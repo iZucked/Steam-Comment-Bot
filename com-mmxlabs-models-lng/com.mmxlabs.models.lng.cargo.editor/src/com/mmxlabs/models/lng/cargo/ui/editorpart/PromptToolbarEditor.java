@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -60,8 +61,8 @@ public class PromptToolbarEditor extends ControlContribution {
 			int toolbarHeight = toolbarComposite.getSize().y;
 			// Fix issue in workbench. On opening the application, the toolbar height is 44 allowing large buttons. However the real height is only 22 (and this is correct when opening an editor after
 			// the application has opened). This will probably cause issues on e.g. Alex's machine when running at high resolution (3840x2160 -- icons are already tiny on this mode).
-			if (toolbarHeight > 23) {
-				toolbarHeight = 23;
+			if (toolbarHeight > 35) {
+				toolbarHeight = 35;
 			}
 			final Point size = btn.getSize();
 
@@ -119,7 +120,7 @@ public class PromptToolbarEditor extends ControlContribution {
 	};
 	private Button btn90Day;
 	private Label lbl3;
-	private Label lbl4;
+	private Text lbl4;
 	private Composite scheduleHorizonComposite;
 
 	public PromptToolbarEditor(final String id, final EditingDomain editingDomain, final LNGScenarioModel scenarioModel) {
@@ -131,12 +132,40 @@ public class PromptToolbarEditor extends ControlContribution {
 	@Override
 	protected Control createControl(final Composite ppparent) {
 
-		final Composite pparent = new Composite(ppparent, SWT.NONE);
-		pparent.setLayout(GridLayoutFactory.fillDefaults().numColumns(8).equalWidth(false).spacing(3, 0).margins(0, 0).create());
+		int minHeight = 36;
+		final Composite pparent = new Composite(ppparent, SWT.NONE) {
+			@Override
+			protected void checkSubclass() {
+			}
+
+			@Override
+			public Point getSize() {
+				Point p = super.getSize();
+				return new Point(p.x, Math.max(minHeight, p.y));
+			}
+
+			@Override
+			public void setSize(int width, int height) {
+				super.setSize(width, Math.max(minHeight, height));
+			}
+
+			@Override
+			public Point computeSize(int wHint, int hHint) {
+				Point p = super.computeSize(wHint, hHint);
+				return new Point(p.x, Math.max(minHeight, p.y));
+			}
+
+			@Override
+			public Point computeSize(int wHint, int hHint, boolean b) {
+				Point p = super.computeSize(wHint, hHint, b);
+				return new Point(p.x, Math.max(minHeight, p.y));
+			};
+		};
+		pparent.setLayout(GridLayoutFactory.fillDefaults().numColumns(8).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
 		final Label lbl = new Label(pparent, SWT.NONE);
 		lbl.setText("Prompt:");
-		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).minSize(1000, -1).create());
+		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
 		final CompoundCommand setDefaultPromptCommand = new CompoundCommand("Set default prompt");
 
@@ -170,11 +199,11 @@ public class PromptToolbarEditor extends ControlContribution {
 
 		final Label lbl2 = new Label(pparent, SWT.NONE);
 		lbl2.setText(" to ");
-		lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).create());
+		lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 
 		periodEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).create());
+		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 
 		{
 			if (scenarioModel.isSetPromptPeriodEnd()) {
@@ -228,7 +257,7 @@ public class PromptToolbarEditor extends ControlContribution {
 
 		lbl3 = new Label(pparent, SWT.NONE);
 		lbl3.setText(" Schedule horizon:  ");
-		lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).create());
+		lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 		hookScheduleEndDateMenu(lbl3);
 
 		scheduleHorizonComposite = new Composite(pparent, SWT.NONE);
@@ -238,10 +267,15 @@ public class PromptToolbarEditor extends ControlContribution {
 		scheduleHorizonEditor = new DateTime(scheduleHorizonComposite, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		hookScheduleEndDateMenu(scheduleHorizonEditor);
 
-		lbl4 = new Label(scheduleHorizonComposite, SWT.BORDER);
+		lbl4 = new Text(scheduleHorizonComposite, SWT.READ_ONLY| SWT.BORDER);
 		lbl4.setText("Open");
-		lbl4.setAlignment(SWT.CENTER);
+		lbl4.setEditable(false);
 		lbl4.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		// lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+		// lbl4.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+
+		lbl4.setLayoutData(GridDataFactory.swtDefaults().hint(1000, 20).minSize(1000, 20).align(SWT.CENTER, SWT.BOTTOM).create());
+
 		hookScheduleEndDateMenu(lbl4);
 
 		{
