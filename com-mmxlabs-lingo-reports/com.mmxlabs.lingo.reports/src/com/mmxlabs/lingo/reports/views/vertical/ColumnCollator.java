@@ -183,6 +183,7 @@ public abstract class ColumnCollator {
 						candidate.addEvent(date, event);
 					}
 				}
+				break;
 			}
 		}
 	}
