@@ -7,9 +7,13 @@ package com.mmxlabs.lingo.reports.views.vertical;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
+import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
+import com.mmxlabs.lingo.reports.views.vertical.providers.HashMapEventProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.SequenceEventProvider;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
@@ -23,7 +27,7 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 
 	@Override
 	protected ReportNebulaGridManager createContentProvider() {
-		ReportNebulaGridManager manager = super.createContentProvider();
+		final ReportNebulaGridManager manager = super.createContentProvider();
 		return manager;
 	}
 
@@ -37,8 +41,7 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 		result.add(fobDesColumn);
 
 		if (data.vessels != null) {
-			 List<CombinedSequence> combinedSequences =
-			 CombinedSequence.createCombinedSequences(Lists.newArrayList(data.vessels));
+			final List<CombinedSequence> combinedSequences = CombinedSequence.createCombinedSequences(Lists.newArrayList(data.vessels));
 
 			// add a column for each vessel in the scenario
 			if (!combinedSequences.isEmpty()) {
@@ -54,15 +57,38 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 		}
 		// charter ins
 		if (data.vessels != null) {
+
+			// One column per charter-in (excluding nominals)
 			for (final Sequence seq : data.vessels) {
-				if (seq.isSpotVessel()) {
-					CombinedSequence cs = new CombinedSequence(null);
+
+				if (seq.isSpotVessel() && seq.getSpotIndex() >= 0) {
+					final CombinedSequence cs = new CombinedSequence(null);
 					cs.getSequences().add(seq);
 					final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(),
 							new SequenceEventProvider(cs.getSequences().toArray(new Sequence[cs.getSequences().size()]), null, verticalReportVisualiser),
 							new EventLabelProvider(verticalReportVisualiser), seq.getName(), null);
 					result.add(column);
 				}
+			}
+
+			// Compress nominal cargoes
+			final ColumnCollator c = new ColumnCollator(data, verticalReportVisualiser) {
+
+				@Override
+				protected boolean includeSequence(@NonNull final Sequence sequence) {
+					return sequence.isSpotVessel() && sequence.getSpotIndex() == -1;
+				}
+
+				@Override
+				protected @NonNull EventProvider createEventProvider(@NonNull final Sequence sequence) {
+					return new HashMapEventProvider(data.start, data.end, new SequenceEventProvider(sequence, null, verticalReportVisualiser));
+				}
+			};
+
+			final List<HashMapEventProvider> collate = c.collate();
+			for (final HashMapEventProvider p : collate) {
+				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), p, new EventLabelProvider(verticalReportVisualiser), "Nominals", null);
+				result.add(column);
 			}
 		}
 
