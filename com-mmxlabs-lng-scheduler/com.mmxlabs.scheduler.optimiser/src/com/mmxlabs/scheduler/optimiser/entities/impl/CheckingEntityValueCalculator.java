@@ -16,10 +16,10 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CheckingEntityValueCalculator implements IEntityValueCalculator {
@@ -76,13 +76,13 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	@Override
-	public long evaluate(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, final @NonNull IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
+			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final long value_d = delegate.evaluate(evaluationMode, plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final long value_d = delegate.evaluate(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final long value_r = reference.evaluate(evaluationMode, plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final long value_r = reference.evaluate(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);
