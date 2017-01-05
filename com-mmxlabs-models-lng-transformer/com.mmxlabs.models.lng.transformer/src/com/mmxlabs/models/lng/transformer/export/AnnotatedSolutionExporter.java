@@ -314,8 +314,7 @@ public class AnnotatedSolutionExporter {
 			final List<Event> eventsForElement = new ArrayList<Event>();
 			final List<IPortSlot> sequencePortSlots = scheduledSequence.getSequenceSlots();
 
-			// Flag for round trip cargoes. Split sequences at a discharge -> Load segment.
-			boolean lastEventWasDischarge = true;
+			// Flag for round trip cargoes. Split sequences at a Cargo Round Trip End elements
 			for (int i = 0; i < sequencePortSlots.size(); ++i) {
 				final IPortSlot scheduledSlot = sequencePortSlots.get(i);
 				assert scheduledSlot != null;
@@ -367,8 +366,6 @@ public class AnnotatedSolutionExporter {
 						sequences.add(thisSequence);
 					}
 				}
-
-				lastEventWasDischarge = scheduledSlot.getPortType() == PortType.Discharge;
 			}
 
 			// Setup next/prev events.
