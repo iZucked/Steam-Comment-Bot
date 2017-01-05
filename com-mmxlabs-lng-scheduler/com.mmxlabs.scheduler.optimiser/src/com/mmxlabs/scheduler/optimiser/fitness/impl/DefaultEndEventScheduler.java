@@ -80,6 +80,15 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		partialPortTimesRecord.setReturnSlotTime(endEventSlot, scheduledTime);
 		partialPortTimesRecord.setSlotDuration(endEventSlot, 0);
 
+		// Create new PTR to for end event. This is to allow us to always attach P&L to end events.
+		// Note: This fouls up the GCO stuff for the end event.
+		final PortTimesRecord endPortTimesRecord = new PortTimesRecord();
+		endPortTimesRecord.setSlotTime(endEventSlot, scheduledTime);
+
+		endPortTimesRecord.setSlotDuration(endEventSlot, 0);
+
+		additionalRecords.add(endPortTimesRecord);
+
 		return additionalRecords;
 	}
 

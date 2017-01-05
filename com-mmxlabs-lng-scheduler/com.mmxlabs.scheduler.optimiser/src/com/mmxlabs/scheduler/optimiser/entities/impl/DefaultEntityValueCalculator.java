@@ -59,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -104,9 +105,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
-			@NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan,
+			@NonNull final IAllocationAnnotation currentAllocation, @NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final CargoValueAnnotation cargoPNLData = new CargoValueAnnotation(currentAllocation);
 
@@ -161,9 +162,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
-				int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, cargoPNLData, portSlotDetails);
+				final int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, cargoPNLData, portSlotDetails);
 				cargoPNLData.setSlotPricePerMMBTu(slot, slotPricePerMMBtu);
-				long slotValue = Calculator.costFromConsumption(cargoPNLData.getCommercialSlotVolumeInMMBTu(slot), slotPricePerMMBtu);
+				final long slotValue = Calculator.costFromConsumption(cargoPNLData.getCommercialSlotVolumeInMMBTu(slot), slotPricePerMMBtu);
 				cargoPNLData.setSlotValue(slot, slotValue);
 				slotPricesPerMMBTu[idx] = slotPricePerMMBtu;
 
@@ -366,7 +367,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityPostTaxProfit
 	 */
 
-	protected void processProfitAndLossBooks(@NonNull Map<IEntityBook, Long> entityPreTaxProfit, @NonNull Map<IEntityBook, Long> entityPostTaxProfit) {
+	protected void processProfitAndLossBooks(@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @NonNull final Map<IEntityBook, Long> entityPostTaxProfit) {
 		// Do nothing by default.
 	}
 
@@ -377,7 +378,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param baseEntity
 	 * @param entityProfit
 	 */
-	protected void evaluateCargoPNL(@NonNull EvaluationMode evaluationMode, @NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity baseEntity,
+	protected void evaluateCargoPNL(@NonNull final EvaluationMode evaluationMode, @NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity baseEntity,
 			@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		int idx = 0;
@@ -428,8 +429,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(@NonNull EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability,
+			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			return 0L;
@@ -438,7 +439,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long value;
 		final long revenue;
 		long additionalCost = 0;
-		int vesselEndTime = Integer.MAX_VALUE;
 		final boolean isGeneratedCharterOutPlan;
 		{
 			final PortDetails firstPortDetails = (PortDetails) plan.getSequence()[0];
@@ -448,16 +448,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (firstPortSlot.getPortType() == PortType.CharterOut || isGeneratedCharterOutPlan) {
 				final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) firstPortSlot;
 				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() //
-						+ vesselEventPortSlot.getVesselEvent().getRepositioning()
-						+ vesselEventPortSlot.getVesselEvent().getBallastBonus();
+						+ vesselEventPortSlot.getVesselEvent().getRepositioning() + vesselEventPortSlot.getVesselEvent().getBallastBonus();
 			} else {
 				revenue = 0;
 			}
+
 			if (firstPortSlot.getPortType() == PortType.Start) {
 				additionalCost += shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, vesselStartTime);
 			}
 			if (firstPortSlot.getPortType() == PortType.End) {
-				vesselEndTime = utcOffsetProvider.UTC(volumeAllocatedSequences.getVesselEndTime(firstPortSlot), firstPortSlot);
+				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
 				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselEndTime);
 			}
 
@@ -482,8 +482,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return value;
 	}
 
-	private void generateShippingAnnotations(@NonNull EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity, final long revenue, final long cost, long additionalCost, final int utcEquivTaxTime,
+	private void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity, final long revenue, final long cost, final long additionalCost, final int utcEquivTaxTime,
 			final ISequenceElement exportElement, final boolean includeLNG) {
 		{
 			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vesselAvailability, includeLNG, true);
@@ -567,13 +567,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param entityDetailTreeMap
 	 * @return
 	 */
-	protected long calculatePostTaxItems(@NonNull EvaluationMode evaluationMode, @NonNull final IVesselAvailability vesselAvailability, @NonNull final VoyagePlan plan,
+	protected long calculatePostTaxItems(@NonNull final EvaluationMode evaluationMode, @NonNull final IVesselAvailability vesselAvailability, @NonNull final VoyagePlan plan,
 			@NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final Map<IEntityBook, Long> entityPostTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityDetailTreeMap) {
 		return 0;
 	}
 
 	@Override
-	public long evaluateUnusedSlot(@NonNull EvaluationMode evaluationMode, @NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
+	public long evaluateUnusedSlot(@NonNull final EvaluationMode evaluationMode, @NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final IEntity entity = entityProvider.getEntityForSlot(portSlot);

@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -27,11 +28,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class ShippingCostHelper {
+	@Inject
+	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
 
-	public long getFuelCosts(final @NonNull VoyagePlan plan, boolean includeLNG) {
+	public long getFuelCosts(final @NonNull VoyagePlan plan, final boolean includeLNG) {
 
 		// @formatter:off
-		long fuelCost = plan.getTotalFuelCost(FuelComponent.Base)
+		final long fuelCost = plan.getTotalFuelCost(FuelComponent.Base)
 				+ plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
 				+ plan.getTotalFuelCost(FuelComponent.Cooldown)
 				+ plan.getTotalFuelCost(FuelComponent.IdleBase)
@@ -48,7 +51,7 @@ public class ShippingCostHelper {
 
 		long portCosts = 0;
 		final Object[] sequence = plan.getSequence();
-		int offset = plan.isIgnoreEnd() ? 1 : 0;
+		final int offset = plan.isIgnoreEnd() ? 1 : 0;
 		for (int i = 0; i < sequence.length - offset; ++i) {
 			final Object obj = sequence[i];
 			if (obj instanceof PortDetails) {
@@ -70,7 +73,7 @@ public class ShippingCostHelper {
 		final long planDuration = getPlanDurationInHours(plan);
 
 		final long hireRatePerDay = plan.getCharterInRatePerDay();
-		long hireCosts = hireRatePerDay * planDuration / 24L;
+		final long hireCosts = hireRatePerDay * planDuration / 24L;
 		return hireCosts;
 	}
 
@@ -82,7 +85,7 @@ public class ShippingCostHelper {
 	public int getPlanDurationInHours(final @NonNull VoyagePlan plan) {
 		int planDuration = 0;
 		final Object[] sequence = plan.getSequence();
-		int offset = plan.isIgnoreEnd() ? 1 : 0;
+		final int offset = plan.isIgnoreEnd() ? 1 : 0;
 		final int k = sequence.length - offset;
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
@@ -168,7 +171,7 @@ public class ShippingCostHelper {
 	 * @return
 	 */
 	public boolean hasGeneratedCharterOut(final @NonNull VoyagePlan plan) {
-		Object obj = plan.getSequence()[0];
+		final Object obj = plan.getSequence()[0];
 		if (obj instanceof PortDetails) {
 			final PortDetails portDetails = (PortDetails) obj;
 			if (portDetails.getOptions().getPortSlot().getPortType() == PortType.GeneratedCharterOut) {
@@ -191,14 +194,14 @@ public class ShippingCostHelper {
 		return shippingCosts + portCosts + hireCosts;
 	}
 
-	public long getShippingRepositioningCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime ) {
+	public long getShippingRepositioningCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime) {
 		if (portSlot.getPortType() == PortType.Start) {
 			return vesselAvailability.getRepositioningFee().getValueAtPoint(vesselStartTime);
 		}
 		return 0L;
 	}
-	
-	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime ) {
+
+	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
 			return vesselAvailability.getBallastBonus().getValueAtPoint(vesselEndTime);
 		}
@@ -207,7 +210,7 @@ public class ShippingCostHelper {
 
 	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG,
 			final boolean includeCharterInCosts) {
-		long @NonNull [] costs = new long[4];
+		final long @NonNull [] costs = new long[4];
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return costs;
 		}

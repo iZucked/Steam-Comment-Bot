@@ -20,10 +20,10 @@ import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLin
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class CachingEntityValueCalculator implements IEntityValueCalculator {
@@ -55,7 +55,7 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 	}
 
 	@Override
-	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
+	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
 			@NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 		if (annotatedSolution != null || volumeAllocatedSequences == null || evaluationMode != EvaluationMode.FullPNL) {
@@ -69,13 +69,13 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 	}
 
 	@Override
-	public long evaluate(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-		return delegate.evaluate(evaluationMode, plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+	public long evaluate(final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
+			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+		return delegate.evaluate(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 	}
 
 	@Override
-	public long evaluateUnusedSlot(EvaluationMode evaluationMode, @NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
+	public long evaluateUnusedSlot(final EvaluationMode evaluationMode, @NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 		return delegate.evaluateUnusedSlot(evaluationMode, portSlot, volumeAllocatedSequences, annotatedSolution);
 	}

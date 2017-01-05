@@ -59,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -420,8 +421,8 @@ public class ShippingCostEntityValueCalculator implements IEntityValueCalculator
 	 * @return
 	 */
 	@Override
-	public long evaluate(@NonNull EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
-			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(@NonNull EvaluationMode evaluationMode, final VoyagePlan plan, final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability, final int planStartTime,
+			final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			return 0L;
@@ -446,9 +447,10 @@ public class ShippingCostEntityValueCalculator implements IEntityValueCalculator
 			if (firstPortSlot.getPortType() == PortType.Start) {
 				additionalCost += shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, vesselStartTime);
 			}
-			if (firstPortSlot.getPortType() == PortType.End) {
-				vesselEndTime = utcOffsetProvider.UTC(volumeAllocatedSequences.getVesselEndTime(firstPortSlot), firstPortSlot);
-				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselEndTime);
+			final IPortSlot lastSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
+			if (lastSlot.getPortType() == PortType.End) {
+				vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(lastSlot), lastSlot);
+				additionalCost += shippingCostHelper.getShippingBallastBonusCost(lastSlot, vesselAvailability, vesselEndTime);
 			}
 
 			// Calculate the value for the fitness function

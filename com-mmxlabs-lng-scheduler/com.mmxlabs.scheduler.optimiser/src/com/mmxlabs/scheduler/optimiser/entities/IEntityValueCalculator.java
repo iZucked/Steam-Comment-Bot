@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public interface IEntityValueCalculator {
@@ -48,8 +49,8 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull EvaluationMode evaluationMode, @NonNull VoyagePlan plan, @NonNull IVesselAvailability vesselAvailability, int planStartTime, int vesselStartTime,
-			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
+	long evaluate(@NonNull EvaluationMode evaluationMode, @NonNull VoyagePlan plan, @NonNull IPortTimesRecord portTimesRecord, @NonNull IVesselAvailability vesselAvailability, int planStartTime,
+			int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate an unused port slot for P&L contributions (e.g. cancellation fees). The port slot is expected to be an instanceof {@link ILoadOption} or {@link IDischargeOption}.
