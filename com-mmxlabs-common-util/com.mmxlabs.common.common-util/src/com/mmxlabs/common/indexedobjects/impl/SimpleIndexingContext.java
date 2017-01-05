@@ -71,10 +71,22 @@ public final class SimpleIndexingContext implements IIndexingContext {
 	 * @return
 	 */
 	private final AtomicInteger getLowestSuperclass(final Class<? extends Object> baseType) {
+		{
+			Class<? extends Object> type = baseType;
 
-		Class<? extends Object> type = baseType;
+			while (type != null) {
+				if (indices.containsKey(type)) {
+					if ((type == Object.class) && !warnedTypes.contains(baseType)) {
+						log.warn("Warning: using object index for " + baseType.getSimpleName());
+						warnedTypes.add(baseType);
+					}
+					return indices.get(type);
+				}
+				type = type.getSuperclass();
+			}
+		}
+		for (Class<?> type : baseType.getInterfaces()) {
 
-		while (type != null) {
 			if (indices.containsKey(type)) {
 				if ((type == Object.class) && !warnedTypes.contains(baseType)) {
 					log.warn("Warning: using object index for " + baseType.getSimpleName());
@@ -82,7 +94,6 @@ public final class SimpleIndexingContext implements IIndexingContext {
 				}
 				return indices.get(type);
 			}
-			type = type.getSuperclass();
 		}
 
 		// Should never get here as Object.class is a registered type.

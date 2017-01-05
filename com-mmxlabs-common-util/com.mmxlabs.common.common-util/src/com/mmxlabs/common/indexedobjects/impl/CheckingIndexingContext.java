@@ -70,18 +70,28 @@ public final class CheckingIndexingContext implements IIndexingContext {
 	 * @return
 	 */
 	private final AtomicInteger getLowestSuperclass(final Class<?> baseType) {
+		{
+			@Nullable
+			Class<?> type = baseType;
 
-		@Nullable
-		Class<?> type = baseType;
-
-		while (type != null) {
+			while (type != null) {
+				if (indices.containsKey(type)) {
+					if (type == Object.class) {
+						break;
+						//throw new IllegalArgumentException("Error, baseType does not have a registered class: " + baseType.getSimpleName());
+					}
+					return indices.get(type);
+				}
+				type = type.getSuperclass();
+			}
+		}
+		for (Class<?> type : baseType.getInterfaces()) {
 			if (indices.containsKey(type)) {
 				if (type == Object.class) {
 					throw new IllegalArgumentException("Error, baseType does not have a registered class: " + baseType.getSimpleName());
 				}
 				return indices.get(type);
 			}
-			type = type.getSuperclass();
 		}
 
 		// Should never get here as Object.class is a registered type.
