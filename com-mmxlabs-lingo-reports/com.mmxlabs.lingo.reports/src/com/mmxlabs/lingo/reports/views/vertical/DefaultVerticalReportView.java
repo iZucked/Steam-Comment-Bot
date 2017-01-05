@@ -87,7 +87,7 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 
 			final List<HashMapEventProvider> collate = c.collate();
 			for (final HashMapEventProvider p : collate) {
-				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), p, new EventLabelProvider(verticalReportVisualiser), "Nominals", null);
+				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), p, new EventLabelProvider(verticalReportVisualiser), "Nominal Cargoes", null);
 				result.add(column);
 			}
 		}
