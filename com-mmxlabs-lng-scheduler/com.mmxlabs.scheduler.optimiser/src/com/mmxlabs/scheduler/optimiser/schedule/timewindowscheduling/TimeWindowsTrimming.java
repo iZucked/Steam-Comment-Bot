@@ -328,6 +328,12 @@ public class TimeWindowsTrimming {
 					}
 				}
 			}
+		} else if (sortedCanalTimes.length > 1) {
+			// still need to find out the best canal
+			NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0],
+					boiloffIntervals[0], loadDuration, salesIntervals[0].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
+					vessel.getVesselClass(), load.getCargoCVValue(), true);
+			bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 		}
 		assert bestCanalDetails != null;
 		return getCargoBounds(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end, salesIntervals[bestSalesDetailsIdx].start,
@@ -359,15 +365,9 @@ public class TimeWindowsTrimming {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
 					NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails;
-					try {
 					totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
 							vessel.getVesselClass(), load.getCargoCVValue(), true);
-					} catch (ArrayIndexOutOfBoundsException a) {
-						totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
-								boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
-								vessel.getVesselClass(), load.getCargoCVValue(), true);
-					}
 					final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
 					final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - estimatedCostMMBTU;
 					if (newMargin > bestMargin) {
@@ -378,6 +378,12 @@ public class TimeWindowsTrimming {
 					}
 				}
 			}
+		} else if (sortedCanalTimes.length > 1) {
+			// still need to find out the best canal
+			NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0],
+					boiloffIntervals[0], loadDuration, salesIntervals[0].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
+					vessel.getVesselClass(), load.getCargoCVValue(), true);
+			bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 		}
 
 		assert bestCanalDetails != null;
