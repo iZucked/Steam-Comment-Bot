@@ -724,101 +724,98 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	public static void calculateMetrics(@NonNull final ChangeSet changeSet, @NonNull final Schedule fromSchedule, @NonNull final Schedule toSchedule, final boolean isBase) {
-		{
-			final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
-			final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
+		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
+		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
-			long pnl = 0;
-			int lateness = 0;
-			int violations = 0;
-			if (toSchedule != null) {
-				for (final Sequence sequence : toSchedule.getSequences()) {
-					for (final Event event : sequence.getEvents()) {
-						if (event instanceof ProfitAndLossContainer) {
-							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-							final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-							if (groupProfitAndLoss != null) {
-								pnl += groupProfitAndLoss.getProfitAndLoss();
-							}
-						}
-
-						if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-								violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
-							}
-						}
-
-						if (event instanceof EventGrouping) {
-							final EventGrouping eventGrouping = (EventGrouping) event;
-							lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
-							violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
+		long pnl = 0;
+		int lateness = 0;
+		int violations = 0;
+		if (toSchedule != null) {
+			for (final Sequence sequence : toSchedule.getSequences()) {
+				for (final Event event : sequence.getEvents()) {
+					if (event instanceof ProfitAndLossContainer) {
+						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
+						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
+						if (groupProfitAndLoss != null) {
+							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
 					}
-				}
 
-				for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
-					pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-				}
-			}
-
-			currentMetrics.setPnl((int) pnl);
-			currentMetrics.setCapacity(violations);
-			currentMetrics.setLateness(lateness);
-			if (fromSchedule != null) {
-				for (final Sequence sequence : fromSchedule.getSequences()) {
-					for (final Event event : sequence.getEvents()) {
-						if (event instanceof ProfitAndLossContainer) {
-							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-							final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-							if (groupProfitAndLoss != null) {
-								pnl -= groupProfitAndLoss.getProfitAndLoss();
-							}
+					if (event instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) event;
+						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+							lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+							violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 						}
-						if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-								violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
-							}
-						}
+					}
 
-						if (event instanceof EventGrouping) {
-							final EventGrouping eventGrouping = (EventGrouping) event;
-							lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
-							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
-						}
-
+					if (event instanceof EventGrouping) {
+						final EventGrouping eventGrouping = (EventGrouping) event;
+						lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+						violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 					}
 				}
+			}
 
-				for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
-					pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-				}
+			for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
+				pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 			}
-			deltaMetrics.setPnlDelta((int) pnl);
-			deltaMetrics.setLatenessDelta((int) lateness);
-			deltaMetrics.setCapacityDelta((int) violations);
-			if (isBase) {
-				changeSet.setMetricsToBase(deltaMetrics);
-			} else {
-				changeSet.setMetricsToPrevious(deltaMetrics);
-			}
-			changeSet.setCurrentMetrics(currentMetrics);
 		}
 
+		currentMetrics.setPnl((int) pnl);
+		currentMetrics.setCapacity(violations);
+		currentMetrics.setLateness(lateness);
+		if (fromSchedule != null) {
+			for (final Sequence sequence : fromSchedule.getSequences()) {
+				for (final Event event : sequence.getEvents()) {
+					if (event instanceof ProfitAndLossContainer) {
+						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
+						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
+						if (groupProfitAndLoss != null) {
+							pnl -= groupProfitAndLoss.getProfitAndLoss();
+						}
+					}
+					if (event instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) event;
+						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+							pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+							lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
+						}
+					}
+
+					if (event instanceof EventGrouping) {
+						final EventGrouping eventGrouping = (EventGrouping) event;
+						lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+						violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
+					}
+				}
+			}
+
+			for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
+				pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+			}
+		}
+		deltaMetrics.setPnlDelta((int) pnl);
+		deltaMetrics.setLatenessDelta((int) lateness);
+		deltaMetrics.setCapacityDelta((int) violations);
+		if (isBase) {
+			changeSet.setMetricsToBase(deltaMetrics);
+		} else {
+			changeSet.setMetricsToPrevious(deltaMetrics);
+		}
+		changeSet.setCurrentMetrics(currentMetrics);
 	}
 
 	public static void mergeSpots(final List<ChangeSetRow> rows) {
+
+		// Phase 1. Find wiring groups which have compatible (i.e. same market, different instance count) heads and tails and join them together.
+		// For example a Spot Purchase may now be open, but previously paired to a sale. Another sale in the wiring group may have previously been paired to a different spot purchase in the same
+		// market/month as the open position. We can assume these are equivalent and join the head to the tail.
 		{
-			// Phase 1. Find wiring groups which have compatible (i.e. same market, different instance count) heads and tails and join them together.
-			// For example a Spot Purchase may now be open, but previously paired to a sale. Another sale in the wiring group may have previously been paired to a different spot purchase in the same
-			// market/month as the open position. We can assume these are equivalent and join the head to the tail.
 			final Map<ChangeSetRow, ChangeSetRow> headToTails = new LinkedHashMap<>();
 			for (final ChangeSetRow row : rows) {
 				if (row.getLhsWiringLink() == null) {
