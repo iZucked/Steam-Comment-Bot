@@ -693,6 +693,7 @@ public final class OptimisationHelper {
 
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
+		to.setWithSpotCargoMarkets(from.isWithSpotCargoMarkets());
 
 		if (from.getSimilarityMode() != null) {
 			to.setSimilarityMode(from.getSimilarityMode());
