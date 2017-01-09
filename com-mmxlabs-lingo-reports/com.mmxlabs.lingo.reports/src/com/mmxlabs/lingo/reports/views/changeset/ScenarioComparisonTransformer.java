@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ModelReference;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
@@ -217,18 +216,13 @@ public class ScenarioComparisonTransformer {
 				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBase, false);
 			} else if (pass == 1) {
 				if (r.isReference()) {
-					// final Set<EObject> equivalents = equivalancesMap.get(element);
-					// if (equivalents == null) {
 					ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, false, false);
 
 					continue;
 				}
-				// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBase);
 			} else if (pass == 3 && !r.isReference()) {
 				final Set<EObject> equivalents = equivalancesMap.get(element);
 				if (equivalents == null) {
-					// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, !r.isReference());
-
 					continue;
 				}
 
@@ -279,40 +273,28 @@ public class ScenarioComparisonTransformer {
 		pnl = 0;
 		violations = 0;
 		lateness = 0;
-		{
-			for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
-				{
-					final ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
 
-					if (newGroupProfitAndLoss != null) {
-						final GroupProfitAndLoss groupProfitAndLoss = newGroupProfitAndLoss.getGroupProfitAndLoss();
-						if (groupProfitAndLoss != null) {
-							pnl += groupProfitAndLoss.getProfitAndLoss();
-						}
-					}
-					final EventGrouping newEventGrouping = row.getNewEventGrouping();
-					if (newEventGrouping != null) {
+		for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+			{
+				pnl += ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 
-						lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
-						violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
-					}
+				final EventGrouping newEventGrouping = row.getNewEventGrouping();
+				if (newEventGrouping != null) {
+					lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
+					violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
 				}
-				{
-					final ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
-					if (originalGroupProfitAndLoss != null) {
-						final GroupProfitAndLoss groupProfitAndLoss = originalGroupProfitAndLoss.getGroupProfitAndLoss();
-						if (groupProfitAndLoss != null) {
-							pnl -= groupProfitAndLoss.getProfitAndLoss();
-						}
-					}
-					final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
-					if (originalEventGrouping != null) {
-						lateness -= LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
-						violations -= ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
-					}
+			}
+			{
+				pnl -= ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+
+				final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
+				if (originalEventGrouping != null) {
+					lateness -= LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
+					violations -= ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
 				}
 			}
 		}
+
 		deltaMetrics.setPnlDelta((int) pnl);
 		deltaMetrics.setLatenessDelta((int) lateness);
 		deltaMetrics.setCapacityDelta((int) violations);

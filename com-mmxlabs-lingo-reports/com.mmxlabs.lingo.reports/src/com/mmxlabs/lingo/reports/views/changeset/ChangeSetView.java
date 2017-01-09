@@ -1364,27 +1364,9 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					Number f = null;
-					{
-						final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
-						if (pnlContainer != null) {
-							f = ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer);
-						}
-					}
-					Number t = null;
-					{
-						final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
-						if (pnlContainer != null) {
-							t = ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer);
-						}
-					}
-					double delta = 0;
-					if (f != null) {
-						delta -= f.intValue();
-					}
-					if (t != null) {
-						delta += t.intValue();
-					}
+					long f = ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+					long t = ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+					double delta = t - f;
 					delta = delta / 1000000.0;
 					if (Math.abs(delta) < 0.0001) {
 						delta = 0;
