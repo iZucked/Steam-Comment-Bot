@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * All rights reserved.
+ */
 package com.mmxlabs.scenario.service.ui.dnd;
 
 import org.eclipse.jdt.annotation.NonNull;
