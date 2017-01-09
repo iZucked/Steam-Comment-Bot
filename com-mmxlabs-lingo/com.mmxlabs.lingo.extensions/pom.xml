@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>4.1.0.RELEASE</version>
+		<version>4.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.lingo.extensions</artifactId>
-	<version>4.1.0.RELEASE</version>
+	<version>4.1.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
