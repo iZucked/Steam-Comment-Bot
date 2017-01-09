@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Fragment-Host: com.mmxlabs.models.util
 Bundle-SymbolicName: com.mmxlabs.models.util.test;singleton:=true
-Bundle-Version: 4.1.0.RELEASE
+Bundle-Version: 4.1.1.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
