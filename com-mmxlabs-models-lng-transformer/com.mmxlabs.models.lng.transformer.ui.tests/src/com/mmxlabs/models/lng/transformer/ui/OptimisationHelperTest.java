@@ -80,7 +80,7 @@ public class OptimisationHelperTest {
 				Assert.assertNotNull(constraintAndFitnessSettings);
 				Assert.assertNotNull(constraintAndFitnessSettings.getSimilaritySettings());
 				Assert.assertEquals(ScenarioUtils.createOffSimilaritySettings(), constraintAndFitnessSettings.getSimilaritySettings());
-				
+
 			}
 		}
 	}
@@ -180,6 +180,20 @@ public class OptimisationHelperTest {
 
 		Assert.assertNotNull(plan);
 		Assert.assertFalse(plan.getUserSettings().isBuildActionSets());
+	}
+
+	@Test
+	public void testTransformUserSettings_SpotCargoMarkets_On() {
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setWithSpotCargoMarkets(false);
+
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, null);
+
+		Assert.assertNotNull(optimisationPlan);
+		Assert.assertNotNull(optimisationPlan.getUserSettings());
+		Assert.assertSame(userSettings, optimisationPlan.getUserSettings());
+		Assert.assertFalse(optimisationPlan.getStages().isEmpty()); // hard to test this now...
+		// Assert.assertEquals(ScenarioUtils.createLowSimilaritySettings(), settings.getSimilaritySettings());
 	}
 
 }

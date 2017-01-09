@@ -65,7 +65,11 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setShippingOnly(false);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_ON).click(), u -> Assert.assertTrue(u.isShippingOnly()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_ON).click(), u -> {
+			Assert.assertTrue(u.isShippingOnly());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isShippingOnly());
+		});
 	}
 
 	@Test
@@ -73,22 +77,35 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setShippingOnly(true);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_OFF).click(), u -> Assert.assertFalse(u.isShippingOnly()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_OFF).click(), u -> {
+			Assert.assertFalse(u.isShippingOnly());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertFalse(settings.isShippingOnly());
+		});
 	}
+
 	@Test
 	public void testSetWithSpotCargoMarkets_On() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setWithSpotCargoMarkets(false);
-		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_ON).click(), u -> Assert.assertTrue(u.isWithSpotCargoMarkets()));
+
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_ON).click(), u -> {
+			Assert.assertTrue(u.isWithSpotCargoMarkets());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isWithSpotCargoMarkets());
+		});
 	}
-	
+
 	@Test
-	public void testSetWithSpotCargoMarketsy_Off() throws Exception {
+	public void testSetWithSpotCargoMarkets_Off() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setWithSpotCargoMarkets(true);
-		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF).click(), u -> Assert.assertFalse(u.isWithSpotCargoMarkets()));
+
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF).click(), u -> {
+			Assert.assertFalse(u.isWithSpotCargoMarkets());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertFalse(settings.isWithSpotCargoMarkets());
+		});
 	}
 
 	@Test
@@ -96,7 +113,11 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setGenerateCharterOuts(false);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> Assert.assertTrue(u.isGenerateCharterOuts()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> {
+			Assert.assertTrue(u.isGenerateCharterOuts());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isGenerateCharterOuts());
+		});
 	}
 
 	@Test
@@ -104,7 +125,11 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setGenerateCharterOuts(true);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> Assert.assertFalse(u.isGenerateCharterOuts()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> {
+			Assert.assertFalse(u.isGenerateCharterOuts());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertFalse(settings.isGenerateCharterOuts());
+		});
 	}
 
 	@Test
@@ -112,7 +137,11 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(), u -> Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(), u -> {
+			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode());
+		});
 	}
 
 	@Test
@@ -120,7 +149,11 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(), u -> Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(), u -> {
+			Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode());
+		});
 	}
 
 	@Test
@@ -128,7 +161,11 @@ public class ParameterModesDialogTest {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(), u -> Assert.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()));
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(), u -> {
+			Assert.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode());
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode());
+		});
 	}
 
 	@Test
@@ -140,6 +177,10 @@ public class ParameterModesDialogTest {
 		executeValidTest(settings, b -> b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("02/2015"), u -> {
 			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodStart()); //
 			Assert.assertFalse(u.isSetPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings); //
+			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodStart()); //
+			Assert.assertFalse(settings.isSetPeriodEnd()); //
+
 		});
 	}
 
@@ -154,6 +195,10 @@ public class ParameterModesDialogTest {
 		}, u -> {
 			Assert.assertFalse(u.isSetPeriodStart()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings); //
+			Assert.assertFalse(settings.isSetPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
+
 		});
 	}
 
@@ -169,6 +214,10 @@ public class ParameterModesDialogTest {
 		}, u -> {
 			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodStart()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings); //
+			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
+
 		});
 	}
 
@@ -205,6 +254,12 @@ public class ParameterModesDialogTest {
 			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
 			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
 			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isBuildActionSets());//
+			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
+			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodEnd()); //
+
 		});
 	}
 
@@ -226,6 +281,12 @@ public class ParameterModesDialogTest {
 			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
 			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isBuildActionSets());//
+			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
+			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
+
 		});
 	}
 
@@ -247,6 +308,12 @@ public class ParameterModesDialogTest {
 			Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
 			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isBuildActionSets());//
+			Assert.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
+			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
+
 		});
 	}
 
@@ -268,6 +335,12 @@ public class ParameterModesDialogTest {
 			Assert.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()); //
 			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
+			OptimisationHelper.mergeFields(u, settings);
+			Assert.assertTrue(settings.isBuildActionSets());//
+			Assert.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode()); //
+			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
+
 		});
 	}
 

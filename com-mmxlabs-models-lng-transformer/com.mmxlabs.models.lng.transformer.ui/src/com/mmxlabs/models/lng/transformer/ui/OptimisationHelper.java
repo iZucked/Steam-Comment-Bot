@@ -673,13 +673,16 @@ public final class OptimisationHelper {
 	 * @param to
 	 * @return
 	 */
-	private static void mergeFields(@NonNull final UserSettings from, @NonNull final UserSettings to) {
+	public static void mergeFields(@NonNull final UserSettings from, @NonNull final UserSettings to) {
 
 		resetDisabledFeatures(from);
 
+		// Sometime these are the same instance, so don't bother with the next bit
+		if (from == to) {
+			return;
+		}
 		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
 		// them doing the right thing
-
 		if (from.isSetPeriodStart() == false) {
 			to.unsetPeriodStart();
 		} else {
