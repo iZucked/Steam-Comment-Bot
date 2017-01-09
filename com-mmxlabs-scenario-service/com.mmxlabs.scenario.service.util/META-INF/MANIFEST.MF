@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Scenario Service Utils
 Bundle-SymbolicName: com.mmxlabs.scenario.service.util;singleton:=true
-Bundle-Version: 4.1.0.RELEASE
+Bundle-Version: 4.1.1.qualifier
 Bundle-Activator: com.mmxlabs.scenario.service.util.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
