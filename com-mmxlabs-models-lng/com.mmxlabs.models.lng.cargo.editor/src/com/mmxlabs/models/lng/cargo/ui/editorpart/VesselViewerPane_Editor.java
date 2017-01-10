@@ -63,7 +63,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), jointModelEditor.getEditingDomain()) {@Override
 		public boolean canEdit(Object object) {
 			if (object instanceof VesselAvailability) {
-				if (((VesselAvailability) object).isOptional()) {
+				if (!((VesselAvailability) object).isFleet()) {
 					return true;
 				} else {
 					return false;
@@ -76,7 +76,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Ballast Bonus", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), jointModelEditor.getEditingDomain()) {@Override
 			public boolean canEdit(Object object) {
 			if (object instanceof VesselAvailability) {
-				if (((VesselAvailability) object).isOptional()) {
+				if (!((VesselAvailability) object).isFleet()) {
 					return true;
 				} else {
 					return false;
