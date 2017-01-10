@@ -19,13 +19,17 @@ import org.eclipse.ui.PlatformUI;
 public final class RunnerHelper {
 
 	/**
-	 * Returns the {@link Display} for the {@link IWorkbench}, or null if not
-	 * yet created or disposed
+	 * Returns the {@link Display} for the {@link IWorkbench}, or null if not yet created or disposed
 	 * 
 	 * @return
 	 */
 	@Nullable
 	public static Display getWorkbenchDisplay() {
+
+		if (!PlatformUI.isWorkbenchRunning()) {
+			return null;
+		}
+
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench == null) {
 			return null;
@@ -44,8 +48,7 @@ public final class RunnerHelper {
 	 * Run the task in a blocking manner.
 	 * 
 	 * @param runnable
-	 * @return Returns false if we were unable to find a {@link Display} thread
-	 *         to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
 	 */
 	public static boolean syncExec(@NonNull final Runnable runnable) {
 
@@ -66,8 +69,7 @@ public final class RunnerHelper {
 	 * Run the task in a blocking manner.
 	 * 
 	 * @param runnable
-	 * @return Returns false if we were unable to find a {@link Display} thread
-	 *         to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
 	 */
 	public static boolean syncExecDisplayOptional(@NonNull final Runnable runnable) {
 
@@ -101,8 +103,7 @@ public final class RunnerHelper {
 	/**
 	 * Run the task asynchronously.
 	 * 
-	 * @return Returns false if we were unable to find a {@link Display} thread
-	 *         to execute the task on.
+	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
 	 */
 	public static boolean asyncExec(@NonNull final Runnable runnable) {
 
