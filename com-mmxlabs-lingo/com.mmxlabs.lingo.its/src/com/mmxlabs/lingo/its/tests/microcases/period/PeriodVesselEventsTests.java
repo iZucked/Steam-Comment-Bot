@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
-import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -43,7 +42,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * Some test cases around period optimisation with vessel events (specifically charter out events which can move between vessels). Original period transformer locks down all vessel events.
@@ -96,7 +94,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2015, 9, 1, 0, 0, 0)) //
 				.build();
 
-		CharterOutEvent charter_1 = cargoModelBuilder
+		final CharterOutEvent charter_1 = cargoModelBuilder
 				.makeCharterOutEvent("CharterOut1", LocalDateTime.of(2015, 4, 1, 0, 0, 0), LocalDateTime.of(2015, 4, 1, 0, 0, 0), portFinder.findPort("Bonny Nigeria")) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
@@ -130,7 +128,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 
 			// Check locked flags
-			VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
+			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
 			Assert.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
 
 			Assert.assertFalse(period_event.isLocked());
@@ -188,11 +186,11 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2015, 9, 1, 0, 0, 0)) //
 				.build();
 
-		CharterOutEvent charter_1 = cargoModelBuilder
+		final CharterOutEvent charter_1 = cargoModelBuilder
 				.makeCharterOutEvent("CharterOut1", LocalDateTime.of(2015, 3, 30, 0, 0, 0), LocalDateTime.of(2015, 3, 30, 0, 0, 0), portFinder.findPort("Bonny Nigeria")) //
 				.withDurationInDays(10) //
-				.withAllowedVessels(vessel_1, vessel_2) //
 				.withVesselAssignment(vesselAvailability_1, 1) //
+				.withAllowedVessels(vessel_1, vessel_2) //
 				.build();
 
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
@@ -222,12 +220,14 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 
 			// Check locked flags
-			VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
-			Assert.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
+			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
+			final Vessel period_vessel_1 = ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel();
+			Assert.assertEquals(vessel_1.getName(), period_vessel_1.getName());
 
 			Assert.assertFalse(period_event.isLocked());
 			Assert.assertFalse(period_event.getAllowedVessels().isEmpty());
-			Assert.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
+			Assert.assertEquals(1, period_event.getAllowedVessels().size());
+			Assert.assertTrue(period_event.getAllowedVessels().contains( period_vessel_1));
 
 			scenarioRunner.run();
 			Assert.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
