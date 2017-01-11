@@ -38,4 +38,10 @@ public class HashMapEventAndBorderProvider extends HashMapEventProvider implemen
 		}
 		return 0;
 	}
+
+	public void setBorders(LocalDate date, Event event, int border) {
+		final Pair<LocalDate, Event> key = new Pair<>(date, event);
+		borderResults.put(key, border);
+
+	}
 }

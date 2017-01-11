@@ -131,7 +131,12 @@ public class ScheduleSequenceData {
 
 		// set the final record fields
 		start = startDate;
-		end = endDate;
+		if (model.isSetSchedulingEndDate()) {
+			end = model.getSchedulingEndDate().minusDays(1);
+		} else {
+			end = endDate;
+		}
+		
 
 		// find the sequences per vessel, and the FOB & DES sequences
 		Sequence tempDes = null;

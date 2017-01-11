@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -24,6 +25,7 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 
 /**
  * Class that makes the relevant API calls to the nebula Grid widget viewer framework.
@@ -37,12 +39,12 @@ import com.mmxlabs.models.lng.schedule.Event;
  * 
  */
 public class ReportNebulaGridManager implements IStructuredContentProvider {
-	private Pair<Date, Integer>[] nebulaElements;
-	private List<CalendarColumn> calendarColumns;
-	private List<GridViewerColumn> nebulaColumns;
-	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
-	private final Map<LocalDate, Integer> rowCache = new HashMap<>();
-	private final AbstractVerticalCalendarReportView verticalReport;
+	protected Pair<Date, Integer>[] nebulaElements;
+	protected List<CalendarColumn> calendarColumns;
+	protected List<GridViewerColumn> nebulaColumns;
+	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
+	protected final Map<LocalDate, Integer> rowCache = new HashMap<>();
+	protected final AbstractVerticalCalendarReportView verticalReport;
 
 	protected LNGScenarioModel root = null;
 

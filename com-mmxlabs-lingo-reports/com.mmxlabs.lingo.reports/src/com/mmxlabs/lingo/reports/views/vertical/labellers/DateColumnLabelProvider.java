@@ -27,7 +27,7 @@ public class DateColumnLabelProvider extends EventLabelProvider {
 	}
 
 	@Override
-	protected String getText(@NonNull final LocalDate date, @NonNull final Event event) {
+	public String getText(@NonNull final LocalDate date, @NonNull final Event event) {
 		return date.format(df);
 	}
 }
