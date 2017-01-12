@@ -22,7 +22,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -82,15 +81,17 @@ public class CycleDiffProcessor implements IDiffProcessor {
 		if (referenceRow == null) {
 			return;
 		}
-
+	
 		final CargoAllocation referenceRowCargoAllocation = referenceRow.getCargoAllocation();
 		if (referenceRowCargoAllocation != null) {
+			// final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(referenceRowCargoAllocation);
+			boolean different = false;
 
 			// Check to see if wiring has changed.
-			boolean different = false;
 			{
 				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(referenceRowCargoAllocation);
-				for (final Row referringRow : referenceRow.getReferringRows()) {
+				final Row referringRow = referenceRow.getLhsLink();
+				if (referringRow != null) {
 					final CargoAllocation pinnedCargoAllocation = referringRow.getCargoAllocation();
 					if (pinnedCargoAllocation != null) {
 						// convert this cargo's wiring of slot allocations to a string
@@ -100,9 +101,6 @@ public class CycleDiffProcessor implements IDiffProcessor {
 
 					} else {
 						different = true;
-					}
-					if (different) {
-						break;
 					}
 				}
 			}
@@ -146,11 +144,57 @@ public class CycleDiffProcessor implements IDiffProcessor {
 
 				cycleGroup.setChangeType(ChangeType.WIRING);
 			}
-		} else if (referenceRow.getOpenSlotAllocation() != null) {
-			final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
-			boolean different = false;
-			for (final Row referringRow : referenceRow.getReferringRows()) {
-				final OpenSlotAllocation allocation = referringRow.getOpenSlotAllocation();
+		} else if (referenceRow.getOpenLoadSlotAllocation() != null) {
+			final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenLoadSlotAllocation();
+			boolean different = true;
+			final Row referringRow = referenceRow.getLhsLink();
+			if (referringRow != null) {
+				final OpenSlotAllocation allocation = referringRow.getOpenLoadSlotAllocation();
+				if (allocation == null) {
+					different = true;
+				}
+			}
+			if (different) {
+				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
+				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
+
+				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+
+				for (final Slot s : buysSet) {
+					Object a = relatedSlotAllocations.getSlotAllocation(s);
+					if (a == null) {
+						a = relatedSlotAllocations.getOpenSlotAllocation(s);
+					}
+					if (a == null) {
+						continue;
+					}
+					final Row r = elementToRowMap.get(a);
+					if (r == null) {
+						continue;
+					}
+					cycleGroup.getRows().add(r);
+				}
+				for (final Slot s : sellsSet) {
+					Object a = relatedSlotAllocations.getSlotAllocation(s);
+					if (a == null) {
+						a = relatedSlotAllocations.getOpenSlotAllocation(s);
+					}
+					if (a == null) {
+						continue;
+					}
+					final Row r = elementToRowMap.get(a);
+					if (r == null) {
+						continue;
+					}
+					cycleGroup.getRows().add(r);
+				}
+			}
+		} else if (referenceRow.getOpenDischargeSlotAllocation() != null) {
+			final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenDischargeSlotAllocation();
+			boolean different = true;
+			final Row referringRow = referenceRow.getRhsLink();
+			if (referringRow != null) {
+				final OpenSlotAllocation allocation = referringRow.getOpenLoadSlotAllocation();
 				if (allocation == null) {
 					different = true;
 				}
@@ -269,13 +313,14 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				if (d != null) {
 					sellsSet.add(d.getSlot());
 				}
-				final OpenSlotAllocation o = r.getOpenSlotAllocation();
-				if (o != null) {
-					if (o.getSlot() instanceof LoadSlot) {
-						buysSet.add(o.getSlot());
-					} else {
-						sellsSet.add(o.getSlot());
-					}
+				final OpenSlotAllocation ol = r.getOpenLoadSlotAllocation();
+				if (ol != null) {
+					buysSet.add(ol.getSlot());
+				}
+
+				final OpenSlotAllocation od = r.getOpenDischargeSlotAllocation();
+				if (od != null) {
+					sellsSet.add(od.getSlot());
 				}
 			}
 			if (buysSet.isEmpty() && sellsSet.isEmpty()) {
@@ -294,6 +339,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 
 			group.setDescription(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
 		}
+
 	}
 
 	private String setToString(final Set<String> stringsSet) {

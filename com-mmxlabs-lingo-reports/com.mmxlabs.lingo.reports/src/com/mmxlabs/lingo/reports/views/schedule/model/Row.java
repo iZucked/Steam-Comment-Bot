@@ -35,10 +35,11 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getDischargeAllocation <em>Discharge Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenSlotAllocation <em>Open Slot Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferenceRow <em>Reference Row</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferringRows <em>Referring Rows</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenLoadSlotAllocation <em>Open Load Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenDischargeSlotAllocation <em>Open Discharge Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isReference <em>Reference</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLhsLink <em>Lhs Link</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRhsLink <em>Rhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario <em>Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}</li>
@@ -330,76 +331,56 @@ public interface Row extends EObject {
 	void setDischargeAllocation(SlotAllocation value);
 
 	/**
-	 * Returns the value of the '<em><b>Open Slot Allocation</b></em>' reference.
+	 * Returns the value of the '<em><b>Open Load Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Open Slot Allocation</em>' reference isn't clear,
+	 * If the meaning of the '<em>Open Load Slot Allocation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Open Slot Allocation</em>' reference.
-	 * @see #setOpenSlotAllocation(OpenSlotAllocation)
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_OpenSlotAllocation()
+	 * @return the value of the '<em>Open Load Slot Allocation</em>' reference.
+	 * @see #setOpenLoadSlotAllocation(OpenSlotAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_OpenLoadSlotAllocation()
 	 * @model
 	 * @generated
 	 */
-	OpenSlotAllocation getOpenSlotAllocation();
+	OpenSlotAllocation getOpenLoadSlotAllocation();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenSlotAllocation <em>Open Slot Allocation</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenLoadSlotAllocation <em>Open Load Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Open Slot Allocation</em>' reference.
-	 * @see #getOpenSlotAllocation()
+	 * @param value the new value of the '<em>Open Load Slot Allocation</em>' reference.
+	 * @see #getOpenLoadSlotAllocation()
 	 * @generated
 	 */
-	void setOpenSlotAllocation(OpenSlotAllocation value);
+	void setOpenLoadSlotAllocation(OpenSlotAllocation value);
 
 	/**
-	 * Returns the value of the '<em><b>Reference Row</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferringRows <em>Referring Rows</em>}'.
+	 * Returns the value of the '<em><b>Open Discharge Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Reference Row</em>' reference isn't clear,
+	 * If the meaning of the '<em>Open Discharge Slot Allocation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Reference Row</em>' reference.
-	 * @see #setReferenceRow(Row)
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_ReferenceRow()
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferringRows
-	 * @model opposite="referringRows"
+	 * @return the value of the '<em>Open Discharge Slot Allocation</em>' reference.
+	 * @see #setOpenDischargeSlotAllocation(OpenSlotAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_OpenDischargeSlotAllocation()
+	 * @model
 	 * @generated
 	 */
-	Row getReferenceRow();
+	OpenSlotAllocation getOpenDischargeSlotAllocation();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferenceRow <em>Reference Row</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenDischargeSlotAllocation <em>Open Discharge Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Reference Row</em>' reference.
-	 * @see #getReferenceRow()
+	 * @param value the new value of the '<em>Open Discharge Slot Allocation</em>' reference.
+	 * @see #getOpenDischargeSlotAllocation()
 	 * @generated
 	 */
-	void setReferenceRow(Row value);
-
-	/**
-	 * Returns the value of the '<em><b>Referring Rows</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.schedule.model.Row}.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferenceRow <em>Reference Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Referring Rows</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Referring Rows</em>' reference list.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_ReferringRows()
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferenceRow
-	 * @model opposite="referenceRow"
-	 * @generated
-	 */
-	EList<Row> getReferringRows();
+	void setOpenDischargeSlotAllocation(OpenSlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>Reference</b></em>' attribute.
@@ -426,6 +407,58 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setReference(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Lhs Link</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Lhs Link</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lhs Link</em>' reference.
+	 * @see #setLhsLink(Row)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_LhsLink()
+	 * @model
+	 * @generated
+	 */
+	Row getLhsLink();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLhsLink <em>Lhs Link</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lhs Link</em>' reference.
+	 * @see #getLhsLink()
+	 * @generated
+	 */
+	void setLhsLink(Row value);
+
+	/**
+	 * Returns the value of the '<em><b>Rhs Link</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Rhs Link</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Rhs Link</em>' reference.
+	 * @see #setRhsLink(Row)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_RhsLink()
+	 * @model
+	 * @generated
+	 */
+	Row getRhsLink();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRhsLink <em>Rhs Link</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Rhs Link</em>' reference.
+	 * @see #getRhsLink()
+	 * @generated
+	 */
+	void setRhsLink(Row value);
 
 	/**
 	 * Returns the value of the '<em><b>Row Group</b></em>' reference.

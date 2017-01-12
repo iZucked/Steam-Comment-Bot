@@ -43,8 +43,8 @@ public class GeneratedCharterRevenueFormatter extends IntegerFormatter {
 			final int currentRevenue = getSequenceRevenue(selectedElements, row.getLinkedSequences());
 			if (diffMode) {
 				int referenceRevenue = 0;
-				if (row.getReferenceRow() != null) {
-					final Row referenceRow = row.getReferenceRow();
+				if (row.getLhsLink() != null) {
+					final Row referenceRow = row.getLhsLink();
 					referenceRevenue = getSequenceRevenue(selectedElements, referenceRow.getLinkedSequences());
 				}
 				return currentRevenue - referenceRevenue;

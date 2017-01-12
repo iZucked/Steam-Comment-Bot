@@ -90,6 +90,7 @@ import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
@@ -1363,8 +1364,9 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long f = ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss);
-					long t = ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+					long f = ChangeSetKPIUtil.getPNL(change, ResultType.ORIGINAL);
+					long t = ChangeSetKPIUtil.getPNL(change, ResultType.NEW);
+
 					double delta = t - f;
 					delta = delta / 1000000.0;
 					if (Math.abs(delta) < 0.0001) {
@@ -1379,45 +1381,11 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createSalesRevenueLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
-			if (pnlContainer instanceof CargoAllocation) {
-				long sum = 0;
-				final CargoAllocation cargoAllocation = (CargoAllocation) pnlContainer;
-				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
-					if (sa.getSlot() instanceof DischargeSlot) {
-						sum += sa.getVolumeValue();
-					}
-				}
-				return sum;
-			}
-			return null;
-
-		}, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
-			if (pnlContainer instanceof CargoAllocation) {
-				long sum = 0;
-				final CargoAllocation cargoAllocation = (CargoAllocation) pnlContainer;
-				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
-					if (sa.getSlot() instanceof DischargeSlot) {
-						sum += sa.getVolumeValue();
-					}
-				}
-				return sum;
-			}
-			return null;
-
-		});
-	}
-
 	private CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, change -> {
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-					- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
+			return ChangeSetKPIUtil.getTax(change, ResultType.ORIGINAL);
 		}, change -> {
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-					- ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
+			return ChangeSetKPIUtil.getTax(change, ResultType.NEW);
 		});
 	}
 
@@ -1429,38 +1397,22 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long originalLateWithFlex = 0;
-					long originalLateWithoutFlex = 0;
-					{
-						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
-						if (eventGrouping != null) {
-							originalLateWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
-							originalLateWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
-						}
-					}
-					long newLatenessWithFlex = 0;
-					long newLatenessWithoutFlex = 0;
-					{
-						final EventGrouping eventGrouping = change.getNewEventGrouping();
-						if (eventGrouping != null) {
-							newLatenessWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
-							newLatenessWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
-						}
-					}
+					long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
+					long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
 
 					// No lateness
-					if (originalLateWithoutFlex == 0 && newLatenessWithoutFlex == 0) {
+					if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0 && newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
 						return null;
 					}
 
-					final boolean originalInFlex = originalLateWithoutFlex > 0 && originalLateWithFlex == 0;
-					final boolean newInFlex = newLatenessWithoutFlex > 0 && newLatenessWithFlex == 0;
+					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
+					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
 
 					if (originalInFlex != newInFlex) {
 						// Lateness shift between flex and non-flex times.
-						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
 						final String flexStr;
-						if (originalLateWithoutFlex == 0) {
+						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
 							assert originalInFlex == false;
 							flexStr = "within";
 						} else if (delta > 0) {
@@ -1473,12 +1425,12 @@ public class ChangeSetView implements IAdaptable {
 					}
 					if (!originalInFlex) {
 						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
 						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
 						// }
 					} else {
 						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
 						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
 						// }
 					}
@@ -1517,34 +1469,17 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long originalLateWithFlex = 0;
-					long originalLateWithoutFlex = 0;
-					{
-						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
-						if (eventGrouping != null) {
-							originalLateWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
-							originalLateWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
-						}
-					}
-					long newLatenessWithFlex = 0;
-					long newLatenessWithoutFlex = 0;
-					{
-						final EventGrouping eventGrouping = change.getNewEventGrouping();
-						if (eventGrouping != null) {
+					long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
+					long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
 
-							newLatenessWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
-							newLatenessWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
-						}
-					}
-
-					final boolean originalInFlex = originalLateWithoutFlex > 0 && originalLateWithFlex == 0;
-					final boolean newInFlex = newLatenessWithoutFlex > 0 && newLatenessWithFlex == 0;
+					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
+					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
 
 					String flexStr = "";
 					if (originalInFlex != newInFlex) {
 						// Lateness shift between flex and non-flex times.
-						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
-						if (originalLateWithoutFlex == 0) {
+						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
+						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
 							assert originalInFlex == false;
 							flexStr = " *";
 						} else if (delta > 0) {
@@ -1554,8 +1489,8 @@ public class ChangeSetView implements IAdaptable {
 						}
 					}
 					long delta = 0L;
-					delta -= originalLateWithoutFlex;
-					delta += newLatenessWithoutFlex;
+					delta -= originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
+					delta += newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
 					final long originalDelta = delta;
 					delta = (int) Math.round((double) delta / 24.0);
 					if (delta != 0L) {
@@ -1601,27 +1536,10 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					Number f = null;
-					{
-						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
-						if (eventGrouping != null) {
-							f = ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
-						}
-					}
-					Number t = null;
-					{
-						final EventGrouping eventGrouping = change.getNewEventGrouping();
-						if (eventGrouping != null) {
-							t = ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
-						}
-					}
-					int delta = 0;
-					if (f != null) {
-						delta -= f.intValue();
-					}
-					if (t != null) {
-						delta += t.intValue();
-					}
+					long f = ChangeSetKPIUtil.getViolations(change, ResultType.ORIGINAL);
+					long t = ChangeSetKPIUtil.getViolations(change, ResultType.NEW);
+
+					long delta = t - f;
 					if (delta != 0) {
 						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
@@ -1632,62 +1550,24 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, false, change -> {
-
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
-					- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
-		}, change ->
-
-		{
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
-					- ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
-		});
+		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.NEW));
 	}
 
 	private CellLabelProvider createUpstreamDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, true, change -> {
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getElementUpstreamPNL);
-		}, change -> {
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getElementUpstreamPNL);
-		});
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.NEW));
 	}
 
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, true, change -> {
-			return -ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
-		}, change -> {
-			return -ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
-		});
-
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.ORIGINAL),
+				change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.NEW));
 	}
 
 	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> {
-			return -ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
-		}, change -> {
-			return -ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
-		});
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.NEW));
 	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, false, change -> {
-			final EventGrouping eventGrouping = change.getOriginalEventGrouping();
-			if (eventGrouping != null) {
-				return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true);
-			}
-			return null;
-
-		}, change -> {
-			final EventGrouping eventGrouping = change.getNewEventGrouping();
-			if (eventGrouping != null) {
-				return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true);
-			}
-			return null;
-		});
+		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getShipping(change, ResultType.NEW));
 	}
 
 	private CellLabelProvider createCSLabelProvider() {

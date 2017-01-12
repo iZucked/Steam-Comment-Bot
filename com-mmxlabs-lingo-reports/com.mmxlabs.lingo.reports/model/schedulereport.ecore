@@ -34,12 +34,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceRow" eType="#//Row"
-        eOpposite="#//Row/referringRows"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="referringRows" upperBound="-1"
-        eType="#//Row" eOpposite="#//Row/referenceRow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openLoadSlotAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openDischargeSlotAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="reference" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsLink" eType="#//Row"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsLink" eType="#//Row"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroup" eType="#//RowGroup"
         eOpposite="#//RowGroup/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>

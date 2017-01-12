@@ -271,31 +271,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW__DISCHARGE_ALLOCATION = 10;
 
 	/**
-	 * The feature id for the '<em><b>Open Slot Allocation</b></em>' reference.
+	 * The feature id for the '<em><b>Open Load Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__OPEN_SLOT_ALLOCATION = 11;
+	int ROW__OPEN_LOAD_SLOT_ALLOCATION = 11;
 
 	/**
-	 * The feature id for the '<em><b>Reference Row</b></em>' reference.
+	 * The feature id for the '<em><b>Open Discharge Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERENCE_ROW = 12;
-
-	/**
-	 * The feature id for the '<em><b>Referring Rows</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROW__REFERRING_ROWS = 13;
+	int ROW__OPEN_DISCHARGE_SLOT_ALLOCATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' attribute.
@@ -304,7 +295,25 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERENCE = 14;
+	int ROW__REFERENCE = 13;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Link</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__LHS_LINK = 14;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Link</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__RHS_LINK = 15;
 
 	/**
 	 * The feature id for the '<em><b>Row Group</b></em>' reference.
@@ -313,7 +322,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__ROW_GROUP = 15;
+	int ROW__ROW_GROUP = 16;
 
 	/**
 	 * The feature id for the '<em><b>Scenario</b></em>' reference.
@@ -322,7 +331,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SCENARIO = 16;
+	int ROW__SCENARIO = 17;
 
 	/**
 	 * The feature id for the '<em><b>Table</b></em>' container reference.
@@ -331,7 +340,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__TABLE = 17;
+	int ROW__TABLE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Linked Sequences</b></em>' reference list.
@@ -340,7 +349,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__LINKED_SEQUENCES = 18;
+	int ROW__LINKED_SEQUENCES = 19;
 
 	/**
 	 * The number of structural features of the '<em>Row</em>' class.
@@ -349,7 +358,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 19;
+	int ROW_FEATURE_COUNT = 20;
 
 	/**
 	 * The number of operations of the '<em>Row</em>' class.
@@ -824,37 +833,26 @@ public interface ScheduleReportPackage extends EPackage {
 	EReference getRow_DischargeAllocation();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenSlotAllocation <em>Open Slot Allocation</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenLoadSlotAllocation <em>Open Load Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Open Slot Allocation</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenSlotAllocation()
+	 * @return the meta object for the reference '<em>Open Load Slot Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenLoadSlotAllocation()
 	 * @see #getRow()
 	 * @generated
 	 */
-	EReference getRow_OpenSlotAllocation();
+	EReference getRow_OpenLoadSlotAllocation();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferenceRow <em>Reference Row</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenDischargeSlotAllocation <em>Open Discharge Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Reference Row</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferenceRow()
+	 * @return the meta object for the reference '<em>Open Discharge Slot Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getOpenDischargeSlotAllocation()
 	 * @see #getRow()
 	 * @generated
 	 */
-	EReference getRow_ReferenceRow();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferringRows <em>Referring Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Referring Rows</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getReferringRows()
-	 * @see #getRow()
-	 * @generated
-	 */
-	EReference getRow_ReferringRows();
+	EReference getRow_OpenDischargeSlotAllocation();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isReference <em>Reference</em>}'.
@@ -866,6 +864,28 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRow_Reference();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLhsLink <em>Lhs Link</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Lhs Link</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getLhsLink()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_LhsLink();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRhsLink <em>Rhs Link</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Rhs Link</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getRhsLink()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_RhsLink();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}'.
@@ -1290,28 +1310,20 @@ public interface ScheduleReportPackage extends EPackage {
 		EReference ROW__DISCHARGE_ALLOCATION = eINSTANCE.getRow_DischargeAllocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Open Slot Allocation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Open Load Slot Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROW__OPEN_SLOT_ALLOCATION = eINSTANCE.getRow_OpenSlotAllocation();
+		EReference ROW__OPEN_LOAD_SLOT_ALLOCATION = eINSTANCE.getRow_OpenLoadSlotAllocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Reference Row</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Open Discharge Slot Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROW__REFERENCE_ROW = eINSTANCE.getRow_ReferenceRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Referring Rows</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROW__REFERRING_ROWS = eINSTANCE.getRow_ReferringRows();
+		EReference ROW__OPEN_DISCHARGE_SLOT_ALLOCATION = eINSTANCE.getRow_OpenDischargeSlotAllocation();
 
 		/**
 		 * The meta object literal for the '<em><b>Reference</b></em>' attribute feature.
@@ -1320,6 +1332,22 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROW__REFERENCE = eINSTANCE.getRow_Reference();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Link</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__LHS_LINK = eINSTANCE.getRow_LhsLink();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Link</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__RHS_LINK = eINSTANCE.getRow_RhsLink();
 
 		/**
 		 * The meta object literal for the '<em><b>Row Group</b></em>' reference feature.

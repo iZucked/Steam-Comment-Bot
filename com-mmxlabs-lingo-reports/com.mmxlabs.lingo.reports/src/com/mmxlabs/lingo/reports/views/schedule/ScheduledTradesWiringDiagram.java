@@ -195,9 +195,9 @@ public class ScheduledTradesWiringDiagram implements PaintListener {
 
 					if (row.isReference()) {
 						a = row;
-						if (!row.getReferringRows().isEmpty()) {
+						if (row.getLhsLink() != null) {
 //							b = row.getReferringRows().get(0);
-							 Row z = row.getReferringRows().get(0);
+							 Row z = row.getLhsLink();
 							 for (Row x : g.getRows()) {
 							 if (x != row && x.isReference() && x.getDischargeAllocation().getName() .equals( z.getDischargeAllocation().getName())) {
 							

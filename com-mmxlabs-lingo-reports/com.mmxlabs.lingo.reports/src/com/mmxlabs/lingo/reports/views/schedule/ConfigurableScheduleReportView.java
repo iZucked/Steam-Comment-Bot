@@ -174,7 +174,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 							elements.add(row.getCargoAllocation());
 							elements.add(row.getLoadAllocation());
 							elements.add(row.getDischargeAllocation());
-							elements.add(row.getOpenSlotAllocation());
+							elements.add(row.getOpenLoadSlotAllocation());
+							elements.add(row.getOpenDischargeSlotAllocation());
 							elements.addAll(row.getInputEquivalents());
 							elements.retainAll(scenarioComparisonService.getSelectedElements());
 							if (elements.isEmpty()) {

@@ -29,13 +29,16 @@ public class ChangeDescriptionUtil {
 
 	public static String getCapacityViolationDescription(final Row row) {
 		if (!row.isReference()) {
-			final Row referenceRow = row.getReferenceRow();
+			final Row lhsLink = row.getLhsLink();
 			String loadViolationString = "";
-			String dischargeViolationString = "";
-			if (referenceRow != null) {
-				loadViolationString = CapacityViolationDiffUtils.checkSlotAllocationForCapacityViolations(row.getLoadAllocation(), referenceRow.getLoadAllocation());
+			if (lhsLink != null) {
+				loadViolationString = CapacityViolationDiffUtils.checkSlotAllocationForCapacityViolations(row.getLoadAllocation(), lhsLink.getLoadAllocation());
 			}
-			dischargeViolationString = CapacityViolationDiffUtils.checkSlotAllocationForCapacityViolations(row.getDischargeAllocation(), getMatchedDischargeAllocation(row));
+			final Row rhsLink = row.getRhsLink();
+			String dischargeViolationString = "";
+			if (rhsLink != null) {
+				dischargeViolationString = CapacityViolationDiffUtils.checkSlotAllocationForCapacityViolations(row.getDischargeAllocation(), rhsLink.getDischargeAllocation());
+			}
 			return String.format("%s%s%s", loadViolationString, loadViolationString.equals("") || dischargeViolationString.equals("") ? "" : " | ", dischargeViolationString);
 		}
 		return "";
@@ -43,37 +46,25 @@ public class ChangeDescriptionUtil {
 
 	public static String getLatenessDescription(final Row row) {
 		if (!row.isReference()) {
-			final Row referenceRow = row.getReferenceRow();
+			final Row lhsLink = row.getLhsLink();
 			String loadLatenessString = "";
-			String dischargeLatenessString = "";
-			if (referenceRow != null) {
-				loadLatenessString = LatenessDiffUtils.checkSlotAllocationForLateness(row.getLoadAllocation(), referenceRow.getLoadAllocation());
+			if (lhsLink != null) {
+				loadLatenessString = LatenessDiffUtils.checkSlotAllocationForLateness(row.getLoadAllocation(), lhsLink.getLoadAllocation());
 			}
-			dischargeLatenessString = LatenessDiffUtils.checkSlotAllocationForLateness(row.getDischargeAllocation(), getMatchedDischargeAllocation(row));
+			final Row rhsLink = row.getRhsLink();
+			String dischargeLatenessString = "";
+			if (rhsLink != null) {
+				dischargeLatenessString = LatenessDiffUtils.checkSlotAllocationForLateness(row.getDischargeAllocation(), rhsLink.getDischargeAllocation());
+			}
 			return String.format("%s%s%s", loadLatenessString, loadLatenessString.equals("") || dischargeLatenessString.equals("") ? "" : " | ", dischargeLatenessString);
 		}
 		return "";
 	}
 
-	private static SlotAllocation getMatchedDischargeAllocation(Row row) {
-		CycleGroup group = row.getCycleGroup();
-		SlotAllocation matchedDischarge = null;
-		if (group != null) {
-			for (Row r : group.getRows()) {
-				if (r.isReference()) {
-					if (row.getDischargeAllocation() != null && r.getDischargeAllocation() != null && row.getDischargeAllocation().getName().equals(r.getDischargeAllocation().getName())) {
-						matchedDischarge = r.getDischargeAllocation();
-					}
-				}
-			}
-		}
-		return matchedDischarge;
-	}
-
 	public static String getChangeDescription(final Row row) {
 
 		if (!row.isReference()) {
-			final Row referenceRow = row.getReferenceRow();
+			final Row referenceRow = row.getLhsLink();
 			final CargoAllocation ca = row.getCargoAllocation();
 			if (referenceRow != null) {
 
@@ -118,9 +109,13 @@ public class ChangeDescriptionUtil {
 								CargoAllocationUtils.getSalesWiringAsString(ca));
 					}
 				}
-				if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
+				if (row.getOpenLoadSlotAllocation() != null && referenceRow.getOpenLoadSlotAllocation() == null) {
 					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
-					return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
+					return String.format("Cancelled '%s'", row.getOpenLoadSlotAllocation().getSlot().getName());
+				}
+				if (row.getOpenDischargeSlotAllocation() != null && referenceRow.getOpenLoadSlotAllocation() == null) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+					return String.format("Cancelled '%s'", row.getOpenDischargeSlotAllocation().getSlot().getName());
 				}
 				if (row.getTarget() instanceof GeneratedCharterOut && referenceRow.getTarget() instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut rowTarget = (GeneratedCharterOut) row.getTarget();
@@ -161,10 +156,13 @@ public class ChangeDescriptionUtil {
 				}
 			} else {
 
-				if (row.getOpenSlotAllocation() != null) {
+				if (row.getOpenLoadSlotAllocation() != null) {
 					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
-
-					return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
+					return String.format("Cancelled '%s'", row.getOpenLoadSlotAllocation().getSlot().getName());
+				}
+				if (row.getOpenDischargeSlotAllocation() != null) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+					return String.format("Cancelled '%s'", row.getOpenDischargeSlotAllocation().getSlot().getName());
 				}
 
 				if (row.getLoadAllocation() != null && row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
@@ -180,7 +178,7 @@ public class ChangeDescriptionUtil {
 				}
 			}
 		} else {
-			if (row.getReferringRows().isEmpty()) {
+			if (row.getLhsLink() == null) {
 				// This is a reference row, nothing refers to it.
 
 				// GCO in reference case, but not comparison case.
@@ -211,7 +209,7 @@ public class ChangeDescriptionUtil {
 
 		String result = "";
 
-		final Row referenceRow = row.getReferenceRow();
+		final Row referenceRow = row.isReference() ? null : row.getLhsLink();
 		if (referenceRow != null) {
 			try {
 				final CargoAllocation ca = (CargoAllocation) referenceRow.eGet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION);
@@ -235,7 +233,7 @@ public class ChangeDescriptionUtil {
 			return null;
 		}
 
-		final Row referenceRow = row.getReferenceRow();
+		final Row referenceRow = row.isReference() ? null : row.getLhsLink();
 		if (referenceRow != null) {
 			//
 			if (row.getCargoAllocation() != null) {
@@ -249,15 +247,10 @@ public class ChangeDescriptionUtil {
 					if (pinnedCargoAllocation != null) {
 						// convert this cargo's wiring of slot allocations to a string
 						result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-					} else if (referenceRow.getOpenSlotAllocation() != null) {
-						final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
-						if (openSlotAllocation != null) {
-							if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-								result = "Long";
-							} else {
-								result = "Short";
-							}
-						}
+					} else if (referenceRow.getOpenLoadSlotAllocation() != null) {
+						result = "Long";
+					} else if (referenceRow.getOpenDischargeSlotAllocation() != null) {
+						result = "Short";
 					}
 				} catch (final Exception e) {
 					LOG.warn("Error formatting previous wiring", e);
@@ -269,20 +262,27 @@ public class ChangeDescriptionUtil {
 				}
 
 				return result;
-			} else if (row.getOpenSlotAllocation() != null) {
-				final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+			} else if (row.getOpenLoadSlotAllocation() != null) {
+				final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
+				if (openSlotAllocation != null) {
+
+					if (referenceRow.getCargoAllocation() != null) {
+						final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
+						if (pinnedCargoAllocation != null) {
+							final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+							return result;
+						}
+					}
+				}
+			} else if (row.getOpenDischargeSlotAllocation() != null) {
+				final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 				if (openSlotAllocation != null) {
 
 					if (referenceRow.getCargoAllocation() != null) {
 						final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
 						if (pinnedCargoAllocation != null) {
 
-							final String result;
-							if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-								result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-							} else {
-								result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
-							}
+							final String result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
 							return result;
 						}
 					}

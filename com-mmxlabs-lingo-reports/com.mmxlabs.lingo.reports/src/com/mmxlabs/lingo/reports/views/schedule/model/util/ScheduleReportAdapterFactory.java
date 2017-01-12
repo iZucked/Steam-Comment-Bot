@@ -10,8 +10,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -74,8 +72,8 @@ public class ScheduleReportAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ScheduleReportSwitch<@Nullable Adapter> modelSwitch =
-		new ScheduleReportSwitch<@Nullable Adapter>() {
+	protected ScheduleReportSwitch<Adapter> modelSwitch =
+		new ScheduleReportSwitch<Adapter>() {
 			@Override
 			public Adapter caseTable(Table object) {
 				return createTableAdapter();

@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-class SelectedDataProviderImpl implements ISelectedDataProvider {
+public class SelectedDataProviderImpl implements ISelectedDataProvider {
 
 	private final List<ScenarioInstance> scenarioInstances = new LinkedList<>();
 	private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();

@@ -119,7 +119,8 @@ public class FleetEquivalanceGroupBuilder {
 							final Row equivalenceRow = elementToRowMap.get(e);
 							if (equivalenceRow != null) {
 								if (referenceRow != null) {
-									equivalenceRow.setReferenceRow(referenceRow);
+									equivalenceRow.setLhsLink(referenceRow);
+									referenceRow.setLhsLink(equivalenceRow);
 								}
 							}
 						}

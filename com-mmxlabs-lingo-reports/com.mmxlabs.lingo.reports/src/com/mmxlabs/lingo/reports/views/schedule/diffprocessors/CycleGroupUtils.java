@@ -34,12 +34,11 @@ public class CycleGroupUtils {
 
 	private static void setRowCycleGroup(final Row row, final CycleGroup cycleGroup) {
 		row.setCycleGroup(cycleGroup);
-		if (row.getReferenceRow() != null) {
-			row.getReferenceRow().setCycleGroup(cycleGroup);
-		} else {
-			for (final Row r : row.getReferringRows()) {
-				r.setCycleGroup(cycleGroup);
-			}
+		if (row.getLhsLink() != null) {
+			row.getLhsLink().setCycleGroup(cycleGroup);
+		}
+		if (row.getRhsLink() != null) {
+			row.getRhsLink().setCycleGroup(cycleGroup);
 		}
 	}
 

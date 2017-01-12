@@ -16,6 +16,7 @@ import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.BaseFuelCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.CanalCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterCostFormatter;
@@ -23,10 +24,8 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysForm
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.LNGCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.PortCostFormatter;
-import com.mmxlabs.lingo.reports.views.fleet.formatters.VesselFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardFleetColumnFactory implements IFleetColumnFactory {

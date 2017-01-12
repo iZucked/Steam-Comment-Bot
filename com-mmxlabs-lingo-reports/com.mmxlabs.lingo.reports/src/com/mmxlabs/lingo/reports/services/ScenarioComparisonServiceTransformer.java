@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -298,11 +300,64 @@ public class ScenarioComparisonServiceTransformer {
 						if (referenceRow != null) {
 							referenceRow.setVisible(true);
 
-							final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+							// Bind (non-spot market) slots based on ID - slot ID must by unique!
+							{
+								if (referenceRow.getLhsLink() == null && referenceRow.getName() != null && !referenceRow.getName().isEmpty()) {
 
-							for (final Row row : referenceRow.getReferringRows()) {
-								row.setVisible(true);
-								CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+									for (Row row : table.getRows()) {
+										if (!row.isReference()) {
+											if (Objects.equal(referenceRow.getName(), row.getName())) {
+
+												if (referenceRow.getOpenLoadSlotAllocation() != null
+														|| (referenceRow.getLoadAllocation() != null && !(referenceRow.getLoadAllocation().getSlot() instanceof SpotSlot))) {
+
+													assert row.getLhsLink() == null;
+													row.setLhsLink(referenceRow);
+													referenceRow.setLhsLink(row);
+
+													final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+													CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+
+													break;
+												}
+											}
+										}
+									}
+								}
+								if (referenceRow.getRhsLink() == null && referenceRow.getName2() != null && !referenceRow.getName2().isEmpty()) {
+
+									for (Row row : table.getRows()) {
+										if (!row.isReference()) {
+											if (Objects.equal(referenceRow.getName2(), row.getName2())) {
+												if (referenceRow.getOpenDischargeSlotAllocation() != null
+														|| (referenceRow.getDischargeAllocation() != null && !(referenceRow.getDischargeAllocation().getSlot() instanceof SpotSlot))) {
+													assert row.getRhsLink() == null;
+													row.setRhsLink(referenceRow);
+													referenceRow.setRhsLink(row);
+													break;
+												}
+											}
+										}
+									}
+
+								}
+							}
+
+							// Bind all rows linked by LHS/RHS definitions.
+							final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+							{
+								Row row = referenceRow.getLhsLink();
+								if (row != null) {
+									row.setVisible(true);
+									CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+								}
+							}
+							{
+								Row row = referenceRow.getRhsLink();
+								if (row != null) {
+									row.setVisible(true);
+									CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+								}
 							}
 						}
 					}
@@ -429,7 +484,13 @@ public class ScenarioComparisonServiceTransformer {
 
 				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
 				row.setTarget(openSlotAllocation);
-				row.setOpenSlotAllocation(openSlotAllocation);
+				if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+					row.setOpenLoadSlotAllocation(openSlotAllocation);
+				} else if (openSlotAllocation.getSlot() instanceof DischargeSlot) {
+					row.setOpenDischargeSlotAllocation(openSlotAllocation);
+				} else {
+					assert false;
+				}
 				elementToRowMap.put(openSlotAllocation, row);
 				allElements.add(openSlotAllocation);
 				if (isReferenceSchedule) {
@@ -441,8 +502,7 @@ public class ScenarioComparisonServiceTransformer {
 				} else {
 					if (slot instanceof DischargeSlot) {
 						row.setName2(slot.getName());
-					} // else
-					{
+					} else {
 						row.setName(slot.getName());
 
 					}
