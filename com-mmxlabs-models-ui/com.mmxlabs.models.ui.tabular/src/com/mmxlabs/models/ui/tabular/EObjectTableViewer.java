@@ -46,6 +46,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * A TableViewer which displays a list of EObjects using the other classes in this package. Factored out of EObjectEditorViewerPane so that it can be used in dialogs without causing trouble, and
@@ -73,13 +74,9 @@ public class EObjectTableViewer extends GridTreeViewer {
 		public void commandStackChanged(final EventObject event) {
 
 			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the container - OR contained elements?
-
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					if (!getControl().isDisposed()) {
-						doCommandStackChanged();
-					}
+			RunnerHelper.asyncExec(() -> {
+				if (!getControl().isDisposed()) {
+					doCommandStackChanged();
 				}
 			});
 		}
