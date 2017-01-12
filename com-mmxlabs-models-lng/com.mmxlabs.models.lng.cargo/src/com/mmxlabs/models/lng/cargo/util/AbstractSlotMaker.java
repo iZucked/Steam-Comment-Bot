@@ -134,6 +134,11 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
+	public @NonNull T withHedgeValue(final int value) {
+		slot.setHedges(value);
+		return (T) this;
+	}
+
 	public @NonNull T withMiscCosts(final int costs) {
 		slot.setMiscCosts(costs);
 		return (T) this;
