@@ -115,10 +115,10 @@ public final class ScenarioModelUtil {
 		}
 		return costModel;
 	}
-	
+
 	@NonNull
 	public static AnalyticsModel getAnalyticsModel(@NonNull final LNGScenarioModel lngScenarioModel) {
-	 
+
 		final AnalyticsModel analyticsModel = lngScenarioModel.getAnalyticsModel();
 		if (analyticsModel == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
@@ -190,5 +190,13 @@ public final class ScenarioModelUtil {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
 		return commercialModel;
+	}
+
+	public static @Nullable LNGScenarioModel findScenarioModel(final @NonNull EObject source) {
+		EObject container = source.eContainer();
+		while (container != null && !(container instanceof LNGScenarioModel)) {
+			container = container.eContainer();
+		}
+		return (LNGScenarioModel) container;
 	}
 }
