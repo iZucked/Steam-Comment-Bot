@@ -49,4 +49,13 @@ public interface IAdditionalAttributeProvider {
 
 	default void done() {
 	}
+
+	default int getBorders(GridItem item, int i) {
+		return 0;
+	}
+
+	@Nullable
+	default Object getTypedValue(GridItem item, int i) {
+		return null;
+	}
 }
