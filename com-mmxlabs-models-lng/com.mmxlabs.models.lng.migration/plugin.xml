@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="63"
+            latestVersion="64"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -484,6 +484,13 @@
              from="62"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV63"
              to="63">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV64"
+             context="com.mmxlabs.lingo"
+             from="63"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV64"
+             to="64">
        </MigrationUnit>
    </extension>
 </plugin>

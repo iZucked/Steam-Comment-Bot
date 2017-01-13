@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -196,6 +197,18 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	public T withVesselRestriction(@NonNull final AVesselSet<Vessel> restrictedVessel) {
 		slot.getAllowedVessels().clear();
 		slot.getAllowedVessels().add(restrictedVessel);
+		return (T) this;
+	}
+
+	/**
+	 * Generic slot modifier call
+	 * 
+	 * @param action
+	 * @return
+	 */
+	@NonNull
+	public T with(@NonNull Consumer<Slot> action) {
+		action.accept(slot);
 		return (T) this;
 	}
 

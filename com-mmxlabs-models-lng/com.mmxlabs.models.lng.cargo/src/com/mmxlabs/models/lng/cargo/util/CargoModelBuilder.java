@@ -126,7 +126,7 @@ public class CargoModelBuilder {
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
 		} else if (divertable) {
-			throw new IllegalArgumentException("Divertable DES Purchases need a nominated vessel");
+//			throw new IllegalArgumentException("Divertable DES Purchases need a nominated vessel");
 		}
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -190,7 +190,7 @@ public class CargoModelBuilder {
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
 		} else if (divertable) {
-			throw new IllegalArgumentException("Divertable FOB sale need a nominated vessel");
+//			throw new IllegalArgumentException("Divertable FOB sale need a nominated vessel");
 		}
 		slot.setFOBSale(true);
 		slot.setDivertible(divertable);

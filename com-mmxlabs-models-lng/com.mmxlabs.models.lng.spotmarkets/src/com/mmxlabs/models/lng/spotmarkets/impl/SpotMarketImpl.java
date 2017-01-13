@@ -5,20 +5,26 @@
 package com.mmxlabs.models.lng.spotmarkets.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +43,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPricingEvent <em>Pricing Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  * </ul>
  *
  * @generated
@@ -191,6 +200,46 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @ordered
 	 */
 	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> restrictedPorts;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Contract> restrictedContracts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -445,6 +494,51 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isRestrictedListsArePermissive() {
+		return restrictedListsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
+		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
+		restrictedListsArePermissive = newRestrictedListsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet<Port>> getRestrictedPorts() {
+		if (restrictedPorts == null) {
+			restrictedPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS);
+		}
+		return restrictedPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Contract> getRestrictedContracts() {
+		if (restrictedContracts == null) {
+			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS);
+		}
+		return restrictedContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -504,6 +598,12 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return basicGetEntity();
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				return getPricingEvent();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return isRestrictedListsArePermissive();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
+				return getRestrictedPorts();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
+				return getRestrictedContracts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -513,6 +613,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -542,6 +643,17 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				setPricingEvent((PricingEvent)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				setRestrictedListsArePermissive((Boolean)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
+				getRestrictedPorts().clear();
+				getRestrictedPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -582,6 +694,15 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				setPricingEvent(PRICING_EVENT_EDEFAULT);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
+				getRestrictedPorts().clear();
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -612,6 +733,12 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return entity != null;
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_PORTS:
+				return restrictedPorts != null && !restrictedPorts.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKET__RESTRICTED_CONTRACTS:
+				return restrictedContracts != null && !restrictedContracts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -670,6 +797,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		result.append(volumeLimitsUnit);
 		result.append(", pricingEvent: ");
 		result.append(pricingEvent);
+		result.append(", restrictedListsArePermissive: ");
+		result.append(restrictedListsArePermissive);
 		result.append(')');
 		return result.toString();
 	}
