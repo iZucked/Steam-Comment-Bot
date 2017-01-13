@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -42,20 +43,10 @@ public class ValueListAttributeManipulator extends BasicAttributeManipulator {
 		Object value = super.getValue(object);
 		final int index = valueList.indexOf(value);
 		if (index == -1) {
-			return value == null ? "" : value.toString();
+			return (value == null || value == SetCommand.UNSET_VALUE) ? "" : value.toString();
 		}
 		return names.get(index);
 	}
-	
-//	@Override
-//	public String renderSetValue(final Object o, final Object object) {
-//		final Object value = super.getValue(object);
-//		final int index = valueList.indexOf(value);
-//		if (index == -1) {
-//			return value == null ? "" : value.toString();
-//		}
-//		return names.get(index);
-//	}
 
 	@Override
 	public void doSetValue(final Object object, final Object value) {
