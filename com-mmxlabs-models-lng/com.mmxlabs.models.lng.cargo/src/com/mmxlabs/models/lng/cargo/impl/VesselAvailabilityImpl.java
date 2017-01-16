@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 /**
@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isFleet <em>Fleet</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
@@ -51,7 +52,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getBallastBonus <em>Ballast Bonus</em>}</li>
  * </ul>
@@ -78,6 +78,26 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected boolean fleet = FLEET_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OPTIONAL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean optional = OPTIONAL_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
@@ -303,26 +323,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected boolean forceHireCostOnlyEndRule = FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOptional()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean OPTIONAL_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOptional()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean optional = OPTIONAL_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
@@ -1037,6 +1037,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 				return isFleet();
+			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
+				return isOptional();
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
@@ -1065,8 +1067,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return basicGetEndHeel();
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				return isForceHireCostOnlyEndRule();
-			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
-				return isOptional();
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
 				return getRepositioningFee();
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
@@ -1086,6 +1086,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 				setFleet((Boolean)newValue);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
+				setOptional((Boolean)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)newValue);
@@ -1125,9 +1128,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				setForceHireCostOnlyEndRule((Boolean)newValue);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
-				setOptional((Boolean)newValue);
-				return;
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
 				setRepositioningFee((String)newValue);
 				return;
@@ -1148,6 +1148,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 				setFleet(FLEET_EDEFAULT);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
+				setOptional(OPTIONAL_EDEFAULT);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)null);
@@ -1185,9 +1188,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				setForceHireCostOnlyEndRule(FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
-				setOptional(OPTIONAL_EDEFAULT);
-				return;
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
 				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
 				return;
@@ -1208,6 +1208,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 				return fleet != FLEET_EDEFAULT;
+			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
+				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				return vessel != null;
 			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
@@ -1232,8 +1234,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return endHeel != null;
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				return forceHireCostOnlyEndRule != FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
-			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
-				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
 				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
@@ -1274,6 +1274,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (fleet: ");
 		result.append(fleet);
+		result.append(", optional: ");
+		result.append(optional);
 		result.append(", timeCharterRate: ");
 		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
 		result.append(", startAfter: ");
@@ -1286,8 +1288,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		if (endByESet) result.append(endBy); else result.append("<unset>");
 		result.append(", forceHireCostOnlyEndRule: ");
 		result.append(forceHireCostOnlyEndRule);
-		result.append(", optional: ");
-		result.append(optional);
 		result.append(", repositioningFee: ");
 		result.append(repositioningFee);
 		result.append(", ballastBonus: ");

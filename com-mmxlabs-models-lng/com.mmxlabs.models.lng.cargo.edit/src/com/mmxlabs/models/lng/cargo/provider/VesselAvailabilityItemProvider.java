@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 /**
@@ -57,6 +57,7 @@ public class VesselAvailabilityItemProvider
 			super.getPropertyDescriptors(object);
 
 			addFleetPropertyDescriptor(object);
+			addOptionalPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
@@ -67,7 +68,6 @@ public class VesselAvailabilityItemProvider
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
-			addOptionalPropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
 			addBallastBonusPropertyDescriptor(object);
 		}
@@ -463,13 +463,13 @@ public class VesselAvailabilityItemProvider
 
 		switch (notification.getFeatureID(VesselAvailability.class)) {
 			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
+			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__START_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__END_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__END_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
-			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

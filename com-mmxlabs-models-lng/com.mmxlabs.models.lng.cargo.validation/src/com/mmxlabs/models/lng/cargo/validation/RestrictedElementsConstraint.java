@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -16,9 +16,11 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -75,7 +77,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		final List<? extends EObject> restrictedPorts;
 		boolean restrictedListsArePermissive = false;
 		final String cause;
-//		if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
+		// if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
 		if (slot1.isOverrideRestrictions()) {
 			restrictedListsArePermissive = slot1.isRestrictedListsArePermissive();
 			restrictedContracts = slot1.getRestrictedContracts();
@@ -84,10 +86,26 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		} else {
 			final Contract contract = slot1.getContract();
 			if (contract == null) {
-				restrictedListsArePermissive = false;
-				restrictedContracts = Collections.emptyList();
-				restrictedPorts = Collections.emptyList();
-				cause = "Slot " + slot1.getName();
+				if (slot1 instanceof SpotSlot) {
+					SpotSlot spotSlot = (SpotSlot) slot1;
+					SpotMarket market = spotSlot.getMarket();
+					if (market != null) {
+						restrictedListsArePermissive = market.isRestrictedListsArePermissive();
+						restrictedContracts = market.getRestrictedContracts();
+						restrictedPorts = market.getRestrictedPorts();
+						cause = "Spot market " + market.getName();
+					} else {
+						restrictedListsArePermissive = false;
+						restrictedContracts = Collections.emptyList();
+						restrictedPorts = Collections.emptyList();
+						cause = "Slot " + slot1.getName();
+					}
+				} else {
+					restrictedListsArePermissive = false;
+					restrictedContracts = Collections.emptyList();
+					restrictedPorts = Collections.emptyList();
+					cause = "Slot " + slot1.getName();
+				}
 			} else {
 				restrictedListsArePermissive = contract.isRestrictedListsArePermissive();
 				restrictedContracts = contract.getRestrictedContracts();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.presentation.composites;
@@ -73,6 +73,9 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 		add_priceInfoEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
+		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedPortsEditor(detailComposite, topClass);
+		add_restrictedContractsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the enabled feature on SpotMarket
@@ -142,5 +145,32 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__PRICING_EVENT));
+	}
+
+	/**
+	 * Create the editor for the restrictedListsArePermissive feature on SpotMarket
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedPorts feature on SpotMarket
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedContracts feature on SpotMarket
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS));
 	}
 }

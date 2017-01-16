@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.editor;
 
 import java.util.Collection;
@@ -35,10 +39,10 @@ public class VesselAvailabilityDetailWrapper extends IInlineEditorEnablementWrap
 	protected boolean respondToNotification(final Notification notification) {
 
 		final EObject object = (EObject) notification.getNotifier();
-		if (notification.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Optional()) {
+		if (notification.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Fleet()) {
 			if (notification.getNotifier() == input) {
 				enabled = false;
-				if (notification.getNewBooleanValue()) {
+				if (!notification.getNewBooleanValue()) {
 					enabled = true;
 					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 					dialogContext.getDialogController().updateEditorVisibility();

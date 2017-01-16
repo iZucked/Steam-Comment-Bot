@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -276,6 +276,46 @@ public class ScheduleModelKPIUtils {
 			}
 		}
 		return cancellationFees;
+	}
+
+	public static long getHedgeValue(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
+		long hedgeValue = 0;
+		if (profitAndLossContainer != null) {
+			for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
+				if (generalPNLDetails instanceof SlotPNLDetails) {
+					final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+					for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+						if (details instanceof BasicSlotPNLDetails) {
+							hedgeValue += ((BasicSlotPNLDetails) details).getHedgingValue();
+						}
+					}
+				}
+			}
+		}
+		return hedgeValue;
+	}
+
+	/**
+	 * Returns the value of the misc costs - typically a negative number!
+	 * 
+	 * @param profitAndLossContainer
+	 * @return
+	 */
+	public static long getMiscCostsValue(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
+		long miscCosts = 0;
+		if (profitAndLossContainer != null) {
+			for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
+				if (generalPNLDetails instanceof SlotPNLDetails) {
+					final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+					for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+						if (details instanceof BasicSlotPNLDetails) {
+							miscCosts += ((BasicSlotPNLDetails) details).getMiscCostsValue();
+						}
+					}
+				}
+			}
+		}
+		return miscCosts;
 	}
 
 	public static long getAdditionalShippingProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {

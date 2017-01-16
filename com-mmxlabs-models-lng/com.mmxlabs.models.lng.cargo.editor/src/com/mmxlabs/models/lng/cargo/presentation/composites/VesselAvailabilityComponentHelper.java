@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 /**
@@ -70,6 +70,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_fleetEditor(detailComposite, topClass);
+		add_optionalEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
@@ -82,7 +83,6 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_startHeelEditor(detailComposite, topClass);
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
-		add_optionalEditor(detailComposite, topClass);
 		add_repositioningFeeEditor(detailComposite, topClass);
 		add_ballastBonusEditor(detailComposite, topClass);
 	}

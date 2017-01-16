@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -134,6 +135,11 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
+	public @NonNull T withHedgeValue(final int value) {
+		slot.setHedges(value);
+		return (T) this;
+	}
+
 	public @NonNull T withMiscCosts(final int costs) {
 		slot.setMiscCosts(costs);
 		return (T) this;
@@ -191,6 +197,18 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	public T withVesselRestriction(@NonNull final AVesselSet<Vessel> restrictedVessel) {
 		slot.getAllowedVessels().clear();
 		slot.getAllowedVessels().add(restrictedVessel);
+		return (T) this;
+	}
+
+	/**
+	 * Generic slot modifier call
+	 * 
+	 * @param action
+	 * @return
+	 */
+	@NonNull
+	public T with(@NonNull Consumer<Slot> action) {
+		action.accept(slot);
 		return (T) this;
 	}
 

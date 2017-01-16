@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
@@ -325,13 +325,40 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -441,6 +468,33 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE = SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__RESTRICTED_PORTS = SPOT_MARKET__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -579,6 +633,33 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE = SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__RESTRICTED_PORTS = SPOT_MARKET__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
+
+	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -704,6 +785,33 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE = SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__RESTRICTED_PORTS = SPOT_MARKET__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
 
 	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
@@ -849,6 +957,33 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE = SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__RESTRICTED_PORTS = SPOT_MARKET__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__RESTRICTED_CONTRACTS = SPOT_MARKET__RESTRICTED_CONTRACTS;
 
 	/**
 	 * The feature id for the '<em><b>Origin Ports</b></em>' reference list.
@@ -1383,6 +1518,39 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getSpotMarket_PricingEvent();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#isRestrictedListsArePermissive()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EAttribute getSpotMarket_RestrictedListsArePermissive();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedPorts <em>Restricted Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Ports</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedPorts()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EReference getSpotMarket_RestrictedPorts();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedContracts <em>Restricted Contracts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#getRestrictedContracts()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EReference getSpotMarket_RestrictedContracts();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket <em>DES Purchase Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1870,6 +2038,30 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__PRICING_EVENT = eINSTANCE.getSpotMarket_PricingEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET__RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSpotMarket_RestrictedListsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__RESTRICTED_PORTS = eINSTANCE.getSpotMarket_RestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Contracts</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__RESTRICTED_CONTRACTS = eINSTANCE.getSpotMarket_RestrictedContracts();
 
 		/**
 		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
