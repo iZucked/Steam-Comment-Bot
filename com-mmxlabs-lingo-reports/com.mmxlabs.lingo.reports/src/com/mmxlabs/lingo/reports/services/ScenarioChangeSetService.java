@@ -137,7 +137,7 @@ public class ScenarioChangeSetService {
 		public void partDeactivated(final MPart part) {
 			if (lastChangeSetViewPart == part) {
 				// Clear selection
-				fireListeners(null, null, null, false);
+//				fireListeners(null, null, null, false);
 			}
 		}
 
@@ -145,7 +145,7 @@ public class ScenarioChangeSetService {
 		public void partHidden(final MPart part) {
 			if (lastChangeSetViewPart == part) {
 				// Clear selection
-				fireListeners(null, null, null, false);
+//				fireListeners(null, null, null, false);
 			}
 		}
 
