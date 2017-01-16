@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
@@ -139,6 +140,17 @@ public class PortModelBuilder {
 			list.add(port);
 		}
 		return list;
+	}
+
+	@NonNull
+	public PortGroup makePortGroup(@NonNull String name, @NonNull final Port... ports) {
+		final PortGroup portGroup = PortFactory.eINSTANCE.createPortGroup();
+		portGroup.setName(name);
+		for (final Port port : ports) {
+			portGroup.getContents().add(port);
+		}
+		portModel.getPortGroups().add(portGroup);
+		return portGroup;
 	}
 
 }
