@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -35,6 +36,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -75,6 +78,14 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		}
 		if (obj instanceof Port) {
 			return portMap.get(obj);
+		} else if (obj instanceof APortSet<?>) {
+			final APortSet<?> aPortSet = (APortSet<?>) obj;
+			final Set<Port> objects = (Set<Port>)SetUtils.getObjects(aPortSet);
+			final Set<ISequenceElement> elements = new HashSet<>();
+			for (final Port p  : objects) {
+				elements.addAll(portMap.getOrDefault(p, Collections.emptySet()));
+			}
+			return elements;
 		}
 		if (obj instanceof Slot) {
 			return slotMap.get(obj);
