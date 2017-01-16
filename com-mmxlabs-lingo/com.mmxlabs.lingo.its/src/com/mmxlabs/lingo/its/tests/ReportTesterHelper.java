@@ -22,7 +22,7 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
-import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
@@ -41,7 +41,7 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
  */
 public class ReportTesterHelper {
 
-	public static final String SCHEDULE_SUMMARY_ID = ConfigurableScheduleReportView.ID;
+	public static final String SCHEDULE_SUMMARY_ID = ScheduleSummaryReport.ID;
 	public static final String SCHEDULE_SUMMARY_SHORTNAME = "ScheduleSummary";
 
 	public static final String PORT_ROTATIONS_ID = PortRotationReportView.ID;
