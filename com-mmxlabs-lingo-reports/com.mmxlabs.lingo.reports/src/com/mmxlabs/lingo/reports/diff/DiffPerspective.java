@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.diff;
@@ -10,7 +10,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
 
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
-import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.standard.CargoEconsReport;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
 
@@ -39,7 +39,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		changeSetArea.addPlaceholder("com.mmxlabs.lingo.reports.views.changeset.ActionSetView");
 		fleetReportArea.addView(ConfigurableFleetReportView.ID);
 
-		ganttArea.addView(ConfigurableScheduleReportView.ID);
+		ganttArea.addView(ScheduleSummaryReport.ID);
 		ganttArea.addView("com.mmxlabs.scheduleview.views.SchedulerView");
 
 		econsArea.addView(CargoEconsReport.ID);
@@ -49,7 +49,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
 
 		layout.addShowViewShortcut(HeadlineReportView.ID);
-		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
+		layout.addShowViewShortcut(ScheduleSummaryReport.ID);
 		layout.addShowViewShortcut(ConfigurableFleetReportView.ID);
 		layout.addShowViewShortcut("com.mmxlabs.scheduleview.views.SchedulerView");
 		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.diff.DiffGroupView");

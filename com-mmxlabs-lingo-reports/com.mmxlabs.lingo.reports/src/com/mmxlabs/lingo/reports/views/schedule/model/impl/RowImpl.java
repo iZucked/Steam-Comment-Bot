@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 /**
@@ -17,10 +17,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -51,10 +48,11 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getOpenSlotAllocation <em>Open Slot Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getReferenceRow <em>Reference Row</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getReferringRows <em>Referring Rows</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getOpenLoadSlotAllocation <em>Open Load Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getOpenDischargeSlotAllocation <em>Open Discharge Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#isReference <em>Reference</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLhsLink <em>Lhs Link</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRhsLink <em>Rhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenario <em>Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTable <em>Table</em>}</li>
@@ -205,34 +203,24 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	protected SlotAllocation dischargeAllocation;
 
 	/**
-	 * The cached value of the '{@link #getOpenSlotAllocation() <em>Open Slot Allocation</em>}' reference.
+	 * The cached value of the '{@link #getOpenLoadSlotAllocation() <em>Open Load Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getOpenSlotAllocation()
+	 * @see #getOpenLoadSlotAllocation()
 	 * @generated
 	 * @ordered
 	 */
-	protected OpenSlotAllocation openSlotAllocation;
+	protected OpenSlotAllocation openLoadSlotAllocation;
 
 	/**
-	 * The cached value of the '{@link #getReferenceRow() <em>Reference Row</em>}' reference.
+	 * The cached value of the '{@link #getOpenDischargeSlotAllocation() <em>Open Discharge Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getReferenceRow()
+	 * @see #getOpenDischargeSlotAllocation()
 	 * @generated
 	 * @ordered
 	 */
-	protected Row referenceRow;
-
-	/**
-	 * The cached value of the '{@link #getReferringRows() <em>Referring Rows</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReferringRows()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Row> referringRows;
+	protected OpenSlotAllocation openDischargeSlotAllocation;
 
 	/**
 	 * The default value of the '{@link #isReference() <em>Reference</em>}' attribute.
@@ -253,6 +241,26 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * @ordered
 	 */
 	protected boolean reference = REFERENCE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLhsLink() <em>Lhs Link</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLhsLink()
+	 * @generated
+	 * @ordered
+	 */
+	protected Row lhsLink;
+
+	/**
+	 * The cached value of the '{@link #getRhsLink() <em>Rhs Link</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRhsLink()
+	 * @generated
+	 * @ordered
+	 */
+	protected Row rhsLink;
 
 	/**
 	 * The cached value of the '{@link #getRowGroup() <em>Row Group</em>}' reference.
@@ -690,17 +698,16 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public OpenSlotAllocation getOpenSlotAllocation() {
-		if (openSlotAllocation != null && openSlotAllocation.eIsProxy()) {
-			InternalEObject oldOpenSlotAllocation = (InternalEObject)openSlotAllocation;
-			openSlotAllocation = (OpenSlotAllocation)eResolveProxy(oldOpenSlotAllocation);
-			if (openSlotAllocation != oldOpenSlotAllocation) {
+	public OpenSlotAllocation getOpenLoadSlotAllocation() {
+		if (openLoadSlotAllocation != null && openLoadSlotAllocation.eIsProxy()) {
+			InternalEObject oldOpenLoadSlotAllocation = (InternalEObject)openLoadSlotAllocation;
+			openLoadSlotAllocation = (OpenSlotAllocation)eResolveProxy(oldOpenLoadSlotAllocation);
+			if (openLoadSlotAllocation != oldOpenLoadSlotAllocation) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__OPEN_SLOT_ALLOCATION, oldOpenSlotAllocation, openSlotAllocation));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__OPEN_LOAD_SLOT_ALLOCATION, oldOpenLoadSlotAllocation, openLoadSlotAllocation));
 			}
 		}
-		return openSlotAllocation;
+		return openLoadSlotAllocation;
 	}
 
 	/**
@@ -708,8 +715,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OpenSlotAllocation basicGetOpenSlotAllocation() {
-		return openSlotAllocation;
+	public OpenSlotAllocation basicGetOpenLoadSlotAllocation() {
+		return openLoadSlotAllocation;
 	}
 
 	/**
@@ -717,12 +724,11 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setOpenSlotAllocation(OpenSlotAllocation newOpenSlotAllocation) {
-		OpenSlotAllocation oldOpenSlotAllocation = openSlotAllocation;
-		openSlotAllocation = newOpenSlotAllocation;
+	public void setOpenLoadSlotAllocation(OpenSlotAllocation newOpenLoadSlotAllocation) {
+		OpenSlotAllocation oldOpenLoadSlotAllocation = openLoadSlotAllocation;
+		openLoadSlotAllocation = newOpenLoadSlotAllocation;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__OPEN_SLOT_ALLOCATION, oldOpenSlotAllocation, openSlotAllocation));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__OPEN_LOAD_SLOT_ALLOCATION, oldOpenLoadSlotAllocation, openLoadSlotAllocation));
 	}
 
 	/**
@@ -730,17 +736,16 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Row getReferenceRow() {
-		if (referenceRow != null && referenceRow.eIsProxy()) {
-			InternalEObject oldReferenceRow = (InternalEObject)referenceRow;
-			referenceRow = (Row)eResolveProxy(oldReferenceRow);
-			if (referenceRow != oldReferenceRow) {
+	public OpenSlotAllocation getOpenDischargeSlotAllocation() {
+		if (openDischargeSlotAllocation != null && openDischargeSlotAllocation.eIsProxy()) {
+			InternalEObject oldOpenDischargeSlotAllocation = (InternalEObject)openDischargeSlotAllocation;
+			openDischargeSlotAllocation = (OpenSlotAllocation)eResolveProxy(oldOpenDischargeSlotAllocation);
+			if (openDischargeSlotAllocation != oldOpenDischargeSlotAllocation) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__REFERENCE_ROW, oldReferenceRow, referenceRow));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION, oldOpenDischargeSlotAllocation, openDischargeSlotAllocation));
 			}
 		}
-		return referenceRow;
+		return openDischargeSlotAllocation;
 	}
 
 	/**
@@ -748,8 +753,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Row basicGetReferenceRow() {
-		return referenceRow;
+	public OpenSlotAllocation basicGetOpenDischargeSlotAllocation() {
+		return openDischargeSlotAllocation;
 	}
 
 	/**
@@ -757,47 +762,11 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetReferenceRow(Row newReferenceRow, NotificationChain msgs) {
-		Row oldReferenceRow = referenceRow;
-		referenceRow = newReferenceRow;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__REFERENCE_ROW, oldReferenceRow, newReferenceRow);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setReferenceRow(Row newReferenceRow) {
-		if (newReferenceRow != referenceRow) {
-			NotificationChain msgs = null;
-			if (referenceRow != null)
-				msgs = ((InternalEObject)referenceRow).eInverseRemove(this, ScheduleReportPackage.ROW__REFERRING_ROWS, Row.class, msgs);
-			if (newReferenceRow != null)
-				msgs = ((InternalEObject)newReferenceRow).eInverseAdd(this, ScheduleReportPackage.ROW__REFERRING_ROWS, Row.class, msgs);
-			msgs = basicSetReferenceRow(newReferenceRow, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__REFERENCE_ROW, newReferenceRow, newReferenceRow));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Row> getReferringRows() {
-		if (referringRows == null) {
-			referringRows = new EObjectWithInverseResolvingEList<Row>(Row.class, this, ScheduleReportPackage.ROW__REFERRING_ROWS, ScheduleReportPackage.ROW__REFERENCE_ROW);
-		}
-		return referringRows;
+	public void setOpenDischargeSlotAllocation(OpenSlotAllocation newOpenDischargeSlotAllocation) {
+		OpenSlotAllocation oldOpenDischargeSlotAllocation = openDischargeSlotAllocation;
+		openDischargeSlotAllocation = newOpenDischargeSlotAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION, oldOpenDischargeSlotAllocation, openDischargeSlotAllocation));
 	}
 
 	/**
@@ -821,6 +790,82 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 		reference = newReference;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__REFERENCE, oldReference, reference));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Row getLhsLink() {
+		if (lhsLink != null && lhsLink.eIsProxy()) {
+			InternalEObject oldLhsLink = (InternalEObject)lhsLink;
+			lhsLink = (Row)eResolveProxy(oldLhsLink);
+			if (lhsLink != oldLhsLink) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__LHS_LINK, oldLhsLink, lhsLink));
+			}
+		}
+		return lhsLink;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Row basicGetLhsLink() {
+		return lhsLink;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLhsLink(Row newLhsLink) {
+		Row oldLhsLink = lhsLink;
+		lhsLink = newLhsLink;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__LHS_LINK, oldLhsLink, lhsLink));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Row getRhsLink() {
+		if (rhsLink != null && rhsLink.eIsProxy()) {
+			InternalEObject oldRhsLink = (InternalEObject)rhsLink;
+			rhsLink = (Row)eResolveProxy(oldRhsLink);
+			if (rhsLink != oldRhsLink) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__RHS_LINK, oldRhsLink, rhsLink));
+			}
+		}
+		return rhsLink;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Row basicGetRhsLink() {
+		return rhsLink;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRhsLink(Row newRhsLink) {
+		Row oldRhsLink = rhsLink;
+		rhsLink = newRhsLink;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__RHS_LINK, oldRhsLink, rhsLink));
 	}
 
 	/**
@@ -993,12 +1038,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				if (cycleGroup != null)
 					msgs = ((InternalEObject)cycleGroup).eInverseRemove(this, ScheduleReportPackage.CYCLE_GROUP__ROWS, CycleGroup.class, msgs);
 				return basicSetCycleGroup((CycleGroup)otherEnd, msgs);
-			case ScheduleReportPackage.ROW__REFERENCE_ROW:
-				if (referenceRow != null)
-					msgs = ((InternalEObject)referenceRow).eInverseRemove(this, ScheduleReportPackage.ROW__REFERRING_ROWS, Row.class, msgs);
-				return basicSetReferenceRow((Row)otherEnd, msgs);
-			case ScheduleReportPackage.ROW__REFERRING_ROWS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getReferringRows()).basicAdd(otherEnd, msgs);
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				if (rowGroup != null)
 					msgs = ((InternalEObject)rowGroup).eInverseRemove(this, ScheduleReportPackage.ROW_GROUP__ROWS, RowGroup.class, msgs);
@@ -1021,10 +1060,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 		switch (featureID) {
 			case ScheduleReportPackage.ROW__CYCLE_GROUP:
 				return basicSetCycleGroup(null, msgs);
-			case ScheduleReportPackage.ROW__REFERENCE_ROW:
-				return basicSetReferenceRow(null, msgs);
-			case ScheduleReportPackage.ROW__REFERRING_ROWS:
-				return ((InternalEList<?>)getReferringRows()).basicRemove(otherEnd, msgs);
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				return basicSetRowGroup(null, msgs);
 			case ScheduleReportPackage.ROW__TABLE:
@@ -1084,16 +1119,20 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__DISCHARGE_ALLOCATION:
 				if (resolve) return getDischargeAllocation();
 				return basicGetDischargeAllocation();
-			case ScheduleReportPackage.ROW__OPEN_SLOT_ALLOCATION:
-				if (resolve) return getOpenSlotAllocation();
-				return basicGetOpenSlotAllocation();
-			case ScheduleReportPackage.ROW__REFERENCE_ROW:
-				if (resolve) return getReferenceRow();
-				return basicGetReferenceRow();
-			case ScheduleReportPackage.ROW__REFERRING_ROWS:
-				return getReferringRows();
+			case ScheduleReportPackage.ROW__OPEN_LOAD_SLOT_ALLOCATION:
+				if (resolve) return getOpenLoadSlotAllocation();
+				return basicGetOpenLoadSlotAllocation();
+			case ScheduleReportPackage.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION:
+				if (resolve) return getOpenDischargeSlotAllocation();
+				return basicGetOpenDischargeSlotAllocation();
 			case ScheduleReportPackage.ROW__REFERENCE:
 				return isReference();
+			case ScheduleReportPackage.ROW__LHS_LINK:
+				if (resolve) return getLhsLink();
+				return basicGetLhsLink();
+			case ScheduleReportPackage.ROW__RHS_LINK:
+				if (resolve) return getRhsLink();
+				return basicGetRhsLink();
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				if (resolve) return getRowGroup();
 				return basicGetRowGroup();
@@ -1151,18 +1190,20 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__DISCHARGE_ALLOCATION:
 				setDischargeAllocation((SlotAllocation)newValue);
 				return;
-			case ScheduleReportPackage.ROW__OPEN_SLOT_ALLOCATION:
-				setOpenSlotAllocation((OpenSlotAllocation)newValue);
+			case ScheduleReportPackage.ROW__OPEN_LOAD_SLOT_ALLOCATION:
+				setOpenLoadSlotAllocation((OpenSlotAllocation)newValue);
 				return;
-			case ScheduleReportPackage.ROW__REFERENCE_ROW:
-				setReferenceRow((Row)newValue);
-				return;
-			case ScheduleReportPackage.ROW__REFERRING_ROWS:
-				getReferringRows().clear();
-				getReferringRows().addAll((Collection<? extends Row>)newValue);
+			case ScheduleReportPackage.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION:
+				setOpenDischargeSlotAllocation((OpenSlotAllocation)newValue);
 				return;
 			case ScheduleReportPackage.ROW__REFERENCE:
 				setReference((Boolean)newValue);
+				return;
+			case ScheduleReportPackage.ROW__LHS_LINK:
+				setLhsLink((Row)newValue);
+				return;
+			case ScheduleReportPackage.ROW__RHS_LINK:
+				setRhsLink((Row)newValue);
 				return;
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				setRowGroup((RowGroup)newValue);
@@ -1222,17 +1263,20 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__DISCHARGE_ALLOCATION:
 				setDischargeAllocation((SlotAllocation)null);
 				return;
-			case ScheduleReportPackage.ROW__OPEN_SLOT_ALLOCATION:
-				setOpenSlotAllocation((OpenSlotAllocation)null);
+			case ScheduleReportPackage.ROW__OPEN_LOAD_SLOT_ALLOCATION:
+				setOpenLoadSlotAllocation((OpenSlotAllocation)null);
 				return;
-			case ScheduleReportPackage.ROW__REFERENCE_ROW:
-				setReferenceRow((Row)null);
-				return;
-			case ScheduleReportPackage.ROW__REFERRING_ROWS:
-				getReferringRows().clear();
+			case ScheduleReportPackage.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION:
+				setOpenDischargeSlotAllocation((OpenSlotAllocation)null);
 				return;
 			case ScheduleReportPackage.ROW__REFERENCE:
 				setReference(REFERENCE_EDEFAULT);
+				return;
+			case ScheduleReportPackage.ROW__LHS_LINK:
+				setLhsLink((Row)null);
+				return;
+			case ScheduleReportPackage.ROW__RHS_LINK:
+				setRhsLink((Row)null);
 				return;
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				setRowGroup((RowGroup)null);
@@ -1280,14 +1324,16 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return loadAllocation != null;
 			case ScheduleReportPackage.ROW__DISCHARGE_ALLOCATION:
 				return dischargeAllocation != null;
-			case ScheduleReportPackage.ROW__OPEN_SLOT_ALLOCATION:
-				return openSlotAllocation != null;
-			case ScheduleReportPackage.ROW__REFERENCE_ROW:
-				return referenceRow != null;
-			case ScheduleReportPackage.ROW__REFERRING_ROWS:
-				return referringRows != null && !referringRows.isEmpty();
+			case ScheduleReportPackage.ROW__OPEN_LOAD_SLOT_ALLOCATION:
+				return openLoadSlotAllocation != null;
+			case ScheduleReportPackage.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION:
+				return openDischargeSlotAllocation != null;
 			case ScheduleReportPackage.ROW__REFERENCE:
 				return reference != REFERENCE_EDEFAULT;
+			case ScheduleReportPackage.ROW__LHS_LINK:
+				return lhsLink != null;
+			case ScheduleReportPackage.ROW__RHS_LINK:
+				return rhsLink != null;
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				return rowGroup != null;
 			case ScheduleReportPackage.ROW__SCENARIO:

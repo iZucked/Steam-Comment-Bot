@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.services;
 
 import java.util.Collection;
@@ -133,7 +137,7 @@ public class ScenarioChangeSetService {
 		public void partDeactivated(final MPart part) {
 			if (lastChangeSetViewPart == part) {
 				// Clear selection
-				fireListeners(null, null, null, false);
+//				fireListeners(null, null, null, false);
 			}
 		}
 
@@ -141,7 +145,7 @@ public class ScenarioChangeSetService {
 		public void partHidden(final MPart part) {
 			if (lastChangeSetViewPart == part) {
 				// Clear selection
-				fireListeners(null, null, null, false);
+//				fireListeners(null, null, null, false);
 			}
 		}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
@@ -29,8 +29,8 @@ public class PortRotationsReportTransformer {
 
 			private int numberOfSchedules;
 			private boolean isPinned;
-			private final Map<Object, ScenarioResult> elementToInstanceMap = new HashMap<>();
-			private final Map<Object, LNGScenarioModel> elementToModelMap = new HashMap<>();
+			private final Map<Object, ScenarioResult> _elementToInstanceMap = new HashMap<>();
+			private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
 			private final List<Object> elementList = new ArrayList<>();
 
 			@Override
@@ -41,8 +41,8 @@ public class PortRotationsReportTransformer {
 				numberOfSchedules = 0;
 				isPinned = false;
 
-				elementToInstanceMap.clear();
-				elementToModelMap.clear();
+				_elementToInstanceMap.clear();
+				_elementToModelMap.clear();
 				elementList.clear();
 			}
 
@@ -52,11 +52,11 @@ public class PortRotationsReportTransformer {
 				isPinned |= pinned;
 				final Collection<? extends Object> collectElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
-				elementToInstanceMap.put(schedule, scenarioResult);
-				elementToModelMap.put(schedule, scenarioModel);
+				_elementToInstanceMap.put(schedule, scenarioResult);
+				_elementToModelMap.put(schedule, scenarioModel);
 				for (final Object element : collectElements) {
-					elementToInstanceMap.put(element, scenarioResult);
-					elementToModelMap.put(element, scenarioModel);
+					_elementToInstanceMap.put(element, scenarioResult);
+					_elementToModelMap.put(element, scenarioModel);
 				}
 				return collectElements;
 			}
@@ -74,7 +74,7 @@ public class PortRotationsReportTransformer {
 				super.endCollecting();
 
 				viewer.processInputs(elements);
-				viewer.mapInputs(elementToInstanceMap, elementToModelMap);
+				viewer.mapInputs(_elementToInstanceMap, _elementToModelMap);
 				elements.addAll(elementList);
 				// viewer.setInput(elements);
 			}

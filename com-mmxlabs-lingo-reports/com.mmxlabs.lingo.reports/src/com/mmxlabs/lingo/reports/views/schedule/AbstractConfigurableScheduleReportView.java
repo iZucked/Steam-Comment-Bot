@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 /**
@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -49,17 +50,14 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
  * for the user to change the default settings.
  */
-public class ConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
-	/**
-	 * The ID of the view as specified by the extension.
-	 */
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+public abstract class AbstractConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
 
 	private final ScheduleBasedReportBuilder builder;
 
@@ -75,9 +73,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
 
-	@Inject
-	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
-		super("com.mmxlabs.lingo.doc.Reports_ScheduleSummary");
+	protected AbstractConfigurableScheduleReportView(final String id, final ScheduleBasedReportBuilder builder) {
+		super(id);
 
 		// Setup the builder hooks.
 		this.builder = builder;
@@ -111,11 +108,14 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		return super.getAdapter(adapter);
 	}
 
-	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+
+		private final Map<Object, ScenarioResult> _elementToInstanceMap = new HashMap<>();
+		private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
 
 		@Override
-		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioResult pin, @NonNull ScenarioResult other, @NonNull Table table,
-				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
@@ -126,28 +126,50 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				}
 			}
 
+			updateElementMaps(selectedDataProvider, table);
+
 			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
-		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioResult> others, @NonNull Table table,
-				@NonNull List<LNGScenarioModel> rootObjects) {
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioResult> others, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects) {
 			clearInputEquivalents();
+
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
 
-			int numberOfSchedules = others.size();
+			final int numberOfSchedules = others.size();
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
 					handler.setViewState(numberOfSchedules > 1, false);
 				}
 			}
+			updateElementMaps(selectedDataProvider, table);
 
 			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
+		private void updateElementMaps(final ISelectedDataProvider selectedDataProvider, final Table table) {
+			_elementToInstanceMap.clear();
+			_elementToModelMap.clear();
+			for (final Row row : table.getRows()) {
+				@Nullable
+				final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(row.getSchedule());
+				final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+				_elementToModelMap.put(row.getSchedule(), scenarioModel);
+				_elementToInstanceMap.put(row.getSchedule(), scenarioResult);
+				row.getInputEquivalents().forEach(e -> {
+					_elementToInstanceMap.put(e, scenarioResult);
+					_elementToModelMap.put(e, scenarioModel);
+				});
+			}
+
+			mapInputs(_elementToInstanceMap, _elementToModelMap);
+		}
+
 		@Override
-		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			ViewerHelper.refresh(viewer, true);
 		}
 
@@ -168,13 +190,14 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
 					if (!scenarioComparisonService.getSelectedElements().contains(element)) {
 						if (element instanceof Row) {
-							Row row = (Row) element;
-							Set<EObject> elements = new HashSet<>();
+							final Row row = (Row) element;
+							final Set<EObject> elements = new HashSet<>();
 							elements.add(row.getTarget());
 							elements.add(row.getCargoAllocation());
 							elements.add(row.getLoadAllocation());
 							elements.add(row.getDischargeAllocation());
-							elements.add(row.getOpenSlotAllocation());
+							elements.add(row.getOpenLoadSlotAllocation());
+							elements.add(row.getOpenDischargeSlotAllocation());
 							elements.addAll(row.getInputEquivalents());
 							elements.retainAll(scenarioComparisonService.getSelectedElements());
 							if (elements.isEmpty()) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.services;
@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-class SelectedDataProviderImpl implements ISelectedDataProvider {
+public class SelectedDataProviderImpl implements ISelectedDataProvider {
 
 	private final List<ScenarioResult> scenarioResults = new LinkedList<>();
 	// private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();
@@ -31,6 +31,7 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	private ScenarioResult pinnedScenarioInstance;
 
 	public void addScenario(@NonNull final ScenarioResult scenarioResult, @Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
+		
 		scenarioResults.add(scenarioResult);
 
 		for (final EObject e : children) {

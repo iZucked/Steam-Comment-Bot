@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical;
@@ -131,7 +131,12 @@ public class ScheduleSequenceData {
 
 		// set the final record fields
 		start = startDate;
-		end = endDate;
+		if (model.isSetSchedulingEndDate()) {
+			end = model.getSchedulingEndDate().minusDays(1);
+		} else {
+			end = endDate;
+		}
+		
 
 		// find the sequences per vessel, and the FOB & DES sequences
 		Sequence tempDes = null;

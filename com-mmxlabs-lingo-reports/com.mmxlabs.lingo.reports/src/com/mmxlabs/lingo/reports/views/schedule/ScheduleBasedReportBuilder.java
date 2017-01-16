@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -90,9 +90,17 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	}
 
 	public boolean showRow(Row row) {
-		OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
-		if (openSlotAllocation != null) {
-			return showOpenSlot(openSlotAllocation);
+		boolean show = false;
+		OpenSlotAllocation openLoadSlotAllocation = row.getOpenLoadSlotAllocation();
+		if (openLoadSlotAllocation != null) {
+			show |= showOpenSlot(openLoadSlotAllocation);
+		}
+		OpenSlotAllocation openDischargeSlotAllocation = row.getOpenDischargeSlotAllocation();
+		if (openDischargeSlotAllocation != null) {
+			show |= showOpenSlot(openDischargeSlotAllocation);
+		}
+		if (show) {
+			return true;
 		}
 		SlotAllocation loadAllocation = row.getLoadAllocation();
 		if (loadAllocation != null) {
@@ -103,7 +111,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			return showEvent((Event) target);
 		}
 
-		return true;
+		return false;
 	}
 
 	public boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {

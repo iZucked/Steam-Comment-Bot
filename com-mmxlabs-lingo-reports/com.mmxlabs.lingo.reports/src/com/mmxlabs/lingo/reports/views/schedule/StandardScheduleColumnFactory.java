@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -36,6 +36,7 @@ import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
@@ -52,7 +53,6 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentForma
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -133,10 +133,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					if (object instanceof Row) {
 						final Row row = (Row) object;
-						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
-							if (slot instanceof LoadSlot) {
+							if (slot != null) {
 								return slot.getName();
 							}
 						} else {
@@ -167,12 +167,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 							if (object instanceof Row) {
 								final Row row = (Row) object;
-								final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+								final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 								if (openSlotAllocation != null) {
 									final Slot slot = openSlotAllocation.getSlot();
-									if (slot instanceof LoadSlot) {
+									if (slot != null) {
 										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
-
 									}
 								}
 								final SlotAllocation slotAllocation = row.getLoadAllocation();
@@ -209,12 +208,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 							if (object instanceof Row) {
 								final Row row = (Row) object;
-								final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+								final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 								if (openSlotAllocation != null) {
 									final Slot slot = openSlotAllocation.getSlot();
-									if (slot instanceof DischargeSlot) {
+									if (slot != null) {
 										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
-
 									}
 								}
 								final SlotAllocation slotAllocation = row.getDischargeAllocation();
@@ -274,10 +272,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					if (object instanceof Row) {
 						final Row row = (Row) object;
-						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
-							if (slot instanceof LoadSlot) {
+							if (slot != null) {
 								final Contract contract = slot.getContract();
 								if (contract != null) {
 									return contract.getName();
@@ -306,10 +304,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					if (object instanceof Row) {
 						final Row row = (Row) object;
-						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
-							if (slot instanceof DischargeSlot) {
+							if (slot != null) {
 								final Contract contract = slot.getContract();
 								if (contract != null) {
 									return contract.getName();
@@ -338,10 +336,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					if (object instanceof Row) {
 						final Row row = (Row) object;
-						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
-							if (slot instanceof LoadSlot) {
+							if (slot != null) {
 								final Port port = slot.getPort();
 								if (port != null) {
 									return port.getName();
@@ -378,10 +376,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					if (object instanceof Row) {
 						final Row row = (Row) object;
-						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
-							if (slot instanceof DischargeSlot) {
+							if (slot != null) {
 								final Port port = slot.getPort();
 								if (port != null) {
 									return port.getName();
@@ -1086,10 +1084,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					if (object instanceof Row) {
 						final Row row = (Row) object;
-						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
-							if (slot instanceof LoadSlot) {
+							if (slot != null) {
 								final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
 								if (entity != null) {
 									return entity.getName();
@@ -1121,10 +1119,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 							if (object instanceof Row) {
 								final Row row = (Row) object;
-								final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+								final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 								if (openSlotAllocation != null) {
 									final Slot slot = openSlotAllocation.getSlot();
-									if (slot instanceof DischargeSlot) {
+									if (slot != null) {
 										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
 										if (entity != null) {
 											return entity.getName();

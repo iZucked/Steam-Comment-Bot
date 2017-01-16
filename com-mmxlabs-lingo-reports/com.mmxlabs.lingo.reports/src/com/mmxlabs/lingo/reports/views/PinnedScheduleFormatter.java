@@ -1,8 +1,4 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
- * All rights reserved.
- */
-package com.mmxlabs.lingo.reports.views.schedule.model.provider;
+package com.mmxlabs.lingo.reports.views;
 
 import org.eclipse.swt.graphics.Image;
 

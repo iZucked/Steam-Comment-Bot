@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.lingo.reports/src" editDirectory=""
-    editorDirectory="" modelPluginID="com.mmxlabs.lingo.reports" modelName="model"
-    editPluginClass="com.mmxlabs.lingo.reports.internal.Activator" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.lingo.reports/src" editDirectory="/com.mmxlabs.lingo.reports/src"
+    editorDirectory="" modelPluginID="com.mmxlabs.lingo.reports" dynamicTemplates="true"
+    redirection="" modelName="model" editPluginClass="" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
     copyrightFields="false" language="" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime"
     operationReflection="true" importOrganizing="true">
   <foreignModel>schedulereport.ecore</foreignModel>
@@ -39,9 +39,9 @@
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/loadAllocation"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/dischargeAllocation"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/openSlotAllocation"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/referenceRow"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/referringRows"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/reference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/lhsLink"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/rhsLink"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/rowGroup"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/scenario"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/table"/>

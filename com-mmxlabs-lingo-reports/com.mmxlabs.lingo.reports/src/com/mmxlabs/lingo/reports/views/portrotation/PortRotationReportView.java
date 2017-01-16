@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
@@ -61,9 +61,6 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private Iterable<IPortRotationBasedReportInitialStateExtension> initialStates;
 
 	private PortRotationsReportTransformer transformer;
-
-	private Map<Object, ScenarioResult> elementToInstanceMap;
-	private Map<Object, LNGScenarioModel> elementToModelMap;
 
 	private List<Object> elements;
 
@@ -270,24 +267,6 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, getBlockManager());
 	}
 
-	public void mapInputs(final Map<Object, ScenarioResult> elementToInstanceMap, final Map<Object, LNGScenarioModel> elementToModelMap) {
-		this.elementToInstanceMap = elementToInstanceMap;
-		this.elementToModelMap = elementToModelMap;
-	}
-
-	public ScenarioResult getScenarioInstance(final Object key) {
-		if (elementToInstanceMap != null) {
-			return elementToInstanceMap.get(key);
-		}
-		return null;
-	}
-
-	public LNGScenarioModel getScenarioModel(final Object key) {
-		if (elementToModelMap != null) {
-			return elementToModelMap.get(key);
-		}
-		return null;
-	}
 
 	@Override
 	public void initPartControl(final Composite parent) {

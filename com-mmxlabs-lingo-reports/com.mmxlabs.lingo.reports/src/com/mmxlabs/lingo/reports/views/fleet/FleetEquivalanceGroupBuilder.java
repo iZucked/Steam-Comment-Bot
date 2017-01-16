@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.fleet;
@@ -119,7 +119,8 @@ public class FleetEquivalanceGroupBuilder {
 							final Row equivalenceRow = elementToRowMap.get(e);
 							if (equivalenceRow != null) {
 								if (referenceRow != null) {
-									equivalenceRow.setReferenceRow(referenceRow);
+									equivalenceRow.setLhsLink(referenceRow);
+									referenceRow.setLhsLink(equivalenceRow);
 								}
 							}
 						}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -253,27 +253,37 @@ public class EquivalanceGroupBuilder {
 							if (referenceElement instanceof SlotVisit) {
 								continue;
 							}
-							// Skip DischargeSlots references as we link by load slot
-							if (referenceElement instanceof SlotAllocation) {
-								if (((SlotAllocation) referenceElement).getSlot() instanceof DischargeSlot) {
-									continue;
-								}
-							}
+							// // Skip DischargeSlots references as we link by load slot
+							// if (referenceElement instanceof SlotAllocation) {
+							// if (((SlotAllocation) referenceElement).getSlot() instanceof DischargeSlot) {
+							// continue;
+							// }
+							// }
 
 							final Row referenceRow = elementToRowMap.get(referenceElement);
 							for (final EObject e : equivalences) {
 								final Row equivalenceRow = elementToRowMap.get(e);
 								if (equivalenceRow != null) {
-									if (e instanceof SlotAllocation) {
-										if (((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
-											if (equivalenceRow.getReferenceRow() != null) {
-												continue;
-											}
-										}
-									}
+									// if (e instanceof SlotAllocation) {
+									// if (((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
+									//
+									// if (equivalenceRow.getReferenceRow() != null) {
+									// continue;
+									// }
+									// }
+									// }
 									if (referenceRow != null) {
 										assert referenceRow != equivalenceRow;
-										equivalenceRow.setReferenceRow(referenceRow);
+										if (e instanceof SlotAllocation && ((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
+											equivalenceRow.setRhsLink(referenceRow);
+											referenceRow.setRhsLink(equivalenceRow);
+										} else if (e instanceof OpenSlotAllocation && ((OpenSlotAllocation) e).getSlot() instanceof DischargeSlot) {
+											equivalenceRow.setRhsLink(referenceRow);
+											referenceRow.setRhsLink(equivalenceRow);
+										} else {
+											equivalenceRow.setLhsLink(referenceRow);
+											referenceRow.setLhsLink(equivalenceRow);
+										}
 									}
 								}
 							}
@@ -324,8 +334,10 @@ public class EquivalanceGroupBuilder {
 		if (element instanceof Row) {
 			if (element.eIsSet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION)) {
 				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION);
-			} else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__OPEN_SLOT_ALLOCATION)) {
-				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__OPEN_SLOT_ALLOCATION);
+			} else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__OPEN_LOAD_SLOT_ALLOCATION)) {
+				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__OPEN_LOAD_SLOT_ALLOCATION);
+			} else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION)) {
+				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__OPEN_DISCHARGE_SLOT_ALLOCATION);
 			} else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__TARGET)) {
 				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__TARGET);
 			}

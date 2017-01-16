@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
@@ -44,8 +44,8 @@ public class GeneratedCharterDaysFormatter extends NumberOfDPFormatter {
 			final int currentHours = getSequenceHours(selectedElements, row.getLinkedSequences());
 			if (diffMode) {
 				int referenceHours = 0;
-				if (row.getReferenceRow() != null) {
-					final Row referenceRow = row.getReferenceRow();
+				if (row.getLhsLink() != null) {
+					final Row referenceRow = row.getLhsLink();
 					final Sequence referenceSequence = referenceRow.getSequence();
 					referenceHours = getSequenceHours(selectedElements, referenceRow.getLinkedSequences());
 				}

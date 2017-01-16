@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
@@ -29,19 +29,19 @@ public class EventLabelProvider {
 		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
 
-	protected String getText(@NonNull final LocalDate date, @NonNull final Event event) {
+	public String getText(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventText(date, event);
 	}
 
-	protected Font getFont(@NonNull final LocalDate date, @NonNull final Event event) {
+	public Font getFont(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventFont(date, event);
 	}
 
-	protected Color getBackground(@NonNull final LocalDate date, @NonNull final Event event) {
+	public Color getBackground(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventBackgroundColor(date, event);
 	}
 
-	protected Color getForeground(@NonNull final LocalDate date, @NonNull final Event event) {
+	public Color getForeground(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventForegroundColor(date, event);
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
@@ -27,7 +27,7 @@ public class DateColumnLabelProvider extends EventLabelProvider {
 	}
 
 	@Override
-	protected String getText(@NonNull final LocalDate date, @NonNull final Event event) {
+	public String getText(@NonNull final LocalDate date, @NonNull final Event event) {
 		return date.format(df);
 	}
 }

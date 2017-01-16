@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.diff;
@@ -154,8 +154,8 @@ public class DiffSelectionAdapter {
 		} else {
 			elements.add(row);
 			elements.addAll(row.getInputEquivalents());
-			elements.add(row.getReferenceRow());
-			elements.addAll(row.getReferringRows());
+			elements.add(row.getLhsLink());
+			elements.add(row.getRhsLink());
 		}
 	}
 
@@ -200,8 +200,8 @@ public class DiffSelectionAdapter {
 			expandUp(row.getCycleGroup(), elements);
 		} else {
 			elements.add(row);
-			elements.add(row.getReferenceRow());
-			elements.addAll(row.getReferringRows());
+			elements.add(row.getLhsLink());
+			elements.add(row.getRhsLink());
 		}
 	}
 
