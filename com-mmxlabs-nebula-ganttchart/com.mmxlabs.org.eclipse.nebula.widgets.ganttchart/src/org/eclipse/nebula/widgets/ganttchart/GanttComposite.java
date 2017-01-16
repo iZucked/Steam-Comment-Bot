@@ -18,10 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
-
-import javax.swing.text.DefaultEditorKit.CutAction;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
