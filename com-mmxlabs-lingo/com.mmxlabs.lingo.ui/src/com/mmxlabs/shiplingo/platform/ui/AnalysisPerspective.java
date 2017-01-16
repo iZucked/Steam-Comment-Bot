@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.shiplingo.platform.ui;
@@ -11,7 +11,7 @@ import org.eclipse.ui.IViewLayout;
 
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
-import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.FitnessReportView;
@@ -70,7 +70,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addView(SchedulerView.ID);
 		reportsFolder.addView(AbstractVerticalCalendarReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
-		reportsFolder.addPlaceholder(ConfigurableScheduleReportView.ID);
+		reportsFolder.addPlaceholder(ScheduleSummaryReport.ID);
 		reportsFolder.addPlaceholder(PortRotationReportView.ID);
 		reportsFolder.addPlaceholder(LatenessReportView.ID);
 		reportsFolder.addPlaceholder(CooldownReportView.ID);
@@ -81,7 +81,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
 		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
 		layout.addShowViewShortcut(KPIReportView.ID);
-		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
+		layout.addShowViewShortcut(ScheduleSummaryReport.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(AbstractVerticalCalendarReportView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);

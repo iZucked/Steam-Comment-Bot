@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.lingo.its.feature"
       label="Lingo ITS"
-      version="4.0.9.qualifier"
+      version="4.1.1.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
