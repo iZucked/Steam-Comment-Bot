@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<groupId>com.mmxlabs.rcp.common</groupId>
-		<version>4.1.1-SNAPSHOT</version>
+		<version>4.1.1.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.license.ssl</artifactId>
-	<version>4.1.1-SNAPSHOT</version>
+	<version>4.1.1.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
