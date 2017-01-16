@@ -55,11 +55,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
  * for the user to change the default settings.
  */
-public class ConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
-	/**
-	 * The ID of the view as specified by the extension.
-	 */
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+public abstract class AbstractConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
 
 	private final ScheduleBasedReportBuilder builder;
 
@@ -75,9 +71,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
 
-	@Inject
-	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
-		super("com.mmxlabs.lingo.doc.Reports_ScheduleSummary");
+	protected AbstractConfigurableScheduleReportView(final String id, final ScheduleBasedReportBuilder builder) {
+		super(id);
 
 		// Setup the builder hooks.
 		this.builder = builder;
@@ -111,11 +106,14 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		return super.getAdapter(adapter);
 	}
 
-	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+
+		private final Map<Object, ScenarioInstance> _elementToInstanceMap = new HashMap<>();
+		private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
 
 		@Override
-		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
-				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioInstance pin, @NonNull final ScenarioInstance other, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
@@ -126,28 +124,55 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				}
 			}
 
+			updateElementMaps(selectedDataProvider, table);
+
 			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
-		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table,
-				@NonNull List<LNGScenarioModel> rootObjects) {
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioInstance> others, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects) {
 			clearInputEquivalents();
+
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
 
-			int numberOfSchedules = others.size();
+			final int numberOfSchedules = others.size();
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
 					handler.setViewState(numberOfSchedules > 1, false);
 				}
 			}
+			updateElementMaps(selectedDataProvider, table);
+
+			// elementToInstanceMap.put(schedule, scenarioInstance);
+			// elementToModelMap.put(schedule, scenarioModel);
+			// for (final Object element : collectElements) {
+			// elementToInstanceMap.put(element, scenarioInstance);
+			// elementToModelMap.put(element, scenarioModel);
+			// }
 
 			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
+		private void updateElementMaps(final ISelectedDataProvider selectedDataProvider, final Table table) {
+			_elementToInstanceMap.clear();
+			_elementToModelMap.clear();
+			for (final Row row : table.getRows()) {
+				final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(row.getSchedule());
+				_elementToModelMap.put(row.getSchedule(), scenarioModel);
+				_elementToInstanceMap.put(row.getSchedule(), (ScenarioInstance) row.getScenario());
+				row.getInputEquivalents().forEach(e -> {
+					_elementToInstanceMap.put(e, (ScenarioInstance) row.getScenario());
+					_elementToModelMap.put(e, scenarioModel);
+				});
+			}
+
+			mapInputs(_elementToInstanceMap, _elementToModelMap);
+		}
+
 		@Override
-		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			ViewerHelper.refresh(viewer, true);
 		}
 
@@ -168,8 +193,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
 					if (!scenarioComparisonService.getSelectedElements().contains(element)) {
 						if (element instanceof Row) {
-							Row row = (Row) element;
-							Set<EObject> elements = new HashSet<>();
+							final Row row = (Row) element;
+							final Set<EObject> elements = new HashSet<>();
 							elements.add(row.getTarget());
 							elements.add(row.getCargoAllocation());
 							elements.add(row.getLoadAllocation());

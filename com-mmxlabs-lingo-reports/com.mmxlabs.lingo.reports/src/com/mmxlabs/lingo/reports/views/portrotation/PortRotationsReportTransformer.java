@@ -29,8 +29,8 @@ public class PortRotationsReportTransformer {
 
 			private int numberOfSchedules;
 			private boolean isPinned;
-			private final Map<Object, ScenarioInstance> elementToInstanceMap = new HashMap<>();
-			private final Map<Object, LNGScenarioModel> elementToModelMap = new HashMap<>();
+			private final Map<Object, ScenarioInstance> _elementToInstanceMap = new HashMap<>();
+			private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
 			private final List<Object> elementList = new ArrayList<>();
 
 			@Override
@@ -41,8 +41,8 @@ public class PortRotationsReportTransformer {
 				numberOfSchedules = 0;
 				isPinned = false;
 
-				elementToInstanceMap.clear();
-				elementToModelMap.clear();
+				_elementToInstanceMap.clear();
+				_elementToModelMap.clear();
 				elementList.clear();
 			}
 
@@ -52,11 +52,11 @@ public class PortRotationsReportTransformer {
 				isPinned |= pinned;
 				final Collection<? extends Object> collectElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
-				elementToInstanceMap.put(schedule, scenarioInstance);
-				elementToModelMap.put(schedule, scenarioModel);
+				_elementToInstanceMap.put(schedule, scenarioInstance);
+				_elementToModelMap.put(schedule, scenarioModel);
 				for (final Object element : collectElements) {
-					elementToInstanceMap.put(element, scenarioInstance);
-					elementToModelMap.put(element, scenarioModel);
+					_elementToInstanceMap.put(element, scenarioInstance);
+					_elementToModelMap.put(element, scenarioModel);
 				}
 				return collectElements;
 			}
@@ -74,7 +74,7 @@ public class PortRotationsReportTransformer {
 				super.endCollecting();
 
 				viewer.processInputs(elements);
-				viewer.mapInputs(elementToInstanceMap, elementToModelMap);
+				viewer.mapInputs(_elementToInstanceMap, _elementToModelMap);
 				elements.addAll(elementList);
 				// viewer.setInput(elements);
 			}

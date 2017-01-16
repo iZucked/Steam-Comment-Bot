@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -62,10 +63,10 @@ import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
-import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -74,6 +75,7 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -88,6 +90,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private IMemento memento;
 
 	private boolean customisableReport = true;
+	
+	protected Map<Object, ScenarioInstance> elementToInstanceMap;
+	protected Map<Object, LNGScenarioModel> elementToModelMap;
 
 	public AbstractConfigurableGridReportView(final String helpContextID) {
 		this.helpContextId = helpContextID;
@@ -674,4 +679,24 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	public ColumnBlockManager getBlockManager() {
 		return blockManager;
 	}
+
+	public void mapInputs(final Map<Object, ScenarioInstance> elementToInstanceMap, final Map<Object, LNGScenarioModel> elementToModelMap) {
+		this.elementToInstanceMap = elementToInstanceMap;
+		this.elementToModelMap = elementToModelMap;
+	}
+
+	public ScenarioInstance getScenarioInstance(final Object key) {
+		if (elementToInstanceMap != null) {
+			return elementToInstanceMap.get(key);
+		}
+		return null;
+	}
+
+	public LNGScenarioModel getScenarioModel(final Object key) {
+		if (elementToModelMap != null) {
+			return elementToModelMap.get(key);
+		}
+		return null;
+	}
+
 }
