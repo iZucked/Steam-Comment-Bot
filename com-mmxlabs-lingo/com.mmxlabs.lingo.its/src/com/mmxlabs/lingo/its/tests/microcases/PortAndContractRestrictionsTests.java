@@ -25,13 +25,13 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintChecker;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -362,6 +362,46 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
+	public void testRestricted_SlotSalesContract_PortGroup() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPort("Point Fortin"), portFinder.findPort("Bonny Nigeria"));
+
+		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
+		contract.setRestrictedListsArePermissive(false);
+		contract.getRestrictedPorts().add(g1);
+
+		// Construct the cargo scenario
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				// Load
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				// Discharge
+				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), contract, null, null)//
+				.build() //
+				// Cargo
+				.withVesselAssignment(charterInMarket_1, -1, 1) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+			// Validate the initial sequences are valid
+			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+			Assert.assertNotNull(failedCheckers);
+			Assert.assertEquals(1, failedCheckers.size());
+			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
 	public void testRestricted_SlotSalesContract_Port_Unshipped() throws Exception {
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
@@ -514,6 +554,48 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
+	public void testRestricted_SpotDESSale_PortGroup() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
+				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
+				.build();
+
+		final PortGroup g1 = portModelBuilder.makePortGroup("PG1", portFinder.findPort("Point Fortin"), portFinder.findPort("Bonny Nigeria"));
+
+		spotMarket.getRestrictedPorts().add(g1);
+
+		// Construct the cargo scenario
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				// Load
+				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				// Discharge
+				.makeMarketDESSale("D", spotMarket, YearMonth.of(2017, 2), portFinder.findPort("Sakai"))//
+				.build() //
+				// Cargo
+				.withVesselAssignment(charterInMarket_1, -1, 1) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+			// Validate the initial sequences are valid
+			final List<IConstraintChecker> failedCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+			Assert.assertNotNull(failedCheckers);
+			Assert.assertEquals(1, failedCheckers.size());
+			Assert.assertTrue(failedCheckers.get(0) instanceof RestrictedElementsConstraintChecker);
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
 	public void testRestricted_SpotDESSale_Port_Unshipped() throws Exception {
 
 		// Create the required basic elements
@@ -563,7 +645,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
+		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -603,7 +685,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
+		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -641,7 +723,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
+		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -680,7 +762,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
+		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
 
 		// Construct the cargo scenario
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
@@ -718,7 +800,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
+		final SalesContract salesContract = commercialModelBuilder.makeExpressionSalesContract("Contract", entity, "7");
 
 		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("P", entity, "5");
 		contract.setRestrictedListsArePermissive(false);
@@ -758,7 +840,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
+		final PurchaseContract purchaseContract = commercialModelBuilder.makeExpressionPurchaseContract("Contract", entity, "5");
 
 		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("P", entity, "7");
 
@@ -799,7 +881,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("C", entity, "7");
+		final SalesContract contract = commercialModelBuilder.makeExpressionSalesContract("C", entity, "7");
 
 		final FOBPurchasesMarket spotMarket = spotMarketsModelBuilder.makeFOBPurchaseMarket("Spot", portFinder.findPort("Point Fortin"), entity, "5", 22.8) //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
@@ -841,7 +923,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
-		PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C", entity, "5");
+		final PurchaseContract contract = commercialModelBuilder.makeExpressionPurchaseContract("C", entity, "5");
 
 		final DESSalesMarket spotMarket = spotMarketsModelBuilder.makeDESSaleMarket("Spot", portFinder.findPort("Sakai"), entity, "7") //
 				.withVolumeLimits(0, 3_000_000, VolumeUnits.MMBTU) //
