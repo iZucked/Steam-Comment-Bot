@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
@@ -581,13 +581,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		long result = 0;
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
-			final long miscCostsValue = miscCostsProvider.getCostsValue(portSlot);
 			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
 			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getInclusiveStart());
 
 			// Taxed P&L - use time window start as tax date
-			final long preTaxValue = hedgeValue + miscCostsValue // note: misc costs -ve
-					- cancellationCost; // note: cancellation cost positive
+			final long preTaxValue = hedgeValue - cancellationCost; // note: cancellation cost positive
 			final int utcEquivTaxTime = utcOffsetProvider.UTC(portSlot.getTimeWindow().getInclusiveStart(), portSlot);
 			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
 			result = postTaxValue;
@@ -609,9 +607,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 				if (hedgeValue != 0) {
 					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
-				}
-				if (miscCostsValue != 0) {
-					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_miscCostsValue, new MiscCostsAnnotation(miscCostsValue));
 				}
 			}
 		}

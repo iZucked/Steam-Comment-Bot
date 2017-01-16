@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
@@ -328,6 +328,12 @@ public class TimeWindowsTrimming {
 					}
 				}
 			}
+		} else if (sortedCanalTimes.length > 1) {
+			// still need to find out the best canal
+			NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0],
+					boiloffIntervals[0], loadDuration, salesIntervals[0].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
+					vessel.getVesselClass(), load.getCargoCVValue(), true);
+			bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 		}
 		assert bestCanalDetails != null;
 		return getCargoBounds(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end, salesIntervals[bestSalesDetailsIdx].start,
@@ -359,15 +365,9 @@ public class TimeWindowsTrimming {
 			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
 					NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails;
-					try {
 					totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
 							boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
 							vessel.getVesselClass(), load.getCargoCVValue(), true);
-					} catch (ArrayIndexOutOfBoundsException a) {
-						totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
-								boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
-								vessel.getVesselClass(), load.getCargoCVValue(), true);
-					}
 					final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
 					final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - estimatedCostMMBTU;
 					if (newMargin > bestMargin) {
@@ -378,6 +378,12 @@ public class TimeWindowsTrimming {
 					}
 				}
 			}
+		} else if (sortedCanalTimes.length > 1) {
+			// still need to find out the best canal
+			NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[0],
+					boiloffIntervals[0], loadDuration, salesIntervals[0].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
+					vessel.getVesselClass(), load.getCargoCVValue(), true);
+			bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 		}
 
 		assert bestCanalDetails != null;
@@ -418,134 +424,6 @@ public class TimeWindowsTrimming {
 	private int[] getCargoBounds(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int maxSpeedCanal, final int nboSpeedCanal) {
 		final int[] idealTimes = priceIntervalProviderHelper.getIdealLoadAndDischargeTimesGivenCanal(purchaseStart, purchaseEnd, salesStart, salesEnd, loadDuration, maxSpeedCanal, nboSpeedCanal);
 		return new int[] {idealTimes[0], processEndTime(idealTimes[0]), idealTimes[1], processEndTime(idealTimes[1])};
-	}
-
-	/**
-	 * Trim time windows given different route options
-	 * 
-	 * @param portTimeWindowsRecord
-	 * @param vessel
-	 * @param load
-	 * @param discharge
-	 * @param loadPriceIntervals
-	 * @param dischargePriceIntervals
-	 * @return
-	 */
-	@Deprecated
-	int[] trimCargoTimeWindowsWithRouteOptimisation(final IPortTimeWindowsRecord portTimeWindowsRecord, final IVessel vessel, final ILoadOption load, final IDischargeOption discharge,
-			final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
-		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-		assert loadTimeWindow != null;
-		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getInclusiveStart());
-		assert sortedCanalTimes.length > 0;
-		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
-		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
-		final int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals);
-		final List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
-		if (canalsWeCanUse.size() == 1) {
-			// no options
-			final Pair<Integer, Integer> lowestPriceInterval = priceIntervalProviderHelper.getLowestPriceInterval(loadPriceIntervals);
-			final Pair<Integer, Integer> highestPriceInterval = priceIntervalProviderHelper.getHighestPriceInterval(dischargePriceIntervals);
-			return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(lowestPriceInterval.getFirst(), lowestPriceInterval.getSecond(), highestPriceInterval.getFirst(),
-					highestPriceInterval.getSecond(), loadDuration, (int) sortedCanalTimes[canalsWeCanUse.get(0)].ladenTimeAtMaxSpeed);
-		} else {
-			// we could go via canal but should we?
-			final IntervalData[] purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
-			final IntervalData[] salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
-			int bestPurchaseDetailsIdx = priceIntervalProviderHelper.getMinIndexOfPriceIntervalList(purchaseIntervals);
-			int bestSalesDetailsIdx = priceIntervalProviderHelper.getMaxIndexOfPriceIntervalList(salesIntervals);
-			if (priceIntervalProviderHelper.isFeasibleTravelTime(purchaseIntervals[bestPurchaseDetailsIdx], salesIntervals[bestSalesDetailsIdx], loadDuration, sortedCanalTimes[0].ladenTimeAtMaxSpeed)) {
-				// we can choose best bucket and go direct if we want
-				return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end,
-						salesIntervals[bestSalesDetailsIdx].start, salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) sortedCanalTimes[0].ladenTimeAtMaxSpeed);
-			} else {
-				// we are going to have to go via a canal. is it worth it?
-				final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-				final IntervalData bestPurchaseDetails = purchaseIntervals[bestPurchaseDetailsIdx];
-				final IntervalData bestSalesDetails = salesIntervals[bestSalesDetailsIdx];
-				LadenRouteData bestCanalDetails = priceIntervalProviderHelper.getBestCanalDetails(bestPurchaseDetails, bestSalesDetails, loadDuration, sortedCanalTimes);
-				long bestMargin = salesIntervals[bestSalesDetailsIdx].price - purchaseIntervals[bestPurchaseDetailsIdx].price - (bestCanalDetails.ladenRouteCost / loadVolumeMMBTU);
-				for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
-					for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-						final LadenRouteData newCanalDetails = priceIntervalProviderHelper.getBestCanalDetails(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration,
-								sortedCanalTimes);
-						final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - (newCanalDetails.ladenRouteCost / loadVolumeMMBTU);
-						if (newMargin > bestMargin) {
-							bestMargin = newMargin;
-							bestPurchaseDetailsIdx = purchaseIndex;
-							bestSalesDetailsIdx = salesIndex;
-							bestCanalDetails = newCanalDetails;
-						}
-					}
-				}
-				return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end,
-						salesIntervals[bestSalesDetailsIdx].start, salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.ladenTimeAtMaxSpeed);
-			}
-		}
-	}
-
-	/**
-	 * Trim time windows given different route options when load depends on discharge and discharge depends on load
-	 * 
-	 * @param portTimeWindowsRecord
-	 * @param vessel
-	 * @param load
-	 * @param discharge
-	 * @param loadPriceIntervals
-	 * @param dischargePriceIntervals
-	 * @return
-	 */
-	@Deprecated
-	private int[] trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(final IPortTimeWindowsRecord portTimeWindowsRecord, final IVessel vessel, final ILoadOption load,
-			final IDischargeOption discharge, final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
-		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-		assert loadTimeWindow != null;
-		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getInclusiveStart());
-		assert sortedCanalTimes.length > 0;
-		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
-		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
-		final int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration;
-		final List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
-		if (canalsWeCanUse.size() == 1) {
-			// no options
-			final Pair<Integer, Integer> highestPriceInterval = priceIntervalProviderHelper.getHighestPriceInterval(loadPriceIntervals);
-			final Pair<Integer, Integer> lowestPriceInterval = priceIntervalProviderHelper.getLowestPriceInterval(dischargePriceIntervals);
-			return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(highestPriceInterval.getFirst(), highestPriceInterval.getSecond(), lowestPriceInterval.getFirst(),
-					lowestPriceInterval.getSecond(), loadDuration, (int) sortedCanalTimes[0].ladenTimeAtMaxSpeed);
-		} else {
-			// we could go via canal but should we?
-			final IntervalData[] purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals); // discharge prices!!
-			final IntervalData[] salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals); // load prices!!
-			int bestPurchaseDetailsIdx = priceIntervalProviderHelper.getMaxIndexOfPriceIntervalList(purchaseIntervals);
-			int bestSalesDetailsIdx = priceIntervalProviderHelper.getMinIndexOfPriceIntervalList(salesIntervals);
-			if (priceIntervalProviderHelper.isFeasibleTravelTime(purchaseIntervals[bestPurchaseDetailsIdx], salesIntervals[bestSalesDetailsIdx], loadDuration, sortedCanalTimes[0].ladenTimeAtMaxSpeed)) {
-				// we can choose best bucket and go direct if we want
-				return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end,
-						salesIntervals[bestSalesDetailsIdx].start, salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) sortedCanalTimes[0].ladenTimeAtMaxSpeed);
-			} else {
-				// we are going to have to go via a canal. is it worth it?
-				final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-				final IntervalData bestPurchaseDetails = purchaseIntervals[bestPurchaseDetailsIdx];
-				final IntervalData bestSalesDetails = salesIntervals[bestSalesDetailsIdx];
-				LadenRouteData bestCanalDetails = schedulingCanalDistanceProvider.getBestCanalDetails(sortedCanalTimes, bestSalesDetails.end - bestPurchaseDetails.start + loadDuration);
-				long bestMargin = purchaseIntervals[bestPurchaseDetailsIdx].price - salesIntervals[bestSalesDetailsIdx].price - (bestCanalDetails.ladenRouteCost / loadVolumeMMBTU);
-				for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
-					for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-						final LadenRouteData newCanalDetails = schedulingCanalDistanceProvider.getBestCanalDetails(sortedCanalTimes,
-								salesIntervals[salesIndex].end - purchaseIntervals[purchaseIndex].start + loadDuration);
-						final long newMargin = purchaseIntervals[purchaseIndex].price - salesIntervals[salesIndex].price - (newCanalDetails.ladenRouteCost / loadVolumeMMBTU);
-						if (newMargin > bestMargin) {
-							bestMargin = newMargin;
-							bestPurchaseDetailsIdx = purchaseIndex;
-							bestSalesDetailsIdx = salesIndex;
-							bestCanalDetails = newCanalDetails;
-						}
-					}
-				}
-				return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals[bestPurchaseDetailsIdx].start, purchaseIntervals[bestPurchaseDetailsIdx].end,
-						salesIntervals[bestSalesDetailsIdx].start, salesIntervals[bestSalesDetailsIdx].end, loadDuration, (int) bestCanalDetails.ladenTimeAtMaxSpeed);
-			}
-		}
 	}
 
 	/**
