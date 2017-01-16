@@ -70,7 +70,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	@Override
-	public List<int[]> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		final List<int[]> intervals = new LinkedList<>();
 		intervals.add(new int[] { startOfRange, price });
 		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
@@ -78,7 +78,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	@Override
-	public List<Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public List<@NonNull Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final int[] intervals = new int[] { start, end };
 		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);

@@ -702,7 +702,7 @@ public class LNGVoyageCalculatorTest {
 		return vbfc;
 	}
 
-	private ICurve getMockedCurve(final int mainInt) {
+	private @NonNull ICurve getMockedCurve(final int mainInt) {
 		final ICurve curve = Mockito.mock(ICurve.class);
 
 		// create prices for different times (to test UTC)

@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -114,10 +115,10 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public List<int[]> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
-		final List<int[]> intervals = new LinkedList<>();
+	public List<int @NonNull []> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
+		final List<int @NonNull []> intervals = new LinkedList<>();
 		intervals.add(new int[] { startOfRange, pricePerMMBTU });
-		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
+		intervals.add(PriceIntervalProviderHelper.getEndInterval(endOfRange));
 		return intervals;
 	}
 
