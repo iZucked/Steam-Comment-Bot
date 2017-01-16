@@ -11,6 +11,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -22,10 +25,12 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 /**
  * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)} should be replaceable with the new {@link EventGrouping} interface.
@@ -176,4 +181,18 @@ public class ScheduleModelUtils {
 		return fuelTotal;
 	}
 
+	public static @Nullable VesselClass getVesselClass(final Sequence seq) {
+		final VesselAvailability vesselAvailability = seq.getVesselAvailability();
+		if (vesselAvailability != null) {
+			final Vessel vessel = vesselAvailability.getVessel();
+			if (vessel != null) {
+				return vessel.getVesselClass();
+			}
+		}
+		final CharterInMarket charterInMarket = seq.getCharterInMarket();
+		if (charterInMarket != null) {
+			return charterInMarket.getVesselClass();
+		}
+		return null;
+	}
 }
