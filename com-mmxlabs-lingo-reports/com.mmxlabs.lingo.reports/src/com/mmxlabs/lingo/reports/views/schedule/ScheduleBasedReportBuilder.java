@@ -111,7 +111,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			return showEvent((Event) target);
 		}
 
-		return true;
+		return false;
 	}
 
 	public boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
