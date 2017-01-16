@@ -486,7 +486,7 @@
              to="63">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV64"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV65"
              context="com.mmxlabs.lingo"
              from="63"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV64"
