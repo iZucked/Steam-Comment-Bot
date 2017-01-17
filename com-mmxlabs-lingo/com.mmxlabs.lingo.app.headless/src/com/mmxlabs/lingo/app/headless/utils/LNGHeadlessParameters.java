@@ -98,5 +98,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("idle-time-low",2_500, Integer.class, false);
 		setParameter("idle-time-high",10_000, Integer.class, false);
 		setParameter("idle-time-end", 10_000, Integer.class, false);
+		
+		setParameter("spotmarket-optimisation", false, Boolean.class, false);
 	}
 }
