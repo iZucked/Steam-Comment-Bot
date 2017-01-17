@@ -591,6 +591,7 @@ public class HeadlessApplication implements IApplication {
 		// Scenario settings
 		plan.getUserSettings().setShippingOnly(headlessParameters.getParameterValue("shippingonly-optimisation", Boolean.class));
 		plan.getUserSettings().setGenerateCharterOuts(headlessParameters.getParameterValue("generatedcharterouts-optimisation", Boolean.class));
+		plan.getUserSettings().setWithSpotCargoMarkets(headlessParameters.getParameterValue("spotmarket-optimisation", Boolean.class));
 		// action sets
 
 		createDateRanges(plan, headlessParameters);
