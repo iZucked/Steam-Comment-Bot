@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
 /**
@@ -34,11 +36,11 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	}
 
 	@Override
-	public int[] getIntervalRange(int start, int end) {
+	public int @NonNull [] getIntervalRange(int start, int end) {
 		NavigableSet<Integer> subSet = intervals.subSet(start, false, end, false);
-		int[] integerList = new int[subSet.size()+2];
+		int[] integerList = new int[subSet.size() + 2];
 		int idx = 0;
-		integerList[0]=start;
+		integerList[0] = start;
 		for (int i : subSet) {
 			integerList[++idx] = i;
 		}
@@ -49,7 +51,7 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	@Override
 	public int[] getIntervalRangePricingTime(int start, int end, String tz, int additionalOffset, ITimeZoneToUtcOffsetProvider offsetProvider) {
 		NavigableSet<Integer> subSet = intervals.subSet(start, false, end, false);
-		int[] integerList = new int[subSet.size()+2];
+		int[] integerList = new int[subSet.size() + 2];
 		int idx = 0;
 		integerList[0] = convertTimeToLocal(start, tz, additionalOffset, offsetProvider);
 		for (int i : subSet) {
@@ -62,7 +64,7 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	@Override
 	public int[] getIntervalRangeSchedulingTime(int start, int end, String tz, int additionalOffset, ITimeZoneToUtcOffsetProvider offsetProvider) {
 		NavigableSet<Integer> subSet = intervals.subSet(start, false, end, false);
-		int[] integerList = new int[subSet.size()+2];
+		int[] integerList = new int[subSet.size() + 2];
 		int idx = 0;
 		integerList[0] = convertTimeToUTC(start, tz, additionalOffset, offsetProvider);
 		for (int i : subSet) {
@@ -75,11 +77,11 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	private int convertTimeToLocal(int utcTime, String tz, int additionalOffset, ITimeZoneToUtcOffsetProvider offsetProvider) {
 		return offsetProvider.localTime(utcTime, tz) + additionalOffset; // note: adding additionalOffset
 	}
-	
+
 	private int convertTimeToUTC(int localTime, String tz, int additionalOffset, ITimeZoneToUtcOffsetProvider offsetProvider) {
 		return offsetProvider.UTC(localTime, tz) - additionalOffset; // note: subtracting additionalOffset
 	}
-	
+
 	@Override
 	public int getNextInterval(int point) {
 		return intervals.higher(point);
@@ -100,7 +102,7 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 		for (int i : range) {
 			curr = i;
 			if (prev != Integer.MIN_VALUE) {
-				intervals.add(new int[] {prev, curr});
+				intervals.add(new int[] { prev, curr });
 			}
 			prev = curr;
 		}
@@ -108,9 +110,9 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	}
 
 	@Override
-	public int[][] getIntervalsAs2dArray(int start, int end) {
-		int[] range = getIntervalRange(start, end);
-		int[][] intervals = new int[range.length-1][2];
+	public int @NonNull [] @NonNull [] getIntervalsAs2dArray(int start, int end) {
+		int @NonNull [] range = getIntervalRange(start, end);
+		int @NonNull [] @NonNull [] intervals = new int @NonNull [range.length - 1] @NonNull [2];
 		int idx = 0;
 		int prev = Integer.MIN_VALUE;
 		int curr;
@@ -118,7 +120,7 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 			curr = i;
 			if (prev != Integer.MIN_VALUE) {
 				intervals[idx][0] = prev;
-				intervals[idx][1] = curr;				
+				intervals[idx][1] = curr;
 				idx++;
 			}
 			prev = curr;

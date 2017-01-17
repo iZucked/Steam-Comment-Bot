@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -21,13 +23,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
  */
 public class PriceExpressionContract extends SimpleContract implements IPriceIntervalProvider {
 
-	private final ICurve expressionCurve;
-	private final IIntegerIntervalCurve priceChangeIntervalsInHours;
-	
+	private final @NonNull ICurve expressionCurve;
+	private final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours;
+
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderUtil;
 
-	public PriceExpressionContract(final ICurve expressionCurve, final IIntegerIntervalCurve priceChangeIntervalsInHours) {
+	public PriceExpressionContract(final @NonNull ICurve expressionCurve, final @NonNull IIntegerIntervalCurve priceChangeIntervalsInHours) {
 		this.expressionCurve = expressionCurve;
 		this.priceChangeIntervalsInHours = priceChangeIntervalsInHours;
 	}
@@ -38,7 +40,7 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 	}
 
 	@Override
-	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
 		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderUtil.getPriceIntervalsList((ILoadOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);
 		} else if (slot instanceof IDischargeOption) {
@@ -49,7 +51,7 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 	}
 
 	@Override
-	public List<Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public List<@NonNull Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		int[] intervals = priceChangeIntervalsInHours.getIntervalsAs1dArray(start, end);
 		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderUtil.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);

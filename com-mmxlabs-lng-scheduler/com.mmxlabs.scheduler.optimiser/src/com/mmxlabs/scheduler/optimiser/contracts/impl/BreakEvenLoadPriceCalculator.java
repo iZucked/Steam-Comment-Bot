@@ -86,18 +86,18 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	public int getCalculatorPricingDate(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		return IPortSlot.NO_PRICING_DATE;
 	}
-	
+
 	@Override
-	public List<int[]> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
-		final List<int[]> intervals = new LinkedList<>();
+	public List<int @NonNull []> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
+		final List<int @NonNull []> intervals = new LinkedList<>();
 		intervals.add(new int[] { startOfRange, price });
 		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
 		return intervals;
 	}
 
 	@Override
-	public List<Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
-		final int[] intervals = new int[] { start, end };
+	public List<@NonNull Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+		final int @NonNull [] intervals = new int[] { start, end };
 		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
 		} else if (slot instanceof IDischargeOption) {
