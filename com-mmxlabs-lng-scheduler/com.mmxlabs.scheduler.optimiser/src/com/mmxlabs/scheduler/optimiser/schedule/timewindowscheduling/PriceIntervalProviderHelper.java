@@ -28,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -37,7 +36,6 @@ import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
@@ -48,14 +46,14 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class PriceIntervalProviderHelper {
 
 	@Inject
-	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+	private @NonNull ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Inject
-	private Provider<IPriceIntervalProducer> priceIntervalProducerProvider;
+	private @NonNull Provider<IPriceIntervalProducer> priceIntervalProducerProvider;
 
 	@Inject
-	private IVesselProvider vesselProvider;
-	
+	private @NonNull IVesselProvider vesselProvider;
+
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
@@ -69,6 +67,7 @@ public class PriceIntervalProviderHelper {
 
 	private final static int TOTAL_BOILOFF_COSTS_INDEX = 0;
 	private final static int TOTAL_BUNKER_COSTS_INDEX = 1;
+
 	/**
 	 * Compares price intervals based on price
 	 */
@@ -145,9 +144,9 @@ public class PriceIntervalProviderHelper {
 	 * @param portTimeWindowRecord
 	 * @return
 	 */
-	public List<int[]> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
-			final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		final List<int[]> priceIntervals = new LinkedList<>();
+	public List<int @NonNull []> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start,
+			final int end, final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
+		final List<int @NonNull []> priceIntervals = new LinkedList<>();
 		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals);
 		return priceIntervals;
 	}
@@ -163,10 +162,10 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public List<Integer> buildDateChangeCurveAsIntegerList(final int start, final int end, final @NonNull IPortSlot slot, final int @NonNull [] intervals,
+	public List<@NonNull Integer> buildDateChangeCurveAsIntegerList(final int start, final int end, final @NonNull IPortSlot slot, final int @NonNull [] intervals,
 			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		// TODO - get rid of PriceEventType (change to int[]?)
-		final List<Integer> shifted = new LinkedList<>();
+		final List<@NonNull Integer> shifted = new LinkedList<>();
 		final PricingEventType pricingEventType = getPriceEventTypeFromPortSlot(slot, portTimeWindowsRecord);
 		if (isStartOfWindow(pricingEventType)) {
 			shifted.add(start);
@@ -194,17 +193,17 @@ public class PriceIntervalProviderHelper {
 		return shifted;
 	}
 
-	public List<int[]> getEndElementPriceIntervals(@NonNull List<Integer> times) {
-		List<int[]> intervals = new LinkedList<>();
+	public List<int @NonNull []> getEndElementPriceIntervals(@NonNull List<@NonNull Integer> times) {
+		List<int @NonNull []> intervals = new LinkedList<>();
 		for (int i = 0; i < times.size(); i++) {
-			intervals.add(new int[]{times.get(i), // time
+			intervals.add(new int[] { times.get(i), // time
 					0 // 0 for a price of zero (we don't care about price, only cost for end elements
-					});
+			});
 		}
-		intervals.add(new int[]{times.get(times.size() - 1) + 1, Integer.MIN_VALUE});
+		intervals.add(new int[] { times.get(times.size() - 1) + 1, Integer.MIN_VALUE });
 		return intervals;
 	}
-	
+
 	int @NonNull [] getCargoBoundsWithCanalTrimming(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int minTimeCanal) {
 		final int minSalesStart = getMinDischargeGivenCanal(purchaseStart, salesStart, loadDuration, minTimeCanal);
 		return new int[] { purchaseStart, processEndTime(purchaseStart), minSalesStart, processEndTime(Math.max(minSalesStart, salesEnd)) };
@@ -266,7 +265,7 @@ public class PriceIntervalProviderHelper {
 		int equivalenceFactor = vesselClass.getBaseFuel().getEquivalenceFactor();
 		long bestMargin = Long.MAX_VALUE;
 		LadenRouteData bestCanal = null;
-		
+
 		for (final LadenRouteData canal : sortedCanalTimes) {
 			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
 				final long cost = getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, boiloffRateM3, vesselClass, cv, equivalenceFactor, canal, charterRatePerDay, isLaden);
@@ -291,18 +290,22 @@ public class PriceIntervalProviderHelper {
 		return new NonNullPair<LadenRouteData, Long>(bestCanal, bestMargin);
 	}
 
-	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3, final IVesselClass vesselClass, final int cv,
-			int equivalenceFactor, final LadenRouteData canal, long charterRatePerDay, boolean isLaden) {
-		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed, (int) canal.ladenTimeAtNBOSpeed);
-		long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor, vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.transitTime, loadDuration, isLaden);
+	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3,
+			final IVesselClass vesselClass, final int cv, int equivalenceFactor, final LadenRouteData canal, long charterRatePerDay, boolean isLaden) {
+		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
+				(int) canal.ladenTimeAtNBOSpeed);
+		long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor,
+				vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.transitTime, loadDuration, isLaden);
 
-		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long)(times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel costs
+		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long) (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel
+																																				// costs
 		final long cost = canal.ladenRouteCost + fuelCosts[TOTAL_BOILOFF_COSTS_INDEX] + fuelCosts[TOTAL_BUNKER_COSTS_INDEX] + charterCost;
 		return cost;
 	}
 
 	/**
 	 * Calculates approximate fuel costs. Assumptions: does not calculate the in port costs, route costs or idle bunkers
+	 * 
 	 * @param salesPrice
 	 * @param boiloffRateM3
 	 * @param vesselClass
@@ -313,10 +316,12 @@ public class PriceIntervalProviderHelper {
 	 * @param baseFuelPrice
 	 * @param canalTransitTime
 	 * @param durationAtPort
-	 * @param isLaden TODO
+	 * @param isLaden
+	 *            TODO
 	 * @return
 	 */
-	public long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor, final int baseFuelPrice, int canalTransitTime, int durationAtPort, boolean isLaden) {
+	public long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor,
+			final int baseFuelPrice, int canalTransitTime, int durationAtPort, boolean isLaden) {
 		final VesselState vesselState;
 		if (isLaden) {
 			vesselState = VesselState.Laden;
@@ -346,7 +351,7 @@ public class PriceIntervalProviderHelper {
 		long[] fuelCosts = new long[2];
 		final long totalBoilOffCost;
 		final long totalBunkerCost;
-		
+
 		if (vesselClass.hasReliqCapability()) {
 			totalBoilOffCost = Calculator.costFromVolume(requiredTotalFuelMMBTu, salesPrice);
 			totalBunkerCost = 0L;
@@ -356,13 +361,13 @@ public class PriceIntervalProviderHelper {
 			final long boiloffMT = Calculator.convertM3ToMT(boiloffM3, cv, equivalenceFactor);
 			final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, salesPrice);
 			final long boiloffCostMMBTU = boiloffCost;
-			
+
 			final long bunkersNeededMT = Math.max(0, requiredTotalFuelMT - boiloffMT);
 			final long bunkersCost = Calculator.costFromConsumption(bunkersNeededMT, baseFuelPrice);
-			
+
 			final long fboInMMBTU = Math.max(0, requiredTotalFuelMMBTu - boiloffMMBTU);
 			final long fboCost = Calculator.costFromVolume(fboInMMBTU, salesPrice);
-			
+
 			if (fboCost > bunkersCost) {
 				totalBoilOffCost = boiloffCostMMBTU;
 				totalBunkerCost = bunkersCost;
@@ -376,7 +381,7 @@ public class PriceIntervalProviderHelper {
 		fuelCosts[1] = OptimiserUnitConvertor.convertToInternalDailyCost(totalBunkerCost);
 		return fuelCosts;
 	}
-	
+
 	public NonNullPair<LadenRouteData, Long> getBestCanalDetailsWithBoiloff(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
 			@NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final int cv, final int loadVolumeMMBTU) {
 		assert sortedCanalTimes.length > 0;
@@ -523,6 +528,7 @@ public class PriceIntervalProviderHelper {
 		}
 		return min;
 	}
+
 	@Nullable
 	IVessel getVessel(@NonNull final IResource resource) {
 		final IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
@@ -548,7 +554,7 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	List<int[]> getComplexPriceIntervals(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final @NonNull IPriceIntervalProvider loadPriceIntervalProvider,
+	List<int @NonNull []> getComplexPriceIntervals(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final @NonNull IPriceIntervalProvider loadPriceIntervalProvider,
 			final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final boolean dateFromLoad) {
 		ITimeWindow timeWindow;
 		if (dateFromLoad) {
@@ -557,15 +563,15 @@ public class PriceIntervalProviderHelper {
 			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
 		}
 
-		final List<int[]> intervals = getFeasibleIntervalSubSet(timeWindow.getInclusiveStart(), timeWindow.getExclusiveEnd(),
+		final List<int @NonNull []> intervals = getFeasibleIntervalSubSet(timeWindow.getInclusiveStart(), timeWindow.getExclusiveEnd(),
 				priceIntervalProducerProvider.get().getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
 						(IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, dateFromLoad));
 		return intervals;
 	}
 
 	@NonNull
-	List<int[]> getFeasibleIntervalSubSet(final int inclusiveStart, final int exclusiveEnd, @NonNull final List<int[]> intervals) {
-		final List<int[]> list = new LinkedList<>();
+	List<int @NonNull []> getFeasibleIntervalSubSet(final int inclusiveStart, final int exclusiveEnd, @NonNull final List<int @NonNull []> intervals) {
+		final List<int @NonNull []> list = new LinkedList<>();
 		for (int i = 0; i < intervals.size(); i++) {
 			if (list.size() == 0) {
 				if (intervals.get(i)[0] == inclusiveStart) {
@@ -582,7 +588,7 @@ public class PriceIntervalProviderHelper {
 		}
 		if (list.size() == 0) {
 			// start is greater than all intervals we have in the list
-			list.add(new int[] {inclusiveStart, intervals.get(intervals.size() - 1)[1]});
+			list.add(new int[] { inclusiveStart, intervals.get(intervals.size() - 1)[1] });
 		}
 		list.add(new int[] { exclusiveEnd, Integer.MIN_VALUE });
 		return list;
@@ -639,13 +645,13 @@ public class PriceIntervalProviderHelper {
 		return isLoadPricingEventTime(pet);
 	}
 
-	boolean isDischargePricingEventTime(final ILoadOption slot, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+	boolean isDischargePricingEventTime(final @NonNull ILoadOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final PricingEventType pet = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent()
 				: slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
 		return isDischargePricingEventTime(pet);
 	}
 
-	boolean isDischargePricingEventTime(final IDischargeOption slot, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+	boolean isDischargePricingEventTime(final @NonNull IDischargeOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final PricingEventType pet = slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent()
 				: slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
 		return isDischargePricingEventTime(pet);
@@ -705,7 +711,7 @@ public class PriceIntervalProviderHelper {
 		return priceIntervals;
 	}
 
-	void createAndSetTimeWindow(final IPortTimeWindowsRecord portTimeWindowRecord, final IPortSlot slot, final int start, final int end) {
+	void createAndSetTimeWindow(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortSlot slot, final int start, final int end) {
 		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(slot);
 		final TimeWindow feasibleTimeWindow = new TimeWindow(start, end, timeWindow.getExclusiveEndFlex());
 		portTimeWindowRecord.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
@@ -899,8 +905,8 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public Pair<Integer, Integer> getHighestPriceInterval(final IPriceIntervalProvider priceIntervalProvider, final int startOfRange, final int endOfRange, final IPortSlot slot,
-			final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public Pair<Integer, Integer> getHighestPriceInterval(final @NonNull IPriceIntervalProvider priceIntervalProvider, final int startOfRange, final int endOfRange, final @NonNull IPortSlot slot,
+			final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
 		return getHighestPriceInterval(priceIntervalProvider.getPriceIntervals(slot, startOfRange, endOfRange, portTimeWindowRecord));
 	}
 
@@ -910,7 +916,7 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public Pair<Integer, Integer> getLowestPriceInterval(final List<int[]> intervals) {
+	public Pair<@NonNull Integer, @NonNull Integer> getLowestPriceInterval(final List<int @NonNull []> intervals) {
 		int start = -1;
 		int end = -1;
 		int best = Integer.MAX_VALUE;
@@ -931,9 +937,8 @@ public class PriceIntervalProviderHelper {
 	 * 
 	 * @return
 	 */
-	@NonNull
-	public IntervalData[] getIntervalsBoundsAndPrices(final List<int[]> intervals) {
-		final IntervalData[] sortedIntervals = new IntervalData[intervals.size() - 1];
+	public @NonNull IntervalData @NonNull [] getIntervalsBoundsAndPrices(final List<int[]> intervals) {
+		final @NonNull IntervalData @NonNull [] sortedIntervals = new @NonNull IntervalData @NonNull [intervals.size() - 1];
 		for (int i = 0; i < intervals.size() - 1; i++) {
 			sortedIntervals[i] = new IntervalData(intervals.get(i)[0], getEndInterval(intervals.get(i)[0], intervals.get(i + 1)[0]), intervals.get(i)[1]);
 		}
@@ -945,9 +950,9 @@ public class PriceIntervalProviderHelper {
 	 * 
 	 * @return
 	 */
-	@NonNull
-	public IntervalData[] getIntervalsBoundsAndPricesWithNoRange(final List<int[]> intervals) {
-		final IntervalData[] sortedIntervals = new IntervalData[intervals.size() - 1];
+
+	public @NonNull IntervalData @NonNull [] getIntervalsBoundsAndPricesWithNoRange(final List<int @NonNull []> intervals) {
+		final @NonNull IntervalData @NonNull [] sortedIntervals = new @NonNull IntervalData @NonNull [intervals.size() - 1];
 		for (int i = 0; i < intervals.size() - 1; i++) {
 			sortedIntervals[i] = new IntervalData(intervals.get(i)[0], intervals.get(i)[0], intervals.get(i)[1]);
 		}
@@ -968,13 +973,13 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public Pair<Integer, Integer> getLowestPriceInterval(final IPriceIntervalProvider priceIntervalProvider, final int startOfRange, final int endOfRange, final IPortSlot slot,
-			final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public Pair<Integer, Integer> getLowestPriceInterval(final @NonNull IPriceIntervalProvider priceIntervalProvider, final int startOfRange, final int endOfRange, final @NonNull IPortSlot slot,
+			final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
 		return getLowestPriceInterval(priceIntervalProvider.getPriceIntervals(slot, startOfRange, endOfRange, portTimeWindowRecord));
 	}
 
 	@Nullable
-	public ILoadOption getFirstLoadOption(final List<IPortSlot> slots) {
+	public ILoadOption getFirstLoadOption(final List<@NonNull IPortSlot> slots) {
 		for (final IPortSlot slot : slots) {
 			if (ILoadOption.class.isAssignableFrom(slot.getClass())) {
 				return (ILoadOption) slot;
@@ -1010,8 +1015,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	/**
-	 * Makes sure the end of a time window is in the proper format.
-	 * Takes as input the inclusive end and outputs the correct format.
+	 * Makes sure the end of a time window is in the proper format. Takes as input the inclusive end and outputs the correct format.
+	 * 
 	 * @param end
 	 * @return
 	 */

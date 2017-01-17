@@ -49,20 +49,20 @@ public class AllowedVesselPermissionConstraintCheckerTest {
 
 		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
-		IVessel vessel = Mockito.mock(IVessel.class);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
 
-		Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot1 = createSequenceElement(portSlotProvider);
-		Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot2 = createSequenceElement(portSlotProvider);
+		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot1 = createSequenceElement(portSlotProvider);
+		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot2 = createSequenceElement(portSlotProvider);
 
 		Assert.assertFalse(checker.checkPairwiseConstraint(slot1.getFirst(), slot2.getFirst(), resource));
 		Assert.assertFalse(checker.checkPairwiseConstraint(slot2.getFirst(), slot1.getFirst(), resource));
 	}
 
-	private AllowedVesselPermissionConstraintChecker createChecker(final IVesselProvider vesselProvider, final INominatedVesselProvider nominatedVesselProvider,
-			final IAllowedVesselProvider allowedVesselProvider, final IPortTypeProvider portTypeProvider, IPortSlotProvider portSlotProvider) {
+	private AllowedVesselPermissionConstraintChecker createChecker(final @NonNull IVesselProvider vesselProvider, final @NonNull INominatedVesselProvider nominatedVesselProvider,
+			final @NonNull IAllowedVesselProvider allowedVesselProvider, final @NonNull IPortTypeProvider portTypeProvider, @NonNull final IPortSlotProvider portSlotProvider) {
 		final AllowedVesselPermissionConstraintChecker checker = new AllowedVesselPermissionConstraintChecker("checker");
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
@@ -81,7 +81,7 @@ public class AllowedVesselPermissionConstraintCheckerTest {
 	}
 
 	@NonNull
-	Pair<@NonNull ISequenceElement, @NonNull IPortSlot> createSequenceElement(IPortSlotProvider mockedProvider) {
+	Pair<@NonNull ISequenceElement, @NonNull IPortSlot> createSequenceElement(final IPortSlotProvider mockedProvider) {
 
 		final IPortSlot portSlot = Mockito.mock(IPortSlot.class);
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);

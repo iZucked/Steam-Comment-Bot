@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.contracts;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -26,8 +27,10 @@ public interface IPriceIntervalProvider {
 	 *            TODO
 	 * @return
 	 */
-	List<int[]> getPriceIntervals(@NonNull IPortSlot slot, int startOfRange, int endOfRange, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
+	@NonNull
+	List<int @NonNull []> getPriceIntervals(@NonNull IPortSlot slot, int startOfRange, int endOfRange, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
 
 	// TODO: extend to load/discharge interface
-	List<Integer> getPriceHourIntervals(@NonNull IPortSlot slot, int start, int end, @NonNull IPortTimeWindowsRecord portTimeWindowsRecord);
+	@Nullable
+	List<@NonNull Integer> getPriceHourIntervals(@NonNull IPortSlot slot, int start, int end, @NonNull IPortTimeWindowsRecord portTimeWindowsRecord);
 }

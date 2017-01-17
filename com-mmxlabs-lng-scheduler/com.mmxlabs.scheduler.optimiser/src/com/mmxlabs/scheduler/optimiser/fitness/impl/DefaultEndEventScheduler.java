@@ -147,8 +147,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			// However this may miss potential cheaper solutions past this
 			// boundary
 
-			final IPortSlot prevPortSlot = partialPortTimesRecord.getSlots().get(partialPortTimesRecord.getSlots().size() - 1);
-			final PortType prevPortType = prevPortSlot.getPortType();
+			final @NonNull IPortSlot prevPortSlot = partialPortTimesRecord.getSlots().get(partialPortTimesRecord.getSlots().size() - 1);
+			final @NonNull PortType prevPortType = prevPortSlot.getPortType();
 
 			assert prevPortSlot != null;
 			final int prevArrivalTime = partialPortTimesRecord.getSlotTime(prevPortSlot);
@@ -256,8 +256,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			boolean bestNBO = false;
 			boolean bestFBO = true;
 
-			Pair<ERouteOption, Integer> bestRoute = null;
-			LOOP_ROUTE: for (final Pair<ERouteOption, Integer> distanceOption : distanceProvider.getAllDistanceValues(from, to)) {
+			Pair<@NonNull ERouteOption, @NonNull Integer> bestRoute = null;
+			LOOP_ROUTE: for (final Pair<@NonNull ERouteOption, @NonNull Integer> distanceOption : distanceProvider.getAllDistanceValues(from, to)) {
 				final ERouteOption route = distanceOption.getFirst();
 				final int distance = distanceOption.getSecond();
 
