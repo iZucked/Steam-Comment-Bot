@@ -429,6 +429,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Sell Volume", null, ColumnType.NORMAL, Formatters.integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred()));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.buy_value":
+			
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Purchase Cost", null, ColumnType.NORMAL, Formatters.integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeValue()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.sell_value":
+			
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Sales Revenue", null, ColumnType.NORMAL, Formatters.integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeValue()));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_mmbtu":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
