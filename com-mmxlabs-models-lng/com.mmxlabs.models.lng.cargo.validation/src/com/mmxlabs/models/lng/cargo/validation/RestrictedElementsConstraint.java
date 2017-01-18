@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -74,7 +76,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		}
 
 		final List<Contract> restrictedContracts;
-		final List<? extends EObject> restrictedPorts;
+		final List<?> restrictedPorts;
 		boolean restrictedListsArePermissive = false;
 		final String cause;
 		// if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
@@ -92,7 +94,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 					if (market != null) {
 						restrictedListsArePermissive = market.isRestrictedListsArePermissive();
 						restrictedContracts = market.getRestrictedContracts();
-						restrictedPorts = market.getRestrictedPorts();
+						restrictedPorts = new LinkedList<>(SetUtils.getObjects(market.getRestrictedPorts()));
 						cause = "Spot market " + market.getName();
 					} else {
 						restrictedListsArePermissive = false;
@@ -109,7 +111,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 			} else {
 				restrictedListsArePermissive = contract.isRestrictedListsArePermissive();
 				restrictedContracts = contract.getRestrictedContracts();
-				restrictedPorts = contract.getRestrictedPorts();
+				restrictedPorts = new LinkedList<>(SetUtils.getObjects(contract.getRestrictedPorts()));
 				cause = "Contract " + contract.getName();
 			}
 		}
