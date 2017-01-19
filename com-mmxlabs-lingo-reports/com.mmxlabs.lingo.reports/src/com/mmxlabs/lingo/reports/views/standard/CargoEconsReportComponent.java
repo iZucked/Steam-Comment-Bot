@@ -24,6 +24,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -42,6 +43,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions;
 import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -77,21 +81,30 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	@Inject
 	private ESelectionService selectionService;
 
+	@Inject
+	private SelectedScenariosService selectedScenariosService;
+
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	private GridTableViewer viewer;
-	private Collection<Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener>> selectionListeners = new ConcurrentLinkedQueue<>();
+	private final Collection<Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener>> selectionListeners = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * List of dynamically generated columns to be disposed on selection changes
 	 */
 	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
-	private EconsOptions options = new EconsOptions();
+	private final EconsOptions options = new EconsOptions();
+
+	private Image pinImage = null;
 
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
+
+		final ImageDescriptor imageDescriptor = Activator.getPlugin().getImageDescriptor("icons/Pinned.gif");
+		pinImage = imageDescriptor.createImage();
+
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
 		ColumnViewerToolTipSupport.enableFor(viewer);
@@ -111,7 +124,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		viewer.setContentProvider(new ArrayContentProvider());
 		// Our input!
 
-		List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
 		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
 			rows.addAll(factory.createRows(options));
 			return true;
@@ -126,8 +139,12 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 
 	@PreDestroy
 	public void dispose() {
+		if (pinImage != null) {
+			pinImage.dispose();
+			pinImage = null;
 
-		for (Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener> p : selectionListeners) {
+		}
+		for (final Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener> p : selectionListeners) {
 			if (p.getFirst() == null) {
 				selectionService.removePostSelectionListener(p.getSecond());
 			} else {
@@ -195,17 +212,17 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		@Override
 		public String getText(final Object element) {
 			if (element instanceof CargoEconsReportRow) {
-				CargoEconsReportRow row = (CargoEconsReportRow) element;
+				final CargoEconsReportRow row = (CargoEconsReportRow) element;
 				return row.formatter.render(columnElement);
 			}
 			return null;
 		}
 
 		@Override
-		public String getToolTipText(Object element) {
+		public String getToolTipText(final Object element) {
 			if (element instanceof CargoEconsReportRow) {
-				CargoEconsReportRow row = (CargoEconsReportRow) element;
-				Supplier<String> tooltip = row.tooltip;
+				final CargoEconsReportRow row = (CargoEconsReportRow) element;
+				final Supplier<String> tooltip = row.tooltip;
 				if (tooltip != null) {
 					return tooltip.get();
 				}
@@ -345,9 +362,9 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	 * Adds a selection listener for the given partID. Listens to everything if null
 	 */
 	@BindSelectionListener
-	public void listenToSelectionsFrom(@Optional @Nullable String partId) {
+	public void listenToSelectionsFrom(@Optional @Nullable final String partId) {
 
-		org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener = new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
+		final org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener = new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
 
 			@Override
 			public void selectionChanged(final MPart part, final Object selectedObjects) {
@@ -387,8 +404,12 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 						dataColumns.add(gvc);
 						gvc.getColumn().setText(cargoAllocation.getName());
 						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
-
 						gvc.getColumn().setWidth(100);
+						@Nullable
+						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+							gvc.getColumn().setImage(pinImage);
+						}
 					} else if (selectedObject instanceof MarketAllocation) {
 						final MarketAllocation cargoAllocation = (MarketAllocation) selectedObject;
 
@@ -401,6 +422,12 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(cargoAllocation));
 
 						gvc.getColumn().setWidth(100);
+
+						@Nullable
+						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+							gvc.getColumn().setImage(pinImage);
+						}
 					}
 				}
 
@@ -422,7 +449,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	 * Adds a selection listener for the given partID. Listens to everything if null
 	 */
 	@SetEconsMarginMode
-	public void setMarginMode(MarginBy mode) {
+	public void setMarginMode(final MarginBy mode) {
 		options.marginBy = mode;
 		ViewerHelper.refresh(getViewer(), false);
 	}
