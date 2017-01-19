@@ -116,7 +116,7 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 	 * @return
 	 */
 	private String buildQueryURL(final float lat, final float lon) {
-		final long timestamp = System.currentTimeMillis() / 1000;
+		final long timestamp = System.currentTimeMillis() / 1000L;
 		final String str = String.format("https://maps.googleapis.com/maps/api/timezone/json?location=%f,%f&timestamp=%d&sensor=false", lat, lon, timestamp);
 		return str;
 	}
