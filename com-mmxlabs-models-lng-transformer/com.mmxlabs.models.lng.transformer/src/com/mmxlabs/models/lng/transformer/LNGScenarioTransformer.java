@@ -455,6 +455,10 @@ public class LNGScenarioTransformer {
 			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodEnd()));
 		}
 
+		if (rootObject.isSetSchedulingEndDate()) {
+			promptPeriodProviderEditor.setEndOfSchedulingPeriod(dateHelper.convertTime(rootObject.getSchedulingEndDate()));
+		}
+		
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
