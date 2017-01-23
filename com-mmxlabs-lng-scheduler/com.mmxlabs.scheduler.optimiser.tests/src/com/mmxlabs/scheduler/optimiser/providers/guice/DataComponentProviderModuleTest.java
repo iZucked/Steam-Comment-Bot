@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
+import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 
@@ -35,20 +35,20 @@ public class DataComponentProviderModuleTest {
 	public void testDataComponentProviderModuleBoolean_True() {
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(true));
 
-		final ITimeWindowDataComponentProviderEditor editor = injector.getInstance(ITimeWindowDataComponentProviderEditor.class);
+		final IElementDurationProviderEditor editor = injector.getInstance(IElementDurationProviderEditor.class);
 		Assert.assertNotNull(editor);
 
-		Assert.assertTrue(editor instanceof IndexedTimeWindowEditor);
+		Assert.assertTrue(editor instanceof IndexedElementDurationEditor);
 	}
 
 	@Test
 	public void testDataComponentProviderModuleBoolean_False() {
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(false));
 
-		final ITimeWindowDataComponentProviderEditor editor = injector.getInstance(ITimeWindowDataComponentProviderEditor.class);
+		final IElementDurationProviderEditor editor = injector.getInstance(IElementDurationProviderEditor.class);
 		Assert.assertNotNull(editor);
 
-		Assert.assertTrue(editor instanceof TimeWindowDataComponentProvider);
+		Assert.assertTrue(editor instanceof HashMapElementDurationEditor);
 	}
 
 }

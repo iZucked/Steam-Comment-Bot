@@ -19,17 +19,13 @@ import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComp
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
-import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedLockedElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
@@ -155,7 +151,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvi
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.AHashMapSimpleCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSpotMarketSlotsEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
@@ -214,7 +209,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IPortProviderEditor portProvider;
 		final IPortSlotProviderEditor portSlotsProvider;
 		final IPortTypeProviderEditor portTypeProvider;
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider;
 		final IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
 		final IElementDurationProviderEditor elementDurationsProvider;
 		if (USE_INDEXED_DCPS) {
@@ -222,7 +216,6 @@ public class DataComponentProviderModule extends AbstractModule {
 			portSlotsProvider = new IndexedPortSlotEditor();
 			portTypeProvider = new IndexedPortTypeEditor();
 
-			timeWindowProvider = new IndexedTimeWindowEditor();
 			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor();
 
 			elementDurationsProvider = new IndexedElementDurationEditor();
@@ -234,7 +227,6 @@ public class DataComponentProviderModule extends AbstractModule {
 			portSlotsProvider = new HashMapPortSlotEditor();
 			portTypeProvider = new HashMapPortTypeEditor();
 
-			timeWindowProvider = new TimeWindowDataComponentProvider();
 			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider();
 			elementDurationsProvider = new HashMapElementDurationEditor();
 
@@ -249,9 +241,6 @@ public class DataComponentProviderModule extends AbstractModule {
 
 		bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 		bind(IPortTypeProviderEditor.class).toInstance(portTypeProvider);
-
-		bind(ITimeWindowDataComponentProvider.class).toInstance(timeWindowProvider);
-		bind(ITimeWindowDataComponentProviderEditor.class).toInstance(timeWindowProvider);
 
 		bind(IOrderedSequenceElementsDataComponentProvider.class).toInstance(orderedSequenceElementsEditor);
 		bind(IOrderedSequenceElementsDataComponentProviderEditor.class).toInstance(orderedSequenceElementsEditor);

@@ -29,10 +29,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
-import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -121,13 +118,6 @@ public final class VoyagePlannerTest {
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 		final ISequenceElement element4 = new SequenceElement(index, "element4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider();
-
-		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
-		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
-		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
-		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(timeWindow4));
-
 		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
 		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
@@ -191,7 +181,6 @@ public final class VoyagePlannerTest {
 				}).toInstance(distanceProvider);
 				bind(IElementDurationProvider.class).toInstance(durationsProvider);
 				bind(IPortProvider.class).toInstance(portProvider);
-				bind(ITimeWindowDataComponentProvider.class).toInstance(timeWindowProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);

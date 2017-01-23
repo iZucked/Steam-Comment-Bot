@@ -36,7 +36,6 @@ import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -246,10 +245,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
-
-	@Inject
-	@NonNull
-	private ITimeWindowDataComponentProviderEditor timeWindowProvider;
 
 	@Inject
 	@NonNull
@@ -518,12 +513,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portSlotsProvider.setPortSlot(element, slot);
 
-		@Nullable
-		final ITimeWindow timeWindow = slot.getTimeWindow();
-		if (timeWindow != null) {
-			timeWindowProvider.setTimeWindows(element, Collections.singletonList(timeWindow));
-		}
-
 		addSlotToVolumeConstraints(slot);
 
 		calculatorProvider.addLoadPriceCalculator(priceCalculator);
@@ -594,11 +583,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portTypeProvider.setPortType(element, PortType.Discharge);
 
-		@Nullable
-		final ITimeWindow timeWindow = slot.getTimeWindow();
-		if (timeWindow != null) {
-			timeWindowProvider.setTimeWindows(element, Collections.singletonList(timeWindow));
-		}
 		addSlotToVolumeConstraints(slot);
 
 		calculatorProvider.addSalesPriceCalculator(priceCalculator);
@@ -708,21 +692,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		if (startEndRequirementProvider.getEndRequirement(resource).getTimeWindow() != null) {
 			// We should set the time window for all end elements for this
-			// resource
-			// to match the end requirement for the resource
-			timeWindowProvider.setTimeWindows(element, Collections.singletonList(startEndRequirementProvider.getEndRequirement(resource).getTimeWindow()));
+			// resource to match the end requirement for the resource
 			slot.setTimeWindow(startEndRequirementProvider.getEndRequirement(resource).getTimeWindow());
 		} else {
 			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
 				// spot charters have no end time window, because their end date
 				// is very flexible.
-				final List<ITimeWindow> noTimeWindows = Collections.emptyList();
-				timeWindowProvider.setTimeWindows(element, noTimeWindows);
 			} else if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType().equals(VesselInstanceType.ROUND_TRIP)) {
 				// spot charters have no end time window, because their end date
 				// is very flexible.
-				final List<ITimeWindow> noTimeWindows = Collections.emptyList();
-				timeWindowProvider.setTimeWindows(element, noTimeWindows);
 			} else {
 				// this defers setting the time windows to
 				// getOptimisationData(), which will
@@ -731,7 +709,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				// this list to have a time window around that end date
 				final MutableTimeWindow mutableWindow = new MutableTimeWindow();
 				slot.setTimeWindow(mutableWindow);
-				timeWindowProvider.setTimeWindows(element, Collections.singletonList(mutableWindow));
 				endSlotWindows.add(mutableWindow);
 			}
 		}
@@ -947,7 +924,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final StartPortSlot startSlot = new StartPortSlot("start-" + name, startPort, startWindow, start.getHeelOptions());
 
 		final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
-		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startWindow));
 
 		final EndPortSlot endSlot = new EndPortSlot("end-" + name, //
 				(end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE, //
@@ -970,14 +946,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 				final MutableTimeWindow mutableWindow = new MutableTimeWindow();
 				endSlot.setTimeWindow(mutableWindow);
-				timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(mutableWindow));
 				endSlotWindows.add(mutableWindow);
 			}
 		} else {
 			final ITimeWindow endWindow = end.getTimeWindow();
 			assert endWindow != null;
 			endSlot.setTimeWindow(endWindow);
-			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endWindow));
 		}
 
 		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
@@ -1137,7 +1111,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// 3 == discharge + 60
 			// 4 == discharge (minus spot) + 60
 			final int rule = 4;
-			
+
 			if (rule == 0) {
 				/**
 				 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
@@ -1194,8 +1168,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				// Include all time windows *except* spot market slots
 				final OptionalInt optionalMax = sequenceElements.stream() //
 						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
-						.filter(element -> !timeWindowProvider.getTimeWindows(element).isEmpty()) //
-						.mapToInt(element -> timeWindowProvider.getTimeWindows(element).get(0).getExclusiveEnd()) //
+						.map(element -> portSlotsProvider.getPortSlot(element)) //
+						.filter(portSlot -> portSlot.getTimeWindow() != null) //
+						.mapToInt(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()) //
 						.max();
 				final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
 
@@ -1205,14 +1180,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				assert false;
 			}
 			windowAdder = (rule == 3 || rule == 4) ? 0 : 35 * 24;
-			promptPeriodProviderEditor.setEndOfSchedulingPeriod(latestTime);	
+			promptPeriodProviderEditor.setEndOfSchedulingPeriod(latestTime);
 		} else {
 			windowAdder = 0;
 			latestTime = promptPeriodProviderEditor.getEndOfSchedulingPeriod();
 		}
 		startEndRequirementProvider.setNotionalEndTime(latestTime);
 
-		
 		for (final MutableTimeWindow window : endSlotWindows) {
 			window.setInclusiveStart(latestTime - 1);
 			window.setExclusiveEnd(latestTime + windowAdder);
@@ -1278,7 +1252,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				final RoundTripCargoEnd returnPortSlot = new RoundTripCargoEnd(name, port);
 
 				final SequenceElement returnElement = new SequenceElement(indexingContext, name);
-				timeWindowProvider.setTimeWindows(returnElement, Collections.<ITimeWindow> emptyList());
 
 				elementDurationsProvider.setElementDuration(returnElement, 0);
 
@@ -1499,7 +1472,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			orderedSequenceElementsEditor.setElementOrder(startElement, redirectElement);
 			orderedSequenceElementsEditor.setElementOrder(redirectElement, endElement);
 
-			timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(vesselEvent.getTimeWindow()));
 			elementDurationsProvider.setElementDuration(startElement, 0);
 			elementDurationsProvider.setElementDuration(redirectElement, 0);
 
@@ -1546,7 +1518,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		sequenceElements.add(endElement);
 
-		timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(vesselEvent.getTimeWindow()));
 		portTypeProvider.setPortType(endElement, slot.getPortType());
 
 		elementDurationsProvider.setElementDuration(endElement, vesselEvent.getDurationHours());
@@ -1717,8 +1688,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						// Get current allocation
 						final ITimeWindow desPurchaseWindowForPort = dischargePorts.get(option.getPort());
 
-						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-						if (matchingWindows(Collections.singletonList(desPurchaseWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(desPurchaseWindowForPort))) {
+						ITimeWindow tw2 = option.getTimeWindow();
+						if (matchingWindows(desPurchaseWindowForPort, tw2) || matchingWindows(tw2, desPurchaseWindowForPort)) {
 
 							final ISequenceElement element = portSlotsProvider.getElement(option);
 							fobdesCompatibilityProviderEditor.permitElementOnResource(element, option, resource, virtualVesselAvailability);
@@ -1769,8 +1740,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						// Get current allocation
 						final ITimeWindow fobSaleWindowForPort = loadPorts.get(option.getPort());
 
-						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-						if (matchingWindows(Collections.singletonList(fobSaleWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(fobSaleWindowForPort))) {
+						final ITimeWindow tw2 = option.getTimeWindow();
+						if (matchingWindows(fobSaleWindowForPort, tw2) || matchingWindows(tw2, fobSaleWindowForPort)) {
 							final ISequenceElement element = portSlotsProvider.getElement(option);
 							fobdesCompatibilityProviderEditor.permitElementOnResource(element, option, resource, virtualVesselAvailability);
 						}
@@ -1787,18 +1758,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param tw2
 	 * @return
 	 */
-	private boolean matchingWindows(final List<ITimeWindow> tw1, final List<ITimeWindow> tw2) {
+	private boolean matchingWindows(final @Nullable ITimeWindow tw1, final @Nullable ITimeWindow tw2) {
 
-		for (final ITimeWindow t1 : tw1) {
-			for (final ITimeWindow t2 : tw2) {
-				// End is within
-				if (t1.getExclusiveEnd() > t2.getInclusiveStart() && t1.getExclusiveEnd() - 1 < t2.getExclusiveEnd()) {
-					return true;
-				}
-				// Start is within
-				if (t1.getInclusiveStart() >= t2.getInclusiveStart() && t1.getInclusiveStart() < t2.getExclusiveEnd()) {
-					return true;
-				}
+		if (tw1 != null && tw2 != null) {
+			// End is within
+			if (tw1.getExclusiveEnd() > tw2.getInclusiveStart() && tw1.getExclusiveEnd() - 1 < tw2.getExclusiveEnd()) {
+				return true;
+			}
+			// Start is within
+			if (tw1.getInclusiveStart() >= tw2.getInclusiveStart() && tw1.getInclusiveStart() < tw2.getExclusiveEnd()) {
+				return true;
 			}
 		}
 
