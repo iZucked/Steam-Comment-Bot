@@ -458,7 +458,7 @@ public class LNGScenarioTransformer {
 		if (rootObject.isSetSchedulingEndDate()) {
 			promptPeriodProviderEditor.setEndOfSchedulingPeriod(dateHelper.convertTime(rootObject.getSchedulingEndDate()));
 		}
-		
+
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -2793,6 +2793,10 @@ public class LNGScenarioTransformer {
 					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3,
 					eVesselAvailability.isForceHireCostOnlyEndRule());
 
+			if (!endRequirement.hasTimeRequirement()) {
+//				builder.addOpenEndWindow((MutableTimeWindow)end.getTimeWindow());
+			}
+			
 			final ILongCurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
 				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
@@ -2982,14 +2986,17 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private IStartRequirement createStartRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
 			@Nullable final ZonedDateTime to, @Nullable final Port port, @Nullable final HeelOptions eHeelOptions) {
-		ITimeWindow window = null;
-
+		final ITimeWindow window;
+		boolean hasTimeRequirement = true;
 		if (from == null && to != null) {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to), 0, false);
 		} else if (from != null && to == null) {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(dateHelper.getLatestTime()), 0, false);
 		} else if (from != null && to != null) {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
+		} else {
+			window = TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false);
+			hasTimeRequirement = false;
 		}
 
 		IHeelOptions heelOptions;
@@ -3003,7 +3010,7 @@ public class LNGScenarioTransformer {
 		} else {
 			heelOptions = null;
 		}
-		return builder.createStartRequirement(portAssociation.lookup(port), window, heelOptions);
+		return builder.createStartRequirement(portAssociation.lookup(port), hasTimeRequirement, window, heelOptions);
 	}
 
 	/**
@@ -3018,7 +3025,7 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
 			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3, final boolean forceHireCostOnlyEndRule) {
-		ITimeWindow window = null;
+		final ITimeWindow window;
 
 		boolean isOpenEnded = false;
 		if (from == null && to != null) {
@@ -3026,12 +3033,13 @@ public class LNGScenarioTransformer {
 		} else if (from != null && to == null) {
 			// Set a default window end date which is valid change later
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(from), 0, true);
-			builder.addOpenEndWindow((MutableTimeWindow) window);
+			builder.addPartiallyOpenEndWindow((MutableTimeWindow) window);
 		} else if (from != null && to != null) {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
 		} else {
 			// No window
 			isOpenEnded = true;
+			window = new MutableTimeWindow();
 		}
 
 		final Set<IPort> portSet = new HashSet<IPort>();
@@ -3041,9 +3049,9 @@ public class LNGScenarioTransformer {
 		// Is the availability open ended or do we force the end rule?
 		final boolean useHireCostOnlyEndRule = forceHireCostOnlyEndRule || isOpenEnded;
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
+			return builder.createEndRequirement(null, !isOpenEnded, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
 		} else {
-			return builder.createEndRequirement(portSet, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
+			return builder.createEndRequirement(portSet, !isOpenEnded, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
 		}
 
 	}

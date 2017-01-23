@@ -21,8 +21,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
@@ -131,7 +131,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
-		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
 		final PortTimesRecord portTimesRecord = getPortTimesRecord(loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, notionalLoadSlot, notionalDischargeSlot,
 				notionalReturnSlot);
@@ -157,7 +157,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPricePerMMBTu);
 
-		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
 		final PortTimesRecord portTimesRecord = getPortTimesRecord(loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, notionalLoadSlot, notionalDischargeSlot,
 				notionalReturnSlot);
