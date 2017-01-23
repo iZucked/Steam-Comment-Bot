@@ -12,16 +12,16 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -35,10 +35,7 @@ public class NoNominalInPromptTransformer {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private IPortTypeProvider portTypeProvider;
-
-	@Inject
-	private ITimeWindowDataComponentProvider timeWindowProvider;
+	private IPortSlotProvider portSlotProvider;
 
 	public @NonNull ISequences run(@NonNull final ISequences rawSequences) {
 
@@ -52,14 +49,15 @@ public class NoNominalInPromptTransformer {
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 
 				// List of elements (cargoes) to remove
-				final List<ISequenceElement> elementsToRemove = new LinkedList<>();
+				final List<@NonNull ISequenceElement> elementsToRemove = new LinkedList<>();
 
 				// Loop over list of element identifying cargo strips (TODO: Yet another place we do this)
 				boolean isCargo = false; // Currently stepping over a sequence of cargo elements
 				boolean foundDischarge = false; // Have we found a discharge yet? (Supporting LLD cargoes).
 				boolean isRemoving = false; // Are we removing these elements?
 				for (final ISequenceElement e : newSequences.getSequence(resource)) {
-					final PortType portType = portTypeProvider.getPortType(e);
+					final IPortSlot portSlot = portSlotProvider.getPortSlot(e);
+					final PortType portType = portSlot.getPortType();
 
 					// Examine element for where we are in the cargo sequence - start or within
 					boolean startOfSequence = false;
@@ -85,12 +83,9 @@ public class NoNominalInPromptTransformer {
 						isRemoving = false;
 						if (isCargo) {
 							// If timewindow start is in prompt, then we want to remove the cargo.
-							@NonNull
-							final List<@NonNull ITimeWindow> timeWindow = timeWindowProvider.getTimeWindows(e);
-							for (final ITimeWindow tw : timeWindow) {
-								if (tw.getInclusiveStart() < endOfPromptPeriod) {
-									isRemoving = true;
-								}
+							final ITimeWindow timeWindow = portSlot.getTimeWindow();
+							if (timeWindow != null && (timeWindow.getInclusiveStart() < endOfPromptPeriod)) {
+								isRemoving = true;
 							}
 						}
 					}

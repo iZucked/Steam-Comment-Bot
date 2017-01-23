@@ -13,15 +13,15 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -46,13 +46,10 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject
-	private IPortTypeProvider portTypeProvider;
+	private IPortSlotProvider portSlotProvider;
 
 	@Inject
 	private IPromptPeriodProvider promptPeriodProvider;
-
-	@Inject
-	private ITimeWindowDataComponentProvider timeWindowProvider;
 
 	@NonNull
 	private final String name;
@@ -78,7 +75,7 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 		}
 
 		ISequenceElement prevElement = null;
-		for (ISequenceElement element : sequence) {
+		for (final ISequenceElement element : sequence) {
 			if (!checkElement(element, resource)) {
 				return false; // fail fast.
 			}
@@ -132,7 +129,7 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 			return true;
 		}
 
-		boolean valid = checkElement(first, resource) && checkElement(second, resource);
+		final boolean valid = checkElement(first, resource) && checkElement(second, resource);
 		if (valid) {
 			return roundTripVesselPermissionProvider.isBoundPair(first, second);
 		}
@@ -140,29 +137,31 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 	}
 
 	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
-		if (portTypeProvider.getPortType(element) == PortType.Start) {
+
+		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+		final PortType portType = portSlot.getPortType();
+
+		if (portType == PortType.Start) {
 			return true;
 		}
-		if (portTypeProvider.getPortType(element) == PortType.End) {
+		if (portType == PortType.End) {
 			return true;
 		}
-		if (portTypeProvider.getPortType(element) == PortType.Round_Trip_Cargo_End) {
+		if (portType == PortType.Round_Trip_Cargo_End) {
 			return true;
 		}
-		boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
+		final boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
 		if (!permitted) {
 			return false;
 		}
 		// Not strictly correct - should be first load in cargo sequence;
-		if (portTypeProvider.getPortType(element) == PortType.Load) {
-			int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
+		if (portType == PortType.Load) {
+			final int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
 			// If timewindow start is in prompt, then we want to remove the cargo.
-			@NonNull
-			final List<@NonNull ITimeWindow> timeWindow = timeWindowProvider.getTimeWindows(element);
-			for (final ITimeWindow tw : timeWindow) {
-				if (tw.getInclusiveStart() < endOfPromptPeriod) {
-					return false;
-				}
+			final ITimeWindow timeWindow = portSlot.getTimeWindow();
+
+			if (timeWindow != null && (timeWindow.getInclusiveStart() < endOfPromptPeriod)) {
+				return false;
 			}
 		}
 		return true;

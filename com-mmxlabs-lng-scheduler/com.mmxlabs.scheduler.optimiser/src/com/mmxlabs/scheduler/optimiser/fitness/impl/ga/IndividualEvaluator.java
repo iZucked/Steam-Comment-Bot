@@ -6,12 +6,12 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,10 +22,12 @@ import com.mmxlabs.optimiser.ga.Individual;
 import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -46,11 +48,12 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 
 	private ISequenceScheduler sequenceScheduler;
 
-	private ITimeWindowDataComponentProvider timeWindowProvider;
-
 	private IElementDurationProvider durationsProvider;
 
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	private IPortProvider portProvider;
 
@@ -260,9 +263,10 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		ISequenceElement prevT = null;
 		final Iterator<ISequenceElement> itr = sequence.iterator();
 		for (int idx = 0; itr.hasNext(); ++idx) {
-			final ISequenceElement t = itr.next();
+			final ISequenceElement element = itr.next();
+			IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 
-			final List<ITimeWindow> timeWindows = timeWindowProvider.getTimeWindows(t);
+			final ITimeWindow timeWindow = portSlot.getTimeWindow();
 
 			// TODO: Multiple time windows can be handled by combining the all
 			// time window ranges into a single value. Then use a step function
@@ -273,20 +277,17 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 			// the multiplier array should the overall range be large (thus
 			// triggering the multiplier), or if the time windows themselves are
 			// of vastly differing ranges (e.g. 6 hours versus 6 days).
-			assert timeWindows.size() <= 1;
-
-			final ITimeWindow tw = timeWindows.isEmpty() ? null : timeWindows.get(0);
 
 			if (idx < (travelTimes.length - 1)) {
 				// Add Visit duration to "travel" time between elements
-				final int duration = durationsProvider.getElementDuration(t, resource);
+				final int duration = durationsProvider.getElementDuration(element, resource);
 				travelTimes[idx + 1] = duration;
 			}
 
 			if (prevT != null) {
 				// TODO: Cache these items
 				final IPort from = portProvider.getPortForElement(prevT);
-				final IPort to = portProvider.getPortForElement(t);
+				final IPort to = portProvider.getPortForElement(element);
 
 				// Find the quickest route between the ports
 				final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider.getValues(from, to);
@@ -300,12 +301,12 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 				travelTimes[idx] += minTime;
 			}
 
-			if (tw != null) {
+			if (timeWindow != null) {
 				// Record early arrival time as window start
-				windowStarts[idx] = tw.getInclusiveStart();
+				windowStarts[idx] = timeWindow.getInclusiveStart();
 
 				// Determine range of values between arrival and end window.
-				final int r = tw.getExclusiveEnd() - tw.getInclusiveStart() - 1;
+				final int r = timeWindow.getExclusiveEnd() - timeWindow.getInclusiveStart() - 1;
 				// Should we be forced to arrive too late, i.e. past the end
 				// window, then there is nothing to optimise over here, so set
 				// range to zero.
@@ -322,7 +323,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 				multiplier[idx] = 1;
 			}
 
-			prevT = t;
+			prevT = element;
 		}
 
 		// The first pass constructed the GA range to match the available
@@ -456,9 +457,6 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		if (fitnessComponentWeights == null) {
 			throw new IllegalStateException("No fitness component weights set");
 		}
-		if (timeWindowProvider == null) {
-			throw new IllegalStateException("No time window provider set");
-		}
 		if (portProvider == null) {
 			throw new IllegalStateException("No port provider set");
 		}
@@ -479,14 +477,6 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 
 	public final void setSequenceScheduler(final ISequenceScheduler sequenceScheduler) {
 		this.sequenceScheduler = sequenceScheduler;
-	}
-
-	public final ITimeWindowDataComponentProvider getTimeWindowProvider() {
-		return timeWindowProvider;
-	}
-
-	public final void setTimeWindowProvider(final ITimeWindowDataComponentProvider timeWindowProvider) {
-		this.timeWindowProvider = timeWindowProvider;
 	}
 
 	public final Collection<ICargoSchedulerFitnessComponent> getFitnessComponents() {
@@ -511,7 +501,6 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 	public void dispose() {
 
 		sequenceScheduler = null;
-		timeWindowProvider = null;
 		durationsProvider = null;
 		vesselProvider = null;
 		portProvider = null;

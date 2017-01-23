@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -144,9 +142,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	private ITimeWindowDataComponentProvider timeWindowProvider;
-
-	@Inject
 	private IPortProvider portProvider;
 
 	@Inject
@@ -183,17 +178,17 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final int size = sequences.size();
 		bindings.clear();
 
-//		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
-			arrivalTimes = new int[size][];
-			windowStartTime = new int[size][];
-			windowEndTime = new int[size][];
-			minTimeToNextElement = new int[size][];
-			maxTimeToNextElement = new int[size][];
-			isVirtual = new boolean[size][];
-			useTimeWindow = new boolean[size][];
-			actualisedTimeWindow = new boolean[size][];
-			sizes = new int[size];
-//		}
+		// if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
+		arrivalTimes = new int[size][];
+		windowStartTime = new int[size][];
+		windowEndTime = new int[size][];
+		minTimeToNextElement = new int[size][];
+		maxTimeToNextElement = new int[size][];
+		isVirtual = new boolean[size][];
+		useTimeWindow = new boolean[size][];
+		actualisedTimeWindow = new boolean[size][];
+		sizes = new int[size];
+		// }
 
 		portTimeWindowsRecords.clear();
 		for (int i = 0; i < size; i++) {
@@ -467,14 +462,14 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		// --->
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
-			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 
 			// from voyageplanner --->
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationProvider.getElementDuration(element, resource);
 			// --->
 
-			final List<ITimeWindow> windows;
+			final ITimeWindow window;
 
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
@@ -488,7 +483,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 					timeWindow = startRequirement.getTimeWindow();
 				}
 
-				windows = Collections.singletonList(timeWindow);
+				window = timeWindow;
 			} else if (portTypeProvider.getPortType(element) == PortType.End) {
 				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 				// "windows" defaults to an empty list
@@ -498,32 +493,32 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 					if (timeWindow != null) {
 						// Make sure we always use the time window [This never worked - value was overwritten]
 						useTimeWindow[index] = true;
-						windows = Collections.singletonList(timeWindow);
+						window = timeWindow;
 					} else {
-						windows = timeWindowProvider.getTimeWindows(element);
+						window = portSlot.getTimeWindow();
 					}
 				} else {
-					windows = timeWindowProvider.getTimeWindows(element);
+					window = portSlot.getTimeWindow();
 				}
 			} else {
 
 				final IPortSlot prevSlot = prevElement == null ? null : portSlotProvider.getPortSlot(prevElement);
 				if (prevSlot != null && actualsDataProvider.hasReturnActuals(prevSlot)) {
-					windows = Collections.singletonList(actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot));
-					if (actualsDataProvider.hasActuals(slot)) {
-						int a = actualsDataProvider.getArrivalTime(slot);
+					window = actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot);
+					if (actualsDataProvider.hasActuals(portSlot)) {
+						int a = actualsDataProvider.getArrivalTime(portSlot);
 						int b = actualsDataProvider.getReturnTime(prevSlot);
 						assert a == b;
 
 					}
 					actualisedTimeWindow[index] = true;
-				} else if (actualsDataProvider.hasActuals(slot)) {
-					windows = Collections.singletonList(actualsDataProvider.getArrivalTimeWindow(slot));
+				} else if (actualsDataProvider.hasActuals(portSlot)) {
+					window = actualsDataProvider.getArrivalTimeWindow(portSlot);
 					actualisedTimeWindow[index] = true;
 
 				} else {
 					// "windows" defaults to whatever windows are specified by the time window provider
-					windows = timeWindowProvider.getTimeWindows(element);
+					window = portSlot.getTimeWindow();
 				}
 
 				recordShipToShipBindings(sequenceIndex, index, element);
@@ -578,8 +573,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			}
 
 			// Handle time windows
-			if (windows.isEmpty()) { // empty time windows are made to be the
-										// biggest reasonable gap
+			if (window == null) { // empty time windows are made to be the
+									// biggest reasonable gap
 				if (index > 0) {
 					// clip start of time window
 					windowStartTime[index] = windowStartTime[index - 1] + minTimeToNextElement[index - 1];
@@ -590,8 +585,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 					windowEndTime[index] = sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
 				}
 			} else {
-				assert windows.size() == 1 : "Multiple time windows are not yet supported!";
-				final ITimeWindow window = windows.get(0);
 				if (index == 0) {// first time window is special
 					windowStartTime[index] = window.getInclusiveStart();
 					windowEndTime[index] = window.getExclusiveEnd();
@@ -606,7 +599,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 						windowStartTime[index] = window.getInclusiveStart();
 					} else {
 						windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
-						windowEndTime[index] = Math.max(windowEndTime[index]  , windowStartTime[index] + 1);
+						windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
 					}
 				}
 			}
@@ -709,7 +702,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		if (ideal < windowStartTime[seq][pos]) {
 			return windowStartTime[seq][pos];
 		} else if (ideal >= windowEndTime[seq][pos]) {
-			return windowEndTime[seq][pos]-1;
+			return windowEndTime[seq][pos] - 1;
 		} else {
 			return ideal;
 		}
@@ -729,7 +722,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	protected final long getApproximateCombinations(final int seq, final int firstIndex, final int lastIndex, final long maxValue) {
 		long accumulator = 1;
 		for (int i = firstIndex; i <= lastIndex; i++) {
-			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i])  );
+			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i]));
 			if (accumulator > maxValue) {
 				return maxValue;
 			}

@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.lso;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -22,17 +21,17 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -68,13 +67,10 @@ public class MoveHelper {
 
 	@Inject
 	@NonNull
-	private IPortTypeProvider portTypeProvider;
+	private IPortSlotProvider portSlotProvider;
 
 	@Inject
 	private IPromptPeriodProvider promptPeriodProvider;
-
-	@Inject
-	private ITimeWindowDataComponentProvider timeWindowProvider;
 
 	@Inject
 	@NonNull
@@ -96,10 +92,10 @@ public class MoveHelper {
 			final @NonNull IResource resource = itr.next();
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-			@NonNull
-			PortType portType = portTypeProvider.getPortType(element);
-			@NonNull
-			VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+			final @NonNull IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+			final @NonNull PortType portType = portSlot.getPortType();
+			final @NonNull VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+
 			if (portType == PortType.DryDock || portType == PortType.Maintenance || portType == PortType.CharterOut) {
 				if (!(vesselInstanceType == VesselInstanceType.FLEET || vesselInstanceType == VesselInstanceType.TIME_CHARTER)) {
 					itr.remove();
@@ -113,15 +109,12 @@ public class MoveHelper {
 					continue;
 				}
 				if (portType == PortType.Load || portType == PortType.Discharge) {
-					int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
+					final int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
 					// If timewindow start is in prompt, then we want to remove the cargo.
-					@NonNull
-					final List<@NonNull ITimeWindow> timeWindow = timeWindowProvider.getTimeWindows(element);
-					for (final ITimeWindow tw : timeWindow) {
-						if (tw.getInclusiveStart() < endOfPromptPeriod) {
-							itr.remove();
-							continue;
-						}
+					final ITimeWindow timeWindow = portSlot.getTimeWindow();
+					if (timeWindow != null && (timeWindow.getInclusiveStart() < endOfPromptPeriod)) {
+						itr.remove();
+						continue;
 					}
 				}
 			}
@@ -144,7 +137,7 @@ public class MoveHelper {
 			return optionalElementsProvider.isElementOptional(element);
 		}
 
-		Collection<@NonNull IResource> resources = cachedResult.computeIfAbsent(element, cacheComputeFunction);
+		final Collection<@NonNull IResource> resources = cachedResult.computeIfAbsent(element, cacheComputeFunction);
 		return resources.contains(resource);
 
 	}
