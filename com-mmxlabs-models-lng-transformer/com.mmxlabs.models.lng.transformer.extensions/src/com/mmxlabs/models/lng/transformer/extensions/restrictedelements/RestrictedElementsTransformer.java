@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -80,9 +79,9 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 			return portMap.get(obj);
 		} else if (obj instanceof APortSet<?>) {
 			final APortSet<?> aPortSet = (APortSet<?>) obj;
-			final Set<Port> objects = (Set<Port>)SetUtils.getObjects(aPortSet);
+			final Set<Port> objects = (Set<Port>) SetUtils.getObjects(aPortSet);
 			final Set<ISequenceElement> elements = new HashSet<>();
-			for (final Port p  : objects) {
+			for (final Port p : objects) {
 				elements.addAll(portMap.getOrDefault(p, Collections.emptySet()));
 			}
 			return elements;
@@ -191,8 +190,12 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						restrictedPorts = contract.getRestrictedPorts();
 					}
 				}
-				registerRestrictedElements(slot, restrictedContracts, isPermissive, type);
-				registerRestrictedElements(slot, restrictedPorts, isPermissive, type);
+				if (!restrictedContracts.isEmpty()) {
+					registerRestrictedElements(slot, restrictedContracts, isPermissive, type);
+				}
+				if (!restrictedPorts.isEmpty()) {
+					registerRestrictedElements(slot, restrictedPorts, isPermissive, type);
+				}
 
 			};
 			// Process purchase contract restrictions - these are the follower restrictions
