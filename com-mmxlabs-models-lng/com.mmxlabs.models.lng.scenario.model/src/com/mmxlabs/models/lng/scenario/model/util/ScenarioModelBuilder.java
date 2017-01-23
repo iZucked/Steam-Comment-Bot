@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.scenario.model.util;
 import java.time.LocalDate;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -119,5 +120,13 @@ public final class ScenarioModelBuilder {
 	public void setPromptPeriod(@NonNull final LocalDate promptStart, @NonNull final LocalDate promptEnd) {
 		lngScenarioModel.setPromptPeriodStart(promptStart);
 		lngScenarioModel.setPromptPeriodEnd(promptEnd);
+	}
+
+	public void setScheduleHorizon(@Nullable final LocalDate horizon) {
+		if (horizon != null) {
+			lngScenarioModel.setSchedulingEndDate(horizon);
+		} else {
+			lngScenarioModel.unsetSchedulingEndDate();
+		}
 	}
 }
