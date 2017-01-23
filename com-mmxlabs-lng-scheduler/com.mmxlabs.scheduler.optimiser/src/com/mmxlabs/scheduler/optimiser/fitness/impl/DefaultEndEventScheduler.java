@@ -125,7 +125,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		@Nullable
 		ITimeWindow timeWindow = endRequirement.getTimeWindow();
 		final ITimeWindow window = timeWindow;
-		final int extraExtent = window == null ? 1 : (scheduledTime >= window.getExclusiveEnd() ? 0 : 1);
+		final int extraExtent = endRequirement.hasTimeRequirement() ? (scheduledTime >= window.getExclusiveEnd() ? 0 : 1) : 1;
 		// Experimental speed - step code to replace VPO. -- WIP
 		if (false && extraExtent > 0) {
 			// TODO: Cacheable!

@@ -20,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -695,8 +695,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (expectedHeelLeftOnBoard) {
 					// Gas on board
 					final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
-					if (toPortSlot instanceof EndPortSlot) {
-						final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+					if (toPortSlot instanceof IEndPortSlot) {
+						final IEndPortSlot endPortSlot = (IEndPortSlot) toPortSlot;
 						if (endPortSlot.isEndCold()) {
 							remainingHeelInM3 = endPortSlot.getTargetEndHeelInM3();
 						} else {
@@ -745,8 +745,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 			if (lastVoyageDetailsElement != null) {
 				final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
-				if (toPortSlot instanceof EndPortSlot) {
-					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+				if (toPortSlot instanceof IEndPortSlot) {
+					final IEndPortSlot endPortSlot = (IEndPortSlot) toPortSlot;
 
 					// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {

@@ -37,7 +37,7 @@ public interface IStartEndRequirement {
 	 * 
 	 * @return
 	 */
-//	@Nullable
+	@Nullable
 	ITimeWindow getTimeWindow();
 
 	/**

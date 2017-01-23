@@ -13,8 +13,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class RoundTripCargoEnd extends PortSlot {
 
 	public RoundTripCargoEnd(final @NonNull String id, final @NonNull IPort port) {
-		super(id, port, null);
-		setPortType(PortType.Round_Trip_Cargo_End);
+		super(id, PortType.Round_Trip_Cargo_End, port, null);
 	}
 
 	@Override

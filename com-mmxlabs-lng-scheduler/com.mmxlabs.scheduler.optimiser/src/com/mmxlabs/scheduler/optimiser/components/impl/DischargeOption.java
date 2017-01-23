@@ -49,8 +49,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	 */
 	public DischargeOption(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, boolean volumeInM3, final long minDischargeVolume, final long maxDischargeVolume,
 			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
-		super(id, port, timeWindow);
-		setPortType(PortType.Discharge);
+		super(id, PortType.Discharge, port, timeWindow);
 		this.volumeSetInM3 = volumeInM3;
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;

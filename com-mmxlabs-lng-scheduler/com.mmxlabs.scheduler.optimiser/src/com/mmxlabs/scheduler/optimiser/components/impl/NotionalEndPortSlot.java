@@ -8,18 +8,18 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public final class EndPortSlot extends PortSlot {
+public final class NotionalEndPortSlot extends PortSlot implements IEndPortSlot {
 
 	private boolean endCold;
 	private long targetEndHeelInM3;
 
-	public EndPortSlot(final String id, final IPort port, final ITimeWindow timeWindow, final boolean endCold, final long targetEndHeelInM3) {
-		super(id, port, timeWindow);
+	public NotionalEndPortSlot(final String id, final IPort port, final ITimeWindow timeWindow, final boolean endCold, final long targetEndHeelInM3) {
+		super(id, PortType.End, port, timeWindow);
 		this.endCold = endCold;
 		this.targetEndHeelInM3 = targetEndHeelInM3;
-		setPortType(PortType.End);
 	}
 
+	@Override
 	public boolean isEndCold() {
 		return endCold;
 	}
@@ -28,6 +28,7 @@ public final class EndPortSlot extends PortSlot {
 		this.endCold = endCold;
 	}
 
+	@Override
 	public long getTargetEndHeelInM3() {
 		return targetEndHeelInM3;
 	}

@@ -16,12 +16,12 @@ import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IExcessIdleTimeConstrainedSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IExcessIdleTimeConstrainedSlotProvider.eIdleDetails;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -81,7 +81,7 @@ public class IdleTimeChecker {
 		final int violatingHours = getViolatingHours(idleTimeInHours);
 		if (violatingHours > 0) {
 			final IPortSlot idleTimeSlot = voyageDetails.getOptions().getFromPortSlot();
-			final boolean isEnd = voyageDetails.getOptions().getToPortSlot() instanceof EndPortSlot;
+			final boolean isEnd = voyageDetails.getOptions().getToPortSlot().getPortType() == PortType.End;
 			final long penalty = getIdleTimePenalty(idleTimeInHours, isEnd, annotatedSolution);
 			volumeAllocatedSequence.addIdleHoursViolation(idleTimeSlot, violatingHours);
 			volumeAllocatedSequence.addIdleWeightedCost(idleTimeSlot, penalty);

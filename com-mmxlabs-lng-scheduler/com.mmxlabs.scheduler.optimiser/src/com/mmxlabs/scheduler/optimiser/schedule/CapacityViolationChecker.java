@@ -26,7 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.SimpleCargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
@@ -276,8 +276,8 @@ public class CapacityViolationChecker {
 		// Handle anything left over at the end of the schedule
 		if (lastHeelDetails != null) {
 			final IPortSlot toPortSlot = lastHeelDetails.getOptions().getPortSlot();
-			if (toPortSlot instanceof EndPortSlot) {
-				final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+			if (toPortSlot instanceof IEndPortSlot) {
+				final IEndPortSlot endPortSlot = (IEndPortSlot) toPortSlot;
 				if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
 					// NOTE: This can be negative and as such does not feed into capacity component. Note negative values are also now deemed to be "unset"
 					// addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);

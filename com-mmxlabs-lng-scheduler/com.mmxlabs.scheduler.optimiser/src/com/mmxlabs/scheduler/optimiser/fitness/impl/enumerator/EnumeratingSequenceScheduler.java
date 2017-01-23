@@ -449,6 +449,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final int minSpeed = vesselAvailability.getVessel().getVesselClass().getMinSpeed();
 
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		final boolean isSpotCharter = vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
 
 		int index = 0;
 		ISequenceElement prevElement = null;
@@ -479,26 +480,36 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				ITimeWindow timeWindow = defaultStartWindow;
 
 				// but can be overridden by a specified start requirement
-				if (startRequirement != null && startRequirement.getTimeWindow() != null) {
+				if (startRequirement != null && startRequirement.hasTimeRequirement()) {
 					timeWindow = startRequirement.getTimeWindow();
 				}
 
 				window = timeWindow;
 			} else if (portTypeProvider.getPortType(element) == PortType.End) {
-				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
-				// "windows" defaults to an empty list
-				if (endRequirement != null) {
-					// but can be overridden by the specified end requirement
-					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
-					if (timeWindow != null) {
-						// Make sure we always use the time window [This never worked - value was overwritten]
-						useTimeWindow[index] = true;
-						window = timeWindow;
+				// Previously this was null for spot & round trip vessels, so make null again here.
+				// Consider setting upper bound to "Integer.MAX_VALUE"
+				// Consider extra TW flag?
+				// Could make it null again...
+				if (isSpotCharter || isRoundTripSequence) {
+					// Special scheduling rules - finish as early as possible then the VPO or scheduling end date calculator kicks in
+					window = null;
+				} else {
+					final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+					// "windows" defaults to an empty list
+					if (endRequirement != null) {
+						// but can be overridden by the specified end requirement
+						if (endRequirement.hasTimeRequirement()) {
+							final ITimeWindow timeWindow = endRequirement.getTimeWindow();
+							// Make sure we always use the time window [This never worked - value was overwritten]
+							useTimeWindow[index] = true;
+							window = timeWindow;
+						} else {
+
+							window = portSlot.getTimeWindow();
+						}
 					} else {
 						window = portSlot.getTimeWindow();
 					}
-				} else {
-					window = portSlot.getTimeWindow();
 				}
 			} else {
 
@@ -515,9 +526,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				} else if (actualsDataProvider.hasActuals(portSlot)) {
 					window = actualsDataProvider.getArrivalTimeWindow(portSlot);
 					actualisedTimeWindow[index] = true;
-
 				} else {
-					// "windows" defaults to whatever windows are specified by the time window provider
 					window = portSlot.getTimeWindow();
 				}
 

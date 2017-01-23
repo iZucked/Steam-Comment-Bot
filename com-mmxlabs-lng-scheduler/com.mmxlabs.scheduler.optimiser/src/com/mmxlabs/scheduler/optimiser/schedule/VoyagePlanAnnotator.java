@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.GeneratedCharterOutEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
@@ -193,8 +193,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 						}
 						assert currentHeelInM3 + VoyagePlanner.ROUNDING_EPSILON >= 0;
 					} else {
-						if (currentPortSlot instanceof EndPortSlot) {
-							final EndPortSlot endPortSlot = (EndPortSlot) currentPortSlot;
+						if (currentPortSlot instanceof IEndPortSlot) {
+							final IEndPortSlot endPortSlot = (IEndPortSlot) currentPortSlot;
 							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
 							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
 						}

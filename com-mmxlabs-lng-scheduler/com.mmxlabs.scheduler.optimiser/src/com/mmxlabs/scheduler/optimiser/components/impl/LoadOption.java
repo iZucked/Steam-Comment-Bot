@@ -80,8 +80,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 */
 	public LoadOption(final @NonNull String id, final IPort port, final @NonNull ITimeWindow timeWindow, boolean volumeInM3, final long minLoadVolume, final long maxLoadVolume,
 			final ILoadPriceCalculator loadPriceCalculator, final int cargoCVValue) {
-		super(id, port, timeWindow);
-		setPortType(PortType.Load);
+		super(id, PortType.Load, port, timeWindow);
 		this.loadPriceCalculator = loadPriceCalculator;
 		assert cargoCVValue != 0;
 		this.cargoCVValue = cargoCVValue;

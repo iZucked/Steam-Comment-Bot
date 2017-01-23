@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
@@ -14,13 +17,15 @@ public abstract class StartEndRequirement implements IStartEndRequirement {
 	private final IPort port;
 	private final Collection<IPort> portSet;
 	private final boolean portIsSpecified;
-	private final ITimeWindow timeWindow;
+	private final @Nullable ITimeWindow timeWindow;
+	private boolean hasTimeRequirement;
 
-	protected StartEndRequirement(final IPort port, Collection<IPort> portSet, final boolean portIsSpecified, final ITimeWindow timeWindow) {
+	protected StartEndRequirement(final IPort port, Collection<IPort> portSet, final boolean portIsSpecified, final boolean hasTimeRequirement, final @Nullable ITimeWindow timeWindow) {
 		super();
 		this.port = port;
 		this.portSet = portSet;
 		this.portIsSpecified = portIsSpecified;
+		this.hasTimeRequirement = hasTimeRequirement;
 		this.timeWindow = timeWindow;
 	}
 
@@ -31,7 +36,7 @@ public abstract class StartEndRequirement implements IStartEndRequirement {
 
 	@Override
 	public boolean hasTimeRequirement() {
-		return timeWindow != null;
+		return hasTimeRequirement;
 	}
 
 	@Override

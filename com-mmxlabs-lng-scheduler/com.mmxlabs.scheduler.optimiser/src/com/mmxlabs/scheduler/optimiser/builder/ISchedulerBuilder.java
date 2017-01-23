@@ -221,20 +221,42 @@ public interface ISchedulerBuilder {
 	 * @param vesselInstanceType
 	 * @param start
 	 * @param end
-	 * @param repositioningFee TODO
-	 * @param ballastBonus TODO
-	 * @param isOptional TODO
+	 * @param repositioningFee
+	 *            TODO
+	 * @param ballastBonus
+	 *            TODO
+	 * @param isOptional
+	 *            TODO
 	 * @return
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
 			@NonNull IEndRequirement end, ILongCurve repositioningFee, ILongCurve ballastBonus, boolean isOptional);
 
+	/**
+	 * Boolean flag to indicate hard start time window. If false, provider timeWindow is a notional start date.
+	 * 
+	 * @param fixedPort
+	 * @param hasTimeRequirement
+	 * @param timeWindow
+	 * @param heelOptions
+	 * @return
+	 */
 	@NonNull
-	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptions heelOptions);
+	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, @Nullable IHeelOptions heelOptions);
 
+	/**
+	 * Boolean flag to indicate hard end time window. If false, provider timeWindow is a notional end date and should be an instanceof of a {@link MutableTimeWindow}.
+	 * 
+	 * @param fixedPort
+	 * @param hasTimeRequirement
+	 * @param timeWindow
+	 * @param heelOptions
+	 * @return
+	 */
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, @Nullable ITimeWindow timeWindow, boolean endCold, long targetHeelInM3, boolean isOpenEnded);
+	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, boolean endCold, long targetHeelInM3,
+			boolean isOpenEnded);
 
 	/**
 	 * Create a port with the given name and cooldown requirement
@@ -397,7 +419,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	ILoadSlot createLoadSlot(String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
+	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
 			int durationHours, boolean cooldownSet, boolean cooldownForbidden, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked,
 			boolean isSpotMarketSlot, boolean isVolumeLimitInM3);
 
@@ -732,12 +754,16 @@ public interface ISchedulerBuilder {
 
 	void setVesselAndClassPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels, @Nullable List<@NonNull IVesselClass> permittedVesselClasses);
 
+	void addOpenEndWindow(@NonNull MutableTimeWindow window);
+
 	/**
+	 * 
+	 * 
 	 * Register a time window with an open end date that needs to be adjusted to sync up with optimisation end date
 	 * 
 	 * @param window
 	 */
-	void addOpenEndWindow(@NonNull MutableTimeWindow window);
+	void addPartiallyOpenEndWindow(@NonNull MutableTimeWindow window);
 
 	/**
 	 * Set Inaccessible Routes (canals) for a vessel
@@ -754,4 +780,5 @@ public interface ISchedulerBuilder {
 	 * @param inaccessibleRoutes
 	 */
 	void setVesselClassInaccessibleRoutes(@NonNull IVesselClass vesselClass, Set<ERouteOption> inaccessibleRoutes);
+
 }

@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -245,7 +245,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// set end ports
 		boolean goingToEnd = false;
 		final Set<IPort> endPorts = new HashSet<IPort>();
-		if (nextLoadSlot instanceof EndPortSlot && charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
+		if (nextLoadSlot instanceof IEndPortSlot && charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
 			goingToEnd = true;
 			endPorts.add(nextLoad);
 		}

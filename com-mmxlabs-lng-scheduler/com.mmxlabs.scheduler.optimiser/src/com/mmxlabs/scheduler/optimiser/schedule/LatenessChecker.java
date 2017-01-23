@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessAnnotation;
@@ -95,10 +95,14 @@ public class LatenessChecker {
 
 		if (portSlot instanceof StartPortSlot) {
 			final IStartEndRequirement req = startEndRequirementProvider.getStartRequirement(resource);
-			tw = req.getTimeWindow();
-		} else if (portSlot instanceof EndPortSlot) {
+			if (req.hasTimeRequirement()) {
+				tw = req.getTimeWindow();
+			}
+		} else if (portSlot instanceof IEndPortSlot) {
 			final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
-			tw = req.getTimeWindow();
+			if (req.hasTimeRequirement()) {
+				tw = req.getTimeWindow();
+			}
 		} else {
 			tw = portSlot.getTimeWindow();
 		}

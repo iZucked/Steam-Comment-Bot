@@ -31,8 +31,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -157,7 +158,7 @@ public class LatenessComponentTest {
 		final StartPortSlot startSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
 		final PortDetails startDetails = new PortDetails(new PortOptions(startSlot));
 
-		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0L);
+		final IEndPortSlot endSlot = new NotionalEndPortSlot(null, null, null, false, 0L);
 		final PortDetails endDetails = new PortDetails(new PortOptions(endSlot));
 
 		final LoadSlot loadSlot = new LoadSlot("l1", Mockito.mock(IPort.class), window1, true, 0L, 140_000_000L, Mockito.mock(ILoadPriceCalculator.class), 22400, false, true);

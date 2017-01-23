@@ -160,11 +160,12 @@ public class TestCalculations {
 			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(24);
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement,
+					new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -231,7 +232,7 @@ public class TestCalculations {
 			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInMMBTu(loadSlot)).thenReturn(3200L);
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
-			
+
 			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(5200L);
 
 			// Schedule sequence
@@ -615,11 +616,12 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), false, 0, false);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement,
+					new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -1011,7 +1013,7 @@ public class TestCalculations {
 	public void testCalculations3() {
 		test3Logic(false);
 	}
-	
+
 	/**
 	 * Like testCalculations3 but with optional vessel availabilities
 	 */
@@ -1019,7 +1021,6 @@ public class TestCalculations {
 	public void testCalculations3_optional() {
 		test3Logic(true);
 	}
-
 
 	private void test3Logic(boolean isOptional) {
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
@@ -1073,11 +1074,12 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), isOptional);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement,
+					new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), isOptional);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -1486,7 +1488,7 @@ public class TestCalculations {
 			private boolean isVPOSpeedStepping() {
 				return true;
 			}
-			
+
 			@Provides
 			@Singleton
 			private ILatenessComponentParameters provideLatenessComponentParameters() {
