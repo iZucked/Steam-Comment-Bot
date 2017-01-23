@@ -22,6 +22,8 @@ import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
@@ -120,12 +122,15 @@ public class SimpleSchedulerTest {
 		final IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
 		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
-		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port2), null, false, 0, false), new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
-		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port2), null, false, 0, false), new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
-		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port6), null, false, 0, false), new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
+		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), false, 0, false), new ConstantValueLongCurve(0),
+				new ConstantValueLongCurve(0), false);
+		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), false, 0, false), new ConstantValueLongCurve(0),
+				new ConstantValueLongCurve(0), false);
+		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
+				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), false, 0, false), new ConstantValueLongCurve(0),
+				new ConstantValueLongCurve(0), false);
 
 		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
 		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);

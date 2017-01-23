@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -111,18 +111,18 @@ public class TimeWindowsTrimming {
 			final Pair<ILoadOption, IDischargeOption> slots = priceIntervalProviderHelper.getLoadAndDischarge(portTimeWindowRecord, slotData);
 			final ILoadOption load = slots.getFirst();
 			final IDischargeOption discharge = slots.getSecond();
-			final EndPortSlot end = portTimeWindowRecord.getReturnSlot() instanceof EndPortSlot ? (EndPortSlot) portTimeWindowRecord.getReturnSlot() : null;
+			final IEndPortSlot end = portTimeWindowRecord.getReturnSlot() instanceof IEndPortSlot ? (IEndPortSlot) portTimeWindowRecord.getReturnSlot() : null;
 			// process and set time windows
 			processTimeWindowsForCargo(portTimeWindowRecord, vesselStartTime, load, discharge, end);
 		}
 		return portTimeWindowRecord;
 	}
 
-	private void setFeasibleTimeWindowForEndSlot(IPortTimeWindowsRecord portTimeWindowRecord, EndPortSlot end, int endTimeOfLastNonReturnSlot, long minimumTravelTime) {
+	private void setFeasibleTimeWindowForEndSlot(IPortTimeWindowsRecord portTimeWindowRecord, IEndPortSlot end, int endTimeOfLastNonReturnSlot, long minimumTravelTime) {
 		processFeasibleTimeWindowForEndSlot(portTimeWindowRecord, end, endTimeOfLastNonReturnSlot, (int) minimumTravelTime);
 	}
 
-	private void processFeasibleTimeWindowForEndSlot(IPortTimeWindowsRecord portTimeWindowRecord, EndPortSlot end, int endTimeOfLastNonReturnSlot, int minimumTravelTime) {
+	private void processFeasibleTimeWindowForEndSlot(IPortTimeWindowsRecord portTimeWindowRecord, IEndPortSlot end, int endTimeOfLastNonReturnSlot, int minimumTravelTime) {
 		ITimeWindow endTimeWindow = end.getTimeWindow();
 		// assume that end will start at the start of the previous slot's time window + previous slots duration
 		int assumedStart = endTimeOfLastNonReturnSlot + minimumTravelTime;
@@ -162,7 +162,7 @@ public class TimeWindowsTrimming {
 	 * @param end
 	 */
 	private void processTimeWindowsForCargo(final IPortTimeWindowsRecord portTimeWindowRecord, final int vesselStartTime, final ILoadOption load, final IDischargeOption discharge,
-			final EndPortSlot end) {
+			final IEndPortSlot end) {
 		if (load != null && discharge != null && load.getLoadPriceCalculator() instanceof IPriceIntervalProvider && discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider) {
 			if ((priceIntervalProviderHelper.isLoadPricingEventTime(load, portTimeWindowRecord)
 					|| priceIntervalProviderHelper.isPricingDateSpecified(load, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(load, portTimeWindowRecord)))
@@ -265,7 +265,7 @@ public class TimeWindowsTrimming {
 	}
 
 	int[] trimEndElementTimeWindowsWithRouteOptimisationAndBoilOff(final IPortTimeWindowsRecord portTimeWindowsRecord, final ILoadOption load, final IDischargeOption discharge,
-			final EndPortSlot endSlot, final IVessel vessel, final List<int[]> dischargePriceIntervals, List<int[]> boiloffPricingIntervals, int vesselStartTime) {
+			final IEndPortSlot endSlot, final IVessel vessel, final List<int[]> dischargePriceIntervals, List<int[]> boiloffPricingIntervals, int vesselStartTime) {
 		final ITimeWindow dischargeTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 		assert dischargeTimeWindow != null;
 		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(portTimeWindowsRecord.getResource());
@@ -511,7 +511,7 @@ public class TimeWindowsTrimming {
 	 * @return
 	 */
 	@NonNull
-	private List<int[]> getEndPriceIntervals(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IDischargeOption discharge, final @NonNull EndPortSlot end,
+	private List<int[]> getEndPriceIntervals(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IDischargeOption discharge, final @NonNull IEndPortSlot end,
 			final int endTimeOfLastNonReturnSlot, final IVessel vessel, int cv) {
 		final ITimeWindow feasibleEndTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(end);
 		final ITimeWindow specifiedEndTimeWindow = end.getTimeWindow();

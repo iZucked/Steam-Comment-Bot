@@ -170,6 +170,14 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+			
+			if (firstType == PortType.Start) {
+				return true;
+			}
+			if (secondType == PortType.End) {
+				return true;
+			}
+			
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
 
@@ -205,7 +213,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			// Ignore problems with short cargoes between discharge and next load
-			if (firstType == PortType.Start && secondType == PortType.End) {
+			if (firstType == PortType.Start || secondType == PortType.End) {
 				return true;
 			}
 			if (firstType == PortType.Round_Trip_Cargo_End || secondType == PortType.Round_Trip_Cargo_End) {

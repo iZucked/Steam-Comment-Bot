@@ -19,21 +19,10 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 	private final IHeelOptions heelOptions;
 
 	public StartPortSlot(@NonNull final String id, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow, @Nullable final IHeelOptions heelOptions) {
-		super(id, port, timeWindow);
-		setPortType(PortType.Start);
+		super(id, PortType.Start, port, timeWindow);
 		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
 	}
 
-	// public StartPortSlot(final IHeelOptions heelOptions) {
-	// setPortType(PortType.Start);
-	// this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
-	// }
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot#getHeelOptions()
-	 */
 	@Override
 	@NonNull
 	public IHeelOptions getHeelOptions() {
@@ -42,6 +31,9 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 
 	@Override
 	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof StartPortSlot) {
 			final StartPortSlot other = (StartPortSlot) obj;
 

@@ -15,8 +15,9 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 	private final long targetHeelInM3;
 	private final boolean isHireCostOnlyEndRule;
 
-	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final ITimeWindow timeWindow, final boolean endCold, final long tagetHeelInM3, final boolean isHireCostOnlyEndRule) {
-		super(portSet.size() == 1 ? portSet.iterator().next() : null, portSet, portIsSpecified, timeWindow);
+	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final boolean hasTimeRequirement, final ITimeWindow timeWindow, final boolean endCold,
+			final long tagetHeelInM3, final boolean isHireCostOnlyEndRule) {
+		super(portSet.size() == 1 ? portSet.iterator().next() : null, portSet, portIsSpecified,hasTimeRequirement,  timeWindow);
 		this.endCold = endCold;
 		this.targetHeelInM3 = tagetHeelInM3;
 		this.isHireCostOnlyEndRule = isHireCostOnlyEndRule;

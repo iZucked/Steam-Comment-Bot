@@ -16,14 +16,15 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class VesselEventPortSlot extends PortSlot implements IVesselEventPortSlot {
 	protected IVesselEvent charterOut;
 	private @NonNull List<@NonNull ISequenceElement> eventSequenceElements = Collections.emptyList();
 	private @NonNull List<@NonNull IPortSlot> eventPortSlots = Collections.emptyList();
 
-	public VesselEventPortSlot(@NonNull final String id, @NonNull final IPort port, final ITimeWindow timeWindow, @NonNull final IVesselEvent charterOut) {
-		super(id, port, timeWindow);
+	public VesselEventPortSlot(@NonNull final String id, @NonNull final PortType portType, @NonNull final IPort port, final ITimeWindow timeWindow, @NonNull final IVesselEvent charterOut) {
+		super(id, portType, port, timeWindow);
 		this.charterOut = charterOut;
 	}
 

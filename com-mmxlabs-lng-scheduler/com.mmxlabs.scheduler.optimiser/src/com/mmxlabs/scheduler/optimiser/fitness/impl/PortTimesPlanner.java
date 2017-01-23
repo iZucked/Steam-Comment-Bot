@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -92,10 +92,10 @@ public class PortTimesPlanner {
 		for (final ISequenceElement element : sequence) {
 
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-			if (thisPortSlot instanceof StartPortSlot) {
+			if (thisPortSlot.getPortType() == PortType.Start) {
 				continue;
 			}
-			if (thisPortSlot instanceof EndPortSlot) {
+			if (thisPortSlot.getPortType() == PortType.End) {
 				continue;
 			}
 
