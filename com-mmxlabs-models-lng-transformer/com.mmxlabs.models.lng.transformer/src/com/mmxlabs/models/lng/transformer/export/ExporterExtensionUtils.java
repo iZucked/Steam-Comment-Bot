@@ -45,10 +45,11 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class ExporterExtensionUtils {
 
@@ -72,7 +73,7 @@ public class ExporterExtensionUtils {
 			@NonNull final Schedule outputSchedule, @NonNull final IAnnotatedSolution annotatedSolution) {
 		ProfitAndLossContainer profitAndLossContainer = null;
 
-		if (slot instanceof ILoadOption || slot instanceof IDischargeOption) {
+		if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
 
 			final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
@@ -85,7 +86,7 @@ public class ExporterExtensionUtils {
 			}
 			if (profitAndLossContainer == null) {
 
-//				OpenSlotAllocation openSlotAllocation = null;
+				// OpenSlotAllocation openSlotAllocation = null;
 				for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
 					if (allocation.getSlot() == modelSlot) {
 						profitAndLossContainer = allocation;
@@ -126,10 +127,10 @@ public class ExporterExtensionUtils {
 				}
 			}
 
-		} else if (slot instanceof StartPortSlot) {
+		} else if (slot.getPortType() == PortType.Start) {
 			final StartEvent startEvent = findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution);
 			return startEvent;
-		} else if (slot instanceof EndPortSlot) {
+		} else if (slot.getPortType() == PortType.End) {
 			final EndEvent endEvent = findEndEvent(element, modelEntityMap, outputSchedule, annotatedSolution);
 			return endEvent;
 		}

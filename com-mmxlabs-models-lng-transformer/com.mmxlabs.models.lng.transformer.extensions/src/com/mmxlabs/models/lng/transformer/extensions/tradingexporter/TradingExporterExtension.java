@@ -47,11 +47,12 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * EMF export side for basic trading optimiser information. Model may need reworking, so this isn't exactly final.
@@ -183,7 +184,7 @@ public class TradingExporterExtension implements IExporterExtension {
 							if (startEvent != null) {
 								setPandLentries(profitAndLossWithTimeCharter, startEvent);
 							}
-						} else if (slot instanceof EndPortSlot) {
+						} else if (slot.getPortType() == PortType.End) {
 							final EndEvent endEvent = findEndEvent(element);
 
 							if (endEvent != null) {
@@ -247,7 +248,7 @@ public class TradingExporterExtension implements IExporterExtension {
 			if (seq.size() == 0) {
 				continue;
 			}
-			
+
 			if (seq.get(0) == element) {
 				// Found the sequence, so no find the matching EMF sequence
 				for (final Sequence sequence : outputSchedule.getSequences()) {

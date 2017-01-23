@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -110,14 +110,13 @@ public class BagMover {
 	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int MAX_SEARCH_STATES;
 
-	
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable final List<ISequenceElement> targetElements, final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
 			@Nullable Collection<@NonNull IResource> currentChangedResources) {
 		return search(currentRawSequences, similarityState, changes, changeSets, tryDepth, moveType, currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources, 0);
 	}
-	
+
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable final List<ISequenceElement> targetElements, final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
@@ -327,7 +326,8 @@ public class BagMover {
 		// (3) if not able to fix the particular difference, try again
 		if (newStates.size() == 0) {
 			if (recursion < RECURSION_LIMIT) {
-				return search(currentRawSequences, similarityState, changes, changeSets, tryDepth, moveType, currentMetrics, jobStore, targetElements, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources, recursion+1);
+				return search(currentRawSequences, similarityState, changes, changeSets, tryDepth, moveType, currentMetrics, jobStore, targetElements,
+						ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources, recursion + 1);
 			} else {
 				searchData.getSearchStatistics().logEvaluationsFailedConstraints();
 				JobState failedState = new JobState(searchData);
@@ -1243,17 +1243,23 @@ public class BagMover {
 		return new LinkedList<>(validPoints);
 	}
 
-	private ITimeWindow getTW(final @NonNull IPortSlot portSlot, final @NonNull IResource resource) {
+	private @Nullable ITimeWindow getTW(final @NonNull IPortSlot portSlot, final @NonNull IResource resource) {
 		ITimeWindow tw = null;
 
 		if (portSlot instanceof StartPortSlot) {
 			final IStartEndRequirement req = startEndRequirementProvider.getStartRequirement(resource);
-			tw = req.getTimeWindow();
-		} else if (portSlot instanceof EndPortSlot) {
+			if (req.hasTimeRequirement()) {
+				tw = req.getTimeWindow();
+			}
+		} else if (portSlot instanceof IEndPortSlot) {
 			final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
-			tw = req.getTimeWindow();
+			if (req.hasTimeRequirement()) {
+				tw = req.getTimeWindow();
+			}
+		} else {
+			tw = portSlot.getTimeWindow();
 		}
-
+		// TODO: Needed?
 		if (tw == null) {
 			tw = portSlot.getTimeWindow();
 		}

@@ -258,10 +258,17 @@ public class PeriodTransformer {
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
 			if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
-				vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
-				vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
 
-				vesselAvailability.setForceHireCostOnlyEndRule(true);
+				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate() .isBefore( output.getPromptPeriodEnd())) {
+					vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
+					vesselAvailability.setEndBy(output.getPromptPeriodEnd().atStartOfDay());
+				} else {
+
+					vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+					vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+				}
+
+					vesselAvailability.setForceHireCostOnlyEndRule(true);
 			}
 			if (!vesselAvailability.getEndAt().isEmpty()) {
 				vesselAvailability.getEndAt().add(endEvent.getPort());
@@ -298,6 +305,9 @@ public class PeriodTransformer {
 		removeExcludedSlotsAndCargoes(internalDomain, mapping, slotsToRemove, cargoesToRemove);
 		// Some slots are brought in from outside the period, make sure they are locked
 		lockOpenSlots(output.getCargoModel(), periodRecord, objectToPortVisitMap);
+
+		// TODO: We can probably get rid of this now -- need some unit tests to verify
+
 		// TEMP HACK UNTIL MULTIPLE AVAILABILITES PROPERLY IN PLACE AND filterSlotsAndCargoes can properly handle this.
 		for (final VesselAvailability newVA : newVesselAvailabilities) {
 			for (final VesselAvailability vesselAvailability : wholeScenario.getCargoModel().getVesselAvailabilities()) {
@@ -321,6 +331,9 @@ public class PeriodTransformer {
 
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
+
+		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
+		output.unsetSchedulingEndDate();
 
 		return new NonNullPair<>(output, internalDomain);
 	}
@@ -656,6 +669,15 @@ public class PeriodTransformer {
 							newVesselAvailability.setVessel(vesselAvailability.getVessel());
 
 							// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
+							newVesselAvailability.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
+							newVesselAvailability.setFleet(vesselAvailability.isFleet());
+
+							newVesselAvailability.setFleet(vesselAvailability.isFleet());
+							newVesselAvailability.setEntity(vesselAvailability.getEntity());
+
+							// Ignore Ballast bonus/repositioning - should not be part of P&L...
+							// ... unless linked to a curve price.
+							// Do not set optional, as this is no longer optional!
 
 							newVesselAvailabilities.add(newVesselAvailability);
 							updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
