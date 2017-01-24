@@ -1119,6 +1119,8 @@ public class PeriodTransformer {
 
 			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setForceHireCostOnlyEndRule(false);
+
 			if (vesselAvailability.getEndHeel() == null) {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 			}
@@ -1190,6 +1192,8 @@ public class PeriodTransformer {
 
 			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setForceHireCostOnlyEndRule(false);
+
 
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
