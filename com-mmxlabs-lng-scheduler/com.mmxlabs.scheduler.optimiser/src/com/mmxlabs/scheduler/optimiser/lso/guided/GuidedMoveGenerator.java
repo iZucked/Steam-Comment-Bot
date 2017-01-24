@@ -75,8 +75,6 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	private List<@NonNull ISequenceElement> allTargetElements = new LinkedList<>();
 
-	private GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
-
 	@Inject
 	private void findAllTargetElements(@NonNull final IOptimisationData optimisationData) {
 
