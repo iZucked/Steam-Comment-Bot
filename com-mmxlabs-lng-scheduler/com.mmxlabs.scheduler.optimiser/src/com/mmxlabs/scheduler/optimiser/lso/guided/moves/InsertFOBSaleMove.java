@@ -56,6 +56,10 @@ public class InsertFOBSaleMove implements IMove {
 		}
 
 		public InsertFOBSaleMove create() {
+			assert fobSale != null;
+			assert fobSaleResource != null;
+			assert fobPurchase != null;
+
 			return new InsertFOBSaleMove(fobSaleResource, fobSale, fobPurchase, currentFobPurchaseResource);
 		}
 	}

@@ -23,6 +23,7 @@ Require-Bundle: com.google.inject;bundle-version="3.0.0",
  com.mmxlabs.common.common-util;bundle-version="[4.1.5,5.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Export-Package: com.mmxlabs.scheduler.optimiser,
+ com.mmxlabs.scheduler.optimiser.actionset,
  com.mmxlabs.scheduler.optimiser.annotations,
  com.mmxlabs.scheduler.optimiser.annotations.impl,
  com.mmxlabs.scheduler.optimiser.builder,
