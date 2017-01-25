@@ -11,11 +11,15 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
 
@@ -39,15 +43,9 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
+	public SwapSingleSequenceElements generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
 
-	}
-
-	@Override
-	public SwapSingleSequenceElements generateMove() {
-
-		final Random random = owner.getRandom();
-		final ISequences sequences = owner.getSequences();
+		final ISequences sequences = rawSequences;
 
 		// Find a random none-empty ISequence
 		ISequence sequence = null;
@@ -78,7 +76,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 		Collections.shuffle(bucket, random);
 
 		for (final ISequenceElement e : sequenceElementsAsList) {
-			final int eIdx = owner.getReverseLookup().get(e).getSecond();
+			final int eIdx = stateManager.lookup(e).getSecond();
 			// Remove element so it is not considered again in the inner loop. This avoids repeating the search e -> f when e has become f.
 			bucket.remove(e);
 
@@ -87,7 +85,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 
 			// Find possible element to swap - this list will be reduced overtime
 			for (final ISequenceElement f : bucket) {
-				final int fIdx = owner.getReverseLookup().get(f).getSecond();
+				final int fIdx = stateManager.lookup(f).getSecond();
 
 				final ISequenceElement beforeF = fIdx == 0 ? null : sequence.get(fIdx - 1);
 				final ISequenceElement afterF = fIdx == sequence.size() - 1 ? null : sequence.get(fIdx + 1);

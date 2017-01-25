@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso;
 
+import java.util.Random;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -14,17 +19,11 @@ import com.mmxlabs.optimiser.lso.IMove;
  * 
  */
 public interface IConstrainedMoveGeneratorUnit {
-	/**
-	 * Called when the parent MG has the same named method called, after any lookup tables are built.
-	 * 
-	 * @param sequences
-	 */
-	void setSequences(ISequences sequences);
 
 	/**
 	 * Try to generate a move
 	 * 
 	 * @return
 	 */
-	IMove generateMove();
+	IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random);
 }

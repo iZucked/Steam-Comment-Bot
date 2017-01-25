@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -97,41 +99,31 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	}
 
-	@Override
-	public void setSequences(final ISequences sequences) {
+	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(@NonNull ILookupManager stateManager, @NonNull Random random) {
 
-	}
-	
-
-	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(){
-		
-		
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
-		
-		
-		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.getValidBreaks());
-				pos1 = owner.reverseLookup.get(newPair.getFirst());
-				pos2 = owner.reverseLookup.get(newPair.getSecond());
-	
-		
-		Pair<Pair<IResource, Integer>,Pair<IResource, Integer>> positions = new Pair(pos1,pos2);
+
+		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, owner.getValidBreaks());
+		pos1 = stateManager.lookup(newPair.getFirst());
+		pos2 = stateManager.lookup(newPair.getSecond());
+
+		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = new Pair(pos1, pos2);
 		return positions;
 	}
-	
 
 	@Override
-	public IMove generateMove() {
+	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
 		if (owner.getValidBreaks().isEmpty()) {
 			return new NullMoveA();
 		}
-		
+
 		// get resources for a random edge
-		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = findEdge();
-		
+		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = findEdge(stateManager, random);
+
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
-		
+
 		// if no resource found then we have a part of the edge in the unused list
 		// exit! (let another move solve this)
 		if (positions != null) {
@@ -143,7 +135,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		} else {
 			return new NullMoveB();
 		}
-		
+
 		final IResource sequence1 = pos1.getFirst();
 		final IResource sequence2 = pos2.getFirst();
 		final int position1 = pos1.getSecond();
@@ -163,7 +155,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			// I think 3opt2 is worth looking for first, as more requirements =>
 			// less feasible.
 
-			final ISequence sequence = owner.sequences.getSequence(sequence1);
+			final ISequence sequence = rawSequences.getSequence(sequence1);
 			final int beforeFirstCut = Math.min(position1, position2);
 			final int beforeSecondCut = Math.max(position1, position2) - 1;
 			// Zero length segment
@@ -181,8 +173,8 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			if (followers.size() == 0) {
 				return null;
 			}
-			final ISequenceElement precursor = followers.get(owner.random.nextInt(followers.size()));
-			final Pair<IResource, Integer> posPrecursor = owner.reverseLookup.get(precursor);
+			final ISequenceElement precursor = followers.get(random.nextInt(followers.size()));
+			final Pair<IResource, Integer> posPrecursor = stateManager.lookup(precursor);
 
 			// now check whether the element before the precursor can precede
 			// the first element in the segment
@@ -190,7 +182,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			if (first == null) {
 				return new NullMove3Over2();
 			}
-			final ISequenceElement beforeInsert = owner.sequences.getSequence(first).get(posPrecursor.getSecond() - 1);
+			final ISequenceElement beforeInsert = rawSequences.getSequence(first).get(posPrecursor.getSecond() - 1);
 			if (followersAndPreceders.getValidFollowers(beforeInsert).contains(firstElementInSegment)) {
 				// we have a legal 3opt2, so do that. It might be a 3opt1
 				// really, but that's OK
@@ -228,8 +220,8 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 			// check if it'd be a legal 2opt2
 
-			final ISequence seq1 = owner.sequences.getSequence(sequence1);
-			final ISequence seq2 = owner.sequences.getSequence(sequence2);
+			final ISequence seq1 = rawSequences.getSequence(sequence1);
+			final ISequence seq2 = rawSequences.getSequence(sequence2);
 
 			boolean valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 
@@ -241,7 +233,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			}
 
 			// if it would be, maybe do it
-			if (valid2opt2 && (owner.random.nextDouble() < 0.05)) {
+			if (valid2opt2 && (random.nextDouble() < 0.05)) {
 				// make 2opt2
 				final Move2over2 result = new Move2over2A();
 				result.setResource1(sequence1);
@@ -266,7 +258,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				for (int i = position2 + FOUR_OPT2_MOVES; i < (seq2.size() - 1); i++) { // ignore last element
 					final ISequenceElement here = seq2.get(i);
 					for (final ISequenceElement elt : followersAndPreceders.getValidFollowers(here)) {
-						final Pair<IResource, Integer> loc = owner.reverseLookup.get(elt);
+						final Pair<IResource, Integer> loc = stateManager.lookup(elt);
 						final IResource first = loc.getFirst();
 						if (first == null) {
 							// Most likely an optional element no longer in sequences
@@ -287,7 +279,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 									}
 								} else {
 									// 4opt2 check
-									if (valid2opt2 && followersAndPreceders.getValidFollowers(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
+									if (valid2opt2 && followersAndPreceders.getValidFollowers(rawSequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
 										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
 									}
 								}
@@ -324,7 +316,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					}
 				}
 
-				final Pair<Integer, Integer> selectedSecondBreak = RandomHelper.chooseElementFrom(owner.random, viableSecondBreaks);
+				final Pair<Integer, Integer> selectedSecondBreak = RandomHelper.chooseElementFrom(random, viableSecondBreaks);
 				// so now we have two breaks, which either means a 4opt2 or a
 				// 3opt2, so we just have to decode these and see.
 				// second element of the pair is in sequence1, first is in

@@ -5,13 +5,16 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.Map;
+import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequences;
 
 /**
  * 
@@ -20,14 +23,13 @@ public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConst
 
 	private static final int MAX_LOOPS = 200;
 
-
 	public SequencesConstrainedLoopingMoveGeneratorUnit(@NonNull final ConstrainedMoveGenerator owner) {
 		super(owner);
 
 	}
 
 	@Override
-	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge() {
+	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(@NonNull ILookupManager stateManager, @NonNull Random random) {
 		int currentLoops = 0;
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
@@ -35,11 +37,10 @@ public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConst
 
 		while (currentLoops < MAX_LOOPS) {
 
-			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.getRandom(), owner.getValidBreaks());
+			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, owner.getValidBreaks());
 			if (newPair != null) {
-				Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = owner.getReverseLookup();
-				pos1 = reverseLookup.get(newPair.getFirst());
-				pos2 = reverseLookup.get(newPair.getSecond());
+				pos1 = stateManager.lookup(newPair.getFirst());
+				pos2 = stateManager.lookup(newPair.getSecond());
 
 				if (pos1 != null && pos2 != null && (pos1.getFirst() != null) && (pos2.getFirst() != null)) {
 					positions = new Pair<>(pos1, pos2);
@@ -51,7 +52,6 @@ public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConst
 
 		return positions;
 	}
-
 
 	public int getMaxLoops() {
 

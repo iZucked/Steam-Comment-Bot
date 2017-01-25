@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -48,20 +49,15 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
-		// Do nothing - data stored in owner
-	}
-
-	@Override
-	public IMove generateMove() {
+	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 		// Retry a few times...
 		for (int i = 0; i < 10; ++i) {
 
-			// Find a target pair (pos1 -> pos2)
-			final Pair<ISequenceElement, ISequenceElement> newPair = chooseRandomElementPair();
+			// Find a target pair (pos1 -> pos2)			
+			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, owner.validBreaks);
 
-			final Pair<IResource, Integer> pos1Pair = getReverseLookup().get(newPair.getFirst());
-			final Pair<IResource, Integer> pos2Pair = getReverseLookup().get(newPair.getSecond());
+			final Pair<IResource, Integer> pos1Pair = lookupManager.lookup(newPair.getFirst());
+			final Pair<IResource, Integer> pos2Pair = lookupManager.lookup(newPair.getSecond());
 
 			// Are either element unused? If so, skip
 			final IResource resource1 = pos1Pair.getFirst();
@@ -85,8 +81,8 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				continue;
 			}
 
-			final ISequence seq1 = getCurrentSequences().getSequence(resource1);
-			final ISequence seq2 = getCurrentSequences().getSequence(resource2);
+			final ISequence seq1 = rawSequences.getSequence(resource1);
+			final ISequence seq2 = rawSequences.getSequence(resource2);
 
 			// Is pos2 at the end of the sequence? Cannot move it
 			if (position2Index == seq2.size() - 1) {
@@ -132,18 +128,6 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			return new Move4over2(resource1, position1Index + 1, position1Index + 1 + 1, resource2, position2Index, position2Index + 1);
 		}
 		return new NullElementSwapMove();
-	}
-
-	protected ISequences getCurrentSequences() {
-		return owner.sequences;
-	}
-
-	protected Pair<ISequenceElement, ISequenceElement> chooseRandomElementPair() {
-		return RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
-	}
-
-	protected Map<ISequenceElement, Pair<IResource, Integer>> getReverseLookup() {
-		return owner.reverseLookup;
 	}
 
 	private boolean checkResource(@NonNull final ISequenceElement element, @NonNull final IResource resource) {

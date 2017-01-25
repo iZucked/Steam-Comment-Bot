@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -37,7 +38,6 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		final IFollowersAndPreceders followersAndPreceders = Mockito.mock(IFollowersAndPreceders.class);
 
 		final Random random = new Random();
-		Mockito.when(cmg.getRandom()).thenReturn(random);
 
 		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg, followersAndPreceders);
 
@@ -52,9 +52,11 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		seq.add(elementA);
 		seq.add(elementB);
 
+		ILookupManager lookupManager = Mockito.mock(ILookupManager.class);
+
 		final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
-		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
-		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
+		Mockito.when(lookupManager.lookup(elementA)).thenReturn(new Pair<IResource, Integer>(resource, 0));
+		Mockito.when(lookupManager.lookup(elementB)).thenReturn(new Pair<IResource, Integer>(resource, 1));
 
 		// Build up followers / preceders
 		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
@@ -65,9 +67,6 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		followers.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
 		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
-
-		Mockito.when(cmg.getReverseLookup()).thenReturn(reverseLookup);
-		Mockito.when(cmg.getSequences()).thenReturn(sequences);
 
 		Mockito.when(followersAndPreceders.getValidFollowers(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
 
@@ -88,7 +87,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 			}
 		});
 
-		final SwapSingleSequenceElements move = mg.generateMove();
+		final SwapSingleSequenceElements move = mg.generateMove(sequences, lookupManager, random);
 
 		// Failure - currently cannot swap two adjacent elements.
 		Assert.assertNull(move);
@@ -107,7 +106,6 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		final IFollowersAndPreceders followersAndPreceders = Mockito.mock(IFollowersAndPreceders.class);
 
 		final Random random = new Random();
-		Mockito.when(cmg.getRandom()).thenReturn(random);
 
 		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg, followersAndPreceders);
 
@@ -123,10 +121,10 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		seq.add(elementB);
 		seq.add(elementC);
 
-		final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
-		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
-		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
-		reverseLookup.put(elementC, new Pair<IResource, Integer>(resource, 2));
+		ILookupManager lookupManager = Mockito.mock(ILookupManager.class);
+		Mockito.when(lookupManager.lookup(elementA)).thenReturn(new Pair<IResource, Integer>(resource, 0));
+		Mockito.when(lookupManager.lookup(elementB)).thenReturn(new Pair<IResource, Integer>(resource, 1));
+		Mockito.when(lookupManager.lookup(elementC)).thenReturn(new Pair<IResource, Integer>(resource, 2));
 
 		// Build up followers / preceders
 		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
@@ -144,9 +142,6 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 
 		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementC)));
 		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
-
-		Mockito.when(cmg.getReverseLookup()).thenReturn(reverseLookup);
-		Mockito.when(cmg.getSequences()).thenReturn(sequences);
 
 		Mockito.when(followersAndPreceders.getValidFollowers(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
 
@@ -167,7 +162,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 			}
 		});
 
-		final SwapSingleSequenceElements move = mg.generateMove();
+		final SwapSingleSequenceElements move = mg.generateMove(sequences, lookupManager, random);
 
 		Assert.assertNotNull(move);
 

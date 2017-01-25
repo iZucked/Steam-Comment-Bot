@@ -11,8 +11,12 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -63,20 +67,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private static final double optionalMoveFrequency = 0.10;
 	private static final double shuffleMoveFrequency = 0.20;
 	private static final double swapMoveFrequency = 0.01;
-
-	/**
-	 * A reverse lookup table from elements to positions. The {@link Pair} is a item containing {@link Resource} index and position within the {@link ISequence}. There are some special cases here. A
-	 * null Resource index means the {@link ISequenceElement} is not part of the main set of sequences. A value of zero or more indicates the position within the {@link ISequences#getUnusedElements()}
-	 * list. A negative number means it is not for normal use. Currently -1 means the element is the unused pair of an alternative (@see {@link IAlternativeElementProvider}
-	 */
-	protected final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
-
-	/**
-	 * A reference to the current set of sequences, which will be used in generating moves
-	 */
-	protected ISequences sequences = null;
-
-	protected Random random;
 
 	int breakableVertexCount = 0;
 
@@ -137,9 +127,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	public void init() {
-		if (random == null) {
-			throw new IllegalStateException("Random number generator has not been set");
-		}
 		// this.checker = injector.getInstance(LegalSequencingChecker.class);
 		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		int initialMaxLateness = checker.getMaxLateness();
@@ -170,18 +157,12 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 				breakableVertexCount++;
 			}
 
-			reverseLookup.put(e1, new Pair<>(null, 0));
-
 			Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(e1);
 			if (validFollowers.size() > 1) {
 				for (ISequenceElement e2 : validFollowers) {
 					validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, e2));
 				}
 			}
-		}
-
-		if (false) {
-			this.guidedMoveGenerator = injector.getInstance(GuidedMoveGenerator.class);
 		}
 
 		if (isLoopingSCMG) {
@@ -227,76 +208,17 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
-	public IMove generateMove() {
-		if (guidedMoveGenerator != null) {
-			return guidedMoveGenerator.generateMove();
-		}
-
+	public @Nullable IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
 		if (enableSwapElementsMoveGenerator && ((elementSwapMoveGenerator != null) && (random.nextDouble() < elementSwapMoveFrequency))) {
-			return elementSwapMoveGenerator.generateMove();
+			return elementSwapMoveGenerator.generateMove(rawSequences, stateManager, random);
 		} else if ((optionalMoveGenerator != null) && (random.nextDouble() < optionalMoveFrequency)) {
-			return optionalMoveGenerator.generateMove();
+			return optionalMoveGenerator.generateMove(rawSequences, stateManager, random);
 		} else if ((shuffleMoveGenerator != null) && (random.nextDouble() < shuffleMoveFrequency)) {
-			return shuffleMoveGenerator.generateMove();
+			return shuffleMoveGenerator.generateMove(rawSequences, stateManager, random);
 		} else if ((swapElementsMoveGenerator != null) && (random.nextDouble() < swapMoveFrequency)) {
-			return swapElementsMoveGenerator.generateMove();
+			return swapElementsMoveGenerator.generateMove(rawSequences, stateManager, random);
 		} else {
-			return sequencesMoveGenerator.generateMove();
+			return sequencesMoveGenerator.generateMove(rawSequences, stateManager, random);
 		}
-	}
-
-	@Override
-	public ISequences getSequences() {
-		return sequences;
-	}
-
-	@Override
-	public void setSequences(final ISequences sequences) {
-		this.sequences = sequences;
-
-		// build table for elements in conventional sequences
-		for (IResource resource : data.getResources()) {
-			final ISequence sequence = sequences.getSequence(resource);
-			for (int j = 0; j < sequence.size(); j++) {
-				final ISequenceElement element = sequence.get(j);
-				reverseLookup.get(element).setBoth(resource, j);
-				if (alternativeElementProvider.hasAlternativeElement(element)) {
-					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
-					// Negative numbers now indicate alternative
-					reverseLookup.get(alt).setBoth(null, -1);
-				}
-			}
-		}
-
-		// build table for excluded elements
-		int x = 0;
-		for (final ISequenceElement element : sequences.getUnusedElements()) {
-			reverseLookup.get(element).setBoth(null, x);
-			if (alternativeElementProvider.hasAlternativeElement(element)) {
-				final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
-				reverseLookup.get(alt).setBoth(null, -1);
-			}
-			x++;
-		}
-
-		sequencesMoveGenerator.setSequences(sequences);
-
-		if (guidedMoveGenerator != null) {
-			guidedMoveGenerator.setSequences(sequences);
-		}
-	}
-
-	public Random getRandom() {
-		return random;
-	}
-
-	public void setRandom(final Random random) {
-		this.random = random;
-	}
-
-	/**
-	 */
-	public Map<ISequenceElement, Pair<IResource, Integer>> getReverseLookup() {
-		return reverseLookup;
 	}
 }

@@ -10,14 +10,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -28,7 +27,7 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 	ISequenceElement mockSequenceB = Mockito.mock(ISequenceElement.class);
 	Pair<ISequenceElement, ISequenceElement> mockedPair = new Pair<>(mockSequenceA, mockSequenceB);
 
-	Map<ISequenceElement, Pair<IResource, Integer>> mockReverseLookup = new HashMap<>();
+	// Map<ISequenceElement, Pair<IResource, Integer>> mockReverseLookup = new HashMap<>();
 
 	IResource mockResourceA = Mockito.mock(IResource.class);
 	IResource mockResourceB = Mockito.mock(IResource.class);
@@ -47,16 +46,13 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		final Pair<IResource, Integer> firstMockPair = new Pair<>(mockResourceA, 1);
 		final Pair<IResource, Integer> secondMockPair = new Pair<>(mockResourceB, 2);
 
-		mockReverseLookup.put(mockSequenceA, firstMockPair);
-		mockReverseLookup.put(mockSequenceB, secondMockPair);
-
-		Mockito.when(mockOwner.getReverseLookup()).thenReturn(mockReverseLookup);
+		ILookupManager lookupManager = Mockito.mock(ILookupManager.class);
+		Mockito.when(lookupManager.lookup(mockSequenceA)).thenReturn(firstMockPair);
+		Mockito.when(lookupManager.lookup(mockSequenceB)).thenReturn(secondMockPair);
 
 		final Random x = new Random();
 
-		Mockito.when(mockOwner.getRandom()).thenReturn(x);
-
-		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answer = loopingMoveGenerator.findEdge();
+		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answer = loopingMoveGenerator.findEdge(lookupManager, x);
 
 		final Pair<IResource, Integer> firstPair = answer.getFirst();
 		final Pair<IResource, Integer> secondPair = answer.getSecond();
@@ -68,26 +64,23 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		assertNotNull(secondPair);
 		assertNotEquals(firstPair, secondPair);
 
-		mockReverseLookup = new HashMap<>();
+		lookupManager = Mockito.mock(ILookupManager.class);
 
-		Mockito.when(mockOwner.getReverseLookup()).thenReturn(mockReverseLookup);
+		// Mockito.when(mockOwner.getReverseLookup()).thenReturn(mockReverseLookup);
 		Mockito.when(mockOwner.getValidBreaks()).thenReturn(mockedList);
 
 		loopingMoveGenerator = new SequencesConstrainedLoopingMoveGeneratorUnit(mockOwner);
 
-		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerFullLoop = loopingMoveGenerator.findEdge();
+		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerFullLoop = loopingMoveGenerator.findEdge(lookupManager, x);
 
 		final Pair<IResource, Integer> firstMockNullPair = new Pair<>(null, 1);
 		final Pair<IResource, Integer> secondMockNullPair = new Pair<>(null, 2);
 
-		mockReverseLookup = new HashMap<>();
+		lookupManager = Mockito.mock(ILookupManager.class);
 
-		mockReverseLookup.put(mockSequenceA, firstMockNullPair);
-		mockReverseLookup.put(mockSequenceB, secondMockNullPair);
-
-		Mockito.when(mockOwner.getReverseLookup()).thenReturn(mockReverseLookup);
-
-		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerNullLoop = loopingMoveGenerator.findEdge();
+		Mockito.when(lookupManager.lookup(mockSequenceA)).thenReturn(firstMockNullPair);
+		Mockito.when(lookupManager.lookup(mockSequenceB)).thenReturn(secondMockNullPair);
+		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerNullLoop = loopingMoveGenerator.findEdge(lookupManager, x);
 
 		// Check maximum loops
 		assertNull(answerNullLoop);

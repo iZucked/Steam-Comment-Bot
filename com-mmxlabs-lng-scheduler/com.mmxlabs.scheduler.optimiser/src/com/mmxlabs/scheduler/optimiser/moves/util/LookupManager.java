@@ -21,10 +21,6 @@ public class LookupManager implements ILookupManager {
 
 	@Inject
 	@NonNull
-	private IOptimisationData optimisationData;
-
-	@Inject
-	@NonNull
 	private IAlternativeElementProvider alternativeElementProvider;
 
 	/**
@@ -42,12 +38,12 @@ public class LookupManager implements ILookupManager {
 		this.reverseLookup.clear();
 
 		// build table for elements in conventional sequences
-		for (final IResource resource : optimisationData.getResources()) {
+		for (final IResource resource : sequences.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
 			for (int j = 0; j < sequence.size(); j++) {
 				final ISequenceElement element = sequence.get(j);
 				reverseLookup.put(element, new Pair<>(resource, j));
-				if (alternativeElementProvider.hasAlternativeElement(element)) {
+				if (alternativeElementProvider != null && alternativeElementProvider.hasAlternativeElement(element)) {
 					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
 					// Negative numbers now indicate alternative
 					reverseLookup.put(alt, new Pair<>(null, -1));
@@ -57,14 +53,16 @@ public class LookupManager implements ILookupManager {
 		}
 
 		// build table for excluded elements
-		int x = 0;
-		for (final ISequenceElement element : sequences.getUnusedElements()) {
-			reverseLookup.put(element, new Pair<>(null, x));
-			if (alternativeElementProvider.hasAlternativeElement(element)) {
-				final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
-				reverseLookup.put(alt, new Pair<>(null, -1));
+		if (alternativeElementProvider != null) {
+			int x = 0;
+			for (final ISequenceElement element : sequences.getUnusedElements()) {
+				reverseLookup.put(element, new Pair<>(null, x));
+				if (alternativeElementProvider.hasAlternativeElement(element)) {
+					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
+					reverseLookup.put(alt, new Pair<>(null, -1));
+				}
+				x++;
 			}
-			x++;
 		}
 	}
 

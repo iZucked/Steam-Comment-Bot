@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -83,12 +85,8 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
-		this.providedSequences = sequences;
-	}
-
-	@Override
-	public IMove generateMove() {
+	public IMove generateMove(ISequences rawSequences, ILookupManager lookupManager, Random random) {
+		this.providedSequences = rawSequences;
 		hintManager.reset();
 
 		final int num_tries = 30;

@@ -251,7 +251,7 @@ public class GuidedMoveHelperImpl implements IGuidedMoveHelper {
 
 	@Override
 	public boolean isStrictOptional() {
-		return false;
+		return true;
 	}
 
 	@Override

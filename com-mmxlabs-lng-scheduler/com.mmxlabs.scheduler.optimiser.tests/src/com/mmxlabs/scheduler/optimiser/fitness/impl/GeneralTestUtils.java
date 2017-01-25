@@ -43,6 +43,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 /**
  * Utility class to help build up test components.
@@ -52,9 +53,8 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  */
 public final class GeneralTestUtils {
 
-	public static IMoveGenerator createRandomMoveGenerator(@NonNull final Random random) {
+	public static IMoveGenerator createRandomMoveGenerator() {
 		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
-		moveGenerator.setRandom(random);
 
 		// Register RNG move generator units
 		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit());
@@ -109,10 +109,11 @@ public final class GeneralTestUtils {
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, evaluationProcesses, data);
-		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator(random);
+		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator();
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
-
+		lso.setLookupManager(new LookupManager());
+		
 		lso.setNumberOfIterations(numberOfIterations);
 		lso.setSequenceManipulator(new NullSequencesManipulator());
 		lso.setMoveGenerator(moveGenerator);

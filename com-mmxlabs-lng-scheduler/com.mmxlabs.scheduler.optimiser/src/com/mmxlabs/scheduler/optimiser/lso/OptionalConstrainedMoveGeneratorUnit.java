@@ -9,12 +9,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -54,19 +58,15 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
-	}
-
-	@Override
-	public IMove generateMove() {
+	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
 		// select an optional element at random
-		final ISequenceElement optional = RandomHelper.chooseElementFrom(owner.random, optionalElementsProvider.getOptionalElements());
-		final Pair<IResource, Integer> location = owner.reverseLookup.get(optional);
+		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
+		final Pair<IResource, Integer> location = stateManager.lookup(optional);
 
 		if (location.getFirst() == null) {
-			return generateAddingMove(optional, location.getSecond());
+			return generateAddingMove(optional, location.getSecond(), stateManager, rawSequences, random);
 		} else {
-			return generateRemovingMove(optional, location);
+			return generateRemovingMove(optional, location, stateManager, rawSequences, random);
 		}
 	}
 
@@ -77,14 +77,14 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 	 * @param location
 	 * @return
 	 */
-	private IMove generateRemovingMove(final ISequenceElement element, final Pair<IResource, Integer> location) {
+	private IMove generateRemovingMove(final ISequenceElement element, final Pair<IResource, Integer> location, final ILookupManager stateManager, final ISequences rawSequences, final Random random) {
 		final Integer locationIndex = location.getSecond();
-		final ISequence locationSequence = owner.sequences.getSequence(location.getFirst());
+		final ISequence locationSequence = rawSequences.getSequence(location.getFirst());
 		final ISequenceElement beforeElement = locationSequence.get(locationIndex - 1);
 		final ISequenceElement afterElement = locationSequence.get(locationIndex + 1);
 
 		// check whether beforeElement can be before afterElement
-		if (owner.getRandom().nextBoolean() && followersAndPreceders.getValidFollowers(beforeElement).contains(afterElement)) {
+		if (random.nextBoolean() && followersAndPreceders.getValidFollowers(beforeElement).contains(afterElement)) {
 			// we can just cut out the optional element
 			return new RemoveOptionalElement(location.getFirst(), locationIndex);
 		} else {
@@ -114,8 +114,8 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				}
 			}
 
-			final ISequenceElement another = RandomHelper.chooseElementFrom(owner.random, optionalElementsProvider.getOptionalElements());
-			final Pair<IResource, Integer> location2 = owner.reverseLookup.get(another);
+			final ISequenceElement another = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
+			final Pair<IResource, Integer> location2 = stateManager.lookup(another);
 			if (location2.getFirst() == null) {
 				// this is a spare element, so we can rotate them
 				return new SwapOptionalElements(location.getFirst(), locationIndex, location2.getSecond());
@@ -123,8 +123,8 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				// try cutting them both out
 				// TODO consider whether we can make this more efficient
 				// as half the time we will pick L/L or D/D
-				final ISequenceElement beforeAnother = owner.sequences.getSequence(location2.getFirst()).get(location2.getSecond() - 1);
-				final ISequenceElement afterAnother = owner.sequences.getSequence(location2.getFirst()).get(location2.getSecond() + 1);
+				final ISequenceElement beforeAnother = rawSequences.getSequence(location2.getFirst()).get(location2.getSecond() - 1);
+				final ISequenceElement afterAnother = rawSequences.getSequence(location2.getFirst()).get(location2.getSecond() + 1);
 				// find whether we can move one of these into the gap
 				if (followersAndPreceders.getValidFollowers(beforeElement).contains(afterAnother)) {
 					// here afterAnother can go after before; resource2 is the thing whose guy gets moved.
@@ -143,7 +143,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 		return null;
 	}
 
-	private IMove generateAddingMove(final ISequenceElement unused, final int unusedIndex) {
+	private IMove generateAddingMove(final ISequenceElement unused, final int unusedIndex, final ILookupManager stateManager, final ISequences rawSequences, final Random random) {
 		// the element is currently not in the solution, so try and add it
 
 		// find something which can go after this element
@@ -153,9 +153,9 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 			LOOP_TRIES: for (int t = 0; t < 10; ++t) {
 				// there is an element which can follow this element.
-				final ISequenceElement follower = followers.get(RandomHelper.nextIntBetween(owner.random, 0, followers.size() - 1));
+				final ISequenceElement follower = followers.get(RandomHelper.nextIntBetween(random, 0, followers.size() - 1));
 				// check whether follower is already in the solution somewhere
-				final Pair<IResource, Integer> followerPosition = owner.reverseLookup.get(follower);
+				final Pair<IResource, Integer> followerPosition = stateManager.lookup(follower);
 				if (followerPosition.getSecond() == -1) {
 					continue;
 				}
@@ -165,7 +165,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					final IResource resource = followerPosition.getFirst();
 					final int position = followerPosition.getSecond();
 					// this is the element currently before the follower
-					final ISequenceElement beforeFollower = owner.sequences.getSequence(resource).get(position - 1);
+					final ISequenceElement beforeFollower = rawSequences.getSequence(resource).get(position - 1);
 					// these are the elements which can go after what's currently before the follower
 					Followers<ISequenceElement> beforeFollowerFollowers = followersAndPreceders.getValidFollowers(beforeFollower);
 					if (!checkResource(unused, resource)) {
@@ -182,7 +182,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					if (canSwap) {
 						++numChoices;
 					}
-					final int choice = owner.getRandom().nextInt(numChoices);
+					final int choice = random.nextInt(numChoices);
 
 					if ((numChoices == 3 && choice == 0) || numChoices == 2 && choice == 0 && canInsert) {
 						// we can insert directly
@@ -207,10 +207,10 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 						bffSet.retainAll(upSet);
 
 						List<ISequenceElement> candidates = new ArrayList<ISequenceElement>(bffSet);
-						Collections.shuffle(candidates, owner.getRandom());
+						Collections.shuffle(candidates, random);
 
 						LOOP_ELEMENTS: for (final ISequenceElement candidate : candidates) {
-							final Pair<IResource, Integer> candidatePosition = owner.reverseLookup.get(candidate);
+							final Pair<IResource, Integer> candidatePosition = stateManager.lookup(candidate);
 							if (candidatePosition.getSecond() == -1) {
 								continue;
 							}
@@ -229,7 +229,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 									// S1: [beforeCandidate, +filler, afterCandidate]
 									// S2: [beforeFollower, +candidate, +unused, follower]
 									// need to find filler element
-									final ISequence candidateSequence = owner.sequences.getSequence(candidatePosition.getFirst());
+									final ISequence candidateSequence = rawSequences.getSequence(candidatePosition.getFirst());
 									final ISequenceElement beforeCandidate = candidateSequence.get(candidatePosition.getSecond() - 1);
 									final ISequenceElement afterCandidate = candidateSequence.get(candidatePosition.getSecond() + 1);
 
@@ -246,8 +246,8 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 									} else {
 										final Followers<ISequenceElement> beforeFollowers = followersAndPreceders.getValidFollowers(beforeCandidate);
 
-										final List<ISequenceElement> spares = new ArrayList<>(owner.sequences.getUnusedElements());
-										Collections.shuffle(spares, owner.getRandom());
+										final List<ISequenceElement> spares = new ArrayList<>(rawSequences.getUnusedElements());
+										Collections.shuffle(spares, random);
 										LOOP_SPARES: for (final ISequenceElement spare : spares) {
 
 											if (!checkResource(spare, candidateResource)) {
@@ -258,7 +258,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 											if (beforeFollowers.contains(spare) && followersAndPreceders.getValidFollowers(spare).contains(afterCandidate)) {
 
 												// we have a working filler element to do the move above.
-												final Pair<IResource, Integer> fillerPosition = owner.reverseLookup.get(spare);
+												final Pair<IResource, Integer> fillerPosition = stateManager.lookup(spare);
 												// TODO these checks appear duplicated, and do not seem to be used
 												// final boolean check = checkResource(candidate, resource);
 												// checkResource(candidate, resource);
@@ -284,12 +284,12 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					for (int i = 0; i < followerFollowers.size(); ++i) {
 						elements.add(i);
 					}
-					Collections.shuffle(elements, owner.getRandom());
+					Collections.shuffle(elements, random);
 
 					LOOP_ELEMENTS: for (final int idx : elements) {
 						final ISequenceElement insertElement = followerFollowers.get(idx);
 						// final ISequenceElement insertElement = followerFollowers.get(RandomHelper.nextIntBetween(owner.random, 0, followerFollowers.size() - 1));
-						final Pair<IResource, Integer> insertPosition = owner.reverseLookup.get(insertElement);
+						final Pair<IResource, Integer> insertPosition = stateManager.lookup(insertElement);
 						if (insertPosition.getFirst() != null) {
 							final IResource insertResource = insertPosition.getFirst();
 							final int insertBefore = insertPosition.getSecond();
