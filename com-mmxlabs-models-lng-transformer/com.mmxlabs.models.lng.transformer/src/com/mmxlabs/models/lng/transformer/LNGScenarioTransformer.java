@@ -2679,8 +2679,6 @@ public class LNGScenarioTransformer {
 		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
 		final Association<Vessel, IVessel> vesselAssociation = new Association<Vessel, IVessel>();
 		final Association<VesselAvailability, IVesselAvailability> vesselAvailabilityAssociation = new Association<VesselAvailability, IVesselAvailability>();
-		// TODO: Check that we are mutliplying/dividing correctly to maintain
-		// precision
 
 		final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
@@ -2788,15 +2786,23 @@ public class LNGScenarioTransformer {
 					endCold = false;
 				}
 			}
+			final ZonedDateTime endBy = eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null;
+			ZonedDateTime endAfter = eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null;
+			boolean forceHireCostOnlyEndRule = eVesselAvailability.isForceHireCostOnlyEndRule();
 
-			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null,
-					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3,
-					eVesselAvailability.isForceHireCostOnlyEndRule());
-
-			if (!endRequirement.hasTimeRequirement()) {
-//				builder.addOpenEndWindow((MutableTimeWindow)end.getTimeWindow());
+			if (rootObject.isSetSchedulingEndDate()) {
+				final ZonedDateTime schedulingEndDate = rootObject.getSchedulingEndDate().atStartOfDay(ZoneId.of("Etc/UTC"));
+				if (endAfter != null) {
+					if (endAfter.isAfter(schedulingEndDate)) {
+						endAfter = schedulingEndDate;
+						forceHireCostOnlyEndRule = true;
+					}
+				}
 			}
-			
+
+			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3,
+					forceHireCostOnlyEndRule);
+
 			final ILongCurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
 				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);

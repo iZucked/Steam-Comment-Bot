@@ -223,6 +223,7 @@ public class PeriodTransformer {
 				.filter(s -> s.getVesselAvailability() != null) //
 				.collect(Collectors.toMap(Sequence::getVesselAvailability, s -> s.getEvents().get(s.getEvents().size() - 1)));
 
+		// Extend the vessel end date to cover late ending if present in input scenario
 		for (Sequence seq : output.getScheduleModel().getSchedule().getSequences()) {
 			VesselAvailability va = seq.getVesselAvailability();
 			if (va != null) {
@@ -259,7 +260,7 @@ public class PeriodTransformer {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
 			if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
 
-				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate() .isBefore( output.getPromptPeriodEnd())) {
+				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
 					vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
 					vesselAvailability.setEndBy(output.getPromptPeriodEnd().atStartOfDay());
 				} else {
@@ -268,7 +269,14 @@ public class PeriodTransformer {
 					vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
 				}
 
-					vesselAvailability.setForceHireCostOnlyEndRule(true);
+				vesselAvailability.setForceHireCostOnlyEndRule(true);
+			} else if (vesselAvailability.isSetEndAfter()) {
+				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
+					if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
+						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
+						vesselAvailability.setForceHireCostOnlyEndRule(true);
+					}
+				}
 			}
 			if (!vesselAvailability.getEndAt().isEmpty()) {
 				vesselAvailability.getEndAt().add(endEvent.getPort());
