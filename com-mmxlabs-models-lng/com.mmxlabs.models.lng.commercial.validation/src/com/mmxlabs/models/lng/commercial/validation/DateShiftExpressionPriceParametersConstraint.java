@@ -84,7 +84,7 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractModelM
 					}
 
 					dsd.addEObjectAndFeature(pricingParams, CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE);
-//					failures.add(dsd);
+					failures.add(dsd);
 				}
 			}
 		}
