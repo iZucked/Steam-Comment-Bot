@@ -23,8 +23,8 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
-import com.mmxlabs.scheduler.optimiser.lso.guided.LookupManager;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.SwapElementsMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 public class SwapSlotMoveHandler implements IMoveHandler {
 

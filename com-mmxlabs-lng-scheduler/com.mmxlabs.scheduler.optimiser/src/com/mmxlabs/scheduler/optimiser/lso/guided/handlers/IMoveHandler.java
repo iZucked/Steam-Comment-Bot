@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.LookupManager;
+import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 /**
  * A {@link IMoveHandler} is a part of the {@link GuidedMoveGenerator} used to construct an atomic change in the state of a portfolio.

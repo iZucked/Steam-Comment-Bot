@@ -15,8 +15,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.LookupManager;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 public class RemoveCargoMoveHandler implements IMoveHandler {
 

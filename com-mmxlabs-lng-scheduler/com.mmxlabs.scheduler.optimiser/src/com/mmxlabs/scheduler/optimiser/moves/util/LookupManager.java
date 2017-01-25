@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.lso.guided;
+package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -16,7 +17,7 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 
-public class LookupManager {
+public class LookupManager implements ILookupManager {
 
 	@Inject
 	@NonNull
@@ -71,6 +72,11 @@ public class LookupManager {
 		return sequences;
 	}
 
+	/**
+	 * Returns a {@link Pair} mapping an {@link ISequenceElement} to a {@link IResource} / array index. If the {@link IResource} is null, this indicates the element is in the unused list. If the index
+	 * is -1, then this marks the element as the unused half of an alternative element pair (see {@link IAlternativeElementProvider}. Finally if a null Pair is return the element has not been found at
+	 * all.
+	 */
 	public Pair<IResource, Integer> lookup(@NonNull ISequenceElement element) {
 		return reverseLookup.get(element);
 	}
