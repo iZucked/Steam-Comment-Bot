@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 /**
  * The {@link IChainRunner} contains a series of {@link IChainLink}s to convert the initial state contained in the {@link LNGDataTransformer} by following through all the links to progressively

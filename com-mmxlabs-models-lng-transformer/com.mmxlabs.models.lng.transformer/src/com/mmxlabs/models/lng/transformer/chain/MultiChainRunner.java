@@ -18,8 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 
 /**
  * A composite {@link IChainRunner} allowing multiple {@link IChainRunner} instances to be run in parallel from a shared {@link LNGDataTransformer}.

@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.chain;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.optimiser.core.IMultiStateResult;
+
 /**
  * A {@link IChainLink} represents a single step in a {@link IChainRunner} which may (or may not) transform the data in an {@link IMultiStateResult} object into another {@link IMultiStateResult} by
  * e.g. running an optimisation. These will typically wrap around a {@link ILNGStateTransformerUnit}

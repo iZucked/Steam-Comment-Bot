@@ -11,8 +11,8 @@ import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
-import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 public class ResetInitialSequencesUnit {
 

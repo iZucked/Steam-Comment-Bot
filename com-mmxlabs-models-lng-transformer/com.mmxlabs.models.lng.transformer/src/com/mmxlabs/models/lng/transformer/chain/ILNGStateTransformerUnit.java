@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 
 /**
  * A {@link ILNGStateTransformerUnit} defines a transformation between in input solution and an output solution from a shared {@link LNGDataTransformer}
