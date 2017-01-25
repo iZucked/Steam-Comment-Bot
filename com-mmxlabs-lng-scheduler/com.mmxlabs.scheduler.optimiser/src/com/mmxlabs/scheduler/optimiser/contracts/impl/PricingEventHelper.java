@@ -8,7 +8,10 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -18,6 +21,32 @@ public final class PricingEventHelper {
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+
+	public IPort getLoadTimingPort(@NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption) {
+
+		if (!(loadOption instanceof ILoadSlot)) {
+			// DES Purchase - take discharge port
+			return dischargeOption.getPort();
+		} else {
+			return loadOption.getPort();
+		}
+	}
+
+	public IPort getDischargeTimingPort(@NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption) {
+
+		if (!(dischargeOption instanceof IDischargeSlot)) {
+			// FOB Sale - take load port
+			return loadOption.getPort();
+		} else {
+			return dischargeOption.getPort();
+		}
+	}
+
+	public int getStartOfLoadInUTC(@NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
+
+		final int localTime = portTimesRecord.getSlotTime(loadOption);
+		return timeZoneToUtcOffsetProvider.UTC(localTime, getLoadTimingPort(loadOption, dischargeOption));
+	}
 
 	public int getDischargePricingDate(@NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 
@@ -46,10 +75,13 @@ public final class PricingEventHelper {
 
 	public int getDischargePricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
+		final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
+		IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
+		IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
 		switch (pricingEvent) {
 		case END_OF_DISCHARGE: {
 			final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, timingPortForDischarge);
 			break;
 		}
 		case END_OF_DISCHARGE_WINDOW: {
@@ -57,23 +89,19 @@ public final class PricingEventHelper {
 			break;
 		}
 		case END_OF_LOAD: {
-			final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
 			final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, timingPortForLoad);
 			break;
 		}
 		case END_OF_LOAD_WINDOW: {
-			final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getExclusiveEnd(), loadOption);
 			break;
 		}
 		case START_OF_LOAD: {
-			final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption), loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption), timingPortForLoad);
 			break;
 		}
 		case START_OF_LOAD_WINDOW: {
-			final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getInclusiveStart(), loadOption);
 			break;
 		}
@@ -84,7 +112,7 @@ public final class PricingEventHelper {
 		default:
 			// Default is start of discharge
 		case START_OF_DISCHARGE: {
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), timingPortForDischarge);
 			;
 			break;
 		}
@@ -95,23 +123,26 @@ public final class PricingEventHelper {
 	public int getLoadPricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption,
 			@NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
+		IPort timingPortForLoad = getLoadTimingPort(loadOption, dischargeOption);
+		IPort timingPortForDischarge = getDischargeTimingPort(loadOption, dischargeOption);
+
 		switch (pricingEvent) {
 		case END_OF_DISCHARGE:
 			final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, timingPortForDischarge);
 			break;
 		case END_OF_DISCHARGE_WINDOW:
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getExclusiveEnd(), dischargeOption);
 			break;
 		case END_OF_LOAD:
 			final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, timingPortForLoad);
 			break;
 		case END_OF_LOAD_WINDOW:
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getExclusiveEnd(), loadOption);
 			break;
 		case START_OF_DISCHARGE:
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), timingPortForDischarge);
 			break;
 		case START_OF_DISCHARGE_WINDOW:
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getInclusiveStart(), dischargeOption);
@@ -122,7 +153,7 @@ public final class PricingEventHelper {
 		default:
 			// Default is start of load
 		case START_OF_LOAD:
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption), loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption), timingPortForLoad);
 			break;
 		}
 		return pricingDate;
