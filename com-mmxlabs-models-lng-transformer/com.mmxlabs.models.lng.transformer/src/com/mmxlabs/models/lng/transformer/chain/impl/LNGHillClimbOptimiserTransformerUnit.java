@@ -250,9 +250,6 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
-			final ConstrainedMoveGenerator cmg = injector.getInstance(ConstrainedMoveGenerator.class);
-			cmg.setRandom(new Random(stageSettings.getSeed()));
-
 			optimiser = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
 			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 			optimiser.init();

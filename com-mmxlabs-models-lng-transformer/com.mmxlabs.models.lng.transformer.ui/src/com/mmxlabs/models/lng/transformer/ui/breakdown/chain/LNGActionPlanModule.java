@@ -12,35 +12,36 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown.chain;
 import static org.ops4j.peaberry.Peaberry.service;
 
 import java.util.Map;
-import java.util.Random;
 
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
-import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
-import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHelperImpl;
+import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.MoveHandlerHelper;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
@@ -62,9 +63,21 @@ public class LNGActionPlanModule extends AbstractModule {
 
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
 
-		// bind(IFitnessHelper.class).to(FitnessHelper.class);
+		bind(InsertCargoVesselMoveHandler.class).in(Singleton.class);
+		bind(InsertDESPurchaseMoveHandler.class).in(Singleton.class);
+		bind(InsertFOBSaleMoveHandler.class).in(Singleton.class);
+		bind(MoveHandlerHelper.class).in(Singleton.class);
+		bind(RemoveSlotMoveHandler.class).in(Singleton.class);
+		bind(RemoveCargoMoveHandler.class).in(Singleton.class);
+		bind(SwapCargoVesselMoveHandler.class).in(Singleton.class);
+		bind(SwapSlotMoveHandler.class).in(Singleton.class);
 
-		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+		bind(GuidedMoveHelperImpl.class).in(Singleton.class);
+		bind(IGuidedMoveHelper.class).to(GuidedMoveHelperImpl.class);
+		bind(MoveHelper.class).in(Singleton.class);
+
+		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
 	}
 
 	@Provides

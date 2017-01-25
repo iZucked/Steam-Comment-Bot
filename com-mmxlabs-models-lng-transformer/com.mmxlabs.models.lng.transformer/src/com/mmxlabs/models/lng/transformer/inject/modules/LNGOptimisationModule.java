@@ -22,10 +22,8 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -36,6 +34,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
@@ -56,26 +55,26 @@ public class LNGOptimisationModule extends AbstractModule {
 		install(new LinearFitnessEvaluatorModule());
 
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+		bind(ILookupManager.class).to(LookupManager.class);
+
 	}
 
 	@Provides
 	@Singleton
-	private IMoveGenerator provideMoveGenerator(final ConstrainedMoveGenerator normalMoveGenerator, @Named(LocalSearchOptimiserModule.RANDOM_SEED) long seed) {
+	private IMoveGenerator provideMoveGenerator(final ConstrainedMoveGenerator normalMoveGenerator) {
 
 		final CompoundMoveGenerator moveGenerator = new CompoundMoveGenerator();
 
 		moveGenerator.addGenerator(normalMoveGenerator, 1);
-		moveGenerator.setRandom(new Random(seed));
 
 		return moveGenerator;
 	}
 
 	@Provides
 	@Singleton
-	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final Injector injector, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
+	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final Injector injector) {
 
 		final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator();
-		cmg.setRandom(new Random(seed));
 		injector.injectMembers(cmg);
 		// cmg.init();
 		return cmg;

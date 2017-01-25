@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.RemoveCargoC
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.UnusedToUsedDischargeChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.UnusedToUsedLoadChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.VesselChange;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -49,6 +50,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -238,7 +240,8 @@ public class BagMover {
 		}
 
 		if (differencesList.size() > 0) {
-			final StateManager stateManager = new StateManager(currentRawSequences, currentFullSequences);
+			final LookupManager stateManager = new LookupManager();
+			stateManager.createLookup(currentRawSequences);
 			// (1) Choose a difference
 			Difference difference = pickRandomElementFromList(differencesList, rdm);
 			while (difference.move != DifferenceType.CARGO_WRONG_WIRING && difference.move != DifferenceType.CARGO_WRONG_VESSEL && difference.move != DifferenceType.CARGO_NOT_IN_TARGET
@@ -826,10 +829,10 @@ public class BagMover {
 		}
 	}
 
-	private Collection<JobState> insertUnusedElementsIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final StateManager stateManager,
-			@NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final ISequenceElement element, final long[] currentMetrics,
-			@NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
-			@Nullable final Collection<@NonNull IResource> currentChangedResources) {
+	private Collection<JobState> insertUnusedElementsIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState,
+			@NonNull final ILookupManager stateManager, @NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final ISequenceElement element,
+			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differencesList,
+			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		if (portTypeProvider.getPortType(element) == PortType.Load) {
 			final Integer otherDischargeIdx = similarityState.getDischargeForLoad(element);
 			final ISequenceElement discharge = similarityState.getElementForIndex(otherDischargeIdx);
@@ -841,7 +844,7 @@ public class BagMover {
 						targetElements, differencesList, searchData, currentChangedResources);
 			} else {
 
-				final Pair<IResource, Integer> p = stateManager.getPositionForElement(discharge);
+				final Pair<IResource, Integer> p = stateManager.lookup(discharge);
 
 				// step (2) remove both slots
 				// FIXME: Currently just unpair both slots and remove from solution
@@ -896,7 +899,7 @@ public class BagMover {
 				return insertUnusedCargoIntoSequence(currentSequences, similarityState, changes, new ArrayList<>(changeSets), tryDepth, resource, load, element, currentMetrics, jobStore,
 						targetElements, differencesList, searchData, currentChangedResources);
 			} else {
-				final Pair<IResource, Integer> p = stateManager.getPositionForElement(load);
+				final Pair<IResource, Integer> p = stateManager.lookup(load);
 
 				// step (2) remove both slots
 				// FIXME: Currently just unpair both slots and remove from solution
