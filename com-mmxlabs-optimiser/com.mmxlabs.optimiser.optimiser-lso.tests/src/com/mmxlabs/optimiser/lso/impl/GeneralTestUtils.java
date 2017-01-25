@@ -58,9 +58,8 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  */
 public final class GeneralTestUtils {
 
-	public static IMoveGenerator createRandomMoveGenerator(@NonNull final Random random) {
+	public static IMoveGenerator createRandomMoveGenerator() {
 		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
-		moveGenerator.setRandom(random);
 
 		// Register RNG move generator units
 		moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit());
@@ -146,7 +145,7 @@ public final class GeneralTestUtils {
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, data);
-		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator(random);
+		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator();
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
 

@@ -9,13 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -93,7 +99,19 @@ public class DefaultLocalSearchOptimiserTest {
 		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 
 		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, random, numberOfIterations, 1, monitor);
+		lso.setLookupManager(new ILookupManager() {
+			@Override
+			public void createLookup(@NonNull ISequences sequences) {
+				// TODO Auto-generated method stub
 
+			}
+
+			@Override
+			public @Nullable Pair<@Nullable IResource, @NonNull Integer> lookup(@NonNull ISequenceElement element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
 		// Perform the optimisation
 		lso.optimise(context);
 

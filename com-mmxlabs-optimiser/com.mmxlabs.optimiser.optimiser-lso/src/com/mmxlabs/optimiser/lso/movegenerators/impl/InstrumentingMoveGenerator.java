@@ -11,11 +11,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -155,8 +157,8 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
-	public IMove generateMove() {
-		final IMove move = delegate.generateMove();
+	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
+		final IMove move = delegate.generateMove(rawSequences, stateManager, random);
 		total++;
 		if (move != null) {
 			if (collectStats) {
@@ -187,17 +189,6 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 			}
 		}
 		return move;
-	}
-
-	@Override
-	@NonNull
-	public ISequences getSequences() {
-		return delegate.getSequences();
-	}
-
-	@Override
-	public void setSequences(@NonNull final ISequences sequences) {
-		delegate.setSequences(sequences);
 	}
 
 	public void notifyOfThresholderDecision(final long delta, final boolean answer) {

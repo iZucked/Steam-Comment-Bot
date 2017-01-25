@@ -12,6 +12,7 @@ import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -27,10 +28,6 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
 public final class RandomMoveGenerator implements IMoveGenerator {
 
-	private Random random;
-
-	private ISequences sequences;
-
 	private final List<IRandomMoveGeneratorUnit> units = new ArrayList<IRandomMoveGeneratorUnit>();
 
 	private final List<Double> weights = new ArrayList<Double>();
@@ -42,15 +39,15 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
-	public IMove generateMove() {
+	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
 		// Pin for null analysis
-		final ISequences pSequences = sequences;
+		final ISequences pSequences = rawSequences;
 		assert pSequences != null;
 		double newMove = random.nextDouble() * totalWeight;
 		for (int i = 0; i < units.size(); i++) {
 			final double weight = weights.get(i);
 			if (newMove <= weight) {
-				return units.get(i).generateRandomMove(this, pSequences);
+				return units.get(i).generateRandomMove(this, pSequences, random);
 			}
 			newMove -= weight;
 		}
@@ -58,43 +55,14 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 		return null;
 	}
 
-	public void init() {
-
-		if (random == null) {
-			throw new IllegalStateException("Random is not set");
-		}
-
-		if (sequences == null) {
-			throw new IllegalStateException("Sequences is not set");
-		}
-	}
-
-	public void setRandom(@NonNull final Random random) {
-		this.random = random;
-	}
-
-	public Random getRandom() {
-		return random;
-	}
-
-	@Override
-	public void setSequences(@NonNull final ISequences sequences) {
-		this.sequences = sequences;
-	}
-
-	@Override
-	@NonNull
-	public ISequences getSequences() {
-		return sequences;
-	}
-
 	/**
 	 * Randomly generate a break point in the given sequence.
 	 * 
 	 * @param sequence
+	 * @param random 
 	 * @return
 	 */
-	public int generateBreakPoint(@NonNull final ISequence sequence) {
+	public int generateBreakPoint(@NonNull final ISequence sequence, Random random) {
 		final int breakPoint;
 
 		// if (true) {
@@ -117,12 +85,13 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 	 * 
 	 * @param sequence
 	 * @param breakPoints
+	 * @param random 
 	 */
-	public void generateSortedBreakPoints(final ISequence sequence, final int[] breakPoints) {
+	public void generateSortedBreakPoints(final ISequence sequence, final int[] breakPoints, Random random) {
 
 		// Generate the break points
 		for (int i = 0; i < breakPoints.length; ++i) {
-			breakPoints[i] = generateBreakPoint(sequence);
+			breakPoints[i] = generateBreakPoint(sequence, random);
 		}
 
 		// Sort the list

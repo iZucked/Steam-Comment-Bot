@@ -22,9 +22,7 @@ public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
 	@Nullable
-	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
-
-		final Random random = moveGenerator.getRandom();
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences, Random random) {
 
 		final List<IResource> resources = sequences.getResources();
 
@@ -70,7 +68,7 @@ public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 			IResource resource = froms.get(i);
 			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
-			moveGenerator.generateSortedBreakPoints(sequence, breakPoints);
+			moveGenerator.generateSortedBreakPoints(sequence, breakPoints, random);
 
 			// Randomly pick the insertion point as first or last break point
 			if (random.nextBoolean()) {

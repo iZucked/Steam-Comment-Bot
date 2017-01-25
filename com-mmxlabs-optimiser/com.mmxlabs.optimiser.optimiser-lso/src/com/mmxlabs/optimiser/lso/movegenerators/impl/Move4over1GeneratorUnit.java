@@ -20,9 +20,7 @@ public final class Move4over1GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
 	@Nullable
-	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
-
-		final Random random = moveGenerator.getRandom();
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences, Random random) {
 
 		final List<IResource> resources = sequences.getResources();
 
@@ -37,7 +35,7 @@ public final class Move4over1GeneratorUnit implements IRandomMoveGeneratorUnit {
 		final ISequence sequence = sequences.getSequence(resource);
 
 		final int[] segmentBreakPoints = new int[4];
-		moveGenerator.generateSortedBreakPoints(sequence, segmentBreakPoints);
+		moveGenerator.generateSortedBreakPoints(sequence, segmentBreakPoints, random);
 
 		// Create new move
 		final Move4over1 move = new Move4over1();

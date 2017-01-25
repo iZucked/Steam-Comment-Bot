@@ -53,6 +53,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected int numberOfFailedToValidate;
 
+	protected ModifiableSequences initialRawSequences;
+	
 	protected ModifiableSequences currentRawSequences;
 
 	protected ModifiableSequences potentialRawSequences;
@@ -93,7 +95,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
-		getMoveGenerator().setSequences(potentialRawSequences);
+		setSequences(potentialRawSequences);
 
 		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();
 		if (annotatedBestSolution == null) {
@@ -156,7 +158,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			}
 
 			// Generate a new move
-			final IMove move = getMoveGenerator().generateMove();
+			final IMove move = getMoveGenerator().generateMove(potentialRawSequences, getLookupManager(), getRandom());
 
 			// Make sure the generator was able to generate a move
 			if (move == null || move instanceof INullMove) {
@@ -270,7 +272,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
 
 				// Update move sequences.
-				getMoveGenerator().setSequences(pinnedPotentialRawSequences);
+				setSequences(pinnedPotentialRawSequences);
 
 				++numberOfMovesAccepted;
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
@@ -333,6 +335,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	}
 
 	protected void setInitialSequences(@NonNull final ISequences initialSequences) {
+		// Store initialSequences
+		initialRawSequences = new ModifiableSequences(initialSequences);
 		// Apply sequence manipulators
 		final IModifiableSequences fullSequences = new ModifiableSequences(initialSequences);
 		getSequenceManipulator().manipulate(fullSequences);

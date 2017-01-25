@@ -20,9 +20,7 @@ public final class Move3over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
 	@Nullable
-	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
-
-		final Random random = moveGenerator.getRandom();
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences, Random random) {
 
 		final List<IResource> resources = sequences.getResources();
 
@@ -44,9 +42,9 @@ public final class Move3over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 		final ISequence sequence2 = sequences.getSequence(resource2);
 
 		final int[] resource1StartEnd = new int[2];
-		moveGenerator.generateSortedBreakPoints(sequence1, resource1StartEnd);
+		moveGenerator.generateSortedBreakPoints(sequence1, resource1StartEnd, random);
 
-		final int resource2Position = moveGenerator.generateBreakPoint(sequence2);
+		final int resource2Position = moveGenerator.generateBreakPoint(sequence2, random);
 
 		// Create new move
 		final Move3over2 move = new Move3over2();

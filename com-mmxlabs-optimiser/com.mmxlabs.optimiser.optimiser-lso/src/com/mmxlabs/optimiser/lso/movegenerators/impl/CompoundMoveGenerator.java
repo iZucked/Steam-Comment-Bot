@@ -10,6 +10,7 @@ import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -24,8 +25,6 @@ public class CompoundMoveGenerator implements IMoveGenerator {
 	private final List<Double> weights = new LinkedList<Double>();
 	private final List<IMoveGenerator> generators = new LinkedList<IMoveGenerator>();
 	private double totalWeight = 0;
-	private ISequences sequences;
-	private Random random;
 
 	public void addGenerator(final IMoveGenerator generator, final double weight) {
 		weights.add(weight);
@@ -34,33 +33,16 @@ public class CompoundMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
-	public IMove generateMove() {
+	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 		double d = random.nextDouble() * totalWeight;
 		for (int i = 0; i < weights.size(); i++) {
 			final double w = weights.get(i);
 			if (d <= w) {
-				return generators.get(i).generateMove();
+				return generators.get(i).generateMove(rawSequences, lookupManager, random);
 			}
 			d -= w;
 		}
 		return null;
 	}
 
-	@Override
-	@NonNull
-	public ISequences getSequences() {
-		return sequences;
-	}
-
-	@Override
-	public void setSequences(@NonNull final ISequences sequences) {
-		for (final IMoveGenerator generator : generators) {
-			generator.setSequences(sequences);
-		}
-		this.sequences = sequences;
-	}
-
-	public void setRandom(@NonNull final Random random) {
-		this.random = random;
-	}
 }

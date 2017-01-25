@@ -26,8 +26,7 @@ public class Move2over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
 	@Nullable
-	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
-		final Random random = moveGenerator.getRandom();
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences, Random random) {
 
 		final List<IResource> resources = sequences.getResources();
 		final int resourceCount = resources.size();
@@ -40,8 +39,8 @@ public class Move2over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 		final int resource2 = RandomHelper.nextDifferentInt(random, resourceCount, resource1);
 
 		// generate breakpoints (this should be OK regarding start and end).
-		final int resource1Start = moveGenerator.generateBreakPoint(sequences.getSequence(resource1));
-		final int resource2Start = moveGenerator.generateBreakPoint(sequences.getSequence(resource2));
+		final int resource1Start = moveGenerator.generateBreakPoint(sequences.getSequence(resource1), random);
+		final int resource2Start = moveGenerator.generateBreakPoint(sequences.getSequence(resource2), random);
 
 		// fill out new move object
 		final Move2over2 output = new Move2over2();

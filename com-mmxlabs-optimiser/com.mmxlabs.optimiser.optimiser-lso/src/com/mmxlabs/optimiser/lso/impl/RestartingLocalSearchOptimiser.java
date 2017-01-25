@@ -58,7 +58,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 			}
 
 			// Generate a new move
-			final IMove move = getMoveGenerator().generateMove();
+			final IMove move = getMoveGenerator().generateMove(potentialRawSequences, getLookupManager(), getRandom());
 
 			// Make sure the generator was able to generate a move
 			if (move == null || move instanceof INullMove) {
@@ -164,7 +164,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
 
 				// Update move sequences.
-				getMoveGenerator().setSequences(pinnedPotentialRawSequences);
+				setSequences(pinnedPotentialRawSequences);
 
 				setNumberOfMovesAccepted(getNumberOfMovesAccepted() + 1);
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
@@ -202,6 +202,8 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 	@Override
 	public void restart() {
 		currentRestart++;
+		currentRawSequences = new ModifiableSequences(initialRawSequences);
+		potentialRawSequences = new ModifiableSequences(potentialRawSequences);
 		System.out.println("Restarting:" + currentRestart);
 		getFitnessEvaluator().restart();
 	}
