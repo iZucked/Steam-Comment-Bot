@@ -50,7 +50,9 @@ public class InsertDESPurchaseMoveHandler implements IMoveHandler {
 		final List<ISequenceElement> followers = Lists.newArrayList(validFollowers);
 		followers.removeAll(forbiddenElements);
 		Collections.shuffle(followers, helper.getSharedRandom());
-
+		if (followers.isEmpty()) {
+			return null;
+		}
 		final Hints hints = new Hints();
 		for (final ISequenceElement possibleFollower : followers) {
 			// This should be implicit by virtue of being able to follow the DES Purchase
