@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -78,6 +79,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
 			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
 			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
+			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: return createDateShiftExpressionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -205,6 +207,16 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public SimpleEntityBook createSimpleEntityBook() {
 		SimpleEntityBookImpl simpleEntityBook = new SimpleEntityBookImpl();
 		return simpleEntityBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DateShiftExpressionPriceParameters createDateShiftExpressionPriceParameters() {
+		DateShiftExpressionPriceParametersImpl dateShiftExpressionPriceParameters = new DateShiftExpressionPriceParametersImpl();
+		return dateShiftExpressionPriceParameters;
 	}
 
 	/**

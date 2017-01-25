@@ -141,7 +141,14 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Spot Charter Out Market"
           targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
-    </factory>    
+    </factory>
+	 <factory
+	       ID="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory_DateShift"
+	       factory="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
+	       label="Date shift expression Spot Market"
+	       outputEClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters"
+	       targetEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+	 </factory>    
  </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">

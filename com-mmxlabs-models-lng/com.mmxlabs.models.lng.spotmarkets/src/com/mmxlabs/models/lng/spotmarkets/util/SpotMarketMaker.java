@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.spotmarkets.util;
 
 import java.time.YearMonth;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -211,6 +212,12 @@ public class SpotMarketMaker {
 	@NonNull
 	public SpotMarketMaker withPricingEvent(@NonNull final PricingEvent pricingEvent) {
 		spotMarket.setPricingEvent(pricingEvent);
+		return this;
+	}
+
+	@NonNull
+	public SpotMarketMaker with(Consumer<SpotMarket> action) {
+		action.accept(spotMarket);
 		return this;
 	}
 

@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.util.CommercialAdapterFactory;
 
@@ -294,6 +295,29 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DateShiftExpressionPriceParametersItemProvider dateShiftExpressionPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDateShiftExpressionPriceParametersAdapter() {
+		if (dateShiftExpressionPriceParametersItemProvider == null) {
+			dateShiftExpressionPriceParametersItemProvider = new DateShiftExpressionPriceParametersItemProvider(this);
+		}
+
+		return dateShiftExpressionPriceParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -428,6 +452,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
 		if (contractExpressionMapEntryItemProvider != null) contractExpressionMapEntryItemProvider.dispose();
 		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
+		if (dateShiftExpressionPriceParametersItemProvider != null) dateShiftExpressionPriceParametersItemProvider.dispose();
 	}
 
 }

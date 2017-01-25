@@ -41,7 +41,7 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.PriceExpressionParametersConstraint"
+                  class="com.mmxlabs.models.lng.commercial.validation.ExpressionPriceParametersConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.PriceExpressionParametersConstraint"
                   isEnabledByDefault="true"
                   lang="Java"
@@ -134,6 +134,22 @@
                </message>
                <target
                      class="Contract">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.DateShiftExpressionPriceParametersConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.DateShiftExpressionPriceParametersConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DateShiftExpressionPriceParametersConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DateShiftExpressionPriceParameters">
                </target>
             </constraint>
          </constraints>

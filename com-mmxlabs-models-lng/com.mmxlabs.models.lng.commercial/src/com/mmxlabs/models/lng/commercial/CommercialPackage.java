@@ -1137,6 +1137,70 @@ public interface CommercialPackage extends EPackage {
 	int SIMPLE_ENTITY_BOOK_FEATURE_COUNT = BASE_ENTITY_BOOK_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.DateShiftExpressionPriceParametersImpl <em>Date Shift Expression Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.DateShiftExpressionPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getDateShiftExpressionPriceParameters()
+	 * @generated
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Specific Day</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__SPECIFIC_DAY = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Date Shift Expression Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1144,7 +1208,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 14;
+	int CONTRACT_TYPE = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -1154,7 +1218,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 15;
+	int PRICING_EVENT = 16;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1638,6 +1702,49 @@ public interface CommercialPackage extends EPackage {
 	EClass getSimpleEntityBook();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters <em>Date Shift Expression Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Date Shift Expression Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters
+	 * @generated
+	 */
+	EClass getDateShiftExpressionPriceParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters#getPriceExpression()
+	 * @see #getDateShiftExpressionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getDateShiftExpressionPriceParameters_PriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters#isSpecificDay <em>Specific Day</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Specific Day</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters#isSpecificDay()
+	 * @see #getDateShiftExpressionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getDateShiftExpressionPriceParameters_SpecificDay();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters#getValue()
+	 * @see #getDateShiftExpressionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getDateShiftExpressionPriceParameters_Value();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2066,6 +2173,40 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SIMPLE_ENTITY_BOOK = eINSTANCE.getSimpleEntityBook();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.DateShiftExpressionPriceParametersImpl <em>Date Shift Expression Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.DateShiftExpressionPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getDateShiftExpressionPriceParameters()
+		 * @generated
+		 */
+		EClass DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS = eINSTANCE.getDateShiftExpressionPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getDateShiftExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Specific Day</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__SPECIFIC_DAY = eINSTANCE.getDateShiftExpressionPriceParameters_SpecificDay();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE = eINSTANCE.getDateShiftExpressionPriceParameters_Value();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
