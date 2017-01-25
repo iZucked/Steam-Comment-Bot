@@ -156,13 +156,15 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			for (final Row row : table.getRows()) {
 				@Nullable
 				final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(row.getSchedule());
-				final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
-				_elementToModelMap.put(row.getSchedule(), scenarioModel);
-				_elementToInstanceMap.put(row.getSchedule(), scenarioResult);
-				row.getInputEquivalents().forEach(e -> {
-					_elementToInstanceMap.put(e, scenarioResult);
-					_elementToModelMap.put(e, scenarioModel);
-				});
+				if (scenarioResult != null) {
+					final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+					_elementToModelMap.put(row.getSchedule(), scenarioModel);
+					_elementToInstanceMap.put(row.getSchedule(), scenarioResult);
+					row.getInputEquivalents().forEach(e -> {
+						_elementToInstanceMap.put(e, scenarioResult);
+						_elementToModelMap.put(e, scenarioModel);
+					});
+				}
 			}
 
 			mapInputs(_elementToInstanceMap, _elementToModelMap);
