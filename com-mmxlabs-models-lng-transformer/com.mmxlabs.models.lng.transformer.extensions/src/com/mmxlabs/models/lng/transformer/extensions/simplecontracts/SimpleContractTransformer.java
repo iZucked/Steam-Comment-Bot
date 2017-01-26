@@ -170,7 +170,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 			}
 		} else {
 			priceIntervals = integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(integerIntervalCurveHelper.getPreviousMonth(dateHelper.convertTime(dateHelper.getEarliestTime())),
-					integerIntervalCurveHelper.getNextMonth(dateHelper.convertTime(dateHelper.getLatestTime())), shift * 24);
+					integerIntervalCurveHelper.getNextMonth(dateHelper.convertTime(dateHelper.getLatestTime())), shift * 24 * -1);
 			{
 				final IExpression<ISeries> expression = indices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
