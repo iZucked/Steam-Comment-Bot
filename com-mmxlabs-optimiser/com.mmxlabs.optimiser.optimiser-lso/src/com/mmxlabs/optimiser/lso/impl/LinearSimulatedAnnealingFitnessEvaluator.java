@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
@@ -41,14 +42,15 @@ import com.mmxlabs.optimiser.lso.IThresholder;
  * @author Simon Goodall
  * 
  */
-public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessEvaluator {
+public class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessEvaluator {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LinearSimulatedAnnealingFitnessEvaluator.class);
 
 	@Inject
-	private IFitnessHelper fitnessHelper;
+	protected IFitnessHelper fitnessHelper;
 
-	private final @NonNull List<IFitnessComponent> fitnessComponents;
+	final @NonNull
+	protected List<IFitnessComponent> fitnessComponents;
 	private final @NonNull List<IEvaluationProcess> evaluationProcesses;
 
 	private final @NonNull IThresholder thresholder;
@@ -58,11 +60,11 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	private final Map<String, Long> initialFitnesses = new HashMap<String, Long>();
 	private final Map<String, Long> currentFitnesses = new HashMap<String, Long>();
-	private final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
+	protected final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
 
 	private Triple<ISequences, ISequences, IEvaluationState> initialSequences = null;
 	private Triple<ISequences, ISequences, IEvaluationState> currentSequences = null;
-	private Triple<ISequences, ISequences, IEvaluationState> bestSequences = null;
+	protected Triple<ISequences, ISequences, IEvaluationState> bestSequences = null;
 
 	private long initialFitness = Long.MAX_VALUE;
 	private long currentFitness = Long.MAX_VALUE;
@@ -161,7 +163,32 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			}
 		}
 
-		return fitnessCombiner.calculateFitness(fitnessComponents);
+		return getFitnessCombiner().calculateFitness(fitnessComponents);
+	}
+	
+	/**
+	 * Method used to perform the evaluation of {@link ISequences}.
+	 * 
+	 * @param sequences
+	 * @param affectedResources
+	 * @return
+	 */
+	public Pair<Long, Long> evaluateTwoObjectives(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
+
+		// Evaluates the current sequences
+		if (affectedResources == null) {
+			if (!fitnessHelper.evaluateSequencesFromComponents(sequences, evaluationState, getFitnessComponents())) {
+				return null;
+			}
+		} else {
+			if (!fitnessHelper.evaluateSequencesFromComponents(sequences, evaluationState, getFitnessComponents(), affectedResources)) {
+				return null;
+			}
+		}
+//		long fullFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+		long fullFitness = fitnessComponents.get(0).getFitness();
+		long similarity = fitnessComponents.get(3).getFitness() / 1;
+		return new Pair(fullFitness, similarity);
 	}
 
 	@Override
@@ -304,5 +331,13 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	@Override
 	public long getLastFitness() {
 		return lastFitness;
+	}
+
+	public IFitnessCombiner getFitnessCombiner() {
+		return fitnessCombiner;
+	}
+
+	public void setFitnessCombiner(IFitnessCombiner fitnessCombiner) {
+		this.fitnessCombiner = fitnessCombiner;
 	}
 }
