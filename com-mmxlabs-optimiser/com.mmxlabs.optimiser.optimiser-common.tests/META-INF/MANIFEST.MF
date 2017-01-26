@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-common.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.1.2.qualifier
+Bundle-Version: 4.1.2.RELEASE
 Fragment-Host: com.mmxlabs.optimiser.optimiser-common
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
  org.junit;bundle-version="4.8.2",
