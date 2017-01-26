@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions;
@@ -40,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -114,10 +115,55 @@ public class ScenarioUtils {
 		if (System.getProperty("similarity.smallweight") != null) {
 			weight = 10_000;
 		}
-		similaritySettings.setLowInterval(createSimilarityInterval(8, weight));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, weight));
-		similaritySettings.setHighInterval(createSimilarityInterval(32, weight));
-		similaritySettings.setOutOfBoundsWeight(weight);
+
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 0));
+		similaritySettings.setOutOfBoundsWeight(0);
+
+		return similaritySettings;
+	}
+	
+	public static SimilaritySettings createUnweightedSimilaritySettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 1));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 1));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 1));
+		similaritySettings.setOutOfBoundsWeight(1);
+
+		return similaritySettings;
+	}
+
+	public static SimilaritySettings createLowSimilaritySettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
+		similaritySettings.setOutOfBoundsWeight(5_000_000);
+
+		return similaritySettings;
+	}
+
+	public static SimilaritySettings createMediumSimilaritySettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 250_000));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
+		similaritySettings.setOutOfBoundsWeight(1_000_000);
+
+		return similaritySettings;
+	}
+
+	public static SimilaritySettings createHighSimilaritySettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 250_000));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 500_000));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 1_000_000));
+		similaritySettings.setOutOfBoundsWeight(5_000_000);
 
 		return similaritySettings;
 	}
@@ -364,6 +410,7 @@ public class ScenarioUtils {
 			}
 		}
 	}
+	
 	public static void setLSOStageSeed(final OptimisationPlan plan, final int seed) {
 		for (final OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof LocalSearchOptimisationStage) {
@@ -387,6 +434,18 @@ public class ScenarioUtils {
 			if (stage instanceof HillClimbOptimisationStage) {
 				final HillClimbOptimisationStage hillClimbOptimisationStage = (HillClimbOptimisationStage) stage;
 				hillClimbOptimisationStage.getAnnealingSettings().setIterations(iterations);
+			}
+		}
+	}
+
+	public static void setActionPlanStageParameters(final OptimisationPlan plan, final int totalEvalations, 
+			final int inRunEvaluations, final int searchDepth) {
+		for (final OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof ActionPlanOptimisationStage) {
+				final ActionPlanOptimisationStage actionPlanOptimisationStage = (ActionPlanOptimisationStage) stage;
+				actionPlanOptimisationStage.setTotalEvaluations(totalEvalations);
+				actionPlanOptimisationStage.setInRunEvaluations(inRunEvaluations);
+				actionPlanOptimisationStage.setSearchDepth(searchDepth);
 			}
 		}
 	}

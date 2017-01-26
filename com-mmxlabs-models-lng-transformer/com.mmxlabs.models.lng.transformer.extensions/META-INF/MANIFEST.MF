@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[4.1.2,5.0.0)",
  com.mmxlabs.models.lng.transformer;bundle-version="4.1.2",
  com.google.guava;bundle-version="13.0.1",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
+ com.mmxlabs.models.lng.parameters
 Export-Package: com.mmxlabs.models.lng.transformer.extensions,
  com.mmxlabs.models.lng.transformer.extensions.common,
  com.mmxlabs.models.lng.transformer.extensions.contracts.utils,

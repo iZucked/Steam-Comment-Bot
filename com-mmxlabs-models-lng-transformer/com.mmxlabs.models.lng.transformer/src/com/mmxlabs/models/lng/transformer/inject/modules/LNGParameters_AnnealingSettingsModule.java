@@ -81,5 +81,11 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 	private int getRestartIterationsThreshold() {
 		return settings.getRestartIterationsThreshold();
 	}
+	
+	@Provides
+	@Named(LocalSearchOptimiserModule.NEW_SIMILARITY_OPTIMISER)
+	private boolean isUsingNewSimilarityModule() {
+		return false;
+	}
 
 }
