@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
 		<groupId>com.mmxlabs.scenario.service</groupId>
-		<version>4.1.2-SNAPSHOT</version>
+		<version>4.1.2.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.scenario.service.dirscan</artifactId>
-	<version>4.1.2-SNAPSHOT</version>
+	<version>4.1.2.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
