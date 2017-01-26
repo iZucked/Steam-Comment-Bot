@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo</groupId>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
-		<version>4.1.2-SNAPSHOT</version>
+		<version>4.1.2.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.its</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.1.2-SNAPSHOT</version>
+	<version>4.1.2.RELEASE</version>
 
 	<build>
 		<plugins>
