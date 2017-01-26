@@ -17,7 +17,7 @@ import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
-public class MigrateToV65a extends AbstractMigrationUnit {
+public class MigrateToV65 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -40,7 +40,7 @@ public class MigrateToV65a extends AbstractMigrationUnit {
 		if (referenceModel == null) {
 			return;
 		}
-		final EObjectWrapper spotMarketsModel = model.getRef("spotMarketsModel");
+		final EObjectWrapper spotMarketsModel = referenceModel.getRef("spotMarketsModel");
 		if (spotMarketsModel == null) {
 			return;
 		}
