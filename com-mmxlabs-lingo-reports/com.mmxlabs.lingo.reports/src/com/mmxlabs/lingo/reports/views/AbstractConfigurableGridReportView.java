@@ -28,6 +28,8 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -63,6 +65,8 @@ import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
@@ -142,6 +146,35 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	@Override
 	public final void createPartControl(final Composite parent) {
 		initPartControl(parent);
+
+		// TODO: Maybe add a view toggle as this makes it hard to find the subsequent discharge of an LDD when sorting as it will be done on the first row.
+		// Maybe render l-ID in (?) and sort on other row only if there are empty values?
+		// Add toplevel sorted to keep linked row groups together (i.e. complex cargoes)
+		{
+			final ViewerComparator vc = viewer.getComparator();
+			// Wrap around with group sorter
+			viewer.setComparator(new ViewerComparator() {
+				@Override
+				public int compare(final Viewer viewer, final Object e1, final Object e2) {
+					RowGroup g1 = null;
+					RowGroup g2 = null;
+					if (e1 instanceof Row) {
+						g1 = ((Row) e1).getRowGroup();
+					}
+					if (e2 instanceof Row) {
+						g2 = ((Row) e2).getRowGroup();
+					}
+					if (g1 == g2) {
+						return vc.compare(viewer, e1, e2);
+					} else {
+						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
+						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
+						return vc.compare(viewer, rd1, rd2);
+					}
+				}
+			});
+
+		}
 
 		propertyChangeListener = new IPropertyChangeListener() {
 			@Override

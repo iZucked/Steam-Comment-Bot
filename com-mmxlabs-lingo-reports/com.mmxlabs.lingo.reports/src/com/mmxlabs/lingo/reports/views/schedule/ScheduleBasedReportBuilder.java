@@ -89,24 +89,36 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	}
 
-	public boolean showRow(Row row) {
+	public boolean showRow(final Row row) {
 		boolean show = false;
-		OpenSlotAllocation openLoadSlotAllocation = row.getOpenLoadSlotAllocation();
+		final OpenSlotAllocation openLoadSlotAllocation = row.getOpenLoadSlotAllocation();
 		if (openLoadSlotAllocation != null) {
 			show |= showOpenSlot(openLoadSlotAllocation);
 		}
-		OpenSlotAllocation openDischargeSlotAllocation = row.getOpenDischargeSlotAllocation();
+		final OpenSlotAllocation openDischargeSlotAllocation = row.getOpenDischargeSlotAllocation();
 		if (openDischargeSlotAllocation != null) {
 			show |= showOpenSlot(openDischargeSlotAllocation);
 		}
 		if (show) {
 			return true;
 		}
-		SlotAllocation loadAllocation = row.getLoadAllocation();
+		final SlotAllocation loadAllocation = row.getLoadAllocation();
 		if (loadAllocation != null) {
 			return showEvent(loadAllocation.getSlotVisit());
+		} else {
+			// For LDD cargoes, there is no load allocation for the subsequent discharges, so try to locate the first slot allocation and retry
+			final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
+			if (dischargeAllocation != null) {
+				final CargoAllocation cargoAllocation = row.getCargoAllocation();
+				if (cargoAllocation != null) {
+					if (cargoAllocation.getSlotAllocations().size() > 0) {
+						return showEvent(cargoAllocation.getSlotAllocations().get(0).getSlotVisit());
+					}
+				}
+			}
 		}
-		EObject target = row.getTarget();
+
+		final EObject target = row.getTarget();
 		if (target instanceof Event) {
 			return showEvent((Event) target);
 		}
@@ -194,7 +206,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		};
 	}
 
-	public void refreshPNLColumns(List<LNGScenarioModel> rootObjects) {
+	public void refreshPNLColumns(final List<LNGScenarioModel> rootObjects) {
 
 		// Clear existing entity columns
 		for (final String s : entityColumnNames) {
@@ -203,7 +215,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 		entityColumnNames.clear();
 
-		List<ColumnHandler> handlers = new LinkedList<>();
+		final List<ColumnHandler> handlers = new LinkedList<>();
 		for (final LNGScenarioModel rootObject : rootObjects) {
 
 			if (rootObject != null) {
@@ -273,31 +285,31 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		return blockManager.createColumn(blockManager.getBlockByID(blockId), "Wiring", new ICellRenderer() {
 
 			@Override
-			public Comparable getComparable(Object object) {
+			public Comparable getComparable(final Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public String render(Object object) {
+			public String render(final Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public Object getFilterValue(Object object) {
+			public Object getFilterValue(final Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+			public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public boolean isValueUnset(Object object) {
+			public boolean isValueUnset(final Object object) {
 				return false;
 			}
 
@@ -387,7 +399,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		return adaptableReport;
 	}
 
-	public void setAdaptableReport(IAdaptable adaptableReport) {
+	public void setAdaptableReport(final IAdaptable adaptableReport) {
 		this.adaptableReport = adaptableReport;
 	}
 
