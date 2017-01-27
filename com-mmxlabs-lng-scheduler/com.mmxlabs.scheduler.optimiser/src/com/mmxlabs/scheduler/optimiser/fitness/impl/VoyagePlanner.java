@@ -313,7 +313,7 @@ public class VoyagePlanner {
 
 		// Get starting heel for vessel
 		long heelVolumeInM3 = 0;
-		IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+		final IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
 
 		heelVolumeInM3 = startRequirement.getHeelOptions().getHeelLimit();
 
@@ -1040,45 +1040,32 @@ public class VoyagePlanner {
 
 		@NonNull
 		VesselState state = VesselState.Ballast;
-		int possiblePartialDischargeIndex = -1;
 
-		final int idx = 0;
-		for (final IPortSlot portSlot : portTimesRecord.getSlots()) {
-			// result[idx] = state;
-			// Determine vessel state changes from this location
-			switch (portSlot.getPortType()) {
-			case Load:
+		final @NonNull List<@NonNull IPortSlot> slots = portTimesRecord.getSlots();
+		final int size = slots.size();
+
+		for (int idx = 0; idx < size; ++idx) {
+			final IPortSlot portSlot = slots.get(idx);
+			final PortType portType = portSlot.getPortType();
+			if (portType == PortType.Load) {
 				state = VesselState.Laden;
-				possiblePartialDischargeIndex = -1; // forget about any previous discharge, it was correctly set to a full discharge
-				break;
-			case Discharge:
-				// we'll assume this is a full discharge
+			} else if (portType == PortType.Discharge) {
+				final VesselState lstate = state;
 				state = VesselState.Ballast;
-				// but the last discharge which might have been partial *was* a partial discharge
-				if (possiblePartialDischargeIndex > -1) {
-					return VesselState.Laden;
+				// For complex cargoes, we are laden until the last leg. Thus LDD is laden, laden, then ballast
+				if (lstate == VesselState.Laden && idx + 1 < size) {
+					final IPortSlot next_portSlot = slots.get(1 + idx);
+					final PortType next_portType = next_portSlot.getPortType();
+					if (next_portType == PortType.Discharge) {
+						state = VesselState.Laden;
+					}
 				}
-				// and this one might be too
-				possiblePartialDischargeIndex = idx;
-				break;
-			case CharterOut:
-			case DryDock:
-			case Maintenance:
-			case Round_Trip_Cargo_End:
+			} else {
 				state = VesselState.Ballast;
-				possiblePartialDischargeIndex = -1; // forget about any previous discharge, it was correctly set to a full discharge
-				break;
-			default:
-				break;
 			}
-
-			if (possiblePartialDischargeIndex == -1 && portSlot == fromPortSlot) {
+			if (portSlot == fromPortSlot) {
 				return state;
 			}
-		}
-
-		if (possiblePartialDischargeIndex > -1) {
-			return state;
 		}
 
 		throw new IllegalArgumentException("Unknown from port slot");
@@ -1128,7 +1115,7 @@ public class VoyagePlanner {
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					} else {
 						if (portSlot.getPortType() == PortType.End) {
-//							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
+							// final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
 							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
 							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
 						}
