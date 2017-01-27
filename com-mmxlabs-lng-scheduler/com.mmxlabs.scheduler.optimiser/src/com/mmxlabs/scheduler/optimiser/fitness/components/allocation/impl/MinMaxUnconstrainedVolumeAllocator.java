@@ -110,6 +110,12 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	@Override
 	protected @NonNull AllocationAnnotation calculateShippedMode(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
+		
+		if (slots.size() > 2) {
+			// Fixed discharge volumes, so no decision to make here.
+			return calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
+		}
+		
 		final IEntityValueCalculator entityValueCalculator = entityValueCalculatorProvider.get();
 
 		final AllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
