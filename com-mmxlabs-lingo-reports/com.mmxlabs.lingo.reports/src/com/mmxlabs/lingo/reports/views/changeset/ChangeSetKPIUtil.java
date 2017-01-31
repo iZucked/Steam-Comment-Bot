@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 
 /**
  * Util methods to obtain the required data for the columns in the {@link ChangeSetView}. This class should make it easier to unit test the displayed output is correct without needing to work with the
@@ -136,7 +137,7 @@ public class ChangeSetKPIUtil {
 			throw new IllegalArgumentException();
 		}
 		if (eventGrouping != null) {
-			return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true);
+			return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true, ShippingCostType.ALL);
 		}
 		return 0L;
 	}
