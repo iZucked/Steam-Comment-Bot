@@ -245,7 +245,7 @@ public class SimilarityFitnessCoreTest {
 			@Override
 			public <T> T getData(final String key, final Class<T> cls) {
 				// TODO Auto-generated method stub
-				return null;
+				return (T) null;
 			}
 		};
 		return evaluationState;
