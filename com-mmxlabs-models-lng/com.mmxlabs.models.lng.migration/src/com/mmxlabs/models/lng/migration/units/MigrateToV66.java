@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
-public class MigrateToV65 extends AbstractMigrationUnit {
+public class MigrateToV66 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -20,12 +20,12 @@ public class MigrateToV65 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 64;
+		return 65;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 65;
+		return 66;
 	}
 
 	@Override
