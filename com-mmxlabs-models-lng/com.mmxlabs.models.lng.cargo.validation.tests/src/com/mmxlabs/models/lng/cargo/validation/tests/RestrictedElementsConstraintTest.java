@@ -7,6 +7,9 @@ package com.mmxlabs.models.lng.cargo.validation.tests;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+import java.util.stream.Collector;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
@@ -16,6 +19,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -385,6 +389,8 @@ public class RestrictedElementsConstraintTest {
 
 		final Port loadPort = mock(Port.class);
 		final Port dischargePort = mock(Port.class);
+		
+		Mockito.when(dischargePort.collect(Matchers.any())).thenReturn(ECollections.<Port>newBasicEList(dischargePort));
 
 		final Contract loadContract = mock(Contract.class);
 		final Contract dischargeContract = mock(Contract.class);
