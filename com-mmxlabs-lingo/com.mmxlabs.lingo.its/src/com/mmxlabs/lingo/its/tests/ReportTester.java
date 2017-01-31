@@ -45,7 +45,7 @@ public class ReportTester {
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
 	// Never commit as true
-	private static final boolean storeReports = false;
+	private static final boolean storeReports = true;
 
 	public static void testReportsWithElement(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, String elementID,
 			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {
