@@ -55,7 +55,8 @@ public class LNGOptimisationModule extends AbstractModule {
 		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
 
-		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
 	}
 
 	@Provides
