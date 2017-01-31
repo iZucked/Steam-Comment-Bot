@@ -83,6 +83,7 @@ import com.mmxlabs.ganttviewer.actions.PackAction;
 import com.mmxlabs.ganttviewer.actions.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.actions.ZoomInAction;
 import com.mmxlabs.ganttviewer.actions.ZoomOutAction;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
@@ -178,7 +179,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	private Table table;
 
 	// DEMO
-	private final boolean showConnections = System.getProperty("schedulechart.showConnections") != null;
+	private final boolean showConnections = System.getProperty("schedulechart.showConnections") != null || LicenseFeatures.isPermitted("features:schedulechart-showConnections");
 
 	/**
 	 * The constructor.
@@ -1293,7 +1294,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private final IScenarioChangeSetListener scenarioChangeSetListener = new IScenarioChangeSetListener() {
 		@Override
-		public void changeSetChanged(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final Collection<ChangeSetRow> changeSetRows, final boolean diffToBase) {
+		public void changeSetChanged(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final Collection<ChangeSetRow> changeSetRows,
+				final boolean diffToBase) {
 			ViewerHelper.refresh(viewer, true);
 		}
 	};

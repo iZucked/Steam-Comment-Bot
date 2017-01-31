@@ -126,7 +126,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTable(Table object) {
-		return null;
+		return (T) null;
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRow(Row object) {
-		return null;
+		return (T) null;
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCycleGroup(CycleGroup object) {
-		return null;
+		return (T) null;
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRowGroup(RowGroup object) {
-		return null;
+		return (T) null;
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseUserGroup(UserGroup object) {
-		return null;
+		return (T) null;
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDiffOptions(DiffOptions object) {
-		return null;
+		return (T) null;
 	}
 
 	/**
@@ -217,7 +217,7 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 */
 	@Override
 	public T defaultCase(EObject object) {
-		return null;
+		return (T) null;
 	}
 
 } //ScheduleReportSwitch

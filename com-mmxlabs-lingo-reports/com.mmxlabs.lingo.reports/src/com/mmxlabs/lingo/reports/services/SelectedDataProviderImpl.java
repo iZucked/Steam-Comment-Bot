@@ -15,23 +15,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class SelectedDataProviderImpl implements ISelectedDataProvider {
 
 	private final List<ScenarioResult> scenarioResults = new LinkedList<>();
-	// private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();
-	//
-	// private final Map<ScenarioResult, LNGScenarioModel> instanceToModelMap = new HashMap<>();
 	private final Map<EObject, ScenarioResult> scenarioInstanceMap = new HashMap<>();
-	// private final Map<EObject, LNGScenarioModel> scenarioModelMap = new HashMap<>();
 	private final Map<EObject, Schedule> scheduleMap = new HashMap<>();
 	private ScenarioResult pinnedScenarioInstance;
 
 	public void addScenario(@NonNull final ScenarioResult scenarioResult, @Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
-		
+
 		scenarioResults.add(scenarioResult);
 
 		for (final EObject e : children) {
@@ -39,11 +34,6 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 			scheduleMap.put(e, schedule);
 		}
 	}
-
-	// @Override
-	// public Collection<LNGScenarioModel> getScenarioModels() {
-	// return scenarioModels;
-	// }
 
 	@Override
 	public List<ScenarioResult> getScenarioResults() {
@@ -55,29 +45,13 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 		return scenarioInstanceMap.get(eObject);
 	}
 
-	// @Override
-	// public LNGScenarioModel getScenarioModel(final EObject eObject) {
-	// return scenarioModelMap.get(eObject);
-	// }
-
-	// @Override
-	// public @NonNull LNGScenarioModel getScenarioModel(@NonNull ScenarioInstance scenarioInstance) {
-	// return instanceToModelMap.get(scenarioInstance);
-	// }
-
 	@Override
 	public Schedule getSchedule(final EObject eObject) {
 		return scheduleMap.get(eObject);
 	}
 
-	// @Override
-	// public ScenarioResult getPinnedScenarioResult() {
-	// return pinnedScenarioInstance;
-	// }
-
 	@Override
 	public boolean isPinnedObject(EObject eObject) {
-
 		return Objects.equals(getScenarioResult(eObject), pinnedScenarioInstance);
 	}
 

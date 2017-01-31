@@ -14,24 +14,10 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public interface ISelectedDataProvider {
-	// @NonNull
-	// Collection<@NonNull LNGScenarioModel> getScenarioModels();
-	//
-	// @NonNull
-	// Collection<@NonNull ScenarioInstance> getScenarioInstances();
-	//
-	// @Nullable
-	// ScenarioInstance getPinnedScenarioInstance();
-	//
-	// // Lookup methods
+
+	// Lookup methods
 	@Nullable
 	ScenarioResult getScenarioResult(EObject eObject);
-	//
-	// @Nullable
-	// LNGScenarioModel getScenarioModel(EObject eObject);
-	//
-	// @Nullable
-	// LNGScenarioModel getScenarioModel(@NonNull ScenarioInstance scenarioInstance);
 
 	@Nullable
 	Schedule getSchedule(EObject eObject);
