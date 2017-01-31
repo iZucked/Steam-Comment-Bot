@@ -39,7 +39,7 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
  * 
  */
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
-	
+
 	@Inject
 	protected IOptimisationData data;
 
@@ -77,7 +77,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		setCurrentContext(optimiserContext);
 
 		initLogger();
-//		data = optimiserContext.getOptimisationData();
+		// data = optimiserContext.getOptimisationData();
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
@@ -147,18 +147,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
-			++numberOfMovesTried;
-			if (numberOfMovesTried % 10000 == 0) {
-				System.out.println("iteration:" + numberOfMovesTried);
-			}
-			getFitnessEvaluator().step();
-			if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-				loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(),
-						getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
-			}
+			initNextIteration();
 
 			// Generate a new move
-			final IMove move = getMoveGenerator().generateMove(potentialRawSequences, getLookupManager(), getRandom());
+			final IMove move = generateNewMove();
 
 			// Make sure the generator was able to generate a move
 			if (move == null || move instanceof INullMove) {
@@ -178,36 +170,14 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			}
 
 			// Update potential sequences
-			move.apply(pinnedPotentialRawSequences);
-			final String moveName = move.getClass().getName();
-			if (loggingDataStore != null) {
-				loggingDataStore.logAppliedMove(moveName);
-				if (DO_SEQUENCE_LOGGING) {
-					loggingDataStore.logSequence(pinnedPotentialRawSequences);
-				}
-			}
+			applyNewMove(pinnedPotentialRawSequences, move);
 
 			// Apply sequence manipulators
 			final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(pinnedPotentialRawSequences);
 
 			// Apply hard constraint checkers
-			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
-				// solution
-				final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
-
-				if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
-					if (loggingDataStore != null) {
-						loggingDataStore.logFailedConstraints(checker, move);
-						if (DO_SEQUENCE_LOGGING) {
-							loggingDataStore.logSequenceFailedConstraint(checker, pinnedPotentialRawSequences);
-						}
-					}
-					// Reject Move
-					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
-					// Break out
-					continue MAIN_LOOP;
-				}
+			if (!applyHardConstraints(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move, potentialFullSequences)) {
+				continue MAIN_LOOP;
 			}
 
 			if (loggingDataStore != null) {
@@ -216,94 +186,177 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				}
 			}
 
-			final IEvaluationState evaluationState = new EvaluationState();
-			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
-					// Problem evaluating, reject move
-					++numberOfFailedEvaluations;
-
-					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
-					continue MAIN_LOOP;
-				}
+			final IEvaluationState evaluationState = getEvaluationState(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move, potentialFullSequences);
+			if (evaluationState == null) {
+				continue MAIN_LOOP;
 			}
+
 			// Apply hard constraint checkers
-			for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
-				if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
-					// Problem evaluating, reject move
-					++numberOfFailedEvaluations;
-
-					 if (loggingDataStore != null) {
-					 loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
-					 if (DO_SEQUENCE_LOGGING) {
-					 loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
-					 }
-					 }
-					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
-					// Break out
-					continue MAIN_LOOP;
-				}
+			if (!applyHardEvaluatedConstraintCheckers(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move, potentialFullSequences, evaluationState)) {
+				continue MAIN_LOOP;
 			}
 
-			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
-					// Problem evaluating, reject move
-					++numberOfFailedEvaluations;
-
-					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
-					continue MAIN_LOOP;
-				}
+			if (!evaluateOnEvaluationProcesses(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move, potentialFullSequences, evaluationState)) {
+				continue MAIN_LOOP;
 			}
 
 			// Test move and update state if accepted
-			if (getFitnessEvaluator().evaluateSequences(potentialRawSequences, potentialFullSequences, evaluationState, move.getAffectedResources())) {
-
-				// Update IReducingConstraintCheckers with new state
-				for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
-					checker.sequencesAccepted(potentialFullSequences);
-				}
-				if (loggingDataStore != null) {
-					if (DO_SEQUENCE_LOGGING) {
-						loggingDataStore.logSequenceAccepted(pinnedPotentialRawSequences, getFitnessEvaluator().getCurrentFitness());
-					}
-					loggingDataStore.logSuccessfulMove(move, getNumberOfMovesTried(), getFitnessEvaluator().getLastFitness());
-				}
-
-				// Success update state for new sequences
-				updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
-
-				// Update move sequences.
-				setSequences(pinnedPotentialRawSequences);
-
-				++numberOfMovesAccepted;
-				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
-					best.setFirst(getNumberOfMovesTried());
-					best.setSecond(getFitnessEvaluator().getBestFitness());
-					if (false) {
-						System.out.println(best.getFirst() + ":" + best.getSecond());
-					}
-				}
-
-				// Current state is now accepted, set this flag to false to permit the constraint checker delta functionality
-				failedInitialConstraintCheckers = false;
-
-			} else {
-				// Failed, reset state for old sequences
-				++numberOfRejectedMoves;
-				if (loggingDataStore != null) {
-					if (DO_SEQUENCE_LOGGING) {
-						loggingDataStore.logSequenceRejected(pinnedPotentialRawSequences, getFitnessEvaluator().getCurrentFitness());
-					}
-					loggingDataStore.logRejectedMove(move, getNumberOfMovesTried(), getFitnessEvaluator().getLastFitness());
-				}
-
-				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
-			}
+			acceptOrRejectMove(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move, potentialFullSequences, evaluationState);
 		}
 
 		setNumberOfIterationsCompleted(numberOfMovesTried);
 
 		updateProgressLogs();
 		return iterationsThisStep;
+	}
+
+	protected void acceptOrRejectMove(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
+			final IModifiableSequences potentialFullSequences, final IEvaluationState evaluationState) {
+		if (getFitnessEvaluator().evaluateSequences(potentialRawSequences, potentialFullSequences, evaluationState, move.getAffectedResources())) {
+
+			// Update IReducingConstraintCheckers with new state
+			for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
+				checker.sequencesAccepted(potentialFullSequences);
+			}
+			if (loggingDataStore != null) {
+				if (DO_SEQUENCE_LOGGING) {
+					loggingDataStore.logSequenceAccepted(pinnedPotentialRawSequences, getFitnessEvaluator().getCurrentFitness());
+				}
+				loggingDataStore.logSuccessfulMove(move, getNumberOfMovesTried(), getFitnessEvaluator().getLastFitness());
+			}
+
+			// Success update state for new sequences
+			updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
+
+			// Update move sequences.
+			setSequences(pinnedPotentialRawSequences);
+
+			++numberOfMovesAccepted;
+			if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
+				best.setFirst(getNumberOfMovesTried());
+				best.setSecond(getFitnessEvaluator().getBestFitness());
+				if (false) {
+					System.out.println(best.getFirst() + ":" + best.getSecond());
+				}
+			}
+
+			// Current state is now accepted, set this flag to false to permit the constraint checker delta functionality
+			failedInitialConstraintCheckers = false;
+
+		} else {
+			// Failed, reset state for old sequences
+			++numberOfRejectedMoves;
+			if (loggingDataStore != null) {
+				if (DO_SEQUENCE_LOGGING) {
+					loggingDataStore.logSequenceRejected(pinnedPotentialRawSequences, getFitnessEvaluator().getCurrentFitness());
+				}
+				loggingDataStore.logRejectedMove(move, getNumberOfMovesTried(), getFitnessEvaluator().getLastFitness());
+			}
+
+			updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+		}
+	}
+
+	protected boolean evaluateOnEvaluationProcesses(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
+			final IModifiableSequences potentialFullSequences, final IEvaluationState evaluationState) {
+		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+			if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
+				// Problem evaluating, reject move
+				++numberOfFailedEvaluations;
+
+				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+				return false;
+			}
+		}
+		return true;
+	}
+
+	protected boolean applyHardEvaluatedConstraintCheckers(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
+			final IModifiableSequences potentialFullSequences, final IEvaluationState evaluationState) {
+		for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+			if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
+				// Problem evaluating, reject move
+				++numberOfFailedEvaluations;
+
+				if (loggingDataStore != null) {
+					loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
+					if (DO_SEQUENCE_LOGGING) {
+						loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
+					}
+				}
+				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+				// Break out
+				return false;
+			}
+		}
+		return true;
+	}
+
+	protected IEvaluationState getEvaluationState(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
+			final IModifiableSequences potentialFullSequences) {
+		final IEvaluationState evaluationState = new EvaluationState();
+		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
+				// Problem evaluating, reject move
+				++numberOfFailedEvaluations;
+
+				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+				return null;
+			}
+		}
+		return evaluationState;
+	}
+
+	protected boolean applyHardConstraints(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
+			final IModifiableSequences potentialFullSequences) {
+		for (final IConstraintChecker checker : getConstraintCheckers()) {
+			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
+			// solution
+			final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
+
+			if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
+				if (loggingDataStore != null) {
+					loggingDataStore.logFailedConstraints(checker, move);
+					if (DO_SEQUENCE_LOGGING) {
+						loggingDataStore.logSequenceFailedConstraint(checker, pinnedPotentialRawSequences);
+					}
+				}
+				// Reject Move
+				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+				// Break out
+				return false;
+				// continue MAIN_LOOP;
+			}
+		}
+		return true;
+	}
+
+	protected void applyNewMove(final ModifiableSequences pinnedPotentialRawSequences, final IMove move) {
+		move.apply(pinnedPotentialRawSequences);
+		final String moveName = move.getClass().getName();
+		if (loggingDataStore != null) {
+			loggingDataStore.logAppliedMove(moveName);
+			if (DO_SEQUENCE_LOGGING) {
+				loggingDataStore.logSequence(pinnedPotentialRawSequences);
+			}
+		}
+	}
+
+	protected IMove generateNewMove() {
+		final IMove move = getMoveGenerator().generateMove(potentialRawSequences, getLookupManager(), getRandom());
+		return move;
+	}
+
+	protected void initNextIteration() {
+		getFitnessEvaluator().step();
+		++numberOfMovesTried;
+		if (numberOfMovesTried % 10000 == 0) {
+			System.out.println("iteration:" + numberOfMovesTried);
+		}
+		if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
+			loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(),
+					getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
+		}
 	}
 
 	protected void evaluateInputSequences(@NonNull final ISequences currentRawSequences) {

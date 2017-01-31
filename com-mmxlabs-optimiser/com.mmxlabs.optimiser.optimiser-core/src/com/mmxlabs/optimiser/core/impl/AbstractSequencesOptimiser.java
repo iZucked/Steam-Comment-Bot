@@ -103,7 +103,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	@Override
-	public final IAnnotatedSolution getBestSolution() {
+	public IAnnotatedSolution getBestSolution() {
 		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution();
 		if (annotatedSolution == null) {
 			return null;

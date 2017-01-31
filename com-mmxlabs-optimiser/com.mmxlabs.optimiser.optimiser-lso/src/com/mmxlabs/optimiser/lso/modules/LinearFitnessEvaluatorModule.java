@@ -18,11 +18,13 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
+import com.mmxlabs.optimiser.core.fitness.IMultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
+import com.mmxlabs.optimiser.lso.impl.MultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
@@ -34,6 +36,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 	public static final String LINEAR_FITNESS_WEIGHTS_MAP = "LinearFitnessWeights";
+	public static final String MULTI_OBJECTIVE_FITNESS_EVALUATOR = "MULTI_OBJECTIVE_FITNESS_EVALUATOR";
 
 	@Override
 	protected void configure() {
@@ -74,5 +77,16 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 		return fitnessEvaluator;
 	}
+	
+	@Provides
+	private IMultiObjectiveFitnessEvaluator createMultiObjectiveFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
+			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
+
+		final MultiObjectiveFitnessEvaluator fitnessEvaluator = new MultiObjectiveFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
+		injector.injectMembers(fitnessEvaluator);
+
+		return fitnessEvaluator;
+	}
+
 
 }

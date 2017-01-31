@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.optimiser.lso.modules;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
 
@@ -22,12 +25,15 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.core.fitness.IMultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
 import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
@@ -46,6 +52,9 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	public static final String SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS = "SOLUTION_IMPROVER-NumberOfIterations";
 	public static final String USE_RESTARTING_OPTIMISER = "useRestartingOptimiser";
 	public static final String RANDOM_SEED = "RandomSeed";
+	public static final String MULTIOBJECTIVE_OBJECTIVE_NAMES = "MULTIOBJECTIVE_OBJECTIVE_NAMES";
+	public static final String SIMILARITY_SETTING = "LSO_MODULE_SIMILARITY_SETTING";
+	public static final String NEW_SIMILARITY_OPTIMISER = "LSO_MODULE_SIMILARITY_OPTIMISER";
 
 	@Override
 	protected void configure() {
@@ -53,11 +62,20 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	LocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @Named(USE_RESTARTING_OPTIMISER) final boolean isRestarting) {
-		if (isRestarting) {
-			return injector.getInstance(RestartingLocalSearchOptimiser.class);
+	LocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @Named(USE_RESTARTING_OPTIMISER) final boolean isRestarting, @Named(SIMILARITY_SETTING) final SimilarityFitnessMode similarityFitnessMode, @Named(NEW_SIMILARITY_OPTIMISER) boolean isUsingNewSimilarityOptimiser) {
+		if (isUsingNewSimilarityOptimiser) {
+			if (similarityFitnessMode == SimilarityFitnessMode.OFF) {
+				return injector.getInstance(DefaultLocalSearchOptimiser.class);
+			} else {
+				return injector.getInstance(SimpleMultiObjectiveOptimiser.class);
+			}
 		} else {
-			return injector.getInstance(DefaultLocalSearchOptimiser.class);
+			if (isRestarting) {
+				return injector.getInstance(RestartingLocalSearchOptimiser.class);
+			} else {
+				return injector.getInstance(DefaultLocalSearchOptimiser.class);
+			}
+			
 		}
 	}
 
@@ -86,6 +104,21 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers,
 				evaluationProcesses, lso);
 
+		return lso;
+	}
+
+	@Provides
+	@Singleton
+	SimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
+			@Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @Named(MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
+			@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses, @Named(LocalSearchOptimiserModule.RANDOM_SEED) long randomSeed) {
+		List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
+		assert(objectives.size() == objectiveNames.size());
+		final SimpleMultiObjectiveOptimiser lso = new SimpleMultiObjectiveOptimiser(objectives, new Random(randomSeed));
+		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers,
+				evaluationProcesses, lso);
+		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
 		return lso;
 	}
 
