@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
+import com.mmxlabs.lingo.reports.views.changeset.model.*;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -70,7 +71,12 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 			case ChangesetPackage.CHANGE_SET: return createChangeSet();
 			case ChangesetPackage.METRICS: return createMetrics();
 			case ChangesetPackage.DELTA_METRICS: return createDeltaMetrics();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA_GROUP: return createChangeSetRowDataGroup();
 			case ChangesetPackage.CHANGE_SET_ROW: return createChangeSetRow();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA: return createChangeSetRowData();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP: return createChangeSetTableGroup();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW: return createChangeSetTableRow();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROOT: return createChangeSetTableRoot();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -151,9 +157,59 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ChangeSetRowDataGroup createChangeSetRowDataGroup() {
+		ChangeSetRowDataGroupImpl changeSetRowDataGroup = new ChangeSetRowDataGroupImpl();
+		return changeSetRowDataGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ChangeSetRow createChangeSetRow() {
 		ChangeSetRowImpl changeSetRow = new ChangeSetRowImpl();
 		return changeSetRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetRowData createChangeSetRowData() {
+		ChangeSetRowDataImpl changeSetRowData = new ChangeSetRowDataImpl();
+		return changeSetRowData;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetTableGroup createChangeSetTableGroup() {
+		ChangeSetTableGroupImpl changeSetTableGroup = new ChangeSetTableGroupImpl();
+		return changeSetTableGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetTableRow createChangeSetTableRow() {
+		ChangeSetTableRowImpl changeSetTableRow = new ChangeSetTableRowImpl();
+		return changeSetTableRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetTableRoot createChangeSetTableRoot() {
+		ChangeSetTableRootImpl changeSetTableRoot = new ChangeSetTableRootImpl();
+		return changeSetTableRoot;
 	}
 
 	/**

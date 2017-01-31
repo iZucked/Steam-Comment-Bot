@@ -21,6 +21,8 @@ import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -44,6 +46,12 @@ public class InsertionPlanFilter extends ViewerFilter {
 		}
 		if (parentElement instanceof ChangeSet) {
 			return setsToInclude.contains(parentElement);
+		}
+		if (element instanceof ChangeSetTableGroup) {
+			return setsToInclude.contains(((ChangeSetTableGroup) element).getChangeSet());
+		}
+		if (parentElement instanceof ChangeSetTableGroup) {
+			return setsToInclude.contains(((ChangeSetTableGroup) parentElement).getChangeSet());
 		}
 		return true;
 	}
@@ -85,21 +93,28 @@ public class InsertionPlanFilter extends ViewerFilter {
 			final Collection<ChangeSetRow> changeSetRows = changeSet.getChangeSetRowsToBase();
 			int structuralChanges = 0;
 			ChangeSetRow targetRow = null;
+			ChangeSetRowData targetRowData = null;
 			for (final ChangeSetRow row : changeSetRows) {
-				if (row.isWiringChange() || row.isVesselChange()) {
-					++structuralChanges;
-				}
-				if (row.getLoadSlot() == target || row.getDischargeSlot() == target) {
-					assert targetRow == null;
-					targetRow = row;
+				if (row.getAfterData() != null) {
+					if (!row.getAfterData().getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
+						++structuralChanges;
+					}
+					for (ChangeSetRowData d : row.getAfterData().getMembers()) {
+						if (d.getLoadSlot() == target || d.getDischargeSlot() == target) {
+							assert targetRow == null;
+							targetRow = row;
+							targetRowData = d;
+							break;
+						}
+					}
 				}
 			}
 			final ChangeSetMetadata key = new ChangeSetMetadata();
 			key.changeCount = structuralChanges;
 			Object sendTo = null;
 			if (targetRow != null) {
-				if (targetRow.getLoadSlot() == target) {
-					final DischargeSlot dischargeSlot = targetRow.getDischargeSlot();
+				if (targetRowData.getLoadSlot() == target) {
+					final DischargeSlot dischargeSlot = targetRowData.getDischargeSlot();
 					if (dischargeSlot instanceof SpotSlot) {
 						sendTo = ((SpotSlot) dischargeSlot).getMarket().eClass();
 					} else if (dischargeSlot.getContract() != null) {
@@ -108,8 +123,8 @@ public class InsertionPlanFilter extends ViewerFilter {
 						sendTo = dischargeSlot.getName();
 					}
 
-				} else if (targetRow.getDischargeSlot() == target) {
-					final LoadSlot loadSlot = targetRow.getLoadSlot();
+				} else if (targetRowData.getDischargeSlot() == target) {
+					final LoadSlot loadSlot = targetRowData.getLoadSlot();
 					if (loadSlot instanceof SpotSlot) {
 						sendTo = ((SpotSlot) loadSlot).getMarket().eClass();
 					} else if (loadSlot.getContract() != null) {
@@ -208,7 +223,6 @@ public class InsertionPlanFilter extends ViewerFilter {
 			reorderedElements.addAll(e.getValue());
 		}
 		return reorderedElements;
-
 	}
 
 	public void toggleFilter() {

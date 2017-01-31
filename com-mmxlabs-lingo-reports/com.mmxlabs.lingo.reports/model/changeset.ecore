@@ -35,44 +35,86 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latenessDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacityDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetRowDataGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//ChangeSetRowData" containment="true" eOpposite="#//ChangeSetRowData/rowDataGroup"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSetRow">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalVesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newVesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsWiringLink" eType="#//ChangeSetRow"
-        eOpposite="#//ChangeSetRow/rhsWiringLink"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsWiringLink" eType="#//ChangeSetRow"
-        eOpposite="#//ChangeSetRow/lhsWiringLink"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="wiringChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalGroupProfitAndLoss"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="beforeData" eType="#//ChangeSetRowDataGroup"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="afterData" eType="#//ChangeSetRowDataGroup"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetRowData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primaryRecord" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rowDataGroup" eType="#//ChangeSetRowDataGroup"
+        eOpposite="#//ChangeSetRowDataGroup/members"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventGrouping" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselShortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsLink" eType="#//ChangeSetRowData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsLink" eType="#//ChangeSetRowData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsEvent" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsEvent" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsGroupProfitAndLoss"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ProfitAndLossContainer"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newGroupProfitAndLoss"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsGroupProfitAndLoss"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ProfitAndLossContainer"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalEventGrouping"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newEventGrouping" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalVesselShortName"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newVesselShortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalOpenLoadAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newOpenLoadAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalOpenDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newOpenDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="ScenarioResult" instanceClassName="com.mmxlabs.scenario.service.ui.ScenarioResult"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetTableGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//ChangeSetTableRow"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deltaMetrics" eType="#//DeltaMetrics"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentMetrics" eType="#//Metrics"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeSet" eType="#//ChangeSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetTableRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsBefore" eType="#//ChangeSetRowData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsAfter" eType="#//ChangeSetRowData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsBefore" eType="#//ChangeSetRowData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsAfter" eType="#//ChangeSetRowData"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beforeVesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beforeVesselShortName"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="afterVesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="afterVesselShortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wiringChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previousRHS" eType="#//ChangeSetTableRow"
+        eOpposite="#//ChangeSetTableRow/nextLHS"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextLHS" eType="#//ChangeSetTableRow"
+        eOpposite="#//ChangeSetTableRow/previousRHS"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsSlot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsSpot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsOptional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsNonShipped" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsSlot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsSpot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsOptional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsNonShipped" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetTableRoot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//ChangeSetTableGroup" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

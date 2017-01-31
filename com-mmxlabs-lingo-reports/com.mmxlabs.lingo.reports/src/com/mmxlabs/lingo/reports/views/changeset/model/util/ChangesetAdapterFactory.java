@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.util;
 
+import com.mmxlabs.lingo.reports.views.changeset.model.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -90,8 +91,28 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 				return createDeltaMetricsAdapter();
 			}
 			@Override
+			public Adapter caseChangeSetRowDataGroup(ChangeSetRowDataGroup object) {
+				return createChangeSetRowDataGroupAdapter();
+			}
+			@Override
 			public Adapter caseChangeSetRow(ChangeSetRow object) {
 				return createChangeSetRowAdapter();
+			}
+			@Override
+			public Adapter caseChangeSetRowData(ChangeSetRowData object) {
+				return createChangeSetRowDataAdapter();
+			}
+			@Override
+			public Adapter caseChangeSetTableGroup(ChangeSetTableGroup object) {
+				return createChangeSetTableGroupAdapter();
+			}
+			@Override
+			public Adapter caseChangeSetTableRow(ChangeSetTableRow object) {
+				return createChangeSetTableRowAdapter();
+			}
+			@Override
+			public Adapter caseChangeSetTableRoot(ChangeSetTableRoot object) {
+				return createChangeSetTableRootAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -170,6 +191,20 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup <em>Change Set Row Data Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup
+	 * @generated
+	 */
+	public Adapter createChangeSetRowDataGroupAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow <em>Change Set Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -180,6 +215,62 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createChangeSetRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData <em>Change Set Row Data</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData
+	 * @generated
+	 */
+	public Adapter createChangeSetRowDataAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup <em>Change Set Table Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup
+	 * @generated
+	 */
+	public Adapter createChangeSetTableGroupAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow <em>Change Set Table Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow
+	 * @generated
+	 */
+	public Adapter createChangeSetTableRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot <em>Change Set Table Root</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot
+	 * @generated
+	 */
+	public Adapter createChangeSetTableRootAdapter() {
 		return null;
 	}
 

@@ -99,9 +99,10 @@ import com.mmxlabs.lingo.reports.services.ScenarioChangeSetService;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -499,7 +500,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 					final boolean isDiffToBase = scenarioChangeSetService.isDiffToBase();
 					// final ChangeSet changeSet = scenarioChangeSetService.getChangeSet();
-					final Collection<ChangeSetRow> csRows = scenarioChangeSetService.getSelectedChangeSetRows();
+					final Collection<ChangeSetTableRow> csRows = scenarioChangeSetService.getSelectedChangeSetRows();
 					{
 						if (csRows != null) {
 							// final List<ChangeSetRow> csRows;
@@ -510,10 +511,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 							// }
 							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
-							for (final ChangeSetRow csRow : csRows) {
+							for (final ChangeSetTableRow csRow : csRows) {
 								{
-									final SlotAllocation oldAllocation = csRow.getOriginalLoadAllocation();
-									final SlotAllocation newAllocation = csRow.getNewLoadAllocation();
+									final SlotAllocation oldAllocation = csRow.getLhsBefore() != null ? csRow.getLhsBefore().getLoadAllocation() : null;
+									final SlotAllocation newAllocation = csRow.getLhsAfter() != null ? csRow.getLhsAfter().getLoadAllocation() : null;
 
 									if (oldAllocation != null && newAllocation != null) {
 
@@ -527,11 +528,13 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 										}
 									}
 								}
+								// TODO: Test this still works!
 								{
-									ChangeSetRow rhsWiringLink = csRow.getRhsWiringLink();
-									if (rhsWiringLink != null) {
-										final SlotAllocation oldAllocation = rhsWiringLink.getOriginalDischargeAllocation();
-										final SlotAllocation newAllocation = csRow.getNewDischargeAllocation();
+//									ChangeSetTableRow rhsWiringLink = csRow.getPreviousRHS();
+//									if (rhsWiringLink != null) 
+									{
+										final SlotAllocation oldAllocation = csRow.getRhsBefore() != null ? csRow.getRhsBefore().getDischargeAllocation() : null;
+										final SlotAllocation newAllocation = csRow.getRhsAfter() != null ? csRow.getRhsAfter().getDischargeAllocation() : null;
 
 										if (oldAllocation != null && newAllocation != null) {
 											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
@@ -545,23 +548,23 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 											}
 										}
 									}
-									ChangeSetRow lhsWiringLink = csRow.getLhsWiringLink();
-									if (lhsWiringLink != null) {
-										final SlotAllocation newAllocation = lhsWiringLink.getNewDischargeAllocation();
-										final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
-
-										if (oldAllocation != null && newAllocation != null) {
-											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
-
-												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
-												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
-
-												if (oldEvent != null && newEvent != null) {
-													ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
-												}
-											}
-										}
-									}
+//									ChangeSetTableRow lhsWiringLink = csRow.getNextLHS();
+//									if (lhsWiringLink != null) {
+//										final SlotAllocation newAllocation = lhsWiringLink.getNewDischargeAllocation();
+//										final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
+//
+//										if (oldAllocation != null && newAllocation != null) {
+//											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
+//
+//												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+//												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+//
+//												if (oldEvent != null && newEvent != null) {
+//													ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+//												}
+//											}
+//										}
+//									}
 								}
 							}
 						}
@@ -1294,7 +1297,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private final IScenarioChangeSetListener scenarioChangeSetListener = new IScenarioChangeSetListener() {
 		@Override
-		public void changeSetChanged(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final Collection<ChangeSetRow> changeSetRows,
+		public void changeSetChanged(@Nullable final ChangeSetTableRoot changeSetRoot, @Nullable final ChangeSetTableGroup changeSet, @Nullable final Collection<ChangeSetTableRow> changeSetRows,
 				final boolean diffToBase) {
 			ViewerHelper.refresh(viewer, true);
 		}

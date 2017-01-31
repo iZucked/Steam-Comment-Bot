@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.util;
 
+import com.mmxlabs.lingo.reports.views.changeset.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -97,9 +98,39 @@ public class ChangesetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ChangesetPackage.CHANGE_SET_ROW_DATA_GROUP: {
+				ChangeSetRowDataGroup changeSetRowDataGroup = (ChangeSetRowDataGroup)theEObject;
+				T result = caseChangeSetRowDataGroup(changeSetRowDataGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ChangesetPackage.CHANGE_SET_ROW: {
 				ChangeSetRow changeSetRow = (ChangeSetRow)theEObject;
 				T result = caseChangeSetRow(changeSetRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ChangesetPackage.CHANGE_SET_ROW_DATA: {
+				ChangeSetRowData changeSetRowData = (ChangeSetRowData)theEObject;
+				T result = caseChangeSetRowData(changeSetRowData);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP: {
+				ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup)theEObject;
+				T result = caseChangeSetTableGroup(changeSetTableGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW: {
+				ChangeSetTableRow changeSetTableRow = (ChangeSetTableRow)theEObject;
+				T result = caseChangeSetTableRow(changeSetTableRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ChangesetPackage.CHANGE_SET_TABLE_ROOT: {
+				ChangeSetTableRoot changeSetTableRoot = (ChangeSetTableRoot)theEObject;
+				T result = caseChangeSetTableRoot(changeSetTableRoot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -168,6 +199,21 @@ public class ChangesetSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change Set Row Data Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change Set Row Data Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChangeSetRowDataGroup(ChangeSetRowDataGroup object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Change Set Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -179,6 +225,66 @@ public class ChangesetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseChangeSetRow(ChangeSetRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change Set Row Data</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change Set Row Data</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChangeSetRowData(ChangeSetRowData object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change Set Table Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change Set Table Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChangeSetTableGroup(ChangeSetTableGroup object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change Set Table Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change Set Table Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChangeSetTableRow(ChangeSetTableRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Change Set Table Root</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Change Set Table Root</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseChangeSetTableRoot(ChangeSetTableRoot object) {
 		return null;
 	}
 

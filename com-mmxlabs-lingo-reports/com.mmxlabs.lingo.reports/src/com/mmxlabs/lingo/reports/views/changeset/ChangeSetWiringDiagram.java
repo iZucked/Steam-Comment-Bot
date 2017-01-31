@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -31,12 +30,10 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 
 /**
  * A control for drawing a wiring diagram. This just displays an arbitrary bipartite graph / matching.
@@ -82,9 +79,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 	/**
 	 * The {@link ChangeSetRoot} data structure containing all the required data
 	 */
-	private ChangeSetRoot table;
-
-	private boolean diffToBase;
+	private ChangeSetTableRoot table;
 
 	/**
 	 * Create a new wiring diagram
@@ -147,10 +142,10 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		}
 
 		// Copy ref in case of concurrent change during paint
-		final ChangeSetRoot root = table;
+		final ChangeSetTableRoot root = table;
 		// Get a list of terminal positions from subclass
-		Map<ChangeSetRow, Integer> rowIndices = new HashMap<>();
-		Map<Integer, ChangeSetRow> indexToRow = new HashMap<>();
+		Map<ChangeSetTableRow, Integer> rowIndices = new HashMap<>();
+		Map<Integer, ChangeSetTableRow> indexToRow = new HashMap<>();
 
 		final List<Float> terminalPositions = getTerminalPositions(rowIndices, indexToRow);
 		final GC graphics = e.gc;
@@ -169,17 +164,17 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 
 		// draw paths
-		for (ChangeSet changeSet : root.getChangeSets()) {
-			EList<ChangeSetRow> rows = diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
-			for (final ChangeSetRow row : rows) {
+		for (ChangeSetTableGroup changeSet : root.getGroups()) {
+			List<ChangeSetTableRow> rows = changeSet.getRows(); // diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
+			for (final ChangeSetTableRow row : rows) {
 
 				if (!row.isWiringChange()) {
 					continue;
 				}
-				if (row.getRhsWiringLink() == null) {
+				ChangeSetTableRow otherRow = row.getPreviousRHS();
+				if (otherRow == null) {
 					continue;
 				}
-				ChangeSetRow otherRow = row.getRhsWiringLink();
 
 				final Integer unsortedSource = rowIndices.get(row);
 				final Integer unsortedDestination = rowIndices.get(otherRow);
@@ -236,7 +231,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 				continue;
 			}
 
-			final ChangeSetRow row = indexToRow.get(i);
+			final ChangeSetTableRow row = indexToRow.get(i);
 			if (row == null) {
 				continue;
 			}
@@ -244,18 +239,16 @@ public class ChangeSetWiringDiagram implements PaintListener {
 				continue;
 			}
 			// Draw left hand terminal
-			if (row.getLoadSlot() != null) {
-				final LoadSlot loadSlot = row.getLoadSlot();// (LoadSlot) row.getLoadAllocation().getSlot();
-				final Color terminalColour = (row.getNewDischargeAllocation() != null || loadSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
-				drawTerminal(true, loadSlot.isDESPurchase(), terminalColour, loadSlot.isOptional(), loadSlot instanceof SpotSlot, ca, graphics, midpoint);
+			if (row.isLhsSlot()) {
+				final Color terminalColour = row.isLhsValid() ? ValidTerminalColour : InvalidTerminalColour;
+				drawTerminal(true, row.isLhsNonShipped(), terminalColour, row.isLhsOptional(), row.isLhsSpot(), ca, graphics, midpoint);
 			}
 
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
-			if (row.getDischargeSlot() != null) {
-				final DischargeSlot dischargeSlot = row.getDischargeSlot();// (DischargeSlot) row.getDischargeAllocation().getSlot();
-				final Color terminalColour = (row.getNewLoadAllocation() != null || dischargeSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
-				drawTerminal(false, !dischargeSlot.isFOBSale(), terminalColour, dischargeSlot.isOptional(), dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
+			if (row.isRhsSlot()) {
+				final Color terminalColour = row.isRhsValid() ? ValidTerminalColour : InvalidTerminalColour;
+				drawTerminal(false, !row.isRhsNonShipped(), terminalColour, row.isRhsOptional(), row.isRhsSpot(), ca, graphics, midpoint);
 			}
 		}
 	}
@@ -304,7 +297,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		grid.redraw();
 	}
 
-	protected List<Float> getTerminalPositions(Map<ChangeSetRow, Integer> rTI, Map<Integer, ChangeSetRow> iTR) {
+	protected List<Float> getTerminalPositions(Map<ChangeSetTableRow, Integer> rTI, Map<Integer, ChangeSetTableRow> iTR) {
 
 		// Determine the mid-point in each row and generate an ordered list of heights.
 
@@ -325,8 +318,8 @@ public class ChangeSetWiringDiagram implements PaintListener {
 					heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 
 					Object data = item.getData();
-					if (data instanceof ChangeSetRow) {
-						ChangeSetRow changeSetRow = (ChangeSetRow) data;
+					if (data instanceof ChangeSetTableRow) {
+						ChangeSetTableRow changeSetRow = (ChangeSetTableRow) data;
 						rTI.put(changeSetRow, idx - 1);
 						iTR.put(idx - 1, changeSetRow);
 					}
@@ -408,12 +401,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 	}
 
-	public void setChangeSetRoot(final ChangeSetRoot root) {
+	public void setChangeSetRoot(final ChangeSetTableRoot root) {
 		this.table = root;
-	}
-
-	public void setDiffToBase(boolean diffToBase) {
-		this.diffToBase = diffToBase;
-
 	}
 }

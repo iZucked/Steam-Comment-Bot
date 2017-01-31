@@ -426,7 +426,6 @@ public class ScenarioComparisonServiceTransformer {
 				tableModelInstance.getRowGroups().add(group);
 				// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
 				for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
-
 					final Row row = ScheduleReportFactory.eINSTANCE.createRow();
 					row.setSequence(cargoAllocation.getSequence());
 					row.setTarget(cargoAllocation);

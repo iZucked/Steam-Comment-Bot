@@ -6,7 +6,7 @@ package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +17,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.MappingModel;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
@@ -27,17 +30,24 @@ import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -75,49 +85,54 @@ public class ScenarioComparisonTransformer {
 					return root;
 				}
 				final List<ChangeSet> changeSets = new LinkedList<>();
-
+				// TODO - fix the comparison logic to support LDD
 				// Convert into new data model.
 				for (final UserGroup g : table.getUserGroups()) {
-					// final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
-					final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
-					final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
-
-					final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
-					final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
 
 					final ChangeSet changeSet = createChangeSet(root, from, to);
-					final List<ChangeSetRow> rows = new LinkedList<>();
 
+					// Before
+					Set<EObject> beforeTargets = new LinkedHashSet<EObject>();
 					for (final CycleGroup cycleGroup : g.getGroups()) {
-						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 0);
-						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 1);
-						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 2);
+						beforeTargets.addAll(processCycleGroup(cycleGroup, 0));
 					}
+					Set<EObject> afterTargets = new LinkedHashSet<EObject>();
+					for (final CycleGroup cycleGroup : g.getGroups()) {
+						afterTargets.addAll(processCycleGroup(cycleGroup, 1));
+					}
+
+					// Generate the row data
+					final MappingModel beforeDifferences = ChangeSetTransformerUtil.generateMappingModel(new LinkedList<>(beforeTargets));
+					final MappingModel afterDifferences = ChangeSetTransformerUtil.generateMappingModel(new LinkedList<>(afterTargets));
+
+					final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
+
 					processRows(toSchedule, fromSchedule, rows, changeSet);
 					if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
 						changeSets.add(changeSet);
 					}
 				}
 				for (final CycleGroup cycleGroup : table.getCycleGroups()) {
-					final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
-					final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
 
-					final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
-					final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+					// Before
+					Set<EObject> beforeTargets = new LinkedHashSet<EObject>();
+					beforeTargets.addAll(processCycleGroup(cycleGroup, 0));
+					Set<EObject> afterTargets = new LinkedHashSet<EObject>();
+					afterTargets.addAll(processCycleGroup(cycleGroup, 1));
 
-					final List<ChangeSetRow> rows = new LinkedList<>();
+					// Generate the row data
+					final MappingModel beforeDifferences = ChangeSetTransformerUtil.generateMappingModel(new LinkedList<>(beforeTargets));
+					final MappingModel afterDifferences = ChangeSetTransformerUtil.generateMappingModel(new LinkedList<>(afterTargets));
+
+					final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
 
 					final ChangeSet changeSet = createChangeSet(root, from, to);
-
-					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 0);
-					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 1);
-					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 2);
-
 					processRows(toSchedule, fromSchedule, rows, changeSet);
 					if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
 						changeSets.add(changeSet);
 					}
 				}
+
 				Collections.sort(changeSets, new Comparator<ChangeSet>() {
 
 					@Override
@@ -147,9 +162,9 @@ public class ScenarioComparisonTransformer {
 				});
 				root.getChangeSets().addAll(changeSets);
 				return root;
-
 			}
 		}
+
 	}
 
 	@NonNull
@@ -177,87 +192,150 @@ public class ScenarioComparisonTransformer {
 	}
 
 	private void processRows(@NonNull final Schedule toSchedule, @NonNull final Schedule fromSchedule, @NonNull final List<ChangeSetRow> rows, @NonNull final ChangeSet changeSet) {
-		ChangeSetTransformerUtil.mergeSpots(rows);
+
+		// ChangeSetTransformerUtil.mergeSpots(rows);
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		// ChangeSetTransformerUtil.filterRows(rows);
-		ChangeSetTransformerUtil.sortRows(rows, null);
+		// ChangeSetTransformerUtil.sortRows(rows, null);
 		changeSet.getChangeSetRowsToPrevious().addAll(rows);
 		calculateMetrics(changeSet, fromSchedule, toSchedule);
 	}
 
-	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			@NonNull final Map<String, List<ChangeSetRow>> lhsRowMarketMap, @NonNull final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
-			final Map<EObject, Set<EObject>> equivalancesMap, final int pass) {
+	private List<EObject> processCycleGroup(final CycleGroup cycleGroup, final int pass) {
+
+		boolean isBase = pass == 0;
+
+		List<EObject> targets = new LinkedList<>();
 		for (final Row r : cycleGroup.getRows()) {
 
-			final boolean isBase = true;
-
-			if (pass == 0 && r.isReference()) {
-				continue;
-			}
-			if (pass == 2 && !r.isReference()) {
+			boolean rBase = isBase && r.isReference();
+			boolean rOther = !isBase && !r.isReference();
+			if (!rBase && !rOther) {
 				continue;
 			}
 
 			EObject element = r.getTarget();
 			if (element instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) element;
-				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					if (slotAllocation.getSlot() instanceof LoadSlot) {
-						final SlotVisit slotVisit = slotAllocation.getSlotVisit();
-						element = slotVisit;
-						break;
+				CargoAllocation cargoAllocation = (CargoAllocation) element;
+				if (!targets.contains(cargoAllocation)) {
+					targets.add(cargoAllocation);
+				}
+			} else if (element instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) element;
+				SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+				if (slotAllocation != null) {
+					CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+					if (!targets.contains(cargoAllocation)) {
+						targets.add(cargoAllocation);
 					}
 				}
-			}
-			assert element != null;
+			} else if (element instanceof OpenSlotAllocation) {
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+				targets.add(openSlotAllocation);
+			} else if (element instanceof Event) {
+				Event event = (Event) element;
+				if (event instanceof VesselEventVisit) {
+					targets.add(event);
+				} else if (event instanceof GeneratedCharterOut) {
+					targets.add(event);
+				} else {
+					Sequence sequence = event.getSequence();
+					if (sequence.getSequenceType() == SequenceType.VESSEL //
+							|| sequence.getSequenceType() == SequenceType.ROUND_TRIP //
+							|| sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+						// Filter events
+						if (event instanceof Journey) {
+							continue;
+						} else if (event instanceof Idle) {
+							continue;
+						} else if (event instanceof Cooldown) {
+							continue;
+						}
 
-			if (pass == 0) {
-				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBase, false);
-			} else if (pass == 1) {
-				if (r.isReference()) {
-					ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, false, false);
+						else if (event instanceof StartEvent //
+								|| event instanceof EndEvent) {
+							if (sequence.getSequenceType() == SequenceType.VESSEL) {
+								// Only include these for fleet vessels.
 
-					continue;
-				}
-			} else if (pass == 3 && !r.isReference()) {
-				final Set<EObject> equivalents = equivalancesMap.get(element);
-				if (equivalents == null) {
-					continue;
-				}
-
-				if (element instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) element;
-					if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
-
-						for (final EObject e : equivalents) {
-							if (e instanceof SlotVisit) {
-								final SlotVisit slotVisit2 = (SlotVisit) e;
-								final CargoAllocation cargoAllocation = slotVisit2.getSlotAllocation().getCargoAllocation();
-								if (cargoAllocation.getSlotAllocations().size() != 2) {
-									throw new RuntimeException("Complex cargoes are not supported");
-								}
-								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2, slotVisit2.getSlotAllocation(), false,
-										false);
+							} else {
+								continue;
 							}
+						} else if (event instanceof VesselEventVisit) {
+							// Keep going!
+						} else if (event instanceof GeneratedCharterOut) {
+							// Keep going!
+						} else if (event instanceof SlotVisit) {
+							// Already processed
+							continue;
+						} else if (event instanceof PortVisit) {
+							if (sequence.getSequenceType() == SequenceType.VESSEL) {
+								// Only include these for fleet vessels.
+
+							} else {
+								// On a spot vessel "probably" the fake end ports -- TODO; tighten check up
+								continue;
+							}
+						} else {
+							// Unknown event!
+							assert false;
 						}
+
+						targets.add(event);
 					}
-				} else if (element instanceof OpenSlotAllocation) {
-					final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-					for (final EObject e : equivalents) {
-						if (e instanceof OpenSlotAllocation) {
-							final OpenSlotAllocation openSlotAllocation2 = (OpenSlotAllocation) e;
-							ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation2, false);
-						}
-					}
-				} else if (element instanceof Event) {
-					final Event event = (Event) element;
-					ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, false);
 				}
+
 			}
 		}
+		return targets;
 	}
+	//
+	// public void a() {
+	// if (pass == 0) {
+	// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBase, false);
+	// } else if (pass == 1) {
+	// if (r.isReference()) {
+	// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, false, false);
+	//
+	// continue;
+	// }
+	// } else if (pass == 3 && !r.isReference()) {
+	// final Set<EObject> equivalents = equivalancesMap.get(element);
+	// if (equivalents == null) {
+	// continue;
+	// }
+	//
+	// if (element instanceof SlotVisit) {
+	// final SlotVisit slotVisit = (SlotVisit) element;
+	// if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+	// final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
+	//
+	// for (final EObject e : equivalents) {
+	// if (e instanceof SlotVisit) {
+	// final SlotVisit slotVisit2 = (SlotVisit) e;
+	// final CargoAllocation cargoAllocation = slotVisit2.getSlotAllocation().getCargoAllocation();
+	// if (cargoAllocation.getSlotAllocations().size() != 2) {
+	// throw new RuntimeException("Complex cargoes are not supported");
+	// }
+	// ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
+	// (LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, false);
+	// }
+	// }
+	// }
+	// } else if (element instanceof OpenSlotAllocation) {
+	//
+	// for (final EObject e : equivalents) {
+	// if (e instanceof OpenSlotAllocation) {
+	// final OpenSlotAllocation openSlotAllocation2 = (OpenSlotAllocation) e;
+	// ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation2, false);
+	// }
+	// }
+	// } else if (element instanceof Event) {
+	// final Event event = (Event) element;
+	// ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, false);
+	// }
+	// }
+	// }
+	// }
 
 	private static void calculateMetrics(@NonNull final ChangeSet changeSet, @NonNull final Schedule fromSchedule, @NonNull final Schedule toSchedule) {
 		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
@@ -275,22 +353,30 @@ public class ScenarioComparisonTransformer {
 		lateness = 0;
 
 		for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
-			{
-				pnl += ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+			ChangeSetRowDataGroup afterData = row.getAfterData();
+			if (afterData != null) {
+				pnl += ChangeSetTransformerUtil.getRowProfitAndLossValue(afterData, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 
-				final EventGrouping newEventGrouping = row.getNewEventGrouping();
-				if (newEventGrouping != null) {
-					lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
-					violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
+				if (afterData.getMembers().size() > 0) {
+					ChangeSetRowData rd = afterData.getMembers().get(0);
+					EventGrouping eventGrouping = rd.getEventGrouping();
+					if (eventGrouping != null) {
+						lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+						violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
+					}
 				}
 			}
-			{
-				pnl -= ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+			ChangeSetRowDataGroup beforeData = row.getBeforeData();
+			if (beforeData != null) {
+				pnl -= ChangeSetTransformerUtil.getRowProfitAndLossValue(beforeData, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 
-				final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
-				if (originalEventGrouping != null) {
-					lateness -= LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
-					violations -= ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
+				if (beforeData.getMembers().size() > 0) {
+					ChangeSetRowData rd = beforeData.getMembers().get(0);
+					EventGrouping eventGrouping = rd.getEventGrouping();
+					if (eventGrouping != null) {
+						lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+						violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
+					}
 				}
 			}
 		}

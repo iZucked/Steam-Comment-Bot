@@ -62,6 +62,15 @@ public interface ChangesetFactory extends EFactory {
 	DeltaMetrics createDeltaMetrics();
 
 	/**
+	 * Returns a new object of class '<em>Change Set Row Data Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Change Set Row Data Group</em>'.
+	 * @generated
+	 */
+	ChangeSetRowDataGroup createChangeSetRowDataGroup();
+
+	/**
 	 * Returns a new object of class '<em>Change Set Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -69,6 +78,42 @@ public interface ChangesetFactory extends EFactory {
 	 * @generated
 	 */
 	ChangeSetRow createChangeSetRow();
+
+	/**
+	 * Returns a new object of class '<em>Change Set Row Data</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Change Set Row Data</em>'.
+	 * @generated
+	 */
+	ChangeSetRowData createChangeSetRowData();
+
+	/**
+	 * Returns a new object of class '<em>Change Set Table Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Change Set Table Group</em>'.
+	 * @generated
+	 */
+	ChangeSetTableGroup createChangeSetTableGroup();
+
+	/**
+	 * Returns a new object of class '<em>Change Set Table Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Change Set Table Row</em>'.
+	 * @generated
+	 */
+	ChangeSetTableRow createChangeSetTableRow();
+
+	/**
+	 * Returns a new object of class '<em>Change Set Table Root</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Change Set Table Root</em>'.
+	 * @generated
+	 */
+	ChangeSetTableRoot createChangeSetTableRoot();
 
 	/**
 	 * Returns the package supported by this factory.

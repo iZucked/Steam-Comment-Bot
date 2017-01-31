@@ -4,10 +4,18 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.ToLongFunction;
+
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
@@ -23,170 +31,174 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostTy
 public class ChangeSetKPIUtil {
 
 	public enum ResultType {
-		ORIGINAL, NEW
+		Before, After
 	}
 
 	public enum FlexType {
 		WithoutFlex, WithFlex
 	}
 
-	public static long getPNL(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
-		switch (type) {
-		case NEW:
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
-		case ORIGINAL:
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
-		default:
-			throw new IllegalArgumentException();
-		}
+	public static long getPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 	}
 
-	public static long getSalesRevenue(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
+	public static long getSalesRevenue(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		ChangeSetRowData rowData;
 		switch (type) {
-		case NEW: {
-			SlotAllocation allocation = row.getNewDischargeAllocation();
-			if (allocation != null) {
-				return allocation.getVolumeValue();
-			}
-			return 0L;
-		}
-		case ORIGINAL: {
-			SlotAllocation allocation = row.getOriginalDischargeAllocation();
-			if (allocation != null) {
-				return allocation.getVolumeValue();
-			}
-			return 0L;
-		}
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long getPurchaseCost(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
-		switch (type) {
-		case NEW: {
-			SlotAllocation allocation = row.getNewLoadAllocation();
-			if (allocation != null) {
-				return allocation.getVolumeValue();
-			}
-			return 0L;
-		}
-		case ORIGINAL: {
-			SlotAllocation allocation = row.getOriginalLoadAllocation();
-			if (allocation != null) {
-				return allocation.getVolumeValue();
-			}
-			return 0L;
-		}
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long getAdditionalUpsidePNL(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-		// TODO: Check sign is correct!
-
-		switch (type) {
-		case NEW:
-			return -ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
-		case ORIGINAL:
-			return -ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long getUpstreamPNL(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
-		switch (type) {
-		case NEW:
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getElementUpstreamPNL);
-		case ORIGINAL:
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getElementUpstreamPNL);
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long getAdditionalShippingPNL(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-		// TODO: Check sign is correct!
-		switch (type) {
-		case NEW:
-			return -ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
-		case ORIGINAL:
-			return -ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long getShipping(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
-		final EventGrouping eventGrouping;
-		switch (type) {
-		case NEW:
-			eventGrouping = row.getNewEventGrouping();
+		case After: {
+			rowData = tableRow.getLhsAfter();
 			break;
-		case ORIGINAL:
-			eventGrouping = row.getOriginalEventGrouping();
+		}
+		case Before: {
+			rowData = tableRow.getLhsBefore();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException();
+		}
+		if (rowData != null) {
+			SlotAllocation allocation = rowData.getDischargeAllocation();
+			if (allocation != null) {
+				return allocation.getVolumeValue();
+			}
+		}
+		return 0L;
+	}
+
+	public static long getPurchaseCost(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		ChangeSetRowData rowData;
+		switch (type) {
+		case After: {
+			rowData = tableRow.getLhsAfter();
+			break;
+		}
+		case Before: {
+			rowData = tableRow.getLhsBefore();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException();
+		}
+		if (rowData != null) {
+			SlotAllocation allocation = rowData.getLoadAllocation();
+			if (allocation != null) {
+				return allocation.getVolumeValue();
+			}
+		}
+		return 0L;
+	}
+
+	public static long getAdditionalUpsidePNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		return -getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
+	}
+
+	public static long getUpstreamPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getElementUpstreamPNL);
+	}
+
+	public static long getRowProfitAndLossValue(@Nullable final ChangeSetTableRow row, @NonNull final ResultType type, final @NonNull ToLongFunction<@Nullable ProfitAndLossContainer> f) {
+		if (row == null) {
+			return 0L;
+		}
+
+		final Set<ProfitAndLossContainer> rows = new HashSet<>();
+		switch (type) {
+		case After:
+			if (row.getLhsAfter() != null) {
+				rows.add(row.getLhsAfter().getLhsGroupProfitAndLoss());
+				rows.add(row.getLhsAfter().getOpenLoadAllocation());
+			}
+			if (row.getRhsAfter() != null) {
+				rows.add(row.getRhsAfter().getRhsGroupProfitAndLoss());
+				rows.add(row.getRhsAfter().getOpenDischargeAllocation());
+			}
+			break;
+		case Before:
+			if (row.getLhsBefore() != null) {
+				rows.add(row.getLhsBefore().getLhsGroupProfitAndLoss());
+				rows.add(row.getLhsBefore().getOpenLoadAllocation());
+			}
+			if (row.getRhsBefore() != null) {
+				rows.add(row.getRhsBefore().getRhsGroupProfitAndLoss());
+				rows.add(row.getRhsBefore().getOpenDischargeAllocation());
+			}
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
+		//
+		// final Set<ProfitAndLossContainer> containers = new HashSet<ProfitAndLossContainer>();
+		// for (final ChangeSetRowData d : rows) {
+		// if (d == null) {
+		// continue;
+		// }
+		// containers.add(d.getLhsGroupProfitAndLoss());
+		// containers.add(d.getRhsGroupProfitAndLoss());
+		// containers.add(d.getOpenLoadAllocation());
+		// containers.add(d.getOpenDischargeAllocation());
+		// }
+
+		long sum = 0L;
+		for (final ProfitAndLossContainer c : rows) {
+			if (c == null) {
+				continue;
+			}
+			sum += f.applyAsLong(c);
+		}
+		return sum;
+	}
+
+	public static long getAdditionalShippingPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		return -getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
+	}
+
+	public static long getShipping(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 		if (eventGrouping != null) {
 			return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true, ShippingCostType.ALL);
 		}
 		return 0L;
 	}
 
-	public static long getCargoOtherPNL(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
+	private static @Nullable EventGrouping getEventGrouping(final ChangeSetTableRow tableRow, final ResultType type) {
+
+		EventGrouping eventGrouping = null;
 
 		switch (type) {
-		case NEW:
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
-					+ ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getHedgeValue)
-					+ ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getMiscCostsValue)
-					- ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getCancellationFees);
-		case ORIGINAL:
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
-					+ ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getHedgeValue)
-					+ ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getMiscCostsValue)
-					- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getCancellationFees);
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long getTax(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
-		switch (type) {
-		case NEW:
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-					- ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
-		case ORIGINAL:
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-					- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
-		default:
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public static long[] getLateness(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
-
-		final EventGrouping eventGrouping;
-		switch (type) {
-		case NEW:
-			eventGrouping = row.getNewEventGrouping();
+		case After:
+			if (tableRow.getLhsAfter() != null) {
+				eventGrouping = tableRow.getLhsAfter().getEventGrouping();
+			}
 			break;
-		case ORIGINAL:
-			eventGrouping = row.getOriginalEventGrouping();
+		case Before:
+			if (tableRow.getLhsBefore() != null) {
+				eventGrouping = tableRow.getLhsBefore().getEventGrouping();
+			}
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
+		return eventGrouping;
+	}
+
+	public static long getCargoOtherPNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getAdditionalProfitAndLoss) //
+				+ getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getHedgeValue) //
+				+ getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getMiscCostsValue) //
+				- getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getCancellationFees);
+	}
+
+	public static long getTax(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss) - getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
+	}
+
+	public static long[] getLateness(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+
 		final long[] result = new long[FlexType.values().length];
 		if (eventGrouping != null) {
 			result[FlexType.WithFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
@@ -195,36 +207,27 @@ public class ChangeSetKPIUtil {
 		return result;
 	}
 
-	public static long getViolations(@NonNull final ChangeSetRow row, @NonNull final ResultType type) {
+	public static long getViolations(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
-		final EventGrouping eventGrouping;
-		switch (type) {
-		case NEW:
-			eventGrouping = row.getNewEventGrouping();
-			break;
-		case ORIGINAL:
-			eventGrouping = row.getOriginalEventGrouping();
-			break;
-		default:
-			throw new IllegalArgumentException();
-		}
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+
 		if (eventGrouping != null) {
 			return ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 		}
 		return 0L;
 	}
 
-	public static long getPNLSum(@NonNull ChangeSetRow row, @NonNull ResultType type) {
+	public static long getPNLSum(@NonNull ChangeSetTableRow tableRow, @NonNull ResultType type) {
 
 		long pnl = 0L;
-		pnl -= getPurchaseCost(row, type);
-		pnl += getSalesRevenue(row, type);
-		pnl -= getShipping(row, type);
-		pnl -= getAdditionalShippingPNL(row, type);
-		pnl -= getAdditionalUpsidePNL(row, type);
-		pnl += getCargoOtherPNL(row, type);
-		pnl += getTax(row, type);
-		pnl += getUpstreamPNL(row, type);
+		pnl -= getPurchaseCost(tableRow, type);
+		pnl += getSalesRevenue(tableRow, type);
+		pnl -= getShipping(tableRow, type);
+		pnl -= getAdditionalShippingPNL(tableRow, type);
+		pnl -= getAdditionalUpsidePNL(tableRow, type);
+		pnl += getCargoOtherPNL(tableRow, type);
+		pnl += getTax(tableRow, type);
+		pnl += getUpstreamPNL(tableRow, type);
 		return pnl;
 	}
 }

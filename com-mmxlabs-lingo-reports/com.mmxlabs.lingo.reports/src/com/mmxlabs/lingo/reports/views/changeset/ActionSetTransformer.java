@@ -10,7 +10,6 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -76,31 +75,7 @@ public class ActionSetTransformer {
 				}
 			}
 		}
-
-		return createDataModel(monitor, stages);
-
-	}
-
-	public ChangeSetRoot createDataModel(final IProgressMonitor monitor, final List<ScenarioResult> stages) {
-		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
-
-		try {
-			ScheduleResultListTransformer transformer = new ScheduleResultListTransformer();
-			monitor.beginTask("Opening action sets", stages.size());
-			ScenarioResult prev = null;
-			for (final ScenarioResult current : stages) {
-				if (prev != null) {
-					root.getChangeSets().add(transformer.buildChangeSet(stages.get(0), prev, current));
-				}
-				prev = current;
-				monitor.worked(1);
-
-			}
-		} finally {
-			monitor.done();
-		}
-
-		return root;
+		return new ScheduleResultListTransformer().createDataModel(stages, monitor);
 	}
 
 }

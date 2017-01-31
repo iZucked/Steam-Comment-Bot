@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToDoubleBiFunction;
@@ -37,6 +37,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -83,7 +84,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.google.common.base.Objects;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -93,9 +93,14 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
+import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
+import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
@@ -104,15 +109,13 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
@@ -122,7 +125,6 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
-import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -186,38 +188,21 @@ public class ChangeSetView implements IAdaptable {
 				return;
 			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-				cleanUpVesselColumns();
-				if (pin == null || other == null) {
-					setEmptyData();
-				} else {
-					final Display display = PlatformUI.getWorkbench().getDisplay();
-					final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-					try {
-						d.run(true, false, new IRunnableWithProgress() {
-
-							@Override
-							public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-								final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-								scheduleDiffUtils.setCheckAssignmentDifferences(true);
-								scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-								scheduleDiffUtils.setCheckNextPortDifferences(true);
-								final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-								final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, equivalancesMap, table, pin, other, monitor);
-								display.asyncExec(new ViewUpdateRunnable(newRoot));
-							}
-						});
-					} catch (InvocationTargetException | InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				ScenarioResult target = pin == null ? other : pin;
+				setNewDataData(target, monitor -> {
+					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+					scheduleDiffUtils.setCheckAssignmentDifferences(true);
+					scheduleDiffUtils.setCheckSpotMarketDifferences(true);
+					scheduleDiffUtils.setCheckNextPortDifferences(true);
+					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
+					final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, equivalancesMap, table, pin, other, monitor);
+					return newRoot;
+				}, null);
 			}
 		}
 
 		@Override
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
-			// TODO Auto-generated method stub
 
 		}
 	};
@@ -239,6 +224,9 @@ public class ChangeSetView implements IAdaptable {
 
 	private GridViewerColumn latenessColumn;
 
+	public ChangeSetTableRoot tableRootToBase;
+	public ChangeSetTableRoot tableRootToPrevious;
+
 	// flag to indicate whether or not to respond to data change events.
 	private boolean handleEvents;
 
@@ -250,9 +238,13 @@ public class ChangeSetView implements IAdaptable {
 
 	private final class ViewUpdateRunnable implements Runnable {
 		private final ChangeSetRoot newRoot;
+		private final ChangeSetTableRoot csdiffToPrevious;
+		private final ChangeSetTableRoot csDdiffToBase;
 
-		private ViewUpdateRunnable(final ChangeSetRoot newRoot) {
+		private ViewUpdateRunnable(final ChangeSetRoot newRoot, final ChangeSetTableRoot diffToPrevious, final ChangeSetTableRoot diffToBase) {
 			this.newRoot = newRoot;
+			this.csdiffToPrevious = diffToPrevious;
+			this.csDdiffToBase = diffToBase;
 		}
 
 		@Override
@@ -268,14 +260,25 @@ public class ChangeSetView implements IAdaptable {
 			final Set<String> vesselnames = new LinkedHashSet<>();
 			final Map<String, String> shortNameMap = new HashMap<>();
 
-			if (newRoot != null) {
-				for (final ChangeSet cs : newRoot.getChangeSets()) {
-					for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
-						vesselnames.add(csr.getOriginalVesselName());
-						vesselnames.add(csr.getNewVesselName());
+			if (csDdiffToBase != null) {
+				for (final ChangeSetTableGroup group : csDdiffToBase.getGroups()) {
+					for (final ChangeSetTableRow csr : group.getRows()) {
+						vesselnames.add(csr.getBeforeVesselName());
+						vesselnames.add(csr.getAfterVesselName());
 
-						shortNameMap.put(csr.getOriginalVesselName(), csr.getOriginalVesselShortName());
-						shortNameMap.put(csr.getNewVesselName(), csr.getNewVesselShortName());
+						shortNameMap.put(csr.getBeforeVesselName(), csr.getBeforeVesselShortName());
+						shortNameMap.put(csr.getAfterVesselName(), csr.getAfterVesselShortName());
+					}
+				}
+			}
+			if (csdiffToPrevious != null) {
+				for (final ChangeSetTableGroup group : csdiffToPrevious.getGroups()) {
+					for (final ChangeSetTableRow csr : group.getRows()) {
+						vesselnames.add(csr.getBeforeVesselName());
+						vesselnames.add(csr.getAfterVesselName());
+
+						shortNameMap.put(csr.getBeforeVesselName(), csr.getBeforeVesselShortName());
+						shortNameMap.put(csr.getAfterVesselName(), csr.getAfterVesselShortName());
 					}
 				}
 			}
@@ -325,12 +328,15 @@ public class ChangeSetView implements IAdaptable {
 					createListener(cs.getPrevScenario());
 				}
 			}
+			ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
 
-			diagram.setChangeSetRoot(newRoot);
-			viewer.setInput(newRoot);
+			diagram.setChangeSetRoot(newTable);
+			viewer.setInput(newTable);
 			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
 			final ChangeSetRoot oldRoot = ChangeSetView.this.root;
 			ChangeSetView.this.root = newRoot;
+			ChangeSetView.this.tableRootToBase = csDdiffToBase;
+			ChangeSetView.this.tableRootToPrevious = csdiffToPrevious;
 			cleanUp(oldRoot);
 		}
 	}
@@ -392,12 +398,14 @@ public class ChangeSetView implements IAdaptable {
 
 		additionalAttributeProvider = new IAdditionalAttributeProvider() {
 
+			@Override
 			public void begin() {
 				textualVesselMarkers = true;
 				// Need to refresh the view to trigger creation of the text labels
 				ViewerHelper.refresh(viewer, true);
 			}
 
+			@Override
 			public void done() {
 				textualVesselMarkers = false;
 				// Need to refresh the view to trigger creation of the text labels
@@ -475,9 +483,10 @@ public class ChangeSetView implements IAdaptable {
 					public void displayActionPlan(final List<ScenarioResult> scenarios) {
 						cleanUpVesselColumns();
 
-						final ActionSetTransformer transformer = new ActionSetTransformer();
-						final ChangeSetRoot newRoot = transformer.createDataModel(new NullProgressMonitor(), scenarios);
-						RunnerHelper.exec(new ViewUpdateRunnable(newRoot), true);
+						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
+						final ChangeSetTableRoot csdiffToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, null);
+						final ChangeSetTableRoot csdiffToBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, null);
+						RunnerHelper.exec(new ViewUpdateRunnable(newRoot, csdiffToPrevious, csdiffToBase), true);
 					}
 				};
 			}
@@ -629,8 +638,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("+ Sales");
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
-					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -642,8 +650,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Purchase");
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -762,7 +769,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__LHS_NAME));
+			gvc.setLabelProvider(createIDLabelProvider(true));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -789,8 +796,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("tBtu");
 			gvc.getColumn().setWidth(55);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -814,7 +820,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__RHS_NAME));
+			gvc.setLabelProvider(createIDLabelProvider(false));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -843,8 +849,8 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("tBtu");
 			gvc.getColumn().setWidth(55);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
-					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			gvc.setLabelProvider(
+					createDeltaLabelProvider(true, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 
@@ -902,19 +908,22 @@ public class ChangeSetView implements IAdaptable {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							Object o = itr.next();
-							if (o instanceof ChangeSetRow) {
-								o = ((ChangeSetRow) o).eContainer();
+							if (o instanceof ChangeSetTableRow) {
+								o = ((ChangeSetTableRow) o).eContainer();
 							}
-							if (o instanceof ChangeSet) {
-								final ChangeSet changeSet = (ChangeSet) o;
-								final ScenarioResult other;
-								if (diffToBase) {
-									other = changeSet.getBaseScenario();
-								} else {
-									other = changeSet.getPrevScenario();
+							if (o instanceof ChangeSetTableGroup) {
+								final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) o;
+								final ChangeSet changeSet = changeSetTableGroup.getChangeSet();
+								if (changeSet != null) {
+									final ScenarioResult other;
+									if (diffToBase) {
+										other = changeSet.getBaseScenario();
+									} else {
+										other = changeSet.getPrevScenario();
+									}
+									scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
+									break;
 								}
-								scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
-								break;
 							}
 						}
 					}
@@ -924,18 +933,13 @@ public class ChangeSetView implements IAdaptable {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							final Object o = itr.next();
-							if (o instanceof ChangeSetRow) {
-								final ChangeSetRow changeSetRow = (ChangeSetRow) o;
+							if (o instanceof ChangeSetTableRow) {
+								final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) o;
 								selectRow(selectedElements, changeSetRow);
-							} else if (o instanceof ChangeSet) {
-								final ChangeSet changeSet = (ChangeSet) o;
-								List<ChangeSetRow> rows;
-								if (diffToBase) {
-									rows = changeSet.getChangeSetRowsToBase();
-								} else {
-									rows = changeSet.getChangeSetRowsToPrevious();
-								}
-								for (final ChangeSetRow changeSetRow : rows) {
+							} else if (o instanceof ChangeSetTableGroup) {
+								final ChangeSetTableGroup group = (ChangeSetTableGroup) o;
+								final List<ChangeSetTableRow> rows = group.getRows();
+								for (final ChangeSetTableRow changeSetRow : rows) {
 									selectRow(selectedElements, changeSetRow);
 								}
 							}
@@ -952,130 +956,58 @@ public class ChangeSetView implements IAdaptable {
 				}
 			}
 
-			private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
-				selectedElements.add(changeSetRow);
-				selectedElements.add(changeSetRow.getLoadSlot());
-				selectedElements.add(changeSetRow.getNewLoadAllocation());
-				selectedElements.add(changeSetRow.getOriginalLoadAllocation());
-				if (changeSetRow.getNewLoadAllocation() != null) {
-					selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
-					selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit().getSequence());
+			private void selectRow(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
+				selectedElements.add(tableRow);
+				selectRow(selectedElements, tableRow.getLhsBefore());
+				selectRow(selectedElements, tableRow.getLhsAfter());
+				selectRow(selectedElements, tableRow.getRhsBefore());
+				selectRow(selectedElements, tableRow.getRhsAfter());
+			}
+
+			private void selectRow(final Set<Object> selectedElements, final ChangeSetRowData rowData) {
+				if (rowData == null) {
+					return;
 				}
-				if (changeSetRow.getOriginalLoadAllocation() != null) {
-					selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
-					selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit().getSequence());
+
+				selectedElements.add(rowData);
+				selectedElements.add(rowData.getLoadSlot());
+				if (rowData.getLoadAllocation() != null) {
+					selectedElements.add(rowData.getLoadAllocation());
+					selectedElements.add(rowData.getLoadAllocation().getSlotVisit());
+					selectedElements.add(rowData.getLoadAllocation().getSlotVisit().getSequence());
 				}
-				selectedElements.add(changeSetRow.getNewDischargeAllocation());
-				selectedElements.add(changeSetRow.getOriginalDischargeAllocation());
-				if (changeSetRow.getNewDischargeAllocation() != null) {
-					selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit());
-					selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit().getSequence());
+				if (rowData.getDischargeAllocation() != null) {
+					selectedElements.add(rowData.getDischargeAllocation());
+					selectedElements.add(rowData.getDischargeAllocation().getSlotVisit());
+					selectedElements.add(rowData.getDischargeAllocation().getSlotVisit().getSequence());
 				}
-				if (changeSetRow.getOriginalDischargeAllocation() != null) {
-					selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit());
-					selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit().getSequence());
+
+				selectedElements.add(rowData.getLhsGroupProfitAndLoss());
+				selectedElements.add(rowData.getRhsGroupProfitAndLoss());
+
+				selectedElements.add(rowData.getLhsEvent());
+				selectedElements.add(rowData.getRhsEvent());
+				//
+				final EventGrouping eventGrouping = rowData.getEventGrouping();
+				if (eventGrouping != null) {
+					selectedElements.add(eventGrouping);
+					selectedElements.addAll(eventGrouping.getEvents());
 				}
-				selectedElements.add(changeSetRow.getNewGroupProfitAndLoss());
-				selectedElements.add(changeSetRow.getOriginalGroupProfitAndLoss());
-				selectedElements.add(changeSetRow.getNewEventGrouping());
-				if (changeSetRow.getNewEventGrouping() instanceof Event) {
-					selectedElements.add(((Event) changeSetRow.getNewEventGrouping()).getSequence());
+				if (eventGrouping instanceof Event) {
+					final Event event = (Event) eventGrouping;
+					selectedElements.add(event.getSequence());
 				}
-				selectedElements.add(changeSetRow.getOriginalEventGrouping());
-				if (changeSetRow.getOriginalEventGrouping() instanceof Event) {
-					selectedElements.add(((Event) changeSetRow.getOriginalEventGrouping()).getSequence());
+				// //
+				if (rowData.getOpenLoadAllocation() != null) {
+					selectedElements.add(rowData.getOpenLoadAllocation());
+					selectedElements.add(rowData.getOpenLoadAllocation().getSlot());
 				}
-				if (changeSetRow.getOriginalOpenLoadAllocation() != null) {
-					selectedElements.add(changeSetRow.getOriginalOpenLoadAllocation());
-					selectedElements.add(changeSetRow.getOriginalOpenLoadAllocation().getSlot());
-				}
-				if (changeSetRow.getOriginalOpenDischargeAllocation() != null) {
-					selectedElements.add(changeSetRow.getOriginalOpenDischargeAllocation());
-					selectedElements.add(changeSetRow.getOriginalOpenDischargeAllocation().getSlot());
-				}
-				if (changeSetRow.getNewOpenLoadAllocation() != null) {
-					selectedElements.add(changeSetRow.getNewOpenLoadAllocation());
-					selectedElements.add(changeSetRow.getNewOpenLoadAllocation().getSlot());
-				}
-				if (changeSetRow.getNewOpenDischargeAllocation() != null) {
-					selectedElements.add(changeSetRow.getNewOpenDischargeAllocation());
-					selectedElements.add(changeSetRow.getNewOpenDischargeAllocation().getSlot());
+				if (rowData.getOpenDischargeAllocation() != null) {
+					selectedElements.add(rowData.getOpenDischargeAllocation());
+					selectedElements.add(rowData.getOpenDischargeAllocation().getSlot());
 				}
 			}
 		});
-		//
-		// // Selection listener for current selection.
-		// viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-		//
-		// @Override
-		// public void selectionChanged(final SelectionChangedEvent event) {
-		// final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-		//
-		// final Set<Object> selectedElements = new LinkedHashSet<>();
-		// final Iterator<?> itr = selection.iterator();
-		// while (itr.hasNext()) {
-		// final Object o = itr.next();
-		// if (o instanceof ChangeSetRow) {
-		// final ChangeSetRow changeSetRow = (ChangeSetRow) o;
-		// selectRow(selectedElements, changeSetRow);
-		// } else if (o instanceof ChangeSet) {
-		// final ChangeSet changeSet = (ChangeSet) o;
-		// List<ChangeSetRow> rows;
-		// if (diffToBase) {
-		// rows = changeSet.getChangeSetRowsToBase();
-		// } else {
-		// rows = changeSet.getChangeSetRowsToPrevious();
-		// }
-		// for (final ChangeSetRow changeSetRow : rows) {
-		// selectRow(selectedElements, changeSetRow);
-		// }
-		// }
-		// }
-		// while (selectedElements.remove(null))
-		// ;
-		//
-		// // Update selected elements
-		// scenarioComparisonService.setSelectedElements(selectedElements);
-		//
-		// // set the selection to the service
-		// eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
-		//
-		// }
-		//
-		// private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
-		// selectedElements.add(changeSetRow.getLoadSlot());
-		// selectedElements.add(changeSetRow.getNewLoadAllocation());
-		// selectedElements.add(changeSetRow.getOriginalLoadAllocation());
-		// if (changeSetRow.getNewLoadAllocation() != null) {
-		// selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
-		// selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit().getSequence());
-		// }
-		// if (changeSetRow.getOriginalLoadAllocation() != null) {
-		// selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
-		// selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit().getSequence());
-		// }
-		// selectedElements.add(changeSetRow.getNewDischargeAllocation());
-		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation());
-		// if (changeSetRow.getNewDischargeAllocation() != null) {
-		// selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit());
-		// selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit().getSequence());
-		// }
-		// if (changeSetRow.getOriginalDischargeAllocation() != null) {
-		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit());
-		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit().getSequence());
-		// }
-		// selectedElements.add(changeSetRow.getNewGroupProfitAndLoss());
-		// selectedElements.add(changeSetRow.getOriginalGroupProfitAndLoss());
-		// selectedElements.add(changeSetRow.getNewEventGrouping());
-		// if (changeSetRow.getNewEventGrouping() instanceof Event) {
-		// selectedElements.add(((Event) changeSetRow.getNewEventGrouping()).getSequence());
-		// }
-		// selectedElements.add(changeSetRow.getOriginalEventGrouping());
-		// if (changeSetRow.getOriginalEventGrouping() instanceof Event) {
-		// selectedElements.add(((Event) changeSetRow.getOriginalEventGrouping()).getSequence());
-		// }
-		// }
-		// });
 
 		final ViewerFilter[] filters = new ViewerFilter[2];
 		filters[0] = new ViewerFilter() {
@@ -1084,15 +1016,15 @@ public class ChangeSetView implements IAdaptable {
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
 				if (!showNonStructuralChanges) {
-					if (element instanceof ChangeSetRow) {
-						final ChangeSetRow row = (ChangeSetRow) element;
+					if (element instanceof ChangeSetTableRow) {
+						final ChangeSetTableRow row = (ChangeSetTableRow) element;
 						if (!row.isWiringChange() && !row.isVesselChange()) {
-							final long delta = ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-									- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;
-							if (parentElement instanceof ChangeSet) {
-								final ChangeSet changeSet = (ChangeSet) parentElement;
-								totalPNLDelta = changeSet.getMetricsToPrevious().getPnlDelta();
+							if (parentElement instanceof ChangeSetTableGroup) {
+								final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) parentElement;
+								totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 							}
 							if (Math.abs(delta) < 250_000L) {
 								// Exclude if less than 10% of PNL change.
@@ -1184,7 +1116,7 @@ public class ChangeSetView implements IAdaptable {
 				if (value instanceof GridItem) {
 					final GridItem gridItem = (GridItem) value;
 					final Object data = gridItem.getData();
-					if (data instanceof ChangeSet) {
+					if (data instanceof ChangeSetTableGroup) {
 						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 						final int s = gc.getLineStyle();
 						gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
@@ -1236,7 +1168,7 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createStandardLabelProvider(final EStructuralFeature attrib) {
+	private CellLabelProvider createIDLabelProvider(final boolean lhs) {
 		return new CellLabelProvider() {
 
 			@Override
@@ -1244,9 +1176,19 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				cell.setText("");
 
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow change = (ChangeSetRow) element;
-					cell.setText((String) change.eGet(attrib));
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow d = (ChangeSetTableRow) element;
+					if (lhs) {
+						if (d.getLhsName() != null && !d.getLhsName().isEmpty()) {
+							cell.setText((String) d.getLhsName());
+							return;
+						}
+					} else {
+						if (d.getRhsName() != null && !d.getRhsName().isEmpty()) {
+							cell.setText((String) d.getRhsName());
+							return;
+						}
+					}
 				}
 			}
 
@@ -1262,16 +1204,16 @@ public class ChangeSetView implements IAdaptable {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow change = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
 
 					LocalDate windowStart = null;
 					boolean isDelta = false;
 					int deltaHours = 0;
 
 					if (isLoadSide) {
-						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
-						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
+						final SlotAllocation originalLoadAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
+						final SlotAllocation newLoadAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
 
 						if (newLoadAllocation != null) {
 							final Slot slot = newLoadAllocation.getSlot();
@@ -1301,8 +1243,16 @@ public class ChangeSetView implements IAdaptable {
 						}
 
 					} else {
-						final SlotAllocation originalDischargeAllocation = change.getRhsWiringLink() != null ? change.getRhsWiringLink().getOriginalDischargeAllocation() : null;
-						final SlotAllocation newDischargeAllocation = change.getNewDischargeAllocation();
+						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						// final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+						// DO NOT COMMIT - UNIT TEST COMPATIBILITY
+						SlotAllocation originalDischargeAllocation = null;
+						if (tableRow.getPreviousRHS() != null) {
+							if (tableRow.getPreviousRHS().getLhsBefore() != null) {
+								originalDischargeAllocation = tableRow.getPreviousRHS().getLhsBefore().getDischargeAllocation();
+							}
+						}
+						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 
 						if (newDischargeAllocation != null) {
 							final Slot slot = newDischargeAllocation.getSlot();
@@ -1319,6 +1269,7 @@ public class ChangeSetView implements IAdaptable {
 						if (newDischargeAllocation != null && originalDischargeAllocation != null) {
 							deltaHours = Hours.between(originalDischargeAllocation.getSlotVisit().getStart(), newDischargeAllocation.getSlotVisit().getStart());
 							if (deltaHours != 0) {
+								// DO NOT COMMIT - TO COMPARE WITH EXISTING UNIT TESTS
 								isDelta = true;
 							}
 						}
@@ -1336,18 +1287,24 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final EStructuralFeature from, final EStructuralFeature to, final EStructuralFeature attrib) {
+	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
 
-		return createLambdaLabelProvider(asInt, false, change -> getNumber(from, attrib, change), change -> getNumber(to, attrib, change));
+		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
+		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER;
+
+		return createLambdaLabelProvider(asInt, false, change -> getNumber(from, field, attrib, change), change -> getNumber(to, field, attrib, change));
 	}
 
 	@NonNull
-	private Number getNumber(final EStructuralFeature from, final EStructuralFeature attrib, final ChangeSetRow change) {
+	private Number getNumber(final EReference from, final EStructuralFeature field, final EStructuralFeature attrib, final ChangeSetTableRow row) {
 		Number n = null;
 		try {
-			n = getNumberInt(from, attrib, change);
+			final ChangeSetRowData change = (ChangeSetRowData) row.eGet(from);
+			if (change != null) {
+				n = getNumberInt(field, attrib, change);
+			}
 		} catch (final Exception e) {
-
+			final int ii = 0;
 		}
 		if (n == null) {
 			return Long.valueOf(0L);
@@ -1358,9 +1315,9 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	@Nullable
-	private Number getNumberInt(final EStructuralFeature from, final EStructuralFeature attrib, final ChangeSetRow change) {
-		if (change != null && change.eClass().getEAllStructuralFeatures().contains(from)) {
-			final EObject eObject = (EObject) change.eGet(from);
+	private Number getNumberInt(final EStructuralFeature field, final EStructuralFeature attrib, final ChangeSetRowData change) {
+		if (change != null && change.eClass().getEAllStructuralFeatures().contains(field)) {
+			final EObject eObject = (EObject) change.eGet(field);
 			if (eObject != null) {
 				return (Number) eObject.eGet(attrib);
 			}
@@ -1376,17 +1333,12 @@ public class ChangeSetView implements IAdaptable {
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
 
-					final ChangeSet changeSet = (ChangeSet) element;
-					final DeltaMetrics metrics;
-					if (diffToBase) {
-						metrics = changeSet.getMetricsToBase();
-					} else {
-						metrics = changeSet.getMetricsToPrevious();
-					}
+					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
+					final DeltaMetrics metrics = changeSet.getDeltaMetrics();
 					if (metrics != null) {
 						double delta = metrics.getPnlDelta();
 
@@ -1401,11 +1353,11 @@ public class ChangeSetView implements IAdaptable {
 						}
 					}
 				}
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow change = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
-					final long f = ChangeSetKPIUtil.getPNL(change, ResultType.ORIGINAL);
-					final long t = ChangeSetKPIUtil.getPNL(change, ResultType.NEW);
+					final long f = ChangeSetKPIUtil.getPNL(change, ResultType.Before);
+					final long t = ChangeSetKPIUtil.getPNL(change, ResultType.After);
 
 					double delta = t - f;
 					delta = delta / 1000000.0;
@@ -1423,9 +1375,9 @@ public class ChangeSetView implements IAdaptable {
 
 	private CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, change -> {
-			return ChangeSetKPIUtil.getTax(change, ResultType.ORIGINAL);
+			return ChangeSetKPIUtil.getTax(change, ResultType.Before);
 		}, change -> {
-			return ChangeSetKPIUtil.getTax(change, ResultType.NEW);
+			return ChangeSetKPIUtil.getTax(change, ResultType.After);
 		});
 	}
 
@@ -1434,11 +1386,11 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow change = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
-					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
-					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
+					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
+					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
 
 					// No lateness
 					if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0 && newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
@@ -1484,18 +1436,14 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
 
-					final ChangeSet changeSet = (ChangeSet) element;
-					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
-					final DeltaMetrics deltaMetrics;
-					if (diffToBase) {
-						deltaMetrics = changeSet.getMetricsToBase();
-					} else {
-						deltaMetrics = changeSet.getMetricsToPrevious();
-					}
+					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+					final Metrics scenarioMetrics = group.getCurrentMetrics();
+					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
+
 					if (deltaMetrics != null) {
 						final int latenessDelta = (int) Math.round((double) deltaMetrics.getLatenessDelta() / 24.0);
 						final int lateness = (int) Math.round((double) scenarioMetrics.getLateness() / 24.0);
@@ -1506,11 +1454,11 @@ public class ChangeSetView implements IAdaptable {
 						}
 					}
 				}
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow change = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
-					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
-					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
+					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
+					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
 
 					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
 					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
@@ -1552,18 +1500,13 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
 
-					final ChangeSet changeSet = (ChangeSet) element;
-					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
-					final DeltaMetrics deltaMetrics;
-					if (diffToBase) {
-						deltaMetrics = changeSet.getMetricsToBase();
-					} else {
-						deltaMetrics = changeSet.getMetricsToPrevious();
-					}
+					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+					final Metrics scenarioMetrics = group.getCurrentMetrics();
+					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
 					if (deltaMetrics != null) {
 						cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑", Math.abs(deltaMetrics.getCapacityDelta()),
 								scenarioMetrics.getCapacity()));
@@ -1573,11 +1516,11 @@ public class ChangeSetView implements IAdaptable {
 						}
 					}
 				}
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow change = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
-					final long f = ChangeSetKPIUtil.getViolations(change, ResultType.ORIGINAL);
-					final long t = ChangeSetKPIUtil.getViolations(change, ResultType.NEW);
+					final long f = ChangeSetKPIUtil.getViolations(change, ResultType.Before);
+					final long t = ChangeSetKPIUtil.getViolations(change, ResultType.After);
 
 					final long delta = t - f;
 					if (delta != 0) {
@@ -1590,25 +1533,28 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.NEW));
+		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before), change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.After));
 	}
 
 	private CellLabelProvider createUpstreamDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.NEW));
+
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.Before), change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.After));
 	}
 
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.ORIGINAL),
-				change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.NEW));
+
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.Before),
+				change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.After));
 	}
 
 	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.ORIGINAL),
-				change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.NEW));
+
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.Before),
+				change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.After));
 	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getShipping(change, ResultType.NEW));
+		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before), change -> ChangeSetKPIUtil.getShipping(change, ResultType.After));
 	}
 
 	private CellLabelProvider createCSLabelProvider() {
@@ -1620,42 +1566,22 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				cell.setText("");
 
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 
 					cell.setFont(boldFont);
 
-					final ChangeSet changeSet = (ChangeSet) element;
+					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
 
 					if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
 						cell.setText(changeSet.getDescription());
 					} else {
-						final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
+						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
 						int idx = 0;
 						if (root != null) {
-							idx = root.getChangeSets().indexOf(changeSet);
+							idx = root.getGroups().indexOf(changeSet);
 						}
-						// int changeCount = 0;
-						// final List<ChangeSetRow> rows;
-						// if (diffToBase) {
-						// rows = changeSet.getChangeSetRowsToBase();
-						// } else {
-						// rows = changeSet.getChangeSetRowsToPrevious();
-						// }
-						// for (ChangeSetRow r : rows) {
-						// if (r.isVesselChange()) {
-						//// changeCount++;
-						// }
-						// if (r.isWiringChange() && r.getNewLoadAllocation() != null) {
-						//// changeCount++;
-						// }
-						// if (r.getRhsWiringLink() != null ) {
-						// changeCount++;
-						// }
-						// }
 
-						// cell.setText(String.format("Set %d (%d)", idx + 1, changeCount));
 						cell.setText(String.format("Set %d", idx + 1));
-
 					}
 				}
 			}
@@ -1668,7 +1594,7 @@ public class ChangeSetView implements IAdaptable {
 
 	}
 
-	public void setActionSetData(final ScenarioInstance target) {
+	public void setNewDataData(final Object target, final Function<IProgressMonitor, ChangeSetRoot> action, final @Nullable Slot targetToSortFirst) {
 
 		cleanUpVesselColumns();
 
@@ -1683,9 +1609,10 @@ public class ChangeSetView implements IAdaptable {
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						final ActionSetTransformer transformer = new ActionSetTransformer();
-						final ChangeSetRoot newRoot = transformer.createDataModel(target, monitor);
-						display.asyncExec(new ViewUpdateRunnable(newRoot));
+						final ChangeSetRoot newRoot = action.apply(monitor);
+						final ChangeSetTableRoot newTablePrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, targetToSortFirst);
+						final ChangeSetTableRoot newTableBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, targetToSortFirst);
+						display.asyncExec(new ViewUpdateRunnable(newRoot, newTablePrevious, newTableBase));
 					}
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
@@ -1693,79 +1620,19 @@ public class ChangeSetView implements IAdaptable {
 				e.printStackTrace();
 			}
 		}
-
-	}
-
-	public void setActionableSetData(final ScenarioInstance target, final ActionableSetPlan plan) {
-
-		cleanUpVesselColumns();
-
-		if (target == null) {
-			setEmptyData();
-		} else {
-			final Display display = PlatformUI.getWorkbench().getDisplay();
-			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-			try {
-				d.run(true, false, new IRunnableWithProgress() {
-
-					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-						final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-						final ChangeSetRoot newRoot = transformer.createDataModel(target, plan, monitor);
-						display.asyncExec(new ViewUpdateRunnable(newRoot));
-					}
-				});
-			} catch (InvocationTargetException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	public void setInsertionPlanData(final ScenarioInstance target, final SlotInsertionOptions plan) {
-
-		cleanUpVesselColumns();
-
-		if (target == null) {
-			setEmptyData();
-		} else {
-			final Display display = PlatformUI.getWorkbench().getDisplay();
-			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-			try {
-				d.run(true, false, new IRunnableWithProgress() {
-
-					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-						final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
-						final ChangeSetRoot newRoot = transformer.createDataModel(target, plan, monitor);
-						// Returns a new sort order -- based on the assumption input data is sorted by best value first
-						final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, plan.getSlotsInserted().get(0));
-						newRoot.getChangeSets().clear();
-						newRoot.getChangeSets().addAll(processChangeSetRoot);
-						insertionPlanFilter.setFilterActive(true);
-
-						display.asyncExec(new ViewUpdateRunnable(newRoot));
-					}
-				});
-			} catch (InvocationTargetException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 	private void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
+		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
-		diagram.setChangeSetRoot(newRoot);
-		ViewerHelper.setInput(viewer, true, newRoot);
+		diagram.setChangeSetRoot(newTableRoot);
+		ViewerHelper.setInput(viewer, true, newTableRoot);
 
 		final ChangeSetRoot oldRoot = ChangeSetView.this.root;
 		ChangeSetView.this.root = newRoot;
+		ChangeSetView.this.tableRootToBase = newTableRoot;
+		ChangeSetView.this.tableRootToPrevious = newTableRoot;
 		cleanUp(oldRoot);
 	}
 
@@ -1835,15 +1702,15 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				cell.setImage(null);
 				final Object element = cell.getElement();
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
 
-					if (name.equals(changeSetRow.getNewVesselName())) {
+					if (name.equals(changeSetRow.getAfterVesselName())) {
 						cell.setImage(imageClosedCircle);
 						if (textualVesselMarkers) {
 							cell.setText("●");
 						}
-					} else if (name.equals(changeSetRow.getOriginalVesselName())) {
+					} else if (name.equals(changeSetRow.getBeforeVesselName())) {
 						cell.setImage(imageOpenCircle);
 						if (textualVesselMarkers) {
 							cell.setText("○");
@@ -1854,13 +1721,13 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
 
-					if (name.equals(changeSetRow.getNewVesselName())) {
+					if (name.equals(changeSetRow.getAfterVesselName())) {
 						return name;
 					}
-					if (name.equals(changeSetRow.getOriginalVesselName())) {
+					if (name.equals(changeSetRow.getBeforeVesselName())) {
 						return name;
 					}
 				}
@@ -1877,24 +1744,25 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				cell.setImage(null);
 				final Object element = cell.getElement();
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
 
 					if (textualVesselMarkers) {
 						if (changeSetRow.isWiringChange()) {
 							String left = "";
 							String right = "";
-
-							final LoadSlot load = changeSetRow.getLoadSlot();
-							if (load != null) {
-								left = load.isDESPurchase() ? "○" : "●";
+							if (changeSetRow.isLhsSlot()) {
+								left = changeSetRow.isLhsNonShipped() ? "○" : "●";
 							}
-							final DischargeSlot discharge = changeSetRow.getDischargeSlot();
-							if (discharge != null) {
-								right = discharge.isFOBSale() ? "●" : "○";
+							if (changeSetRow.isRhsSlot()) {
+								right = !changeSetRow.isRhsNonShipped() ? "○" : "●";
 							}
 
-							cell.setText(String.format("%s      %s", left, right));
+							if (left.isEmpty() && right.isEmpty()) {
+								int ii = 0;
+							} else
+
+								cell.setText(String.format("%s      %s", left, right));
 						}
 					}
 				}
@@ -1910,9 +1778,9 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				cell.setImage(null);
 				final Object element = cell.getElement();
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
-					if (!Objects.equal(changeSetRow.getNewVesselName(), changeSetRow.getOriginalVesselName())) {
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
+					if (!Objects.equals(changeSetRow.getAfterVesselName(), changeSetRow.getBeforeVesselName())) {
 						cell.setImage(imageHalfCircle);
 						if (textualVesselMarkers) {
 							cell.setText("○");
@@ -1930,19 +1798,19 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetRow) {
-					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
 
-					if (isSet(changeSetRow.getOriginalVesselName()) && isSet(changeSetRow.getNewVesselName())) {
-						if (!Objects.equal(changeSetRow.getOriginalVesselName(), changeSetRow.getNewVesselName())) {
-							return String.format("Changed from %s to %s", changeSetRow.getOriginalVesselName(), changeSetRow.getNewVesselName());
+					if (isSet(changeSetRow.getBeforeVesselName()) && isSet(changeSetRow.getAfterVesselName())) {
+						if (!Objects.equals(changeSetRow.getBeforeVesselName(), changeSetRow.getAfterVesselName())) {
+							return String.format("Changed from %s to %s", changeSetRow.getBeforeVesselName(), changeSetRow.getAfterVesselName());
 						} else {
-							return String.format("On %s", changeSetRow.getNewVesselName());
+							return String.format("On %s", changeSetRow.getAfterVesselName());
 						}
-					} else if (isSet(changeSetRow.getOriginalVesselName())) {
-						return String.format("Unassigned from %s", changeSetRow.getOriginalVesselName());
-					} else if (isSet(changeSetRow.getNewVesselName())) {
-						return String.format("Assigned to %s", changeSetRow.getNewVesselName());
+					} else if (isSet(changeSetRow.getBeforeVesselName())) {
+						return String.format("Unassigned from %s", changeSetRow.getBeforeVesselName());
+					} else if (isSet(changeSetRow.getAfterVesselName())) {
+						return String.format("Assigned to %s", changeSetRow.getAfterVesselName());
 					}
 				}
 				return null;
@@ -1955,7 +1823,7 @@ public class ChangeSetView implements IAdaptable {
 
 		scenarioComparisonService.removeListener(listener);
 		cleanUp(this.root);
-		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetRoot());
+		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
 		this.root = null;
 		{
 			for (final Map.Entry<ScenarioResult, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
@@ -2014,10 +1882,10 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				if (element instanceof ChangeSetRoot) {
+				if (element instanceof ChangeSetTableRoot) {
 					return true;
 				}
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 					return true;
 				}
 
@@ -2036,9 +1904,9 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public Object[] getElements(final Object inputElement) {
 
-				if (inputElement instanceof ChangeSetRoot) {
-					final ChangeSetRoot changeSetRoot = (ChangeSetRoot) inputElement;
-					return changeSetRoot.getChangeSets().toArray();
+				if (inputElement instanceof ChangeSetTableRoot) {
+					final ChangeSetTableRoot changeSetRoot = (ChangeSetTableRoot) inputElement;
+					return changeSetRoot.getGroups().toArray();
 				}
 
 				return new Object[0];
@@ -2046,13 +1914,10 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof ChangeSet) {
-					final ChangeSet changeSet = (ChangeSet) parentElement;
-					if (diffToBase) {
-						return changeSet.getChangeSetRowsToBase().toArray();
-					} else {
-						return changeSet.getChangeSetRowsToPrevious().toArray();
-					}
+				if (parentElement instanceof ChangeSetTableGroup) {
+					final ChangeSetTableGroup group = (ChangeSetTableGroup) parentElement;
+					final List<ChangeSetTableRow> rows = group.getRows();
+					return rows.toArray();
 				}
 				return null;
 			}
@@ -2063,8 +1928,13 @@ public class ChangeSetView implements IAdaptable {
 	@Optional
 	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
 		diffToBase = !diffToBase;
-		diagram.setDiffToBase(diffToBase);
-		ViewerHelper.refresh(viewer, true);
+		if (diffToBase) {
+			diagram.setChangeSetRoot(tableRootToBase);
+			ViewerHelper.setInput(viewer, true, tableRootToBase);
+		} else {
+			diagram.setChangeSetRoot(tableRootToPrevious);
+			ViewerHelper.setInput(viewer, true, tableRootToPrevious);
+		}
 	}
 
 	@Inject
@@ -2095,10 +1965,14 @@ public class ChangeSetView implements IAdaptable {
 			return;
 		}
 		this.viewMode = ViewMode.ACTION_SET;
-		setActionSetData(target);
+		setNewDataData(target, monitor -> {
+			final ActionSetTransformer transformer = new ActionSetTransformer();
+			return transformer.createDataModel(target, monitor);
+		}, null);
 	}
 
-	private CellLabelProvider createLambdaLabelProvider(final boolean asInt, final boolean asSigFigs, final Function<ChangeSetRow, Number> calcF, final Function<ChangeSetRow, Number> calcT) {
+	private CellLabelProvider createLambdaLabelProvider(final boolean asInt, final boolean asSigFigs, final Function<ChangeSetTableRow, Number> calcF,
+			final Function<ChangeSetTableRow, Number> calcT) {
 
 		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
 			double delta = 0.0;
@@ -2129,17 +2003,12 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				cell.setFont(null);
 				double delta = 0;
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 					cell.setFont(boldFont);
-					final ChangeSet changeSet = (ChangeSet) element;
-					final List<ChangeSetRow> rows;
-					if (diffToBase) {
-						rows = changeSet.getChangeSetRowsToBase();
-					} else {
-						rows = changeSet.getChangeSetRowsToPrevious();
-					}
+					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+					final List<ChangeSetTableRow> rows = group.getRows();
 					if (rows != null) {
-						for (final ChangeSetRow change : rows) {
+						for (final ChangeSetTableRow change : rows) {
 							if (asInt) {
 								delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
 							} else {
@@ -2147,9 +2016,9 @@ public class ChangeSetView implements IAdaptable {
 							}
 						}
 					}
-				} else if (element instanceof ChangeSetRow) {
+				} else if (element instanceof ChangeSetTableRow) {
 
-					final ChangeSetRow change = (ChangeSetRow) element;
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 					if (asInt) {
 						delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
 					} else {
@@ -2191,14 +2060,18 @@ public class ChangeSetView implements IAdaptable {
 
 	private CellLabelProvider createPriceLabelProvider(final boolean isLoad) {
 
-		final Function<ChangeSetRow, Number> calcF;
-		final Function<ChangeSetRow, Number> calcT;
+		final Function<ChangeSetTableRow, Number> calcF;
+		final Function<ChangeSetTableRow, Number> calcT;
 		if (isLoad) {
-			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION,
+					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION,
+					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
 		} else {
-			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
+					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
+					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
 		}
 		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
 			double delta = 0.0;
@@ -2219,27 +2092,22 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				cell.setFont(null);
 				double delta = 0;
-				if (element instanceof ChangeSet) {
+				if (element instanceof ChangeSetTableGroup) {
 					// cell.setFont(boldFont);
-					final ChangeSet changeSet = (ChangeSet) element;
-					final List<ChangeSetRow> rows;
-					if (diffToBase) {
-						rows = changeSet.getChangeSetRowsToBase();
-					} else {
-						rows = changeSet.getChangeSetRowsToPrevious();
-					}
+					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+					final List<ChangeSetTableRow> rows = group.getRows();
 					if (rows != null) {
-						for (final ChangeSetRow change : rows) {
+						for (final ChangeSetTableRow change : rows) {
 							delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
 						}
 					}
-				} else if (element instanceof ChangeSetRow) {
+				} else if (element instanceof ChangeSetTableRow) {
 
-					final ChangeSetRow change = (ChangeSetRow) element;
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 					delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
 
 					if (isLoad) {
-						final SlotAllocation allocation = change.getNewLoadAllocation();
+						final SlotAllocation allocation = change.getLhsAfter() != null ? change.getLhsAfter().getLoadAllocation() : null;
 						if (allocation != null) {
 							final Slot slot = allocation.getSlot();
 							if (slot != null) {
@@ -2251,7 +2119,7 @@ public class ChangeSetView implements IAdaptable {
 							}
 						}
 					} else {
-						final SlotAllocation allocation = change.getNewDischargeAllocation();
+						final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
 						if (allocation != null) {
 							final Slot slot = allocation.getSlot();
 							if (slot != null) {
@@ -2271,12 +2139,12 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetRow) {
+				if (element instanceof ChangeSetTableRow) {
 
-					final ChangeSetRow change = (ChangeSetRow) element;
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
 					if (isLoad) {
-						final SlotAllocation allocation = change.getNewLoadAllocation();
+						final SlotAllocation allocation = change.getLhsAfter() != null ? change.getLhsAfter().getLoadAllocation() : null;
 						if (allocation != null) {
 							final Slot slot = allocation.getSlot();
 							if (slot != null) {
@@ -2287,7 +2155,7 @@ public class ChangeSetView implements IAdaptable {
 							}
 						}
 					} else {
-						final SlotAllocation allocation = change.getNewDischargeAllocation();
+						final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
 						if (allocation != null) {
 							final Slot slot = allocation.getSlot();
 							if (slot != null) {
@@ -2326,100 +2194,30 @@ public class ChangeSetView implements IAdaptable {
 			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 			final GridItem[] items = grid.getSelection();
 			if (items.length >= 1) {
-				final Set<ChangeSet> selectedSets = new LinkedHashSet<>();
+				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
-					if (obj instanceof ChangeSet) {
-						selectedSets.add((ChangeSet) obj);
-					} else if (obj instanceof ChangeSetRow) {
-						final ChangeSetRow changeSetRow = (ChangeSetRow) obj;
-						selectedSets.add((ChangeSet) changeSetRow.eContainer());
+					if (obj instanceof ChangeSetTableGroup) {
+						selectedSets.add((ChangeSetTableGroup) obj);
+					} else if (obj instanceof ChangeSetTableRow) {
+						final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) obj;
+						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
 					}
 				}
 				boolean showMenu = false;
 				if (selectedSets.size() == 1) {
 					if (canExportChangeSet) {
 						if (ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
-							final ChangeSet changeSet = selectedSets.iterator().next();
-							mgr.add(new RunnableAction("Export change", () -> {
-
-								try {
-
-									final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
-									String name;
-									if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
-										name = changeSet.getDescription();
-									} else {
-										int idx = 0;
-										if (root != null) {
-											idx = root.getChangeSets().indexOf(changeSet);
-										}
-										name = String.format("Set %d", idx);
-									}
-									ExportScheduleHelper.export(changeSet.getCurrentScenario(), name);
-								} catch (final IOException e1) {
-									e1.printStackTrace();
-								}
-							}));
+							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+							mgr.add(new ExportChangeAction(changeSetTableGroup));
 							showMenu = true;
 						}
 					}
 				}
 				if (selectedSets.size() > 1) {
 					if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-
-						mgr.add(new RunnableAction("Merge changes", () -> {
-							final ChangeSet firstChangeSet = selectedSets.iterator().next();
-							selectedSets.remove(firstChangeSet);
-							for (final ChangeSet cs : selectedSets) {
-								firstChangeSet.getChangeSetRowsToBase().addAll(cs.getChangeSetRowsToBase());
-								firstChangeSet.getChangeSetRowsToPrevious().addAll(cs.getChangeSetRowsToPrevious());
-								if (firstChangeSet.getCurrentMetrics() != null) {
-									final int pnl = firstChangeSet.getCurrentMetrics().getPnl();
-									firstChangeSet.getCurrentMetrics().setPnl(pnl + cs.getCurrentMetrics().getPnl());
-
-									final int capacity = firstChangeSet.getCurrentMetrics().getCapacity();
-									firstChangeSet.getCurrentMetrics().setCapacity(capacity + cs.getCurrentMetrics().getCapacity());
-
-									final int lateness = firstChangeSet.getCurrentMetrics().getLateness();
-									firstChangeSet.getCurrentMetrics().setLateness(lateness + cs.getCurrentMetrics().getLateness());
-								}
-								if (firstChangeSet.getMetricsToBase() != null) {
-									final int pnl = firstChangeSet.getMetricsToBase().getPnlDelta();
-									firstChangeSet.getMetricsToBase().setPnlDelta(pnl + cs.getMetricsToBase().getPnlDelta());
-
-									final int capacity = firstChangeSet.getMetricsToBase().getCapacityDelta();
-									firstChangeSet.getMetricsToBase().setCapacityDelta(capacity + cs.getMetricsToBase().getCapacityDelta());
-
-									final int lateness = firstChangeSet.getMetricsToBase().getLatenessDelta();
-									firstChangeSet.getMetricsToBase().setLatenessDelta(lateness + cs.getMetricsToBase().getLatenessDelta());
-								}
-								if (firstChangeSet.getMetricsToPrevious() != null) {
-									final int pnl = firstChangeSet.getMetricsToPrevious().getPnlDelta();
-									firstChangeSet.getMetricsToPrevious().setPnlDelta(pnl + cs.getMetricsToPrevious().getPnlDelta());
-
-									final int capacity = firstChangeSet.getMetricsToPrevious().getCapacityDelta();
-									firstChangeSet.getMetricsToPrevious().setCapacityDelta(capacity + cs.getMetricsToPrevious().getCapacityDelta());
-
-									final int lateness = firstChangeSet.getMetricsToPrevious().getLatenessDelta();
-									firstChangeSet.getMetricsToPrevious().setLatenessDelta(lateness + cs.getMetricsToPrevious().getLatenessDelta());
-								}
-								if (cs.getCurrentScenarioRef() != null) {
-									cs.getCurrentScenarioRef().close();
-								}
-								if (cs.getBaseScenarioRef() != null) {
-									cs.getBaseScenarioRef().close();
-								}
-								if (cs.getPrevScenarioRef() != null) {
-									cs.getPrevScenarioRef().close();
-								}
-
-							}
-							final ChangeSetRoot root = (ChangeSetRoot) firstChangeSet.eContainer();
-							root.getChangeSets().removeAll(selectedSets);
-							viewer.refresh();
-						}));
+						mgr.add(new MergeChangesAction(selectedSets, viewer));
 						showMenu = true;
 					}
 
@@ -2441,11 +2239,25 @@ public class ChangeSetView implements IAdaptable {
 		if (plan instanceof ActionableSetPlan) {
 			this.viewMode = ViewMode.ACTION_SET;
 			this.canExportChangeSet = true;
-			setActionableSetData(target, (ActionableSetPlan) plan);
+			setNewDataData(target, monitor -> {
+				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
+				return transformer.createDataModel(target, (ActionableSetPlan) plan, monitor);
+			}, null);
 		} else if (plan instanceof SlotInsertionOptions) {
+			SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			this.viewMode = ViewMode.ACTION_SET;
 			this.canExportChangeSet = true;
-			setInsertionPlanData(target, (SlotInsertionOptions) plan);
+			setNewDataData(target, monitor -> {
+				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
+
+				ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor);
+				// Returns a new sort order -- based on the assumption input data is sorted by best value first
+				final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, slotInsertionOptions.getSlotsInserted().get(0));
+				newRoot.getChangeSets().clear();
+				newRoot.getChangeSets().addAll(processChangeSetRoot);
+				insertionPlanFilter.setFilterActive(true);
+				return newRoot;
+			}, slotInsertionOptions.getSlotsInserted().get(0));
 		}
 	}
 

@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -36,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -372,16 +374,20 @@ public class EquivalanceGroupBuilder {
 			}
 		} else if (element instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) element;
-			final String base = "start-" + startEvent.getSequence().getName() + "-"+(startEvent.getSequence().getVesselAvailability() != null ? ""+startEvent.getSequence().getVesselAvailability().getStartAfter(): "null") + "-"+(startEvent.getSequence().getVesselAvailability() != null ? "" + startEvent.getSequence().getVesselAvailability().getEndAfter(): "null");
-			if (startEvent.getSequence().isSetSpotIndex()) {
-				return base + "-" + startEvent.getSequence().getSpotIndex();
+			Sequence sequence = startEvent.getSequence();
+			VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+			final String base = "start-" + sequence.getName() + "-" + (vesselAvailability == null ? "" : Integer.toString(vesselAvailability.getCharterNumber()));
+			if (sequence.isSetSpotIndex()) {
+				return base + "-" + sequence.getSpotIndex();
 			}
 			return base;
 		} else if (element instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) element;
-			final String base = "end-" + endEvent.getSequence().getName() + "-"+(endEvent.getSequence().getVesselAvailability() != null ? ""+endEvent.getSequence().getVesselAvailability().getStartAfter() : "null") + "-"+ (endEvent.getSequence().getVesselAvailability() != null ? ""+endEvent.getSequence().getVesselAvailability().getEndAfter() : "null");
-			if (endEvent.getSequence().isSetSpotIndex()) {
-				return base + "-" + endEvent.getSequence().getSpotIndex();
+			Sequence sequence = endEvent.getSequence();
+			VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+			final String base = "end-" + sequence.getName() + "-" + (vesselAvailability == null ? "" : Integer.toString(vesselAvailability.getCharterNumber()));
+			if (sequence.isSetSpotIndex()) {
+				return base + "-" + sequence.getSpotIndex();
 			}
 			return base;
 		} else if (element instanceof GeneratedCharterOut) {

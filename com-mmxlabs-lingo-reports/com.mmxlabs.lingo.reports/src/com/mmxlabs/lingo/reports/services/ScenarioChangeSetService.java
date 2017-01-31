@@ -25,6 +25,9 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.rcp.common.SelectionHelper;
 
 /**
@@ -40,9 +43,9 @@ public class ScenarioChangeSetService {
 	private ESelectionService selectionService;
 
 	private boolean diffToBase;
-	private ChangeSetRoot changeSetRoot;
-	private ChangeSet changeSet;
-	private Collection<ChangeSetRow> changeSetRows;
+	private ChangeSetTableRoot changeSetRoot;
+	private ChangeSetTableGroup changeSet;
+	private Collection<ChangeSetTableRow> changeSetRows;
 
 	private final ConcurrentLinkedQueue<IScenarioChangeSetListener> listeners = new ConcurrentLinkedQueue<>();
 
@@ -50,17 +53,17 @@ public class ScenarioChangeSetService {
 		return diffToBase;
 	}
 
-	public @Nullable ChangeSet getChangeSet() {
+	public @Nullable ChangeSetTableGroup getChangeSet() {
 		return changeSet;
 	}
 
 	@Nullable
-	public ChangeSetRoot getChangeSetRoot() {
+	public ChangeSetTableRoot getChangeSetRoot() {
 		return changeSetRoot;
 	}
 
 	@Nullable
-	public Collection<ChangeSetRow> getSelectedChangeSetRows() {
+	public Collection<ChangeSetTableRow> getSelectedChangeSetRows() {
 		return changeSetRows;
 	}
 
@@ -85,25 +88,25 @@ public class ScenarioChangeSetService {
 
 					// Where to get this from?
 					final boolean diffToBase = false;
-					ChangeSetRoot root = null;
-					ChangeSet set = null;
-					final List<ChangeSetRow> rows = new LinkedList<>();
+					ChangeSetTableRoot root = null;
+					ChangeSetTableGroup set = null;
+					final List<ChangeSetTableRow> rows = new LinkedList<>();
 
 					final Iterator<?> itr = structuredSelection.iterator();
 					while (itr.hasNext()) {
 						Object o = itr.next();
-						if (o instanceof ChangeSetRow) {
-							final ChangeSetRow r = (ChangeSetRow) o;
+						if (o instanceof ChangeSetTableRow) {
+							final ChangeSetTableRow r = (ChangeSetTableRow) o;
 							rows.add(r);
 							o = r.eContainer();
 						}
-						if (o instanceof ChangeSet) {
-							final ChangeSet s = (ChangeSet) o;
+						if (o instanceof ChangeSetTableGroup) {
+							final ChangeSetTableGroup s = (ChangeSetTableGroup) o;
 							set = s;
 							o = s.eContainer();
 						}
-						if (o instanceof ChangeSetRoot) {
-							final ChangeSetRoot r = (ChangeSetRoot) o;
+						if (o instanceof ChangeSetTableRoot) {
+							final ChangeSetTableRoot r = (ChangeSetTableRoot) o;
 							root = r;
 						}
 					}
@@ -195,8 +198,8 @@ public class ScenarioChangeSetService {
 		listeners.remove(l);
 	}
 
-	private synchronized void fireListeners(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final Collection<ChangeSetRow> changeSetRows,
-			final boolean diffToBase) {
+	private synchronized void fireListeners(@Nullable final ChangeSetTableRoot changeSetRoot, @Nullable final ChangeSetTableGroup changeSet,
+			@Nullable final Collection<ChangeSetTableRow> changeSetRows, final boolean diffToBase) {
 		this.changeSetRoot = changeSetRoot;
 		this.changeSet = changeSet;
 		this.changeSetRows = changeSetRows;
