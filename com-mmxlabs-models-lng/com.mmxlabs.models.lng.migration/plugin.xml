@@ -507,11 +507,11 @@
              to="65">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV65"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV66"
              context="com.mmxlabs.lingo"
              from="65"
-             id="com.mmxlabs.models.lng.migration.units.MigrateToV65"
-             to="65">
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV66"
+             to="66">
        </MigrationUnit>
    </extension>
 </plugin>
