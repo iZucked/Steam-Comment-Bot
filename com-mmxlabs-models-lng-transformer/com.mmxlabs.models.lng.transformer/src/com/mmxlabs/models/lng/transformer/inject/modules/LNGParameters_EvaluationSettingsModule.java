@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
@@ -29,7 +32,10 @@ import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
+import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
+import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
+import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -47,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 
 	public static final String OPTIMISER_REEVALUATE = "LNGParameters_EvaluationSettingsModule_OPTIMISER_REEVALUATE";
+	public static final String SIMILARITY_SETTING = "LNGParameters_EvaluationSettingsModule_SIMILARITY_SETTING";
 	
 	@NonNull
 	private final UserSettings userSettings;
@@ -158,6 +165,15 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		}
 		return weightsMap;
 	}
+	
+	@Provides
+	@Named(LocalSearchOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_NAMES)
+	List<String> provideMultiObjectiveFitnessComponentNames(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
+		LinkedList<String> objectiveNames = new LinkedList<String>(Arrays.asList("SimilarityFitnessCore"));
+		assert(enabledFitnessNames.containsAll(objectiveNames));
+		return objectiveNames;
+	}
+
 
 	@Provides
 	@Singleton
@@ -225,6 +241,24 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	private boolean isSCMGLooping() {
 		return false;
 	}
+	
+	@Provides
+	@Named(LocalSearchOptimiserModule.SIMILARITY_SETTING)
+	private SimilarityFitnessMode getSimilarityMode() {
+		switch (userSettings.getSimilarityMode()) {
+		case OFF:
+			return SimilarityFitnessMode.OFF;
+		case LOW:
+			return SimilarityFitnessMode.LOW;
+		case MEDIUM:
+			return SimilarityFitnessMode.MEDIUM;
+		case HIGH:
+			return SimilarityFitnessMode.HIGH;
+		default:
+			return null;
+		}
+	}
+
 	
 
 }
