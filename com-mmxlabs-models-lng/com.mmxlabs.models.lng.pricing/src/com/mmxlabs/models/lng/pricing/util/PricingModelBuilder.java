@@ -62,7 +62,7 @@ public class PricingModelBuilder {
 
 		return baseFuelIndex;
 	}
-	
+
 	public @NonNull CommodityIndex createCommodityIndex(@NonNull final String name, final double commodityIndexPrice) {
 
 		final DerivedIndex<Double> indexData = PricingFactory.eINSTANCE.createDerivedIndex();
@@ -76,7 +76,7 @@ public class PricingModelBuilder {
 
 		return commodityIndex;
 	}
-	
+
 	public void clearPointsOnCommodityIndex(CommodityIndex commodityIndex) {
 		DataIndex<Double> data = (DataIndex<Double>) commodityIndex.getData();
 		data.getPoints().clear();
@@ -89,6 +89,20 @@ public class PricingModelBuilder {
 		ip.setDate(date);
 		ip.setValue(value);
 		points.add(ip);
+	}
+
+	public DataIndexBuilder<CommodityIndex> makeCommodityDataCurve(String name, String currencyUnit, String volumeUnit) {
+		final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
+
+		final CommodityIndex commodityIndex = PricingFactory.eINSTANCE.createCommodityIndex();
+		commodityIndex.setName(name);
+		commodityIndex.setCurrencyUnit(currencyUnit);
+		commodityIndex.setVolumeUnit(volumeUnit);
+		commodityIndex.setData(indexData);
+
+		return new DataIndexBuilder<CommodityIndex>(commodityIndex, idx -> {
+			pricingModel.getCommodityIndices().add(idx);
+		});
 	}
 
 }

@@ -143,7 +143,7 @@ public class BaseCaseEvaluator {
 				}
 			}
 
-			return null;
+			return (T) null;
 		}
 
 		public <T extends EObject> T getCopy(@NonNull T original) {

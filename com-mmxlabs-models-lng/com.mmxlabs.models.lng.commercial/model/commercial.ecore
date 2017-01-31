@@ -136,4 +136,22 @@
     <eLiterals name="START_DISCHARGE" value="2"/>
     <eLiterals name="END_DISCHARGE" value="3"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DateShiftExpressionPriceParameters"
+      eSuperTypes="#//LNGPriceCalculatorParameters">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specificDay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+          <details key="formatString" value="#,###,##0"/>
+        </eAnnotations>
+        <details key="formatString" value="-#0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
 </ecore:EPackage>

@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry;
 import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
@@ -140,6 +141,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass simpleEntityBookEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass dateShiftExpressionPriceParametersEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -630,6 +638,42 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDateShiftExpressionPriceParameters() {
+		return dateShiftExpressionPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDateShiftExpressionPriceParameters_PriceExpression() {
+		return (EAttribute)dateShiftExpressionPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDateShiftExpressionPriceParameters_SpecificDay() {
+		return (EAttribute)dateShiftExpressionPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDateShiftExpressionPriceParameters_Value() {
+		return (EAttribute)dateShiftExpressionPriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -730,6 +774,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		simpleEntityBookEClass = createEClass(SIMPLE_ENTITY_BOOK);
 
+		dateShiftExpressionPriceParametersEClass = createEClass(DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS);
+		createEAttribute(dateShiftExpressionPriceParametersEClass, DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
+		createEAttribute(dateShiftExpressionPriceParametersEClass, DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__SPECIFIC_DAY);
+		createEAttribute(dateShiftExpressionPriceParametersEClass, DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE);
+
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
 		pricingEventEEnum = createEEnum(PRICING_EVENT);
@@ -782,6 +831,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		slotContractParamsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		baseEntityBookEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		simpleEntityBookEClass.getESuperTypes().add(this.getBaseEntityBook());
+		dateShiftExpressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -849,6 +899,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(simpleEntityBookEClass, SimpleEntityBook.class, "SimpleEntityBook", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(dateShiftExpressionPriceParametersEClass, DateShiftExpressionPriceParameters.class, "DateShiftExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDateShiftExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, DateShiftExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDateShiftExpressionPriceParameters_SpecificDay(), ecorePackage.getEBoolean(), "specificDay", null, 0, 1, DateShiftExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDateShiftExpressionPriceParameters_Value(), ecorePackage.getEInt(), "value", null, 0, 1, DateShiftExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
 		addEEnumLiteral(contractTypeEEnum, ContractType.BOTH);
@@ -892,6 +947,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
+		   });
+		addAnnotation
+		  (getContract_MaxQuantity(), 
+		   new boolean[] { true },
+		   "http://www.mmxlabs.com/models/ui/numberFormat",
+		   new String[] {
+			 "formatString", "#,###,##0"
 		   });	
 		addAnnotation
 		  (getSalesContract_MinCvValue(), 
@@ -913,6 +975,19 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getDateShiftExpressionPriceParameters_Value(), 
+		   source, 
+		   new String[] {
+			 "formatString", "-#0"
+		   });
+		addAnnotation
+		  (getDateShiftExpressionPriceParameters_Value(), 
+		   new boolean[] { true },
+		   "http://www.mmxlabs.com/models/ui/numberFormat",
+		   new String[] {
+			 "formatString", "#,###,##0"
 		   });
 	}
 
@@ -932,6 +1007,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   });	
 		addAnnotation
 		  (getExpressionPriceParameters_PriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getDateShiftExpressionPriceParameters_PriceExpression(), 
 		   source, 
 		   new String[] {
 			 "type", "commodity"

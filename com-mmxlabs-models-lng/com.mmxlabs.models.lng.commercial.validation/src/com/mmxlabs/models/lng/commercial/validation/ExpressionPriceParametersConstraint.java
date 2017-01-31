@@ -22,7 +22,7 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class PriceExpressionParametersConstraint extends AbstractModelMultiConstraint {
+public class ExpressionPriceParametersConstraint extends AbstractModelMultiConstraint {
 
 	@Override
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {

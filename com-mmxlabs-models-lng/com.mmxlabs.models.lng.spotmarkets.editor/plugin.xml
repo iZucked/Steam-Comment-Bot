@@ -124,13 +124,6 @@
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
     <factory
-          ID="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
-          factory="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
-          label="Price Expression Spot Market"
-          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"          
-          targetEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterInMarketFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Spot Charter In Market"
@@ -141,7 +134,14 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Spot Charter Out Market"
           targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
-    </factory>    
+    </factory>
+	 <factory
+	       ID="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory_DateShift"
+	       factory="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
+	       label="Spot Market"
+	       outputEClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters"
+	       targetEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+	 </factory>    
  </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">

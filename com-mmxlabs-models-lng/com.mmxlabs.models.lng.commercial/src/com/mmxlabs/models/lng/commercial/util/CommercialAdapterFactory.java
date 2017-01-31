@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -140,6 +141,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSimpleEntityBook(SimpleEntityBook object) {
 				return createSimpleEntityBookAdapter();
+			}
+			@Override
+			public Adapter caseDateShiftExpressionPriceParameters(DateShiftExpressionPriceParameters object) {
+				return createDateShiftExpressionPriceParametersAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -366,6 +371,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSimpleEntityBookAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters <em>Date Shift Expression Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters
+	 * @generated
+	 */
+	public Adapter createDateShiftExpressionPriceParametersAdapter() {
 		return null;
 	}
 

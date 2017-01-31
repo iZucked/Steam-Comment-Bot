@@ -105,6 +105,15 @@ public interface CommercialFactory extends EFactory {
 	SimpleEntityBook createSimpleEntityBook();
 
 	/**
+	 * Returns a new object of class '<em>Date Shift Expression Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Date Shift Expression Price Parameters</em>'.
+	 * @generated
+	 */
+	DateShiftExpressionPriceParameters createDateShiftExpressionPriceParameters();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

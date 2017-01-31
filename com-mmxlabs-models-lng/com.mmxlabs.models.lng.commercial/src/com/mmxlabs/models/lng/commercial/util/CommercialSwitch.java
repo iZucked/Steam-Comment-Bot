@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -198,6 +199,15 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = caseBaseEntityBook(simpleEntityBook);
 				if (result == null) result = caseUUIDObject(simpleEntityBook);
 				if (result == null) result = caseMMXObject(simpleEntityBook);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: {
+				DateShiftExpressionPriceParameters dateShiftExpressionPriceParameters = (DateShiftExpressionPriceParameters)theEObject;
+				T result = caseDateShiftExpressionPriceParameters(dateShiftExpressionPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(dateShiftExpressionPriceParameters);
+				if (result == null) result = caseUUIDObject(dateShiftExpressionPriceParameters);
+				if (result == null) result = caseMMXObject(dateShiftExpressionPriceParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -412,6 +422,21 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSimpleEntityBook(SimpleEntityBook object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Date Shift Expression Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Date Shift Expression Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDateShiftExpressionPriceParameters(DateShiftExpressionPriceParameters object) {
 		return null;
 	}
 

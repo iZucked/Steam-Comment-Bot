@@ -499,5 +499,12 @@
              id="com.mmxlabs.models.lng.migration.units.MigrateToV65"
              to="65">
        </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV65"
+             context="com.mmxlabs.lingo"
+             from="64"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV65"
+             to="65">
+       </MigrationUnit>
    </extension>
 </plugin>

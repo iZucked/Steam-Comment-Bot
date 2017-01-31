@@ -74,6 +74,12 @@
        inheritable="true"
        modelClass="com.mmxlabs.models.lng.commercial.SimpleEntityBook">
  </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.DateShiftExpressionPriceParametersComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.DateShiftExpressionPriceParametersComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters">
+ </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
