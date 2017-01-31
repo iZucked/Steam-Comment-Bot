@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.indexedobjects.IIndexBits;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexBits;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
@@ -21,10 +23,10 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public class IndexedOptionalElementsEditor implements IOptionalElementsProviderEditor {
 
-	private final ArrayList<ISequenceElement> optionalList = new ArrayList<ISequenceElement>();
-	private final ArrayList<ISequenceElement> requiredList = new ArrayList<ISequenceElement>();
-	private final ArrayList<ISequenceElement> softRequiredList = new ArrayList<ISequenceElement>();
-	private final IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<ISequenceElement>();
+	private final List<@NonNull ISequenceElement> optionalList = new ArrayList<>();
+	private final List<@NonNull ISequenceElement> requiredList = new ArrayList<>();
+	private final List<@NonNull ISequenceElement> softRequiredList = new ArrayList<>();
+	private final IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<>();
 
 	@Override
 	public boolean isElementOptional(final ISequenceElement element) {
@@ -37,25 +39,22 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 	}
 
 	@Override
-	public List<ISequenceElement> getOptionalElements() {
+	public List<@NonNull ISequenceElement> getOptionalElements() {
 		return Collections.unmodifiableList(optionalList);
 	}
 
 	@Override
-	public List<ISequenceElement> getRequiredElements() {
+	public List<@NonNull ISequenceElement> getRequiredElements() {
 		return Collections.unmodifiableList(requiredList);
 	}
 
-	/**
-	 * @since 2.0
-	 */
 	@Override
-	public List<ISequenceElement> getSoftRequiredElements() {
+	public List<@NonNull ISequenceElement> getSoftRequiredElements() {
 		return Collections.unmodifiableList(softRequiredList);
 	}
 
 	@Override
-	public void setOptional(final ISequenceElement element, final boolean isOptional) {
+	public void setOptional(final @NonNull ISequenceElement element, final boolean isOptional) {
 		if (isOptional) {
 			optionalElements.set(element);
 		} else {

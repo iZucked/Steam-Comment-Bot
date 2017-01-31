@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.common.dcproviders;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -25,7 +27,7 @@ public interface IOptionalElementsProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean isElementOptional(ISequenceElement element);
+	boolean isElementOptional(@NonNull ISequenceElement element);
 
 	/**
 	 * Equivalent to !{@link #isElementOptional(Object)}.
@@ -35,7 +37,7 @@ public interface IOptionalElementsProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean isElementRequired(ISequenceElement element);
+	boolean isElementRequired(@NonNull ISequenceElement element);
 
 	/**
 	 * Get all the elements which are optional in the {@link IOptimisationData}.
@@ -44,7 +46,7 @@ public interface IOptionalElementsProvider extends IDataComponentProvider {
 	 * 
 	 * @return
 	 */
-	List<ISequenceElement> getOptionalElements();
+	List<@NonNull ISequenceElement> getOptionalElements();
 
 	/**
 	 * Get all the elements which aren't optional in the {@link IOptimisationData}
@@ -53,14 +55,13 @@ public interface IOptionalElementsProvider extends IDataComponentProvider {
 	 * 
 	 * @return
 	 */
-	List<ISequenceElement> getRequiredElements();
+	List<@NonNull ISequenceElement> getRequiredElements();
 
 	/**
 	 * Get all the elements which are treated as optional but are really non-optional. Such elements will typically have a penalty associated with them for non-use. These elements will be considered
 	 * as optional and be return in the {@link #getOptionalElements()} method and return true for {@link #isElementOptional(ISequenceElement)}.
 	 * 
 	 * @return
-	 * @since 2.0
 	 */
-	List<ISequenceElement> getSoftRequiredElements();
+	List<@NonNull ISequenceElement> getSoftRequiredElements();
 }

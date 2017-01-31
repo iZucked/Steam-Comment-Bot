@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
@@ -25,7 +27,7 @@ public interface IOptionalElementsProviderEditor extends IOptionalElementsProvid
 	 * @param element
 	 * @param isOptional
 	 */
-	void setOptional(ISequenceElement element, boolean isOptional);
+	void setOptional(@NonNull ISequenceElement element, boolean isOptional);
 
 	/**
 	 * Set whether the given element is soft required - i.e. it is a required element, but should be treated as optional. This will override any previous setting with
@@ -35,5 +37,5 @@ public interface IOptionalElementsProviderEditor extends IOptionalElementsProvid
 	 * @param isSoftRequired
 	 * @since 2.0
 	 */
-	void setSoftRequired(ISequenceElement element, boolean isSoftRequired);
+	void setSoftRequired(@NonNull ISequenceElement element, boolean isSoftRequired);
 }
