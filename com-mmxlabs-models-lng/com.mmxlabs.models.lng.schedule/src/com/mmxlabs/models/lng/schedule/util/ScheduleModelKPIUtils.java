@@ -421,7 +421,11 @@ public class ScheduleModelKPIUtils {
 		return null;
 	}
 
-	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue) {
+	public enum ShippingCostType {
+		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS,
+	}
+
+	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, ShippingCostType costType) {
 		if (grouping != null) {
 
 			// boolean collecting = false;
@@ -429,54 +433,85 @@ public class ScheduleModelKPIUtils {
 			for (final Event event : grouping.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final PortVisit slotVisit = (PortVisit) event;
-					total += slotVisit.getCharterCost();
-					total += slotVisit.getPortCost();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += slotVisit.getCharterCost();
+					}
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.PORT_COSTS) {
+						total += slotVisit.getPortCost();
+					}
 				} else if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
-					total += journey.getCharterCost();
-					total += journey.getToll();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += journey.getCharterCost();
+					}
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.CANAL_COSTS) {
+						total += journey.getToll();
+					}
 				} else if (event instanceof Idle) {
 					final Idle idle = (Idle) event;
-					total += idle.getCharterCost();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += idle.getCharterCost();
+					}
 				} else if (event instanceof Cooldown) {
 					final Cooldown cooldown = (Cooldown) event;
-					total += cooldown.getCharterCost();
-					total += cooldown.getCost();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += cooldown.getCharterCost();
+					}
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.COOLDOWN_COSTS) {
+						total += cooldown.getCost();
+					}
 				} else if (event instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) event;
-					total += generatedCharterOut.getCharterCost();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += generatedCharterOut.getCharterCost();
+					}
 					if (includeRevenue) {
-						total -= generatedCharterOut.getRevenue();
+						if (costType == ShippingCostType.ALL || costType == ShippingCostType.OTHER_COSTS) {
+							total -= generatedCharterOut.getRevenue();
+						}
 					}
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-					total += vesselEventVisit.getPortCost();
-					total += vesselEventVisit.getCharterCost();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.PORT_COSTS) {
+						total += vesselEventVisit.getPortCost();
+					}
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += vesselEventVisit.getCharterCost();
+					}
 					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 					if (vesselEvent instanceof CharterOutEvent) {
 						final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
-						total += charterOutEvent.getRepositioningFee();
-						if (includeRevenue) {
-							total -= charterOutEvent.getDurationInDays() * charterOutEvent.getHireRate();
+						if (costType == ShippingCostType.ALL || costType == ShippingCostType.OTHER_COSTS) {
+							total += charterOutEvent.getRepositioningFee();
+							if (includeRevenue) {
+								total -= charterOutEvent.getDurationInDays() * charterOutEvent.getHireRate();
+							}
 						}
-
 					}
 				} else if (event instanceof PortVisit) {
 					final PortVisit portVisit = (PortVisit) event;
-					total += portVisit.getCharterCost();
-					total += portVisit.getPortCost();
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
+						total += portVisit.getCharterCost();
+					}
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.PORT_COSTS) {
+						total += portVisit.getPortCost();
+					}
 				}
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
-					total += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-					// Start event and charter out events pay for LNG use
-					if (includeAllLNG //
-							|| grouping instanceof StartEvent //
-							|| grouping instanceof EndEvent //
-							|| grouping instanceof VesselEventVisit //
-							|| grouping instanceof GeneratedCharterOut //
-					) {
-						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.BUNKER_COSTS) {
+						total += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+					}
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.LNG_COSTS) {
+						// Start event and charter out events pay for LNG use
+						if (includeAllLNG //
+								|| grouping instanceof StartEvent //
+								|| grouping instanceof EndEvent //
+								|| grouping instanceof VesselEventVisit //
+								|| grouping instanceof GeneratedCharterOut //
+						) {
+							total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+						}
 					}
 				}
 			}
@@ -503,7 +538,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public static long getTotalShippingCost(@NonNull final EventGrouping eventGrouping) {
-		return calculateEventShippingCost(eventGrouping, false, false);
+		return calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.ALL);
 	}
 
 	public static long getTotalShippingCost(@NonNull final CargoAllocation cargoAllocation) {
