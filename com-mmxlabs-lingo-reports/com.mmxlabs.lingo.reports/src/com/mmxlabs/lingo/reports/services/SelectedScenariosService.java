@@ -475,23 +475,23 @@ public class SelectedScenariosService {
 	}
 
 	public void triggerListener(@NonNull final ISelectedScenariosServiceListener l, final boolean block) {
-		final SelectedDataProviderImpl selectedDataProvider = createSelectedDataProvider();
-
-		final LinkedHashSet<ScenarioResult> others = new LinkedHashSet<>(selectionProvider.getSelection());
-		ScenarioResult pinnedInstance = selectionProvider.getPinnedInstance();
-		// If there is only the pinned scenario, pretend it is just selected.
-		// If there is a pin and other scenarios, remove the pin from the others list
-		if (others.size() < 2) {
-			pinnedInstance = null;
-		} else {
-			others.remove(pinnedInstance);
-		}
 		try {
+			final SelectedDataProviderImpl selectedDataProvider = createSelectedDataProvider();
+
+			final LinkedHashSet<ScenarioResult> others = new LinkedHashSet<>(selectionProvider.getSelection());
+			ScenarioResult pinnedInstance = selectionProvider.getPinnedInstance();
+			// If there is only the pinned scenario, pretend it is just selected.
+			// If there is a pin and other scenarios, remove the pin from the others list
+			if (others.size() < 2) {
+				pinnedInstance = null;
+			} else {
+				others.remove(pinnedInstance);
+			}
+	
 			l.selectionChanged(selectedDataProvider, pinnedInstance, others, block);
 		} catch (final Exception e) {
 			log.error(e.getMessage(), e);
 		}
-
 	}
 
 	@Nullable

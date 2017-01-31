@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -59,6 +61,9 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * the user to change the default settings.
  */
 public class ConfigurableFleetReportView extends AbstractConfigurableGridReportView {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigurableFleetReportView.class);
+
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -234,7 +239,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			}
 		} });
 
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		// Try and set initial selection. Do not abort on exceptions
+		try {
+			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
 	}
 
 	@Override
