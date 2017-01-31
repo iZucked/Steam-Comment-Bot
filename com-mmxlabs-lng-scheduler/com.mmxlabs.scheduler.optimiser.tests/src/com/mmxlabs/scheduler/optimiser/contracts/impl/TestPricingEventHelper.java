@@ -17,8 +17,9 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -30,12 +31,31 @@ public class TestPricingEventHelper {
 	@Test
 	public void testLoadSlotTimes() {
 
-		final ILoadOption loadOption = mock(ILoadOption.class);
-		final IDischargeOption dischargeOption = mock(IDischargeOption.class);
+		final IPort loadPort = mock(IPort.class);
+		final IPort dischargePort = mock(IPort.class);
+
+		final ILoadSlot loadOption = mock(ILoadSlot.class);
+		final IDischargeSlot dischargeOption = mock(IDischargeSlot.class);
 		final IPortTimesRecord portTimesRecord = mock(IPortTimesRecord.class);
+
+		when(loadOption.getPort()).thenReturn(loadPort);
+		when(dischargeOption.getPort()).thenReturn(dischargePort);
 
 		final ITimeZoneToUtcOffsetProvider tzProvider = mock(ITimeZoneToUtcOffsetProvider.class);
 		// TZ Shift, +1 for load, +2 for discharge
+		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final IPort p = (IPort) args[1];
+				if (p == loadPort) {
+					return (Integer) args[0] + 1;
+				} else {
+					return (Integer) args[0] + 2;
+
+				}
+			}
+		});
 		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -81,12 +101,30 @@ public class TestPricingEventHelper {
 	@Test
 	public void testDischargeSlotTimes() {
 
-		final ILoadOption loadOption = mock(ILoadOption.class);
-		final IDischargeOption dischargeOption = mock(IDischargeOption.class);
+		final IPort loadPort = mock(IPort.class);
+		final IPort dischargePort = mock(IPort.class);
+
+		final ILoadSlot loadOption = mock(ILoadSlot.class);
+		final IDischargeSlot dischargeOption = mock(IDischargeSlot.class);
 		final IPortTimesRecord portTimesRecord = mock(IPortTimesRecord.class);
+
+		when(loadOption.getPort()).thenReturn(loadPort);
+		when(dischargeOption.getPort()).thenReturn(dischargePort);
 
 		// TZ Shift, +1 for load, +2 for discharge
 		final ITimeZoneToUtcOffsetProvider tzProvider = mock(ITimeZoneToUtcOffsetProvider.class);
+		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final IPort p = (IPort) args[1];
+				if (p == loadPort) {
+					return (Integer) args[0] + 1;
+				} else {
+					return (Integer) args[0] + 2;
+				}
+			}
+		});
 		when(tzProvider.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
