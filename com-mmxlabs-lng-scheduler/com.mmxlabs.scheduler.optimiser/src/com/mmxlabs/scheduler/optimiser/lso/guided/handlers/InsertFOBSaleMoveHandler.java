@@ -56,21 +56,26 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 			assert location != null;
 			if (location.getFirst() == null) {
 				builder.withUnusedFOBPurchase(possiblePreceder);
+				hints.usedElement(possiblePreceder);
 			} else {
 				builder.withUsedFOBPurchase(location.getFirst(), possiblePreceder);
 
 				final ISequence fobPurchaseSequence = sequences.getSequence(location.getFirst());
 				final ISequenceElement next = fobPurchaseSequence.get(location.getSecond() + 1);
-				if (helper.isDischargeSlot(next)) {
-					hints.addProblemElement(next);
+				if (helper.isOptional(next)) {
+					hints.usedElement(possiblePreceder);
 				} else {
-					hints.addShippingLength(location.getFirst(), location.getSecond());
+					if (helper.isDischargeSlot(next)) {
+						hints.addProblemElement(next);
+					} else {
+						hints.addShippingLength(location.getFirst(), location.getSecond());
+					}
 				}
 			}
 
 			break;
 		}
-
-		return new Pair<com.mmxlabs.optimiser.core.moves.IMove, Hints>(builder.create(), hints);
+		hints.getUsedElements().add(fobSale);
+		return new Pair<IMove, Hints>(builder.create(), hints);
 	}
 }

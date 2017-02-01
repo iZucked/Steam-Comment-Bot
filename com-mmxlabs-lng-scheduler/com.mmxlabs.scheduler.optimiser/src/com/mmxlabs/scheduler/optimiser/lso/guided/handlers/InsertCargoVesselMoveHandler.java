@@ -176,6 +176,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 				break;
 			}
 
+			hints.getUsedElements().addAll(orderedCargoElements);
 			return new Pair<IMove, Hints>(builder.create(), hints);
 		}
 

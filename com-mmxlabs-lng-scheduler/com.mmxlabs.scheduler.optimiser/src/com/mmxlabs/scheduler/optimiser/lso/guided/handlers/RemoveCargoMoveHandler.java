@@ -59,6 +59,8 @@ public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 				} else {
 					hints.addProblemElement(e);
 				}
+			} else {
+				hints.usedElement(e);
 			}
 			builder.removeElement(fromResource, e);
 		}

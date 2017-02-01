@@ -45,6 +45,8 @@ public class RemoveSlotMoveHandler implements IGuidedMoveHandler {
 			} else {
 				hints.addProblemElement(element);
 			}
+		} else {
+			hints.getUsedElements().add(element);
 		}
 		builder.removeElement(fromResource, element);
 

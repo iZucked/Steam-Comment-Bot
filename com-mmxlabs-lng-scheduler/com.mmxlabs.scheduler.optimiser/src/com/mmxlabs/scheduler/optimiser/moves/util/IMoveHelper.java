@@ -44,7 +44,7 @@ public interface IMoveHelper {
 	boolean isMaintenanceEvent(@NonNull ISequenceElement element);
 
 	@NonNull
-	Collection<IResource> getAllVesselResources();
+	Collection<@NonNull IResource> getAllVesselResources();
 
 	boolean isStartOrEndSlot(@NonNull ISequenceElement element);
 

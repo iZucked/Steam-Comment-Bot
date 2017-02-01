@@ -102,6 +102,11 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 			final IResource candidateResource = candidateLocation.getFirst();
 
 			if (candidateResource == null) {
+				// unused to unused swap!
+				if (fromResource == null) {
+					continue;
+				}
+
 				if (!helper.isOptional(slot)) {
 					if (options.isStrictOptional()) {
 						continue;
@@ -159,7 +164,12 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 
 		// Record hints
 		elementHints.forEach(p -> hints.addSuggestedElements(p.getSecond()));
-
+		if (helper.isOptional(builder.getElementA())) {
+			hints.getUsedElements().add(builder.getElementA());
+		}
+		if (helper.isOptional(builder.getElementB())) {
+			hints.getUsedElements().add(builder.getElementB());
+		}
 		return new Pair<IMove, Hints>(builder.create(), hints);
 	}
 }

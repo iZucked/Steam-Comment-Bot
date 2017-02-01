@@ -36,6 +36,8 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandle
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -57,9 +59,6 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	private IOptionalElementsProvider optionalElementsProvider;
 
 	@Inject
-	private IGuidedMoveHelper helper;
-
-	@Inject
 	private HintManager hintManager;
 
 	@Inject
@@ -70,69 +69,106 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	private ISequences providedSequences;
 
+	@Inject
+	private EvaluationHelper evaluationHelper;
+
 	private List<@NonNull ISequenceElement> allTargetElements = new LinkedList<>();
 
 	private GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
 
 	@Inject
-	private void findAllTargetElements(@NonNull IOptimisationData optimisationData) {
+	private void findAllTargetElements(@NonNull final IOptimisationData optimisationData) {
 
 		allTargetElements = optimisationData.getSequenceElements().stream() //
 				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
 				.collect(Collectors.toList());
 	}
 
-	public void setTargetElements(Collection<ISequenceElement> targetElements) {
+	/**
+	 * Allow the default set of target elements to be overridden with this set.
+	 * 
+	 * @param targetElements
+	 */
+	public void setTargetElements(final Collection<ISequenceElement> targetElements) {
 		allTargetElements = new ArrayList<>(targetElements);
 	}
 
+	// Normal move generator API.
 	@Override
-	public IMove generateMove(ISequences rawSequences, ILookupManager lookupManager, Random random) {
+	public IMove generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random) {
+
+		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+		final Pair<IMove, HintManager> p = generateMove(rawSequences, lookupManager, random, Collections.emptyList(), options);
+		if (p != null) {
+			return p.getFirst();
+		}
+		return null;
+	}
+
+	public Pair<IMove, HintManager> generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random, final List<ISequenceElement> forbidden,
+			final GuideMoveGeneratorOptions options) {
 		this.providedSequences = rawSequences;
 		hintManager.reset();
-
+		if (options.isIgnoreUsedElements()) {
+			hintManager.getUsedElements().addAll(forbidden);
+		}
 		final int num_tries = options.getNum_tries();
 
 		final List<IMove> discoveredMoves = new LinkedList<>();
 		int checkPointIndex = -1;
-		IModifiableSequences currentSequences = new ModifiableSequences(providedSequences);
+		final IModifiableSequences currentSequences = new ModifiableSequences(providedSequences);
 
-		long existingUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
+		final long existingUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
 				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 				.count();
+
+		final long[] initalMetrics = evaluationHelper.evaluateState(currentSequences, null, null, null);
 
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
-			final Pair<IMove, Hints> moveData = getNextMove(currentSequences, random);
+			final Pair<IMove, Hints> moveData = getNextMove(currentSequences, random, options);
 			if (moveData == null) {
 				continue;
 			}
 
 			final IMove move = moveData.getFirst();
-			discoveredMoves.add(move);
-
 			move.apply(currentSequences);
+
+			discoveredMoves.add(move);
 			hintManager.chain(moveData.getSecond());
 
+			if (currentSequences.equals(providedSequences)) {
+				continue;
+			}
 			// Strictly we remove the original slots from this set and reject the state if there are any slots left rather than just see if there is an overall increase in number as this allows
 			// "swimming" slot violations.
-			long newUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
+			final long newUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
 					.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 					.count();
 			// If the current state passes the constraint checkers, then maybe return it.
 			if (
 			// hintManager.getOpenCompulsarySlots().isEmpty() && //
 			newUnusedCompulsarySlotCount <= existingUnusedCompulsarySlotCount //
-					&& helper.doesMovePassConstraints(currentSequences)) {
+					&& evaluationHelper.doesMovePassConstraints(currentSequences)) {
+
+				if (options.isCheckingMove()) {
+					// Check metrics - this return null if we increase lateness, capacity etc (but loss of P&L is ok)
+					final long[] moveMetrics = evaluationHelper.evaluateState(currentSequences, null, initalMetrics, null);
+					if (moveMetrics == null) {
+						continue;
+					}
+				}
 
 				// Record this state as valid in case we do not find a valid state later on
-				checkPointIndex = i;
+				checkPointIndex = discoveredMoves.size() - 1;
+
+				// -- TODO return a list of valid states? Then caller can apply in order and decide to combine or separate.
 
 				// Sometimes we want to continue searching as the solution may pass constraints, but have other issues - such as increase lateness or other violations.
 				// However the extra search can also introduce unnecessary changes.
 				if (!options.isExtendSearch() || random.nextDouble() < 0.05) {
-					return new CompoundMove(discoveredMoves);
+					return new Pair<>(new CompoundMove(discoveredMoves), hintManager);
 				}
 			}
 
@@ -144,16 +180,16 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		}
 
 		if (checkPointIndex != -1) {
-			return new CompoundMove(discoveredMoves.subList(0, checkPointIndex));
+			return new Pair<>(new CompoundMove(discoveredMoves.subList(0, 1 + checkPointIndex)), hintManager);
 		}
 
 		// No valid state found, give up
 		return null;
 	}
 
-	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences, Random random) {
+	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences, final @NonNull Random random, final @NonNull GuideMoveGeneratorOptions options) {
 
-		final List<@NonNull ISequenceElement> targetElements = getNextElements();
+		final List<@NonNull ISequenceElement> targetElements = getNextElements(options);
 
 		Collections.shuffle(targetElements, random);
 		final LookupManager lookupManager = lookupManagerProvider.get();
@@ -174,7 +210,6 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				if (handler != null) {
 					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element, random, options, hintManager.getUsedElements());
 					if (moveData != null) {
-						moveData.getSecond().usedElement(element);
 						return moveData;
 					}
 				}
@@ -185,7 +220,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	}
 
-	protected List<@NonNull ISequenceElement> getNextElements() {
+	protected List<@NonNull ISequenceElement> getNextElements(final GuideMoveGeneratorOptions options) {
 		// Find a set of elements to consider next
 		final List<@NonNull ISequenceElement> targetElements = new LinkedList<>();
 		{
@@ -197,13 +232,14 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				} else {
 					targetElements.addAll(suggestedElements);
 				}
+				// Do not try to move "used" elements again (unless marked as a problem element!)
+				if (options.isIgnoreUsedElements()) {
+					targetElements.removeAll(hintManager.getUsedElements());
+				}
 			} else {
 				targetElements.addAll(problemElements);
 			}
 		}
-
-		// Do not try to move "used" elements again
-		targetElements.removeAll(hintManager.getUsedElements());
 
 		// TODO, this should be filtered up front
 		return targetElements;// .stream().filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))).collect(Collectors.toList());

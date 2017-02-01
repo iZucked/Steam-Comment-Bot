@@ -60,21 +60,26 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 		for (final ISequenceElement possibleFollower : followers) {
 			// This should be implicit by virtue of being able to follow the DES Purchase
 			assert helper.checkResource(possibleFollower, desPurchaseResource);
-
+			hints.getUsedElements().add(desPurchase);
 			// Where is this possible follower?
 			final Pair<IResource, Integer> location = state.lookup(possibleFollower);
 			assert location != null;
 			if (location.getFirst() == null) {
 				builder.withUnusedDESSale(possibleFollower);
+				hints.getUsedElements().add(possibleFollower);
 			} else {
 				builder.withUsedDESSale(location.getFirst(), possibleFollower);
 
 				final ISequence desSaleSequence = sequences.getSequence(location.getFirst());
 				final ISequenceElement prev = desSaleSequence.get(location.getSecond() - 1);
-				if (helper.isLoadSlot(prev)) {
-					hints.addProblemElement(prev);
+				if (helper.isOptional(prev)) {
+					hints.getUsedElements().add(possibleFollower);
 				} else {
-					hints.addShippingLength(location.getFirst(), location.getSecond() - 1);
+					if (helper.isLoadSlot(prev)) {
+						hints.addProblemElement(prev);
+					} else {
+						hints.addShippingLength(location.getFirst(), location.getSecond() - 1);
+					}
 				}
 			}
 

@@ -14,6 +14,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
@@ -45,6 +46,10 @@ public class EvaluationHelper {
 	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
+	@Inject
+	@NonNull
+	private ISequencesManipulator sequenceManipulator;
+
 	// @Inject
 	// @NonNull
 	// private IPortTypeProvider portTypeProvider;
@@ -55,7 +60,11 @@ public class EvaluationHelper {
 
 	private boolean isReevaluating;
 
-	 private boolean strictChecking = false;
+	private boolean strictChecking = false;
+
+	public EvaluationHelper() {
+		this.isReevaluating = false;
+	}
 
 	public EvaluationHelper(boolean isReevaluating) {
 		this.isReevaluating = isReevaluating;
@@ -81,6 +90,21 @@ public class EvaluationHelper {
 				return false;
 			}
 		}
+		return true;
+	}
+
+	public boolean doesMovePassConstraints(final ISequences rawSequences) {
+
+		// Do normal manipulation
+		final ISequences movedFullSequences = sequenceManipulator.createManipulatedSequences(rawSequences);
+
+		// Run through the constraint checkers
+		for (final IConstraintChecker checker : constraintCheckers) {
+			if (!checker.checkConstraints(movedFullSequences, null)) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -181,6 +205,15 @@ public class EvaluationHelper {
 		return evaluationState;
 	}
 
+	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources,
+			final long @Nullable [] referenceMetrics, @Nullable ISearchStatisticsLogger logger) {
+
+		// Do normal manipulation
+		final @NonNull ISequences currentFullSequences = sequenceManipulator.createManipulatedSequences(currentRawSequences);
+
+		return evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, referenceMetrics, logger);
+	}
+
 	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, final @NonNull ISequences currentFullSequences,
 			@Nullable final Collection<@NonNull IResource> currentChangedResources, final long @Nullable [] referenceMetrics, @Nullable ISearchStatisticsLogger logger) {
 		// Apply hard constraint checkers
@@ -207,7 +240,7 @@ public class EvaluationHelper {
 		boolean failedEvaluation = false;
 		final long thisLateness = calculateScheduleLateness(currentFullSequences, p1.getFirst());
 
-		if (thisLateness > referenceMetrics[MetricType.LATENESS.ordinal()]) {
+		if (referenceMetrics != null && thisLateness > referenceMetrics[MetricType.LATENESS.ordinal()]) {
 			failedEvaluation = true;
 		} else {
 			// currentLateness = thisLateness;

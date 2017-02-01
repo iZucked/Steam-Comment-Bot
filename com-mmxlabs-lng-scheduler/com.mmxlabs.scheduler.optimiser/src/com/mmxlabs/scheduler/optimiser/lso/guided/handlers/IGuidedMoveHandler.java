@@ -27,6 +27,7 @@ public interface IGuidedMoveHandler {
 	 * 
 	 * @param state
 	 * @param element
+	 * @param options
 	 * @return
 	 */
 	@Nullable

@@ -165,6 +165,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		// Filter out the elements we have just moved
 		suggestedElements.removeAll(orderedCargoElements);
 		hints.addSuggestedElements(suggestedElements);
+		hints.getUsedElements().addAll(orderedCargoElements);
 
 		return new Pair<IMove, Hints>(builder.create(), hints);
 	}

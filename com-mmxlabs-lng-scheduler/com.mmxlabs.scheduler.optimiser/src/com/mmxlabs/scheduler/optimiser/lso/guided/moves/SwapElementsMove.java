@@ -44,6 +44,13 @@ public class SwapElementsMove implements IMove {
 			return new SwapElementsMove(elementA, elementB);
 		}
 
+		public ISequenceElement getElementA() {
+			return elementA.getSecond();
+		}
+		public ISequenceElement getElementB() {
+			return elementB.getSecond();
+		}
+
 	}
 
 	private @NonNull

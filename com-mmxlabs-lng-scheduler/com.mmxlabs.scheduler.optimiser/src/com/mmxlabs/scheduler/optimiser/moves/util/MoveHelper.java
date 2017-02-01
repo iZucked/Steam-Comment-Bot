@@ -93,9 +93,9 @@ public class MoveHelper implements IMoveHelper {
 	@NonNull
 	private ILockedElementsProvider lockedElementsProvider;
 
-	private final @NonNull List<IResource> vesselResources = new LinkedList<>();
-	private final @NonNull List<IResource> desPurchaseResources = new LinkedList<>();
-	private final @NonNull List<IResource> fobSaleResources = new LinkedList<>();
+	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
+	private final @NonNull List<@NonNull IResource> desPurchaseResources = new LinkedList<>();
+	private final @NonNull List<@NonNull IResource> fobSaleResources = new LinkedList<>();
 
 	private final Map<ISequenceElement, Collection<IResource>> cachedResult = new ConcurrentHashMap<>();
 
@@ -113,13 +113,9 @@ public class MoveHelper implements IMoveHelper {
 			final @NonNull IResource resource = itr.next();
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-			IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-
-			@NonNull
-			PortType portType = portSlot.getPortType();
-
-			@NonNull
-			VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+			final @NonNull PortType portType = portSlot.getPortType();
+			final @NonNull VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
 			if (portType == PortType.DryDock || portType == PortType.Maintenance || portType == PortType.CharterOut) {
 				if (!(vesselInstanceType == VesselInstanceType.FLEET || vesselInstanceType == VesselInstanceType.TIME_CHARTER)) {
 					itr.remove();
@@ -133,10 +129,10 @@ public class MoveHelper implements IMoveHelper {
 					continue;
 				}
 				if (portType == PortType.Load || portType == PortType.Discharge) {
-					int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
+					final int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
 					// If timewindow start is in prompt, then we want to remove the cargo.
-					ITimeWindow timeWindow = portSlot.getTimeWindow();
-					if (timeWindow != null && timeWindow.getInclusiveStart() < endOfPromptPeriod) {
+					final ITimeWindow timeWindow = portSlot.getTimeWindow();
+					if (timeWindow != null && (timeWindow.getInclusiveStart() < endOfPromptPeriod)) {
 						itr.remove();
 						continue;
 					}
@@ -172,7 +168,7 @@ public class MoveHelper implements IMoveHelper {
 			return optionalElementsProvider.isElementOptional(element);
 		}
 
-		Collection<@NonNull IResource> resources = cachedResult.computeIfAbsent(element, cacheComputeFunction);
+		final Collection<@NonNull IResource> resources = cachedResult.computeIfAbsent(element, cacheComputeFunction);
 		return resources.contains(resource);
 
 	}
@@ -302,12 +298,12 @@ public class MoveHelper implements IMoveHelper {
 
 	@Override
 	@NonNull
-	public Collection<IResource> getAllVesselResources() {
+	public Collection<@NonNull IResource> getAllVesselResources() {
 		return vesselResources;
 	}
 	
 	@Override
-	public boolean isStartOrEndSlot(@NonNull ISequenceElement element) {
+	public boolean isStartOrEndSlot(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot.getPortType() == PortType.Start || portSlot.getPortType() == PortType.End);
 	}
