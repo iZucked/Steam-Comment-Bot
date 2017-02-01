@@ -35,8 +35,6 @@ public class ActionSetTransformer {
 
 	public ChangeSetRoot createDataModel(final ScenarioInstance instance, final IProgressMonitor monitor) {
 
-		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
-
 		final List<ScenarioResult> stages = new LinkedList<>();
 
 		// Try forks
@@ -95,6 +93,13 @@ public class ActionSetTransformer {
 			}
 		}
 
+		return createDataModel(monitor, stages);
+
+	}
+
+	public ChangeSetRoot createDataModel(final IProgressMonitor monitor, final List<ScenarioResult> stages) {
+		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
+
 		try {
 			monitor.beginTask("Opening action sets", stages.size());
 			ScenarioResult prev = null;
@@ -111,7 +116,6 @@ public class ActionSetTransformer {
 		}
 
 		return root;
-
 	}
 
 	private ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {

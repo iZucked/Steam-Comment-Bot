@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -451,6 +452,23 @@ public class ChangeSetView implements IAdaptable {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 
+		if (IActionPlanHandler.class.isAssignableFrom(adapter)) {
+
+			if (viewMode == ViewMode.ACTION_SET) {
+				return (T) new IActionPlanHandler() {
+
+					@Override
+					public void displayActionPlan(List<ScenarioResult> scenarios) {
+						cleanUpVesselColumns();
+
+						final ActionSetTransformer transformer = new ActionSetTransformer();
+						final ChangeSetRoot newRoot = transformer.createDataModel(new NullProgressMonitor(), scenarios);
+						RunnerHelper.exec(new ViewUpdateRunnable(newRoot), true);
+					}
+				};
+			}
+			return null;
+		}
 		if (IAdditionalAttributeProvider.class.isAssignableFrom(adapter)) {
 			return (T) additionalAttributeProvider;
 		}
@@ -480,6 +498,7 @@ public class ChangeSetView implements IAdaptable {
 						// Prefix this header for rendering purposes
 						return "<meta charset=\"UTF-8\"/>" + contents;
 					}
+
 				};
 			} finally {
 				textualVesselMarkers = false;
@@ -1564,7 +1583,8 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.ORIGINAL), change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.NEW));
+		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.ORIGINAL),
+				change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.NEW));
 	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
