@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
-import java.util.Comparator;
-
 public class LadenRouteData {
 	public final long ladenTimeAtMaxSpeed;
 	public final long ladenTimeAtNBOSpeed;

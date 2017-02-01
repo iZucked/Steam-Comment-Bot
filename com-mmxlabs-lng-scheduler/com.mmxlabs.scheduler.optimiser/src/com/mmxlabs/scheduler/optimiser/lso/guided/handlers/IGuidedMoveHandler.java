@@ -13,12 +13,12 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 /**
- * A {@link IMoveHandler} is a part of the {@link GuidedMoveGenerator} used to construct an atomic change in the state of a portfolio.
+ * A {@link IGuidedMoveHandler} is a part of the {@link GuidedMoveGenerator} used to construct an atomic change in the state of a portfolio.
  * 
  * @author Simon Goodall
  *
  */
-public interface IMoveHandler {
+public interface IGuidedMoveHandler {
 	/**
 	 * Attempt to create a move involving the given {@link ISequenceElement}. If successful, this returns {@link Pair} containing the {@link IMove} implementation and a {@link Hints} instance
 	 * describing the effected elements that may need further attention.

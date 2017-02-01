@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISimpleCostsProviderEditor;
 
 public abstract class AHashMapSimpleCostsProviderEditor implements ISimpleCostsProviderEditor {

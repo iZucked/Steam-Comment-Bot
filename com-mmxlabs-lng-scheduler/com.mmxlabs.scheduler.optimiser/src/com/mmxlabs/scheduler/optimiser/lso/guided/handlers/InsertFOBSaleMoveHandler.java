@@ -15,14 +15,14 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertFOBSaleMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
-public class InsertFOBSaleMoveHandler implements IMoveHandler {
+public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
 	private @NonNull IGuidedMoveHelper helper;

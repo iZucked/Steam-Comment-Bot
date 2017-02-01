@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 
 /**
  * Move generator to swap a single element in one sequence with a single element in another sequence.

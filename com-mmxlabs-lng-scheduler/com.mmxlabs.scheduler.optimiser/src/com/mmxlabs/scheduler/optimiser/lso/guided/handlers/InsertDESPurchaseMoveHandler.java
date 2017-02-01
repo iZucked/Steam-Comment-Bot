@@ -15,10 +15,10 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertDESPurchaseMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
  * @author Simon Goodall
  *
  */
-public class InsertDESPurchaseMoveHandler implements IMoveHandler {
+public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
 	private @NonNull IGuidedMoveHelper helper;

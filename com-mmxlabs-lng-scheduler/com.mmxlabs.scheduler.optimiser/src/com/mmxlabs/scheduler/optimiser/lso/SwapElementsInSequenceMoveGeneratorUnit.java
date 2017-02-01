@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} which swaps slots within a single sequence. This is intended for use with {@link VesselInstanceType#CARGO_SHORTS}. Note this cannot currently swap

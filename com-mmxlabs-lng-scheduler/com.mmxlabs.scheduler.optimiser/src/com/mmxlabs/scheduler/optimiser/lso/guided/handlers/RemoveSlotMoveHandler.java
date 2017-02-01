@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
-public class RemoveSlotMoveHandler implements IMoveHandler {
+public class RemoveSlotMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
 	private @NonNull IGuidedMoveHelper helper;

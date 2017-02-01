@@ -28,7 +28,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.lso.IConstrainedMoveGeneratorUnit;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IGuidedMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
@@ -168,7 +168,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 			Collections.shuffle(moveOptions, helper.getSharedRandom());
 			for (final MoveTypes type : moveOptions) {
-				final IMoveHandler handler = getMoveHandler(type);
+				final IGuidedMoveHandler handler = getMoveHandler(type);
 				if (handler != null) {
 					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element, hintManager.getUsedElements());
 					if (moveData != null) {
@@ -208,7 +208,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	}
 
 	@Nullable
-	private IMoveHandler getMoveHandler(final @NonNull MoveTypes moveType) {
+	private IGuidedMoveHandler getMoveHandler(final @NonNull MoveTypes moveType) {
 		switch (moveType) {
 		case Insert_Cargo:
 			return injector.getInstance(InsertCargoVesselMoveHandler.class);

@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveOptionalElement;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ReplaceMoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
