@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -16,17 +17,18 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertCargoMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
-	private @NonNull IGuidedMoveHelper helper;
+	private @NonNull IMoveHelper helper;
 
 	@Inject
 	private @NonNull MoveHandlerHelper moveHelper;
@@ -35,7 +37,8 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+			@NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final Hints hints = new Hints();
@@ -146,7 +149,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 
 		// TODO: The hint manager could be used here to order by known shipping length
 		// Pick the first random insertion point
-		Collections.shuffle(validInsertionPairs, helper.getSharedRandom());
+		Collections.shuffle(validInsertionPairs, random);
 		for (final Pair<ISequenceElement, ISequenceElement> insertionPair : validInsertionPairs) {
 
 			final Pair<IResource, Integer> location = state.lookup(insertionPair.getFirst());

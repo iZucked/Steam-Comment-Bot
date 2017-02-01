@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
 import java.util.Collection;
+import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -8,6 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
@@ -28,5 +30,6 @@ public interface IGuidedMoveHandler {
 	 * @return
 	 */
 	@Nullable
-	Pair<IMove, Hints> handleMove(@NonNull LookupManager state, @NonNull ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements);
+	Pair<IMove, Hints> handleMove(@NonNull LookupManager state, @NonNull ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+			@NonNull Collection<ISequenceElement> forbiddenElements);
 }

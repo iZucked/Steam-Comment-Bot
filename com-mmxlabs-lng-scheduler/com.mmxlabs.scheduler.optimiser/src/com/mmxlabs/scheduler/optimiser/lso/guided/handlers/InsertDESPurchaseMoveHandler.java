@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -15,10 +16,11 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertDESPurchaseMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
@@ -32,13 +34,14 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
 public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
-	private @NonNull IGuidedMoveHelper helper;
+	private @NonNull IMoveHelper helper;
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement desPurchase, @NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement desPurchase, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+			@NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final IResource desPurchaseResource = helper.getDESPurchaseResource(desPurchase);
@@ -49,14 +52,14 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 		final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(desPurchase);
 		final List<ISequenceElement> followers = Lists.newArrayList(validFollowers);
 		followers.removeAll(forbiddenElements);
-		Collections.shuffle(followers, helper.getSharedRandom());
+		Collections.shuffle(followers, random);
 		if (followers.isEmpty()) {
 			return null;
 		}
 		final Hints hints = new Hints();
 		for (final ISequenceElement possibleFollower : followers) {
 			// This should be implicit by virtue of being able to follow the DES Purchase
-			assert helper.checkPermittedResource(possibleFollower, desPurchaseResource);
+			assert helper.checkResource(possibleFollower, desPurchaseResource);
 
 			// Where is this possible follower?
 			final Pair<IResource, Integer> location = state.lookup(possibleFollower);

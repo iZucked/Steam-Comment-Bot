@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -20,22 +21,24 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.SwapElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
-	private @NonNull IGuidedMoveHelper helper;
+	private @NonNull IMoveHelper helper;
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair< IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement slot, @NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement slot, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+			@NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final SwapElementsMove.Builder builder = SwapElementsMove.Builder.newMove();
@@ -91,7 +94,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 		boolean foundElementB = false;
 		final List<ISequenceElement> candidateList = new ArrayList<>(candidates);
 		candidateList.removeAll(forbiddenElements);
-		Collections.shuffle(candidateList, helper.getSharedRandom());
+		Collections.shuffle(candidateList, random);
 		for (final ISequenceElement candidate : candidateList) {
 			foundElementB = false;
 
@@ -100,7 +103,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 
 			if (candidateResource == null) {
 				if (!helper.isOptional(slot)) {
-					if (helper.isStrictOptional()) {
+					if (options.isStrictOptional()) {
 						continue;
 					} else {
 						hints.addProblemElement(slot);
@@ -110,7 +113,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 				foundElementB = true;
 
 			} else {
-				if (!helper.checkPermittedResource(slot, candidateResource)) {
+				if (!helper.checkResource(slot, candidateResource)) {
 					continue;
 				}
 
@@ -138,7 +141,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 				}
 
 				if (!helper.isOptional(candidate)) {
-					if (helper.isStrictOptional()) {
+					if (options.isStrictOptional()) {
 						foundElementB = false;
 						elementHints.clear();
 						continue;

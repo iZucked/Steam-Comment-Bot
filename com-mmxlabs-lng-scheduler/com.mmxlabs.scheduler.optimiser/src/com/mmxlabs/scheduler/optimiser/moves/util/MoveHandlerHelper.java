@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
+package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,12 +9,11 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 
 public class MoveHandlerHelper {
 
 	@Inject
-	private @NonNull IMoveHelper helper;
+	private @NonNull MoveHelper helper;
 
 	@NonNull
 	public List<ISequenceElement> extractSegment(@NonNull ISequence fromSequence, @NonNull ISequenceElement element) {
@@ -64,7 +63,7 @@ public class MoveHandlerHelper {
 				if (helper.isDischargeSlot(e)) {
 					foundDischarge = true;
 				} else {
-					assert helper.isLoadSlot(e) ;
+					assert helper.isLoadSlot(e);
 				}
 			} else {
 				if (!helper.isDischargeSlot(e)) {

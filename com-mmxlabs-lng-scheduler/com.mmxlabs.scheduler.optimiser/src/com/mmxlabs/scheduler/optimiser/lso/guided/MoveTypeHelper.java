@@ -10,12 +10,13 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 
 public class MoveTypeHelper {
 
 	@Inject
 	@NonNull
-	private IGuidedMoveHelper helper;
+	private IMoveHelper helper;
 
 	public List<MoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element) {
 		// Is element locked? Then we can not do anything

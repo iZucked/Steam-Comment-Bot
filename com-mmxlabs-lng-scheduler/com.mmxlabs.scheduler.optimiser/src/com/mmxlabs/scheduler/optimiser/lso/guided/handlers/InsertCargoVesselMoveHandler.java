@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -18,25 +19,25 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertCargoMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 
-	
-	
 	@Inject
-	private @NonNull IGuidedMoveHelper helper;
+	private @NonNull IMoveHelper helper;
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+			@NonNull final Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final Hints hints = new Hints();
@@ -91,7 +92,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 			}
 		}
 		// Randomise search order, find the first valid pairing
-		Collections.shuffle(filteredUnusedSequenceElements, helper.getSharedRandom());
+		Collections.shuffle(filteredUnusedSequenceElements, random);
 		LOOP_UNUSED: for (final ISequenceElement other : filteredUnusedSequenceElements) {
 
 			// Construct the sequence
@@ -111,7 +112,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 			for (final ISequenceElement e : orderedCargoElements) {
 				final Iterator<IResource> itr = validTargetResources.iterator();
 				while (itr.hasNext()) {
-					if (!helper.checkPermittedResource(e, itr.next())) {
+					if (!helper.checkResource(e, itr.next())) {
 						itr.remove();
 					}
 				}
@@ -144,7 +145,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 				}
 
 				final ISequence targetSequence = sequences.getSequence(precederLocation.getFirst());
-				int followerIndex = precederLocation.getSecond() + 1;
+				final int followerIndex = precederLocation.getSecond() + 1;
 				if (followerIndex < targetSequence.size()) {
 					final ISequenceElement followerElement = targetSequence.get(followerIndex);
 					if (followers.contains(followerElement)) {
@@ -162,7 +163,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 
 			// TODO: The hint manager could be used here to order by known shipping length
 			// Pick the first random insertion point
-			Collections.shuffle(validInsertionPairs, helper.getSharedRandom());
+			Collections.shuffle(validInsertionPairs, random);
 			for (final Pair<ISequenceElement, ISequenceElement> insertionPair : validInsertionPairs) {
 
 				final Pair<IResource, Integer> location = state.lookup(insertionPair.getFirst());

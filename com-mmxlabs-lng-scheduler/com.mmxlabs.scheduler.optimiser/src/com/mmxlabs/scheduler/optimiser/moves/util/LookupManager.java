@@ -32,6 +32,7 @@ public class LookupManager implements ILookupManager {
 
 	private ISequences sequences;
 
+	@Override
 	public void createLookup(final ISequences sequences) {
 
 		this.sequences = sequences;
@@ -75,6 +76,7 @@ public class LookupManager implements ILookupManager {
 	 * is -1, then this marks the element as the unused half of an alternative element pair (see {@link IAlternativeElementProvider}. Finally if a null Pair is return the element has not been found at
 	 * all.
 	 */
+	@Override
 	public Pair<IResource, Integer> lookup(@NonNull ISequenceElement element) {
 		return reverseLookup.get(element);
 	}

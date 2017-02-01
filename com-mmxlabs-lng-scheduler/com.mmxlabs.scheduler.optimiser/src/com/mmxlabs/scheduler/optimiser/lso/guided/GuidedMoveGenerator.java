@@ -72,6 +72,8 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	private List<@NonNull ISequenceElement> allTargetElements = new LinkedList<>();
 
+	private GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+
 	@Inject
 	private void findAllTargetElements(@NonNull IOptimisationData optimisationData) {
 
@@ -89,7 +91,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		this.providedSequences = rawSequences;
 		hintManager.reset();
 
-		final int num_tries = 30;
+		final int num_tries = options.getNum_tries();
 
 		final List<IMove> discoveredMoves = new LinkedList<>();
 		int checkPointIndex = -1;
@@ -102,7 +104,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
-			final Pair<IMove, Hints> moveData = getNextMove(currentSequences);
+			final Pair<IMove, Hints> moveData = getNextMove(currentSequences, random);
 			if (moveData == null) {
 				continue;
 			}
@@ -129,9 +131,9 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 				// Sometimes we want to continue searching as the solution may pass constraints, but have other issues - such as increase lateness or other violations.
 				// However the extra search can also introduce unnecessary changes.
-				// if (helper.getSharedRandom().nextDouble() < 0.05) {
-				return new CompoundMove(discoveredMoves);
-				// }
+				if (!options.isExtendSearch() || random.nextDouble() < 0.05) {
+					return new CompoundMove(discoveredMoves);
+				}
 			}
 
 		}
@@ -149,11 +151,11 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		return null;
 	}
 
-	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences) {
+	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences, Random random) {
 
 		final List<@NonNull ISequenceElement> targetElements = getNextElements();
 
-		Collections.shuffle(targetElements, helper.getSharedRandom());
+		Collections.shuffle(targetElements, random);
 		final LookupManager lookupManager = lookupManagerProvider.get();
 		lookupManager.createLookup(sequences);
 
@@ -166,11 +168,11 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				continue;
 			}
 
-			Collections.shuffle(moveOptions, helper.getSharedRandom());
+			Collections.shuffle(moveOptions, random);
 			for (final MoveTypes type : moveOptions) {
 				final IGuidedMoveHandler handler = getMoveHandler(type);
 				if (handler != null) {
-					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element, hintManager.getUsedElements());
+					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element, random, options, hintManager.getUsedElements());
 					if (moveData != null) {
 						moveData.getSecond().usedElement(element);
 						return moveData;
@@ -199,10 +201,10 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				targetElements.addAll(problemElements);
 			}
 		}
-		
+
 		// Do not try to move "used" elements again
 		targetElements.removeAll(hintManager.getUsedElements());
-		
+
 		// TODO, this should be filtered up front
 		return targetElements;// .stream().filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))).collect(Collectors.toList());
 	}

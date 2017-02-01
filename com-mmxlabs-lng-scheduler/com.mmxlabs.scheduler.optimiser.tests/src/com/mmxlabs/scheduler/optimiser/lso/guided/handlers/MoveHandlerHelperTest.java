@@ -14,7 +14,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 
 public class MoveHandlerHelperTest {
 
@@ -35,7 +35,7 @@ public class MoveHandlerHelperTest {
 
 		final ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementResourceAStart, elementA, elementB, elementC, elementD, elementE, elementF, elementResourceAEnd));
 
-		IGuidedMoveHelper helper = Mockito.mock(IGuidedMoveHelper.class);
+		IMoveHelper helper = Mockito.mock(IMoveHelper.class);
 		
 		Mockito.when(helper.isLoadSlot(elementA)).thenReturn(Boolean.TRUE);
 		Mockito.when(helper.isLoadSlot(elementC)).thenReturn(Boolean.TRUE);
@@ -88,11 +88,11 @@ public class MoveHandlerHelperTest {
 		}
 	}
 
-	private MoveHandlerHelper createInstance(final @NonNull IGuidedMoveHelper helper) {
+	private MoveHandlerHelper createInstance(final @NonNull IMoveHelper helper) {
 		Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(IGuidedMoveHelper.class).toInstance(helper);
+				bind(IMoveHelper.class).toInstance(helper);
 			}
 		});
 		return injector.getInstance(MoveHandlerHelper.class);
