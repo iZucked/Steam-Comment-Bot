@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 /**
  * The {@link MoveSnake} implements a snake-like move wherein {@link ISegment}s move between multiple {@link ISequence}s. E.g. a segment is moved from sequence A to sequence B, from sequence B to

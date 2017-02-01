@@ -37,7 +37,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.IMultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;

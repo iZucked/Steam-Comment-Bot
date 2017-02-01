@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.lso;
 
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.ISequencesOptimiser;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 /**
  * Extended {@link IOptimiser} interface for a Local Search Optimiser

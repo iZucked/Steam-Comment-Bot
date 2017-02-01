@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 /**
  * Interface used by the {@link RandomMoveGenerator} to generate a {@link IMove} of a particular type. Implementations need to be registered with the {@link RandomMoveGenerator} before they will be

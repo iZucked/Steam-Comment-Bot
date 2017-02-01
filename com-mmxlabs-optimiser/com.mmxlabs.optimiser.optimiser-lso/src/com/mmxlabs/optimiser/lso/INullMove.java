@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.lso;
 
+import com.mmxlabs.optimiser.core.moves.IMove;
+
 /**
  * Interface defining a Move as used in the Local Search Optimiser.
  * 

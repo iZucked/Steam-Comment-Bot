@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move2over2;
 
 /**

@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ILookupManager;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**

@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 /**
  * A 2-opt-2 move; swaps the tails of two sequences in a solution given two breakpoints in those sequences. For example, given a solution which contains two sequences thus:
