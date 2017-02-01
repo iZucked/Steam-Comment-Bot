@@ -32,8 +32,8 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.lso.FollowersAndPrecedersProviderImpl;
-import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 /**

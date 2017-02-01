@@ -29,8 +29,6 @@ import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.scheduler.optimiser.lso.FollowersAndPrecedersProviderImpl;
-import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHelperImpl;
 import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
@@ -41,6 +39,8 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandle
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
 
 /**
