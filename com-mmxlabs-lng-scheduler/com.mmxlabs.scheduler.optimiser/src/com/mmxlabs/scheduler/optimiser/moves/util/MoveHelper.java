@@ -55,7 +55,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  *
  */
 @Singleton
-public class MoveHelper {
+public class MoveHelper implements IMoveHelper {
 
 	@Inject
 	private IOptimisationData optimisationData;
@@ -73,10 +73,6 @@ public class MoveHelper {
 	@Inject
 	@NonNull
 	private IFOBDESCompatibilityProvider fobDesCompatibilityProvider;
-
-	@Inject
-	@NonNull
-	private IPortTypeProvider portTypeProvider;
 
 	@Inject
 	private IPromptPeriodProvider promptPeriodProvider;
@@ -159,6 +155,7 @@ public class MoveHelper {
 		return allowedResources;
 	};
 
+	@Override
 	public boolean legacyCheckResource(final ISequenceElement sequenceElement, final IResource resource) {
 
 		final Collection<IResource> allowedResources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(sequenceElement);
@@ -168,6 +165,7 @@ public class MoveHelper {
 		return allowedResources.contains(resource);
 	}
 
+	@Override
 	public boolean checkResource(final @NonNull ISequenceElement element, final @Nullable IResource resource) {
 
 		if (resource == null) {
@@ -179,6 +177,7 @@ public class MoveHelper {
 
 	}
 
+	@Override
 	public @NonNull Collection<@NonNull IResource> getAllowedResources(final @NonNull ISequenceElement element) {
 		return cachedResult.computeIfAbsent(element, cacheComputeFunction);
 	}
@@ -214,6 +213,7 @@ public class MoveHelper {
 		}
 	}
 
+	@Override
 	public @NonNull IResource getDESPurchaseResource(@NonNull final ISequenceElement desPurchase) {
 		final Collection<IResource> allowedResources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(desPurchase);
 		assert allowedResources != null && allowedResources.size() == 1;
@@ -221,6 +221,7 @@ public class MoveHelper {
 
 	}
 
+	@Override
 	@NonNull
 	public IResource getFOBSaleResource(@NonNull final ISequenceElement fobSale) {
 		final Collection<IResource> allowedResources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(fobSale);
@@ -229,6 +230,7 @@ public class MoveHelper {
 
 	}
 
+	@Override
 	public boolean isLockedToVessel(@NonNull final ISequenceElement element) {
 
 		boolean locked = lockedElementsProvider.isElementLocked(element);
@@ -241,79 +243,94 @@ public class MoveHelper {
 		return locked;
 	}
 
+	@Override
 	public boolean isLoadSlot(@NonNull final ISequenceElement element) {
 
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return portSlot instanceof ILoadOption;
 	}
 
+	@Override
 	public boolean isDischargeSlot(@NonNull final ISequenceElement element) {
 
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return portSlot instanceof IDischargeOption;
 	}
 
+	@Override
 	public boolean isFOBPurchase(@NonNull final ISequenceElement element) {
 
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return portSlot instanceof ILoadSlot;
 	}
 
+	@Override
 	public boolean isFOBSale(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot instanceof IDischargeOption) && !(portSlot instanceof IDischargeSlot);
 	}
 
+	@Override
 	public boolean isDESPurchase(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot instanceof ILoadOption) && !(portSlot instanceof ILoadSlot);
 	}
 
+	@Override
 	public boolean isDESSale(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return portSlot instanceof IDischargeSlot;
 	}
 
+	@Override
 	public boolean isVesselEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return portSlot instanceof VesselEventPortSlot;
 	}
 
+	@Override
 	public boolean isDryDockEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot.getPortType() == PortType.DryDock);
 	}
 
+	@Override
 	public boolean isMaintenanceEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot.getPortType() == PortType.Maintenance);
 	}
 
+	@Override
 	@NonNull
 	public Collection<IResource> getAllVesselResources() {
 		return vesselResources;
 	}
-
+	
+	@Override
 	public boolean isStartOrEndSlot(@NonNull ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot.getPortType() == PortType.Start || portSlot.getPortType() == PortType.End);
 	}
 
+	@Override
 	public boolean isOptional(@NonNull final ISequenceElement element) {
 		return optionalElementsProvider.isElementOptional(element);
 	}
-
+	
+	@Override
 	public boolean isCharterOutEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot.getPortType() == PortType.CharterOut);
 	}
 
 	// TODO: -- How to tell?
+	@Override
 	public boolean isRelocatedCharterOutEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 		return (portSlot.getPortType() == PortType.CharterOut);
 	}
 
+	@Override
 	public boolean isSimpleCharterOutEvent(@NonNull final ISequenceElement element) {
 		// TODO: -- How to tell?
 
