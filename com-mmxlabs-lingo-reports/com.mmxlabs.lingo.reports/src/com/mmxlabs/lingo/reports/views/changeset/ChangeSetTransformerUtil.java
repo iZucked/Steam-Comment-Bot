@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -311,7 +312,7 @@ public final class ChangeSetTransformerUtil {
 
 			row.setLhsName(eventName);
 			if (event instanceof OpenSlotAllocation) {
-				int ii = 0;
+				final int ii = 0;
 			}
 			if (event instanceof ProfitAndLossContainer) {
 				row.setNewGroupProfitAndLoss((ProfitAndLossContainer) event);
@@ -333,7 +334,7 @@ public final class ChangeSetTransformerUtil {
 
 			}
 			if (event instanceof OpenSlotAllocation) {
-				int ii = 0;
+				final int ii = 0;
 			}
 			if (event instanceof ProfitAndLossContainer) {
 				row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
@@ -638,24 +639,47 @@ public final class ChangeSetTransformerUtil {
 		if (row == null) {
 			return 0L;
 		}
-		if (row.getNewOpenLoadAllocation() != null || row.getNewOpenDischargeAllocation() != null) {
-			return f.applyAsLong(row.getNewOpenLoadAllocation()) + f.applyAsLong(row.getNewOpenDischargeAllocation());
-		} else if (row.getNewGroupProfitAndLoss() != null) {
-			return f.applyAsLong(row.getNewGroupProfitAndLoss());
+		final Set<ProfitAndLossContainer> containers = new HashSet<>();
+
+		if (row.getNewOpenLoadAllocation() != null) {
+			containers.add(row.getNewGroupProfitAndLoss());
 		}
-		return 0L;
+		if (row.getNewOpenDischargeAllocation() != null) {
+			containers.add(row.getNewOpenDischargeAllocation());
+		}
+		if (row.getNewGroupProfitAndLoss() != null) {
+			containers.add(row.getNewGroupProfitAndLoss());
+		}
+
+		long sum = 0L;
+		for (final ProfitAndLossContainer c : containers) {
+			sum += f.applyAsLong(c);
+		}
+		return sum;
 	}
 
 	public static long getOriginalRowProfitAndLossValue(@Nullable final ChangeSetRow row, final @NonNull ToLongFunction<@Nullable ProfitAndLossContainer> f) {
 		if (row == null) {
 			return 0L;
 		}
-		if (row.getOriginalOpenLoadAllocation() != null || row.getOriginalOpenDischargeAllocation() != null) {
-			return f.applyAsLong(row.getOriginalOpenLoadAllocation()) + f.applyAsLong(row.getOriginalOpenDischargeAllocation());
-		} else if (row.getOriginalGroupProfitAndLoss() != null) {
-			return f.applyAsLong(row.getOriginalGroupProfitAndLoss());
+
+		final Set<ProfitAndLossContainer> containers = new HashSet<>();
+
+		if (row.getOriginalOpenLoadAllocation() != null) {
+			containers.add(row.getOriginalOpenLoadAllocation());
 		}
-		return 0L;
+		if (row.getOriginalOpenDischargeAllocation() != null) {
+			containers.add(row.getOriginalOpenDischargeAllocation());
+		}
+		if (row.getOriginalGroupProfitAndLoss() != null) {
+			containers.add(row.getOriginalGroupProfitAndLoss());
+		}
+
+		long sum = 0L;
+		for (final ProfitAndLossContainer c : containers) {
+			sum += f.applyAsLong(c);
+		}
+		return sum;
 	}
 
 	public static void sortRows(@NonNull final List<ChangeSetRow> rows) {
