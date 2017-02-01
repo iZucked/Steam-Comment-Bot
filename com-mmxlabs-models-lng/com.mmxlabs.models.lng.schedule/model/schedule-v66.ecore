@@ -31,6 +31,9 @@
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" lowerBound="1"
         upperBound="-1" eType="#//SlotAllocation" eOpposite="#//SlotAllocation/cargoAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputCargo" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" lowerBound="1"
         eType="#//Sequence" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CargoType"/>
