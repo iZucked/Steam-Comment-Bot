@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,6 +20,8 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -325,7 +329,7 @@ public class LNGSchedulerJobUtils {
 					throw new IllegalStateException("Unsupported slot type");
 				}
 			}
-			// Record the cargo defining cargo as a definitly used cargo
+			// Record the cargo defining cargo as a definitely used cargo
 			usedCargoes.add(loadCargo);
 			// Sanity check the FOB/DES cargoes
 			if (desPurchaseSlot != null || fobSaleSlot != null) {
@@ -404,7 +408,14 @@ public class LNGSchedulerJobUtils {
 					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
 					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
-					cmd.append(DeleteCommand.create(domain, c));
+					// Delete command does not work when exporting to a child scenario
+					// cmd.append(DeleteCommand.create(domain, c));
+					// This *should* be okay, but note will skip our command handler framework.
+					cmd.append(new DeleteCommand(domain, Collections.singleton(c)) {
+						protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(Collection<EObject> eObjects) {
+							return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
+						}
+					});
 				}
 			}
 			if (eObj instanceof SpotSlot) {
@@ -421,6 +432,8 @@ public class LNGSchedulerJobUtils {
 			cmd.append(RemoveCommand.create(domain, schedule, SchedulePackage.eINSTANCE.getSchedule_UnusedElements(), eObj));
 
 		}
+
+		assert possibleUnusedCargoes.isEmpty();
 
 		// Create all the new vessel assignment objects.
 		for (final Sequence sequence : schedule.getSequences()) {
