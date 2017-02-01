@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
  * 
  */
 public class LegalSequencingChecker {
-	private static final Logger log = LoggerFactory.getLogger(LinearSimulatedAnnealingFitnessEvaluator.class);
+	private static final Logger log = LoggerFactory.getLogger(LegalSequencingChecker.class);
 
 	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
 	private final List<IResource> resources;
