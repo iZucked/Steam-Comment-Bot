@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,14 +19,11 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.Resource;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;

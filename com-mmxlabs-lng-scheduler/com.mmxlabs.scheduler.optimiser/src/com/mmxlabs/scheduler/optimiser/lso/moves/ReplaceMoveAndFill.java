@@ -13,7 +13,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 /**
  * 

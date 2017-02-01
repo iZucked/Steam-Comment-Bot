@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move2over2;
 import com.mmxlabs.optimiser.lso.impl.Move3over2;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;

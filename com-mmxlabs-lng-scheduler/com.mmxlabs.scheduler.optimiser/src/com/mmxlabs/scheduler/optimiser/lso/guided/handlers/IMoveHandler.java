@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;

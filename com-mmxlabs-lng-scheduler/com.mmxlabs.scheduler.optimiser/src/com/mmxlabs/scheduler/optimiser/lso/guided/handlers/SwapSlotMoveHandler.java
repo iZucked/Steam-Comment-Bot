@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
@@ -35,7 +35,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement slot, @NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair< IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement slot, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final SwapElementsMove.Builder builder = SwapElementsMove.Builder.newMove();

@@ -7,15 +7,12 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
+import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 

@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.Move3over2;
 

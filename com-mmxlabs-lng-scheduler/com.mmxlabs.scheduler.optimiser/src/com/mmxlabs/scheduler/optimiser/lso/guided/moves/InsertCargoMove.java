@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.finders.AfterElementFinder;
 import com.mmxlabs.scheduler.optimiser.lso.guided.finders.BeforeElementFinder;
 import com.mmxlabs.scheduler.optimiser.lso.guided.finders.IFinder;

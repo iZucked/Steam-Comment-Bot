@@ -12,9 +12,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
+import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 

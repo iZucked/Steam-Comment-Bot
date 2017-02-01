@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 /**
  * The {@link ShuffleElements} is a {@link IMove} to manipulate multiple {@link ISequenceElement}s in various places in the {@link ISequences}. Typically it will be used to combine two

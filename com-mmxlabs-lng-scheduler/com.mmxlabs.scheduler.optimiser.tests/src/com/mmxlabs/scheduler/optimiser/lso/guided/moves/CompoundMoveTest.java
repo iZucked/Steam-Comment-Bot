@@ -1,7 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
-import static org.mockito.Mockito.inOrder;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Lists;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.core.moves.IMove;
 
 public class CompoundMoveTest {
 
