@@ -11,8 +11,6 @@ package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import static org.ops4j.peaberry.Peaberry.service;
 
-import java.util.Random;
-
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
@@ -20,7 +18,6 @@ import org.eclipse.core.runtime.Platform;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -30,7 +27,6 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
@@ -81,17 +77,4 @@ public class LNGOptimisationModule extends AbstractModule {
 		// cmg.init();
 		return cmg;
 	}
-
-	@Provides
-	// @Singleton
-	private InstrumentingMoveGenerator provideInstrumentingMoveGenerator(final IMoveGenerator moveGenerator) {
-
-		final InstrumentingMoveGenerator instrumentingMoveGenerator = LocalSearchOptimiserModule.instrumenting ? new InstrumentingMoveGenerator(moveGenerator, true // profile moves (true) or just rate
-		// (false)
-				, false // don't log moves to file
-		) : null;
-		return instrumentingMoveGenerator;
-
-	}
-
 }
