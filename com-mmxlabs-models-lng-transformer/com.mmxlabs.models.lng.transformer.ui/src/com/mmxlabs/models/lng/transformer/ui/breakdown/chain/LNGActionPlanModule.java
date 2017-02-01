@@ -29,8 +29,6 @@ import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHelperImpl;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
@@ -41,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHa
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
 
 /**
@@ -72,9 +71,8 @@ public class LNGActionPlanModule extends AbstractModule {
 		bind(SwapCargoVesselMoveHandler.class).in(Singleton.class);
 		bind(SwapSlotMoveHandler.class).in(Singleton.class);
 
-		bind(GuidedMoveHelperImpl.class).in(Singleton.class);
-		bind(IGuidedMoveHelper.class).to(GuidedMoveHelperImpl.class);
 		bind(MoveHelper.class).in(Singleton.class);
+		bind(IMoveHelper.class).to(MoveHelper.class);
 
 		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
