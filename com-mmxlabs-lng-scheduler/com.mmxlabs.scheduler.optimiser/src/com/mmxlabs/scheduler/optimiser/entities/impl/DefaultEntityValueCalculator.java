@@ -77,6 +77,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private static final boolean includeTimeCharterInFitness = true;
 
 	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+
+	@Inject
 	private IEntityProvider entityProvider;
 
 	@Inject
@@ -541,9 +544,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param includeLNG
 	 */
 
-	protected void calculateShippingEntityCosts(@NonNull EvaluationMode evaluationMode, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @NonNull final IVesselAvailability vesselAvailability,
-			@NonNull final VoyagePlan plan, @NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity tradingEntity, @NonNull final IEntity shippingEntity, final boolean includeLNG,
-			@Nullable final Map<IEntityBook, IDetailTree> entityDetailsMap) {
+	protected void calculateShippingEntityCosts(@NonNull final EvaluationMode evaluationMode, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
+			@NonNull final IVesselAvailability vesselAvailability, @NonNull final VoyagePlan plan, @NonNull final ICargoValueAnnotation cargoPNLData, @NonNull final IEntity tradingEntity,
+			@NonNull final IEntity shippingEntity, final boolean includeLNG, @Nullable final Map<IEntityBook, IDetailTree> entityDetailsMap) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;
@@ -582,11 +585,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
 			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
-			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getInclusiveStart());
+			final int pricingTime = timeZoneToUtcOffsetProvider.UTC(portSlot.getTimeWindow().getInclusiveStart(), portSlot);
+			final long cancellationCost = cancellationCurve.getValueAtPoint(pricingTime);
 
 			// Taxed P&L - use time window start as tax date
 			final long preTaxValue = hedgeValue - cancellationCost; // note: cancellation cost positive
-			final int utcEquivTaxTime = utcOffsetProvider.UTC(portSlot.getTimeWindow().getInclusiveStart(), portSlot);
+			final int utcEquivTaxTime = pricingTime;
 			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
 			result = postTaxValue;
 
