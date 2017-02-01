@@ -25,7 +25,6 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.MultiObjectiveFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
  * A {@link Guice} module to provide a Local Search optimiser
@@ -54,8 +53,8 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 	@Provides
 	// @Singleton
-	private IFitnessEvaluator createFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
-			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
+	private IFitnessEvaluator createFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final List<IFitnessComponent> fitnessComponents,
+			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		// create a linear Fitness evaluator.
 
 		// final Injector injectorToUse;
@@ -77,9 +76,9 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 		return fitnessEvaluator;
 	}
-	
+
 	@Provides
-	private IMultiObjectiveFitnessEvaluator createMultiObjectiveFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
+	private IMultiObjectiveFitnessEvaluator createMultiObjectiveFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder,
 			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 
 		final MultiObjectiveFitnessEvaluator fitnessEvaluator = new MultiObjectiveFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
@@ -87,6 +86,5 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 		return fitnessEvaluator;
 	}
-
 
 }

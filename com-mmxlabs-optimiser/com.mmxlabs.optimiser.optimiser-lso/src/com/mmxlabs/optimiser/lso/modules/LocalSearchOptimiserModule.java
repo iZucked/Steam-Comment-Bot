@@ -35,7 +35,6 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.SimpleMultiObjectiveOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
  * A {@link Guice} module to provide a Local Search optimiser
@@ -44,8 +43,6 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
  * @since 2.0
  */
 public class LocalSearchOptimiserModule extends AbstractModule {
-
-	public static final boolean instrumenting = true;
 
 	public static final String CLEAN_STATE_NUMBER_OF_ITERATIONS = "CleanState-NumberOfIterations";
 	public static final String LSO_NUMBER_OF_ITERATIONS = "LSO-NumberOfIterations";
@@ -62,7 +59,8 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	LocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @Named(USE_RESTARTING_OPTIMISER) final boolean isRestarting, @Named(SIMILARITY_SETTING) final SimilarityFitnessMode similarityFitnessMode, @Named(NEW_SIMILARITY_OPTIMISER) boolean isUsingNewSimilarityOptimiser) {
+	LocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @Named(USE_RESTARTING_OPTIMISER) final boolean isRestarting,
+			@Named(SIMILARITY_SETTING) final SimilarityFitnessMode similarityFitnessMode, @Named(NEW_SIMILARITY_OPTIMISER) final boolean isUsingNewSimilarityOptimiser) {
 		if (isUsingNewSimilarityOptimiser) {
 			if (similarityFitnessMode == SimilarityFitnessMode.OFF) {
 				return injector.getInstance(DefaultLocalSearchOptimiser.class);
@@ -75,20 +73,19 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			} else {
 				return injector.getInstance(DefaultLocalSearchOptimiser.class);
 			}
-			
+
 		}
 	}
 
 	@Provides
 	@Singleton
 	DefaultLocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator,
-			@Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
-			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
+			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
-		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers,
-				evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 
 		return lso;
 	}
@@ -96,13 +93,12 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	@Provides
 	@Singleton
 	RestartingLocalSearchOptimiser buildRestartingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator,
-			@Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
-			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
+			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 
 		final RestartingLocalSearchOptimiser lso = new RestartingLocalSearchOptimiser();
-		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers,
-				evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 
 		return lso;
 	}
@@ -110,28 +106,28 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	@Provides
 	@Singleton
 	SimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
-			@Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @Named(MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
-			@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses, @Named(LocalSearchOptimiserModule.RANDOM_SEED) long randomSeed) {
-		List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
-		assert(objectives.size() == objectiveNames.size());
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@Named(MULTIOBJECTIVE_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
+			@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses,
+			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed) {
+		final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
+		assert (objectives.size() == objectiveNames.size());
 		final SimpleMultiObjectiveOptimiser lso = new SimpleMultiObjectiveOptimiser(objectives, new Random(randomSeed));
-		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers,
-				evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
 		return lso;
 	}
 
 	private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator,
-			@NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations,
-			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
-			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses, @NonNull final LocalSearchOptimiser lso) {
+			@NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
+			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
+			@NonNull final LocalSearchOptimiser lso) {
 		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
 
 		lso.setSequenceManipulator(manipulator);
 
-		lso.setMoveGenerator(instrumenting ? instrumentingMoveGenerator : moveGenerator);
+		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
 		lso.setEvaluatedStateConstraintCheckers(evaluatedStateConstraintCheckers);
@@ -144,10 +140,9 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	@Provides
 	@Singleton
 	ArbitraryStateLocalSearchOptimiser buildSolutionImprovingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator,
-			@Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
-			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
-			@NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
+			@NonNull final IMoveGenerator moveGenerator, @Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
+			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses, @NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
 
 		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
 
@@ -155,8 +150,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
 		injector.injectMembers(fitnessEvaluator);
 
-		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers,
-				evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 
 		return lso;
 	}
