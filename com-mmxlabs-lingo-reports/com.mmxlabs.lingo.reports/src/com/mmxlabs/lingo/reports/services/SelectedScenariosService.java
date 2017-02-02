@@ -66,10 +66,10 @@ public class SelectedScenariosService {
 	 */
 	private class MyCommandStackListener implements CommandStackListener {
 		private final WeakReference<ScheduleModel> scheduleModel;
-		private CommandStack commandStack;
-		private ScenarioResult result;
+		private final CommandStack commandStack;
+		private final ScenarioResult result;
 
-		public MyCommandStackListener(CommandStack commandStack, ScenarioResult result) {
+		public MyCommandStackListener(final CommandStack commandStack, final ScenarioResult result) {
 			this.commandStack = commandStack;
 			this.result = result;
 			this.scheduleModel = new WeakReference<ScheduleModel>(result.getTypedResult(ScheduleModel.class));
@@ -221,7 +221,10 @@ public class SelectedScenariosService {
 			unbindScenarioServiceSelectionProvider(this.selectionProvider);
 		}
 		for (final Map.Entry<IScenarioService, IScenarioServiceListener> e : unloadlisteners.entrySet()) {
-			e.getKey().removeScenarioServiceListener(e.getValue());
+			final IScenarioService key = e.getKey();
+			if (key != null) {
+				key.removeScenarioServiceListener(e.getValue());
+			}
 		}
 		listeners.clear();
 	}
@@ -250,14 +253,15 @@ public class SelectedScenariosService {
 			return;
 		}
 		final IScenarioService scenarioService = instance.getScenarioInstance().getScenarioService();
-		if (!unloadlisteners.containsKey(scenarioService)) {
+		if (scenarioService != null && !unloadlisteners.containsKey(scenarioService)) {
 			final IScenarioServiceListener l = new OnUnloadScenarioServiceListener();
+			scenarioService.addScenarioServiceListener(l);
 			unloadlisteners.put(scenarioService, l);
 		}
 
 		final CommandStack commandStack = getCommandStack(instance);
 		if (commandStack != null) {
-			MyCommandStackListener l = new MyCommandStackListener(commandStack, instance);
+			final MyCommandStackListener l = new MyCommandStackListener(commandStack, instance);
 			this.commandStacks.put(instance, l);
 
 		}
@@ -487,7 +491,7 @@ public class SelectedScenariosService {
 			} else {
 				others.remove(pinnedInstance);
 			}
-	
+
 			l.selectionChanged(selectedDataProvider, pinnedInstance, others, block);
 		} catch (final Exception e) {
 			log.error(e.getMessage(), e);
