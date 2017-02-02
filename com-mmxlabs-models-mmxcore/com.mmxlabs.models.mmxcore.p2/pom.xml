@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
 		<groupId>com.mmxlabs.models.mmxcore</groupId>
-		<version>4.1.3.RELEASE</version>
+		<version>4.1.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.mmxcore.p2</artifactId>
-	<version>4.1.3.RELEASE</version>
+	<version>4.1.4-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 	<name>Models: MMXCore: p2 Repository</name>
 </project>
