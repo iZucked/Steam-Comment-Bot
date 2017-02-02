@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -39,7 +41,8 @@ public class ReportTester {
 	// Never commit as true
 	private static final boolean storeReports = false;
 
-	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
+	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension,
+			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 
 		// A side-effect is the initial evaluation.
 		LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance.getInstance();
@@ -48,7 +51,7 @@ public class ReportTester {
 		if (preAction != null) {
 			preAction.accept(instance);
 		}
-		
+
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
 		ScenarioResult scenarioResult = new ScenarioResult(instance, ScenarioModelUtil.getScheduleModel(lngScenarioModel));
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
@@ -105,6 +108,61 @@ public class ReportTester {
 		ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel((LNGScenarioModel) refInstance.getInstance()));
 
 		final IReportContents reportContents = reportTester.getReportContents(pinResult, refResult, reportID);
+
+		Assert.assertNotNull(reportContents);
+		final String actualContents = reportContents.getStringContents();
+		Assert.assertNotNull(actualContents);
+		if (storeReports) {
+
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
+
+			final File f1 = new File(expectedReportOutput.toURI());
+			final String slash = f1.isDirectory() ? "/" : "";
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
+			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
+				pw.print(actualContents);
+			}
+		} else {
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
+			final StringBuilder expectedOutputBuilder = new StringBuilder();
+			{
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+					String line = reader.readLine();
+					if (line != null) {
+						expectedOutputBuilder.append(line);
+					}
+					while (line != null) {
+						line = reader.readLine();
+						if (line != null) {
+							expectedOutputBuilder.append("\n");
+							expectedOutputBuilder.append(line);
+						}
+					}
+				}
+			}
+			if (!expectedOutputBuilder.toString().equals(actualContents)) {
+				LOG.warn("Expected " + expectedOutputBuilder.toString());
+				LOG.warn("Actual " + actualContents);
+			}
+			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
+		}
+	}
+
+	public static void testActionPlanReport(final List<ScenarioInstance> orderedInstances, final URL scenarioURL, final String reportID, final String shortName, final String extension)
+			throws Exception {
+
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+
+		List<ScenarioResult> orderedResults = new LinkedList<>();
+		for (ScenarioInstance instance : orderedInstances) {
+			// A side-effect is the initial evaluation.
+			LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation((LNGScenarioModel) instance.getInstance(), false);
+
+			ScenarioResult result = new ScenarioResult(instance, ScenarioModelUtil.getScheduleModel((LNGScenarioModel) instance.getInstance()));
+			orderedResults.add(result);
+		}
+
+		final IReportContents reportContents = reportTester.getActionPlanReportContents(orderedResults, reportID);
 
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();

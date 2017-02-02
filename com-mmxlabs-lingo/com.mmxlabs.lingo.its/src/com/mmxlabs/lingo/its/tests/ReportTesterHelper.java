@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -20,6 +22,7 @@ import org.junit.Assert;
 
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
+import com.mmxlabs.lingo.reports.views.changeset.IActionPlanHandler;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
@@ -70,7 +73,10 @@ public class ReportTesterHelper {
 
 	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetView";
 	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
-	
+
+	public static final String ACTIONPLAN_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ActionSetView";
+	public static final String ACTIONPLAN_REPORT_SHORTNAME = "ActionPlanReport";
+
 	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";
 	public static final String EXPOSURES_REPORT_SHORTNAME = "ExposuresReport";
 
@@ -79,6 +85,22 @@ public class ReportTesterHelper {
 
 		void updateSelection(IViewPart view, IScenarioServiceSelectionProvider provider);
 
+	}
+
+	@Nullable
+	public IReportContents getActionPlanReportContents(final List<ScenarioResult> scenarios, final String reportID) throws InterruptedException {
+		return getReportContents(reportID, (v, p) -> {
+
+			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
+			if (handler == null) {
+				EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
+				MPart part = partService.findPart(reportID);
+				handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+			}
+			if (handler != null) {
+				handler.displayActionPlan(scenarios);
+			}
+		});
 	}
 
 	@Nullable
