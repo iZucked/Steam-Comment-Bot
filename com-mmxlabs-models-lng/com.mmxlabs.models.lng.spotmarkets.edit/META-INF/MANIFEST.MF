@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.spotmarkets.edit;singleton:=true
-Bundle-Version: 4.1.3.qualifier
+Bundle-Version: 4.1.3.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin$Implementation
 Bundle-Vendor: %providerName
