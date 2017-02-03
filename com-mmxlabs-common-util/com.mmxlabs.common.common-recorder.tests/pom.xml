@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>common-util-parent</artifactId>
 		<groupId>com.mmxlabs.common</groupId>
-		<version>4.1.4.RELEASE</version>
+		<version>4.1.5-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.common.common-recorder.tests</artifactId>
-	<version>4.1.4.RELEASE</version>
+	<version>4.1.5-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<build>
