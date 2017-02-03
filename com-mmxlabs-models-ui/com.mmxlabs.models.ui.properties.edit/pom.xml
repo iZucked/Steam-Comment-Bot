@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>4.1.4-SNAPSHOT</version>
+		<version>4.1.4.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.ui.properties.edit</artifactId>
-	<version>4.1.4-SNAPSHOT</version>
+	<version>4.1.4.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
