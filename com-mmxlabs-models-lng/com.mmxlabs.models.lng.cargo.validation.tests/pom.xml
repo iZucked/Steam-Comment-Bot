@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>4.1.3-SNAPSHOT</version>
+		<version>4.1.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.cargo.validation.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.1.3-SNAPSHOT</version>
+	<version>4.1.4-SNAPSHOT</version>
 
 	<build>
 
