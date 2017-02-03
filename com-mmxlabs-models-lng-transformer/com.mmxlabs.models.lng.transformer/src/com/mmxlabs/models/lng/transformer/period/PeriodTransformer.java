@@ -271,7 +271,7 @@ public class PeriodTransformer {
 
 				vesselAvailability.setForceHireCostOnlyEndRule(true);
 			} else if (vesselAvailability.isSetEndAfter()) {
-				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
+				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
 					if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
 						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
 						vesselAvailability.setForceHireCostOnlyEndRule(true);
