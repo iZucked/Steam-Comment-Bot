@@ -3,12 +3,12 @@
 	<parent>
 		<artifactId>optimiser-parent</artifactId>
 		<groupId>com.mmxlabs.optimiser</groupId>
-		<version>4.1.3-SNAPSHOT</version>
+		<version>4.1.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.p2</artifactId>
-	<version>4.1.3-SNAPSHOT</version>
+	<version>4.1.4-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 
 </project>
