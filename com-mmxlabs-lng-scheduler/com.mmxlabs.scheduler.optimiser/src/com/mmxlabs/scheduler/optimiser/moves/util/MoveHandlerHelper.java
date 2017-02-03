@@ -13,7 +13,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 public class MoveHandlerHelper {
 
 	@Inject
-	private @NonNull MoveHelper helper;
+	private @NonNull IMoveHelper helper;
 
 	@NonNull
 	public List<ISequenceElement> extractSegment(@NonNull ISequence fromSequence, @NonNull ISequenceElement element) {

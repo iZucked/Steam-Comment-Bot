@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
+import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 
 public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 

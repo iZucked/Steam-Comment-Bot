@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
+package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.List;
 
@@ -14,7 +14,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 
 public class MoveHandlerHelperTest {
 

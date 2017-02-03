@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertCargoMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
+import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
