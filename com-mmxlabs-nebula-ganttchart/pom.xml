@@ -6,7 +6,7 @@
 
 	<groupId>org.eclipse.nebula.widgets</groupId>
 	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.parent</artifactId>
-	<version>4.1.4-SNAPSHOT</version>
+	<version>4.1.4.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
