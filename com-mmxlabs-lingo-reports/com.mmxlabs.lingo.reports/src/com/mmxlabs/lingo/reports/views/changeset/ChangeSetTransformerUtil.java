@@ -644,6 +644,9 @@ public final class ChangeSetTransformerUtil {
 		if (row.getNewOpenLoadAllocation() != null) {
 			containers.add(row.getNewGroupProfitAndLoss());
 		}
+		if (row.getNewOpenLoadAllocation() != null) {
+			containers.add(row.getNewOpenLoadAllocation());
+		}
 		if (row.getNewOpenDischargeAllocation() != null) {
 			containers.add(row.getNewOpenDischargeAllocation());
 		}
