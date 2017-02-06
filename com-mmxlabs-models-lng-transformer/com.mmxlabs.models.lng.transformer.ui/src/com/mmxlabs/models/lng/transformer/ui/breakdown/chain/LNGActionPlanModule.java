@@ -29,6 +29,9 @@ import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
+import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypeHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
@@ -70,6 +73,10 @@ public class LNGActionPlanModule extends AbstractModule {
 		bind(RemoveCargoMoveHandler.class).in(Singleton.class);
 		bind(SwapCargoVesselMoveHandler.class).in(Singleton.class);
 		bind(SwapSlotMoveHandler.class).in(Singleton.class);
+
+		bind(GuidedMoveGenerator.class);
+		bind(HintManager.class);
+		bind(MoveTypeHelper.class);
 
 		bind(MoveHelper.class).in(Singleton.class);
 		bind(IMoveHelper.class).to(MoveHelper.class);

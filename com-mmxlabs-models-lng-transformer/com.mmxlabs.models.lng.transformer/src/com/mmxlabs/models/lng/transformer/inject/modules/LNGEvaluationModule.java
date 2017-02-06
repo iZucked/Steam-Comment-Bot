@@ -28,12 +28,18 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.LegalSequencingChecker;
+import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
+import com.mmxlabs.scheduler.optimiser.schedule.IdleTimeChecker;
+import com.mmxlabs.scheduler.optimiser.schedule.LatenessChecker;
+import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 
 /**
  * This {@link Module} configures the default schedule optimisation classes.
@@ -58,7 +64,12 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 
 		bind(VoyagePlanner.class);
+		bind(IVoyagePlanAnnotator.class).to(VoyagePlanAnnotator.class);
 		bind(PortTimesPlanner.class);
+		bind(IdleTimeChecker.class);
+		bind(LatenessChecker.class);
+		bind(CapacityViolationChecker.class);
+		bind(ProfitAndLossCalculator.class);
 		bind(ScheduleCalculator.class);
 		
 		if (hints != null) {
