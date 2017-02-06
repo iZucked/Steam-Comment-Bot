@@ -52,10 +52,10 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 		final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(desPurchase);
 		final List<ISequenceElement> followers = Lists.newArrayList(validFollowers);
 		followers.removeAll(forbiddenElements);
-		Collections.shuffle(followers, random);
 		if (followers.isEmpty()) {
 			return null;
 		}
+		Collections.shuffle(followers, random);
 		final Hints hints = new Hints();
 		for (final ISequenceElement possibleFollower : followers) {
 			// This should be implicit by virtue of being able to follow the DES Purchase
