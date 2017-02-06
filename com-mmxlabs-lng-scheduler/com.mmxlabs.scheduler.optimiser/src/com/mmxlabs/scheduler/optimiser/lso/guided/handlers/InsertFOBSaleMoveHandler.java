@@ -44,6 +44,11 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 		final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidPreceders(fobSale);
 		final List<ISequenceElement> preceders = Lists.newArrayList(validFollowers);
 		preceders.removeAll(forbiddenElements);
+
+		if (preceders.isEmpty()) {
+			return null;
+		}
+
 		Collections.shuffle(preceders, random);
 
 		final Hints hints = new Hints();
