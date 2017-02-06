@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.IBasicPropertyConstants;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
@@ -88,7 +87,7 @@ public class CopyGridToExcelMLStringUtil {
 
 	private class StyleManager {
 		private AtomicInteger nextIndex = new AtomicInteger(1);
-		Map<Style, String> stlyeCache = new HashMap<>();
+		private Map<Style, String> stlyeCache = new LinkedHashMap<>();
 
 		public String getStyleID(RGB foreground, RGB background, int border) {
 			return stlyeCache.computeIfAbsent(new Style(foreground, background, border), (style) -> {
