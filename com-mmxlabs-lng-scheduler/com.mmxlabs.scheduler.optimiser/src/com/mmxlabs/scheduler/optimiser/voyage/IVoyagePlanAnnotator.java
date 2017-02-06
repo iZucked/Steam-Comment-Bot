@@ -26,4 +26,6 @@ public interface IVoyagePlanAnnotator {
 	 */
 	void annotateFromVoyagePlan(@NonNull VolumeAllocatedSequence scheduledSequence, @NonNull IAnnotatedSolution annotatedSolution);
 
+	void annotateFromScheduledSequence(@NonNull VolumeAllocatedSequence volumeAllocatedSequence, @NonNull IAnnotatedSolution annotatedSolution);
+
 }

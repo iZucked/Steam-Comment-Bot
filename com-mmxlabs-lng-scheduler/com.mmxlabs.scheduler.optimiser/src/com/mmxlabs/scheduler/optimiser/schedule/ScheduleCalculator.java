@@ -47,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -107,7 +108,7 @@ public class ScheduleCalculator {
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private VoyagePlanAnnotator voyagePlanAnnotator;
+	private IVoyagePlanAnnotator voyagePlanAnnotator;
 
 	@Inject
 	private IVesselProvider vesselProvider;
