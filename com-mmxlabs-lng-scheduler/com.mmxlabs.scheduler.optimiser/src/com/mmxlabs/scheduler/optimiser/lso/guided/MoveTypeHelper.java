@@ -48,6 +48,7 @@ public class MoveTypeHelper {
 				moveTypes.add(MoveTypes.Swap_Slot);
 				moveTypes.add(MoveTypes.Insert_Slot);
 				moveTypes.add(MoveTypes.Insert_Cargo);
+				moveTypes.add(MoveTypes.Remove_Linked_Slot);
 			}
 
 		} else {

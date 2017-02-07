@@ -301,7 +301,7 @@ public class MoveHelper implements IMoveHelper {
 	public Collection<@NonNull IResource> getAllVesselResources() {
 		return vesselResources;
 	}
-	
+
 	@Override
 	public boolean isStartOrEndSlot(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
@@ -312,7 +312,7 @@ public class MoveHelper implements IMoveHelper {
 	public boolean isOptional(@NonNull final ISequenceElement element) {
 		return optionalElementsProvider.isElementOptional(element);
 	}
-	
+
 	@Override
 	public boolean isCharterOutEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);

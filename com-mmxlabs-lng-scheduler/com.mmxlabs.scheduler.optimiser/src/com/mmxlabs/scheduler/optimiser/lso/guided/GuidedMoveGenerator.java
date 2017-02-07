@@ -33,11 +33,11 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMove
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveLinkedSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -59,7 +59,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	private IOptionalElementsProvider optionalElementsProvider;
 
 	@Inject
-	private HintManager hintManager;
+	private Provider<HintManager> hintManagerProvider;
 
 	@Inject
 	private Injector injector;
@@ -98,17 +98,46 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	public IMove generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random) {
 
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
-		final Pair<IMove, HintManager> p = generateMove(rawSequences, lookupManager, random, Collections.emptyList(), options);
+		final long[] initialMetrics = evaluationHelper.evaluateState(new ModifiableSequences(providedSequences), null, null, null);
+		final MoveResult p = generateMove(rawSequences, lookupManager, random, Collections.emptyList(), initialMetrics, options);
 		if (p != null) {
-			return p.getFirst();
+			return p.move;
 		}
 		return null;
 	}
 
-	public Pair<IMove, HintManager> generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random, final List<ISequenceElement> forbidden,
+	public static class MoveResult {
+		public MoveResult(final IMove move, final HintManager hintManager, final long[] metrics) {
+			this.move = move;
+			this.hintManager = hintManager;
+			this.metrics = metrics;
+		}
+
+		public IMove getMove() {
+			return move;
+		}
+
+		public HintManager getHintManager() {
+			return hintManager;
+		}
+
+		public long[] getMetrics() {
+			return metrics;
+		}
+
+		public IMove move;
+		public HintManager hintManager;
+		public long[] metrics;
+
+	}
+
+	public MoveResult generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random, final List<ISequenceElement> forbidden, final long[] initialMetrics,
 			final GuideMoveGeneratorOptions options) {
+
 		this.providedSequences = rawSequences;
-		hintManager.reset();
+
+		final HintManager hintManager = hintManagerProvider.get();
+
 		if (options.isIgnoreUsedElements()) {
 			hintManager.getUsedElements().addAll(forbidden);
 		}
@@ -116,18 +145,17 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 		final List<IMove> discoveredMoves = new LinkedList<>();
 		int checkPointIndex = -1;
+		long[] checkPointMetrics = null;
 		final IModifiableSequences currentSequences = new ModifiableSequences(providedSequences);
 
 		final long existingUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
 				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 				.count();
 
-		final long[] initalMetrics = evaluationHelper.evaluateState(currentSequences, null, null, null);
-
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
-			final Pair<IMove, Hints> moveData = getNextMove(currentSequences, random, options);
+			final Pair<IMove, Hints> moveData = getNextMove(currentSequences, random, options, hintManager);
 			if (moveData == null) {
 				continue;
 			}
@@ -152,9 +180,10 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			newUnusedCompulsarySlotCount <= existingUnusedCompulsarySlotCount //
 					&& evaluationHelper.doesMovePassConstraints(currentSequences)) {
 
+				long[] moveMetrics = null;
 				if (options.isCheckingMove()) {
 					// Check metrics - this return null if we increase lateness, capacity etc (but loss of P&L is ok)
-					final long[] moveMetrics = evaluationHelper.evaluateState(currentSequences, null, initalMetrics, null);
+					moveMetrics = evaluationHelper.evaluateState(currentSequences, null, initialMetrics, null);
 					if (moveMetrics == null) {
 						continue;
 					}
@@ -162,13 +191,14 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 				// Record this state as valid in case we do not find a valid state later on
 				checkPointIndex = discoveredMoves.size() - 1;
+				checkPointMetrics = moveMetrics;
 
 				// -- TODO return a list of valid states? Then caller can apply in order and decide to combine or separate.
 
 				// Sometimes we want to continue searching as the solution may pass constraints, but have other issues - such as increase lateness or other violations.
 				// However the extra search can also introduce unnecessary changes.
 				if (!options.isExtendSearch() || random.nextDouble() < 0.05) {
-					return new Pair<>(new CompoundMove(discoveredMoves), hintManager);
+					return new MoveResult(new CompoundMove(discoveredMoves), hintManager, moveMetrics);
 				}
 			}
 
@@ -180,16 +210,16 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		}
 
 		if (checkPointIndex != -1) {
-			return new Pair<>(new CompoundMove(discoveredMoves.subList(0, 1 + checkPointIndex)), hintManager);
+			return new MoveResult(new CompoundMove(discoveredMoves.subList(0, 1 + checkPointIndex)), hintManager, checkPointMetrics);
 		}
 
 		// No valid state found, give up
 		return null;
 	}
 
-	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences, final @NonNull Random random, final @NonNull GuideMoveGeneratorOptions options) {
+	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences, final @NonNull Random random, final @NonNull GuideMoveGeneratorOptions options, final HintManager hintManager) {
 
-		final List<@NonNull ISequenceElement> targetElements = getNextElements(options);
+		final List<@NonNull ISequenceElement> targetElements = getNextElements(options, hintManager);
 
 		Collections.shuffle(targetElements, random);
 		final LookupManager lookupManager = lookupManagerProvider.get();
@@ -220,7 +250,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	}
 
-	protected List<@NonNull ISequenceElement> getNextElements(final GuideMoveGeneratorOptions options) {
+	protected List<@NonNull ISequenceElement> getNextElements(final GuideMoveGeneratorOptions options, final HintManager hintManager) {
 		// Find a set of elements to consider next
 		final List<@NonNull ISequenceElement> targetElements = new LinkedList<>();
 		{
@@ -256,6 +286,8 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			return injector.getInstance(InsertFOBSaleMoveHandler.class);
 		case Insert_Slot:
 			return injector.getInstance(InsertCargoVesselMoveHandler.class);
+		case Remove_Linked_Slot:
+			return injector.getInstance(RemoveLinkedSlotMoveHandler.class);
 		case Insert_Vessel_Event:
 			break;
 		case Move_Vessel_Event:
