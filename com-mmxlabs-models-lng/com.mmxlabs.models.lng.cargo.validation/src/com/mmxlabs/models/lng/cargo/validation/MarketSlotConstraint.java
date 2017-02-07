@@ -140,7 +140,8 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 				boolean foundAltWindowSize = false;
 				int actual = slot.getWindowSize();
-				if (slot.isSetWindowSizeUnits() && slot.getWindowSizeUnits() == TimePeriod.HOURS || slot.getPort().getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
+				Port port = slot.getPort();
+				if (slot.isSetWindowSizeUnits() && slot.getWindowSizeUnits() == TimePeriod.HOURS || (port != null && port.getDefaultWindowSizeUnits() == TimePeriod.HOURS)) {
 					if (slot.isSetWindowSize()) {
 						LocalDate windowStart = slot.getWindowStart();
 						int expected = Hours.between(windowStart, windowStart.plusMonths(1)) - 1;
