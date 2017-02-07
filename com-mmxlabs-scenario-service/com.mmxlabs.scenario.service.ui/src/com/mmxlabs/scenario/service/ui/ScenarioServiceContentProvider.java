@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -226,6 +227,15 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		} else if (object instanceof IScenarioService) {
 			final IScenarioService scenarioService = (IScenarioService) object;
 			elements = scenarioService.getServiceModel().getElements().toArray();
+		} else if (object instanceof ScenarioInstance) {
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+			final List<Object> l = new LinkedList<>();
+			l.addAll(scenarioInstance.getElements());
+			l.addAll(scenarioInstance.getFragments());
+			return l.toArray();
+		} else if (object instanceof Container) {
+			final Container container = (Container) object;
+			return container.getElements().toArray();
 		} else {
 			elements = super.getChildren(object);
 		}
