@@ -35,7 +35,7 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 	@Inject
 	private ILookupManager lookupManager;
 
-	private IncrementingRandomSeed randomSeed = new IncrementingRandomSeed(0);
+//	private IncrementingRandomSeed randomSeed = new IncrementingRandomSeed(0);
 
 	/**
 	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
@@ -58,9 +58,9 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 	}
 
 	public Random getRandom() {
-		return new Random(randomSeed.getSeed());
+		return random;//new Random(randomSeed.getSeed());
 	}
-
+	
 	public void setRandom(Random random) {
 		this.random = random;
 	}

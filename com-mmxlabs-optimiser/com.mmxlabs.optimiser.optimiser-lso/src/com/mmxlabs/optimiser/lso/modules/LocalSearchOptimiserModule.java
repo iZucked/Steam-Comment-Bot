@@ -80,11 +80,12 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	@Provides
 	@Singleton
 	DefaultLocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, 	@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed,
 			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
 			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		lso.setRandom(new Random(randomSeed));
 		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 
 		return lso;
@@ -94,10 +95,11 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	@Singleton
 	RestartingLocalSearchOptimiser buildRestartingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
 			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
-			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
-			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
+			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
+			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 
 		final RestartingLocalSearchOptimiser lso = new RestartingLocalSearchOptimiser();
+		lso.setRandom(new Random(randomSeed));
 		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 
 		return lso;
@@ -113,6 +115,8 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
 		assert (objectives.size() == objectiveNames.size());
 		final SimpleMultiObjectiveOptimiser lso = new SimpleMultiObjectiveOptimiser(objectives, new Random(randomSeed));
+		lso.setRandom(new Random(randomSeed));
+
 		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
 		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
 		return lso;
@@ -141,11 +145,12 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	@Singleton
 	ArbitraryStateLocalSearchOptimiser buildSolutionImprovingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
 			@NonNull final IMoveGenerator moveGenerator, @Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations,
-			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
-			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses, @NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
+			@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long randomSeed, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
+			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
+			@NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
 
 		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
-
+		lso.setRandom(new Random(randomSeed));
 		// TODO: Put in the LinearFitnessEvaluatorModule as named provider
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
 		injector.injectMembers(fitnessEvaluator);
