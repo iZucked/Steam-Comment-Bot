@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} handles moves on a per slot basis. This moved generator selects single slot and attempts to move it next to another preceder or follower in another
@@ -88,8 +89,12 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			// TODO: check new API - null might be events or start/ends?
 			// TODO: Really need port type in here
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);
-			if ((resources != null && resources.size() > 1) || optionalElementsProvider.isElementOptional(e)) {
-				targetElements.add(e);
+			if (resources == null || (resources.size() > 1) || optionalElementsProvider.isElementOptional(e)) {
+				final PortType portType = portTypeProvider.getPortType(e);
+
+				if (portType == PortType.Load || portType == PortType.Discharge) {
+					targetElements.add(e);
+				}
 			} else if (alternativeElementProvider.hasAlternativeElement(e)) {
 				targetElements.add(e);
 				targetElements.add(alternativeElementProvider.getAlternativeElement(e));
