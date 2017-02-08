@@ -16,8 +16,6 @@ import javax.inject.Singleton;
 import org.eclipse.core.runtime.Platform;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -26,7 +24,6 @@ import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
@@ -52,29 +49,11 @@ public class LNGOptimisationModule extends AbstractModule {
 
 		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+		
 
+		bind(ConstrainedMoveGenerator.class).in(Singleton.class);
+		bind(IMoveGenerator.class).to(ConstrainedMoveGenerator.class);
+		
 		bind(ILookupManager.class).to(LookupManager.class);
-
-	}
-
-	@Provides
-	@Singleton
-	private IMoveGenerator provideMoveGenerator(final ConstrainedMoveGenerator normalMoveGenerator) {
-
-		final CompoundMoveGenerator moveGenerator = new CompoundMoveGenerator();
-
-		moveGenerator.addGenerator(normalMoveGenerator, 1);
-
-		return moveGenerator;
-	}
-
-	@Provides
-	@Singleton
-	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final Injector injector) {
-
-		final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator();
-		injector.injectMembers(cmg);
-		// cmg.init();
-		return cmg;
 	}
 }
