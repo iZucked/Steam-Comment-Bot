@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;

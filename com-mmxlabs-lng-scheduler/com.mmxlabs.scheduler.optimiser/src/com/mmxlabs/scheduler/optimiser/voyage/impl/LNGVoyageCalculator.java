@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;

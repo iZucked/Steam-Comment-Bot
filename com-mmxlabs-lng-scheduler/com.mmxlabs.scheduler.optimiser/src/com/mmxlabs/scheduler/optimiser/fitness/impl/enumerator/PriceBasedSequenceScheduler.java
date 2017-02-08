@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;

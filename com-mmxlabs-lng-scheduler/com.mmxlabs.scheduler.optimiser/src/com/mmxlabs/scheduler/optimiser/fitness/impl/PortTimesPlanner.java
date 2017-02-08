@@ -23,7 +23,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;

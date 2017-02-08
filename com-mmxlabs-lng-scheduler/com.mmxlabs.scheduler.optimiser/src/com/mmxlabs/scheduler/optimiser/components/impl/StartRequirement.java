@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;

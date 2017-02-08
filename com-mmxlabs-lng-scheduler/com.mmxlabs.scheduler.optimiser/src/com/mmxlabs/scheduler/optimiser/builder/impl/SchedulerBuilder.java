@@ -30,7 +30,6 @@ import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
