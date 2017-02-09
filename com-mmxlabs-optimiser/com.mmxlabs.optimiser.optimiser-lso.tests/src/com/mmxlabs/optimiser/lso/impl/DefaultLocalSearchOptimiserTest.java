@@ -102,14 +102,17 @@ public class DefaultLocalSearchOptimiserTest {
 		lso.setLookupManager(new ILookupManager() {
 			@Override
 			public void createLookup(@NonNull ISequences sequences) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public @Nullable Pair<@Nullable IResource, @NonNull Integer> lookup(@NonNull ISequenceElement element) {
-				// TODO Auto-generated method stub
 				return null;
+			}
+
+			@Override
+			public @NonNull ISequences getRawSequences() {
+				throw new IllegalStateException();
 			}
 		});
 		// Perform the optimisation

@@ -23,4 +23,7 @@ public interface ILookupManager {
 	Pair<@Nullable IResource, @NonNull Integer> lookup(@NonNull ISequenceElement element);
 
 	void createLookup(@NonNull ISequences sequences);
+
+	@NonNull
+	ISequences getRawSequences();
 }
