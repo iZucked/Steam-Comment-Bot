@@ -35,15 +35,8 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
 
-	private final ConstrainedMoveGenerator owner;
-
-	public SwapElementsInSequenceMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
-		super();
-		this.owner = owner;
-	}
-
 	@Override
-	public SwapSingleSequenceElements generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
+	public SwapSingleSequenceElements generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 
 		final ISequences sequences = rawSequences;
 
@@ -76,7 +69,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 		Collections.shuffle(bucket, random);
 
 		for (final ISequenceElement e : sequenceElementsAsList) {
-			final int eIdx = stateManager.lookup(e).getSecond();
+			final int eIdx = lookupManager.lookup(e).getSecond();
 			// Remove element so it is not considered again in the inner loop. This avoids repeating the search e -> f when e has become f.
 			bucket.remove(e);
 
@@ -85,7 +78,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 
 			// Find possible element to swap - this list will be reduced overtime
 			for (final ISequenceElement f : bucket) {
-				final int fIdx = stateManager.lookup(f).getSecond();
+				final int fIdx = lookupManager.lookup(f).getSecond();
 
 				final ISequenceElement beforeF = fIdx == 0 ? null : sequence.get(fIdx - 1);
 				final ISequenceElement afterF = fIdx == sequence.size() - 1 ? null : sequence.get(fIdx + 1);

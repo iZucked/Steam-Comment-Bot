@@ -42,7 +42,6 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
  * 
  */
 public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
-	private final ConstrainedMoveGenerator owner;
 
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
@@ -52,11 +51,6 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
-
-	public OptionalConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
-		super();
-		this.owner = owner;
-	}
 
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {

@@ -181,7 +181,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 
 			}
 		});
-		final SwapElementsInSequenceMoveGeneratorUnit unit = new SwapElementsInSequenceMoveGeneratorUnit(owner);
+		final SwapElementsInSequenceMoveGeneratorUnit unit = new SwapElementsInSequenceMoveGeneratorUnit();
 		injector.injectMembers(unit);
 
 		return unit;

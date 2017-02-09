@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 
 /**
@@ -43,19 +44,16 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
 
-	private final @NonNull ConstrainedMoveGenerator owner;
-
-	public ElementSwapMoveGenerator(@NonNull final ConstrainedMoveGenerator owner) {
-		this.owner = owner;
-	}
+	@Inject
+	private IBreakPointHelper breakPointHelper;
 
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 		// Retry a few times...
 		for (int i = 0; i < 10; ++i) {
 
-			// Find a target pair (pos1 -> pos2)			
-			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, owner.validBreaks);
+			// Find a target pair (pos1 -> pos2)
+			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, breakPointHelper.getValidBreaks());
 
 			final Pair<IResource, Integer> pos1Pair = lookupManager.lookup(newPair.getFirst());
 			final Pair<IResource, Integer> pos2Pair = lookupManager.lookup(newPair.getSecond());

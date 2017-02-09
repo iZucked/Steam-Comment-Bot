@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -51,7 +52,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUnit {
-	private final ConstrainedMoveGenerator owner;
 
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
@@ -76,16 +76,14 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
 
-	public ShuffleElementsMoveGenerator(final ConstrainedMoveGenerator owner) {
-		super();
-		this.owner = owner;
-	}
+	@Inject
+	private IOptimisationData optimisationData;
 
 	@Inject
 	public void init() {
-		targetElements = new ArrayList<ISequenceElement>(owner.data.getSequenceElements().size());
+		targetElements = new ArrayList<>(optimisationData.getSequenceElements().size());
 		// Determine possible slots which can be moved.
-		for (final ISequenceElement e : owner.data.getSequenceElements()) {
+		for (final ISequenceElement e : optimisationData.getSequenceElements()) {
 			// TODO: check new API - null might be events or start/ends?
 			// TODO: Really need port type in here
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);
@@ -113,7 +111,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		final ShuffleElementsBuilder builder = new ShuffleElementsBuilder();
 
 		// Set of elements already considered in our move. They should no longer be considered available or in the follower or preceders lists
-		final Set<@NonNull ISequenceElement> touchedElements = new HashSet<ISequenceElement>();
+		final Set<@NonNull ISequenceElement> touchedElements = new HashSet<>();
 		final ISequenceElement rawElement = RandomHelper.chooseElementFrom(random, targetElements);
 		final Pair<IResource, Integer> elementPosition = stateManager.lookup(rawElement);
 		final IResource elementResource = elementPosition.getFirst();

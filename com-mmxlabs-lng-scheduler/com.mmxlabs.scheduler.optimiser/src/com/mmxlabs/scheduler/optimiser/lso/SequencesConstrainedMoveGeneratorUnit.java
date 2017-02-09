@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
+import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
@@ -51,6 +52,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	private IFollowersAndPreceders followersAndPreceders;
 
 	@Inject
+	private IBreakPointHelper breakPointHelper;
+
+	@Inject
 	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) boolean ENABLE_4_OPT_2_FIX) {
 		if (ENABLE_4_OPT_2_FIX) {
 			FOUR_OPT2_MOVES = 0; // 0 = 4 opt 2, 1 = no 4 opt 2
@@ -59,8 +63,6 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		}
 		// System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
 	}
-
-	final protected ConstrainedMoveGenerator owner;
 
 	class Move2over2A extends Move2over2 {
 
@@ -94,18 +96,12 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	NullMove nullMoveC = new NullMoveC();
 	NullMove nullMoveD = new NullMoveD();
 
-	public SequencesConstrainedMoveGeneratorUnit(@NonNull final ConstrainedMoveGenerator owner) {
-		super();
-		this.owner = owner;
-
-	}
-
 	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(@NonNull ILookupManager stateManager, @NonNull Random random) {
 
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
 
-		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, owner.getValidBreaks());
+		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, breakPointHelper.getValidBreaks());
 		pos1 = stateManager.lookup(newPair.getFirst());
 		pos2 = stateManager.lookup(newPair.getSecond());
 
@@ -115,7 +111,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
-		if (owner.getValidBreaks().isEmpty()) {
+		if (breakPointHelper.getValidBreaks().isEmpty()) {
 			return new NullMoveA();
 		}
 

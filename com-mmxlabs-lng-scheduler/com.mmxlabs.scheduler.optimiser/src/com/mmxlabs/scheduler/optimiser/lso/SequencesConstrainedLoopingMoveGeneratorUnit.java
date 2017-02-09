@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso;
 
-import java.util.Map;
 import java.util.Random;
+
+import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -14,7 +15,7 @@ import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 
 /**
  * 
@@ -23,10 +24,8 @@ public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConst
 
 	private static final int MAX_LOOPS = 200;
 
-	public SequencesConstrainedLoopingMoveGeneratorUnit(@NonNull final ConstrainedMoveGenerator owner) {
-		super(owner);
-
-	}
+	@Inject
+	private IBreakPointHelper breakPointHelper;
 
 	@Override
 	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(@NonNull ILookupManager stateManager, @NonNull Random random) {
@@ -37,7 +36,7 @@ public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConst
 
 		while (currentLoops < MAX_LOOPS) {
 
-			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, owner.getValidBreaks());
+			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(random, breakPointHelper.getValidBreaks());
 			if (newPair != null) {
 				pos1 = stateManager.lookup(newPair.getFirst());
 				pos2 = stateManager.lookup(newPair.getSecond());
