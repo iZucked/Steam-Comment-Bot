@@ -25,9 +25,9 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.

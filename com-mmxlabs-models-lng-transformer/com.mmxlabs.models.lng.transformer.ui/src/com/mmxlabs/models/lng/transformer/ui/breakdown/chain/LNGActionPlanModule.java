@@ -39,11 +39,11 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandle
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
-import com.mmxlabs.scheduler.optimiser.moves.util.FollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
