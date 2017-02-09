@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,7 +23,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertCargoMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
@@ -38,13 +38,13 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
 			@NonNull Collection<ISequenceElement> forbiddenElements) {
-		final ISequences sequences = state.getSequences();
+		final ISequences sequences = lookupManager.getRawSequences();
 
 		final Hints hints = new Hints();
 
-		final Pair<IResource, Integer> slotLocation = state.lookup(element);
+		final Pair<IResource, Integer> slotLocation = lookupManager.lookup(element);
 		final IResource fromResource = slotLocation.getFirst();
 
 		if (fromResource == null) {
@@ -72,7 +72,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		// Build up a list of all valid insertion points
 		final List<Pair<ISequenceElement, ISequenceElement>> validInsertionPairs = new LinkedList<>();
 		LOOP_PRECEDER: for (final ISequenceElement preceder : preceders) {
-			final Pair<IResource, Integer> precederLocation = state.lookup(preceder);
+			final Pair<IResource, Integer> precederLocation = lookupManager.lookup(preceder);
 			// Unused? skip
 			if (precederLocation.getFirst() == null) {
 				continue LOOP_PRECEDER;
@@ -88,7 +88,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 				continue LOOP_PRECEDER;
 			}
 			LOOP_FOLLOWER: for (final ISequenceElement follower : followers) {
-				final Pair<IResource, Integer> followerLocation = state.lookup(follower);
+				final Pair<IResource, Integer> followerLocation = lookupManager.lookup(follower);
 				// Unused? skip
 				if (followerLocation.getFirst() == null) {
 					continue LOOP_FOLLOWER;
@@ -153,7 +153,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		Collections.shuffle(validInsertionPairs, random);
 		for (final Pair<ISequenceElement, ISequenceElement> insertionPair : validInsertionPairs) {
 
-			final Pair<IResource, Integer> location = state.lookup(insertionPair.getFirst());
+			final Pair<IResource, Integer> location = lookupManager.lookup(insertionPair.getFirst());
 
 			builder.withElements(fromResource, orderedCargoElements) //
 					.withInsertAfter(location.getFirst(), insertionPair.getFirst()); //

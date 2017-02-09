@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -27,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.SwapElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 
@@ -38,14 +38,14 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
 			@NonNull Collection<ISequenceElement> forbiddenElements) {
-		final ISequences sequences = state.getSequences();
+		final ISequences sequences = lookupManager.getRawSequences();
 
 		final SwapElementsMove.Builder builder = SwapElementsMove.Builder.newMove();
 		final Hints hints = new Hints();
 
-		final Pair<IResource, Integer> slotLocation = state.lookup(element);
+		final Pair<IResource, Integer> slotLocation = lookupManager.lookup(element);
 		final IResource fromResource = slotLocation.getFirst();
 
 		final Set<ISequenceElement> candidates = new LinkedHashSet<>();
@@ -72,7 +72,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 			while (itr.hasNext()) {
 				ISequenceElement candidate = itr.next();
 
-				final Pair<IResource, Integer> candidateLocation = state.lookup(candidate);
+				final Pair<IResource, Integer> candidateLocation = lookupManager.lookup(candidate);
 				final IResource candidateResource = candidateLocation.getFirst();
 
 				if (candidateResource == null) {
@@ -135,7 +135,7 @@ public class SwapSlotMoveHandler implements IGuidedMoveHandler {
 		for (final ISequenceElement candidate : candidateList) {
 			foundElementB = false;
 
-			final Pair<IResource, Integer> candidateLocation = state.lookup(candidate);
+			final Pair<IResource, Integer> candidateLocation = lookupManager.lookup(candidate);
 			final IResource candidateResource = candidateLocation.getFirst();
 
 			if (candidateResource == null) {

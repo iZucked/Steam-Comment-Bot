@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Iterables;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -25,7 +26,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 
 public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
@@ -40,13 +40,13 @@ public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final @NonNull ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
 			@NonNull Collection<ISequenceElement> forbiddenElements) {
-		final ISequences sequences = state.getSequences();
+		final ISequences sequences = lookupManager.getRawSequences();
 
 		final Hints hints = new Hints();
 
-		final Pair<IResource, Integer> slotLocation = state.lookup(element);
+		final Pair<IResource, Integer> slotLocation = lookupManager.lookup(element);
 		final IResource fromResource = slotLocation.getFirst();
 
 		if (fromResource != null) {
@@ -77,7 +77,7 @@ public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
 		while (itr.hasNext()) {
 			ISequenceElement candidate = itr.next();
 
-			final Pair<IResource, Integer> candidateLocation = state.lookup(candidate);
+			final Pair<IResource, Integer> candidateLocation = lookupManager.lookup(candidate);
 			final IResource candidateResource = candidateLocation.getFirst();
 
 			if (candidateResource == null) {

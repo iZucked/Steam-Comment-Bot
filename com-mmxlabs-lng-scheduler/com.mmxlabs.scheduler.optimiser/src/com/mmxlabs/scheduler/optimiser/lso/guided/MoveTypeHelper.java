@@ -18,7 +18,7 @@ public class MoveTypeHelper {
 	@NonNull
 	private IMoveHelper helper;
 
-	public List<MoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element) {
+	public @NonNull List<@NonNull MoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element) {
 		// Is element locked? Then we can not do anything
 		final List<MoveTypes> moveTypes = new LinkedList<>();
 

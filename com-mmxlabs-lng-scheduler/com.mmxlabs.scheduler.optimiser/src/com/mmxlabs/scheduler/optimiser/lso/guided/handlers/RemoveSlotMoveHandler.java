@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -16,7 +17,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 
 public class RemoveSlotMoveHandler implements IGuidedMoveHandler {
 
@@ -24,13 +24,13 @@ public class RemoveSlotMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IMoveHelper helper;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final @NonNull ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
 			@NonNull Collection<ISequenceElement> forbiddenElements) {
-		final ISequences sequences = state.getSequences();
+		final ISequences sequences = lookupManager.getRawSequences();
 
 		final Hints hints = new Hints();
 
-		final Pair<IResource, Integer> slotLocation = state.lookup(element);
+		final Pair<IResource, Integer> slotLocation = lookupManager.lookup(element);
 		final IResource fromResource = slotLocation.getFirst();
 
 		if (fromResource == null) {

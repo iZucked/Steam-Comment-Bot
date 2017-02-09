@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 
 public class LookupManager implements ILookupManager {
@@ -33,7 +32,7 @@ public class LookupManager implements ILookupManager {
 	private ISequences sequences;
 
 	@Override
-	public void createLookup(final ISequences sequences) {
+	public void createLookup(final @NonNull ISequences sequences) {
 
 		this.sequences = sequences;
 		this.reverseLookup.clear();
@@ -67,8 +66,13 @@ public class LookupManager implements ILookupManager {
 		}
 	}
 
-	public ISequences getSequences() {
-		return sequences;
+	@Override
+	public ISequences getRawSequences() {
+		final ISequences pSsequences = sequences;
+		if (pSsequences == null) {
+			throw new IllegalStateException();
+		}
+		return pSsequences;
 	}
 
 	/**
@@ -77,7 +81,7 @@ public class LookupManager implements ILookupManager {
 	 * all.
 	 */
 	@Override
-	public Pair<IResource, Integer> lookup(@NonNull ISequenceElement element) {
+	public Pair<IResource, Integer> lookup(@NonNull final ISequenceElement element) {
 		return reverseLookup.get(element);
 	}
 }

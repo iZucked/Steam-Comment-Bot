@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -21,7 +22,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertDESPurchaseMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
@@ -40,9 +40,9 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement desPurchase, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final @NonNull ISequenceElement desPurchase, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
 			@NonNull Collection<ISequenceElement> forbiddenElements) {
-		final ISequences sequences = state.getSequences();
+		final ISequences sequences = lookupManager.getRawSequences();
 
 		final IResource desPurchaseResource = helper.getDESPurchaseResource(desPurchase);
 
@@ -62,7 +62,7 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 			assert helper.checkResource(possibleFollower, desPurchaseResource);
 			hints.getUsedElements().add(desPurchase);
 			// Where is this possible follower?
-			final Pair<IResource, Integer> location = state.lookup(possibleFollower);
+			final Pair<IResource, Integer> location = lookupManager.lookup(possibleFollower);
 			assert location != null;
 			if (location.getFirst() == null) {
 				builder.withUnusedDESSale(possibleFollower);
