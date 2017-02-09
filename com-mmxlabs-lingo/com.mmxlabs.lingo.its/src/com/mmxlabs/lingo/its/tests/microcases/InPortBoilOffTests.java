@@ -67,7 +67,8 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	final int ROUNDING_EPSILON = 2;
+	// Need largish epsilon as summed LNG fuel use has rounding applied to each component.
+	final int ROUNDING_EPSILON = 5;
 	VesselClass vesselClass;
 	Vessel vessel;
 	VesselAvailability vesselAvailability1;

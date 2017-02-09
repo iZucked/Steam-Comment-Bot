@@ -5,12 +5,9 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
