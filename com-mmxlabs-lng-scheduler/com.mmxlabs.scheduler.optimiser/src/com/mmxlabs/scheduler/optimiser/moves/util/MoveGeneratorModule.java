@@ -11,6 +11,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveLinkedSlotMoveH
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 
 public class MoveGeneratorModule extends AbstractModule {
 	@Override

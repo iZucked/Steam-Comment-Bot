@@ -43,7 +43,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over1GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.Move4over2GeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.MoveSnakeGeneratorUnit;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 
 /**
  * Utility class to help build up test components.

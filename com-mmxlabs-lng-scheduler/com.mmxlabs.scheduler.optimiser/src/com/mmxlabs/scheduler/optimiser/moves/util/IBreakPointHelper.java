@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.moves.handlers;
+package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.ArrayList;
 

@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHa
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.LookupManager;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 

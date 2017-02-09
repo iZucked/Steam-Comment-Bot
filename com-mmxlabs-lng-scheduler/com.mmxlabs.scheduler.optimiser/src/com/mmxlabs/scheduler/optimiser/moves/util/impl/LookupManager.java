@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.moves.util;
+package com.mmxlabs.scheduler.optimiser.moves.util.impl;
 
 import java.util.HashMap;
 import java.util.Map;

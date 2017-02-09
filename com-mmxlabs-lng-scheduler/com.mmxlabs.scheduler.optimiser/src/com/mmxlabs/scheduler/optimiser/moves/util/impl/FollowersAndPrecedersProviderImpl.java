@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.moves.util;
+package com.mmxlabs.scheduler.optimiser.moves.util.impl;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -18,6 +18,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.LegalSequencingChecker;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
