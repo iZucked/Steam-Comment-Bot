@@ -3,6 +3,12 @@ package com.mmxlabs.scheduler.optimiser.moves.util;
 import javax.inject.Singleton;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
+import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
+import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypes;
+import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypesAnnotation;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
@@ -33,5 +39,85 @@ public class MoveGeneratorModule extends AbstractModule {
 
 		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Insert_Cargo)
+	private IMoveGenerator provide_Insert_Cargo_Generator(Injector injector, InsertCargoVesselMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_Cargo, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Insert_DES_Purchase)
+	private IMoveGenerator provide_Insert_DES_Purchase_Generator(Injector injector, InsertDESPurchaseMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_DES_Purchase, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Insert_FOB_Sale)
+	private IMoveGenerator provide_Insert_FOB_Sale_Generator(Injector injector, InsertFOBSaleMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_FOB_Sale, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Insert_Slot)
+	private IMoveGenerator provide_Insert_Slot_Generator(Injector injector, InsertCargoVesselMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_Slot, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Remove_DES_Purchase)
+	private IMoveGenerator provide_Remove_DES_Purchase_Generator(Injector injector, RemoveCargoMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Remove_DES_Purchase, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Swap_Cargo_Vessel)
+	private IMoveGenerator provide_Swap_Cargo_Vessel_Generator(Injector injector, SwapCargoVesselMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Swap_Cargo_Vessel, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Swap_Slot)
+	private IMoveGenerator provide_Swap_Slot_Generator(Injector injector, RemoveCargoMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Swap_Slot, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(MoveTypes.Remove_FOB_Sale)
+	private IMoveGenerator provide_Remove_FOB_Sale_Generator(Injector injector, SwapSlotMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Remove_FOB_Sale, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
 	}
 }
