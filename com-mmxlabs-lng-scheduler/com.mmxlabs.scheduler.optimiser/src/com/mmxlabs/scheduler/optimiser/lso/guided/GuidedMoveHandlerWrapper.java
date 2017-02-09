@@ -1,8 +1,10 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -18,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IGuidedMoveHandler;
 
@@ -39,6 +42,8 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 
 	private final MoveTypes moveType;
 
+	private @Nullable List<ISequenceElement> potentialElements = null;
+
 	public GuidedMoveHandlerWrapper(final MoveTypes moveType, final IGuidedMoveHandler handler) {
 		this.moveType = moveType;
 		this.handler = handler;
@@ -54,10 +59,20 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 		options.setNum_tries(1);
 	}
 
+	@Inject
+	public void initPossibleTargets(final IOptimisationData optimisationData) {
+		potentialElements = new LinkedList<>();
+		for (final Map.Entry<ISequenceElement, @NonNull Collection<@NonNull MoveTypes>> e : moveTypeHelper.getMoveTypes(optimisationData).entrySet()) {
+			if (e.getValue().contains(moveType)) {
+				potentialElements.add(e.getKey());
+			}
+		}
+	}
+
 	@Override
 	public @Nullable IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 
-		final List<ISequenceElement> possibleElements = findPossibleElements(rawSequences);
+		final List<ISequenceElement> possibleElements = findPossibleElements(lookupManager, rawSequences);
 
 		if (possibleElements.isEmpty()) {
 			return null;
@@ -81,22 +96,32 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 	 * @param rawSequences
 	 * @return
 	 */
-	private List<ISequenceElement> findPossibleElements(final ISequences rawSequences) {
-		final List<ISequenceElement> possibleElements = new LinkedList<>();
+	private List<ISequenceElement> findPossibleElements(final ILookupManager lookupManager, final ISequences rawSequences) {
 
-		for (final IResource resource : rawSequences.getResources()) {
-			final ISequence sequence = rawSequences.getSequence(resource);
-			for (final ISequenceElement element : sequence) {
-				final List<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(resource, element);
+		final List<ISequenceElement> possibleElements = new LinkedList<>();
+		if (potentialElements != null) {
+			for (final ISequenceElement element : potentialElements) {
+				final Collection<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(lookupManager.lookup(element).getFirst(), element);
 				if (moveTypes.contains(moveType)) {
 					possibleElements.add(element);
 				}
 			}
-		}
-		for (final ISequenceElement element : rawSequences.getUnusedElements()) {
-			final List<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(null, element);
-			if (moveTypes.contains(moveType)) {
-				possibleElements.add(element);
+		} else {
+
+			for (final IResource resource : rawSequences.getResources()) {
+				final ISequence sequence = rawSequences.getSequence(resource);
+				for (final ISequenceElement element : sequence) {
+					final Collection<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(resource, element);
+					if (moveTypes.contains(moveType)) {
+						possibleElements.add(element);
+					}
+				}
+			}
+			for (final ISequenceElement element : rawSequences.getUnusedElements()) {
+				final Collection<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(null, element);
+				if (moveTypes.contains(moveType)) {
+					possibleElements.add(element);
+				}
 			}
 		}
 		return possibleElements;
