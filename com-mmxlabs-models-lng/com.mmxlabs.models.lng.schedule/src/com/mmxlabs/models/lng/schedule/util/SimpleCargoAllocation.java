@@ -123,6 +123,14 @@ public class SimpleCargoAllocation {
 		return loadAllocation.getPhysicalVolumeTransferred();
 	}
 
+	public int getLoadVolumeInMMBTU() {
+		return loadAllocation.getEnergyTransferred();
+	}
+
+	public int getPhysicalLoadVolumeInMMBTU() {
+		return loadAllocation.getPhysicalEnergyTransferred();
+	}
+
 	public int getDischargeVolume() {
 		return dischargeAllocation.getVolumeTransferred();
 	}
@@ -131,12 +139,28 @@ public class SimpleCargoAllocation {
 		return dischargeAllocation.getPhysicalVolumeTransferred();
 	}
 
+	public int getDischargeVolumeInMMBTU() {
+		return dischargeAllocation.getEnergyTransferred();
+	}
+
+	public int getPhysicalDischargeVolumeInMMBTU() {
+		return dischargeAllocation.getPhysicalEnergyTransferred();
+	}
+
 	public int getDischargeVolumeB() {
 		return dischargeAllocationB.getVolumeTransferred();
 	}
 
 	public int getPhysicalDischargeVolumeB() {
 		return dischargeAllocationB.getPhysicalVolumeTransferred();
+	}
+
+	public int getDischargeVolumeBInMMBTU() {
+		return dischargeAllocationB.getEnergyTransferred();
+	}
+
+	public int getPhysicalDischargeVolumeBInMMBTU() {
+		return dischargeAllocationB.getEnergyTransferred();
 	}
 
 	public CargoAllocation getCargoAllocation() {
