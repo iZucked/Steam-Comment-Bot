@@ -59,8 +59,6 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected ModifiableSequences potentialRawSequences;
 
-	// @Inject(optional = true)
-	// @Named(LSOLoggingConstants.LSO_LOGGER)
 	protected LSOLogger loggingDataStore;
 
 	@Inject(optional = true)
@@ -348,7 +346,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	}
 
 	protected void initNextIteration() {
-		getFitnessEvaluator().step();
+		stepIteration();
 		++numberOfMovesTried;
 		if (numberOfMovesTried % 10000 == 0) {
 			System.out.println("iteration:" + numberOfMovesTried);
@@ -357,6 +355,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(),
 					getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
 		}
+	}
+
+	protected void stepIteration() {
+		getFitnessEvaluator().step();
 	}
 
 	protected void evaluateInputSequences(@NonNull final ISequences currentRawSequences) {

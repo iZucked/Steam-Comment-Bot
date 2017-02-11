@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.optimiser.lso.modules;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -85,8 +84,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
-		lso.setRandom(new Random(randomSeed));
-		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
 
 		return lso;
 	}
@@ -99,8 +97,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 
 		final RestartingLocalSearchOptimiser lso = new RestartingLocalSearchOptimiser();
-		lso.setRandom(new Random(randomSeed));
-		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
 
 		return lso;
 	}
@@ -115,9 +112,8 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		final List<IFitnessComponent> objectives = fitnessEvaluator.getFitnessComponents().stream().filter(f -> objectiveNames.contains(f.getName())).collect(Collectors.toList());
 		assert (objectives.size() == objectiveNames.size());
 		final SimpleMultiObjectiveOptimiser lso = new SimpleMultiObjectiveOptimiser(objectives, new Random(randomSeed));
-		lso.setRandom(new Random(randomSeed));
 
-		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
 		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
 		return lso;
 	}
@@ -125,7 +121,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator,
 			@NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
 			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
-			@NonNull final LocalSearchOptimiser lso) {
+			@NonNull final LocalSearchOptimiser lso, final long seed) {
 		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
 
@@ -139,6 +135,8 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
 
+		lso.setRandom(new Random(seed));
+
 	}
 
 	@Provides
@@ -150,12 +148,12 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			@NonNull final List<@NonNull IFitnessComponent> fitnessComponents) {
 
 		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
-		lso.setRandom(new Random(randomSeed));
+
 		// TODO: Put in the LinearFitnessEvaluatorModule as named provider
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
 		injector.injectMembers(fitnessEvaluator);
 
-		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso);
+		setLSO(injector, context, manipulator, moveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluatedStateConstraintCheckers, evaluationProcesses, lso, randomSeed);
 
 		return lso;
 	}

@@ -57,20 +57,6 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		// create a linear Fitness evaluator.
 
-		// final Injector injectorToUse;
-		// if (LocalSearchOptimiserModule.instrumenting) {
-		// final IThresholder instrumentingThresholder = new InstrumentingThresholder(thresholder, img);
-		// injector.
-		// injectorToUse = injector.createChildInjector(new AbstractModule() {
-		// @Override
-		// protected void configure() {
-		// bind(IThresholder.class).toInstance(instrumentingThresholder);
-		// }
-		// });
-		// } else {
-		// injectorToUse = injector;
-		// }
-
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
 		injector.injectMembers(fitnessEvaluator);
 

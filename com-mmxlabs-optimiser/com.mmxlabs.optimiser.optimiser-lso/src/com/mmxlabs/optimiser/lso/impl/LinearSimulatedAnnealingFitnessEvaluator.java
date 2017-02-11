@@ -114,6 +114,27 @@ public class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessEvaluat
 		return accept;
 	}
 
+	@Override
+	public boolean evaluateSequencesFromFitnessOnly(@NonNull ISequences rawSequences, @NonNull final IEvaluationState evaluationState, @NonNull ISequences fullSequences, long fitness) {
+		boolean accept = false;
+		if (fitness != Long.MAX_VALUE) {
+			// Calculate fitness delta
+			final long delta = fitness - currentFitness;
+
+			// If fitness change is within the threshold, then accept the change
+			accept = thresholder.accept(delta);
+
+			if (accept) {
+
+				// Update internal state
+				updateBest(rawSequences, fullSequences, evaluationState, fitness);
+
+			}
+		}
+		lastFitness = fitness;
+		return accept;
+	}
+
 	/**
 	 * Update internal state, storing new fitness as new current and updating best fitness if required.
 	 * 

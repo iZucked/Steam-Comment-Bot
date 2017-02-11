@@ -57,6 +57,14 @@ public interface IFitnessEvaluator {
 	boolean evaluateSequences(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IResource> affectedResources);
 
 	/**
+	 * Evaluate the given {@link ISequences} to determine whether or not they are accepted as a better state than the previously accepted state. If accepted, then the {@link ISequences} "state" will
+	 * be recorded and used as the basis for future checks. {@link #setInitialSequences(ISequences)} must have been called previously to setup the initial state. Here fitness will have been calculated
+	 * elsewhere.
+	 * 
+	 */
+	boolean evaluateSequencesFromFitnessOnly(@NonNull ISequences rawSequences, @NonNull final IEvaluationState evaluationState, @NonNull ISequences fullSequences, long fitness);
+
+	/**
 	 * Returns the best {@link ISequences} instances (raw then full) seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
 	 * 
 	 * @return

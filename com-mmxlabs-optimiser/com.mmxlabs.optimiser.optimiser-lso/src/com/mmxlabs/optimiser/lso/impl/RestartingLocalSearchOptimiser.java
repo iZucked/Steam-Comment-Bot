@@ -44,7 +44,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
-			getFitnessEvaluator().step();
+			stepIteration();
 			setNumberOfMovesTried(getNumberOfMovesTried() + 1);
 			if (numberOfMovesTried % 10000 == 0) {
 				System.out.println("iteration:" + numberOfMovesTried);
