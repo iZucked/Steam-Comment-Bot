@@ -25,5 +25,5 @@ public interface IConstrainedMoveGeneratorUnit {
 	 * 
 	 * @return
 	 */
-	IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random);
+	IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random);
 }
