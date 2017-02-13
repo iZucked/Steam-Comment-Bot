@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveLinkedSlotMoveH
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.BreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 
 public class MoveGeneratorModule extends AbstractModule {
@@ -37,6 +38,9 @@ public class MoveGeneratorModule extends AbstractModule {
 		bind(MoveHelper.class).in(Singleton.class);
 		bind(IMoveHelper.class).to(MoveHelper.class);
 
+		bind(BreakPointHelper.class).in(Singleton.class);
+		bind(IBreakPointHelper.class).to(BreakPointHelper.class);
+
 		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
 	}
@@ -44,7 +48,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Insert_Cargo)
-	private IMoveGenerator provide_Insert_Cargo_Generator(Injector injector, InsertCargoVesselMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Insert_Cargo_Generator(Injector injector, InsertCargoVesselMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_Cargo, handler);
 		injector.injectMembers(wrapper);
@@ -54,7 +58,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Insert_DES_Purchase)
-	private IMoveGenerator provide_Insert_DES_Purchase_Generator(Injector injector, InsertDESPurchaseMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Insert_DES_Purchase_Generator(Injector injector, InsertDESPurchaseMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_DES_Purchase, handler);
 		injector.injectMembers(wrapper);
@@ -64,7 +68,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Insert_FOB_Sale)
-	private IMoveGenerator provide_Insert_FOB_Sale_Generator(Injector injector, InsertFOBSaleMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Insert_FOB_Sale_Generator(Injector injector, InsertFOBSaleMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_FOB_Sale, handler);
 		injector.injectMembers(wrapper);
@@ -74,7 +78,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Insert_Slot)
-	private IMoveGenerator provide_Insert_Slot_Generator(Injector injector, InsertCargoVesselMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Insert_Slot_Generator(Injector injector, InsertCargoVesselMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Insert_Slot, handler);
 		injector.injectMembers(wrapper);
@@ -84,7 +88,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Remove_DES_Purchase)
-	private IMoveGenerator provide_Remove_DES_Purchase_Generator(Injector injector, RemoveCargoMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Remove_DES_Purchase_Generator(Injector injector, RemoveCargoMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Remove_DES_Purchase, handler);
 		injector.injectMembers(wrapper);
@@ -94,7 +98,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Swap_Cargo_Vessel)
-	private IMoveGenerator provide_Swap_Cargo_Vessel_Generator(Injector injector, SwapCargoVesselMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Swap_Cargo_Vessel_Generator(Injector injector, SwapCargoVesselMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Swap_Cargo_Vessel, handler);
 		injector.injectMembers(wrapper);
@@ -104,7 +108,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Swap_Slot)
-	private IMoveGenerator provide_Swap_Slot_Generator(Injector injector, RemoveCargoMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Swap_Slot_Generator(Injector injector, RemoveCargoMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Swap_Slot, handler);
 		injector.injectMembers(wrapper);
@@ -114,7 +118,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(MoveTypes.Remove_FOB_Sale)
-	private IMoveGenerator provide_Remove_FOB_Sale_Generator(Injector injector, SwapSlotMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Remove_FOB_Sale_Generator(Injector injector, SwapSlotMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(MoveTypes.Remove_FOB_Sale, handler);
 		injector.injectMembers(wrapper);
