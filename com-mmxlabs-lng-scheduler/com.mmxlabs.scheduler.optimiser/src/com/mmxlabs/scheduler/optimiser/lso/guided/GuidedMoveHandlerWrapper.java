@@ -44,6 +44,16 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 
 	private @Nullable List<ISequenceElement> potentialElements = null;
 
+	private @Nullable ISelectedElementFilter selectedElementFilter;
+
+	public @Nullable ISelectedElementFilter getSelectedElementFilter() {
+		return selectedElementFilter;
+	}
+
+	public void setSelectedElementFilter(final ISelectedElementFilter selectedElementFilter) {
+		this.selectedElementFilter = selectedElementFilter;
+	}
+
 	public GuidedMoveHandlerWrapper(final MoveTypes moveType, final IGuidedMoveHandler handler) {
 		this.moveType = moveType;
 		this.handler = handler;
@@ -101,9 +111,13 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 		final List<ISequenceElement> possibleElements = new LinkedList<>();
 		if (potentialElements != null) {
 			for (final ISequenceElement element : potentialElements) {
-				final Collection<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(lookupManager.lookup(element).getFirst(), element);
+				@Nullable
+				final IResource currentResource = lookupManager.lookup(element).getFirst();
+				final Collection<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(currentResource, element);
 				if (moveTypes.contains(moveType)) {
-					possibleElements.add(element);
+					if (selectedElementFilter == null || selectedElementFilter.canSelect(element, currentResource)) {
+						possibleElements.add(element);
+					}
 				}
 			}
 		} else {
@@ -113,7 +127,9 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 				for (final ISequenceElement element : sequence) {
 					final Collection<MoveTypes> moveTypes = moveTypeHelper.getMoveTypes(resource, element);
 					if (moveTypes.contains(moveType)) {
-						possibleElements.add(element);
+						if (selectedElementFilter == null || selectedElementFilter.canSelect(element, resource)) {
+							possibleElements.add(element);
+						}
 					}
 				}
 			}
