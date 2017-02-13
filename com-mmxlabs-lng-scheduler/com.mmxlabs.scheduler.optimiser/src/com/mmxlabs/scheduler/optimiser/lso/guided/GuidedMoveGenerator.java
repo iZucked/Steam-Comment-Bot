@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHa
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -298,6 +299,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Remove_FOB_Sale:
 			return injector.getInstance(RemoveCargoMoveHandler.class);
 		case Remove_Slot:
+			// No InsertSlotMove, but is we are leaving partial segments, this may be needed.		
 			// Insert slot not implemented, so do not used RemoveSlot. Keep to remove cargo
 			// return injector.getInstance(RemoveSlotMoveHandler.class);
 		case Remove_Vessel_Event:
@@ -307,9 +309,9 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Swap_Event_Vessel:
 			break;
 		case Swap_Slot:
-			return injector.getInstance(MoveSlotMoveHandler.class);
-		case Move_Slot_NonShipped_Resource:
 			return injector.getInstance(SwapSlotMoveHandler.class);
+		case Move_Slot_NonShipped_Resource:
+			return injector.getInstance(MoveSlotMoveHandler.class);		
 		default:
 			break;
 

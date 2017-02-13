@@ -6,7 +6,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
+import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
+import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypeHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypes;
 import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypesAnnotation;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
@@ -26,6 +29,10 @@ public class MoveGeneratorModule extends AbstractModule {
 	protected void configure() {
 
 		bind(MoveHandlerHelper.class).in(Singleton.class);
+
+		bind(GuidedMoveGenerator.class);
+		bind(HintManager.class);
+		bind(MoveTypeHelper.class);
 
 		bind(InsertCargoVesselMoveHandler.class).in(Singleton.class);
 		bind(InsertDESPurchaseMoveHandler.class).in(Singleton.class);
