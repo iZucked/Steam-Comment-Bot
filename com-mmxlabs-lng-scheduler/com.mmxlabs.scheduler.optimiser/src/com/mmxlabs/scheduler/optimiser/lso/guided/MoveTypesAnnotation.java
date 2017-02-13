@@ -15,5 +15,4 @@ import com.google.inject.BindingAnnotation;
 @Retention(RUNTIME)
 public @interface MoveTypesAnnotation {
 	MoveTypes value();
-
 }
