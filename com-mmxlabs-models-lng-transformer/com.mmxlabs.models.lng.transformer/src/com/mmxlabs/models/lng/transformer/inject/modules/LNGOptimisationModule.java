@@ -25,8 +25,7 @@ import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
-import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 
 /**
@@ -47,13 +46,11 @@ public class LNGOptimisationModule extends AbstractModule {
 		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
 
-		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
-		
+		install(new MoveGeneratorModule());
 
 		bind(ConstrainedMoveGenerator.class).in(Singleton.class);
 		bind(IMoveGenerator.class).to(ConstrainedMoveGenerator.class);
-		
+
 		bind(ILookupManager.class).to(LookupManager.class);
 	}
 }
