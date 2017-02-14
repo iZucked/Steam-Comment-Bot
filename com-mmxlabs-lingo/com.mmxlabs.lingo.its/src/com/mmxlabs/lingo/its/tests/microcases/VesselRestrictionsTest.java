@@ -92,7 +92,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vesselClass2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
@@ -139,7 +139,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vesselClass2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -188,7 +188,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vesselClass) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -228,7 +228,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vessel) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -272,7 +272,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -319,7 +319,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vesselClass2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -357,7 +357,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vessel) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -388,7 +388,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -416,7 +416,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vessel) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
 				.build() //
@@ -447,7 +447,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
 				.build() //
@@ -480,7 +480,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vessel2) // <<<<<< Restrict discharge to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -511,7 +511,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vesselClass2) // <<<<<< Restrict discharge to alternative vessel class
+				.withAllowedVessels(vesselClass2) // <<<<<< Restrict discharge to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -542,7 +542,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
-				.withVesselRestriction(vessel2) // <<<<<< Restrict discharge to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -574,7 +574,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
-				.withVesselRestriction(vesselClass2) // <<<<<< Restrict discharge to alternative vessel class
+				.withAllowedVessels(vesselClass2) // <<<<<< Restrict discharge to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();

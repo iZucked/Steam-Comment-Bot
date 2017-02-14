@@ -86,10 +86,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
 				.withAssignmentFlags(true, false) //
@@ -97,7 +97,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				// .withLocked(true) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7").build() //
@@ -108,10 +108,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L3", LocalDate.of(2016, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.makeDESSale("D3", LocalDate.of(2016, 6, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
 				.withAssignmentFlags(true, false) //
@@ -203,10 +203,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
 				.withAssignmentFlags(true, false) //
@@ -214,7 +214,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				// .withLocked(true) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7").build() //
@@ -225,10 +225,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L3", LocalDate.of(2015, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.makeDESSale("D3", LocalDate.of(2015, 6, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vesselClass) //
+				.withAllowedVessels(vesselClass) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
 				.withAssignmentFlags(true, false) //
