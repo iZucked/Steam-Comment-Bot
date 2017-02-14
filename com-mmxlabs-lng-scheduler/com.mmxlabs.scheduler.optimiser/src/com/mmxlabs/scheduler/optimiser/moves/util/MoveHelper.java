@@ -32,15 +32,18 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -71,6 +74,9 @@ public class MoveHelper implements IMoveHelper {
 	private IResourceAllocationConstraintDataComponentProvider racDCP;
 
 	@Inject
+	private IAllowedVesselProvider allowedVesselProvider;
+
+	@Inject
 	@NonNull
 	private IFOBDESCompatibilityProvider fobDesCompatibilityProvider;
 
@@ -91,6 +97,10 @@ public class MoveHelper implements IMoveHelper {
 
 	@Inject
 	@NonNull
+	private INominatedVesselProvider nominatedVesselProvider;
+
+	@Inject
+	@NonNull
 	private ILockedElementsProvider lockedElementsProvider;
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
@@ -99,17 +109,10 @@ public class MoveHelper implements IMoveHelper {
 
 	private final Map<ISequenceElement, Collection<IResource>> cachedResult = new ConcurrentHashMap<>();
 
-	private final Function<? super ISequenceElement, ? extends Collection<IResource>> cacheComputeFunction = element -> {
-		@Nullable
-		Collection<@NonNull IResource> allowedResources = racDCP.getAllowedResources(element);
-		if (allowedResources == null) {
-			allowedResources = new HashSet<>(optimisationData.getResources());
-		} else {
-			allowedResources = new HashSet<>(allowedResources);
-		}
+	private final Function<? super ISequenceElement, ? extends Collection<IResource>> cacheComputeFunction = element -> {@Nullable Collection<@NonNull IResource>allowedResources=racDCP.getAllowedResources(element);if(allowedResources==null){allowedResources=new HashSet<>(optimisationData.getResources());}else{allowedResources=new HashSet<>(allowedResources);}
 
-		final Iterator<@NonNull IResource> itr = allowedResources.iterator();
-		while (itr.hasNext()) {
+	final Iterator<@NonNull IResource> itr = allowedResources.iterator();while(itr.hasNext())
+	{
 			final @NonNull IResource resource = itr.next();
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -146,9 +149,32 @@ public class MoveHelper implements IMoveHelper {
 					}
 				}
 			}
+			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP 	){
+				IVessel vessel = null;
+				IVesselClass vesselClass = null;
+
+				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
+					vessel = vesselAvailability.getVessel();
+					vesselClass = vessel.getVesselClass();
+				} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+					// vessel = null; // Not a real vessel
+					vesselClass = vesselAvailability.getVessel().getVesselClass();
+				} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+
+					vessel = nominatedVesselProvider.getNominatedVessel(resource);
+					if (vessel != null) {
+						vesselClass = vessel.getVesselClass();
+					}
+				}
+			
+				if (!allowedVesselProvider.isPermittedOnVessel(portSlot, vessel, vesselClass)) {
+					itr.remove();
+					continue;
+				}
+			}
 		}
 
-		return allowedResources;
+	return allowedResources;
 	};
 
 	@Override

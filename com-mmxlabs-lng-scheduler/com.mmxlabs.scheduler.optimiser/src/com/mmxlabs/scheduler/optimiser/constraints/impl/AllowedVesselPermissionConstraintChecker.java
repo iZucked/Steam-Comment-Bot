@@ -146,40 +146,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 				vesselClass = vessel.getVesselClass();
 			}
 		}
-
-		boolean allowedOnVessel = true;
-		boolean allowedOnVesselClass = true;
-
-		@Nullable
-		final Collection<@NonNull IVessel> permittedVessels = allowedVesselProvider.getPermittedVessels(portSlot);
-		if (permittedVessels != null) {
-			if (vessel == null) {
-				allowedOnVessel = false;
-			} else if (!permittedVessels.contains(vessel)) {
-				allowedOnVessel = false;
-			}
-		}
-
-		@Nullable
-		final Collection<@NonNull IVesselClass> permittedVesselClasses = allowedVesselProvider.getPermittedVesselClasses(portSlot);
-		if (permittedVesselClasses != null) {
-			if (vesselClass == null) {
-				allowedOnVesselClass = false;
-			} else if (!permittedVesselClasses.contains(vesselClass)) {
-				allowedOnVesselClass = false;
-			}
-		}
-
-		if (permittedVessels == null && permittedVesselClasses == null) {
-			// No restrictions
-			return true;
-		} else if (permittedVessels != null && permittedVesselClasses == null) {
-			return allowedOnVessel;
-		} else if (permittedVessels == null && permittedVesselClasses != null) {
-			return allowedOnVesselClass;
-		} else {
-			return allowedOnVessel || allowedOnVesselClass;
-		}
+		return allowedVesselProvider.isPermittedOnVessel(portSlot, vessel, vesselClass);
 	}
 
 	@Override

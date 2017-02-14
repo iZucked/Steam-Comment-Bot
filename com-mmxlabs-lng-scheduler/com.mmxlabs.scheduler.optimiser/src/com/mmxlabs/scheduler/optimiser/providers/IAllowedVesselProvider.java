@@ -29,4 +29,6 @@ public interface IAllowedVesselProvider extends IDataComponentProvider {
 	@Nullable
 	Collection<IVesselClass> getPermittedVesselClasses(IPortSlot portSlot);
 
+	boolean isPermittedOnVessel(IPortSlot portSlot, @Nullable IVessel vessel, @Nullable IVesselClass vesselClass);
+
 }

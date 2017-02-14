@@ -22,19 +22,57 @@ public class DefaultAllowedVesselProvider implements IAllowedVesselProviderEdito
 	private final Map<@NonNull IPortSlot, @Nullable Collection<@NonNull IVesselClass>> permittedVesselClassMap = new HashMap<>();
 
 	@Override
-	public @Nullable Collection<@NonNull IVessel> getPermittedVessels(@NonNull IPortSlot portSlot) {
+	public @Nullable Collection<@NonNull IVessel> getPermittedVessels(@NonNull final IPortSlot portSlot) {
 		return permittedVesselMap.getOrDefault(portSlot, null);
 	}
 
 	@Override
-	public @Nullable Collection<@NonNull IVesselClass> getPermittedVesselClasses(@NonNull IPortSlot portSlot) {
+	public @Nullable Collection<@NonNull IVesselClass> getPermittedVesselClasses(@NonNull final IPortSlot portSlot) {
 		return permittedVesselClassMap.getOrDefault(portSlot, null);
 	}
 
 	@Override
-	public void setPermittedVesselAndClasses(@NonNull IPortSlot portSlot, @Nullable Collection<@NonNull IVessel> permittedVessels, @Nullable Collection<@NonNull IVesselClass> permittedVesselClasses) {
+	public void setPermittedVesselAndClasses(@NonNull final IPortSlot portSlot, @Nullable final Collection<@NonNull IVessel> permittedVessels,
+			@Nullable final Collection<@NonNull IVesselClass> permittedVesselClasses) {
 		permittedVesselMap.put(portSlot, permittedVessels);
 		permittedVesselClassMap.put(portSlot, permittedVesselClasses);
 	}
 
+	@Override
+	public boolean isPermittedOnVessel(final IPortSlot portSlot, final IVessel vessel, final IVesselClass vesselClass) {
+
+		boolean allowedOnVessel = true;
+		boolean allowedOnVesselClass = true;
+
+		@Nullable
+		final Collection<@NonNull IVessel> permittedVessels = getPermittedVessels(portSlot);
+		if (permittedVessels != null) {
+			if (vessel == null) {
+				allowedOnVessel = false;
+			} else if (!permittedVessels.contains(vessel)) {
+				allowedOnVessel = false;
+			}
+		}
+
+		@Nullable
+		final Collection<@NonNull IVesselClass> permittedVesselClasses = getPermittedVesselClasses(portSlot);
+		if (permittedVesselClasses != null) {
+			if (vesselClass == null) {
+				allowedOnVesselClass = false;
+			} else if (!permittedVesselClasses.contains(vesselClass)) {
+				allowedOnVesselClass = false;
+			}
+		}
+
+		if (permittedVessels == null && permittedVesselClasses == null) {
+			// No restrictions
+			return true;
+		} else if (permittedVessels != null && permittedVesselClasses == null) {
+			return allowedOnVessel;
+		} else if (permittedVessels == null && permittedVesselClasses != null) {
+			return allowedOnVesselClass;
+		} else {
+			return allowedOnVessel || allowedOnVesselClass;
+		}
+	}
 }
