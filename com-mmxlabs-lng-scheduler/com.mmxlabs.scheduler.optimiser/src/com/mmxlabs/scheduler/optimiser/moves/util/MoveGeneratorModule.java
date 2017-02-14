@@ -1,10 +1,15 @@
 package com.mmxlabs.scheduler.optimiser.moves.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Singleton;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.mmxlabs.scheduler.optimiser.lso.RouletteWheelMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
@@ -169,13 +174,38 @@ public class MoveGeneratorModule extends AbstractModule {
 		injector.injectMembers(wrapper);
 		return wrapper;
 	}
+
 	@Provides
 	@Singleton
 	@MoveTypesAnnotation(GuidedMoveTypes.Move_Slot_NonShipped_Resource)
 	private GuidedMoveHandlerWrapper provide_Move_Slot_NonShipped_Resource(Injector injector, MoveSlotMoveHandler handler) {
-		
+
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(GuidedMoveTypes.Move_Slot_NonShipped_Resource, handler);
 		injector.injectMembers(wrapper);
 		return wrapper;
+	}
+
+	@Provides
+	@Named(RouletteWheelMoveGenerator.EQUAL_DISTRIBUTION)
+	private boolean isEqualDistributions() {
+		return false;
+	}
+
+	@Provides
+	@Named(RouletteWheelMoveGenerator.MOVE_DISTRIBUTION)
+	private Map<String, Double> getMoveDistributions() {
+		return new HashMap<String, Double>();
+	}
+
+	@Provides
+	@Named(MoveHelper.LEGACY_CHECK_RESOURCE)
+	private boolean useLegacyCheck() {
+		return false;
+	}
+
+	@Provides
+	@Named(MoveMapper.USE_GUIDED_MOVES)
+	private boolean useguidedMoves() {
+		return false;
 	}
 }

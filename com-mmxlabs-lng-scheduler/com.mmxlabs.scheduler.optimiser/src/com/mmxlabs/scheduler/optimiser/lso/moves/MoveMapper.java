@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -30,6 +31,10 @@ public class MoveMapper {
 	private Injector injector;
 
 	public static final String USE_GUIDED_MOVES = "useGuidedMoves";
+
+	@Inject
+	@Named(USE_GUIDED_MOVES)
+	private boolean useGuidedMoves;
 
 	private List<MoveTypes> supportedTypes = new LinkedList<>();
 
@@ -111,16 +116,20 @@ public class MoveMapper {
 	public void initSupportedMoveTypes() {
 
 		supportedTypes = new LinkedList<>();
-
-		for (final MoveTypes moveType : MoveTypes.values()) {
-			// Skip for now
-			if (moveType == MoveTypes.Guided_Move_Generator) {
-				continue;
+		
+		if (!useGuidedMoves) {
+			for (final MoveTypes moveType : MoveTypes.values()) {
+				// Skip for now
+				if (moveType == MoveTypes.Guided_Move_Generator) {
+					continue;
+				}
+				if (getMoveHandler(moveType) != null) {
+					supportedTypes.add(moveType);
+				}
 			}
-			if (getMoveHandler(moveType) != null) {
-				supportedTypes.add(moveType);
-			}
-		}
+		} else {
+			supportedTypes.add(MoveTypes.Guided_Move_Generator);
+		}			
 		final int ii = 11;
 
 		// // O

@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
@@ -59,8 +60,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 @Singleton
 public class MoveHelper implements IMoveHelper {
-
-	public static final String LEGACY_CHECK_RESOURCE = "useLegacyCheck";
 
 	@Inject
 	private IOptimisationData optimisationData;
@@ -104,6 +103,12 @@ public class MoveHelper implements IMoveHelper {
 	@Inject
 	@NonNull
 	private ILockedElementsProvider lockedElementsProvider;
+
+	public static final String LEGACY_CHECK_RESOURCE = "useLegacyCheck";
+
+	@Inject
+	@Named(LEGACY_CHECK_RESOURCE)
+	private boolean useLegacyCheck = false;
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> desPurchaseResources = new LinkedList<>();
@@ -198,6 +203,10 @@ public class MoveHelper implements IMoveHelper {
 
 	@Override
 	public boolean checkResource(final @NonNull ISequenceElement element, final @Nullable IResource resource) {
+
+		if (useLegacyCheck) {
+			return legacyCheckResource(element, resource);
+		}
 
 		if (resource == null) {
 			return optionalElementsProvider.isElementOptional(element);

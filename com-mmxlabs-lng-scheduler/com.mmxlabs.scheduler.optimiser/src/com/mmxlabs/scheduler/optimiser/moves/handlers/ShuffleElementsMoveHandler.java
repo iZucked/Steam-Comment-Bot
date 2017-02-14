@@ -56,6 +56,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
+	private static final String NULL_MOVE_NAME = "ShuffleElement";
+
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
 
@@ -108,7 +110,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 		// TODO: Disable move generator completely in such cases
 		if (targetElements.isEmpty()) {
-			return new NullMove("ShMG", "No Targets");
+			return new NullMove(NULL_MOVE_NAME, "No Target Elements.");
 		}
 
 		final ShuffleElementsBuilder builder = new ShuffleElementsBuilder();
@@ -119,14 +121,14 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		final Pair<IResource, Integer> elementPosition = lookupManager.lookup(rawElement);
 		final IResource elementResource = elementPosition.getFirst();
 		if (elementResource == null) {
-			return new NullMove("ShMG", "Null Element Resource");
+			return new NullMove(NULL_MOVE_NAME, "Null first element.");
 		}
 		final ISequence elementSequence = rawSequences.getSequence(elementResource);
 
 		touchedElements.add(rawElement);
 
 		if (elementPosition.getSecond() == -1) {
-			return new NullMove("ShMG", "-1 Index");
+			return new NullMove(NULL_MOVE_NAME, "Second position indexed at -1.");
 		}
 
 		// If there is an alternative, randomly choose to use it.
@@ -146,7 +148,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 		if (findFollower) {
 			final Followers<@NonNull ISequenceElement> followers = followersAndPreceders.getValidFollowers(element);
 			if (followers.size() == 0) {
-				return new NullMove("ShMG", "No Followers");
+				return new NullMove(NULL_MOVE_NAME, "No valid followers.");
 			}
 			for (final ISequenceElement follower : shuffleFollowers(followers, random)) {
 				final Pair<IResource, Integer> followerPosition = lookupManager.lookup(follower);
@@ -243,7 +245,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			final Followers<@NonNull ISequenceElement> preceders = followersAndPreceders.getValidPreceders(element);
 
 			if (preceders.size() == 0) {
-				return new NullMove("ShMG", "No Preceders");
+				return new NullMove(NULL_MOVE_NAME, "No preceders.");
 			}
 
 			for (final ISequenceElement preceder : shuffleFollowers(preceders, random)) {
@@ -336,7 +338,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			}
 		}
 		if (!foundMove) {
-			return new NullMove("ShMG", "No Found Move");
+			return new NullMove(NULL_MOVE_NAME, "No found moves.");
 		}
 
 		// Fix up source part
@@ -399,7 +401,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			}
 		}
 
-		return new NullMove("ShMG", "Null");
+		return new NullMove(NULL_MOVE_NAME, "Null");
 
 	}
 
