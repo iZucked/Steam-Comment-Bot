@@ -12,6 +12,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypesAnnotation;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.MoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveLinkedSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
@@ -34,6 +35,7 @@ public class MoveGeneratorModule extends AbstractModule {
 		bind(SwapCargoVesselMoveHandler.class).in(Singleton.class);
 		bind(SwapSlotMoveHandler.class).in(Singleton.class);
 		bind(RemoveLinkedSlotMoveHandler.class).in(Singleton.class);
+		bind(MoveSlotMoveHandler.class).in(Singleton.class);
 
 		bind(MoveHelper.class).in(Singleton.class);
 		bind(IMoveHelper.class).to(MoveHelper.class);

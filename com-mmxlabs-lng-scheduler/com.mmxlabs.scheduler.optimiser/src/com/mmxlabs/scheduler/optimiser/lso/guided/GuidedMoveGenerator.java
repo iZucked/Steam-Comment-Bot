@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IGuidedMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.MoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveLinkedSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
@@ -308,6 +309,8 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Swap_Event_Vessel:
 			break;
 		case Swap_Slot:
+			return injector.getInstance(MoveSlotMoveHandler.class);
+		case Move_Slot_NonShipped_Resource:
 			return injector.getInstance(SwapSlotMoveHandler.class);
 		default:
 			break;

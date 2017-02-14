@@ -109,10 +109,17 @@ public class MoveHelper implements IMoveHelper {
 
 	private final Map<ISequenceElement, Collection<IResource>> cachedResult = new ConcurrentHashMap<>();
 
-	private final Function<? super ISequenceElement, ? extends Collection<IResource>> cacheComputeFunction = element -> {@Nullable Collection<@NonNull IResource>allowedResources=racDCP.getAllowedResources(element);if(allowedResources==null){allowedResources=new HashSet<>(optimisationData.getResources());}else{allowedResources=new HashSet<>(allowedResources);}
+	private final Function<? super ISequenceElement, ? extends Collection<IResource>> cacheComputeFunction = element -> {
+		@Nullable
+		Collection<@NonNull IResource> allowedResources = racDCP.getAllowedResources(element);
+		if (allowedResources == null) {
+			allowedResources = new HashSet<>(optimisationData.getResources());
+		} else {
+			allowedResources = new HashSet<>(allowedResources);
+		}
 
-	final Iterator<@NonNull IResource> itr = allowedResources.iterator();while(itr.hasNext())
-	{
+		final Iterator<@NonNull IResource> itr = allowedResources.iterator();
+		while (itr.hasNext()) {
 			final @NonNull IResource resource = itr.next();
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -149,7 +156,7 @@ public class MoveHelper implements IMoveHelper {
 					}
 				}
 			}
-			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP 	){
+			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP) {
 				IVessel vessel = null;
 				IVesselClass vesselClass = null;
 
@@ -166,7 +173,7 @@ public class MoveHelper implements IMoveHelper {
 						vesselClass = vessel.getVesselClass();
 					}
 				}
-			
+
 				if (!allowedVesselProvider.isPermittedOnVessel(portSlot, vessel, vesselClass)) {
 					itr.remove();
 					continue;
@@ -174,7 +181,7 @@ public class MoveHelper implements IMoveHelper {
 			}
 		}
 
-	return allowedResources;
+		return allowedResources;
 	};
 
 	@Override
@@ -362,4 +369,8 @@ public class MoveHelper implements IMoveHelper {
 		return false;
 	}
 
+	@Override
+	public boolean isNonShippedResource(@NonNull IResource resource) {
+		return desPurchaseResources.contains(resource) || fobSaleResources.contains(resource);
+	}
 }

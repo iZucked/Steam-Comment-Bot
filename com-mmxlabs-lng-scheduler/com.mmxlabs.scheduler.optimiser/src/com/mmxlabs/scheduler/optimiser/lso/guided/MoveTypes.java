@@ -1,7 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided;
 
 public enum MoveTypes {
-	// Gaps!
 	Move_Slot_NonShipped_Resource,
 	// Note insert des may remove another cargo
 	Insert_DES_Purchase, Remove_DES_Purchase, //

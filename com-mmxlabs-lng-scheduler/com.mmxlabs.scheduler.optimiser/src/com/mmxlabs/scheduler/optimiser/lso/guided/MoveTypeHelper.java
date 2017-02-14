@@ -90,11 +90,18 @@ public class MoveTypeHelper {
 					moveTypes.add(MoveTypes.Swap_Event_Vessel);
 					moveTypes.add(MoveTypes.Move_Vessel_Event);
 				}
-			} else if (helper.isDESPurchase(element) && helper.isOptional(element)) {
-				moveTypes.add(MoveTypes.Remove_DES_Purchase);
-			} else if (helper.isFOBSale(element) && helper.isOptional(element)) {
-				moveTypes.add(MoveTypes.Remove_FOB_Sale);
+			} else if (helper.isDESPurchase(element)) {
+				if (helper.isOptional(element)) {
+					moveTypes.add(MoveTypes.Remove_DES_Purchase);
+				}
+			} else if (helper.isFOBSale(element)) {
+				if (helper.isOptional(element)) {
+					moveTypes.add(MoveTypes.Remove_FOB_Sale);
+				}
 			} else {
+				if (resource != null && helper.isNonShippedResource(resource)) {
+					moveTypes.add(MoveTypes.Move_Slot_NonShipped_Resource);
+				}
 				moveTypes.add(MoveTypes.Swap_Slot);
 				moveTypes.add(MoveTypes.Swap_Cargo_Vessel);
 				if (helper.isOptional(element)) {
