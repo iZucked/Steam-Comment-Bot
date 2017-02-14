@@ -75,6 +75,10 @@ public class InsertFOBSaleMoveHandler implements IGuidedMoveHandler {
 				hints.usedElement(possibleFOBPurchase);
 				return new Pair<IMove, Hints>(builder.create(), hints);
 			} else {
+				if (!options.isInsertCanRemove()) {
+					continue;
+				}
+
 				final ISequence fobPurchaseSequence = sequences.getSequence(fobPurchaseResource);
 				@NonNull
 				final List<ISequenceElement> cargoSegment = moveHandlerHelper.extractSegment(fobPurchaseSequence, possibleFOBPurchase);

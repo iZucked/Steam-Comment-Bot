@@ -81,6 +81,10 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 				return new Pair<IMove, Hints>(builder.create(), hints);
 
 			} else {
+				if (!options.isInsertCanRemove()) {
+					continue;
+				}
+
 				final ISequence desSaleSequence = sequences.getSequence(desSaleResouce);
 
 				@NonNull

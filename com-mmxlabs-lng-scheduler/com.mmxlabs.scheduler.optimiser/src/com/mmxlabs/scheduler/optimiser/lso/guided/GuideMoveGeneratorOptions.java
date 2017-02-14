@@ -4,6 +4,15 @@ public class GuideMoveGeneratorOptions {
 
 	private boolean strictOptional = true;
 	private boolean checkingMove = false;
+	private boolean insertCanRemove = false;
+
+	public boolean isInsertCanRemove() {
+		return insertCanRemove;
+	}
+
+	public void setInsertCanRemove(boolean insertCanRemove) {
+		this.insertCanRemove = insertCanRemove;
+	}
 
 	// Should the moves which remove elements leave the rest of the segment or not.
 	private boolean permitPartialSegments = false;
