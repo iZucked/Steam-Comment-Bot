@@ -299,6 +299,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Remove_FOB_Sale:
 			return injector.getInstance(RemoveCargoMoveHandler.class);
 		case Remove_Slot:
+			// Insert slot not implemented, so do not used RemoveSlot. Keep to remove cargo
 			// return injector.getInstance(RemoveSlotMoveHandler.class);
 		case Remove_Vessel_Event:
 			break;
