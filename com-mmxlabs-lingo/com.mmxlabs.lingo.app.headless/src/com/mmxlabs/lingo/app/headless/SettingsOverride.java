@@ -53,23 +53,23 @@ public final class SettingsOverride {
 	private int idleTimeEnd = 10_000;
 
 	private boolean equalMoveDistributions = true;
-	
+
 	private boolean useLegacyCheck = false;
 	private boolean useGuidedMoves = false;
-	
-	public boolean useLegacyCheck (){
+
+	public boolean useLegacyCheck() {
 		return useLegacyCheck;
 	}
-	
-	public void setUseLegacyCheck(boolean useLegacyCheck){
+
+	public void setUseLegacyCheck(boolean useLegacyCheck) {
 		this.useLegacyCheck = useLegacyCheck;
 	}
-	
-	public boolean useGuidedMoves(){
+
+	public boolean useGuidedMoves() {
 		return useGuidedMoves;
 	}
-	
-	public void setUseGuidedMoves(boolean useGuidedMoves){
+
+	public void setUseGuidedMoves(boolean useGuidedMoves) {
 		this.useGuidedMoves = useGuidedMoves;
 	}
 
@@ -80,7 +80,7 @@ public final class SettingsOverride {
 	public void setEqualMoveDistributions(boolean equalMoveDistributions) {
 		this.equalMoveDistributions = equalMoveDistributions;
 	}
-	
+
 	public Map<String, Double> getMoveFrequencyParameterMap() {
 		return moveFrequencyParameterMap;
 	}

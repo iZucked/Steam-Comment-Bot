@@ -23,7 +23,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("lso-jobs", 1, Integer.class, false);
 		setParameter("clean-state-jobs", 1, Integer.class, false);
 
-//		ADD STUFF HERE
+		// ADD STUFF HERE
 		// LSO
 		setParameter("sa-epoch-length", 10000, Integer.class, true);
 		setParameter("sa-temperature", 45000, Integer.class, true);
@@ -64,16 +64,16 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		// Similarity
 		setParameter("scp-set-low-thresh", 8, Integer.class, false);
 		setParameter("scp-set-low-weight", 0, Integer.class, false);
-		
+
 		setParameter("scp-set-med-thresh", 16, Integer.class, false);
 		setParameter("scp-set-med-weight", 0, Integer.class, false);
-		
+
 		setParameter("scp-set-high-thresh", 30, Integer.class, false);
 		setParameter("scp-set-high-weight", 0, Integer.class, false);
-		
+
 		setParameter("scp-set-outOfBounds-thresh", -1, Integer.class, false);
 		setParameter("scp-set-outOfBounds-weight", 0, Integer.class, false);
-		
+
 		// Restarting
 		setParameter("restarting-useRestarting", false, Boolean.class, false);
 		setParameter("restarting-restartThreshold", 0, Integer.class, false);
@@ -81,7 +81,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		// Hill Climbing
 		setParameter("hillClimbing-useHillClimbing", false, Boolean.class, false);
 		setParameter("hillClimbing-iterations", 0, Integer.class, false);
-		
+
 		// Action Sets
 		setParameter("actionSets-buildActionSets", false, Boolean.class, false);
 		setParameter("actionSets-totalEvals", 5_000_000, Integer.class, false);
@@ -90,20 +90,20 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("actionSets-verboseLogging", false, Boolean.class, false);
 		// Parallel
 		setParameter("actionSets-maxThreads", 1, Integer.class, false);
-		
+
 		// Moves
 		setParameter("moves-useLoopingSCMG", false, Boolean.class, false);
-		
-		//Idle Time
-		setParameter("idle-time-low",2_500, Integer.class, false);
-		setParameter("idle-time-high",10_000, Integer.class, false);
+
+		// Idle Time
+		setParameter("idle-time-low", 2_500, Integer.class, false);
+		setParameter("idle-time-high", 10_000, Integer.class, false);
 		setParameter("idle-time-end", 10_000, Integer.class, false);
-		
+
 		setParameter("spotmarket-optimisation", false, Boolean.class, false);
-		
+
 		setParameter("use-roulette-wheel", false, Boolean.class, false);
-		
-		//Move Distributions
+
+		// Move Distributions
 		setParameter("equal-move-distributions", false, Boolean.class, false);
 		setParameter("insert-optional-frequency", 0.1, Double.class, false);
 		setParameter("remove-optional-frequency", 0.2, Double.class, false);
@@ -111,8 +111,8 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("move-segments-frequency", 0.6, Double.class, false);
 		setParameter("swap-tails-frequency", 0.8, Double.class, false);
 		setParameter("shuffle-elements-frequency", 1.0, Double.class, false);
-		
 		setParameter("use-guided-moves", false, Boolean.class, false);
 		setParameter("use-legacy-check", false, Boolean.class, false);
+
 	}
 }
