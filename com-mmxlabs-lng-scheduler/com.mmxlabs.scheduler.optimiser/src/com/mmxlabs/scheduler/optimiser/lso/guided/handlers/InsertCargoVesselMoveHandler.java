@@ -88,7 +88,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 						.collect(Collectors.toList());
 			} else {
 				// Invalid element type passed to method
-				throw new IllegalStateException();
+				throw new IllegalArgumentException();
 			}
 		}
 		// Randomise search order, find the first valid pairing
@@ -98,7 +98,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 			// Construct the sequence
 			orderedCargoElements.set(insertIndex, other);
 
-			// Assume we can, in principle, use and fleet vessel
+			// Assume we can, in principle, use any fleet vessel
 			final List<IResource> validTargetResources = new LinkedList<>();
 			if (helper.isDESPurchase(other)) {
 				validTargetResources.add(helper.getDESPurchaseResource(other));
