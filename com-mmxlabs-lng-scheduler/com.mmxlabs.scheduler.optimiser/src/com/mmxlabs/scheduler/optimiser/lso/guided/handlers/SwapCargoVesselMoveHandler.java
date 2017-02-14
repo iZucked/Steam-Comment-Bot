@@ -38,8 +38,8 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
-			@NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull final Random random, @NonNull final GuideMoveGeneratorOptions options,
+			@NonNull final Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = lookupManager.getRawSequences();
 
 		final Hints hints = new Hints();
@@ -63,11 +63,16 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		final List<IResource> validTargetResources = new LinkedList<>();
 		validTargetResources.addAll(helper.getAllVesselResources());
 
+		// Filter to the common set of valid resources.
+		for (final ISequenceElement e : orderedCargoElements) {
+			validTargetResources.retainAll(helper.getAllowedResources(e));
+		}
+
 		// Get list of preceders for first element
 		final Followers<ISequenceElement> preceders = followersAndPreceders.getValidPreceders(orderedCargoElements.get(0));
 
 		// Get list of followers for last element.
-		final Followers<ISequenceElement> followers = followersAndPreceders.getValidPreceders(orderedCargoElements.get(orderedCargoElements.size() - 1));
+		final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(orderedCargoElements.get(orderedCargoElements.size() - 1));
 
 		// Build up a list of all valid insertion points
 		final List<Pair<ISequenceElement, ISequenceElement>> validInsertionPairs = new LinkedList<>();
@@ -118,13 +123,13 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 			return null;
 		}
 
-		LinkedHashSet<ISequenceElement> suggestedElements = new LinkedHashSet<>();
+		final LinkedHashSet<ISequenceElement> suggestedElements = new LinkedHashSet<>();
 		// We may have left a gap, what can we do to fill it?
 		{
-			int slotIndex = slotLocation.getSecond();
-			int offset = orderedCargoElements.indexOf(element);
-			int segmentStart = slotIndex - offset;
-			int segmentEnd = segmentStart + orderedCargoElements.size();
+			final int slotIndex = slotLocation.getSecond();
+			final int offset = orderedCargoElements.indexOf(element);
+			final int segmentStart = slotIndex - offset;
+			final int segmentEnd = segmentStart + orderedCargoElements.size();
 
 			// TODO: THis should really use the shipping length hint
 			// TODO: Exclude self
