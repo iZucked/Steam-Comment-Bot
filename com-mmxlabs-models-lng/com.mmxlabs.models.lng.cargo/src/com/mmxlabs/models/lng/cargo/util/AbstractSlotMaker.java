@@ -194,7 +194,7 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withVesselRestriction(@NonNull final AVesselSet<Vessel> restrictedVessel) {
+	public T withAllowedVessels(@NonNull final AVesselSet<Vessel> restrictedVessel) {
 		slot.getAllowedVessels().clear();
 		slot.getAllowedVessels().add(restrictedVessel);
 		return (T) this;
