@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -19,9 +20,12 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
+import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertDESPurchaseMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
@@ -37,11 +41,14 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IMoveHelper helper;
 
 	@Inject
+	private @NonNull MoveHandlerHelper moveHandlerHelper;
+
+	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final @NonNull ISequenceElement desPurchase, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
-			@NonNull Collection<ISequenceElement> forbiddenElements) {
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final @NonNull ISequenceElement desPurchase, @NonNull final Random random,
+			@NonNull final GuideMoveGeneratorOptions options, @NonNull final Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = lookupManager.getRawSequences();
 
 		final IResource desPurchaseResource = helper.getDESPurchaseResource(desPurchase);
@@ -56,36 +63,71 @@ public class InsertDESPurchaseMoveHandler implements IGuidedMoveHandler {
 			return null;
 		}
 		Collections.shuffle(followers, random);
-		final Hints hints = new Hints();
-		for (final ISequenceElement possibleFollower : followers) {
-			// This should be implicit by virtue of being able to follow the DES Purchase
-			assert helper.checkResource(possibleFollower, desPurchaseResource);
-			hints.getUsedElements().add(desPurchase);
-			// Where is this possible follower?
-			final Pair<IResource, Integer> location = lookupManager.lookup(possibleFollower);
-			assert location != null;
-			if (location.getFirst() == null) {
-				builder.withUnusedDESSale(possibleFollower);
-				hints.getUsedElements().add(possibleFollower);
-			} else {
-				builder.withUsedDESSale(location.getFirst(), possibleFollower);
 
-				final ISequence desSaleSequence = sequences.getSequence(location.getFirst());
-				final ISequenceElement prev = desSaleSequence.get(location.getSecond() - 1);
-				if (helper.isOptional(prev)) {
-					hints.getUsedElements().add(possibleFollower);
-				} else {
-					if (helper.isLoadSlot(prev)) {
-						hints.addProblemElement(prev);
-					} else {
-						hints.addShippingLength(location.getFirst(), location.getSecond() - 1);
+		final Hints hints = new Hints();
+		hints.getUsedElements().add(desPurchase);
+
+		LOOP_CANDIDATES: for (final ISequenceElement possibleDESSale : followers) {
+			// This should be implicit by virtue of being able to follow the DES Purchase
+			assert helper.checkResource(possibleDESSale, desPurchaseResource);
+
+			// Locate DES Sale
+			final Pair<IResource, Integer> location = lookupManager.lookup(possibleDESSale);
+			assert location != null;
+			final IResource desSaleResouce = location.getFirst();
+			if (desSaleResouce == null) {
+				builder.withUnusedDESSale(possibleDESSale);
+				hints.getUsedElements().add(possibleDESSale);
+				return new Pair<IMove, Hints>(builder.create(), hints);
+
+			} else {
+				final ISequence desSaleSequence = sequences.getSequence(desSaleResouce);
+
+				@NonNull
+				final List<ISequenceElement> cargoSegment = moveHandlerHelper.extractSegment(desSaleSequence, possibleDESSale);
+				// Check optionality status
+				for (final ISequenceElement e : cargoSegment) {
+					if (e == possibleDESSale) {
+						continue;
+					}
+					if (!helper.isOptional(e) && options.isStrictOptional()) {
+						continue LOOP_CANDIDATES;
 					}
 				}
+				// TODO
+				// hints.addShippingLength(location.getFirst(), location.getSecond() - 1);
+
+				// Record problem elements and elements to remove
+				final List<Pair<IResource, ISequenceElement>> elementsToRemove = new LinkedList<>();
+				for (final ISequenceElement e : cargoSegment) {
+					if (e == possibleDESSale) {
+						continue;
+					}
+					if (!helper.isOptional(e)) {
+						hints.addProblemElement(e);
+					}
+					elementsToRemove.add(new Pair<>(desSaleResouce, e));
+				}
+
+				hints.getUsedElements().add(possibleDESSale);
+				builder.withUsedDESSale(desSaleResouce, possibleDESSale);
+
+				final InsertDESPurchaseMove insertionMove = builder.create();
+
+				if (options.isPermitPartialSegments()) {
+					return new Pair<IMove, Hints>(insertionMove, hints);
+				} else {
+					// Finally generate the DES Purchase pairing move and a second step to remove the other cargo elements.
+					final List<IMove> moveComponents = new LinkedList<>();
+					moveComponents.add(insertionMove);
+					// Note - this should work equally well for both shipped and unshipped cargoes.
+					moveComponents.add(new RemoveElementsMove(elementsToRemove));
+
+					final CompoundMove finalMove = new CompoundMove(moveComponents);
+					return new Pair<IMove, Hints>(finalMove, hints);
+				}
 			}
-
-			break;
 		}
-
-		return new Pair<IMove, Hints>(builder.create(), hints);
+		return null;
 	}
 }

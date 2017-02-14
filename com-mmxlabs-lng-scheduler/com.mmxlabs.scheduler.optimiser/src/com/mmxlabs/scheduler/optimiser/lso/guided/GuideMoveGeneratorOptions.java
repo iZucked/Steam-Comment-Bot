@@ -2,8 +2,19 @@ package com.mmxlabs.scheduler.optimiser.lso.guided;
 
 public class GuideMoveGeneratorOptions {
 
-	private boolean strictOptional = false;
+	private boolean strictOptional = true;
 	private boolean checkingMove = false;
+
+	// Should the moves which remove elements leave the rest of the segment or not.
+	private boolean permitPartialSegments = false;
+
+	public boolean isPermitPartialSegments() {
+		return permitPartialSegments;
+	}
+
+	public void setPermitPartialSegments(boolean permitPartialSegments) {
+		this.permitPartialSegments = permitPartialSegments;
+	}
 
 	public void setCheckingMove(boolean checkingMove) {
 		this.checkingMove = checkingMove;
