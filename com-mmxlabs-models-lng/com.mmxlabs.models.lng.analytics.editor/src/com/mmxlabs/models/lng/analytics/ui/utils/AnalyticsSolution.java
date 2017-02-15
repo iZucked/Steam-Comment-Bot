@@ -6,14 +6,23 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyticsSolution {
 	private String title;
-	private String id;
+	private final String id;
 	private ScenarioInstance scenarioInstance;
 	private EObject solution;
+	private boolean createDiffToBaseAction;
 
-	public AnalyticsSolution(ScenarioInstance instance, EObject solution, String title) {
+	public boolean isCreateDiffToBaseAction() {
+		return createDiffToBaseAction;
+	}
+
+	public void setCreateDiffToBaseAction(boolean createDiffToBaseAction) {
+		this.createDiffToBaseAction = createDiffToBaseAction;
+	}
+
+	public AnalyticsSolution(final ScenarioInstance instance, final EObject solution, final String title) {
 		scenarioInstance = instance;
 		this.solution = solution;
-		id = title;
+		id = instance.getUuid() + title;
 		this.title = title;
 	}
 
@@ -21,7 +30,7 @@ public class AnalyticsSolution {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -29,7 +38,7 @@ public class AnalyticsSolution {
 		return scenarioInstance;
 	}
 
-	public void setScenarioInstance(ScenarioInstance scenarioInstance) {
+	public void setScenarioInstance(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
 
@@ -37,11 +46,11 @@ public class AnalyticsSolution {
 		return solution;
 	}
 
-	public void setSolution(EObject solution) {
+	public void setSolution(final EObject solution) {
 		this.solution = solution;
 	}
 
 	public String getID() {
-		return null;
+		return id;
 	}
 }
