@@ -151,7 +151,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		final long existingUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
 				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 				.count();
-
+		MoveResult checkPointResult = null;
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
@@ -167,10 +167,14 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			hintManager.chain(moveData.getSecond());
 
 			if (currentSequences.equals(providedSequences)) {
-				continue;
+				// Circular move, give up
+				return null;
 			}
 			// Strictly we remove the original slots from this set and reject the state if there are any slots left rather than just see if there is an overall increase in number as this allows
 			// "swimming" slot violations.
+			
+			
+//			FIXME: This check does not work properly -- maybe soft required is kicking in?
 			final long newUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
 					.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 					.count();
@@ -193,24 +197,36 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				checkPointIndex = discoveredMoves.size() - 1;
 				checkPointMetrics = moveMetrics;
 
+				// Create clone for return result.
+				// FIXME: What do we really need to return?
+				HintManager newManager = injector.getInstance(HintManager.class);
+				newManager.getProblemElements().addAll(hintManager.getProblemElements());
+				newManager.getSuggestedElements().addAll(hintManager.getSuggestedElements());
+				newManager.getUsedElements().addAll(hintManager.getUsedElements());
+
+				checkPointResult = new MoveResult(new CompoundMove(new LinkedList<>(discoveredMoves)), newManager, moveMetrics);
 				// -- TODO return a list of valid states? Then caller can apply in order and decide to combine or separate.
 
 				// Sometimes we want to continue searching as the solution may pass constraints, but have other issues - such as increase lateness or other violations.
 				// However the extra search can also introduce unnecessary changes.
-				if (!options.isExtendSearch() || random.nextDouble() < 0.05) {
-					return new MoveResult(new CompoundMove(discoveredMoves), hintManager, moveMetrics);
+
+				// This flag (assuming elements are properly updated...) should hopefully stop hitch-hiker moves. (at least those completely unrelated).
+				boolean couldExtend = !hintManager.getProblemElements().isEmpty() || !hintManager.getSuggestedElements().isEmpty();
+				if (!options.isExtendSearch() || !couldExtend || random.nextDouble() < 0.05) {
+					return checkPointResult;// new MoveResult(new CompoundMove(discoveredMoves), hintManager, moveMetrics);
 				}
 			}
 
 		}
 
-		// If we have an empty move, return null
-		if (discoveredMoves.isEmpty()) {
-			return null;
-		}
+		// // If we have an empty move, return null
+		// if (discoveredMoves.isEmpty()) {
+		// return null;
+		// }
 
-		if (checkPointIndex != -1) {
-			return new MoveResult(new CompoundMove(discoveredMoves.subList(0, 1 + checkPointIndex)), hintManager, checkPointMetrics);
+		if (checkPointResult != null) {
+			//
+			return checkPointResult;// new MoveResult(new CompoundMove(discoveredMoves.subList(0, 1 + checkPointIndex)), hintManager, checkPointMetrics);
 		}
 
 		// No valid state found, give up
@@ -299,7 +315,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Remove_FOB_Sale:
 			return injector.getInstance(RemoveCargoMoveHandler.class);
 		case Remove_Slot:
-			// No InsertSlotMove, but is we are leaving partial segments, this may be needed.		
+			// No InsertSlotMove, but is we are leaving partial segments, this may be needed.
 			// Insert slot not implemented, so do not used RemoveSlot. Keep to remove cargo
 			// return injector.getInstance(RemoveSlotMoveHandler.class);
 		case Remove_Vessel_Event:
@@ -311,7 +327,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Swap_Slot:
 			return injector.getInstance(SwapSlotMoveHandler.class);
 		case Move_Slot_NonShipped_Resource:
-			return injector.getInstance(MoveSlotMoveHandler.class);		
+			return injector.getInstance(MoveSlotMoveHandler.class);
 		default:
 			break;
 
