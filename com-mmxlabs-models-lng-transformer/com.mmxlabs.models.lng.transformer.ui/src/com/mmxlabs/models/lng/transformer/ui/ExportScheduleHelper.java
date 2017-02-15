@@ -95,8 +95,8 @@ public class ExportScheduleHelper {
 
 		// Clear any insertion plans - assume no longer relevant
 		AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-		// analyticsModel.getActionPlans().clear();
-		// analyticsModel.getInsertionPlans().clear();
+		analyticsModel.getActionPlans().clear();
+		analyticsModel.getInsertionPlans().clear();
 
 		// scheduleModel.setSchedule(schedule);
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
