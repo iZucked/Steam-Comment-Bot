@@ -100,17 +100,14 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.EventGrouping;
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
@@ -169,6 +166,9 @@ public class ChangeSetView implements IAdaptable {
 
 		@Override
 		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioResult> others, final Table table, final List<LNGScenarioModel> rootObjects) {
+			if (!handleEvents) {
+				return;
+			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				cleanUpVesselColumns();
 				setEmptyData();
@@ -178,6 +178,9 @@ public class ChangeSetView implements IAdaptable {
 		@Override
 		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pin, final ScenarioResult other, final Table table,
 				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
+			if (!handleEvents) {
+				return;
+			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				cleanUpVesselColumns();
 				if (pin == null || other == null) {
@@ -231,6 +234,9 @@ public class ChangeSetView implements IAdaptable {
 	private GridViewerColumn violationColumn;
 
 	private GridViewerColumn latenessColumn;
+
+	// flag to indicate whether or not to respond to data change events.
+	private boolean handleEvents;
 
 	// private MPart part;
 
@@ -509,11 +515,14 @@ public class ChangeSetView implements IAdaptable {
 
 	@PostConstruct
 	public void createPartControl(@Optional final MPart part, final Composite parent) {
-
+		handleEvents = true;
 		if (part != null) {
 			for (final String tag : part.getTags()) {
 				if (tag.equals("action-set")) {
 					viewMode = ViewMode.ACTION_SET;
+				}
+				if (tag.equals("disable-event-handlers")) {
+					handleEvents = false;
 				}
 			}
 		}
@@ -1116,7 +1125,7 @@ public class ChangeSetView implements IAdaptable {
 									final Point mousePoint = grid.toControl(cursorLocation);
 									final GridColumn targetColumn = grid.getColumn(mousePoint);
 									// Point cell = grid.getCell(mousePoint);
-									ViewerCell cell = viewer.getCell(mousePoint);
+									final ViewerCell cell = viewer.getCell(mousePoint);
 									if (cell != null && !cell.getText().isEmpty()) {
 										if (latenessColumn != null && latenessColumn.getColumn() == targetColumn) {
 											openView("com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView");
@@ -1991,6 +2000,9 @@ public class ChangeSetView implements IAdaptable {
 	@Inject
 	@Optional
 	private void handleAnalyseScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS) final ScenarioInstance target) {
+		if (!handleEvents) {
+			return;
+		}
 		if (viewMode != ViewMode.ACTION_SET) {
 			return;
 		}
@@ -2301,6 +2313,18 @@ public class ChangeSetView implements IAdaptable {
 				}
 			}
 		}
+	}
+
+	@OpenChangeSetHandler
+	public void openAnalyticsSolution(final AnalyticsSolution solution) {
+		this.viewMode = ViewMode.ACTION_SET;
+
+		final ScenarioInstance target = solution.getScenarioInstance();
+		final EObject plan = solution.getSolution();
+		// Do something?
+//		if (plan instanceof ActionPlan) {
+//			setActionSetData(target, plan);
+//		}
 	}
 
 }
