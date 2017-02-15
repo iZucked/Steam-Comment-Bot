@@ -18,6 +18,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
+import org.eclipse.ui.internal.ViewIntroAdapterPart;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
@@ -83,6 +84,8 @@ public class ChangeSetViewCreatorService {
 		EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
 		MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
 
+		String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.CustomChangeSetView:" + solution.getID();
+
 		RunnerHelper.asyncExec(() -> {
 			boolean foundPerspective = false;
 			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
@@ -101,61 +104,65 @@ public class ChangeSetViewCreatorService {
 					log.error("Unable to open compare perspective", e);
 				}
 			}
+			MPart viewPart = partService.findPart(viewPartId);
+			if (viewPart != null) {
+				viewPart = partService.showPart(viewPart, PartState.ACTIVATE); // Show part
+			} else {
 
-			MPartStack stack = (MPartStack) modelService.find("reportsArea", application);
-			MPart part = modelService.createModelElement(MPart.class);
-			String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.CustomChangeSetView:" + solution.getID();
-			part.setElementId(viewPartId);
-			part.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
-			part.setCloseable(true);
-			part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
-			part.getTags().add("action-set");
-			part.getTags().add("disable-event-handlers");
-			part.setLabel(solution.getTitle());
+				MPartStack stack = (MPartStack) modelService.find("reportsArea", application);
+				MPart part = modelService.createModelElement(MPart.class);
+				part.setElementId(viewPartId);
+				part.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
+				part.setCloseable(true);
+				part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
+				part.getTags().add("action-set");
+				part.getTags().add("disable-event-handlers");
+				part.setLabel(solution.getTitle());
 
-			MToolBar toolbar = modelService.createModelElement(MToolBar.class);
-			part.setToolbar(toolbar);
+				MToolBar toolbar = modelService.createModelElement(MToolBar.class);
+				part.setToolbar(toolbar);
 
-			{
-				MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-				item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
-				item.setType(ItemType.CHECK);
-				item.setLabel("Filter Non Structural Changes");
-				item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
-				item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler");
-				item.setEnabled(true);
-				item.setToBeRendered(true);
-				item.setVisible(true);
-				toolbar.getChildren().add(item);
+				{
+					MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
+					item.setType(ItemType.CHECK);
+					item.setLabel("Filter Non Structural Changes");
+					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler");
+					item.setEnabled(true);
+					item.setToBeRendered(true);
+					item.setVisible(true);
+					toolbar.getChildren().add(item);
+				}
+				if (solution.isCreateDiffToBaseAction()) {
+					MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
+					item.setType(ItemType.CHECK);
+					item.setLabel("Compare to Base");
+					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
+					item.setEnabled(true);
+					item.setToBeRendered(true);
+					item.setVisible(true);
+					toolbar.getChildren().add(item);
+				}
+				{
+					MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					item.setElementId(viewPartId + ".directtoolitem.copy");
+					item.setType(ItemType.CHECK);
+					item.setTooltip("Copy to clipboard");
+					item.setLabel("Filter Non Structural Changes");
+					item.setIconURI("platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler");
+					item.setEnabled(true);
+					item.setToBeRendered(true);
+					item.setVisible(true);
+					toolbar.getChildren().add(item);
+				}
+
+				stack.getChildren().add(part); // Add part to stack
+				viewPart = partService.showPart(part, PartState.ACTIVATE); // Show part
 			}
-			{
-				MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-				item.setElementId(viewPartId + ".directtoolitem.comparetobase");
-				item.setType(ItemType.CHECK);
-				item.setLabel("Compare to Base");
-				item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
-				item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
-				item.setEnabled(true);
-				item.setToBeRendered(true);
-				item.setVisible(true);
-				toolbar.getChildren().add(item);
-			}
-			{
-				MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-				item.setElementId(viewPartId + ".directtoolitem.copy");
-				item.setType(ItemType.CHECK);
-				item.setTooltip("Copy to clipboard");
-				item.setLabel("Filter Non Structural Changes");
-				item.setIconURI("platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif");
-				item.setContributionURI("bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler");
-				item.setEnabled(true);
-				item.setToBeRendered(true);
-				item.setVisible(true);
-				toolbar.getChildren().add(item);
-			}
-
-			stack.getChildren().add(part); // Add part to stack
-			MPart viewPart = partService.showPart(part, PartState.ACTIVATE); // Show part
 
 			// Pass in the input data
 			Object viewObject = viewPart.getObject();

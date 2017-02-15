@@ -35,9 +35,6 @@ import com.mmxlabs.rcp.common.SelectionHelper;
  */
 public class ScenarioChangeSetService {
 
-	private static final @NonNull String actionSetViewId = "com.mmxlabs.lingo.reports.views.changeset.ActionSetView";
-	private static final @NonNull String changeSetViewId = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetView";
-
 	private EPartService partService;
 
 	private ESelectionService selectionService;
@@ -75,6 +72,11 @@ public class ScenarioChangeSetService {
 
 		@Override
 		public void selectionChanged(final MPart part, final Object selectionObject) {
+
+			if (!part.getElementId().contains("com.mmxlabs.lingo.reports.views.changeset.")) {
+				return;
+			}
+
 			if (part == lastChangeSetViewPart) {
 
 				final ISelection selection = SelectionHelper.adaptSelection(selectionObject);
@@ -119,8 +121,9 @@ public class ScenarioChangeSetService {
 
 		@Override
 		public void partActivated(final MPart part) {
+
 			if (part != lastChangeSetViewPart) {
-				if (changeSetViewId.equals(part.getElementId()) || actionSetViewId.equals(part.getElementId())) {
+				if (part.getElementId().contains("com.mmxlabs.lingo.reports.views.changeset.")) {
 					lastChangeSetViewPart = part;
 					lastChangeSetViewObject = (ChangeSetView) part.getObject();
 					changeSetListener.selectionChanged(part, selectionService.getSelection(part.getElementId()));
@@ -137,7 +140,7 @@ public class ScenarioChangeSetService {
 		public void partDeactivated(final MPart part) {
 			if (lastChangeSetViewPart == part) {
 				// Clear selection
-//				fireListeners(null, null, null, false);
+				// fireListeners(null, null, null, false);
 			}
 		}
 
@@ -145,14 +148,14 @@ public class ScenarioChangeSetService {
 		public void partHidden(final MPart part) {
 			if (lastChangeSetViewPart == part) {
 				// Clear selection
-//				fireListeners(null, null, null, false);
+				// fireListeners(null, null, null, false);
 			}
 		}
 
 		@Override
 		public void partVisible(final MPart part) {
 			if (part != lastChangeSetViewPart) {
-				if (changeSetViewId.equals(part.getElementId()) || actionSetViewId.equals(part.getElementId())) {
+				if (part.getElementId().contains("com.mmxlabs.lingo.reports.views.changeset.")) {
 					lastChangeSetViewPart = part;
 					lastChangeSetViewObject = (ChangeSetView) part.getObject();
 					changeSetListener.selectionChanged(part, selectionService.getSelection(part.getElementId()));
@@ -169,14 +172,12 @@ public class ScenarioChangeSetService {
 
 		partService.addPartListener(partlistener);
 		// Add selection listener to only these views
-		selectionService.addPostSelectionListener(changeSetViewId, changeSetListener);
-		selectionService.addPostSelectionListener(actionSetViewId, changeSetListener);
+		selectionService.addPostSelectionListener(changeSetListener);
 	}
 
 	public void stop() {
 		partService.removePartListener(partlistener);
-		selectionService.removePostSelectionListener(changeSetViewId, changeSetListener);
-		selectionService.removePostSelectionListener(actionSetViewId, changeSetListener);
+		selectionService.removePostSelectionListener(changeSetListener);
 
 		partService = null;
 		selectionService = null;
