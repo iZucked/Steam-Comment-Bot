@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.analytics.ui.utils;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.analytics.ActionPlan;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyticsSolution {
@@ -9,6 +10,13 @@ public class AnalyticsSolution {
 	private String id;
 	private ScenarioInstance scenarioInstance;
 	private EObject solution;
+
+	public AnalyticsSolution(ScenarioInstance instance, EObject solution, String title) {
+		scenarioInstance = instance;
+		this.solution = solution;
+		id = title;
+		this.title = title;
+	}
 
 	public String getTitle() {
 		return title;
