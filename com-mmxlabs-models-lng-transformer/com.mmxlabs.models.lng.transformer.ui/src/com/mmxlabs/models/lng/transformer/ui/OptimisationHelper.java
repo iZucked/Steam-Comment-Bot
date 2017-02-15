@@ -283,6 +283,35 @@ public final class OptimisationHelper {
 		return true;
 	}
 
+	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
+		UserSettings previousSettings = null;
+		if (scenario != null) {
+			previousSettings = scenario.getUserSettings();
+		}
+
+		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		if (previousSettings == null) {
+			previousSettings = userSettings;
+		}
+
+		// Permit the user to override the settings object. Use the previous settings as the initial value
+		if (promptUser) {
+			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
+		}
+
+		if (previousSettings == null) {
+			return null;
+		}
+
+		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		mergeFields(previousSettings, userSettings);
+
+		if (!checkUserSettings(userSettings, false)) {
+			return null;
+		}
+		return userSettings;
+	}
+
 	@Nullable
 	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser,
 			final boolean promptOnlyIfOptionsEnabled) {
