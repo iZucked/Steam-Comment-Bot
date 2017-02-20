@@ -198,6 +198,11 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
  */
 public class LNGScenarioTransformer {
 
+	/**
+	 * Constant used to inject a limit for spot slot creation. Negative numbers do not apply a cap.
+	 */
+	public static final String LIMIT_SPOT_SLOT_CREATION = "limit-spot-slot-creation";
+
 	private static final int NOMINAL_CARGO_INDEX = -1;
 
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
@@ -368,6 +373,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
 	private IIntegerIntervalCurve monthIntervalsInHoursCurve;
+
+	@Inject
+	@Named(LIMIT_SPOT_SLOT_CREATION)
+	private int spotSlotCreationCap;
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -1742,7 +1751,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						final int remaining = count - existing.size();
+						final int remaining = getCappedRemainingSpotOptions(count - existing.size());
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -1881,7 +1890,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						final int remaining = count - existing.size();
+						final int remaining = getCappedRemainingSpotOptions(count - existing.size());
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -2030,7 +2039,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						final int remaining = count - existing.size();
+						final int remaining = getCappedRemainingSpotOptions(count - existing.size());
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -2157,7 +2166,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						final int remaining = count - existing.size();
+						final int remaining = getCappedRemainingSpotOptions(count - existing.size());
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -3181,6 +3190,19 @@ public class LNGScenarioTransformer {
 		if (miscCosts != 0) {
 			miscCostsProviderEditor.setCostsValue(portSlot, miscCosts);
 		}
+	}
+
+	/**
+	 * Given the number spot slots available to create, optionally limit this number.
+	 * 
+	 * @param count
+	 * @return
+	 */
+	private int getCappedRemainingSpotOptions(int count) {
+		if (spotSlotCreationCap < 0) {
+			return count;
+		}
+		return Math.min(count, spotSlotCreationCap);
 	}
 
 }

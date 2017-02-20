@@ -33,6 +33,8 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  */
 public class LNGTransformerHelper {
 
+	
+	
 	/**
 	 */
 	public static final @NonNull String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
