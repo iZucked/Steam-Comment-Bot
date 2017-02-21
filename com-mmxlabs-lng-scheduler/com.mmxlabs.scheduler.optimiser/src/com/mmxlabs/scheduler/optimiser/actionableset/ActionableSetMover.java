@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.actionset;
+package com.mmxlabs.scheduler.optimiser.actionableset;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,8 +25,9 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator.MoveResult;
 import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.FitnessCalculator;
 
-public class ActionSetMover {
+public class ActionableSetMover {
 
 	@Inject
 	@NonNull
@@ -77,7 +78,7 @@ public class ActionSetMover {
 
 	}
 
-	public ActionSetJobState search(@NonNull ActionSetJobState state, @NonNull ILookupManager stateManager, long seed) {
+	public ActionableSetJobState search(@NonNull ActionableSetJobState state, @NonNull ILookupManager stateManager, long seed) {
 
 		IModifiableSequences rawSequences = new ModifiableSequences(state.getRawSequences());
 		stateManager.createLookup(rawSequences);
@@ -97,18 +98,18 @@ public class ActionSetMover {
 
 		final MoveResult p = moveGenerator.generateMove(rawSequences, stateManager, random, state.getUsedElements(), state.getMetrics(), options);
 		if (p == null) {
-			return new ActionSetJobState(rawSequences, Long.MAX_VALUE, null, ActionSetJobState.Status.Fail, seed, note, state);
+			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}
 		final IMove move = p.getMove();
 		HintManager mgr = p.getHintManager();
 		// Make sure the generator was able to generate a move
 		if (move == null || move instanceof INullMove) {
-			return new ActionSetJobState(rawSequences, Long.MAX_VALUE, null, ActionSetJobState.Status.Fail, seed, note, state);
+			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}
 
 		// Test move is valid against data.
 		if (!move.validate(rawSequences)) {
-			return new ActionSetJobState(rawSequences, Long.MAX_VALUE, null, ActionSetJobState.Status.Fail, seed, note, state);
+			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}
 
 		// Update potential sequences
@@ -123,24 +124,24 @@ public class ActionSetMover {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker.checkConstraints(currentFullSequences, changedResources) == false) {
-				return new ActionSetJobState(rawSequences, Long.MAX_VALUE, null, ActionSetJobState.Status.Fail, seed, note, state);
+				return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 			}
 		}
 
 		long @Nullable [] newMetrics = p.getMetrics();
 		if (newMetrics == null) {
-			return new ActionSetJobState(rawSequences, Long.MAX_VALUE, null, ActionSetJobState.Status.Fail, seed, note, state);
+			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 
 		}
 		@Nullable
 		IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
 		if (evaluationState == null) {
-			return new ActionSetJobState(rawSequences, Long.MAX_VALUE, null, ActionSetJobState.Status.Fail, seed, note, state);
+			return new ActionableSetJobState(rawSequences, Long.MAX_VALUE, null, ActionableSetJobState.Status.Fail, seed, note, state);
 		}
 
 		long fitness = fitnessCalculator.evaluateSequencesFitness(currentFullSequences, evaluationState, move.getAffectedResources());
 
-		ActionSetJobState s = new ActionSetJobState(rawSequences, fitness, newMetrics, ActionSetJobState.Status.Pass, seed, note, state);
+		ActionableSetJobState s = new ActionableSetJobState(rawSequences, fitness, newMetrics, ActionableSetJobState.Status.Pass, seed, note, state);
 		mgr.getUsedElements().forEach(e -> s.addUsedElements(e));
 		return s;
 	}

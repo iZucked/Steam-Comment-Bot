@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.actionset;
+package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.Collection;
 import java.util.List;

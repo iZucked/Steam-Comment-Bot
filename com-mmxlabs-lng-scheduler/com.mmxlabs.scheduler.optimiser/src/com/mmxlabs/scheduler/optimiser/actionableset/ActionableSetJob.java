@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.actionset;
+package com.mmxlabs.scheduler.optimiser.actionableset;
 
 import java.util.concurrent.Callable;
 
@@ -13,33 +13,23 @@ import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IProgressReporter;
 import com.mmxlabs.optimiser.core.ISequences;
 
-/**
- * A class that could be passed into an ExecutorService to attempt to apply a move and evaluate an ISequences state.
- * 
- * @author AC
- *
- */
-public final class ActionSetJob implements Callable<ActionSetJobState> {
+public final class ActionableSetJob implements Callable<ActionableSetJobState> {
 	private final long seed;
 	private @NonNull final Injector injector;
-	// private @NonNull ILookupManager lookupManager;
-	private @NonNull final ActionSetJobState baseState;
-	// private @NonNull IMoveGenerator moveGenerator;
-	// private boolean failedInitialConstraintCheckers;
-	private IProgressReporter progressReporter;
+	private @NonNull final ActionableSetJobState baseState;
+	private final IProgressReporter progressReporter;
 
-	public ActionSetJob(@NonNull final Injector injector, @NonNull final ActionSetJobState baseState, final long seed, IProgressReporter progressReporter) {
+	public ActionableSetJob(@NonNull final Injector injector, @NonNull final ActionableSetJobState baseState, final long seed, final IProgressReporter progressReporter) {
 		this.injector = injector;
 		this.baseState = baseState;
-		// this.lookupManager = new;
 		this.seed = seed;
 		this.progressReporter = progressReporter;
 	}
 
 	@Override
-	public ActionSetJobState call() {
+	public ActionableSetJobState call() {
 		try {
-			final ActionSetMover mover = injector.getInstance(ActionSetMover.class);
+			final ActionableSetMover mover = injector.getInstance(ActionableSetMover.class);
 			try {
 				final ISequences rawSequences = baseState.getRawSequences();
 				final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);

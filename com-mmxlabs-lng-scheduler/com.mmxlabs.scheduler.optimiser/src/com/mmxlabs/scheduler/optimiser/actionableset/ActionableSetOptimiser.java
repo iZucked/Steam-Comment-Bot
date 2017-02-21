@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.actionset;
+package com.mmxlabs.scheduler.optimiser.actionableset;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,13 +31,14 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.scheduler.optimiser.actionset.ActionSetJobState.Status;
+import com.mmxlabs.scheduler.optimiser.actionableset.ActionableSetJobState.Status;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.FitnessCalculator;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
-public class ActionSetOptimiser {
+public class ActionableSetOptimiser {
 
-	private IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed(0);
+	private final IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed(0);
 
 	@Inject
 	private Injector injector;
@@ -54,7 +55,7 @@ public class ActionSetOptimiser {
 	@Inject
 	private EvaluationHelper evaluationHelper;
 
-	public Collection<IMultiStateResult> optimise(@NonNull final ISequences inputRawSequences, IProgressReporter progressReporter) throws Exception {
+	public Collection<IMultiStateResult> optimise(@NonNull final ISequences inputRawSequences, final IProgressReporter progressReporter) throws Exception {
 
 		long initialFitness;
 		long[] initialMetrics;
@@ -62,7 +63,7 @@ public class ActionSetOptimiser {
 			final IModifiableSequences currentFullSequences = manipulator.createManipulatedSequences(inputRawSequences);
 
 			@Nullable
-			IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
+			final IEvaluationState evaluationState = evaluationHelper.evaluateSequence(currentFullSequences);
 			if (evaluationState == null) {
 				throw new IllegalStateException();
 			}
@@ -77,17 +78,17 @@ public class ActionSetOptimiser {
 			}
 		}
 
-		int iterations = 10;
-		int numberOfJobs = 5_000;
-		int totalWork = iterations * numberOfJobs;
+		final int iterations = 10;
+		final int numberOfJobs = 5_000;
+		final int totalWork = iterations * numberOfJobs;
 
 		progressReporter.begin(totalWork);
 
-		List<ActionSetJobState> jobStates = new LinkedList<ActionSetJobState>();
-		jobStates.add(new ActionSetJobState(inputRawSequences, initialFitness, initialMetrics, Status.Pass, -1, "Initial Solution", null));
+		List<ActionableSetJobState> jobStates = new LinkedList<ActionableSetJobState>();
+		jobStates.add(new ActionableSetJobState(inputRawSequences, initialFitness, initialMetrics, Status.Pass, -1, "Initial Solution", null));
 		for (int iteration = 0; iteration < iterations; ++iteration) {
-			List<ActionSetJobState> currentIterationJobs = generateBatch(jobStates, new Random(iteration), numberOfJobs);
-			List<ActionSetJobState> results = runJobs(currentIterationJobs, progressReporter);
+			final List<ActionableSetJobState> currentIterationJobs = generateBatch(jobStates, new Random(iteration), numberOfJobs);
+			final List<ActionableSetJobState> results = runJobs(currentIterationJobs, progressReporter);
 
 			// TODO: Mix up generations!
 
@@ -101,8 +102,8 @@ public class ActionSetOptimiser {
 			// TODO: Implement equals on ActionSetJobState!
 			jobStates = results.parallelStream().distinct().collect(Collectors.toList());
 			Collections.sort(jobStates, (a, b) -> {
-				long fa = a.getFitness();
-				long fb = b.getFitness();
+				final long fa = a.getFitness();
+				final long fb = b.getFitness();
 				if (fa > fb) {
 					return 1;
 				} else if (fa < fb) {
@@ -119,11 +120,11 @@ public class ActionSetOptimiser {
 
 		progressReporter.done();
 
-		List<ActionSetJobState> jobStates2 = new LinkedList<ActionSetJobState>();
-		for (ActionSetJobState state : jobStates) {
-			List<ActionSetJobState> states = new LinkedList<>();
+		final List<ActionableSetJobState> jobStates2 = new LinkedList<ActionableSetJobState>();
+		for (final ActionableSetJobState state : jobStates) {
+			final List<ActionableSetJobState> states = new LinkedList<>();
 			{
-				ActionSetJobState s = state;
+				ActionableSetJobState s = state;
 				while (s != null) {
 					states.add(0, s);
 					s = s.getParent();
@@ -131,13 +132,13 @@ public class ActionSetOptimiser {
 			}
 			int idx = 0;
 
-			int[] bestMetricsIdx = new int[MetricType.values().length];
-			long[] bestMetrics = new long[MetricType.values().length];
+			final int[] bestMetricsIdx = new int[MetricType.values().length];
+			final long[] bestMetrics = new long[MetricType.values().length];
 
 			while (idx < states.size()) {
-				ActionSetJobState cs = states.get(idx);
+				final ActionableSetJobState cs = states.get(idx);
 				if (idx == 0) {
-					for (MetricType mt : MetricType.values()) {
+					for (final MetricType mt : MetricType.values()) {
 						bestMetrics[mt.ordinal()] = cs.getMetrics()[mt.ordinal()];
 					}
 				} else {
@@ -165,17 +166,17 @@ public class ActionSetOptimiser {
 
 		Collections.sort(jobStates2, (a, b) -> metric(a, b));
 
-		List<IMultiStateResult> results = new LinkedList<IMultiStateResult>();
-		for (ActionSetJobState state : jobStates2) {
+		final List<IMultiStateResult> results = new LinkedList<IMultiStateResult>();
+		for (final ActionableSetJobState state : jobStates2) {
 
-			List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<NonNullPair<ISequences, Map<String, Object>>>();
-			ActionSetJobState s = state;
+			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<NonNullPair<ISequences, Map<String, Object>>>();
+			ActionableSetJobState s = state;
 			while (s != null) {
 				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(s.getRawSequences(), new HashMap<>()));
 				s = s.getParent();
 			}
 
-			MultiStateResult result = new MultiStateResult(solutions.get(0), solutions);
+			final MultiStateResult result = new MultiStateResult(solutions.get(0), solutions);
 			results.add(result);
 		}
 
@@ -183,8 +184,8 @@ public class ActionSetOptimiser {
 
 	}
 
-	private List<ActionSetJobState> generateBatch(List<ActionSetJobState> jobStates, Random random, int targetSize) {
-		List<ActionSetJobState> nextOutput = new LinkedList<ActionSetJobState>();
+	private List<ActionableSetJobState> generateBatch(final List<ActionableSetJobState> jobStates, final Random random, final int targetSize) {
+		final List<ActionableSetJobState> nextOutput = new LinkedList<ActionableSetJobState>();
 		for (int i = 0; i < targetSize; ++i) {
 			nextOutput.add(RandomHelper.chooseElementFrom(random, jobStates));
 		}
@@ -192,27 +193,26 @@ public class ActionSetOptimiser {
 	}
 
 	@NonNull
-	protected List<ActionSetJobState> runJobs(final List<ActionSetJobState> sortedJobStates, IProgressReporter progressReporter) throws InterruptedException {
+	protected List<ActionableSetJobState> runJobs(final List<ActionableSetJobState> sortedJobStates, final IProgressReporter progressReporter) throws InterruptedException {
 		// Create a batcher, which produces small batches of jobs that we can then spread among cores
 		// but keep the progress log accurate and maintain repeatablility
-		final ActionSetJobBatcher jobBatcher = new ActionSetJobBatcher(executorService, sortedJobStates, 100);
+		final ActionableSetJobBatcher jobBatcher = new ActionableSetJobBatcher(executorService, sortedJobStates, 100);
 
-		final List<ActionSetJobState> states = new LinkedList<>();
-		List<Future<ActionSetJobState>> futures;
+		final List<ActionableSetJobState> states = new LinkedList<>();
+		List<Future<ActionableSetJobState>> futures;
 		while (jobBatcher.hasNext()) {
 			final long start = System.currentTimeMillis();
 			futures = jobBatcher.getNextFutures(injector, incrementingRandomSeed, progressReporter);
 			// Collect all results
-			for (final Future<ActionSetJobState> f : futures) {
+			for (final Future<ActionableSetJobState> f : futures) {
 				try {
-					final ActionSetJobState futureState = f.get();
+					final ActionableSetJobState futureState = f.get();
 					// Filter out bad states
 					if (futureState != null && futureState.getStatus() == Status.Pass) {
 						if (futureState.getFitness() != Long.MAX_VALUE) {
-//							if (futureState.getFitness() < futureState.getParent().getFitness()) {
-
-								states.add(futureState);
-//							}
+							// if (futureState.getFitness() < futureState.getParent().getFitness()) {
+							states.add(futureState);
+							// }
 						}
 					}
 
@@ -227,27 +227,27 @@ public class ActionSetOptimiser {
 		return states;
 	}
 
-	private int metric(final ActionSetJobState o1, final ActionSetJobState o2) {
+	private int metric(final ActionableSetJobState o1, final ActionableSetJobState o2) {
 
 		return Long.compare(getMetric(o1), getMetric(o2)) * -1;
 	}
 
-	static long[] getMetricsDelta(long[] prev, long[] current) {
-		long[] m = new long[current.length];
+	static long[] getMetricsDelta(final long[] prev, final long[] current) {
+		final long[] m = new long[current.length];
 		if (prev == null) {
 			return m;
 		}
-		for (MetricType mt : MetricType.values()) {
+		for (final MetricType mt : MetricType.values()) {
 			m[mt.ordinal()] = current[mt.ordinal()] - prev[mt.ordinal()];
 		}
 		return m;
 	}
 
-	public static long getMetric(ActionSetJobState state) {
+	public static long getMetric(final ActionableSetJobState state) {
 
-		List<ActionSetJobState> states = new LinkedList<>();
+		final List<ActionableSetJobState> states = new LinkedList<>();
 		{
-			ActionSetJobState s = state;
+			ActionableSetJobState s = state;
 			while (s != null) {
 				states.add(0, s);
 				s = s.getParent();
@@ -257,12 +257,12 @@ public class ActionSetOptimiser {
 		long value = 0;
 		int idx = 0;
 
-		long[] lastMetrics = states.get(0).getMetrics();
+		final long[] lastMetrics = states.get(0).getMetrics();
 		while (idx < states.size()) {
-			ActionSetJobState cs = states.get(idx);
+			final ActionableSetJobState cs = states.get(idx);
 			cumulativeChanges += 1;// cs.changesList.size();
 
-			long[] delta = getMetricsDelta(lastMetrics, cs.getMetrics());
+			final long[] delta = getMetricsDelta(lastMetrics, cs.getMetrics());
 
 			if (delta[MetricType.PNL.ordinal()] > 0) {
 				value += (delta[MetricType.PNL.ordinal()] / cumulativeChanges);
@@ -272,10 +272,10 @@ public class ActionSetOptimiser {
 				long currentChanges = cumulativeChanges;
 				// look for a net +ve
 
-				long[] cLastMetrics = cs.getMetrics();
+				final long[] cLastMetrics = cs.getMetrics();
 
 				for (int i = idx + 1; i < states.size(); i++) {
-					long[] cDelta = getMetricsDelta(cLastMetrics, states.get(i).getMetrics());
+					final long[] cDelta = getMetricsDelta(cLastMetrics, states.get(i).getMetrics());
 
 					currentSum += cDelta[MetricType.PNL.ordinal()];
 					currentChanges += 1;// states.get(i).changesList.size();
