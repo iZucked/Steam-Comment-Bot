@@ -28,8 +28,21 @@ import com.mmxlabs.scheduler.optimiser.moves.handlers.SwapSegmentSequenceMoveHan
 import com.mmxlabs.scheduler.optimiser.moves.handlers.SwapTailsSequenceMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.BreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.ParallelFollowersAndPrecedersProviderImpl;
 
 public class MoveGeneratorModule extends AbstractModule {
+
+	private boolean parallelFollowerAndPreceeders;
+
+	public MoveGeneratorModule() {
+		this(false);
+	}
+
+	public MoveGeneratorModule(boolean parallelFollowerAndPreceeders) {
+		this.parallelFollowerAndPreceeders = parallelFollowerAndPreceeders;
+
+	}
+
 	@Override
 	protected void configure() {
 
@@ -48,26 +61,31 @@ public class MoveGeneratorModule extends AbstractModule {
 
 		bind(MoveHelper.class).in(Singleton.class);
 		bind(IMoveHelper.class).to(MoveHelper.class);
-		
+
 		bind(BreakPointHelper.class).in(Singleton.class);
 		bind(IBreakPointHelper.class).to(BreakPointHelper.class);
 
-		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
-		
-		//RouletteWheel
+		if (parallelFollowerAndPreceeders) {
+			bind(ParallelFollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+			bind(IFollowersAndPreceders.class).to(ParallelFollowersAndPrecedersProviderImpl.class);
+		} else {
+			bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+			bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+		}
+
+		// RouletteWheel
 		bind(MoveHandlerHelper.class).in(Singleton.class);
 		bind(IMoveHandlerHelper.class).to(MoveHandlerHelper.class);
-		
+
 		bind(MoveMapper.class).in(Singleton.class);
-		
+
 		bind(InsertOptionalElementMoveHandler.class).in(Singleton.class);
 		bind(RemoveOptionalElementMoveHandler.class).in(Singleton.class);
 		bind(SwapSegmentSequenceMoveHandler.class).in(Singleton.class);
 		bind(MoveSegmentSequenceMoveHandler.class).in(Singleton.class);
 		bind(SwapTailsSequenceMoveHandler.class).in(Singleton.class);
 		bind(GuidedMoveGenerator.class).in(Singleton.class);
-		
+
 	}
 
 	@Provides
