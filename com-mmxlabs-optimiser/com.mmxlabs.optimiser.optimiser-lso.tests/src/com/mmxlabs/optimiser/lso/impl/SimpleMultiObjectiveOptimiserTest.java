@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -252,6 +253,7 @@ public class SimpleMultiObjectiveOptimiserTest {
 			protected void configure() {
 				bind(IOptimisationData.class).toInstance(Mockito.mock(IOptimisationData.class));
 				bind(IFitnessHelper.class).toInstance(Mockito.mock(IFitnessHelper.class));
+				bind(ILookupManager.class).toInstance(Mockito.mock(ILookupManager.class));
 			}
 
 			@Provides

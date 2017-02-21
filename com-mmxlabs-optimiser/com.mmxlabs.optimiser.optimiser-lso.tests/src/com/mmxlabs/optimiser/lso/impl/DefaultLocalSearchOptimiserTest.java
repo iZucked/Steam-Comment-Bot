@@ -115,6 +115,7 @@ public class DefaultLocalSearchOptimiserTest {
 				throw new IllegalStateException();
 			}
 		});
+		lso.setRandom(random);
 		// Perform the optimisation
 		lso.optimise(context);
 
