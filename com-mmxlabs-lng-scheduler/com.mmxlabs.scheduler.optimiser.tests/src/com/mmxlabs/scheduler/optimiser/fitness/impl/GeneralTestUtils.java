@@ -127,6 +127,9 @@ public final class GeneralTestUtils {
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
 
 		lso.init();
+		
+		lso.setRandom(random);
+		
 
 		return lso;
 	}

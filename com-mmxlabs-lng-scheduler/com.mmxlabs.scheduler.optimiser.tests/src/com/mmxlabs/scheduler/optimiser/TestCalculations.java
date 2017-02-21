@@ -88,6 +88,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -1527,7 +1528,7 @@ public class TestCalculations {
 			@Override
 			protected void configure() {
 
-				bind(VoyagePlanAnnotator.class);
+				bind(IVoyagePlanAnnotator.class).to(VoyagePlanAnnotator.class);
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);

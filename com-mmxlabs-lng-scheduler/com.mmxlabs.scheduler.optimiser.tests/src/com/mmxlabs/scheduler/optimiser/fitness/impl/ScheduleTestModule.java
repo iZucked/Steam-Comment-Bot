@@ -63,7 +63,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPor
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 public class ScheduleTestModule extends AbstractModule {
@@ -103,6 +105,8 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+
+		bind(IVoyagePlanAnnotator.class).to(VoyagePlanAnnotator.class);
 
 		bind(VoyagePlanOptimiser.class);
 
