@@ -34,12 +34,14 @@ import com.mmxlabs.scheduler.optimiser.schedule.LatenessChecker;
 import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
+import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
  * This {@link Module} configures the default schedule optimisation classes.
@@ -60,6 +62,9 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		install(new SequencesManipulatorModule());
 
+		bind(TimeWindowsTrimming.class);
+		bind(SchedulerCalculationUtils.class);
+
 		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 
@@ -71,7 +76,7 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(CapacityViolationChecker.class);
 		bind(ProfitAndLossCalculator.class);
 		bind(ScheduleCalculator.class);
-		
+
 		if (hints != null) {
 
 			boolean isCleanState = false;
@@ -113,5 +118,4 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(LegalSequencingChecker.class);
 	}
 
-	
 }
