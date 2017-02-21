@@ -16,6 +16,8 @@ import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerManyJobsControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerOptimiserJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerRunMultipleSeedsJobControl;
+import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobControl;
+import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSlotInsertionJobDescriptor;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
 /**
@@ -59,6 +61,9 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 			} else {
 				return (T) new LNGSchedulerEvaluationJobControl(descriptor);
 			}
+		} else if (adaptableObject instanceof LNGSlotInsertionJobDescriptor) {
+			final LNGSlotInsertionJobDescriptor descriptor = (LNGSlotInsertionJobDescriptor) adaptableObject;
+			return (T) new LNGSchedulerInsertSlotJobControl(descriptor);
 		}
 		return (T) null;
 

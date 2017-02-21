@@ -226,6 +226,13 @@
                   type="com.mmxlabs.jobmanager.jobs.IJobControl">
             </adapter>
          </factory>
+         <factory
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.analytics.LNGSlotInsertionJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>
       </extension>
    
       <extension
@@ -450,6 +457,10 @@
          <PluginXMLEnablement
                feature="optimisation-charter-out-generation"
                plugin.xml="gco.plugin.xml">
+         </PluginXMLEnablement>
+         <PluginXMLEnablement
+               feature="options-suggester"
+               plugin.xml="options-suggester.plugin.xml">
          </PluginXMLEnablement>
       </extension>
 </plugin>

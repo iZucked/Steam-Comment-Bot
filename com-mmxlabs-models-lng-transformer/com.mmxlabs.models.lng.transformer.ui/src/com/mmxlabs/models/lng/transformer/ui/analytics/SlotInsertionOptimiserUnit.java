@@ -55,41 +55,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class SlotInsertionOptimiserUnit {
 
-	// @NonNull
-	// public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final LoadDischargePairStage stageSettings,
-	// @Nullable final ExecutorService executorService, final int progressTicks) {
-	// final IChainLink link = new IChainLink() {
-	//
-	// @Override
-	// public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-	// final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-	//
-	// @NonNull
-	// final Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-	// if (userSettings.isGenerateCharterOuts()) {
-	// hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-	// } else {
-	// hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-	// }
-	// hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
-	//
-	// final LoadDischargePairValueCalculatorUnit t = new LoadDischargePairValueCalculatorUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(),
-	// inputState, hints);
-	// t.run(monitor, new ProfitAndLossExtractor((loadOption, dischargeOption, value) -> {
-	// // Record the output
-	// }));
-	// return inputState;
-	// }
-	//
-	// @Override
-	// public int getProgressTicks() {
-	// return progressTicks;
-	// }
-	// };
-	// chainBuilder.addLink(link);
-	// return link;
-	// }
-
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 
