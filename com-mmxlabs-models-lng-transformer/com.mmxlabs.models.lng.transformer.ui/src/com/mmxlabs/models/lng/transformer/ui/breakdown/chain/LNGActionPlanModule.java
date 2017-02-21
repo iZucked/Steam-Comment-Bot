@@ -13,8 +13,6 @@ import static org.ops4j.peaberry.Peaberry.service;
 
 import java.util.Map;
 
-import javax.inject.Singleton;
-
 import org.eclipse.core.runtime.Platform;
 
 import com.google.inject.AbstractModule;
@@ -29,21 +27,7 @@ import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
-import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypeHelper;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
-import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
@@ -60,29 +44,9 @@ public class LNGActionPlanModule extends AbstractModule {
 		}
 		install(new FitnessFunctionInstantiatorModule());
 
-		// install(new LocalSearchOptimiserModule());
-		// install(new LinearFitnessEvaluatorModule());
-
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
 
-		bind(InsertCargoVesselMoveHandler.class).in(Singleton.class);
-		bind(InsertDESPurchaseMoveHandler.class).in(Singleton.class);
-		bind(InsertFOBSaleMoveHandler.class).in(Singleton.class);
-		bind(MoveHandlerHelper.class).in(Singleton.class);
-		bind(RemoveSlotMoveHandler.class).in(Singleton.class);
-		bind(RemoveCargoMoveHandler.class).in(Singleton.class);
-		bind(SwapCargoVesselMoveHandler.class).in(Singleton.class);
-		bind(SwapSlotMoveHandler.class).in(Singleton.class);
-
-		bind(GuidedMoveGenerator.class);
-		bind(HintManager.class);
-		bind(MoveTypeHelper.class);
-
-		bind(MoveHelper.class).in(Singleton.class);
-		bind(IMoveHelper.class).to(MoveHelper.class);
-
-		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+		install(new MoveGeneratorModule());
 	}
 
 	@Provides
@@ -93,40 +57,4 @@ public class LNGActionPlanModule extends AbstractModule {
 		combiner.setFitnessComponentWeights(weightsMap);
 		return combiner;
 	}
-	//
-	// @Provides
-	// @Singleton
-	// private IMoveGenerator provideMoveGenerator(final ConstrainedMoveGenerator normalMoveGenerator, @Named(LocalSearchOptimiserModule.RANDOM_SEED) long seed) {
-	//
-	// final CompoundMoveGenerator moveGenerator = new CompoundMoveGenerator();
-	//
-	// moveGenerator.addGenerator(normalMoveGenerator, 1);
-	// moveGenerator.setRandom(new Random(seed));
-	//
-	// return moveGenerator;
-	// }
-	//
-	// @Provides
-	// @Singleton
-	// private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final Injector injector, final IOptimisationContext context, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
-	//
-	// final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator(context);
-	// cmg.setRandom(new Random(seed));
-	// injector.injectMembers(cmg);
-	// // cmg.init();
-	// return cmg;
-	// }
-	//
-	// @Provides
-	// // @Singleton
-	// private InstrumentingMoveGenerator provideInstrumentingMoveGenerator(final IMoveGenerator moveGenerator) {
-	//
-	// final InstrumentingMoveGenerator instrumentingMoveGenerator = LocalSearchOptimiserModule.instrumenting ? new InstrumentingMoveGenerator(moveGenerator, true // profile moves (true) or just rate
-	// // (false)
-	// , false // don't log moves to file
-	// ) : null;
-	// return instrumentingMoveGenerator;
-	//
-	// }
-
 }
