@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -100,6 +101,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -109,6 +111,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
@@ -237,6 +240,8 @@ public class ChangeSetView implements IAdaptable {
 
 	// flag to indicate whether or not to respond to data change events.
 	private boolean handleEvents;
+
+	private boolean canExportChangeSet;
 
 	// private MPart part;
 
@@ -1679,6 +1684,34 @@ public class ChangeSetView implements IAdaptable {
 
 	}
 
+	public void setInsertionPlanData(final ScenarioInstance target, final SlotInsertionOptions plan) {
+
+		cleanUpVesselColumns();
+
+		if (target == null) {
+			setEmptyData();
+		} else {
+			final Display display = PlatformUI.getWorkbench().getDisplay();
+			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
+			try {
+				d.run(true, false, new IRunnableWithProgress() {
+
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
+						final ChangeSetRoot newRoot = transformer.createDataModel(target, plan, monitor);
+						display.asyncExec(new ViewUpdateRunnable(newRoot));
+					}
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 	private void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -2237,7 +2270,7 @@ public class ChangeSetView implements IAdaptable {
 
 			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 			final GridItem[] items = grid.getSelection();
-			if (items.length > 1) {
+			if (items.length >= 1) {
 				final Set<ChangeSet> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
@@ -2250,6 +2283,22 @@ public class ChangeSetView implements IAdaptable {
 					}
 				}
 				boolean showMenu = false;
+				if (selectedSets.size() == 1) {
+					if (canExportChangeSet) {
+						if (ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
+							final ChangeSet changeSet = selectedSets.iterator().next();
+							mgr.add(new RunnableAction("Export change", () -> {
+
+								try {
+									ExportScheduleHelper.export(changeSet.getCurrentScenario());
+								} catch (IOException e1) {
+										e1.printStackTrace();
+								}
+							}));
+							showMenu = true;
+						}
+					}
+				}
 				if (selectedSets.size() > 1) {
 					if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 
@@ -2322,9 +2371,14 @@ public class ChangeSetView implements IAdaptable {
 		final ScenarioInstance target = solution.getScenarioInstance();
 		final EObject plan = solution.getSolution();
 		// Do something?
-//		if (plan instanceof ActionPlan) {
-//			setActionSetData(target, plan);
-//		}
+		// if (plan instanceof ActionPlan) {
+		// setActionSetData(target, plan);
+		// }
+		if (plan instanceof SlotInsertionOptions) {
+			this.viewMode = ViewMode.ACTION_SET;
+			this.canExportChangeSet = true;
+			setInsertionPlanData(target, (SlotInsertionOptions) plan);
+		}
 	}
 
 }

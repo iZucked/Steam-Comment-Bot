@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension id="com.mmxlabs.lingo.reports.fragment" point="org.eclipse.e4.workbench.model">
+		<fragment apply="always" uri="suggester-fragment.e4xmi">
+		</fragment>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution allPopups="false"
+			locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
+			<command commandId="com.mmxlabs.lingo.reports.changeset.insertionplans"
+				icon="icons/cview16/actionsets_view.gif" label="Open insertion plans"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<with variable="selection">
+							<iterate ifEmpty="false">
+								<instanceof
+									value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+								</instanceof>
+							</iterate>
+						</with>
+						<count value="1">
+						</count>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.commands">
+		<command id="com.mmxlabs.lingo.reports.changeset.insertionplans"
+			name="Open insertion plans">
+		</command>
+	</extension>
+
+</plugin>

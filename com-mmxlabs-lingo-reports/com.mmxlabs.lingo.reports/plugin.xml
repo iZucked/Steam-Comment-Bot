@@ -302,7 +302,7 @@
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.shipping_cost">
-      </ScheduleBasedColumn>      
+      </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.shipping_bunkers">
@@ -690,6 +690,10 @@
       <PluginXMLEnablement
             feature="optimisation-charter-out-generation"
             plugin.xml="gco.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="options-suggester"
+            plugin.xml="suggester.plugin.xml">
       </PluginXMLEnablement>
    </extension>
    <extension
