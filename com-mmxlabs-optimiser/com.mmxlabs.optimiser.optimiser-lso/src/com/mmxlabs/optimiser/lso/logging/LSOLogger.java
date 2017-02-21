@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -32,7 +33,7 @@ import com.mmxlabs.optimiser.lso.INullMove;
 public class LSOLogger implements ILoggingDataStore {
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();
 	private Map<String, AtomicInteger> successfulMoveMap = new HashMap<>();
-	private Map<String, AtomicInteger> nullMovesMap = new HashMap<>();
+	private Map<String, Map<String, AtomicInteger>> nullMovesMap = new HashMap<>();
 	private Map<String, AtomicInteger> failedToValidateMoveMap = new HashMap<>();
 	private Map<String, Map<String, AtomicInteger>> failedConstraintsMovesMap = new HashMap<>();
 	private Map<String, Map<String, AtomicInteger>> failedEvaluatedConstraintsMovesMap = new HashMap<>();
@@ -61,7 +62,7 @@ public class LSOLogger implements ILoggingDataStore {
 	private GeneralAnnotationLogger generalAnnotationLogger;
 
 	public LSOLogger(int reportingInterval, IFitnessEvaluator lsafe, IOptimisationContext context) {
-		nullMovesMap.put("null", new AtomicInteger(0));
+//		nullMovesMap.put("null", new AtomicInteger(0));
 		progressKeys = getProgressKeysMap();
 		this.reportingInterval = reportingInterval;
 		this.fitnessAnnotationLogger = new FitnessAnnotationLogger(lsafe);
@@ -90,14 +91,32 @@ public class LSOLogger implements ILoggingDataStore {
 
 	public void logNullMove(IMove move) {
 		if (move instanceof INullMove) {
-			AtomicInteger count = nullMovesMap.get(move.getClass().getName());
-			if (count == null) {
-				nullMovesMap.put(move.getClass().getName(), new AtomicInteger(1));
+			INullMove nmove = (INullMove) move;
+			String generator = nmove.getGenerator();
+			String failure = nmove.getFailure();
+
+			if (!nullMovesMap.containsKey(generator)) {
+				Map<String, AtomicInteger> nullMap = new HashMap<>();
+				nullMap.put(failure, new AtomicInteger(1));
+				nullMovesMap.put(generator, nullMap);
 			} else {
-				count.incrementAndGet();
+				AtomicInteger count = nullMovesMap.get(generator).get(failure);
+				if (count == null) {
+					nullMovesMap.get(generator).put(failure, new AtomicInteger(1));
+				} else {
+					count.incrementAndGet();
+				}
 			}
+
 		} else {
-			nullMovesMap.get("null").incrementAndGet();
+			if (!nullMovesMap.containsKey("null")) {
+				Map<String, AtomicInteger> map = new HashMap<>();
+				map.put("null", new AtomicInteger(1));
+				nullMovesMap.put("null", map);
+			} else {
+				nullMovesMap.get("null").get("null").incrementAndGet();
+			}
+
 		}
 	}
 
@@ -165,12 +184,12 @@ public class LSOLogger implements ILoggingDataStore {
 			count.incrementAndGet();
 		}
 	}
-	
+
 	// REPLICATED FROM FailConstraints
 	public void logFailedEvaluatedStateConstraints(IEvaluatedStateConstraintChecker checker, IMove move) {
 		logFailedEvaluatedConstraints(checker.getName(), move.getClass().getName());
 	}
-	
+
 	public void logFailedEvaluatedConstraints(String checkerName, String moveName) {
 		Map<String, AtomicInteger> checkerStore;
 		if (!failedEvaluatedConstraintsMovesMap.containsKey(checkerName)) {
@@ -262,7 +281,20 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public int getNullMoveCount(String key) {
-		return nullMovesMap.get(key).get();
+		Map<String, AtomicInteger> counts = nullMovesMap.get(key);
+		int total = 0;
+		for (Entry<String, AtomicInteger> count : counts.entrySet()) {
+			total += count.getValue().get();
+		}
+		return total;
+	}
+	
+	public List<String> getNullMoveSubKeys(String key){
+		return new ArrayList<String>(nullMovesMap.get(key).keySet());
+	}
+	
+	public int getSpecificNullMoveCount(String key, String subkey){
+		return nullMovesMap.get(key).get(subkey).get();
 	}
 
 	public List<String> getFailedToValidateMovesList() {
@@ -284,12 +316,12 @@ public class LSOLogger implements ILoggingDataStore {
 	public List<String> getFailedConstraints() {
 		return new ArrayList<String>(failedConstraintsMovesMap.keySet());
 	}
-	
-	//REPLICATED FROM getFailedConstraints
+
+	// REPLICATED FROM getFailedConstraints
 	public List<String> getFailedEvaluatedConstraints() {
 		return new ArrayList<String>(failedEvaluatedConstraintsMovesMap.keySet());
 	}
-	
+
 	public int getFailedConstraintsMovesTotalCount(String constraint) {
 		int count = 0;
 		for (String move : getFailedConstraintsMoves(constraint)) {
@@ -297,8 +329,8 @@ public class LSOLogger implements ILoggingDataStore {
 		}
 		return count;
 	}
-	
-	//REPLICATED FROM getFailedConstraintsMovesTotalCount
+
+	// REPLICATED FROM getFailedConstraintsMovesTotalCount
 	public int getFailedEvaluatedConstraintsMovesTotalCount(String constraint) {
 		int count = 0;
 		for (String move : getFailedEvaluatedConstraintsMoves(constraint)) {
@@ -310,7 +342,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public List<String> getFailedConstraintsMoves(String constraint) {
 		return new ArrayList<String>(failedConstraintsMovesMap.get(constraint).keySet());
 	}
-	
+
 	// REPLICATED FROM getFailedConstraintMoves
 	public List<String> getFailedEvaluatedConstraintsMoves(String constraint) {
 		return new ArrayList<String>(failedEvaluatedConstraintsMovesMap.get(constraint).keySet());
@@ -319,6 +351,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public int getFailedConstraintsMovesIndividualCount(String constraint, String move) {
 		return failedConstraintsMovesMap.get(constraint).get(move).get();
 	}
+
 	// REPLICATED FROM getFailedConstraintsMovesIndividualCount
 	public int getFailedEvaluatedConstraintsMovesIndividualCount(String constraint, String move) {
 		return failedEvaluatedConstraintsMovesMap.get(constraint).get(move).get();
@@ -351,7 +384,7 @@ public class LSOLogger implements ILoggingDataStore {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.constraints.incrementAndGet();
 	}
-	
+
 	// REPLICATED FROM FAILEDCONSTRAINT
 	public void logSequenceFailedEvaluatedStateConstraint(IEvaluatedStateConstraintChecker checker, ModifiableSequences pinnedPotentialRawSequences) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);

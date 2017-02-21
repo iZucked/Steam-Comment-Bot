@@ -16,6 +16,15 @@ import com.mmxlabs.optimiser.lso.INullMove;
 
 public class NullMove implements INullMove {
 
+	private String generator;
+	private String failure;
+	
+	
+	public NullMove(String generator, String failure){
+		this.failure = failure;
+		this.generator = generator;
+	}
+
 	@Override
 	public Collection<@NonNull IResource> getAffectedResources() {
 		// returns an empty list
@@ -29,6 +38,31 @@ public class NullMove implements INullMove {
 	@Override
 	public boolean validate(@NonNull ISequences sequences) {
 		return false;
+
 	}
 
+	@Override
+	public String getFailure() {
+		return failure;
+	}
+
+	@Override
+	public void setFailure(String failure) {
+		this.failure = failure;
+	}
+	
+	@Override
+	public String getGenerator(){
+		return generator;
+	}
+	
+	@Override
+	public void setGenerator(String generator){
+		this.generator = generator;
+	}
+	
+	@Override
+	public String getFullMessage(){
+		return this.generator + ": " + this.failure;
+	}
 }

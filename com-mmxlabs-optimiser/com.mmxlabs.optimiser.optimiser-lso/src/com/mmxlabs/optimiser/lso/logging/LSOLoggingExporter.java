@@ -98,11 +98,11 @@ public class LSOLoggingExporter {
 		}
 		writer.close();
 	}
-	
+
 	private void exportFitnessAnnotations() {
 		writeFitnessAnnotations(lsoLogger.getFitnessAnnotationLogger());
 	}
-	
+
 	private void writeFitnessAnnotations(FitnessAnnotationLogger fitnessAnnotationLogger) {
 		final Path newPath = getPath("fitnessAnnotations");
 		final PrintWriter writer = getWriter(newPath.toString());
@@ -113,14 +113,14 @@ public class LSOLoggingExporter {
 	private void exportGeneralAnnotations() {
 		writeGeneralAnnotations(lsoLogger.getGeneralAnnotationLogger());
 	}
-	
+
 	private void writeGeneralAnnotations(GeneralAnnotationLogger generalAnnotationLogger) {
 		final Path newPath = getPath("generalAnnotations");
 		final PrintWriter writer = getWriter(newPath.toString());
 		generalAnnotationLogger.exportData(writer);
 		writer.close();
 	}
-	
+
 	public void exportData(final String... keys) {
 		writeDataOverCourseOfRun(keys);
 		exportEndData();
@@ -140,7 +140,7 @@ public class LSOLoggingExporter {
 	}
 
 	public void exportMovesData() {
-		final Path newPath = getPath("moves");
+		final Path newPath = getJSONPath("moves");
 		final PrintWriter writer = getWriter(newPath.toString());
 		writeMoveData(writer);
 		writer.close();
@@ -232,40 +232,92 @@ public class LSOLoggingExporter {
 	}
 
 	private void writeMoveData(final PrintWriter writer) {
-		writer.println("-----[moves]-----");
+
+		StringBuilder moveStringer = new StringBuilder();
+		writer.println("{");
+		// Moves
+		moveStringer.append("\"moves\": { ");
 		for (final String move : lsoLogger.getMovesList()) {
-			writer.println(String.format("[%s] %s", move, lsoLogger.getMoveCount(move)));
+			moveStringer.append("\"" + move + "\": " + Integer.toString(lsoLogger.getMoveCount(move)) + ",");
 		}
-		writer.println("-----[nullMoves]-----");
+		moveStringer.deleteCharAt(moveStringer.length() - 1);
+		moveStringer.append("},");
+		writer.println(moveStringer.toString());
+
+		moveStringer.setLength(0);
+		// NullMoves
+		moveStringer.append("\"nullMoves\" : { ");
 		for (final String move : lsoLogger.getNullMovesList()) {
-			writer.println(String.format("[%s] %s", move, lsoLogger.getNullMoveCount(move)));
+			moveStringer.append("\"" + move + "\": {");
+			for (final String failure : lsoLogger.getNullMoveSubKeys(move)) {
+				moveStringer.append("\"" + failure + "\": " + lsoLogger.getSpecificNullMoveCount(move, failure) + ",");
+			}
+			moveStringer.deleteCharAt(moveStringer.length() - 1);
+			moveStringer.append("},");
 		}
-		writer.println("-----[successfulMoves]-----");
+		moveStringer.deleteCharAt(moveStringer.length() - 1);
+		moveStringer.append("},");
+		writer.println(moveStringer.toString());
+
+		moveStringer.setLength(0);
+		// SuccessfulMoves
+		moveStringer.append("\"successfulMoves\" : { ");
 		for (final String move : lsoLogger.getSuccessfulMovesList()) {
-			writer.println(String.format("[%s] %s", move, lsoLogger.getSuccessfulMoveCount(move)));
+			moveStringer.append("\"" + move + "\": " + Integer.toString(lsoLogger.getSuccessfulMoveCount(move)) + ",");
 		}
-		writer.println("-----[failedToValidate]-----");
+		moveStringer.deleteCharAt(moveStringer.length() - 1);
+		moveStringer.append("},");
+		writer.println(moveStringer.toString());
+
+		moveStringer.setLength(0);
+		// FailedToValidate
+		moveStringer.append("\"failedToValidate\" : { ");
 		for (final String move : lsoLogger.getFailedToValidateMovesList()) {
-			writer.println(String.format("[%s] %s", move, lsoLogger.getFailedToValidateMoveCount(move)));
+			moveStringer.append("\"" + move + "\": " + Integer.toString(lsoLogger.getFailedToValidateMoveCount(move)) + ",");
 		}
-		writer.println("-----[failedConstraints]-----");
-		for (final String failedConstraint : lsoLogger.getFailedConstraints()) {
-			writer.println(String.format("[%s] %s", failedConstraint, lsoLogger.getFailedConstraintsMovesTotalCount(failedConstraint)));
-			for (final String failedMove : lsoLogger.getFailedConstraintsMoves(failedConstraint)) {
-				writer.println(String.format("\t[%s] %s", failedMove, lsoLogger.getFailedConstraintsMovesIndividualCount(failedConstraint, failedMove)));
+		moveStringer.deleteCharAt(moveStringer.length() - 1);
+		moveStringer.append("},");
+		writer.println(moveStringer.toString());
+
+		moveStringer.setLength(0);
+		// FailedConstraints
+		moveStringer.append("\"failedConstraints\" : { ");
+		for (final String move : lsoLogger.getFailedConstraints()) {
+			moveStringer.append("\"" + move + "\": {");
+			for (final String failure : lsoLogger.getFailedConstraintsMoves(move)) {
+				moveStringer.append("\"" + failure + "\": " + lsoLogger.getFailedConstraintsMovesIndividualCount(move, failure) + ",");
 			}
+			moveStringer.deleteCharAt(moveStringer.length() - 1);
+			moveStringer.append("},");
 		}
-		writer.println("-----[failedEvaluatedConstraints]-----");
-		for (final String failedEvaluatedConstraint : lsoLogger.getFailedEvaluatedConstraints()) {
-			writer.println(String.format("[%s] %s", failedEvaluatedConstraint, lsoLogger.getFailedEvaluatedConstraintsMovesTotalCount(failedEvaluatedConstraint)));
-			for (final String failedMove : lsoLogger.getFailedEvaluatedConstraintsMoves(failedEvaluatedConstraint)) {
-				writer.println(String.format("\t[%s] %s", failedMove, lsoLogger.getFailedEvaluatedConstraintsMovesIndividualCount(failedEvaluatedConstraint, failedMove)));
+		moveStringer.deleteCharAt(moveStringer.length() - 1);
+		moveStringer.append("},");
+		writer.println(moveStringer.toString());
+
+		moveStringer.setLength(0);
+		// FailedEvaluatedConstraints
+		moveStringer.append("\"failedEvaluatedConstraints\" : { ");
+		for (final String move : lsoLogger.getFailedEvaluatedConstraints()) {
+			moveStringer.append("\"" + move + "\": {");
+			for (final String failure : lsoLogger.getFailedEvaluatedConstraintsMoves(move)) {
+				moveStringer.append("\"" + failure + "\": " + lsoLogger.getFailedEvaluatedConstraintsMovesIndividualCount(move, failure) + ",");
 			}
+			moveStringer.deleteCharAt(moveStringer.length() - 1);
+			moveStringer.append("},");
 		}
+		moveStringer.deleteCharAt(moveStringer.length() - 1);
+		moveStringer.append("}");
+		writer.println(moveStringer.toString());
+
+		writer.println("}");
 	}
 
 	private Path getPath(final String fileType) {
 		return Paths.get(path, phase, String.format("%s.%s.txt", foldername, fileType));
+	}
+
+	private Path getJSONPath(final String fileType) {
+		return Paths.get(path, phase, String.format("%s.%s.json", foldername, fileType));
 	}
 
 }

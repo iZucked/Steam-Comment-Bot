@@ -9,9 +9,19 @@ import com.mmxlabs.optimiser.core.moves.IMove;
 /**
  * Interface defining a Move as used in the Local Search Optimiser.
  * 
- * @author Simon Goodall
+ * @author NS
  * 
  */
 public interface INullMove extends IMove {
+
+	public String getFailure();
+
+	public void setFailure(String failureName);
+	
+	public String getGenerator();
+	
+	public void setGenerator(String generator);
+	
+	public String getFullMessage();
 
 }
