@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,19 +22,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.transformer.CopiedModelEntityMap;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
@@ -41,9 +41,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.period.CopiedScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.period.IScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
 import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
@@ -54,7 +52,6 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.rcp.common.ecore.RunnableCommand;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -112,6 +109,8 @@ public class LNGScenarioToOptimiserBridge {
 
 	private @NonNull final SolutionBuilderSettings solutionBuilderSettings;
 
+	private PeriodExporter periodExporter;
+
 	public LNGScenarioToOptimiserBridge(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
 			@NonNull final SolutionBuilderSettings solutionBuilderSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule,
 			@Nullable final IOptimiserInjectorService localOverrides, final boolean evaluationOnly, final @NonNull String @Nullable... initialHints) {
@@ -142,6 +141,7 @@ public class LNGScenarioToOptimiserBridge {
 			this.optimiserScenario = t.getFirst();
 			this.optimiserEditingDomain = t.getSecond();
 			this.periodMapping = t.getThird();
+
 		} else {
 			this.periodMapping = null;
 		}
@@ -154,6 +154,8 @@ public class LNGScenarioToOptimiserBridge {
 			optimiserEditingDomain.getCommandStack().execute(wrapper);
 
 			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenario, userSettings, solutionBuilderSettings, hints, services);
+
+			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, periodMapping);
 		} else {
 			optimiserDataTransformer = originalDataTransformer;
 		}
@@ -200,45 +202,37 @@ public class LNGScenarioToOptimiserBridge {
 
 	}
 
-	/**
-	 * Export the current solution (and re-combine into original if period optimisation).
-	 * 
-	 * @param currentProgress
-	 * @param solution
-	 * @return
-	 */
+	private Command previousOverwriteCommand = null;
+
 	public Schedule overwrite(final int currentProgress, @NonNull final ISequences rawSeqences, @Nullable final Map<String, Object> extraAnnotations) {
-
-		// Internal state has changed
-		canExportAsCopy = currentProgress == 0;
-
-		// Clear any previous optimisation state.
-		if (overwriteCommandStackCounter > 0) {
-			if (periodMapping != null) {
-				if (!LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, currentProgress, true)) {
-					assert false;
-				}
-			}
-			if (LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, currentProgress, true)) {
-				--overwriteCommandStackCounter;
-			} else {
+		if (previousOverwriteCommand != null) {
+			assert originalEditingDomain.getCommandStack().getUndoCommand() == previousOverwriteCommand;
+			if (!LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, currentProgress, true)) {
 				assert false;
 			}
+			previousOverwriteCommand = null;
+			--overwriteCommandStackCounter;
 		}
+
 		assert overwriteCommandStackCounter == 0;
+
+		final Schedule schedule = createSchedule(rawSeqences, extraAnnotations);
+		assert schedule != null;
 
 		try {
 			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
 				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
 			}
 
-			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(currentProgress, rawSeqences, extraAnnotations, optimiserScenario, optimiserEditingDomain, originalScenario,
-					originalEditingDomain, optimiserDataTransformer.getModelEntityMap(), originalDataTransformer.getModelEntityMap(), periodMapping);
-			originalEditingDomain.getCommandStack().execute(commandPair.getFirst());
-
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(originalDataTransformer.getInjector(), originalScenario, originalEditingDomain, schedule);
+			assert cmd != null;
+			originalEditingDomain.getCommandStack().execute(cmd);
+			previousOverwriteCommand = cmd;
 			++overwriteCommandStackCounter;
 
-			return commandPair.getSecond();
+			canExportAsCopy = currentProgress == 0;
+
+			return schedule;
 		} finally {
 			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
 				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(false);
@@ -249,257 +243,76 @@ public class LNGScenarioToOptimiserBridge {
 	/**
 	 * Save the sequences in a complete copy of the scenario. *Ensure* the current scenario is in it's original state (excluding Schedule model and Parameters model changes) -- that is the data model
 	 * still represents the initial solution..
-	 * 
+	 *
 	 * @param rawSequences
 	 * @param extraAnnotations
 	 * @return
 	 */
 	@NonNull
-	public LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+	public LNGScenarioModel exportAsCopy(@NonNull final ISequences rawOptimiserSequences, @Nullable final Map<String, Object> extraAnnotations) {
 
 		if (!canExportAsCopy) {
 			throw new IllegalStateException("Unable to export copy - already overwritten data");
 		}
 
-		final EcoreUtil.Copier originalScenarioCopier = new EcoreUtil.Copier();
-		final LNGScenarioModel targetOriginalScenario = (LNGScenarioModel) originalScenarioCopier.copy(originalScenario);
-		// Do not do this here as CopiedModelEntityMap will do it. If we call it twice, we can end up with multiple copies of data
-		// in reference lists
-		// originalScenarioCopier.copyReferences();
+			// Alt code path to avoid second transform.
+			final Schedule child_schedule = createSchedule(rawOptimiserSequences, extraAnnotations);
 
-		assert targetOriginalScenario != null;
-		final EditingDomain targetOriginalEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
+			// Gather uncontained slots to manually copy
+			final Set<Slot> extraSlots = new HashSet<>();
 
-		final IScenarioEntityMapping pPeriodMapping = periodMapping;
-		if (pPeriodMapping != null) {
-			final EcoreUtil.Copier optimiserScenarioCopier = new EcoreUtil.Copier();
-			final LNGScenarioModel targetOptimiserScenario = (LNGScenarioModel) optimiserScenarioCopier.copy(optimiserScenario);
-			// As above
-			// optimiserScenarioCopier.copyReferences();
-
-			assert targetOptimiserScenario != null;
-
-			final CopiedModelEntityMap copiedOptimiserModelEntityMap = new CopiedModelEntityMap(optimiserDataTransformer.getModelEntityMap(), optimiserScenarioCopier);
-			final CopiedModelEntityMap copiedOriginalModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
-
-			final CopiedScenarioEntityMapping copiedPeriodMapping = new CopiedScenarioEntityMapping(pPeriodMapping, originalScenarioCopier, optimiserScenarioCopier);
-			final EditingDomain targetOptimiserEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
-
-			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSequences, extraAnnotations,
-
-					targetOptimiserScenario, targetOptimiserEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedOptimiserModelEntityMap, copiedOriginalModelEntityMap,
-					copiedPeriodMapping);
-			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
-
-		} else {
-			final CopiedModelEntityMap copiedModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
-			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSequences, extraAnnotations,
-
-					targetOriginalScenario, targetOriginalEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, copiedModelEntityMap, null);
-			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
-		}
-
-		return targetOriginalScenario;
-
-	}
-
-	/**
-	 * Returns a {@link Schedule} for the *optimiser* data
-	 * 
-	 * @param rawSequences
-	 * @param extraAnnotations
-	 */
-	@NonNull
-	public Schedule createShedule(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
-
-		final Injector injector;
-		{
-			final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-			final List<Module> modules = new LinkedList<>();
-			modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
-			modules.add(new InputSequencesModule(rawSequences));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
-					new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(), optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-			injector = optimiserDataTransformer.getInjector().createChildInjector(modules);
-		}
-
-		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
-		// exporter == transformer.createASE();
-		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		{
-			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
-			childInjector.injectMembers(exporter);
-		}
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-			scope.enter();
-
-			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
-
-			// Copy extra annotations - e.g. fitness information
-			if (extraAnnotations != null) {
-				extraAnnotations.entrySet().forEach(e -> solution.setGeneralAnnotation(e.getKey(), e.getValue()));
-			}
-
-			return exporter.exportAnnotatedSolution(optimiserDataTransformer.getModelEntityMap(), solution);
-		}
-
-	}
-
-	/**
-	 * Returns a Pair containing a command and a null schedule. Once the Command has been executed, the Schedule will be populated.
-	 * 
-	 * @param currentProgress
-	 * @param extraAnnotations
-	 * @param solution
-	 * @return
-	 */
-	private Pair<Command, Schedule> creatExportScheduleCommand(final int currentProgress, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations,
-			@NonNull final LNGScenarioModel targetOptimiserScenario, @NonNull final EditingDomain targetOptimiserEditingDomain, @NonNull final LNGScenarioModel targetOriginalScenario,
-			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap optimiserModelEntityMap, @NonNull final ModelEntityMap the_originalModelEntityMap,
-			@Nullable final IScenarioEntityMapping periodMapping) {
-
-		// Create a "wrapper" to set the user friendly command name for the undo menu
-		final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
-		// Create a reference to be able to grab the Schedule object from the command state.
-		final Pair<Command, Schedule> p = new Pair<>();
-		// Create a custom compound command to create and execute changes as they are created during the command to allow us to have a single command in the history rather than several.
-		final RunnableCommand c = new RunnableCommand(rc -> {
-
-			if (periodMapping == null) {
-				final Injector evaluationInjector;
-				{
-					final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-					final List<Module> modules = new LinkedList<>();
-					modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
-					modules.add(new InputSequencesModule(rawSequences));
-					modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
-							new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(),
-									optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-							services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-					modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-					evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
-				}
-				// This either applies to the real scenario or the period copy if present.
-				final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, userSettings, targetOptimiserEditingDomain,
-						optimiserModelEntityMap, rawSequences, extraAnnotations);
-
-				// Apply to real scenario
-				rc.appendAndExecute(updateCommand.getFirst());
-				p.setSecond(updateCommand.getSecond());
-			} else {
-
-				// TODO This should operate on a copy also
-
-				// Stage 1, update the period scenario
-				{
-					final Injector evaluationInjector;
-					{
-						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-						final List<@NonNull Module> modules = new LinkedList<>();
-						modules.add(new InputSequencesModule(rawSequences));
-						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
-								new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(),
-										optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-								services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-						evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
-					}
-					// This either applies to the real scenario or the period copy if present.
-					final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, userSettings, targetOptimiserEditingDomain,
-							optimiserModelEntityMap, rawSequences, extraAnnotations);
-
-					// Period optimisation code path, apply the dual commands to the real scenario.
-
-					// Execute the update command on the period scenario
-					targetOptimiserEditingDomain.getCommandStack().execute(updateCommand.getFirst());
-				}
-
-				// Stage 2: Export the period scenario changes into the original scenario
-				final PeriodExporter e = new PeriodExporter();
-				final CompoundCommand part1 = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
-
-				part1.append(e.updateOriginal(targetOriginalEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
-				// part1.append(e.updateOriginal(targetOptimiserEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
-				if (part1.canExecute()) {
-					rc.appendAndExecute(part1);
-				} else {
-					throw new RuntimeException("Unable to execute period optimisation merge command");
-				}
-
-				// Stage 3: Re-evaluate original scenario to make sure it all ties in
-				{
-					final UserSettings userSettings = EcoreUtil.copy(originalDataTransformer.getUserSettings());
-					userSettings.unsetPeriodStart();
-					userSettings.unsetPeriodEnd();
-
-					final Set<@NonNull String> hints = LNGTransformerHelper.getHints(userSettings);
-
-					// final LNGDataTransformer subTransformer = originalDataTransformer;
-
-					// Always create a new transformer as we have problems with re-use and mapping newly created spot slots (and probably cargoes) between instances
-					ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
-					final LNGDataTransformer subTransformer;
-					// if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
-					subTransformer = new LNGDataTransformer(targetOriginalScenario, userSettings, solutionBuilderSettings, hints, originalDataTransformer.getModuleServices());
-					originalModelEntityMap = subTransformer.getModelEntityMap();
-					// } else {
-					// subTransformer = originalDataTransformer;
-					// }
-
-					Injector evaluationInjector2;
-					final Collection<@NonNull IOptimiserInjectorService> services = subTransformer.getModuleServices();
-					{
-						final List<Module> modules2 = new LinkedList<>();
-						modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(
-								new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getUserSettings(),
-										originalDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-								services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-						modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-
-						evaluationInjector2 = subTransformer.getInjector().createChildInjector(modules2);
-					}
-
-					// Take the new EMF state and generate an ISequences from it to re-evaluate
-
-					final ISequences initialSequences;
-					{
-						final List<Module> modules2 = new LinkedList<>();
-						modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
-
-						final Injector initialSolutionInjector = evaluationInjector2.createChildInjector(modules2);
-						final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
-						try {
-							scope.enter();
-							initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
-						} finally {
-							scope.exit();
-						}
-					}
-
-					final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(evaluationInjector2, targetOriginalScenario, EcoreUtil.copy(userSettings), targetOriginalEditingDomain,
-							originalModelEntityMap, initialSequences, extraAnnotations);
-					if (part2.getFirst().canExecute()) {
-						if (!rc.appendAndExecute(part2.getFirst())) {
-							throw new RuntimeException("Unable to execute period optimisation update command");
-						}
-					} else {
-						throw new RuntimeException("Unable to execute period optimisation update command");
-					}
-
-					// Store reference to the final schedule model
-					p.setSecond(part2.getSecond());
-
+			// New spot slots etc will need to be contained here.
+			for (final SlotAllocation a : child_schedule.getSlotAllocations()) {
+				final Slot slot = a.getSlot();
+				if (slot != null && slot.eContainer() == null) {
+					extraSlots.add(slot);
 				}
 			}
-		});
 
-		wrapper.append(c);
-		p.setFirst(wrapper);
-		return p;
+			for (final CargoAllocation ca : child_schedule.getCargoAllocations()) {
 
+				for (final SlotAllocation a : ca.getSlotAllocations()) {
+					final Slot slot = a.getSlot();
+					if (slot != null && slot.eContainer() == null) {
+						extraSlots.add(slot);
+					}
+				}
+			}
+			for (final OpenSlotAllocation ca : child_schedule.getOpenSlotAllocations()) {
+				final Slot slot = ca.getSlot();
+				if (slot != null && slot.eContainer() == null) {
+					assert false;
+				}
+			}
+
+			final EcoreUtil.Copier copier = new EcoreUtil.Copier();
+			// Copy base
+			final LNGScenarioModel copiedOriginalScenario = (LNGScenarioModel) copier.copy(originalScenario);
+			// Copy uncontained slots before the schedule
+			extraSlots.forEach(s -> copier.copy(s));
+			// Finally copy the schedule
+			final Schedule copiedSchedule = (Schedule) copier.copy(child_schedule);
+
+			copier.copyReferences();
+
+			// Construct internal command stack to generate correct output schedule
+			final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
+
+			// This injector is only needed for post-export handlers
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(originalDataTransformer.getInjector(), copiedOriginalScenario, ed, copiedSchedule);
+			assert cmd != null;
+			ed.getCommandStack().execute(cmd);
+
+			return copiedOriginalScenario;
+	}
+ 
+
+	private ISequences getTransformedOriginalRawSequences(final ISequences rawSequences) {
+		// TODO: Wrap this in the period exporter
+		if (periodExporter == null) {
+			return rawSequences;
+		}
+		return periodExporter.transform(rawSequences);
 	}
 
 	@NonNull
@@ -528,13 +341,7 @@ public class LNGScenarioToOptimiserBridge {
 		} catch (final Exception e) {
 			throw new RuntimeException("Unable to store changeset scenario: " + e.getMessage(), e);
 		} finally {
-			// // Reset state
-			// if (periodMapping != null) {
-			// LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-			// LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-			// } else {
-			// LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-			// }
+
 		}
 	}
 
@@ -554,5 +361,89 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	public LNGScenarioModel getOptimiserScenario() {
 		return optimiserScenario;
+	}
+
+	/**
+	 * Returns a {@link Schedule} for the *optimiser* data
+	 * 
+	 * @param rawSequences
+	 * @param extraAnnotations
+	 */
+	@NonNull
+	public Schedule createSchedule(@NonNull final ISequences rawOptimiserSequences, @Nullable final Map<String, Object> extraAnnotations) {
+		final ISequences rawSequences = getTransformedOriginalRawSequences(rawOptimiserSequences);
+
+		final Injector injector;
+		{
+			final Collection<@NonNull IOptimiserInjectorService> services = originalDataTransformer.getModuleServices();
+			final List<Module> modules = new LinkedList<>();
+			modules.add(new InitialSequencesModule(originalDataTransformer.getInitialSequences()));
+			modules.add(new InputSequencesModule(rawSequences));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
+					new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getUserSettings(), originalDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
+					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+			injector = originalDataTransformer.getInjector().createChildInjector(modules);
+		}
+
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		{
+			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+			childInjector.injectMembers(exporter);
+		}
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+
+			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
+
+			// Copy extra annotations - e.g. fitness information
+			if (extraAnnotations != null) {
+				extraAnnotations.entrySet().forEach(e -> solution.setGeneralAnnotation(e.getKey(), e.getValue()));
+			}
+
+			return exporter.exportAnnotatedSolution(originalDataTransformer.getModelEntityMap(), solution);
+		}
+	}
+
+	/**
+	 * Method intended for use by unit tests.
+	 * 
+	 * @param rawSequences
+	 * @param extraAnnotations
+	 * @return
+	 */
+	public Schedule createOptimiserSchedule(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+		final Injector injector;
+		{
+			final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+			final List<Module> modules = new LinkedList<>();
+			modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
+			modules.add(new InputSequencesModule(rawSequences));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
+					new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(), optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
+					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+			injector = optimiserDataTransformer.getInjector().createChildInjector(modules);
+		}
+
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		{
+			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+			childInjector.injectMembers(exporter);
+		}
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+
+			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
+
+			// Copy extra annotations - e.g. fitness information
+			if (extraAnnotations != null) {
+				extraAnnotations.entrySet().forEach(e -> solution.setGeneralAnnotation(e.getKey(), e.getValue()));
+			}
+
+			return exporter.exportAnnotatedSolution(optimiserDataTransformer.getModelEntityMap(), solution);
+		}
 	}
 }

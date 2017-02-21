@@ -150,6 +150,7 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -184,7 +185,7 @@ public class PeriodTransformerTests {
 			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability1, c1));
 		}
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability1
 		Assert.assertTrue(vesselAvailability1.getStartAt().isEmpty());
@@ -200,6 +201,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -245,7 +248,7 @@ public class PeriodTransformerTests {
 			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability2, c1, c2));
 		}
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// Changed
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
@@ -262,6 +265,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -305,7 +310,7 @@ public class PeriodTransformerTests {
 			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability3, c1, c2));
 		}
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
 		Assert.assertTrue(vesselAvailability3.getStartAt().isEmpty());
@@ -321,6 +326,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -390,7 +397,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartAfter());
@@ -405,6 +412,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -470,7 +479,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartAfter());
@@ -485,6 +494,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -529,7 +540,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
 		Assert.assertTrue(vesselAvailability6.getStartAt().isEmpty());
@@ -546,6 +557,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -577,7 +590,7 @@ public class PeriodTransformerTests {
 		// Need vessel event and cooldown also
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability7
 		Assert.assertTrue(vesselAvailability7.getStartAt().isEmpty());
@@ -594,6 +607,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
@@ -632,7 +647,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
 		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
@@ -648,6 +663,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MAY, 15);
@@ -686,7 +703,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartAfter());
@@ -703,6 +720,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JANUARY, 15);
@@ -741,7 +760,7 @@ public class PeriodTransformerTests {
 		}
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
 		Assert.assertNull(vesselAvailability.getStartAfter());
@@ -758,6 +777,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final AssignableElement assignedObject1 = Mockito.mock(AssignableElement.class);
 		final PortVisit portVisit1 = Mockito.mock(PortVisit.class);
@@ -792,9 +813,9 @@ public class PeriodTransformerTests {
 			final VesselAvailability vesselAvailability1 = CargoFactory.eINSTANCE.createVesselAvailability();
 			vesselAvailability1.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
-			transformer.updateStartConditions(vesselAvailability1, assignedObject1, startConditionMap);
-			transformer.updateStartConditions(vesselAvailability1, assignedObject2, startConditionMap);
-			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap);
+			transformer.updateStartConditions(vesselAvailability1, assignedObject1, startConditionMap, mapping);
+			transformer.updateStartConditions(vesselAvailability1, assignedObject2, startConditionMap, mapping);
+			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap, mapping);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability1.getStartAt());
 			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getVolumeAvailable(), 0.0);
@@ -806,9 +827,9 @@ public class PeriodTransformerTests {
 			final VesselAvailability vesselAvailability2 = CargoFactory.eINSTANCE.createVesselAvailability();
 			vesselAvailability2.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
-			transformer.updateStartConditions(vesselAvailability2, assignedObject3, startConditionMap);
-			transformer.updateStartConditions(vesselAvailability2, assignedObject2, startConditionMap);
-			transformer.updateStartConditions(vesselAvailability2, assignedObject1, startConditionMap);
+			transformer.updateStartConditions(vesselAvailability2, assignedObject3, startConditionMap, mapping);
+			transformer.updateStartConditions(vesselAvailability2, assignedObject2, startConditionMap, mapping);
+			transformer.updateStartConditions(vesselAvailability2, assignedObject1, startConditionMap, mapping);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
 			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getVolumeAvailable(), 0.0);
@@ -823,6 +844,8 @@ public class PeriodTransformerTests {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
 		final AssignableElement assignedObject1 = Mockito.mock(AssignableElement.class);
 		final PortVisit portVisit1 = Mockito.mock(PortVisit.class);
@@ -857,9 +880,9 @@ public class PeriodTransformerTests {
 			final VesselAvailability vesselAvailability1 = CargoFactory.eINSTANCE.createVesselAvailability();
 			vesselAvailability1.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
-			transformer.updateEndConditions(vesselAvailability1, assignedObject1, endConditionMap);
-			transformer.updateEndConditions(vesselAvailability1, assignedObject2, endConditionMap);
-			transformer.updateEndConditions(vesselAvailability1, assignedObject3, endConditionMap);
+			transformer.updateEndConditions(vesselAvailability1, assignedObject1, endConditionMap, mapping);
+			transformer.updateEndConditions(vesselAvailability1, assignedObject2, endConditionMap, mapping);
+			transformer.updateEndConditions(vesselAvailability1, assignedObject3, endConditionMap, mapping);
 
 			Assert.assertEquals(Collections.singletonList(port1), vesselAvailability1.getEndAt());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndBy());
@@ -870,9 +893,9 @@ public class PeriodTransformerTests {
 			final VesselAvailability vesselAvailability2 = CargoFactory.eINSTANCE.createVesselAvailability();
 			vesselAvailability2.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
-			transformer.updateEndConditions(vesselAvailability2, assignedObject3, endConditionMap);
-			transformer.updateEndConditions(vesselAvailability2, assignedObject2, endConditionMap);
-			transformer.updateEndConditions(vesselAvailability2, assignedObject1, endConditionMap);
+			transformer.updateEndConditions(vesselAvailability2, assignedObject3, endConditionMap, mapping);
+			transformer.updateEndConditions(vesselAvailability2, assignedObject2, endConditionMap, mapping);
+			transformer.updateEndConditions(vesselAvailability2, assignedObject1, endConditionMap, mapping);
 
 			Assert.assertEquals(Collections.singletonList(port1), vesselAvailability2.getEndAt());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndBy());

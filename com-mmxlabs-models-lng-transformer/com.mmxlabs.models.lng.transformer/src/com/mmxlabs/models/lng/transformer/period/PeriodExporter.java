@@ -4,36 +4,42 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.IdentityCommand;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISegment;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 /***
  * 
@@ -41,209 +47,297 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  * 
  */
 public class PeriodExporter {
+	private final Map<String, ISequenceElement> completeElementMap = new HashMap<>();
+	private final Map<IResource, Triple<IResource, Integer, Integer>> periodToCompleteResourceLength = new HashMap<>();
+	private final Map<IResource, Pair<IResource, List<ISequenceElement>>> periodToCompleteNominalResourceElements = new HashMap<>();
+	private final LNGDataTransformer originalDataTransformer;
+	private final LNGDataTransformer optimiserDataTransformer;
+	private final IScenarioEntityMapping periodMapping;
 
-	public Command updateOriginal(final EditingDomain editingDomain, final LNGScenarioModel originalScenario, final LNGScenarioModel periodScenario, final IScenarioEntityMapping mapping) {
+	public PeriodExporter(final LNGDataTransformer originalDataTransformer, final LNGDataTransformer optimiserDataTransformer, final IScenarioEntityMapping periodMapping) {
+		this.originalDataTransformer = originalDataTransformer;
+		this.optimiserDataTransformer = optimiserDataTransformer;
+		this.periodMapping = periodMapping;
 
-		final CompoundCommand cmd = new CompoundCommand("Update original scenario");
-		// Renumber sequence hints
+		initSequencesMapping(originalDataTransformer.getInitialSequences(), optimiserDataTransformer.getInitialSequences());
+	}
+
+	private void initSequencesMapping(@NonNull final ISequences completeSequences, @NonNull final ISequences periodSequences) {
+		final Map<String, Pair<IResource, Integer>> lookup = new HashMap<>();
+
+		// final Map<String, ISequenceElement> comM;
+		// final Map<String, ISequenceElement> p;
 		{
-			for (Cargo oldCargo : originalScenario.getCargoModel().getCargoes()) {
-				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, oldCargo.getSequenceHint() - 100));
+			for (final IResource r : completeSequences.getResources()) {
+				final ISequence s = completeSequences.getSequence(r);
+				for (int i = 0; i < s.size(); ++i) {
+					final ISequenceElement e = s.get(i);
+					lookup.put(e.getName(), new Pair<>(r, i));
+					completeElementMap.put(e.getName(), e);
+				}
 			}
-			for (VesselEvent oldVesselEvent : originalScenario.getCargoModel().getVesselEvents()) {
-				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, oldVesselEvent.getSequenceHint() - 100));
+			@NonNull
+			final List<@NonNull ISequenceElement> unusedElements = completeSequences.getUnusedElements();
+			for (int i = 0; i < unusedElements.size(); ++i) {
+				final ISequenceElement e = unusedElements.get(i);
+				lookup.put(e.getName(), new Pair<>(null, i));
+				completeElementMap.put(e.getName(), e);
 			}
 		}
+		final IVesselProvider period_vesselProvider = optimiserDataTransformer.getInjector().getInstance(IVesselProvider.class);
+		final IVirtualVesselSlotProvider period_virtualVesselSlotProvider = optimiserDataTransformer.getInjector().getInstance(IVirtualVesselSlotProvider.class);
+		final IVesselProvider complete_vesselProvider = originalDataTransformer.getInjector().getInstance(IVesselProvider.class);
+		final IVirtualVesselSlotProvider complete_virtualVesselSlotProvider = originalDataTransformer.getInjector().getInstance(IVirtualVesselSlotProvider.class);
+		final IPortSlotProvider complete_portSlotProvider = originalDataTransformer.getInjector().getInstance(IPortSlotProvider.class);
 
-		// First the easy part, update vessel events. (assigned vessel).
 		{
-			final CargoModel newCargoModel = periodScenario.getCargoModel();
-			for (final VesselEvent newVesselEvent : newCargoModel.getVesselEvents()) {
+			for (final IResource period_resource : periodSequences.getResources()) {
+				final ISequence s = periodSequences.getSequence(period_resource);
+				final int size = s.size() - 2;
 
-				final VesselEvent oldVesselEvent = mapping.getOriginalFromCopy(newVesselEvent);
-				if (oldVesselEvent == null) {
-					continue;
-				}
-				// Update vessel assignment bits.
+				// We could just do the next section, however I prefer to keep it as a sanity check where possible and use the more complex code more often so we can pick up problems with it earlier
+				// (i.e. every scenario rather than specific cases).
 
-				final VesselAssignmentType vesselAssignmentType = newVesselEvent.getVesselAssignmentType();
-				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
-						mapping.getOriginalFromCopy(newVesselEvent.getVesselAssignmentType())));
-				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newVesselEvent.getSequenceHint()));
+				// if (size > 0) {
+				// final ISequenceElement e = s.get(1);
+				// final Pair<IResource, Integer> pair = lookup.get(e.getName());
+				// assert pair != null;
+				// assert pair.getFirst() != null;
+				// periodToCompleteResourceLength.put(period_resource, new Triple<>(pair.getFirst(), pair.getSecond(), size));
+				// } else
 
-				if (vesselAssignmentType instanceof CharterInMarket) {
-					cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, newVesselEvent.getSpotIndex()));
-				} else {
-					cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
-				}
-			}
+				{
 
-		}
-
-		// Second the harder part, reconcile cargo model changes
-		{
-
-			final CargoModel oldCargoModel = originalScenario.getCargoModel();
-			final CargoModel newCargoModel = periodScenario.getCargoModel();
-
-			// Grab existing slot ids
-			final Set<String> usedIDStrings = new HashSet<String>();
-
-			{
-				for (final LoadSlot loadSlot : oldCargoModel.getLoadSlots()) {
-					usedIDStrings.add(loadSlot.getName());
-				}
-				for (final DischargeSlot dischargeSlot : oldCargoModel.getDischargeSlots()) {
-					usedIDStrings.add(dischargeSlot.getName());
-				}
-			}
-
-			// First pass, update wiring. create list of paired slots and work out which slots are no longer paired
-			final Set<Cargo> seenCargoes = new HashSet<>();
-			final Set<Slot> seenSlots = new HashSet<>();
-
-			for (final Cargo newCargo : newCargoModel.getCargoes()) {
-				Cargo oldCargo = mapping.getOriginalFromCopy(newCargo);
-				if (oldCargo == null) {
-					// Create new cargo.
-					oldCargo = ObjectCopier.copyCargo(newCargo, mapping);
-					cmd.append(AddCommand.create(editingDomain, oldCargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES, oldCargo));
-				}
-				final List<Slot> newCargoSlots = new ArrayList<>(newCargo.getSlots().size());
-				for (final Slot newSlot : newCargo.getSortedSlots()) {
-					Slot oldSlot = mapping.getOriginalFromCopy(newSlot);
-					if (oldSlot == null) {
-						oldSlot = ObjectCopier.copySlot(newSlot, mapping);
-						if (oldSlot instanceof LoadSlot) {
-							cmd.append(AddCommand.create(editingDomain, oldCargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, oldSlot));
+					final IVesselAvailability period_vesselAvailability = period_vesselProvider.getVesselAvailability(period_resource);
+					if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+						if (size > 0) {
+							final ISequenceElement e = s.get(1);
+							final Pair<IResource, Integer> pair = lookup.get(e.getName());
+							assert pair != null;
+							assert pair.getFirst() != null;
+							periodToCompleteResourceLength.put(period_resource, new Triple<>(pair.getFirst(), pair.getSecond(), size));
 						} else {
-							assert oldSlot instanceof DischargeSlot;
-							cmd.append(AddCommand.create(editingDomain, oldCargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, oldSlot));
+							final ISequenceElement periodE = period_virtualVesselSlotProvider.getElementForVesselAvailability(period_vesselAvailability);
+							final ISequenceElement completeE = completeElementMap.get(periodE.getName());
+
+							final IResource complete_resource = complete_vesselProvider.getResource(complete_virtualVesselSlotProvider.getVesselAvailabilityForElement(completeE));
+							periodToCompleteResourceLength.put(period_resource, new Triple<>(complete_resource, 1, 0));
 						}
+					} else if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+						if (size > 0) {
+							final ISequenceElement e = s.get(1);
+							final Pair<IResource, Integer> pair = lookup.get(e.getName());
+							assert pair != null;
+							assert pair.getFirst() != null;
+							periodToCompleteResourceLength.put(period_resource, new Triple<>(pair.getFirst(), pair.getSecond(), size));
+						} else {
+							final ISequenceElement periodE = period_virtualVesselSlotProvider.getElementForVesselAvailability(period_vesselAvailability);
+							final ISequenceElement completeE = completeElementMap.get(periodE.getName());
 
-						if (oldSlot instanceof SpotSlot) {
-							if (usedIDStrings.contains(oldSlot.getName())) {
+							final IResource complete_resource = complete_vesselProvider.getResource(complete_virtualVesselSlotProvider.getVesselAvailabilityForElement(completeE));
+							periodToCompleteResourceLength.put(period_resource, new Triple<>(complete_resource, 1, 0));
+						}
+					} else if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
+							|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
+							|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER//
+							|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 
-								// Expect string in form MARKET_NAME-YYYY-MM-n. Strip off the "n" part.
-								final Pattern pattern = Pattern.compile("(.*-[0-9][0-9][0-9][0-9]-[0-1][0-9]-)[0-9]*");
-								final Matcher matcher = pattern.matcher(oldSlot.getName());
+						// Step one, map the resources between scenarios.
+						IResource complete_resource = null;
+						Pair<VesselAssignmentType, Integer> key = null;
+						if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
+								|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
 
-								final String idPrefix;
-								if (matcher.find()) {
-									idPrefix = matcher.group(1);
-								} else {
-									// Fallback and use whole name as a prefix
-									idPrefix = oldSlot.getName();
+							final VesselAvailability period_VA = optimiserDataTransformer.getModelEntityMap().getModelObjectNullChecked(period_vesselAvailability, VesselAvailability.class);
+							@Nullable
+							final VesselAvailability complete_VA = periodMapping.getOriginalFromCopy(period_VA);
+							final IVesselAvailability complete_vesselAvailability = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(complete_VA, IVesselAvailability.class);
+
+							complete_resource = complete_vesselProvider.getResource(complete_vesselAvailability);
+
+							key = new Pair<>(period_VA, 0);
+
+						} else if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER//
+								|| period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+							@Nullable
+							final ISpotCharterInMarket period_spotCharterInMarket = period_vesselAvailability.getSpotCharterInMarket();
+							final int period_spotIndex = period_vesselAvailability.getSpotIndex();
+							final CharterInMarket period_CharterInMarket = optimiserDataTransformer.getModelEntityMap().getModelObjectNullChecked(period_spotCharterInMarket, CharterInMarket.class);
+
+							final int complete_spotIndex = periodMapping.getSpotCharterInMappingFromPeriod(period_CharterInMarket, period_spotIndex);
+							final CharterInMarket complete_CharterterInMarket = periodMapping.getOriginalFromCopy(period_CharterInMarket);
+							assert complete_CharterterInMarket != null;
+							final ISpotCharterInMarket complete_spotCharterterInMarket = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(complete_CharterterInMarket,
+									ISpotCharterInMarket.class);
+							for (final IResource poss_complete_resource : completeSequences.getResources()) {
+								final IVesselAvailability complete_vesselAvailability = complete_vesselProvider.getVesselAvailability(poss_complete_resource);
+								if (complete_vesselAvailability.getSpotCharterInMarket() == complete_spotCharterterInMarket) {
+									if (complete_vesselAvailability.getSpotIndex() == complete_spotIndex) {
+										complete_resource = poss_complete_resource;
+										key = new Pair<>(period_CharterInMarket, complete_spotIndex);
+										break;
+									}
 								}
-
-								// Avoid ID clash
-								int offset = 0;
-								String id = idPrefix + (offset);
-								while (usedIDStrings.contains(id)) {
-									id = idPrefix + (++offset);
-								}
-								oldSlot.setName(id);
 							}
-							usedIDStrings.add(oldSlot.getName());
 						}
-					}
-					if (newSlot instanceof SpotSlot) {
-						// Clone spot details
-						if (newSlot instanceof LoadSlot && ((LoadSlot) newSlot).isDESPurchase()) {
-							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
-						} else if (newSlot instanceof DischargeSlot && ((DischargeSlot) newSlot).isFOBSale()) {
-							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
+						assert complete_resource != null;
+						assert key != null;
+
+						// If it is a round trip, there is no coherent segment to extract, rather a set of elements out of an unsorted list. We need to handle these diferrently.
+						if (period_vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+							final List<ISequenceElement> elements = new LinkedList<>();
+							if (size > 0) {
+								for (int i = 0; i < size; ++i) {
+									final ISequenceElement e = s.get(1 + i);
+									elements.add(completeElementMap.get(e.getName()));
+								}
+							}
+							periodToCompleteNominalResourceElements.put(period_resource, new Pair<>(complete_resource, elements));
+							periodToCompleteResourceLength.put(period_resource, new Triple<>(complete_resource, 1, 0));
+							continue;
 						}
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START, oldSlot.getWindowStart()));
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 0));
+
+						final ISequence complete_sequence = completeSequences.getSequence(complete_resource);
+						int start_idx = 0;
+						int end_idx = 0;
+						@Nullable
+						AssignableElement lastTrimmedBefore = periodMapping.getLastTrimmedBefore(key.getFirst(), key.getSecond());
+						if (lastTrimmedBefore != null) {
+							lastTrimmedBefore = periodMapping.getOriginalFromCopy(lastTrimmedBefore);
+						}
+
+						if (lastTrimmedBefore == null) {
+							start_idx = 1;
+						} else {
+							if (lastTrimmedBefore instanceof VesselEvent) {
+								final VesselEvent vesselEvent = (VesselEvent) lastTrimmedBefore;
+								final IVesselEventPortSlot o_VesselEvent = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(vesselEvent, IVesselEventPortSlot.class);
+								@NonNull
+								final List<@NonNull ISequenceElement> eventSequenceElements = o_VesselEvent.getEventSequenceElements();
+								final ISequenceElement e = eventSequenceElements.get(eventSequenceElements.size() - 1);
+								start_idx = lookup.get(e.getName()).getSecond() + 1;
+							} else if (lastTrimmedBefore instanceof Cargo) {
+								final Cargo cargo = (Cargo) lastTrimmedBefore;
+								final Slot slot = cargo.getSortedSlots().get(cargo.getSlots().size() - 1);
+								final IPortSlot portSlot = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(slot, IPortSlot.class);
+								final ISequenceElement e = complete_portSlotProvider.getElement(portSlot);
+								start_idx = lookup.get(e.getName()).getSecond() + 1;
+							}
+						}
+						@Nullable
+						AssignableElement lastTrimmedAfter = periodMapping.getLastTrimmedAfter(key.getFirst(), key.getSecond());
+						if (lastTrimmedAfter != null) {
+							lastTrimmedAfter = periodMapping.getOriginalFromCopy(lastTrimmedAfter);
+						}
+						if (lastTrimmedAfter == null) {
+							end_idx = complete_sequence.size() - 1;
+						} else {
+							end_idx = complete_sequence.size() - 1;
+							if (lastTrimmedAfter instanceof VesselEvent) {
+								final VesselEvent vesselEvent = (VesselEvent) lastTrimmedAfter;
+								final IVesselEventPortSlot o_VesselEvent = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(vesselEvent, IVesselEventPortSlot.class);
+								@NonNull
+								final List<@NonNull ISequenceElement> eventSequenceElements = o_VesselEvent.getEventSequenceElements();
+								final ISequenceElement e = eventSequenceElements.get(0);
+								end_idx = lookup.get(e.getName()).getSecond();
+							} else if (lastTrimmedAfter instanceof Cargo) {
+								final Cargo cargo = (Cargo) lastTrimmedAfter;
+								final Slot slot = cargo.getSortedSlots().get(0);
+								final IPortSlot portSlot = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(slot, IPortSlot.class);
+								final ISequenceElement e = complete_portSlotProvider.getElement(portSlot);
+								end_idx = lookup.get(e.getName()).getSecond();
+							}
+						}
+
+						if (size > 0) {
+							final ISequenceElement e = s.get(1);
+							final Pair<IResource, Integer> pair = lookup.get(e.getName());
+							assert pair != null;
+							assert pair.getFirst() != null;
+							periodToCompleteResourceLength.put(period_resource, new Triple<>(pair.getFirst(), pair.getSecond(), size));
+
+							assert pair.getSecond() == start_idx;
+							assert size == end_idx - start_idx;
+						}
+
+						periodToCompleteResourceLength.put(period_resource, new Triple<>(complete_resource, start_idx, end_idx - start_idx));
 					}
-					newCargoSlots.add(oldSlot);
-				}
-				seenCargoes.add(oldCargo);
-
-				// Bind slots to cargo
-				for (final Slot slot : newCargoSlots) {
-					seenSlots.add(slot);
-					if (slot.getCargo() != oldCargo) {
-						cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__CARGO, oldCargo));
-					}
-				}
-
-				// Update vessel assignment bits.
-
-				final VesselAssignmentType vesselAssignmentType = newCargo.getVesselAssignmentType();
-				cmd.append(
-						SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, mapping.getOriginalFromCopy(newCargo.getVesselAssignmentType())));
-				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newCargo.getSequenceHint()));
-
-				if (vesselAssignmentType instanceof CharterInMarket) {
-
-					final int spotIndex = mapping.getSpotCharterInMappingFromPeriod((CharterInMarket) vesselAssignmentType, newCargo.getSpotIndex());
-					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, spotIndex));
-				} else {
-					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
-				}
-
-			}
-
-			final List<Cargo> originalCargoes = new LinkedList<>();
-			final List<LoadSlot> originalLoadSlots = new LinkedList<>();
-			final List<DischargeSlot> originalDischargeSlots = new LinkedList<>();
-			for (final EObject eObj : mapping.getUsedOriginalObjects()) {
-				if (eObj instanceof Cargo) {
-					originalCargoes.add((Cargo) eObj);
-				} else if (eObj instanceof LoadSlot) {
-					originalLoadSlots.add((LoadSlot) eObj);
-				} else if (eObj instanceof DischargeSlot) {
-					originalDischargeSlots.add((DischargeSlot) eObj);
 				}
 			}
-
-			// Finally remove newly unpaired slot to cargo references and remove if spot
-			for (final LoadSlot loadSlot : originalLoadSlots) {
-				if (!seenSlots.contains(loadSlot)) {
-					cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.Literals.SLOT__CARGO, SetCommand.UNSET_VALUE));
-
-					if (loadSlot instanceof SpotSlot) {
-						// Spot slot was in original case, but not longer. Remove it.
-						cmd.append(DeleteCommand.create(editingDomain, loadSlot));
-					}
-				}
-			}
-			for (final DischargeSlot dischargeSlot : originalDischargeSlots) {
-				if (!seenSlots.contains(dischargeSlot)) {
-					cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.SLOT__CARGO, SetCommand.UNSET_VALUE));
-
-					if (dischargeSlot instanceof SpotSlot) {
-						// Spot slot was in original case, but not longer. Remove it.
-						cmd.append(DeleteCommand.create(editingDomain, dischargeSlot));
-					}
-				}
-			}
-			// NOTE: Keep cargo deletion after slot unset SLOT_CARGO feature otherwise is caused lots of issues with commands.
-			// Loop through new loads & discharges looking for unused slots which were part of a cargo originally and break up the original cargo.
-			for (final Cargo cargo : originalCargoes) {
-				if (!seenCargoes.contains(cargo)) {
-					// Cargo was in original case, but not longer. Remove it.
-					cmd.append(DeleteCommand.create(editingDomain, cargo));
-				}
-			}
-
 		}
+	}
 
-		// Post process
+	public ISequences transform(final ISequences rawSequences) {
+		final IModifiableSequences completeSequences = new ModifiableSequences(originalDataTransformer.getInitialSequences());
 		{
-			// Make sure spot slot Ids are unique. ...
+			// final Map<String, ISequenceElement> periodElementMap = new HashMap<>();
+
+			final ISequences partialSequences = rawSequences;
+
+			// Elements we have put in
+			final Set<ISequenceElement> usedElements = new HashSet<>();
+			// Elements we have pulled out. Once we have processed the data, removedElements - usedElements == partialSequences.getUnusedElements()
+			final Set<ISequenceElement> removedElements = new HashSet<>();
+
+			// Loop over period solution and modify the complete
+			final Set<IResource> seenCompleteResources = new HashSet<>();
+			for (final IResource r : partialSequences.getResources()) {
+				final ISequence seq = partialSequences.getSequence(r);
+
+				final Triple<IResource, Integer, Integer> completeMapping = periodToCompleteResourceLength.get(r);
+				if (completeMapping == null) {
+					// hmm resource was not used in initial period solution....
+					throw new UnsupportedOperationException();
+				}
+
+				// Extract the solution segment that represents the equivalent bit of the period
+				final IResource completeResource = completeMapping.getFirst();
+				if (seenCompleteResources.contains(completeResource)) {
+					assert false;
+				}
+				seenCompleteResources.add(completeResource);
+
+				final IModifiableSequence completeSeq = completeSequences.getModifiableSequence(completeResource);
+				if (completeMapping.getThird() > 0) {
+
+					final ISegment s = completeSeq.getSegment(completeMapping.getSecond(), completeMapping.getSecond() + completeMapping.getThird());
+					// Remove it!
+					completeSeq.remove(s);
+					// Mark elements as removed.
+					s.forEach(e -> removedElements.add(e));
+				} else if (periodToCompleteNominalResourceElements.containsKey(r)) {
+					final Pair<IResource, List<ISequenceElement>> pair = periodToCompleteNominalResourceElements.get(r);
+					for (final ISequenceElement e : pair.getSecond()) {
+						completeSeq.remove(e);
+						removedElements.add(e);
+					}
+				}
+				// Now if we use the resource, construct a reverse order list of the elements and insert back into the gap. (ignoring start and end elements).
+				final int size = seq.size() - 2;
+				if (size > 0) {
+					final List<ISequenceElement> toInsert = new LinkedList<>();
+					for (int i = 1; i < seq.size() - 1; ++i) {
+						final ISequenceElement partialE = seq.get(i);
+						final ISequenceElement compeleteE = completeElementMap.get(partialE.getName());
+						toInsert.add(0, compeleteE);
+					}
+					if (toInsert.size() > 0) {
+						for (final ISequenceElement e : toInsert) {
+							completeSeq.insert(completeMapping.getSecond(), e);
+						}
+						usedElements.addAll(toInsert);
+					}
+				}
+
+			}
+
+			// Update the unused elements list.''
+			completeSequences.getModifiableUnusedElements().removeAll(usedElements);
+			removedElements.removeAll(usedElements);
+
+			completeSequences.getModifiableUnusedElements().addAll(removedElements);
+
 		}
-
-		// Copy params model
-//		cmd.append(SetCommand.create(editingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), EcoreUtil.copy(periodScenario.getParameters())));
-//		cmd.append(SetCommand.create(editingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), EcoreUtil.copy(periodScenario.getParameters())));
-
-		if (cmd.isEmpty()) {
-			return IdentityCommand.INSTANCE;
-		}
-
-		return cmd;
+		return completeSequences;
 	}
 }

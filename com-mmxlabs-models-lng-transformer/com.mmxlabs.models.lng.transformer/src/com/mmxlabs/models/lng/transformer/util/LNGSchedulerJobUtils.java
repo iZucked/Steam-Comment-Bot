@@ -157,6 +157,39 @@ public class LNGSchedulerJobUtils {
 		}
 	}
 
+	public static Command exportSchedule(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, @NonNull final Schedule schedule) {
+	 
+		final ScheduleModel scheduleModel = scenario.getScheduleModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
+
+		final CompoundCommand command = new CompoundCommand();
+
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
+
+		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+		final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+
+		final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
+		});
+
+		Iterable<IPostExportProcessor> postExportProcessors;
+		try {
+			postExportProcessors = childInjector.getInstance(key);
+			//
+		} catch (final ConfigurationException e) {
+			postExportProcessors = null;
+		}
+
+		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
+		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		// command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
+
+		// Mark schedule as clean
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+
+		return command;
+	}
+
 	@NonNull
 	public static CompoundCommand createBlankCommand(final int solutionCurrentProgress) {
 		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");

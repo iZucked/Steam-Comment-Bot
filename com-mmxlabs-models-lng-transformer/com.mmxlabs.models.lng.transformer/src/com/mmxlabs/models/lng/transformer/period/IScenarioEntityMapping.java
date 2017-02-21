@@ -12,8 +12,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 /**
  * The IScenarioEntityMapping stores the mapping between an original scenario and the copied scenario used in a period optimisation. This is also used to track which of the original elements have been
@@ -83,5 +85,29 @@ public interface IScenarioEntityMapping {
 	int getSpotCharterInMappingFromPeriod(@NonNull CharterInMarket periodCharterInMarket, int periodSpotIndex);
 
 	int getSpotCharterInMappingFromOriginal(@NonNull CharterInMarket periodCharterInMarket, int originalSpotIndex);
+
+	/**
+	 * If null then nothing has been trimmed, the whole "before" is available otherwise element is element used as basis for starting conditions.
+	 * 
+	 * @param vesselAssignmentType
+	 * @param spotIndex
+	 * @return
+	 */
+	@Nullable
+	AssignableElement getLastTrimmedBefore(VesselAssignmentType vesselAssignmentType, int spotIndex);
+
+	/**
+	 * If null then nothing has been trimmed, the whole "after" is available otherwise element is element used as basis for ending conditions.
+	 * 
+	 * @param vesselAssignmentType
+	 * @param spotIndex
+	 * @return
+	 */
+	@Nullable
+	AssignableElement getLastTrimmedAfter(VesselAssignmentType vesselAssignmentType, int spotIndex);
+
+	void setLastTrimmedBefore(VesselAssignmentType vesselAssignmentType, int spotIndex, AssignableElement e);
+
+	void setLastTrimmedAfter(VesselAssignmentType vesselAssignmentType, int spotIndex, AssignableElement e);
 
 }

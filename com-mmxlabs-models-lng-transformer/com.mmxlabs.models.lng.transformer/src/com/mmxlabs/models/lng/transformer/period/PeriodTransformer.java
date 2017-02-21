@@ -297,7 +297,7 @@ public class PeriodTransformer {
 
 		// Update vessel availabilities
 		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(),
-				objectToPortVisitMap);
+				objectToPortVisitMap, mapping);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 
 		if (extensions != null) {
@@ -359,7 +359,7 @@ public class PeriodTransformer {
 			final SpotMarketsModel spotMarketsModel, final Collection<Cargo> cargoesToRemove) {
 		// Generate the list of all spot charter ins used by all the cargoes in the scenario. An option may appear multiple times.
 		final List<Pair<CharterInMarket, Integer>> total = getSpotCharterInUseForCargoes(cargoModel.getCargoes());
-		// Convert the list into an accumlated map count.
+		// Convert the list into an accumulated map count.
 
 		final Map<Pair<CharterInMarket, Integer>, Long> counter_jav8 = total.stream() //
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -858,51 +858,64 @@ public class PeriodTransformer {
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
 			@NonNull final PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
-			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
 
-		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, cargoesToKeep, eventsToKeep, objectToPortVisitMap);
+		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, cargoesToKeep, eventsToKeep, objectToPortVisitMap, mapping);
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final List<CollectedAssignment> collectedAssignments,
 			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep,
-			@NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
 
 		// Here we loop through all the collected assignments, trimming the vessel availability to anything outside of the date range.
 		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
-		for (final CollectedAssignment collectedAssignment : collectedAssignments) {
-			if (collectedAssignment.isSetSpotIndex()) {
-				continue;
-			}
+		COLLECTED_ASSIGNMENT_LOOP: for (final CollectedAssignment collectedAssignment : collectedAssignments) {
 
 			final List<AssignableElement> assignedObjects = collectedAssignment.getAssignedObjects();
-			final VesselAvailability vesselAvailability = collectedAssignment.getVesselAvailability();
-			if (vesselAvailability != null) {
-				for (final AssignableElement assignedObject : assignedObjects) {
-					assert assignedObject != null;
-					if (assignedObject instanceof Cargo) {
-						if (cargoesToKeep.contains(assignedObject)) {
-							continue;
-						}
+			for (final AssignableElement assignedObject : assignedObjects) {
+				assert assignedObject != null;
+				if (assignedObject instanceof Cargo) {
+					if (cargoesToKeep.contains(assignedObject)) {
+						continue;
 					}
-					if (assignedObject instanceof VesselEvent) {
-						if (eventsToKeep.contains(assignedObject)) {
-							continue;
-						}
+				}
+				if (assignedObject instanceof VesselEvent) {
+					if (eventsToKeep.contains(assignedObject)) {
+						continue;
 					}
-					final NonNullPair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, objectToPortVisitMap, periodRecord);
+				}
+				final NonNullPair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, objectToPortVisitMap, periodRecord);
+				if (collectedAssignment.isSetSpotIndex()) {
+					if (collectedAssignment.getSpotIndex() == NOMINAL_INDEX) {
+						continue;
+					}
 					if (result.getFirst() == InclusionType.Out) {
 						final Position position = result.getSecond();
 
+						// This *should* be working in sorted order. Thus keep that last #Before case and terminate loop at the first #After case
 						if (position == Position.Before) {
-							// Update availability start heel
-							updateStartConditions(vesselAvailability, assignedObject, startConditionMap);
+							mapping.setLastTrimmedAfter(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
 						} else if (position == Position.After) {
-							// Update availability end heel
-							updateEndConditions(vesselAvailability, assignedObject, endConditionMap);
+							mapping.setLastTrimmedAfter(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
+							continue COLLECTED_ASSIGNMENT_LOOP;
 						}
+					}
+				} else {
+					final VesselAvailability vesselAvailability = collectedAssignment.getVesselAvailability();
+					if (vesselAvailability != null) {
+						if (result.getFirst() == InclusionType.Out) {
+							final Position position = result.getSecond();
 
+							if (position == Position.Before) {
+								// Update availability start heel
+								updateStartConditions(vesselAvailability, assignedObject, startConditionMap, mapping);
+							} else if (position == Position.After) {
+								// Update availability end heel
+								updateEndConditions(vesselAvailability, assignedObject, endConditionMap, mapping);
+							}
+						}
 					}
 				}
 			}
@@ -1087,10 +1100,13 @@ public class PeriodTransformer {
 	 * @param startConditionMap
 	 */
 	public void updateStartConditions(@NonNull final VesselAvailability vesselAvailability, @NonNull final AssignableElement assignedObject,
-			@NonNull final Map<AssignableElement, PortVisit> startConditionMap) {
+			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final IScenarioEntityMapping mapping) {
 		final PortVisit portVisit = startConditionMap.get(assignedObject);
 
 		if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.In) {
+
+			mapping.setLastTrimmedBefore(vesselAvailability, 0, assignedObject);
+
 			vesselAvailability.getStartAt().clear();
 			if (portVisit instanceof VesselEventVisit && ((VesselEventVisit) portVisit).getVesselEvent() instanceof CharterOutEvent) {
 				vesselAvailability.getStartAt().add(((VesselEventVisit) portVisit).getVesselEvent().getPort());
@@ -1124,12 +1140,15 @@ public class PeriodTransformer {
 	}
 
 	public void updateEndConditions(@NonNull final VesselAvailability vesselAvailability, @NonNull final AssignableElement assignedObject,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap) {
+			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final IScenarioEntityMapping mapping) {
 
 		final PortVisit portVisit = endConditionMap.get(assignedObject);
 		assert portVisit != null;
 
 		if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.In) {
+
+			mapping.setLastTrimmedAfter(vesselAvailability, 0, assignedObject);
+
 			vesselAvailability.getEndAt().clear();
 			// Standard case
 			vesselAvailability.getEndAt().add(portVisit.getPort());
@@ -1223,7 +1242,6 @@ public class PeriodTransformer {
 			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			vesselAvailability.setForceHireCostOnlyEndRule(false);
-
 
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();

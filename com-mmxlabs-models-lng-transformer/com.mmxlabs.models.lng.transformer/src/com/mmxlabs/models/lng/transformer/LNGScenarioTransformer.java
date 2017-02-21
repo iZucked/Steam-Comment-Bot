@@ -325,7 +325,7 @@ public class LNGScenarioTransformer {
 	 * A {@link Map} of existing spot market slots by ID. This map is used later when building the spot market options.
 	 */
 	@NonNull
-	private final Map<String, Slot> marketSlotsByID = new HashMap<String, Slot>();
+	private final Map<String, @NonNull Slot> marketSlotsByID = new HashMap<>();
 
 	@NonNull
 	private final Map<SpotMarket, TreeMap<String, Collection<Slot>>> existingSpotCount = new HashMap<>();
@@ -3100,10 +3100,10 @@ public class LNGScenarioTransformer {
 	}
 
 	@NonNull
-	private Collection<Slot> getSpotSlots(@NonNull final SpotMarket spotMarket, @NonNull final String key) {
+	private Collection<@NonNull Slot> getSpotSlots(@NonNull final SpotMarket spotMarket, @NonNull final String key) {
 
 		if (existingSpotCount.containsKey(spotMarket)) {
-			final TreeMap<String, Collection<Slot>> curve = existingSpotCount.get(spotMarket);
+			final TreeMap<String, Collection<@NonNull Slot>> curve = existingSpotCount.get(spotMarket);
 			if (curve.containsKey(key)) {
 				final Collection<Slot> slots = curve.get(key);
 				if (slots != null) {
