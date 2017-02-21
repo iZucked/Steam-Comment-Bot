@@ -84,7 +84,9 @@ public class MoveGeneratorModule extends AbstractModule {
 		bind(SwapSegmentSequenceMoveHandler.class).in(Singleton.class);
 		bind(MoveSegmentSequenceMoveHandler.class).in(Singleton.class);
 		bind(SwapTailsSequenceMoveHandler.class).in(Singleton.class);
-		bind(GuidedMoveGenerator.class).in(Singleton.class);
+
+		// Stateful!
+		bind(GuidedMoveGenerator.class);
 
 	}
 
