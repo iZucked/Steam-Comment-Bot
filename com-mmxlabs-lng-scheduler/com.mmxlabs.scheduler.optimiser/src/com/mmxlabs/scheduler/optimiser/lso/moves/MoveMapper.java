@@ -10,8 +10,12 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.AnnotatedMoveType;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveTypes;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.InsertOptionalElementMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.MoveSegmentSequenceMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.RemoveOptionalElementMoveHandler;
@@ -48,8 +52,7 @@ public class MoveMapper {
 			return injector.getInstance(ShuffleElementsMoveHandler.class);
 		case Guided_Move_Generator:
 			return injector.getInstance(GuidedMoveGenerator.class);
-		case Swap_Slot:
-			break;
+
 		case Move_Within_Sequence:
 			break;
 		case Move_Within_Sequence_Single_Element_Swap:
@@ -61,35 +64,37 @@ public class MoveMapper {
 		// Guided Move types...
 
 		// TODO: Wrap these in an element "finder" class and delegate to the guided helper classes
-
+		case Swap_Slot:
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Swap_Slot)));
 		case Insert_Cargo:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Insert_Cargo)));
 		case Insert_DES_Purchase:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Insert_DES_Purchase)));
 		case Insert_FOB_Sale:
-
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Insert_FOB_Sale)));
 		case Insert_Slot:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Insert_Slot)));
 		case Insert_Vessel_Event:
 			break;
-
 		case Move_Vessel_Event:
 			break;
 
 		case Remove_Cargo:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Cargo)));
 		case Remove_DES_Purchase:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_DES_Purchase)));
 		case Remove_FOB_Sale:
-			break;
-
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_FOB_Sale)));
 		case Remove_Slot:
+//			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Slot)));
 			break;
 		case Remove_Vessel_Event:
 			break;
 
 		case Swap_Cargo_Vessel:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Swap_Cargo_Vessel)));
+		case Move_Slot_NonShipped_Resource:
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Move_Slot_NonShipped_Resource)));
 		case Swap_Event_Vessel:
 			break;
 

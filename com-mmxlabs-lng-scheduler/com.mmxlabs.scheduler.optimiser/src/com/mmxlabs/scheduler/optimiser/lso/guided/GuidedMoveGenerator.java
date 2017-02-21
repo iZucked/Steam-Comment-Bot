@@ -244,14 +244,14 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		for (final ISequenceElement element : targetElements) {
 
 			final Pair<IResource, Integer> location = lookupManager.lookup(element);
-			final List<MoveTypes> moveOptions = new ArrayList<>(moveTypeHelper.getMoveTypes(location.getFirst(), element));
+			final List<GuidedMoveTypes> moveOptions = new ArrayList<>(moveTypeHelper.getMoveTypes(location.getFirst(), element));
 
 			if (moveOptions.isEmpty()) {
 				continue;
 			}
 
 			Collections.shuffle(moveOptions, random);
-			for (final MoveTypes type : moveOptions) {
+			for (final GuidedMoveTypes type : moveOptions) {
 				final IGuidedMoveHandler handler = getMoveHandler(type);
 				if (handler != null) {
 					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element, random, options, hintManager.getUsedElements());
@@ -292,7 +292,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	}
 
 	@Nullable
-	private IGuidedMoveHandler getMoveHandler(final @NonNull MoveTypes moveType) {
+	private IGuidedMoveHandler getMoveHandler(final @NonNull GuidedMoveTypes moveType) {
 		switch (moveType) {
 		case Insert_Cargo:
 			return injector.getInstance(InsertCargoVesselMoveHandler.class);

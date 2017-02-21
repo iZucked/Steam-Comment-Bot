@@ -22,7 +22,7 @@ public class MoveTypeHelper {
 	@NonNull
 	private IMoveHelper helper;
 
-	public @NonNull Collection<@NonNull MoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element) {
+	public @NonNull Collection<@NonNull GuidedMoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element) {
 		return getMoveTypes(resource, element, true);
 	}
 
@@ -33,8 +33,8 @@ public class MoveTypeHelper {
 	 * @param optimisationData
 	 * @return
 	 */
-	public @NonNull Map<ISequenceElement, @NonNull Collection<@NonNull MoveTypes>> getMoveTypes(@NonNull IOptimisationData optimisationData) {
-		Map<ISequenceElement, @NonNull Collection<@NonNull MoveTypes>> map = new HashMap<>();
+	public @NonNull Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> getMoveTypes(@NonNull IOptimisationData optimisationData) {
+		Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> map = new HashMap<>();
 		for (ISequenceElement element : optimisationData.getSequenceElements()) {
 			map.put(element, getMoveTypes(null, element, false));
 		}
@@ -42,9 +42,9 @@ public class MoveTypeHelper {
 		return map;
 	}
 
-	public @NonNull Collection<@NonNull MoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element, boolean checkResource) {
+	public @NonNull Collection<@NonNull GuidedMoveTypes> getMoveTypes(@Nullable final IResource resource, @NonNull final ISequenceElement element, boolean checkResource) {
 		// Is element locked? Then we can not do anything
-		final Set<MoveTypes> moveTypes = new LinkedHashSet<>();
+		final Set<GuidedMoveTypes> moveTypes = new LinkedHashSet<>();
 
 		if (checkResource) {
 			// We get here with non-shipped slots!
@@ -63,18 +63,18 @@ public class MoveTypeHelper {
 			if (helper.isVesselEvent(element)) {
 				if (!helper.isRelocatedCharterOutEvent(element)) {
 					// If relocated charter event, do nothing.
-					moveTypes.add(MoveTypes.Insert_Vessel_Event);
+					moveTypes.add(GuidedMoveTypes.Insert_Vessel_Event);
 				}
 			}
 			if (helper.isDESPurchase(element)) {
-				moveTypes.add(MoveTypes.Insert_DES_Purchase);
+				moveTypes.add(GuidedMoveTypes.Insert_DES_Purchase);
 			} else if (helper.isFOBSale(element)) {
-				moveTypes.add(MoveTypes.Insert_FOB_Sale);
+				moveTypes.add(GuidedMoveTypes.Insert_FOB_Sale);
 			} else {
-				moveTypes.add(MoveTypes.Swap_Slot);
-				moveTypes.add(MoveTypes.Insert_Slot);
-				moveTypes.add(MoveTypes.Insert_Cargo);
-				moveTypes.add(MoveTypes.Remove_Linked_Slot);
+				moveTypes.add(GuidedMoveTypes.Swap_Slot);
+				moveTypes.add(GuidedMoveTypes.Insert_Slot);
+				moveTypes.add(GuidedMoveTypes.Insert_Cargo);
+				moveTypes.add(GuidedMoveTypes.Remove_Linked_Slot);
 			}
 
 		}
@@ -85,28 +85,28 @@ public class MoveTypeHelper {
 				if (!helper.isRelocatedCharterOutEvent(element)) {
 					// If relocated charter event, do nothing.
 					if (helper.isOptional(element)) {
-						moveTypes.add(MoveTypes.Remove_Vessel_Event);
+						moveTypes.add(GuidedMoveTypes.Remove_Vessel_Event);
 					}
-					moveTypes.add(MoveTypes.Swap_Event_Vessel);
-					moveTypes.add(MoveTypes.Move_Vessel_Event);
+					moveTypes.add(GuidedMoveTypes.Swap_Event_Vessel);
+					moveTypes.add(GuidedMoveTypes.Move_Vessel_Event);
 				}
 			} else if (helper.isDESPurchase(element)) {
 				if (helper.isOptional(element)) {
-					moveTypes.add(MoveTypes.Remove_DES_Purchase);
+					moveTypes.add(GuidedMoveTypes.Remove_DES_Purchase);
 				}
 			} else if (helper.isFOBSale(element)) {
 				if (helper.isOptional(element)) {
-					moveTypes.add(MoveTypes.Remove_FOB_Sale);
+					moveTypes.add(GuidedMoveTypes.Remove_FOB_Sale);
 				}
 			} else {
 				if (resource != null && helper.isNonShippedResource(resource)) {
-					moveTypes.add(MoveTypes.Move_Slot_NonShipped_Resource);
+					moveTypes.add(GuidedMoveTypes.Move_Slot_NonShipped_Resource);
 				}
-				moveTypes.add(MoveTypes.Swap_Slot);
-				moveTypes.add(MoveTypes.Swap_Cargo_Vessel);
+				moveTypes.add(GuidedMoveTypes.Swap_Slot);
+				moveTypes.add(GuidedMoveTypes.Swap_Cargo_Vessel);
 				if (helper.isOptional(element)) {
-					moveTypes.add(MoveTypes.Remove_Slot);
-					moveTypes.add(MoveTypes.Remove_Cargo);
+					moveTypes.add(GuidedMoveTypes.Remove_Slot);
+					moveTypes.add(GuidedMoveTypes.Remove_Cargo);
 				}
 			}
 		}

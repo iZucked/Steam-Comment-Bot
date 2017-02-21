@@ -17,7 +17,7 @@ public class Hints {
 
 	private final List<ISequenceElement> suggestedElements = new LinkedList<>();
 
-	private final List<Pair<ISequenceElement, MoveTypes>> suggestedElementMoves = new LinkedList<>();
+	private final List<Pair<ISequenceElement, GuidedMoveTypes>> suggestedElementMoves = new LinkedList<>();
 
 	public void addProblemElement(@NonNull final ISequenceElement element) {
 		this.problemElements.add(element);
@@ -51,7 +51,7 @@ public class Hints {
 		this.suggestedElements.add(element);
 	}
 
-	public void addSuggestedElementMove(@NonNull final ISequenceElement element, MoveTypes moveType) {
+	public void addSuggestedElementMove(@NonNull final ISequenceElement element, GuidedMoveTypes moveType) {
 		this.suggestedElementMoves.add(new Pair<>(element, moveType));
 		this.suggestedElements.add(element);
 	}
