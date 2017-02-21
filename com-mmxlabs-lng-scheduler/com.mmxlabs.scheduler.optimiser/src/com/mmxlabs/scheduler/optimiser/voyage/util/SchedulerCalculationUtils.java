@@ -23,18 +23,18 @@ public class SchedulerCalculationUtils {
 	private IVesselProvider vesselProvider;
 
 	@NonNull
-	public ISequence getSequenceFromResource(@NonNull ISequences sequences, @NonNull IResource resource) {
-		ISequence sequence = sequences.getSequence(resource);
+	public ISequence getSequenceFromResource(@NonNull final ISequences sequences, @NonNull final IResource resource) {
+		final ISequence sequence = sequences.getSequence(resource);
 		return sequence;
 	}
 
 	@NonNull
-	public IVesselAvailability getVesselAvailabilityFromResource(@NonNull IResource resource) {
+	public IVesselAvailability getVesselAvailabilityFromResource(@NonNull final IResource resource) {
 		return vesselProvider.getVesselAvailability(resource);
 	}
-	
-	public long getVesselCharterInRatePerDay(IVesselAvailability vesselAvailability, int vesselStartTime, int voyagePlanStartTime) {
-		long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);
+
+	public long getVesselCharterInRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
+		final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, voyagePlanStartTime);
 		return vesselCharterInRatePerDay;
 	}
 }
