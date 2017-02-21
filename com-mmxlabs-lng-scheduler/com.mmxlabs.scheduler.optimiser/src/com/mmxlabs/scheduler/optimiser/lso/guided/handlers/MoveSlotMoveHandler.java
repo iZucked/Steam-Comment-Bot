@@ -27,8 +27,8 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertDESPurchaseMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertFOBSaleMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
@@ -43,7 +43,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IMoveHelper helper;
 
 	@Inject
-	private @NonNull MoveHandlerHelper moveHandlerHelper;
+	private @NonNull IMoveHandlerHelper moveHandlerHelper;
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;

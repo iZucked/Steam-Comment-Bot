@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
@@ -21,6 +20,12 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveLinkedSlotMoveH
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.moves.MoveMapper;
+import com.mmxlabs.scheduler.optimiser.moves.handlers.InsertOptionalElementMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.handlers.MoveSegmentSequenceMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.handlers.RemoveOptionalElementMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.handlers.SwapSegmentSequenceMoveHandler;
+import com.mmxlabs.scheduler.optimiser.moves.handlers.SwapTailsSequenceMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.BreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 
@@ -28,9 +33,6 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		bind(MoveHandlerHelper.class).in(Singleton.class);
-
-		bind(GuidedMoveGenerator.class);
 		bind(HintManager.class);
 		bind(MoveTypeHelper.class);
 
@@ -46,12 +48,26 @@ public class MoveGeneratorModule extends AbstractModule {
 
 		bind(MoveHelper.class).in(Singleton.class);
 		bind(IMoveHelper.class).to(MoveHelper.class);
-
+		
 		bind(BreakPointHelper.class).in(Singleton.class);
 		bind(IBreakPointHelper.class).to(BreakPointHelper.class);
 
 		bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+		
+		//RouletteWheel
+		bind(MoveHandlerHelper.class).in(Singleton.class);
+		bind(IMoveHandlerHelper.class).to(MoveHandlerHelper.class);
+		
+		bind(MoveMapper.class).in(Singleton.class);
+		
+		bind(InsertOptionalElementMoveHandler.class).in(Singleton.class);
+		bind(RemoveOptionalElementMoveHandler.class).in(Singleton.class);
+		bind(SwapSegmentSequenceMoveHandler.class).in(Singleton.class);
+		bind(MoveSegmentSequenceMoveHandler.class).in(Singleton.class);
+		bind(SwapTailsSequenceMoveHandler.class).in(Singleton.class);
+		bind(GuidedMoveGenerator.class).in(Singleton.class);
+		
 	}
 
 	@Provides

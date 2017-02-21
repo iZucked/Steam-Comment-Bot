@@ -8,7 +8,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public interface IBreakPointHelper {
 
-	 List<Pair<ISequenceElement, ISequenceElement>> getValidBreaks();
+	List<Pair<ISequenceElement, ISequenceElement>> getValidBreaks();
 
 	void init(IOptimisationData data);
 

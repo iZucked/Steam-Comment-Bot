@@ -25,8 +25,8 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 
 public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
 
@@ -34,7 +34,7 @@ public class RemoveLinkedSlotMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IMoveHelper helper;
 
 	@Inject
-	private @NonNull MoveHandlerHelper moveHandlerHelper;
+	private @NonNull IMoveHandlerHelper moveHandlerHelper;
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;

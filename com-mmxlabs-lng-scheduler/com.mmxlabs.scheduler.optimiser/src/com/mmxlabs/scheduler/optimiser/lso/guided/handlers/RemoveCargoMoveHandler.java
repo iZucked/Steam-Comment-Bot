@@ -18,8 +18,8 @@ import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.RemoveElementsMove;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 
 public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 
@@ -27,7 +27,7 @@ public class RemoveCargoMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IMoveHelper helper;
 
 	@Inject
-	private @NonNull MoveHandlerHelper moveHelper;
+	private @NonNull IMoveHandlerHelper moveHelper;
 
 	@Override
 	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,

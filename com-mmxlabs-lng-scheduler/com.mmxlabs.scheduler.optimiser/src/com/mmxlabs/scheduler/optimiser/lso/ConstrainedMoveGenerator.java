@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.moves.handlers.ShuffleElementsMoveHandler;
 
 /**
  * <p>
@@ -52,7 +53,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	private SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
 	private OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
-	private ShuffleElementsMoveGenerator shuffleMoveGenerator;
+	private ShuffleElementsMoveHandler shuffleMoveGenerator;
 	private SwapElementsInSequenceMoveGeneratorUnit swapElementsMoveGenerator;
 	private ElementSwapMoveGenerator elementSwapMoveGenerator;
 
@@ -84,7 +85,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 		injector.injectMembers(sequencesMoveGenerator);
 
-		this.shuffleMoveGenerator = new ShuffleElementsMoveGenerator();
+		this.shuffleMoveGenerator = new ShuffleElementsMoveHandler();
 		injector.injectMembers(shuffleMoveGenerator);
 
 		this.elementSwapMoveGenerator = new ElementSwapMoveGenerator();

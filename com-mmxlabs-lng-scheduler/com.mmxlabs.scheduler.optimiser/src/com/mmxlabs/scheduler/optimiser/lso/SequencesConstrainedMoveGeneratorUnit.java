@@ -20,13 +20,11 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.Move2over2;
 import com.mmxlabs.optimiser.lso.impl.Move3over2;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
-import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
-import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
-import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
 import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
@@ -40,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
  * @author hinton
  * 
  */
-public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
+public class SequencesConstrainedMoveGeneratorUnit implements IMoveGenerator {
 	/**
 	 * This setting is an injectable from the OptimiserSettingsModule, to speed up non-client optimisation
 	 */
@@ -55,7 +53,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	private IBreakPointHelper breakPointHelper;
 
 	@Inject
-	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) boolean ENABLE_4_OPT_2_FIX) {
+	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) final boolean ENABLE_4_OPT_2_FIX) {
 		if (ENABLE_4_OPT_2_FIX) {
 			FOUR_OPT2_MOVES = 0; // 0 = 4 opt 2, 1 = no 4 opt 2
 		} else {
@@ -76,27 +74,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	}
 
-	class NullMoveA extends NullMove {
-	}
-
-	class NullMoveB extends NullMove {
-	}
-
-	class NullMoveC extends NullMove {
-	}
-
-	class NullMoveD extends NullMove {
-	}
-
-	class NullMoveE extends NullMove {
-	}
-
-	NullMove nullMoveA = new NullMoveA();
-	NullMove nullMoveB = new NullMoveB();
-	NullMove nullMoveC = new NullMoveC();
-	NullMove nullMoveD = new NullMoveD();
-
-	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(@NonNull ILookupManager stateManager, @NonNull Random random) {
+	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(@NonNull final ILookupManager stateManager, @NonNull final Random random) {
 
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
@@ -105,18 +83,18 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		pos1 = stateManager.lookup(newPair.getFirst());
 		pos2 = stateManager.lookup(newPair.getSecond());
 
-		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = new Pair(pos1, pos2);
+		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = new Pair(pos1, pos2);
 		return positions;
 	}
 
 	@Override
-	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
+	public IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull final Random random) {
 		if (breakPointHelper.getValidBreaks().isEmpty()) {
-			return new NullMoveA();
+			return new NullMove("SCMG", "Empty Break Point");
 		}
 
 		// get resources for a random edge
-		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = findEdge(stateManager, random);
+		final Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = findEdge(stateManager, random);
 
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
@@ -127,10 +105,10 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			pos1 = positions.getFirst();
 			pos2 = positions.getSecond();
 			if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
-				return new NullMoveB();
+				return new NullMove("SCMG", "Null Pos");
 			}
 		} else {
-			return new NullMoveB();
+			return new NullMove("SCMG", "Null Position");
 		}
 
 		final IResource sequence1 = pos1.getFirst();
@@ -139,7 +117,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		int position2 = pos2.getSecond();
 
 		if (position1 == -1 || position2 == -1) {
-			return new NullMoveC();
+			return new NullMove("SCMG", "-1 Index");
 		}
 
 		// are both these elements currently in the same route
@@ -157,7 +135,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final int beforeSecondCut = Math.max(position1, position2) - 1;
 			// Zero length segment
 			if (beforeFirstCut == beforeSecondCut) {
-				return new NullMove3Over2();
+				return new NullMove("SCMG", "Zero Length Sequence");
 			}
 
 			final ISequenceElement firstElementInSegment = sequence.get(beforeFirstCut + 1);
@@ -177,7 +155,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			// the first element in the segment
 			final IResource first = posPrecursor.getFirst();
 			if (first == null) {
-				return new NullMove3Over2();
+				return new NullMove("SCMG", "First = Null");
 			}
 			final ISequenceElement beforeInsert = rawSequences.getSequence(first).get(posPrecursor.getSecond() - 1);
 			if (followersAndPreceders.getValidFollowers(beforeInsert).contains(firstElementInSegment)) {
@@ -188,7 +166,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					// check for stupidity
 					final int position3 = posPrecursor.getSecond();
 					if ((position3 >= beforeFirstCut) && (position3 <= beforeSecondCut)) {
-						return new NullMove3Over2(); // stupidity has happened.
+						return new NullMove("SCMG", "Self Insertion"); // stupidity has happened.
 					}
 				}
 
@@ -206,7 +184,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				// bailing out
 				// maybe search for a 4opt1 in here? but will a 4opt1 work if a
 				// 3opt1 won't? probably not!
-				return new NullMove3Over2();
+				return new NullMove("SCMG", "Bad Insertion");
 			}
 		} else {
 			// we have found a potentially valid situation for an opt2 move of
@@ -309,7 +287,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 						// seq2.get(position2-1), seq1.get(position1+1),
 						// resources.get(sequence2)));
 						//
-						return new NullMove2Over2();
+						return new NullMove("SCMG", "Invalid 2opt2");
 					}
 				}
 
@@ -341,7 +319,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					return result;
 				}
 			} else {
-				return new NullMove4Over2();
+				return new NullMove("SCMG", "Invalid 4opt2");
 			}
 		}
 	}

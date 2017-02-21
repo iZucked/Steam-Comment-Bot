@@ -27,7 +27,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.lso.IConstrainedMoveGeneratorUnit;
+import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.IGuidedMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
@@ -39,12 +39,11 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHa
 import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.CompoundMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
+public class GuidedMoveGenerator implements IMoveGenerator {
 
 	/**
 	 * Port types this move generator can handle. TODO: Add in the vessel events
@@ -98,6 +97,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	public IMove generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random) {
 
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+		providedSequences = lookupManager.getRawSequences();
 		final long[] initialMetrics = evaluationHelper.evaluateState(new ModifiableSequences(providedSequences), null, null, null);
 		final MoveResult p = generateMove(rawSequences, lookupManager, random, Collections.emptyList(), initialMetrics, options);
 		if (p != null) {

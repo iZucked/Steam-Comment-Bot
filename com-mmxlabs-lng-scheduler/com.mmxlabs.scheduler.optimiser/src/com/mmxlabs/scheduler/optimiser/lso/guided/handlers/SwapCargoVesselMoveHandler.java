@@ -22,8 +22,8 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertCargoMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
@@ -32,7 +32,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 	private @NonNull IMoveHelper helper;
 
 	@Inject
-	private @NonNull MoveHandlerHelper moveHelper;
+	private @NonNull IMoveHandlerHelper moveHelper;
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;

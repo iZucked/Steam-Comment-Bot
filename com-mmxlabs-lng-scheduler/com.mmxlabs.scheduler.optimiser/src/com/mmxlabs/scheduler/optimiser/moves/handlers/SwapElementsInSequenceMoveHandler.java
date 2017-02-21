@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.lso;
+package com.mmxlabs.scheduler.optimiser.moves.handlers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +19,11 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 
@@ -31,15 +34,15 @@ import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
  * @author Simon Goodall
  * 
  */
-public class SwapElementsInSequenceMoveGeneratorUnit implements IMoveGenerator {
+public class SwapElementsInSequenceMoveHandler implements IMoveGenerator {
 
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public SwapSingleSequenceElements generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
+	public IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 
-		final ISequences sequences = rawSequences;
+		final ISequences sequences = lookupManager.getRawSequences();
 
 		// Find a random none-empty ISequence
 		ISequence sequence = null;
@@ -55,7 +58,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IMoveGenerator {
 			break;
 		}
 		if (sequence == null) {
-			return null;
+			return new NullMove("SwapElementsInSequence", "Null Sequence");
 		}
 		// Get a list of all the elements for outer loop
 		final List<ISequenceElement> sequenceElementsAsList = new ArrayList<ISequenceElement>(sequence.size());
@@ -96,7 +99,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IMoveGenerator {
 			}
 
 		}
-		return null;
+		return new NullMove("SwapElementsInSequence", "Failure");
 	}
 
 	/**

@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
+import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
@@ -31,12 +32,9 @@ import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
  * @author Simon Goodall
  *
  */
-public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
+public class ElementSwapMoveGenerator implements IMoveGenerator {
 
-	public static final class NullElementSwapMove extends NullMove {
-
-	}
-
+	
 	@Inject
 	@NonNull
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
@@ -126,7 +124,7 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 			return new Move4over2(resource1, position1Index + 1, position1Index + 1 + 1, resource2, position2Index, position2Index + 1);
 		}
-		return new NullElementSwapMove();
+		return new NullMove("ElementSwap", "Null");
 	}
 
 	private boolean checkResource(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
