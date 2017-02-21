@@ -134,6 +134,9 @@ public class HeadlessApplication implements IApplication {
 				.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
 		// Set verbose Logging
 		overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
+		overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("use-roulette-wheel", Boolean.class));
+		overrideSettings.setUseLegacyCheck(headlessParameters.getParameterValue("use-legacy-check", Boolean.class));
+		overrideSettings.setUseGuidedMoves(headlessParameters.getParameterValue("use-guided-moves", Boolean.class));
 		final String scenarioFile = overrideSettings.getScenario();
 		if (scenarioFile == null || scenarioFile.isEmpty()) {
 			System.err.println("No scenario specified");
@@ -277,7 +280,10 @@ public class HeadlessApplication implements IApplication {
 						return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
 					}
 					if (moduleType == ModuleType.Module_Optimisation) {
-						return Collections.<@NonNull Module> singletonList(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+						LinkedList<@NonNull Module> modules = new LinkedList<@NonNull Module>();
+						modules.add(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+						modules.add(new LNGOptimsationOverrideModule(overrideSettings));
+						return modules;
 					}
 					return null;
 				}
@@ -603,6 +609,8 @@ public class HeadlessApplication implements IApplication {
 		setSimilarityParameters(settingsOverride, headlessParameters);
 		setMoveOverrides(settingsOverride, headlessParameters);
 		createPromptDates(rootObject, headlessParameters);
+		setEqualMoveDistributions(settingsOverride, headlessParameters);
+		setMoveDistributions(settingsOverride, headlessParameters);
 	}
 
 	private void setMoveOverrides(final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
@@ -622,6 +630,18 @@ public class HeadlessApplication implements IApplication {
 		} else {
 			rootObject.unsetPromptPeriodEnd();
 		}
+	}
+	
+	private void setEqualMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters){
+		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-move-distributions", Boolean.class));
+	}
+	
+	private void setMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters){
+		final Map<String, Double> moveDistributionsMap = new HashMap<String, Double>();
+		for (final String move : SettingsOverride.moveFrequencyParameters) {
+			moveDistributionsMap.put(move, headlessParameters.getParameterValue(move, Double.class));
+		}
+		overrideSettings.setMoveFrequencyParameterMap(moveDistributionsMap);
 	}
 
 	private void setLatenessParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {

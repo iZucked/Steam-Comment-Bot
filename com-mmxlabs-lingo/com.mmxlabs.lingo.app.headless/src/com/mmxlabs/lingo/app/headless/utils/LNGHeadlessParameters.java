@@ -100,5 +100,19 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("idle-time-end", 10_000, Integer.class, false);
 		
 		setParameter("spotmarket-optimisation", false, Boolean.class, false);
+		
+		setParameter("use-roulette-wheel", false, Boolean.class, false);
+		
+		//Move Distributions
+		setParameter("equal-move-distributions", false, Boolean.class, false);
+		setParameter("insert-optional-frequency", 0.1, Double.class, false);
+		setParameter("remove-optional-frequency", 0.2, Double.class, false);
+		setParameter("swap-segments-frequency", 0.4, Double.class, false);
+		setParameter("move-segments-frequency", 0.6, Double.class, false);
+		setParameter("swap-tails-frequency", 0.8, Double.class, false);
+		setParameter("shuffle-elements-frequency", 1.0, Double.class, false);
+		
+		setParameter("use-guided-moves", false, Boolean.class, false);
+		setParameter("use-legacy-check", false, Boolean.class, false);
 	}
 }
