@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -25,9 +24,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -76,8 +73,6 @@ public class ExportScheduleHelper {
 		final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 
-		final CompoundCommand command = new CompoundCommand();
-
 		final Schedule schedule = source_scheduleModel.getSchedule();
 		// Uncontain these slots so the call to #derive will re-parent them
 		for (final SlotAllocation a : schedule.getSlotAllocations()) {
@@ -95,33 +90,11 @@ public class ExportScheduleHelper {
 
 		// Clear any insertion plans - assume no longer relevant
 		AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-		analyticsModel.getActionPlans().clear();
-		analyticsModel.getInsertionPlans().clear();
+		analyticsModel.getActionableSetPlans().clear();
+		analyticsModel.getInsertionOptions().clear();
 
-		// scheduleModel.setSchedule(schedule);
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
-
-		// TODO: Hook in the PostExportProcessors.
-
-		// // new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
-		// final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
-		//
-		// final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
-		// });
-
-		final Iterable<IPostExportProcessor> postExportProcessors = null;
-		// try {
-		// postExportProcessors = childInjector.getInstance(key);
-		// //
-		// } catch (final ConfigurationException e) {
-		// postExportProcessors = null;
-		// }
-
-		command.append(LNGSchedulerJobUtils.derive(editingDomain, scenarioModel, schedule, cargoModel, postExportProcessors));
-
-		// Mark schedule as clean
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-
+		// TODO: Need injector for correct post export processors
+		Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);
 		command.execute();
 
 		final IScenarioService scenarioService = scenarioInstance.getScenarioService();

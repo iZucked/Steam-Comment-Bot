@@ -157,8 +157,8 @@ public class LNGSchedulerJobUtils {
 		}
 	}
 
-	public static Command exportSchedule(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, @NonNull final Schedule schedule) {
-	 
+	public static Command exportSchedule(final @Nullable Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, @NonNull final Schedule schedule) {
+
 		final ScheduleModel scheduleModel = scenario.getScheduleModel();
 		final CargoModel cargoModel = scenario.getCargoModel();
 
@@ -166,20 +166,23 @@ public class LNGSchedulerJobUtils {
 
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
 
-		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
-		final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
-
-		final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
-		});
-
 		Iterable<IPostExportProcessor> postExportProcessors;
-		try {
-			postExportProcessors = childInjector.getInstance(key);
-			//
-		} catch (final ConfigurationException e) {
+		if (injector != null) {
+
+			// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+			final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+
+			final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
+			});
+			try {
+				postExportProcessors = childInjector.getInstance(key);
+				//
+			} catch (final ConfigurationException e) {
+				postExportProcessors = null;
+			}
+		} else {
 			postExportProcessors = null;
 		}
-
 		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
 		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 		// command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
