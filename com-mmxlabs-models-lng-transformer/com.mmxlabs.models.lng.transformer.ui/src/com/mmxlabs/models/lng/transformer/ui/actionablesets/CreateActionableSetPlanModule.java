@@ -61,11 +61,9 @@ public class CreateActionableSetPlanModule extends AbstractModule {
 		}
 		install(new FitnessFunctionInstantiatorModule());
 
-		
-		install(new MoveGeneratorModule());
+		install(new MoveGeneratorModule(true));
 
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
-
 
 	}
 

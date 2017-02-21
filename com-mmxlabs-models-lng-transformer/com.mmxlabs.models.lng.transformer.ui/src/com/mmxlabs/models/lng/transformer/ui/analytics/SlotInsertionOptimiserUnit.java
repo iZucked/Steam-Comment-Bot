@@ -93,7 +93,7 @@ public class SlotInsertionOptimiserUnit {
 		modules.add(new AbstractModule() {
 			@Override
 			protected void configure() {
-				install(new MoveGeneratorModule());
+				install(new MoveGeneratorModule(true));
 			}
 
 			@Provides

@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGActionPlanModule;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGParameters_ActionPlanSettingsModule;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -202,16 +201,12 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_ActionPlanSettingsModule(stageSettings), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGActionPlanModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new CreateActionableSetPlanModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		modules.add(new AbstractModule() {
 
 			@Override
 			protected void configure() {
-
-				// install(new LinearFitnessEvaluatorModule());
-				// // Don't really want this, but dependency chain of FitnessCalculator requires thresholder
-				// install(new LocalSearchOptimiserModule());
 
 				assert executorService != null;
 				bind(EvaluationHelper.class).in(PerChainUnitScope.class);
