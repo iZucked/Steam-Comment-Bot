@@ -126,7 +126,7 @@ public class LNGScenarioChainBuilder {
 
 	@NonNull
 	public static ExecutorService createExecutorService(final int nThreads) {
-		return Executors.newFixedThreadPool(nThreads);
+		return Executors.newFixedThreadPool(5);
 	}
 
 	public static int getNumberOfAvailableCores() {

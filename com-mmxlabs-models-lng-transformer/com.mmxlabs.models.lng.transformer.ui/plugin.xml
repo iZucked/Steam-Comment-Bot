@@ -233,6 +233,13 @@
                   type="com.mmxlabs.jobmanager.jobs.IJobControl">
             </adapter>
          </factory>
+         <factory
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.actionablesets.CreateActionableSetPlanJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>         
       </extension>
    
       <extension
@@ -462,5 +469,9 @@
                feature="options-suggester"
                plugin.xml="options-suggester.plugin.xml">
          </PluginXMLEnablement>
+         <PluginXMLEnablement
+               feature="actionable-set-optimiser"
+               plugin.xml="actionable-set-optimiser.plugin.xml">
+         </PluginXMLEnablement>         
       </extension>
 </plugin>

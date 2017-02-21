@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+      <extension
+            point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
+         <TradesTableContextMenuExtension
+               class="com.mmxlabs.models.lng.transformer.ui.actionablesets.CreateActionableSetPlanContextMenuExtension">
+         </TradesTableContextMenuExtension>
+      </extension>
+</plugin>

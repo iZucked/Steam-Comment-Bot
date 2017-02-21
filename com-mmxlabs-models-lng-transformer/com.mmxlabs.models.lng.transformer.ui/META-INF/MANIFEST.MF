@@ -62,6 +62,7 @@ Import-Package: com.mmxlabs.models.ui.dates,
 Service-Component: OSGI-INF/*.xml
 Export-Package: com.mmxlabs.models.lng.transformer.stochasticactionsets,
  com.mmxlabs.models.lng.transformer.ui,
+ com.mmxlabs.models.lng.transformer.ui.actionablesets,
  com.mmxlabs.models.lng.transformer.ui.analytics,
  com.mmxlabs.models.lng.transformer.ui.breakdown,
  com.mmxlabs.models.lng.transformer.ui.breakdown.chain,
