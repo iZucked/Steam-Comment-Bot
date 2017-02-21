@@ -228,7 +228,7 @@ public class ActionSetTransformer {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
-					if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit, loadSlot, false, canDefer)) {
+					if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit, slotVisit.getSlotAllocation(), false, canDefer)) {
 						deferredElements.add(element);
 					}
 				}

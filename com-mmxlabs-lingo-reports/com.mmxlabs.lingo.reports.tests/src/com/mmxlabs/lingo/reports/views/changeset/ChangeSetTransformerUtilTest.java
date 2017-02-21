@@ -71,7 +71,7 @@ public class ChangeSetTransformerUtilTest {
 			newDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			newCargoAllocation = createCargoAllocation(cargo, newLoadSlotAllocation, newDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), newLoadSlotAllocation, true, false);
 		}
 
 		// Base
@@ -90,7 +90,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation = createCargoAllocation(cargo, oldLoadSlotAllocation, oldDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), oldLoadSlotAllocation, false,
+					false);
 		}
 
 		// Verify results
@@ -190,7 +191,7 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation = createCargoAllocation(cargo, newLoadSlotAllocation, newDischargeSlotAllocation);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), newLoadSlotAllocation, true, false);
 		}
 
 		// Base
@@ -208,7 +209,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation = createCargoAllocation(cargo, oldLoadSlotAllocation, oldDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), oldLoadSlotAllocation, false,
+					false);
 		}
 
 		// Verify results
@@ -297,7 +299,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation = createCargoAllocation(cargo, oldLoadSlotAllocation, oldDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), oldLoadSlotAllocation, false,
+					false);
 		}
 
 		// Verify results
@@ -374,7 +377,7 @@ public class ChangeSetTransformerUtilTest {
 			newDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			newCargoAllocation = createCargoAllocation(cargo, newLoadSlotAllocation, newDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), newLoadSlotAllocation, true, false);
 		}
 
 		// Original
@@ -445,7 +448,7 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation = createCargoAllocation(cargo, newLoadSlotAllocation, newDischargeSlotAllocation);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), newLoadSlotAllocation, true, false);
 		}
 
 		// Base
@@ -464,7 +467,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation = createCargoAllocation(cargo, oldLoadSlotAllocation, oldDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), oldLoadSlotAllocation, false,
+					false);
 		}
 
 		// Verify results
@@ -543,7 +547,7 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation = createCargoAllocation(cargo, newLoadSlotAllocation, newDischargeSlotAllocation);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), newLoadSlotAllocation, true, false);
 		}
 
 		// Base
@@ -562,7 +566,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation = createCargoAllocation(cargo, oldLoadSlotAllocation, oldDischargeSlotAllocation);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), oldLoadSlotAllocation, false,
+					false);
 		}
 
 		// Verify results - same market type, same market name, same month, same as no change.
@@ -618,7 +623,8 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation1 = createCargoAllocation(cargo, newLoadSlotAllocation1, newDischargeSlotAllocation1);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation1.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation1.getSlotVisit(), newLoadSlotAllocation1, true,
+					false);
 		}
 		// Target - 2
 		final CargoAllocation newCargoAllocation2;
@@ -637,7 +643,8 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation2 = createCargoAllocation(cargo, newLoadSlotAllocation2, newDischargeSlotAllocation2);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation2.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation2.getSlotVisit(), newLoadSlotAllocation2, true,
+					false);
 		}
 
 		// Base - 1
@@ -656,7 +663,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation1 = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation1 = createCargoAllocation(cargo, oldLoadSlotAllocation1, oldDischargeSlotAllocation1);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation1.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation1.getSlotVisit(), oldLoadSlotAllocation1, false,
+					false);
 		}
 
 		// Base - 2
@@ -675,7 +683,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation2 = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation2 = createCargoAllocation(cargo, oldLoadSlotAllocation2, oldDischargeSlotAllocation2);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation2.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation2.getSlotVisit(), oldLoadSlotAllocation2, false,
+					false);
 		}
 
 		// Verify results
@@ -773,7 +782,8 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation1 = createCargoAllocation(cargo, newLoadSlotAllocation1, newDischargeSlotAllocation1);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation1.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation1.getSlotVisit(), newLoadSlotAllocation1, true,
+					false);
 		}
 		// Target - 2
 		final CargoAllocation newCargoAllocation2;
@@ -792,7 +802,8 @@ public class ChangeSetTransformerUtilTest {
 
 			newCargoAllocation2 = createCargoAllocation(cargo, newLoadSlotAllocation2, newDischargeSlotAllocation2);
 
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation2.getSlotVisit(), loadSlot, true, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation2.getSlotVisit(), newLoadSlotAllocation2, true,
+					false);
 		}
 
 		// Base - 1
@@ -811,7 +822,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation1 = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation1 = createCargoAllocation(cargo, oldLoadSlotAllocation1, oldDischargeSlotAllocation1);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation1.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation1.getSlotVisit(), oldLoadSlotAllocation1, false,
+					false);
 		}
 
 		// Base - 2
@@ -831,7 +843,8 @@ public class ChangeSetTransformerUtilTest {
 			oldDischargeSlotAllocation2 = createSlotAllocation(dischargeSlot, sequence);
 
 			oldCargoAllocation2 = createCargoAllocation(cargo, oldLoadSlotAllocation2, oldDischargeSlotAllocation2);
-			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation2.getSlotVisit(), loadSlot, false, false);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation2.getSlotVisit(), oldLoadSlotAllocation2, false,
+					false);
 		}
 
 		// Verify results
@@ -1119,7 +1132,7 @@ public class ChangeSetTransformerUtilTest {
 	@NonNull
 	private CargoAllocation createCargoAllocation(final Cargo cargo, final SlotAllocation... slotsAllocations) {
 		final CargoAllocation cargoAllocation = Mockito.mock(CargoAllocation.class);
-//		Mockito.when(cargoAllocation.getInputCargo()).thenReturn(cargo);
+		// Mockito.when(cargoAllocation.getInputCargo()).thenReturn(cargo);
 
 		final EList<SlotAllocation> slotList = new BasicEList<>();
 		for (final SlotAllocation slotsAllocation : slotsAllocations) {

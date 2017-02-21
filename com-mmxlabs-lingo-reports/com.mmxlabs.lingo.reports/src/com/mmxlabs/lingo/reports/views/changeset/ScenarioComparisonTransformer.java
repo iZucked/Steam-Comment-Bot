@@ -239,7 +239,7 @@ public class ScenarioComparisonTransformer {
 									throw new RuntimeException("Complex cargoes are not supported");
 								}
 								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
-										(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, false);
+										slotVisit2.getSlotAllocation(), false, false);
 							}
 						}
 					}

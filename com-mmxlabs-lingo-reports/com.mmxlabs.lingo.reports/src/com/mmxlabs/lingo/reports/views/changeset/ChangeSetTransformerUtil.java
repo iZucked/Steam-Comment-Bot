@@ -33,7 +33,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -71,7 +70,7 @@ public final class ChangeSetTransformerUtil {
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
 				assert loadSlot != null;
-				return createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit, loadSlot, isBase, canDefer);
+				return createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit, slotVisit.getSlotAllocation(), isBase, canDefer);
 			}
 		} else if (element instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
@@ -88,11 +87,12 @@ public final class ChangeSetTransformerUtil {
 
 	public static boolean createOrUpdateSlotVisitRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
 			final Map<String, List<ChangeSetRow>> lhsRowMarketMap, final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, @NonNull final SlotVisit slotVisit,
-			@NonNull final LoadSlot loadSlot, final boolean isBase, final boolean canDefer) {
+			@NonNull final SlotAllocation loadAllocation, final boolean isBase, final boolean canDefer) {
 
 		final ChangeSetRow row;
 		{
-			final String rowKey = getKeyName(loadSlot);
+			LoadSlot loadSlot = (LoadSlot)loadAllocation.getSlot();
+			final String rowKey = getKeyName(loadAllocation);
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
 			} else {
@@ -144,7 +144,7 @@ public final class ChangeSetTransformerUtil {
 			}
 
 			// Store basic key
-			final String otherRowKey = getKeyName(slotAllocation.getSlot());
+			final String otherRowKey = getKeyName(slotAllocation);
 			if (isBase) {
 				row.setRhsName(getRowName(slotAllocation.getSlot()));
 				row.setNewDischargeAllocation(slotAllocation);
@@ -229,7 +229,7 @@ public final class ChangeSetTransformerUtil {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			final ChangeSetRow row;
 			{
-				final String rowKey = getKeyName(loadSlot);
+				final String rowKey = getKeyName(openSlotAllocation);
 				if (lhsRowMap.containsKey(rowKey)) {
 					row = lhsRowMap.get(rowKey);
 				} else {
@@ -237,7 +237,7 @@ public final class ChangeSetTransformerUtil {
 					rows.add(row);
 					row.setLhsName(getRowName(loadSlot));
 					row.setLoadSlot(loadSlot);
-					lhsRowMap.put(getKeyName(loadSlot), row);
+					lhsRowMap.put(getKeyName(openSlotAllocation), row);
 				}
 			}
 			if (isBase) {
@@ -247,7 +247,7 @@ public final class ChangeSetTransformerUtil {
 				// row.setOriginalGroupProfitAndLoss(openSlotAllocation);
 				row.setOriginalOpenLoadAllocation(openSlotAllocation);
 				if (openSlotAllocation.getSlot() != null) {
-					final ChangeSetRow otherRow = lhsRowMap.get(getKeyName(openSlotAllocation.getSlot()));
+					final ChangeSetRow otherRow = lhsRowMap.get(getKeyName(openSlotAllocation));
 					if (otherRow != null) {
 						if (row != otherRow) {
 							row.setLhsWiringLink(otherRow);
@@ -260,7 +260,7 @@ public final class ChangeSetTransformerUtil {
 			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 			final ChangeSetRow row;
 			{
-				final String rowKey = getKeyName(dischargeSlot);
+				final String rowKey = getKeyName(openSlotAllocation);
 				if (rhsRowMap.containsKey(rowKey)) {
 					row = rhsRowMap.get(rowKey);
 				} else {
@@ -268,7 +268,7 @@ public final class ChangeSetTransformerUtil {
 					rows.add(row);
 					row.setRhsName(getRowName(dischargeSlot));
 					row.setDischargeSlot(dischargeSlot);
-					rhsRowMap.put(getKeyName(dischargeSlot), row);
+					rhsRowMap.put(getKeyName(openSlotAllocation), row);
 				}
 			}
 			if (isBase) {
@@ -278,7 +278,7 @@ public final class ChangeSetTransformerUtil {
 				// row.setOriginalGroupProfitAndLoss(openSlotAllocation);
 				row.setOriginalOpenDischargeAllocation(openSlotAllocation);
 				if (openSlotAllocation.getSlot() != null) {
-					final ChangeSetRow otherRow = rhsRowMap.get(getKeyName(openSlotAllocation.getSlot()));
+					final ChangeSetRow otherRow = rhsRowMap.get(getKeyName(openSlotAllocation));
 					if (otherRow != null) {
 						if (row != otherRow) {
 							row.setRhsWiringLink(otherRow);
@@ -554,17 +554,23 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	@Nullable
-	public static String getKeyName(@Nullable final Slot slot) {
+	public static String getKeyName(@Nullable final SlotAllocation slotAllocation) {
+
+		if (slotAllocation == null) {
+			return null;
+		}
+		Slot slot = slotAllocation.getSlot();
 		if (slot == null) {
 			return null;
 		}
 		if (slot instanceof SpotSlot) {
 			final String key = EquivalanceGroupBuilder.getElementKey(slot);
 			final StringBuilder sb = new StringBuilder();
-			final Cargo cargo = slot.getCargo();
-			if (cargo != null) {
-				for (final Slot slot2 : cargo.getSortedSlots()) {
-					if (slot == slot2) {
+			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+			if (cargoAllocation != null) {
+				for (final SlotAllocation slotAllocation2 : cargoAllocation.getSlotAllocations()) {
+					Slot slot2 = slotAllocation2.getSlot();
+					if (slotAllocation == slotAllocation2) {
 						sb.append(key);
 					} else {
 						sb.append(slot2.getName());
@@ -576,6 +582,21 @@ public final class ChangeSetTransformerUtil {
 			}
 			return sb.toString();
 
+		}
+		return slot.getName();
+	}
+	@Nullable
+	public static String getKeyName(@Nullable final OpenSlotAllocation slotAllocation) {
+		
+		if (slotAllocation == null) {
+			return null;
+		}
+		Slot slot = slotAllocation.getSlot();
+		if (slot == null) {
+			return null;
+		}
+		if (slot instanceof SpotSlot) {
+			assert false;
 		}
 		return slot.getName();
 	}

@@ -15,8 +15,8 @@
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution allPopups="false"
 			locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
-			<command commandId="com.mmxlabs.lingo.reports.changeset.insertionplans"
-				icon="icons/cview16/actionsets_view.gif" label="Open insertion plans"
+			<command commandId="com.mmxlabs.lingo.reports.changeset.openactionplans"
+				icon="icons/cview16/actionsets_view.gif" label="Open actionable sets"
 				style="push">
 				<visibleWhen checkEnabled="false">
 					<and>
@@ -34,11 +34,9 @@
 			</command>
 		</menuContribution>
 	</extension>
-
 	<extension point="org.eclipse.ui.commands">
-		<command id="com.mmxlabs.lingo.reports.changeset.insertionplans"
-			name="Open insertion plans">
+		<command id="com.mmxlabs.lingo.reports.changeset.openactionplans"
+			name="Open actionable sets">
 		</command>
 	</extension>
- 
 </plugin>

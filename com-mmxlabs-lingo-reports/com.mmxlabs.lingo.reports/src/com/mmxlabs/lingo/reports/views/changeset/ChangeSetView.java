@@ -102,6 +102,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -1683,6 +1684,35 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 	}
+	
+	public void setActionableSetData(final ScenarioInstance target, final ActionableSetPlan plan) {
+
+		cleanUpVesselColumns();
+
+		if (target == null) {
+			setEmptyData();
+		} else {
+			final Display display = PlatformUI.getWorkbench().getDisplay();
+			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
+			try {
+				d.run(true, false, new IRunnableWithProgress() {
+
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
+						final ChangeSetRoot newRoot = transformer.createDataModel(target, plan, monitor);
+						display.asyncExec(new ViewUpdateRunnable(newRoot));
+					}
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
 
 	public void setInsertionPlanData(final ScenarioInstance target, final SlotInsertionOptions plan) {
 
@@ -2371,10 +2401,11 @@ public class ChangeSetView implements IAdaptable {
 		final ScenarioInstance target = solution.getScenarioInstance();
 		final EObject plan = solution.getSolution();
 		// Do something?
-		// if (plan instanceof ActionPlan) {
-		// setActionSetData(target, plan);
-		// }
-		if (plan instanceof SlotInsertionOptions) {
+		if (plan instanceof ActionableSetPlan) {
+			this.viewMode = ViewMode.ACTION_SET;
+			this.canExportChangeSet = true;
+			setActionableSetData(target, (ActionableSetPlan) plan);
+		} else if (plan instanceof SlotInsertionOptions) {
 			this.viewMode = ViewMode.ACTION_SET;
 			this.canExportChangeSet = true;
 			setInsertionPlanData(target, (SlotInsertionOptions) plan);

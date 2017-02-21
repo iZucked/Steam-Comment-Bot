@@ -4,6 +4,7 @@
   <imports xsi:type="basic:TrimmedWindow" xmi:id="_HpKhwFIiEeWoN4jo1OIdrw" elementId="IDEWindow"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EYe24EGJEeW-SYJZ5d5KDQ" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_33-uQEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.0" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.AnalyseScenarioHandler" command="_y3WtAEGJEeW-SYJZ5d5KDQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_k_hdwPNbEeaZJ5kGPAzMmQ" elementId="com.mmxlabs.lingo.reports.views.changeset.handlers.CreateChangeSetViewHandler" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.CreateChangeSetViewHandler" command="_ar_YcPNbEeaZJ5kGPAzMmQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_e3NEAEyjEeWRXMz4UJzhKw" featurename="sharedElements" parentElementId="IDEWindow">
     <elements xsi:type="basic:Part" xmi:id="_OYReEFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" label="Change Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif" tooltip="" closeable="true">
@@ -37,6 +38,13 @@
         <children xsi:type="menu:DirectToolItem" xmi:id="_zjVxEFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.comparetobase" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler"/>
         <children xsi:type="menu:DirectToolItem" xmi:id="_sV8ysH8xEeakT9GEeQgFqg" elementId="com.mmxlabs.lingo.reports.directtoolitem.copy2" label="Copy" iconURI="platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif" tooltip="Copy to clipboard" contributionURI="bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler"/>
       </toolbar>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VUXzgPNbEeaZJ5kGPAzMmQ" featurename="commands" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_ar_YcPNbEeaZJ5kGPAzMmQ" elementId="com.mmxlabs.lingo.reports.command.createchangesetview" commandName="Create a Change Set View instance">
+      <parameters xmi:id="_dx5ZcPNbEeaZJ5kGPAzMmQ" elementId="instance" name="instance" optional="false"/>
+      <parameters xmi:id="_g1oQMPNbEeaZJ5kGPAzMmQ" elementId="plan" name="plan" optional="false"/>
+      <parameters xmi:id="_idzH4PNbEeaZJ5kGPAzMmQ" elementId="title" name="title" optional="false"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

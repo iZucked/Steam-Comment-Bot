@@ -20,10 +20,9 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.analytics.ActionableSet;
+import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -33,29 +32,27 @@ import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class InsertionPlanTransformer {
+public class ActionableSetPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance instance, SlotInsertionOptions plan, final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance instance, ActionableSetPlan plan, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
 		final List<ScenarioResult> stages = new LinkedList<>();
 
 		// Assuming first option is the base.
-		for (SlotInsertionOption option : plan.getInsertionOptions()) {
+		for (ActionableSet option : plan.getActionSets()) {
 			stages.add(new ScenarioResult(instance, option.getScheduleModel()));
 		}
 
 		try {
-			monitor.beginTask("Opening insertion plans", stages.size());
-			ScenarioResult base = null;
+			monitor.beginTask("Opening action plans", stages.size());
+			ScenarioResult prev = null;
 			for (final ScenarioResult current : stages) {
-				if (base != null) {
-					root.getChangeSets().add(buildChangeSet(stages.get(0), base, current));
+				if (prev != null) {
+					root.getChangeSets().add(buildChangeSet(stages.get(0), prev, current));
 				}
-				if (base == null) {
-					base = current;
-				}
+				prev = current;
 				monitor.worked(1);
 
 			}
@@ -148,7 +145,7 @@ public class InsertionPlanTransformer {
 		}
 
 		// Second pass, create the wiring links.
-		final List<EObject> deferredElements = processElementsForWiringPass(toInterestingElements, equivalancesMap, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, true);
+		final List<EObject> deferredElements = processElementsForWiringPass(fromInterestingElements, equivalancesMap, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, true);
 		// Process deferred elements - i.e. those with multiple spot market options
 		processElementsForWiringPass(deferredElements, equivalancesMap, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, false);
 
@@ -174,45 +171,38 @@ public class InsertionPlanTransformer {
 		final List<EObject> deferredElements = new LinkedList<>();
 
 		for (final EObject element : elements) {
-			final Set<EObject> equivalents = equivalancesMap.get(element);
-			if (equivalents == null) {
-				continue;
-			}
+			// final Set<EObject> equivalents = equivalancesMap.get(element);
+			// if (equivalents == null) {
+			// continue;
+			// }
 			if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
 
-					for (final EObject e : equivalents) {
-						if (e instanceof SlotVisit) {
-							final SlotVisit slotVisit2 = (SlotVisit) e;
-							final CargoAllocation cargoAllocation = slotVisit2.getSlotAllocation().getCargoAllocation();
-							if (cargoAllocation.getSlotAllocations().size() != 2) {
-								throw new RuntimeException("Complex cargoes are not supported");
-							}
-							if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2, slotVisit2.getSlotAllocation(), false,
-									canDefer)) {
-								deferredElements.add(element);
-							}
-						}
+					if (loadSlot.getName().contains("FOB_PNG-2016-12")) {
+						int ii = 0;
+					}
+					//
+					// for (final EObject e : equivalents) {
+					// if (e instanceof SlotVisit) {
+					// final SlotVisit slotVisit2 = slotVisit;
+					// final CargoAllocation cargoAllocation = slotVisit2.getSlotAllocation().getCargoAllocation();
+					// if (cargoAllocation.getSlotAllocations().size() != 2) {
+					// throw new RuntimeException("Complex cargoes are not supported");
+					// }
+					if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit, slotVisit.getSlotAllocation(), false, canDefer)) {
+						deferredElements.add(element);
+						// }
+						// }
 					}
 				}
 			} else if (element instanceof OpenSlotAllocation) {
 				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-				for (final EObject e : equivalents) {
-					if (e instanceof OpenSlotAllocation) {
-						final OpenSlotAllocation openSlotAllocation2 = (OpenSlotAllocation) e;
-						ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation2, false);
-					}
-				}
+				ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation, false);
 			} else if (element instanceof Event) {
-				final Event event = (Event) element;
-				for (final EObject e : equivalents) {
-					if (e instanceof Event) {
-						final Event event2 = (Event) e;
-						ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event2, false);
-					}
-				}
+				Event event = (Event) element;
+				ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, false);
 			}
 		}
 		return deferredElements;
