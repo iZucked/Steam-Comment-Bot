@@ -330,6 +330,42 @@ public interface AnalyticsFactory extends EFactory {
 	PartialCase createPartialCase();
 
 	/**
+	 * Returns a new object of class '<em>Actionable Set Plan</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Actionable Set Plan</em>'.
+	 * @generated
+	 */
+	ActionableSetPlan createActionableSetPlan();
+
+	/**
+	 * Returns a new object of class '<em>Actionable Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Actionable Set</em>'.
+	 * @generated
+	 */
+	ActionableSet createActionableSet();
+
+	/**
+	 * Returns a new object of class '<em>Slot Insertion Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Slot Insertion Options</em>'.
+	 * @generated
+	 */
+	SlotInsertionOptions createSlotInsertionOptions();
+
+	/**
+	 * Returns a new object of class '<em>Slot Insertion Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Slot Insertion Option</em>'.
+	 * @generated
+	 */
+	SlotInsertionOption createSlotInsertionOption();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

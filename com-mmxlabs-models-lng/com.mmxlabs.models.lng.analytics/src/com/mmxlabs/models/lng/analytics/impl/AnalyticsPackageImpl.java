@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.analytics.ActionableSet;
+import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalysisResultDetail;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -48,6 +50,8 @@ import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
@@ -326,6 +330,34 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass actionableSetPlanEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass actionableSetEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotInsertionOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotInsertionOptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum destinationTypeEEnum = null;
 
 	/**
@@ -456,6 +488,24 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAnalyticsModel_OptionModels() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_InsertionOptions() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_ActionableSetPlans() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -2044,6 +2094,105 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getActionableSetPlan() {
+		return actionableSetPlanEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getActionableSetPlan_ActionSets() {
+		return (EReference)actionableSetPlanEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getActionableSetPlan_ExtraSlots() {
+		return (EReference)actionableSetPlanEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getActionableSet() {
+		return actionableSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getActionableSet_ScheduleModel() {
+		return (EReference)actionableSetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSlotInsertionOptions() {
+		return slotInsertionOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotInsertionOptions_SlotsInserted() {
+		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotInsertionOptions_InsertionOptions() {
+		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotInsertionOptions_ExtraSlots() {
+		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSlotInsertionOption() {
+		return slotInsertionOptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotInsertionOption_ScheduleModel() {
+		return (EReference)slotInsertionOptionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getOptionAnalysisModel_PartialCase() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(4);
 	}
@@ -2156,6 +2305,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__SHIPPING_COST_PLANS);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__CARGO_SANDBOXES);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__OPTION_MODELS);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__INSERTION_OPTIONS);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__ACTIONABLE_SET_PLANS);
 
 		unitCostMatrixEClass = createEClass(UNIT_COST_MATRIX);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__FROM_PORTS);
@@ -2365,6 +2516,21 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		partialCaseEClass = createEClass(PARTIAL_CASE);
 		createEReference(partialCaseEClass, PARTIAL_CASE__PARTIAL_CASE);
 
+		actionableSetPlanEClass = createEClass(ACTIONABLE_SET_PLAN);
+		createEReference(actionableSetPlanEClass, ACTIONABLE_SET_PLAN__ACTION_SETS);
+		createEReference(actionableSetPlanEClass, ACTIONABLE_SET_PLAN__EXTRA_SLOTS);
+
+		actionableSetEClass = createEClass(ACTIONABLE_SET);
+		createEReference(actionableSetEClass, ACTIONABLE_SET__SCHEDULE_MODEL);
+
+		slotInsertionOptionsEClass = createEClass(SLOT_INSERTION_OPTIONS);
+		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__SLOTS_INSERTED);
+		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS);
+		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__EXTRA_SLOTS);
+
+		slotInsertionOptionEClass = createEClass(SLOT_INSERTION_OPTION);
+		createEReference(slotInsertionOptionEClass, SLOT_INSERTION_OPTION__SCHEDULE_MODEL);
+
 		// Create enums
 		destinationTypeEEnum = createEEnum(DESTINATION_TYPE);
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
@@ -2442,6 +2608,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAnalyticsModel_ShippingCostPlans(), this.getShippingCostPlan(), null, "shippingCostPlans", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_CargoSandboxes(), this.getCargoSandbox(), null, "cargoSandboxes", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_OptionModels(), this.getOptionAnalysisModel(), null, "optionModels", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_InsertionOptions(), this.getSlotInsertionOptions(), null, "insertionOptions", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_ActionableSetPlans(), this.getActionableSetPlan(), null, "actionableSetPlans", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostMatrixEClass, UnitCostMatrix.class, "UnitCostMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		EGenericType g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -2660,6 +2828,21 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(partialCaseEClass, PartialCase.class, "PartialCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCase_PartialCase(), this.getPartialCaseRow(), null, "partialCase", null, 0, -1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(actionableSetPlanEClass, ActionableSetPlan.class, "ActionableSetPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getActionableSetPlan_ActionSets(), this.getActionableSet(), null, "actionSets", null, 0, -1, ActionableSetPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getActionableSetPlan_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, ActionableSetPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(actionableSetEClass, ActionableSet.class, "ActionableSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getActionableSet_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, ActionableSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotInsertionOptionsEClass, SlotInsertionOptions.class, "SlotInsertionOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotInsertionOptions_SlotsInserted(), theCargoPackage.getSlot(), null, "slotsInserted", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotInsertionOptions_InsertionOptions(), this.getSlotInsertionOption(), null, "insertionOptions", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotInsertionOptions_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotInsertionOptionEClass, SlotInsertionOption.class, "SlotInsertionOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotInsertionOption_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, SlotInsertionOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(destinationTypeEEnum, DestinationType.class, "DestinationType");

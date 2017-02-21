@@ -1,40 +1,56 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.provider;
 
+
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.AnalyticsModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class AnalyticsModelItemProvider
-	extends UUIDObjectItemProvider {
+public class SlotInsertionOptionsItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AnalyticsModelItemProvider(AdapterFactory adapterFactory) {
+	public SlotInsertionOptionsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -49,25 +65,25 @@ public class AnalyticsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addSelectedMatrixPropertyDescriptor(object);
+			addSlotsInsertedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Selected Matrix feature.
+	 * This adds a property descriptor for the Slots Inserted feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSelectedMatrixPropertyDescriptor(Object object) {
+	protected void addSlotsInsertedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AnalyticsModel_selectedMatrix_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AnalyticsModel_selectedMatrix_feature", "_UI_AnalyticsModel_type"),
-				 AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX,
+				 getString("_UI_SlotInsertionOptions_slotsInserted_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotInsertionOptions_slotsInserted_feature", "_UI_SlotInsertionOptions_type"),
+				 AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED,
 				 true,
 				 false,
 				 true,
@@ -88,12 +104,8 @@ public class AnalyticsModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS);
+			childrenFeatures.add(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS);
+			childrenFeatures.add(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS);
 		}
 		return childrenFeatures;
 	}
@@ -112,14 +124,14 @@ public class AnalyticsModelItemProvider
 	}
 
 	/**
-	 * This returns AnalyticsModel.gif.
+	 * This returns SlotInsertionOptions.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AnalyticsModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SlotInsertionOptions"));
 	}
 
 	/**
@@ -130,11 +142,9 @@ public class AnalyticsModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AnalyticsModel)object).getUuid();
-		return label == null || label.length() == 0 ?
-			getString("_UI_AnalyticsModel_type") :
-			getString("_UI_AnalyticsModel_type") + " " + label;
+		return getString("_UI_SlotInsertionOptions_type");
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -147,13 +157,9 @@ public class AnalyticsModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(AnalyticsModel.class)) {
-			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
-			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
-			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
-			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
-			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
-			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+		switch (notification.getFeatureID(SlotInsertionOptions.class)) {
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS:
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -173,33 +179,39 @@ public class AnalyticsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES,
-				 AnalyticsFactory.eINSTANCE.createUnitCostMatrix()));
+				(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS,
+				 AnalyticsFactory.eINSTANCE.createSlotInsertionOption()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS,
-				 AnalyticsFactory.eINSTANCE.createShippingCostPlan()));
+				(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS,
+				 CargoFactory.eINSTANCE.createLoadSlot()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES,
-				 AnalyticsFactory.eINSTANCE.createCargoSandbox()));
+				(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS,
+				 CargoFactory.eINSTANCE.createDischargeSlot()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS,
-				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
+				(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS,
+				 CargoFactory.eINSTANCE.createSpotLoadSlot()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS,
-				 AnalyticsFactory.eINSTANCE.createSlotInsertionOptions()));
+				(AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS,
+				 CargoFactory.eINSTANCE.createSpotDischargeSlot()));
+	}
 
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS,
-				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

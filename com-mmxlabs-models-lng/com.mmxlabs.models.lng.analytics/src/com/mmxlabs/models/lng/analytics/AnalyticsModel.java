@@ -21,6 +21,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes <em>Cargo Sandboxes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getOptionModels <em>Option Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getInsertionOptions <em>Insertion Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getActionableSetPlans <em>Actionable Set Plans</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
@@ -117,6 +119,38 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<OptionAnalysisModel> getOptionModels();
+
+	/**
+	 * Returns the value of the '<em><b>Insertion Options</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Insertion Options</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Insertion Options</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_InsertionOptions()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<SlotInsertionOptions> getInsertionOptions();
+
+	/**
+	 * Returns the value of the '<em><b>Actionable Set Plans</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ActionableSetPlan}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Actionable Set Plans</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Actionable Set Plans</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_ActionableSetPlans()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ActionableSetPlan> getActionableSetPlans();
 
 } // end of  AnalyticsModel
 

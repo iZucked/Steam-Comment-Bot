@@ -870,6 +870,98 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ActionableSetPlan} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ActionableSetPlanItemProvider actionableSetPlanItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ActionableSetPlan}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createActionableSetPlanAdapter() {
+		if (actionableSetPlanItemProvider == null) {
+			actionableSetPlanItemProvider = new ActionableSetPlanItemProvider(this);
+		}
+
+		return actionableSetPlanItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ActionableSet} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ActionableSetItemProvider actionableSetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ActionableSet}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createActionableSetAdapter() {
+		if (actionableSetItemProvider == null) {
+			actionableSetItemProvider = new ActionableSetItemProvider(this);
+		}
+
+		return actionableSetItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotInsertionOptionsItemProvider slotInsertionOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotInsertionOptionsAdapter() {
+		if (slotInsertionOptionsItemProvider == null) {
+			slotInsertionOptionsItemProvider = new SlotInsertionOptionsItemProvider(this);
+		}
+
+		return slotInsertionOptionsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SlotInsertionOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotInsertionOptionItemProvider slotInsertionOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SlotInsertionOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotInsertionOptionAdapter() {
+		if (slotInsertionOptionItemProvider == null) {
+			slotInsertionOptionItemProvider = new SlotInsertionOptionItemProvider(this);
+		}
+
+		return slotInsertionOptionItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1037,6 +1129,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (resultSetItemProvider != null) resultSetItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
 		if (partialCaseItemProvider != null) partialCaseItemProvider.dispose();
+		if (actionableSetPlanItemProvider != null) actionableSetPlanItemProvider.dispose();
+		if (actionableSetItemProvider != null) actionableSetItemProvider.dispose();
+		if (slotInsertionOptionsItemProvider != null) slotInsertionOptionsItemProvider.dispose();
+		if (slotInsertionOptionItemProvider != null) slotInsertionOptionItemProvider.dispose();
 	}
 
 }

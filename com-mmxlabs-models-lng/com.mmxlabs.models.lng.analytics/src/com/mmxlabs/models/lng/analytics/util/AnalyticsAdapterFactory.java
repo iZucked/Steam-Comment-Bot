@@ -231,6 +231,22 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createPartialCaseAdapter();
 			}
 			@Override
+			public Adapter caseActionableSetPlan(ActionableSetPlan object) {
+				return createActionableSetPlanAdapter();
+			}
+			@Override
+			public Adapter caseActionableSet(ActionableSet object) {
+				return createActionableSetAdapter();
+			}
+			@Override
+			public Adapter caseSlotInsertionOptions(SlotInsertionOptions object) {
+				return createSlotInsertionOptionsAdapter();
+			}
+			@Override
+			public Adapter caseSlotInsertionOption(SlotInsertionOption object) {
+				return createSlotInsertionOptionAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -763,6 +779,62 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan <em>Actionable Set Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSetPlan
+	 * @generated
+	 */
+	public Adapter createActionableSetPlanAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ActionableSet <em>Actionable Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSet
+	 * @generated
+	 */
+	public Adapter createActionableSetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions <em>Slot Insertion Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions
+	 * @generated
+	 */
+	public Adapter createSlotInsertionOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOption <em>Slot Insertion Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOption
+	 * @generated
+	 */
+	public Adapter createSlotInsertionOptionAdapter() {
 		return null;
 	}
 

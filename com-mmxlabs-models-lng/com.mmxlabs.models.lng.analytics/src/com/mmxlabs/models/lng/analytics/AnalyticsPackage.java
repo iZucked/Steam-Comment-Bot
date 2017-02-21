@@ -135,13 +135,31 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__OPTION_MODELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Insertion Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__INSERTION_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Actionable Set Plans</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__ACTIONABLE_SET_PLANS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
@@ -2271,6 +2289,145 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
+	 * @generated
+	 */
+	int ACTIONABLE_SET_PLAN = 36;
+
+	/**
+	 * The feature id for the '<em><b>Action Sets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__ACTION_SETS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTRA_SLOTS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Actionable Set Plan</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl <em>Actionable Set</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSet()
+	 * @generated
+	 */
+	int ACTIONABLE_SET = 37;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET__SCHEDULE_MODEL = 0;
+
+	/**
+	 * The number of structural features of the '<em>Actionable Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
+	 * @generated
+	 */
+	int SLOT_INSERTION_OPTIONS = 38;
+
+	/**
+	 * The feature id for the '<em><b>Slots Inserted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = 0;
+
+	/**
+	 * The feature id for the '<em><b>Insertion Options</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Slot Insertion Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl <em>Slot Insertion Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOption()
+	 * @generated
+	 */
+	int SLOT_INSERTION_OPTION = 39;
+
+	/**
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTION__SCHEDULE_MODEL = 0;
+
+	/**
+	 * The number of structural features of the '<em>Slot Insertion Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTION_FEATURE_COUNT = 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2278,7 +2435,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
 	 * @generated
 	 */
-	int DESTINATION_TYPE = 36;
+	int DESTINATION_TYPE = 40;
 
 
 	/**
@@ -2289,7 +2446,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 37;
+	int VOLUME_MODE = 41;
 
 
 	/**
@@ -2356,6 +2513,28 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAnalyticsModel_OptionModels();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getInsertionOptions <em>Insertion Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Insertion Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getInsertionOptions()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_InsertionOptions();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getActionableSetPlans <em>Actionable Set Plans</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Actionable Set Plans</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getActionableSetPlans()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_ActionableSetPlans();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix <em>Unit Cost Matrix</em>}'.
@@ -4152,6 +4331,123 @@ s	 * <!-- end-user-doc -->
 	EReference getPartialCase_PartialCase();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan <em>Actionable Set Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Actionable Set Plan</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSetPlan
+	 * @generated
+	 */
+	EClass getActionableSetPlan();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan#getActionSets <em>Action Sets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Action Sets</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSetPlan#getActionSets()
+	 * @see #getActionableSetPlan()
+	 * @generated
+	 */
+	EReference getActionableSetPlan_ActionSets();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan#getExtraSlots <em>Extra Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSetPlan#getExtraSlots()
+	 * @see #getActionableSetPlan()
+	 * @generated
+	 */
+	EReference getActionableSetPlan_ExtraSlots();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ActionableSet <em>Actionable Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Actionable Set</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSet
+	 * @generated
+	 */
+	EClass getActionableSet();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ActionableSet#getScheduleModel <em>Schedule Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ActionableSet#getScheduleModel()
+	 * @see #getActionableSet()
+	 * @generated
+	 */
+	EReference getActionableSet_ScheduleModel();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions <em>Slot Insertion Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Insertion Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions
+	 * @generated
+	 */
+	EClass getSlotInsertionOptions();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getSlotsInserted <em>Slots Inserted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Slots Inserted</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getSlotsInserted()
+	 * @see #getSlotInsertionOptions()
+	 * @generated
+	 */
+	EReference getSlotInsertionOptions_SlotsInserted();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getInsertionOptions <em>Insertion Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Insertion Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getInsertionOptions()
+	 * @see #getSlotInsertionOptions()
+	 * @generated
+	 */
+	EReference getSlotInsertionOptions_InsertionOptions();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getExtraSlots <em>Extra Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Extra Slots</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getExtraSlots()
+	 * @see #getSlotInsertionOptions()
+	 * @generated
+	 */
+	EReference getSlotInsertionOptions_ExtraSlots();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOption <em>Slot Insertion Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Insertion Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOption
+	 * @generated
+	 */
+	EClass getSlotInsertionOption();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOption#getScheduleModel <em>Schedule Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOption#getScheduleModel()
+	 * @see #getSlotInsertionOption()
+	 * @generated
+	 */
+	EReference getSlotInsertionOption_ScheduleModel();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4319,6 +4615,22 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ANALYTICS_MODEL__OPTION_MODELS = eINSTANCE.getAnalyticsModel_OptionModels();
+
+		/**
+		 * The meta object literal for the '<em><b>Insertion Options</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__INSERTION_OPTIONS = eINSTANCE.getAnalyticsModel_InsertionOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Actionable Set Plans</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__ACTIONABLE_SET_PLANS = eINSTANCE.getAnalyticsModel_ActionableSetPlans();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
@@ -5716,6 +6028,102 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PARTIAL_CASE__PARTIAL_CASE = eINSTANCE.getPartialCase_PartialCase();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
+		 * @generated
+		 */
+		EClass ACTIONABLE_SET_PLAN = eINSTANCE.getActionableSetPlan();
+
+		/**
+		 * The meta object literal for the '<em><b>Action Sets</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTIONABLE_SET_PLAN__ACTION_SETS = eINSTANCE.getActionableSetPlan_ActionSets();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTIONABLE_SET_PLAN__EXTRA_SLOTS = eINSTANCE.getActionableSetPlan_ExtraSlots();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl <em>Actionable Set</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSet()
+		 * @generated
+		 */
+		EClass ACTIONABLE_SET = eINSTANCE.getActionableSet();
+
+		/**
+		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTIONABLE_SET__SCHEDULE_MODEL = eINSTANCE.getActionableSet_ScheduleModel();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
+		 * @generated
+		 */
+		EClass SLOT_INSERTION_OPTIONS = eINSTANCE.getSlotInsertionOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Slots Inserted</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = eINSTANCE.getSlotInsertionOptions_SlotsInserted();
+
+		/**
+		 * The meta object literal for the '<em><b>Insertion Options</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = eINSTANCE.getSlotInsertionOptions_InsertionOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = eINSTANCE.getSlotInsertionOptions_ExtraSlots();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl <em>Slot Insertion Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOption()
+		 * @generated
+		 */
+		EClass SLOT_INSERTION_OPTION = eINSTANCE.getSlotInsertionOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Schedule Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_INSERTION_OPTION__SCHEDULE_MODEL = eINSTANCE.getSlotInsertionOption_ScheduleModel();
 
 		/**
 		 * The meta object literal for the '<em><b>Partial Case</b></em>' containment reference feature.

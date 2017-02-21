@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
+import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.CargoSandbox;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
@@ -35,6 +37,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getCargoSandboxes <em>Cargo Sandboxes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptionModels <em>Option Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getInsertionOptions <em>Insertion Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getActionableSetPlans <em>Actionable Set Plans</em>}</li>
  * </ul>
  *
  * @generated
@@ -89,6 +93,26 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected EList<OptionAnalysisModel> optionModels;
+
+	/**
+	 * The cached value of the '{@link #getInsertionOptions() <em>Insertion Options</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInsertionOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SlotInsertionOptions> insertionOptions;
+
+	/**
+	 * The cached value of the '{@link #getActionableSetPlans() <em>Actionable Set Plans</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getActionableSetPlans()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ActionableSetPlan> actionableSetPlans;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -205,6 +229,30 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<SlotInsertionOptions> getInsertionOptions() {
+		if (insertionOptions == null) {
+			insertionOptions = new EObjectContainmentEList<SlotInsertionOptions>(SlotInsertionOptions.class, this, AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS);
+		}
+		return insertionOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ActionableSetPlan> getActionableSetPlans() {
+		if (actionableSetPlans == null) {
+			actionableSetPlans = new EObjectContainmentEList<ActionableSetPlan>(ActionableSetPlan.class, this, AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS);
+		}
+		return actionableSetPlans;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -216,6 +264,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return ((InternalEList<?>)getCargoSandboxes()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 				return ((InternalEList<?>)getOptionModels()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
+				return ((InternalEList<?>)getInsertionOptions()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+				return ((InternalEList<?>)getActionableSetPlans()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -239,6 +291,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getCargoSandboxes();
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 				return getOptionModels();
+			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
+				return getInsertionOptions();
+			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+				return getActionableSetPlans();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -271,6 +327,14 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				getOptionModels().clear();
 				getOptionModels().addAll((Collection<? extends OptionAnalysisModel>)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
+				getInsertionOptions().clear();
+				getInsertionOptions().addAll((Collection<? extends SlotInsertionOptions>)newValue);
+				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+				getActionableSetPlans().clear();
+				getActionableSetPlans().addAll((Collection<? extends ActionableSetPlan>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -298,6 +362,12 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 				getOptionModels().clear();
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
+				getInsertionOptions().clear();
+				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+				getActionableSetPlans().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -320,6 +390,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return cargoSandboxes != null && !cargoSandboxes.isEmpty();
 			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 				return optionModels != null && !optionModels.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__INSERTION_OPTIONS:
+				return insertionOptions != null && !insertionOptions.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS:
+				return actionableSetPlans != null && !actionableSetPlans.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

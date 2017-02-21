@@ -108,6 +108,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.RESULT_SET: return createResultSet();
 			case AnalyticsPackage.BASE_CASE: return createBaseCase();
 			case AnalyticsPackage.PARTIAL_CASE: return createPartialCase();
+			case AnalyticsPackage.ACTIONABLE_SET_PLAN: return createActionableSetPlan();
+			case AnalyticsPackage.ACTIONABLE_SET: return createActionableSet();
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: return createSlotInsertionOptions();
+			case AnalyticsPackage.SLOT_INSERTION_OPTION: return createSlotInsertionOption();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -499,6 +503,46 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public PartialCase createPartialCase() {
 		PartialCaseImpl partialCase = new PartialCaseImpl();
 		return partialCase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ActionableSetPlan createActionableSetPlan() {
+		ActionableSetPlanImpl actionableSetPlan = new ActionableSetPlanImpl();
+		return actionableSetPlan;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ActionableSet createActionableSet() {
+		ActionableSetImpl actionableSet = new ActionableSetImpl();
+		return actionableSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotInsertionOptions createSlotInsertionOptions() {
+		SlotInsertionOptionsImpl slotInsertionOptions = new SlotInsertionOptionsImpl();
+		return slotInsertionOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotInsertionOption createSlotInsertionOption() {
+		SlotInsertionOptionImpl slotInsertionOption = new SlotInsertionOptionImpl();
+		return slotInsertionOption;
 	}
 
 	/**

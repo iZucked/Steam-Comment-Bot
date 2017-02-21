@@ -354,6 +354,26 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createActionableSetPlan()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createActionableSet()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createSlotInsertionOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createSlotInsertionOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 CargoFactory.eINSTANCE.createCargoModel()));
 
 		newChildDescriptors.add
@@ -464,6 +484,11 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createDateShiftExpressionPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 FleetFactory.eINSTANCE.createFleetModel()));
 
 		newChildDescriptors.add
@@ -525,6 +550,11 @@ public class ProvisionalCargoItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 MMXCoreFactory.eINSTANCE.createMMXRootObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 MMXCoreFactory.eINSTANCE.createMMXResultRoot()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -69,6 +69,8 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 		add_shippingCostPlansEditor(detailComposite, topClass);
 		add_cargoSandboxesEditor(detailComposite, topClass);
 		add_optionModelsEditor(detailComposite, topClass);
+		add_insertionOptionsEditor(detailComposite, topClass);
+		add_actionableSetPlansEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the roundTripMatrices feature on AnalyticsModel
@@ -113,5 +115,23 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_optionModelsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS));
+	}
+
+	/**
+	 * Create the editor for the insertionOptions feature on AnalyticsModel
+	 *
+	 * @generated
+	 */
+	protected void add_insertionOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS));
+	}
+
+	/**
+	 * Create the editor for the actionableSetPlans feature on AnalyticsModel
+	 *
+	 * @generated
+	 */
+	protected void add_actionableSetPlansEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS));
 	}
 }
