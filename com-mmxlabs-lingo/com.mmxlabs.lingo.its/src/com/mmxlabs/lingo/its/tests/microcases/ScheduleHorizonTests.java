@@ -341,7 +341,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 
 			@Nullable
-			final Schedule schedule = ScenarioModelUtil.findSchedule(optimiserScenario);
+			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
 
 			@Nullable
@@ -423,10 +423,8 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
 			@Nullable
-			final Schedule schedule = ScenarioModelUtil.findSchedule(optimiserScenario);
+			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
 
 			@Nullable
@@ -509,15 +507,12 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
 			@Nullable
-			final Schedule schedule = ScenarioModelUtil.findSchedule(optimiserScenario);
+			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
-
+			
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
@@ -601,10 +596,8 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
 			@Nullable
-			final Schedule schedule = ScenarioModelUtil.findSchedule(optimiserScenario);
+			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
 
 			@Nullable
@@ -689,10 +682,8 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
 			@Nullable
-			final Schedule schedule = ScenarioModelUtil.findSchedule(optimiserScenario);
+			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
 
 			@Nullable
@@ -765,13 +756,9 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
+	
 			@Nullable
-			final Schedule schedule = ScenarioModelUtil.findSchedule(optimiserScenario);
+			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
 
 			@Nullable

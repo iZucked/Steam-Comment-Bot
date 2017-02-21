@@ -127,9 +127,10 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 
 			Assert.assertNotSame(vesselAvailability, l_cargo2.getVesselAssignmentType());
 
+			Assert.assertNotSame(vesselAvailability1, cargo2.getVesselAssignmentType());
 			scenarioRunner.run();
-
-			Assert.assertSame(vesselAvailability, l_cargo2.getVesselAssignmentType());
+			Assert.assertSame(vesselAvailability1, cargo2.getVesselAssignmentType());
+			// Cannot check period result as we do not generate any Schedule models in the period schedule any more
 
 		}, null);
 	}
