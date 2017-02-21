@@ -69,7 +69,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Slot slot, @NonNull final MenuManager menuManager) {
 
-		if (!LicenseFeatures.isPermitted("features:option-suggester")) {
+		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
 
@@ -83,7 +83,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection selection, @NonNull final MenuManager menuManager) {
 
-		if (!LicenseFeatures.isPermitted("features:option-suggester")) {
+		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
 		final List<Slot> slots = new LinkedList<Slot>();
