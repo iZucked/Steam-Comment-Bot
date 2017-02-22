@@ -150,7 +150,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		entity = null;
 	}
 
-	private VesselAvailability createTestVesselAvailability(LocalDateTime startStart, LocalDateTime startEnd, LocalDateTime endStart) {
+	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
 
@@ -195,31 +195,32 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 				// Check spot index has been updated
 				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-				PriceIntervalProviderHelper priceIntervalProviderHelper = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceIntervalProviderHelper.class);
+				final PriceIntervalProviderHelper priceIntervalProviderHelper = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceIntervalProviderHelper.class);
 				/*
 				 * Load data and set up model
 				 */
-				IntervalData purchase = new IntervalData(0, 10, OptimiserUnitConvertor.convertToInternalPrice(5));
-				IntervalData sales = new IntervalData(50, 70, OptimiserUnitConvertor.convertToInternalPrice(10));
-				LadenRouteData[] lrd = new LadenRouteData[2];
+				final IntervalData purchase = new IntervalData(0, 10, OptimiserUnitConvertor.convertToInternalPrice(5));
+				final IntervalData sales = new IntervalData(50, 70, OptimiserUnitConvertor.convertToInternalPrice(10));
+				final LadenRouteData[] lrd = new LadenRouteData[2];
 				lrd[0] = new LadenRouteData(52, 71, 0, 1000, 0);
 				lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
-				IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselName, optimiserScenario.getCargoModel().getVesselAvailabilities(),
+				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselName, optimiserScenario.getCargoModel().getVesselAvailabilities(),
 						scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
 				@NonNull
+				final
 				IVesselClass o_vesselClass = o_vesselAvailability.getVessel().getVesselClass();
 				/*
 				 * Constants
 				 */
 				final int equivalenceFactor = 45_600_000;
 				final long cv = 23_4_00000;
-				int salesPrice = OptimiserUnitConvertor.convertToInternalPrice(10);
-				int loadDuration = 0;
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final int salesPrice = OptimiserUnitConvertor.convertToInternalPrice(10);
+				final int loadDuration = 0;
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
 				assert load != null;
-				long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
+				final long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
 						load.getCargoCVValue(), equivalenceFactor, lrd[0], 0, true);
-				long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
+				final long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
 						load.getCargoCVValue(), equivalenceFactor, lrd[1], 0, true);
 				/*
 				 * Test correct values are being calculated
@@ -229,11 +230,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				/*
 				 * Test correct route chosen
 				 */
-				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
+				final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
 						o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass, load.getCargoCVValue(), true);
 				Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[1]);
-				TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
-				int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
+				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
+				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,
 						loadDuration, new IntervalData[] { purchase }, new IntervalData[] { sales }, new IntervalData[] { sales });
 				Assert.assertArrayEquals(findBestBucketPairWithRouteAndBoiloffConsiderations, new int[] { 10, 11, 50, 51 });
 			});
@@ -264,15 +265,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -285,15 +286,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				// Check spot index has been updated
 				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -302,8 +304,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// Tests
 				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
@@ -337,15 +339,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -360,15 +362,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -377,8 +380,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// tests
 				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
@@ -413,15 +416,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -436,15 +439,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -453,8 +457,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// tests
 				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
@@ -487,15 +491,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(24, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -509,15 +513,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -526,8 +531,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
 				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1488);
@@ -558,7 +563,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double salesPrice = 8.87;
+		final double salesPrice = 8.87;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
 				.withWindowStartTime(0) //
@@ -568,15 +573,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -590,15 +595,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -607,8 +613,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 				Assert.assertEquals(
@@ -637,7 +643,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double salesPrice = 8.86;
+		final double salesPrice = 8.86;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
 				.withWindowStartTime(0) //
@@ -647,15 +653,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withWindowSize(24000, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -667,15 +673,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -684,8 +691,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 				Assert.assertEquals(
@@ -724,15 +731,15 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
 		CommodityIndex hh = null;
-		for (CommodityIndex commodityIndex : commodityIndices) {
+		for (final CommodityIndex commodityIndex : commodityIndices) {
 			if (commodityIndex.getName().equals("Henry_Hub")) {
 				hh = commodityIndex;
 			}
 		}
 		assert hh != null;
-		DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
+		final DataIndex<Double> hh_data = (DataIndex<Double>) hh.getData();
 		hh_data.getPoints().clear();
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
@@ -745,15 +752,16 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				@NonNull
+				final
 				ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				final PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				final IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				final IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 				// make sure no objects are null
 				assert load != null;
@@ -762,8 +770,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				assert dischargePortTimeWindowsRecord != null;
 
 				// get optimised time windows
-				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				Assert.assertEquals(MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, loadFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFLoadSlot().getPort().getTimeZone()),
 						MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()));
@@ -776,13 +784,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	}
 
 	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		IDischargeSlot discharge = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName),
+		final IDischargeSlot discharge = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName),
 				IDischargeSlot.class);
 		return discharge;
 	}
 
 	public ILoadSlot getDefaultOptimiserLoadSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		ILoadSlot load = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName), ILoadSlot.class);
+		final ILoadSlot load = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName), ILoadSlot.class);
 		return load;
 	}
 
