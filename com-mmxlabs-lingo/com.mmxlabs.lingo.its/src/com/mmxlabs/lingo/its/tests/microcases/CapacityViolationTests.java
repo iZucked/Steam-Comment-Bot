@@ -249,7 +249,6 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 					rawSequences);
 			// Check that there is no ConstraintCheckers
 			Assert.assertNull(failedConstraintCheckers);
-
 		});
 	}
 

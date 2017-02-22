@@ -4,29 +4,21 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.IntStream;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
+
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
@@ -41,26 +33,15 @@ import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.FuelAmount;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
-import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.impl.IdleImpl;
-import com.mmxlabs.models.lng.schedule.impl.JourneyImpl;
-import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
-import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 
 public class InPortBoilOffTests extends AbstractMicroTestCase {
 
@@ -137,7 +118,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 
 	@Before
 	@Override
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		super.constructor();
 		// Set a default prompt in the past

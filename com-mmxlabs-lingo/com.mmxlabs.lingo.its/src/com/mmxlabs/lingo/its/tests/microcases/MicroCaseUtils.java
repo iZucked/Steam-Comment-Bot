@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -74,9 +75,8 @@ public class MicroCaseUtils {
 		metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
 
 		instance.setMetadata(metadata);
-		instance.setInstance(lngScenarioModel);
 
-		ScenarioStorageUtil.storeToFile(instance, output);
+		ScenarioStorageUtil.storeToFile(instance, EcoreUtil.copy(lngScenarioModel), output);
 	}
 
 	public static void withInjectorPerChainScope(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Runnable r) {

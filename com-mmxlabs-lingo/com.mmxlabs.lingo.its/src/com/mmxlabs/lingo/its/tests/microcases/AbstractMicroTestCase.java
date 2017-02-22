@@ -86,7 +86,7 @@ public abstract class AbstractMicroTestCase {
 	}
 
 	@Before
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		lngScenarioModel = importReferenceData();
 

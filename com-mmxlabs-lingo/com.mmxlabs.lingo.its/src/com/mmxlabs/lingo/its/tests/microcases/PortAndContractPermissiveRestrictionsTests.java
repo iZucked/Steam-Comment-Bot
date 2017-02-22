@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
@@ -31,7 +30,6 @@ import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintChecker;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -68,7 +66,7 @@ public class PortAndContractPermissiveRestrictionsTests extends AbstractMicroTes
 	}
 
 	@Override
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		super.constructor();
 		// Set a default prompt in the past

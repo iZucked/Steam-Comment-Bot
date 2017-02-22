@@ -81,7 +81,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 	@Before
 	@Override
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		super.constructor();
 		// Set a default prompt in the past

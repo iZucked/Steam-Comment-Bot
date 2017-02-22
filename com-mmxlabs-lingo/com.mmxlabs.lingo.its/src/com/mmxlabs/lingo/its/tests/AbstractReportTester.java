@@ -18,8 +18,11 @@ import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
@@ -109,12 +112,13 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 	public void testExposuresReport() throws Exception {
 		Assume.assumeTrue(LicenseFeatures.isPermitted("features:exposures"));
 		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html", instance -> {
-			try (ModelReference ref = instance.getReference("ExposuresReportView")) {
+			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
 
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
-				final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+				final EditingDomain domain = ref.getEditingDomain();
 				final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
-				Exposures.calculateExposures(scenarioModel, schedule, domain);
+				RunnerHelper.asyncExec(() -> Exposures.calculateExposures(scenarioModel, schedule, domain));
 			}
 		});
 	}

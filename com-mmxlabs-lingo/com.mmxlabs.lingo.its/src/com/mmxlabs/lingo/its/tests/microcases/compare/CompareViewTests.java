@@ -1,14 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minsimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.compare;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,7 +21,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,6 +41,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -48,6 +59,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -75,10 +87,15 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.InstanceData;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 
 @RunWith(value = ShiroRunner.class)
 public class CompareViewTests {
@@ -779,9 +796,13 @@ public class CompareViewTests {
 
 		final ScenarioInstance pinned = makeScenarioInstance("from", from);
 		final ScenarioInstance other = makeScenarioInstance("to", to);
+
+		final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
+		final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
+
 		//
-		try (ModelReference fromRef = pinned.getReference("CompareViewTests:1")) {
-			try (ModelReference toRef = other.getReference("CompareViewTests:2")) {
+		try (ModelReference fromRef = pinnedRecord.aquireReference("CompareViewTests:1")) {
+			try (ModelReference toRef = otherRecord.aquireReference("CompareViewTests:2")) {
 
 				final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers = new LinkedList<>();
 				// if (customRelatedSlotHandlerExtensions != null) {
@@ -800,8 +821,8 @@ public class CompareViewTests {
 					children.add(scenarioModel);
 					return children;
 				};
-				ScenarioResult pinnedResult = new ScenarioResult(pinned);
-				ScenarioResult otherResult = new ScenarioResult(other);
+				final ScenarioResult pinnedResult = new ScenarioResult(pinned);
+				final ScenarioResult otherResult = new ScenarioResult(other);
 				selectedDataProvider.addScenario(pinnedResult, ScenarioModelUtil.getScheduleModel(from).getSchedule(), getChildren.apply(from));
 				selectedDataProvider.addScenario(otherResult, ScenarioModelUtil.getScheduleModel(to).getSchedule(), getChildren.apply(to));
 				selectedDataProvider.setPinnedScenarioInstance(pinnedResult);
@@ -830,9 +851,61 @@ public class CompareViewTests {
 
 		final ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		instance.setName(name);
-		instance.setInstance(from);
+		// instance.setInstance(from);
+
+		SSDataManager.Instance.getModelRecord(instance, (record, monitor) -> {
+			try {
+
+				final ResourceSet resourceSet = new ResourceSetImpl();
+				final Resource r = new ResourceImpl();
+				r.getContents().add(from);
+				resourceSet.getResources().add(r);
+				final Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> p = initEditingDomain(resourceSet, from, instance);
+				final InstanceData data = new InstanceData(record, from, p.getFirst(), p.getSecond(), (d) -> {
+					throw new UnsupportedOperationException();
+				}, (d) -> {
+					// Nothing to do
+				});
+				p.getSecond().setInstanceData(data);
+
+				return data;
+			} catch (final Exception e) {
+				record.setLoadFailure(e);
+				return null;
+			}
+		});
+
+		// TODO: NEED fix
 
 		return instance;
+	}
+
+	public static Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> initEditingDomain(final ResourceSet resourceSet, final EObject rootObject, final ScenarioInstance instance) {
+
+		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(instance);
+
+		commandStack.addCommandStackListener(new CommandStackListener() {
+
+			@Override
+			public void commandStackChanged(final EventObject event) {
+				// instance.setDirty(commandStack.isSaveNeeded());
+			}
+		});
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+
+		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		// Create the editing domain with a special command stack.
+		final MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
+
+		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, resourceSet);
+
+		commandStack.setEditingDomain(editingDomain);
+
+		return new Pair<>(editingDomain, commandStack);
+
 	}
 
 	static class ScenarioMaker {
@@ -918,6 +991,7 @@ public class CompareViewTests {
 		void buildIt(final Consumer<ScenarioMaker> r) {
 			r.accept(this);
 		}
+
 	}
 
 	protected @NonNull ExecutorService createExecutorService() {

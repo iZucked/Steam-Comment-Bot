@@ -32,6 +32,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -73,7 +74,6 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
@@ -145,204 +145,204 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		// Get the root object
-		final ScenarioInstance instance = loadScenario(scenarioFile);
-		if (instance == null) {
-			System.err.println("Unable to load scenario");
-			return IApplication.EXIT_OK;
-		}
-
-		final LNGScenarioModel rootObject = (LNGScenarioModel) instance.getInstance();
-
-		if (rootObject == null) {
-			System.err.println("Unable to load scenario");
-			return IApplication.EXIT_OK;
-		}
-
-		final String outputFile = overrideSettings.getOutput();
-
-		OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
-		assert optimisationPlan != null;
-		optimisationPlan.getStages().clear();
-
-		updateOptimiserSettings(rootObject, optimisationPlan, overrideSettings, headlessParameters);
-
-		// Add in required extensions, but do not run custom hooks.
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false);
-
-		assert overrideSettings.getOutputName() != null;//
-		// final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimisationPlan) : getFolderNameFromSettings(overrideSettings);
-		final String outputFolderName = getFolderNameFromSettings(overrideSettings);
-
-		// Ensure dir structure is in place
-		Paths.get(path, outputFolderName).toFile().mkdirs();
-
-		// final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
-
-		// Create logging module
-		final int no_threads = getNumThreads(headlessParameters);
-		final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
-
-		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
-
-		final ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
-		// System.out.println("DEBUGGER");
-		try {
-
-			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
-
-				@Override
-				protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
-
-					final String stageAndJobID = getStageAndJobID();
-					final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
-					if (logger != null) {
-						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, stageAndJobID, outputFolderName, logger);
-						lsoLoggingExporter.exportData("best-fitness", "current-fitness");
-					}
-					// exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath);
-				}
-
-				// @Override
-				// public void reportSequences(String phase, final ISequences rawSequences) {
-				// switch (phase) {
-				//
-				// case IRunnerHook.PHASE_LSO:
-				// case IRunnerHook.PHASE_HILL:
-				// case IRunnerHook.PHASE_INITIAL:
-				// // save(rawSequences, phase);
-				// break;
-				// case IRunnerHook.PHASE_ACTION_SETS:
-				// break;
-				// }
-				// }
-				//
-				// @Override
-				// public ISequences getPrestoredSequences(String phase) {
-				// switch (phase) {
-				// case IRunnerHook.PHASE_LSO:
-				// case IRunnerHook.PHASE_HILL:
-				// // return load(phase);
-				// case IRunnerHook.PHASE_INITIAL:
-				// case IRunnerHook.PHASE_ACTION_SETS:
-				// break;
-				//
-				// }
-				// return null;
-				// }
-				//
-				// private void save(final @NonNull ISequences rawSequences, final @NonNull String type) {
-				// try {
-				// final String suffix = instance.getName() + "." + type + ".sequences";
-				// final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
-				// // final File file2 = new File("c:\\Temp1\\" + suffix);
-				// try (FileOutputStream fos = new FileOutputStream(file2)) {
-				// final Injector injector = getInjector();
-				// assert (injector != null);
-				// SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
-				// }
-				// } catch (final Exception e) {
-				// }
-				// }
-				//
-				// @Nullable
-				// private ISequences load(final @NonNull String type) {
-				// try {
-				// final String suffix = instance.getName() + "." + type + ".sequences";
-				// final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
-				// // final File file2 = new File("c:\\Temp1\\" + suffix);
-				// try (FileInputStream fos = new FileInputStream(file2)) {
-				// final Injector injector = getInjector();
-				// assert (injector != null);
-				// return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
-				// }
-				// } catch (final Exception e) {
-				// }
-				// return null;
-				// }
-
-			};
-
-			// Create logging module
-
-			// FIXME: Replace with an IParameterMode thing
-			final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
-				@Override
-				public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
-					return null;
-				}
-
-				@Override
-				@Nullable
-				public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
-					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-						return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(overrideSettings));
-					}
-					if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-						return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
-					}
-					if (moduleType == ModuleType.Module_Optimisation) {
-						final LinkedList<@NonNull Module> modules = new LinkedList<@NonNull Module>();
-						modules.add(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
-						modules.add(new LNGOptimsationOverrideModule(overrideSettings));
-						return modules;
-					}
-					return null;
-				}
-			};
-
-			final List<String> hints = new LinkedList<>();
-			hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
-
-			try {
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides,
-						runnerHook, false, hints.toArray(new String[hints.size()]));
-
-				// FIXME
-				// runner.init(monitor);
-
-				final long startTime = System.currentTimeMillis();
-				runner.evaluateInitialState();
-				System.out.println("LNGResult(");
-				System.out.println("\tscenario='" + scenarioFile + "',");
-				if (outputFile != null) {
-					System.out.println("\toutput='" + outputFile + "',");
-				}
-				// System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
-				// System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
-				// System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
-				// System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
-				// System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
-
-				System.err.println("Starting run...");
-
-				runner.run();
-
-				final long runTime = System.currentTimeMillis() - startTime;
-				final Schedule finalSchedule = runner.getSchedule();
-				if (finalSchedule == null) {
-					System.err.println("Error optimising scenario");
-				}
-
-				System.out.println("\truntime=" + runTime + ",");
-
-				System.err.println("Optimised!");
-
-				if (outputFile != null) {
-					saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
-				}
-
-				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
-			} catch (final Exception e) {
-				System.out.println("Headless Error");
-				System.err.println("Headless Error:" + e.getMessage());
-				e.printStackTrace();
+		return ScenarioStorageUtil.withExternalScenarioFromFile(scenarioFile, (instance, modelReference) -> {
+			if (instance == null) {
+				System.err.println("Unable to load scenario");
+				return Integer.valueOf(IApplication.EXIT_OK);
 			}
 
-		} finally {
-			executorService.shutdownNow();
-		}
-		return IApplication.EXIT_OK;
+			final LNGScenarioModel rootObject = (LNGScenarioModel) modelReference.getInstance();
 
+			if (rootObject == null) {
+				System.err.println("Unable to load scenario");
+				return Integer.valueOf(IApplication.EXIT_OK);
+			}
+
+			final String outputFile = overrideSettings.getOutput();
+
+			OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
+			assert optimisationPlan != null;
+			optimisationPlan.getStages().clear();
+
+			updateOptimiserSettings(rootObject, optimisationPlan, overrideSettings, headlessParameters);
+
+			// Add in required extensions, but do not run custom hooks.
+			optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false);
+
+			assert overrideSettings.getOutputName() != null;//
+			// final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimisationPlan) : getFolderNameFromSettings(overrideSettings);
+			final String outputFolderName = getFolderNameFromSettings(overrideSettings);
+
+			// Ensure dir structure is in place
+			Paths.get(path, outputFolderName).toFile().mkdirs();
+
+			// final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
+
+			// Create logging module
+			final int no_threads = getNumThreads(headlessParameters);
+			final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
+
+			final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+
+			final ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
+			// System.out.println("DEBUGGER");
+			try {
+
+				final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
+
+					@Override
+					protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
+
+						final String stageAndJobID = getStageAndJobID();
+						final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+						if (logger != null) {
+							final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, stageAndJobID, outputFolderName, logger);
+							lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+						}
+						// exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath);
+					}
+
+					// @Override
+					// public void reportSequences(String phase, final ISequences rawSequences) {
+					// switch (phase) {
+					//
+					// case IRunnerHook.PHASE_LSO:
+					// case IRunnerHook.PHASE_HILL:
+					// case IRunnerHook.PHASE_INITIAL:
+					// // save(rawSequences, phase);
+					// break;
+					// case IRunnerHook.PHASE_ACTION_SETS:
+					// break;
+					// }
+					// }
+					//
+					// @Override
+					// public ISequences getPrestoredSequences(String phase) {
+					// switch (phase) {
+					// case IRunnerHook.PHASE_LSO:
+					// case IRunnerHook.PHASE_HILL:
+					// // return load(phase);
+					// case IRunnerHook.PHASE_INITIAL:
+					// case IRunnerHook.PHASE_ACTION_SETS:
+					// break;
+					//
+					// }
+					// return null;
+					// }
+					//
+					// private void save(final @NonNull ISequences rawSequences, final @NonNull String type) {
+					// try {
+					// final String suffix = instance.getName() + "." + type + ".sequences";
+					// final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+					// // final File file2 = new File("c:\\Temp1\\" + suffix);
+					// try (FileOutputStream fos = new FileOutputStream(file2)) {
+					// final Injector injector = getInjector();
+					// assert (injector != null);
+					// SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+					// }
+					// } catch (final Exception e) {
+					// }
+					// }
+					//
+					// @Nullable
+					// private ISequences load(final @NonNull String type) {
+					// try {
+					// final String suffix = instance.getName() + "." + type + ".sequences";
+					// final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+					// // final File file2 = new File("c:\\Temp1\\" + suffix);
+					// try (FileInputStream fos = new FileInputStream(file2)) {
+					// final Injector injector = getInjector();
+					// assert (injector != null);
+					// return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+					// }
+					// } catch (final Exception e) {
+					// }
+					// return null;
+					// }
+
+				};
+
+				// Create logging module
+
+				// FIXME: Replace with an IParameterMode thing
+				final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
+					@Override
+					public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+						return null;
+					}
+
+					@Override
+					@Nullable
+					public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+						if (moduleType == ModuleType.Module_EvaluationParametersModule) {
+							return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(overrideSettings));
+						}
+						if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+							return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
+						}
+						if (moduleType == ModuleType.Module_Optimisation) {
+							final LinkedList<@NonNull Module> modules = new LinkedList<@NonNull Module>();
+							modules.add(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+							modules.add(new LNGOptimsationOverrideModule(overrideSettings));
+							return modules;
+						}
+						return null;
+					}
+				};
+
+				final List<String> hints = new LinkedList<>();
+				hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+				try {
+					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides,
+							runnerHook, false, hints.toArray(new String[hints.size()]));
+
+					// FIXME
+					// runner.init(monitor);
+
+					final long startTime = System.currentTimeMillis();
+					runner.evaluateInitialState();
+					System.out.println("LNGResult(");
+					System.out.println("\tscenario='" + scenarioFile + "',");
+					if (outputFile != null) {
+						System.out.println("\toutput='" + outputFile + "',");
+					}
+					// System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
+					// System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
+					// System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
+					// System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
+					// System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
+
+					System.err.println("Starting run...");
+
+					runner.run();
+
+					final long runTime = System.currentTimeMillis() - startTime;
+					final Schedule finalSchedule = runner.getSchedule();
+					if (finalSchedule == null) {
+						System.err.println("Error optimising scenario");
+					}
+
+					System.out.println("\truntime=" + runTime + ",");
+
+					System.err.println("Optimised!");
+
+					if (outputFile != null) {
+						saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
+					}
+
+					exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
+				} catch (final Exception e) {
+					System.out.println("Headless Error");
+					System.err.println("Headless Error:" + e.getMessage());
+					e.printStackTrace();
+				}
+
+			} finally {
+				executorService.shutdownNow();
+			}
+			return Integer.valueOf(IApplication.EXIT_OK);
+		}, new NullProgressMonitor());
 	}
 
 	/**
@@ -407,20 +407,6 @@ public class HeadlessApplication implements IApplication {
 		final JSONParseResult result = headlessParameters.setParametersFromJSON(parsed);
 
 		return new Pair<>(result, headlessParameters);
-	}
-
-	private ScenarioInstance loadScenario(final String scenarioFile) throws IOException {
-
-		// Create instance and preload scenario.
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(scenarioFile);
-
-		if (instance == null) {
-			return null;
-		}
-
-		MigrationHelper.migrateAndLoad(instance);
-
-		return instance;
 	}
 
 	private void saveScenario(final String outputFile, final ScenarioInstance instance) throws IOException {

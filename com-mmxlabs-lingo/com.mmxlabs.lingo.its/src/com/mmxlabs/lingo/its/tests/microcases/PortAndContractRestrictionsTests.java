@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
@@ -62,7 +61,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 	}
 
 	@Override
-	public void constructor() throws MalformedURLException {
+	public void constructor() throws Exception {
 
 		super.constructor();
 		// Set a default prompt in the past

@@ -45,7 +45,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -238,45 +237,4 @@ public class AbstractOptimisationResultTester {
 			}
 		}
 	}
-
-	/**
-	 * Stores the fitness values into the {@link Properties} object.
-	 * 
-	 * @param mapName
-	 *            The variable name prefix.
-	 * @param fitnesses
-	 *            A list of fitnesses to store.
-	 */
-
-	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-		testReports(scenarioURL, reportID, shortName, extension, null);
-	}
-
-	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
-
-		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
-		ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, scenarioCipherProvider);
-			Assert.assertNotNull(instance);
-			MigrationHelper.migrateAndLoad(instance);
-			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension, preAction);
-		});
-	}
-
-	public ScenarioInstance loadScenario(URL url) throws Exception {
-
-		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-
-		return ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-
-			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, scenarioCipherProvider);
-			Assert.assertNotNull(instance);
-
-			MigrationHelper.migrateAndLoad(instance);
-
-			Assert.assertNotNull(instance.getInstance());
-			return instance;
-		});
-	}
-
 }

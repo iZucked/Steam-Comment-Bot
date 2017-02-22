@@ -31,8 +31,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 
 /**
@@ -61,7 +60,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		cargo1.setSequenceHint(10);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, 1));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, 1)));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -85,7 +84,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		cargo1.setSequenceHint(10);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselAvailability));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, cargo1, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vesselAvailability)));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -109,7 +108,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		Slot slot = cargo1.getSlots().get(0);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__PORT, portFinder.findPort("Ras Laffan")));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__PORT, portFinder.findPort("Ras Laffan"))));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -133,7 +132,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		Slot slot = cargo1.getSlots().get(0);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__DURATION, 10));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__DURATION, 10)));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -157,7 +156,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		Slot slot = cargo1.getSlots().get(0);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE, 10));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE, 10)));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -181,7 +180,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		Slot slot = cargo1.getSlots().get(0);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, TimePeriod.DAYS));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, TimePeriod.DAYS)));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -205,7 +204,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		Slot slot = cargo1.getSlots().get(0);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 10));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 10)));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
@@ -229,15 +228,14 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 
 		Slot slot = cargo1.getSlots().get(0);
 
-		domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_START, LocalDate.of(2015, 12, 10)));
+		RunnerHelper.syncExec(() -> domain.getCommandStack().execute(SetCommand.create(domain, slot, CargoPackage.Literals.SLOT__WINDOW_START, LocalDate.of(2015, 12, 10))));
 
 		Assert.assertEquals(0, cargo1.getSequenceHint());
 	}
 
 	private EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {
 		final Object lockObject = new Object();
-		final ScenarioLock lock = ScenarioServiceFactory.eINSTANCE.createScenarioLock();
-		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(null, lockObject, lock);
+		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(null, lockObject);
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());

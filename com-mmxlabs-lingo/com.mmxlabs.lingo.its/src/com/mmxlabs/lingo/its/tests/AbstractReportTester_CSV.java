@@ -6,8 +6,6 @@ package com.mmxlabs.lingo.its.tests;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,26 +35,18 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 @RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_CSV extends AbstractReportTester {
 
-	private static Map<Pair<String, String>, Pair<URL, LNGScenarioModel>> cache = new HashMap<>();
-
 	private final Pair<String, String> key;
 
 	public AbstractReportTester_CSV(final String name, final String scenarioPath) throws MalformedURLException {
 		key = new Pair<>(name, scenarioPath);
-		if (!cache.containsKey(key)) {
-			final URL url = getClass().getResource(scenarioPath);
-			final LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(url.toString());
-			cache.put(key, new Pair<>(url, scenarioModel));
-		}
 	}
 
 	@Override
 	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
-		final Pair<URL, LNGScenarioModel> pair = cache.get(key);
-		final URL url = pair.getFirst();
-		final LNGScenarioModel scenarioModel = pair.getSecond();
-		ScenarioInstance instance = LNGScenarioRunnerCreator.createScenarioInstance(scenarioModel, url);
-		
-		ReportTester.testReports(instance, url, reportID, shortName, extension, preAction);
+		final URL url = getClass().getResource(key.getSecond());
+		final LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(url.toString());
+		ScenarioInstance instance = LNGScenarioRunnerCreator.createFromModelInstance(scenarioModel);
+		instance.setName(url.getPath());
+		ReportTester.testReports(instance, scenarioModel, url, reportID, shortName, extension, preAction);
 	}
 }
