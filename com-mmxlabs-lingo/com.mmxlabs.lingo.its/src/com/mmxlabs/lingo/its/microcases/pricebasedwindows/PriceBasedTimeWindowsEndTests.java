@@ -214,7 +214,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 			// ISequencesManipulator sequencesManipulator = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, ISequencesManipulator.class);
 			sequencesManipulator.manipulate(initialSequences);
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
+				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 
 				priceBasedSequenceScheduler.schedule(initialSequences);
 
