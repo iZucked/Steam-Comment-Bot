@@ -105,6 +105,7 @@ public class SlotInsertionOptimiser {
 //			options.setStrictOptional(true);
 			options.setStrictOptional(new Random(seed).nextBoolean());
 			options.setIgnoreUsedElements(false);
+			options.setInsertCanRemove(true);
 			options.setNum_tries(10);
 
 			final MoveResult p = mg.generateMove(currentSequences, lookupManager, new Random(seed), Collections.emptyList(), initialMetrics, options);
