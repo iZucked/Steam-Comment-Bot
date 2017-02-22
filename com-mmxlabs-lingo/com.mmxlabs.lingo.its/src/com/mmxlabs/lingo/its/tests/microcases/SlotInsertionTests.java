@@ -63,12 +63,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES1), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 			Assert.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), 1, new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result2);
 			Assert.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -101,7 +101,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 			Assert.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
@@ -139,9 +139,9 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES2), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assert.assertEquals(2, result1.getSolutions().size());
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
 			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Purchase1"));
@@ -191,12 +191,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 			Assert.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), 1, new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_FOB1), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result2);
 			Assert.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -231,7 +231,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
 			Assert.assertTrue(result1.getSolutions().size() == 2);
@@ -270,10 +270,10 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_FOB2), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assert.assertEquals(2, result1.getSolutions().size());
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
 			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Sale1"));
@@ -304,12 +304,12 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB1), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 			Assert.assertTrue(result1.getSolutions().size() == 2);
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 
-			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), 1, new NullProgressMonitor());
+			final IMultiStateResult result2 = slotInserter.run(Collections.singletonList(discharge_DES1), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result2);
 			Assert.assertTrue(result2.getSolutions().size() == 2);
 			assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
@@ -352,10 +352,10 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assert.assertEquals(2, result1.getSolutions().size());
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
 			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("FOB_Purchase1"));
@@ -398,10 +398,10 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), 1, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES2), 10, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
-			Assert.assertTrue(result1.getSolutions().size() == 2);
+			Assert.assertEquals(2, result1.getSolutions().size());
 			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
 
 			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale1"));
@@ -472,4 +472,79 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null);
 	}
 
+	@Test
+	@Category({ MicroTest.class })
+	public void testInsertTrickyCargo() throws Exception {
+
+		// Model the case Alex found.
+		// Insert new DES Sale(?). Could swap with optional DES Sale, but dates clash with next load. Cannot do this.
+		// Need to remove existing cargo and then re-insert on market vessel.
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVessel("vessel1", vesselClass);
+		final Vessel vessel2 = fleetModelBuilder.createVessel("vessel2", vesselClass);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+				.build();
+
+		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.build();
+
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
+				.build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale1", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7") //
+				.build();
+
+		@NonNull
+		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo1.setAllowRewiring(false);
+		cargo1.setVesselAssignmentType(vesselAvailability1);
+		cargo1.setSequenceHint(1);
+
+		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2016, 2, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
+				.build();
+
+		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 3, 5), portFinder.findPort("Sakai"), null, entity, "7") //
+				.withOptional(true)//
+
+				.build();
+
+		@NonNull
+		Cargo cargo2 = cargoModelBuilder.createCargo(load_FOB2, discharge_DES2);
+		cargo2.setAllowRewiring(true);
+		cargo2.setVesselAssignmentType(vesselAvailability1);
+		cargo2.setSequenceHint(2);
+
+		final LoadSlot load_FOB3 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase3", LocalDate.of(2016, 4, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
+				.build();
+		final DischargeSlot discharge_DES3 = cargoModelBuilder.makeDESSale("DES_Sale3", LocalDate.of(2016, 5, 5), portFinder.findPort("Sakai"), null, entity, "7") //
+				.build();
+
+		@NonNull
+		Cargo cargo3 = cargoModelBuilder.createCargo(load_FOB3, discharge_DES3);
+		cargo3.setAllowRewiring(false);
+		cargo3.setVesselAssignmentType(vesselAvailability1);
+		cargo3.setSequenceHint(3);
+
+		final DischargeSlot discharge_DES4 = cargoModelBuilder.makeDESSale("DES_Sale4", LocalDate.of(2016, 4, 5), portFinder.findPort("Sakai"), null, entity, "7") //
+				.build();
+
+		evaluateWithLSOTest(true, (plan) -> {
+			// Clear default stages so we can run our own stuff here.
+			plan.getStages().clear();
+		}, null, scenarioRunner -> {
+			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(discharge_DES4), 10, new NullProgressMonitor());
+			Assert.assertNotNull(result1);
+			Assert.assertEquals(2, result1.getSolutions().size());
+			assert result1.getSolutions().get(1).getFirst().getUnusedElements().size() == 1;
+
+			Assert.assertTrue(result1.getSolutions().get(1).getFirst().getUnusedElements().get(0).getName().contains("DES_Sale2"));
+
+		}, null);
+
+	}
 }
