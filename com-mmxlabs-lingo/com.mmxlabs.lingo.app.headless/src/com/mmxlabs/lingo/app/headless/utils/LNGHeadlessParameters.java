@@ -104,7 +104,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("use-roulette-wheel", false, Boolean.class, false);
 
 		// Move Distributions
-		setParameter("equal-move-distributions", false, Boolean.class, false);
+		setParameter("equal-move-distributions", true, Boolean.class, false);
 		setParameter("insert-optional-frequency", 0.1, Double.class, false);
 		setParameter("remove-optional-frequency", 0.2, Double.class, false);
 		setParameter("swap-segments-frequency", 0.4, Double.class, false);
