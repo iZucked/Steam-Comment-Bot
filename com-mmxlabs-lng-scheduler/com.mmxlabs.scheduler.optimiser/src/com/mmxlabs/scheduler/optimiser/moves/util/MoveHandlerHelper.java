@@ -17,12 +17,17 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 public class MoveHandlerHelper implements IMoveHandlerHelper {
 
 	@Inject
 	private @NonNull MoveHelper helper;
+
+	@Inject
+	private @NonNull IPortSlotProvider portSlotProvider;
 
 	@Override
 	public MoveHelper getMoveHelper() {
@@ -31,23 +36,26 @@ public class MoveHandlerHelper implements IMoveHandlerHelper {
 
 	@Override
 	public List<ISequenceElement> extractSegment(final ISequence fromSequence, final ISequenceElement element) {
-		final List<ISequenceElement> orderedCargoElements = new LinkedList<>();
-		//// Find full cargo sequence based on element
+		final List<ISequenceElement> orderedSegmentElements = new LinkedList<>();
+		//// Find full cargo or event sequence based on element
 
 		// Part 1, find the segment start
 		int segmentStart = -1;
 		boolean lastElementWasLoad = false;
+		boolean segmentStartIsLoad = false;
 		for (int i = 0; i < fromSequence.size(); ++i) {
 			final ISequenceElement e = fromSequence.get(i);
 
 			if (helper.isLoadSlot(e)) {
 				if (!lastElementWasLoad || segmentStart == -1) {
 					segmentStart = i;
+					segmentStartIsLoad = true;
 				}
 				lastElementWasLoad = true;
 			} else if (!helper.isDischargeSlot(e)) {
 				lastElementWasLoad = false;
 				segmentStart = -1;
+				segmentStartIsLoad = false;
 			} else {
 				lastElementWasLoad = false;
 			}
@@ -55,13 +63,13 @@ public class MoveHandlerHelper implements IMoveHandlerHelper {
 			if (e == element) {
 				if (segmentStart == -1) {
 					segmentStart = i;
+					segmentStartIsLoad = false;
 				}
 				break;
 			}
 		}
 		if (segmentStart == -1) {
 			throw new IllegalStateException();
-			// return null;
 		}
 
 		// Part 2 - find full segment extent
@@ -73,20 +81,29 @@ public class MoveHandlerHelper implements IMoveHandlerHelper {
 			if (helper.isStartOrEndSlot(e)) {
 				break;
 			}
-			if (!foundDischarge) {
-				if (helper.isDischargeSlot(e)) {
-					foundDischarge = true;
+			if (segmentStartIsLoad) {
+				if (!foundDischarge) {
+					if (helper.isDischargeSlot(e)) {
+						foundDischarge = true;
+					} else {
+						assert helper.isLoadSlot(e);
+					}
 				} else {
-					assert helper.isLoadSlot(e);
+					if (!helper.isDischargeSlot(e)) {
+						break;
+					}
 				}
+				orderedSegmentElements.add(e);
 			} else {
-				if (!helper.isDischargeSlot(e)) {
-					break;
+				// Helpfully a vessel event already stores it's full segment information.
+				if (helper.isVesselEvent(e)) {
+					@NonNull
+					IVesselEventPortSlot portSlot = (IVesselEventPortSlot) portSlotProvider.getPortSlot(e);
+					return portSlot.getEventSequenceElements();
 				}
 			}
-			orderedCargoElements.add(e);
 		}
-		return orderedCargoElements;
+		return orderedSegmentElements;
 	}
 
 	@Override
