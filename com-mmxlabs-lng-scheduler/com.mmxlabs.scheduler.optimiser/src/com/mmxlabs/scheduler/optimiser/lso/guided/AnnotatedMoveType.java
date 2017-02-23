@@ -12,13 +12,13 @@ import com.google.inject.name.Names;
  */
 public class AnnotatedMoveType implements MoveTypesAnnotation {
 
-	public static MoveTypesAnnotation annotatedWith(GuidedMoveTypes moveType) {
+	public static MoveTypesAnnotation annotatedWith(final GuidedMoveTypes moveType) {
 		return new AnnotatedMoveType(moveType);
 	}
 
 	private final GuidedMoveTypes value;
 
-	private AnnotatedMoveType(GuidedMoveTypes value) {
+	private AnnotatedMoveType(final GuidedMoveTypes value) {
 		this.value = value;
 	}
 
@@ -31,21 +31,21 @@ public class AnnotatedMoveType implements MoveTypesAnnotation {
 		return (127 * "value".hashCode()) ^ value.hashCode();
 	}
 
-	public boolean equals(Object o) {
-		if (!(o instanceof AnnotatedMoveType)) {
+	public boolean equals(final Object o) {
+		if (!(o instanceof MoveTypesAnnotation)) {
 			return false;
 		}
 
-		AnnotatedMoveType other = (AnnotatedMoveType) o;
+		final MoveTypesAnnotation other = (MoveTypesAnnotation) o;
 		return value == other.value();
 	}
 
 	public String toString() {
-		return "@" + AnnotatedMoveType.class.getName() + "(value=" + value + ")";
+		return "@" + MoveTypesAnnotation.class.getName() + "(value=" + value + ")";
 	}
 
 	public Class<? extends Annotation> annotationType() {
-		return AnnotatedMoveType.class;
+		return MoveTypesAnnotation.class;
 	}
 
 	private static final long serialVersionUID = 0;
