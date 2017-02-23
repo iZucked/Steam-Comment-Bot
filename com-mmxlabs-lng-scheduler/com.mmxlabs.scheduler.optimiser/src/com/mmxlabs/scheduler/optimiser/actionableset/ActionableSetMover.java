@@ -84,7 +84,9 @@ public class ActionableSetMover {
 		stateManager.createLookup(rawSequences);
 		// String note = (String.format("s: %s move: %s", seed, move));
 		String note = null;
-		Random random = new Random(seed);
+		final Random random = new Random(seed);
+		// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
+		random.nextBoolean();
 
 		GuideMoveGeneratorOptions options = new GuideMoveGeneratorOptions();
 		// Only return moves which do not increase lateness/capacity (NOTE - may still allow floating about)
@@ -92,7 +94,7 @@ public class ActionableSetMover {
 		options.setExtendSearch(random.nextBoolean());
 		options.setIgnoreUsedElements(random.nextBoolean());
 		options.setStrictOptional(random.nextBoolean());
-		options.setPermitPartialSegments(false);//random.nextBoolean());
+		options.setPermitPartialSegments(false);// random.nextBoolean());
 		options.setInsertCanRemove(random.nextBoolean());
 		options.setNum_tries(random.nextInt(10));
 

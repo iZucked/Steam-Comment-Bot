@@ -78,9 +78,9 @@ public class SlotInsertionOptimiser {
 			final IModifiableSequences initialfullSequences = manipulator.createManipulatedSequences(initialRawSequences);
 
 			initialMetrics = evaluationHelper.evaluateState(initialRawSequences, initialfullSequences, null, null, null);
- 
+
 			// Set to max value as this is not a concern for us
-			initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = Integer.MAX_VALUE;
+			// initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = Integer.MAX_VALUE;
 		}
 		final GuidedMoveGenerator mg = injector.getInstance(GuidedMoveGenerator.class);
 
@@ -99,11 +99,16 @@ public class SlotInsertionOptimiser {
 			lookupManager.createLookup(currentSequences);
 
 			final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+
+			final Random optionsRnd = new Random(seed);
+			// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
+			optionsRnd.nextBoolean();
+
 			// Set to true to do lateness, P&L checks etc before returning a valid move.
 			options.setCheckingMove(true);
 			options.setExtendSearch(false);
-//			options.setStrictOptional(true);
-			options.setStrictOptional(new Random(seed).nextBoolean());
+			// options.setStrictOptional(true);
+			options.setStrictOptional(optionsRnd.nextBoolean());
 			options.setIgnoreUsedElements(false);
 			options.setInsertCanRemove(true);
 			options.setNum_tries(10);
