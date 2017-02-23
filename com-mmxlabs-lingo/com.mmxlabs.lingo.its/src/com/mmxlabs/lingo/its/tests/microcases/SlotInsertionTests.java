@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -19,25 +20,37 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 @SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
@@ -88,6 +101,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_DES1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
 
@@ -126,6 +140,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_DES1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
 
@@ -149,7 +164,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null);
 	}
 
-	private SlotInsertionOptimiserUnit getSlotInserter(LNGScenarioRunner scenarioRunner) {
+	private SlotInsertionOptimiserUnit getSlotInserter(final LNGScenarioRunner scenarioRunner) {
 		@NonNull
 		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 		@NonNull
@@ -218,6 +233,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_FOB1);
 		cargo1.setAllowRewiring(true);
 
@@ -257,6 +273,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_FOB1);
 		cargo1.setAllowRewiring(true);
 
@@ -339,6 +356,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
 
@@ -385,6 +403,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
 
@@ -436,6 +455,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(true);
 
@@ -474,6 +494,87 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
+	public void testDivertBackfill() throws Exception {
+
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+				.build();
+
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8) //
+				.build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale1", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7") //
+				.build();
+
+		@NonNull
+		final
+		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo1.setAllowRewiring(true);
+		cargo1.setVesselAssignmentType(vesselAvailability);
+		cargo1.setSequenceHint(1);
+
+		final LoadSlot load_DES = cargoModelBuilder.makeDESPurchase("DES_Purchase_1", false, LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null) //
+				.build();
+
+		// This can only be shipped
+		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7") //
+				.with(s -> ((DischargeSlot) s).setPurchaseDeliveryType(CargoDeliveryType.SHIPPED)) //
+				.build();
+
+		evaluateWithLSOTest(true, (plan) -> {
+			// Clear default stages so we can run our own stuff here.
+			plan.getStages().clear();
+		}, null, scenarioRunner -> {
+			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
+
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_DES), 10, new NullProgressMonitor());
+			Assert.assertNotNull(result1);
+
+			Assert.assertEquals(2, result1.getSolutions().size());
+			@NonNull
+			final
+			ISequences solution = result1.getSolutions().get(1).getFirst();
+			assert solution.getUnusedElements().size() == 0;
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final Injector injector = scenarioToOptimiserBridge.getDataTransformer().getInjector();
+
+			final ModelEntityMap modelEntityMap = scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap();
+
+			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+			final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
+
+			final IVesselAvailability o_vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability, IVesselAvailability.class);
+			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability);
+
+			final IPortSlot dp_portSlot = modelEntityMap.getOptimiserObjectNullChecked(load_DES, IPortSlot.class);
+			final ISequenceElement dp_element = portSlotProvider.getElement(dp_portSlot);
+
+			final IVesselAvailability o_vesselAvailability2 = virtualVesselSlotProvider.getVesselAvailabilityForElement(dp_element);
+			final IResource resource2 = vesselProvider.getResource(o_vesselAvailability2);
+
+			final Function<ISequenceElement, Slot> slotMapper = e -> {
+				final IPortSlot ps = portSlotProvider.getPortSlot(e);
+				return modelEntityMap.getModelObjectNullChecked(ps, Slot.class);
+			};
+
+			Assert.assertSame(load_FOB1, slotMapper.apply(solution.getSequence(resource1).get(1)));
+			Assert.assertSame(discharge_DES2, slotMapper.apply(solution.getSequence(resource1).get(2)));
+
+			Assert.assertSame(load_DES, slotMapper.apply(solution.getSequence(resource2).get(1)));
+			Assert.assertSame(discharge_DES1, slotMapper.apply(solution.getSequence(resource2).get(2)));
+
+		}, null);
+	}
+
+	@Test
+	@Category({ MicroTest.class })
 	public void testInsertTrickyCargo() throws Exception {
 
 		// Model the case Alex found.
@@ -498,6 +599,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo1 = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo1.setAllowRewiring(false);
 		cargo1.setVesselAssignmentType(vesselAvailability1);
@@ -512,6 +614,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo2 = cargoModelBuilder.createCargo(load_FOB2, discharge_DES2);
 		cargo2.setAllowRewiring(true);
 		cargo2.setVesselAssignmentType(vesselAvailability1);
@@ -523,6 +626,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 				.build();
 
 		@NonNull
+		final
 		Cargo cargo3 = cargoModelBuilder.createCargo(load_FOB3, discharge_DES3);
 		cargo3.setAllowRewiring(false);
 		cargo3.setVesselAssignmentType(vesselAvailability1);
