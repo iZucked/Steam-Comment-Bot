@@ -211,7 +211,7 @@ public class MoveGeneratorModule extends AbstractModule {
 	@Provides
 	@Named(RouletteWheelMoveGenerator.EQUAL_DISTRIBUTION)
 	private boolean isEqualDistributions() {
-		return false;
+		return true;
 	}
 
 	@Provides

@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.util.RouletteWheel;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
@@ -49,7 +50,7 @@ public class RouletteWheelMoveGenerator implements IMoveGenerator {
 	@Inject
 	private MoveMapper moveMapper;
 
-	private RouletteWheel rouletteWheel;
+	private RouletteWheel<MoveTypes> rouletteWheel;
 
 	@Inject
 	@Named(MOVE_DISTRIBUTION)
