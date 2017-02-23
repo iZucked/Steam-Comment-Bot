@@ -498,8 +498,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		lockedElements.setLocked(element, locked);
 
-		spotMarketSlots.setSpotMarketSlot(element, isSpotMarketSlot);
-
 		sequenceElements.add(element);
 
 		// Register the port with the element
@@ -567,8 +565,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		optionalElements.setOptional(element, optional);
 
 		lockedElements.setLocked(element, locked);
-
-		spotMarketSlots.setSpotMarketSlot(element, isSpotMarketSlot);
 
 		sequenceElements.add(element);
 
@@ -1118,7 +1114,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				latestTime = Math.max(endOfLatestWindow, latestDischarge) + 60 * 24;
 			} else if (rule == 4) {
 
-				// Include all time windows *except* spot market slots
+				// Include all time windows *except* spot market slots (These need to be registered externally)
 				final OptionalInt optionalMax = sequenceElements.stream() //
 						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
 						.map(element -> portSlotsProvider.getPortSlot(element)) //
