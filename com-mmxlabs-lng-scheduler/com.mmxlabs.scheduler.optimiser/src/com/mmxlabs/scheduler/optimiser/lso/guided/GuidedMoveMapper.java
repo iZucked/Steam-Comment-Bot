@@ -32,8 +32,6 @@ public class GuidedMoveMapper {
 			return injector.getInstance(InsertDESPurchaseMoveHandler.class);
 		case Insert_FOB_Sale:
 			return injector.getInstance(InsertFOBSaleMoveHandler.class);
-		case Insert_Slot:
-			return injector.getInstance(InsertSegmentMoveHandler.class);
 		case Remove_Linked_Slot:
 			return injector.getInstance(RemoveLinkedSlotMoveHandler.class);
 		case Insert_Vessel_Event:
@@ -46,10 +44,7 @@ public class GuidedMoveMapper {
 			return injector.getInstance(RemoveCargoMoveHandler.class);
 		case Remove_FOB_Sale:
 			return injector.getInstance(RemoveCargoMoveHandler.class);
-		case Remove_Slot:
-			// No InsertSlotMove, but is we are leaving partial segments, this may be needed.
-			// Insert slot not implemented, so do not used RemoveSlot. Keep to remove cargo
-			// return injector.getInstance(RemoveSlotMoveHandler.class);
+
 		case Remove_Vessel_Event:
 			return injector.getInstance(RemoveVesselEventMoveHandler.class);
 		case Swap_Cargo_Vessel:
@@ -58,6 +53,13 @@ public class GuidedMoveMapper {
 			return injector.getInstance(SwapSlotMoveHandler.class);
 		case Move_Slot_NonShipped_Resource:
 			return injector.getInstance(MoveSlotMoveHandler.class);
+		case Insert_Slot:
+			return injector.getInstance(InsertSegmentMoveHandler.class);
+		case Remove_Slot:
+			// No Insert *single* Slot Move, but is we are leaving partial segments, this may be needed.
+			// Insert slot not implemented, so do not used RemoveSlot. Keep to remove cargo
+			// return injector.getInstance(RemoveSlotMoveHandler.class);
+			break;
 		default:
 			break;
 		}
