@@ -13,8 +13,6 @@ import static org.ops4j.peaberry.Peaberry.service;
 
 import java.util.Map;
 
-import javax.inject.Singleton;
-
 import org.eclipse.core.runtime.Platform;
 
 import com.google.inject.AbstractModule;
@@ -29,22 +27,7 @@ import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.lso.guided.HintManager;
-import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypeHelper;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertDESPurchaseMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertFOBSaleMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveCargoMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.RemoveSlotMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapCargoVesselMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.SwapSlotMoveHandler;
-import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHandlerHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
