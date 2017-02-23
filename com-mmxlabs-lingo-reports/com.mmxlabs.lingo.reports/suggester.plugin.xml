@@ -8,10 +8,6 @@
 <!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
 <?eclipse version="3.4"?>
 <plugin>
-	<extension id="com.mmxlabs.lingo.reports.fragment" point="org.eclipse.e4.workbench.model">
-		<fragment apply="always" uri="suggester-fragment.e4xmi">
-		</fragment>
-	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution allPopups="false"
 			locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
