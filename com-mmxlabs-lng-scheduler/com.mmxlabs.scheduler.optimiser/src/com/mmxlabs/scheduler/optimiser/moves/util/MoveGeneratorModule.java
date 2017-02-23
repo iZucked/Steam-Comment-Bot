@@ -160,8 +160,28 @@ public class MoveGeneratorModule extends AbstractModule {
 
 	@Provides
 	@Singleton
+	@MoveTypesAnnotation(GuidedMoveTypes.Move_Vessel_Event)
+	private GuidedMoveHandlerWrapper provide_Move_Vessel_Event_Generator(Injector injector, SwapCargoVesselMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(GuidedMoveTypes.Move_Vessel_Event, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
+	@MoveTypesAnnotation(GuidedMoveTypes.Remove_Cargo)
+	private GuidedMoveHandlerWrapper provide_Remove_Cargo_Generator(Injector injector, RemoveCargoMoveHandler handler) {
+
+		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(GuidedMoveTypes.Remove_Cargo, handler);
+		injector.injectMembers(wrapper);
+		return wrapper;
+	}
+
+	@Provides
+	@Singleton
 	@MoveTypesAnnotation(GuidedMoveTypes.Swap_Slot)
-	private GuidedMoveHandlerWrapper provide_Swap_Slot_Generator(Injector injector, RemoveCargoMoveHandler handler) {
+	private GuidedMoveHandlerWrapper provide_Swap_Slot_Generator(Injector injector, SwapSlotMoveHandler handler) {
 
 		GuidedMoveHandlerWrapper wrapper = new GuidedMoveHandlerWrapper(GuidedMoveTypes.Swap_Slot, handler);
 		injector.injectMembers(wrapper);
