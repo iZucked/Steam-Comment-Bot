@@ -42,8 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
-import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertCargoVesselMoveHandler;
+import com.mmxlabs.scheduler.optimiser.lso.guided.handlers.InsertSegmentMoveHandler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
@@ -90,7 +89,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -162,7 +161,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 
 			final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -234,7 +233,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -291,7 +290,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 			final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -363,7 +362,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -424,7 +423,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -486,7 +485,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -564,7 +563,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -645,7 +644,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
@@ -708,7 +707,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
-			final InsertCargoVesselMoveHandler handler = injector.getInstance(InsertCargoVesselMoveHandler.class);
+			final InsertSegmentMoveHandler handler = injector.getInstance(InsertSegmentMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
 			lookupManager.createLookup(initialRawSequences);
 
