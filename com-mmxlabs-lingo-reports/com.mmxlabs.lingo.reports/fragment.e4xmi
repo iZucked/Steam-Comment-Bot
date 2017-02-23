@@ -4,7 +4,6 @@
   <imports xsi:type="basic:TrimmedWindow" xmi:id="_HpKhwFIiEeWoN4jo1OIdrw" elementId="IDEWindow"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EYe24EGJEeW-SYJZ5d5KDQ" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_33-uQEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.0" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.AnalyseScenarioHandler" command="_y3WtAEGJEeW-SYJZ5d5KDQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_k_hdwPNbEeaZJ5kGPAzMmQ" elementId="com.mmxlabs.lingo.reports.views.changeset.handlers.CreateChangeSetViewHandler" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.CreateChangeSetViewHandler" command="_ar_YcPNbEeaZJ5kGPAzMmQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_e3NEAEyjEeWRXMz4UJzhKw" featurename="sharedElements" parentElementId="IDEWindow">
     <elements xsi:type="basic:Part" xmi:id="_OYReEFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" label="Change Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif" tooltip="" closeable="true">
