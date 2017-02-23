@@ -139,6 +139,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -154,6 +155,7 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -162,6 +164,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -181,10 +184,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -334,6 +339,14 @@ public class LNGScenarioTransformer {
 
 	@NonNull
 	private final Map<SpotMarket, TreeMap<String, Collection<Slot>>> existingSpotCount = new HashMap<>();
+
+	@Inject
+	@NonNull
+	private ISpotMarketSlotsProviderEditor spotMarketSlotsProviderEditor;
+
+	@Inject
+	@NonNull
+	private IPortSlotProvider portSlotProvider;
 
 	// @NonNull
 	// private final OptimiserSettings optimiserParameters;
@@ -762,6 +775,8 @@ public class LNGScenarioTransformer {
 		}
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getSecond(), vesselAssociations.getFirst(), modelEntityMap);
+
+		registerSpotCargoMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
 		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), vesselAssociations.getFirst(), contractTransformers, modelEntityMap);
 
@@ -1454,7 +1469,9 @@ public class LNGScenarioTransformer {
 			}
 		}
 
+		// Register as spot market slot
 		if (dischargeSlot instanceof SpotSlot) {
+			registerSpotMarketSlot(modelEntityMap, dischargeSlot, discharge);
 			marketSlotsByID.put(elementName, dischargeSlot);
 			addSpotSlotToCount((SpotSlot) dischargeSlot);
 		}
@@ -1602,12 +1619,14 @@ public class LNGScenarioTransformer {
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);
 
-		for (final IContractTransformer contractTransformer : contractTransformers) {
-			contractTransformer.slotTransformed(loadSlot, load);
-		}
+		// Register as spot market slot
 		if (loadSlot instanceof SpotSlot) {
+			registerSpotMarketSlot(modelEntityMap, loadSlot, load);
 			marketSlotsByID.put(elementName, loadSlot);
 			addSpotSlotToCount((SpotSlot) loadSlot);
+		}
+		for (final IContractTransformer contractTransformer : contractTransformers) {
+			contractTransformer.slotTransformed(loadSlot, load);
 		}
 
 		// set hedging costs in provider
@@ -1624,6 +1643,15 @@ public class LNGScenarioTransformer {
 		applySlotVesselRestrictions(loadSlot.getAllowedVessels(), load, vesselAssociation, vesselClassAssociation);
 
 		return load;
+	}
+
+	private void registerSpotMarketSlot(final ModelEntityMap modelEntityMap, final Slot modelSlot, final IPortSlot portSlot) {
+		final SpotSlot spotSlot = (SpotSlot) modelSlot;
+		final SpotMarket market = spotSlot.getMarket();
+		final ISequenceElement element = portSlotProvider.getElement(portSlot);
+		final String marketDateKey = String.format("%04d-%02d", modelSlot.getWindowStart().getYear(), modelSlot.getWindowStart().getMonthValue());
+		final ISpotMarket o_spotMarket = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotMarket.class);
+		spotMarketSlotsProviderEditor.setSpotMarketSlot(element, portSlot, o_spotMarket, marketDateKey);
 	}
 
 	private void applySlotVesselRestrictions(final @Nullable List<AVesselSet<Vessel>> allowedVessels, final @NonNull IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation,
@@ -1668,6 +1696,21 @@ public class LNGScenarioTransformer {
 				builder.setVesselAndClassPermissions(optimiserSlot, permittedVessels, permittedVesselClasses);
 			}
 		}
+	}
+
+	private void registerSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
+
+		final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
+		if (spotMarketsModel == null) {
+			return;
+		}
+
+		registerSpotMarket(builder, modelEntityMap, spotMarketsModel.getDesPurchaseSpotMarket());
+		registerSpotMarket(builder, modelEntityMap, spotMarketsModel.getDesSalesSpotMarket());
+		registerSpotMarket(builder, modelEntityMap, spotMarketsModel.getFobPurchasesSpotMarket());
+		registerSpotMarket(builder, modelEntityMap, spotMarketsModel.getFobSalesSpotMarket());
+
 	}
 
 	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
@@ -1815,6 +1858,9 @@ public class LNGScenarioTransformer {
 
 								marketSlots.add(desPurchaseSlot);
 								marketGroupSlots.add(desPurchaseSlot);
+
+								registerSpotMarketSlot(modelEntityMap, desSlot, desPurchaseSlot);
+
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
@@ -1954,6 +2000,9 @@ public class LNGScenarioTransformer {
 
 								marketSlots.add(fobSaleSlot);
 								marketGroupSlots.add(fobSaleSlot);
+
+								registerSpotMarketSlot(modelEntityMap, fobSlot, fobSaleSlot);
+
 							}
 						}
 
@@ -2089,6 +2138,9 @@ public class LNGScenarioTransformer {
 
 								marketSlots.add(desSalesSlot);
 								marketGroupSlots.add(desSalesSlot);
+
+								registerSpotMarketSlot(modelEntityMap, desSlot, desSalesSlot);
+
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
@@ -2213,6 +2265,8 @@ public class LNGScenarioTransformer {
 
 								marketSlots.add(fobPurchaseSlot);
 								marketGroupSlots.add(fobPurchaseSlot);
+
+								registerSpotMarketSlot(modelEntityMap, fobSlot, fobPurchaseSlot);
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
@@ -2230,6 +2284,16 @@ public class LNGScenarioTransformer {
 				}
 			}
 
+		}
+	}
+
+	private void registerSpotMarket(final ISchedulerBuilder builder, final ModelEntityMap modelEntityMap, final SpotMarketGroup desPurchaseSpotMarket) {
+		if (desPurchaseSpotMarket != null) {
+			final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
+			for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
+				final ISpotMarket spotMarket = new DefaultSpotMarket(market.getName(), modelEntityMap.getOptimiserObjectNullChecked(market.getEntity(), IEntity.class));
+				modelEntityMap.addModelObject(market, spotMarket);
+			}
 		}
 	}
 
@@ -3198,7 +3262,7 @@ public class LNGScenarioTransformer {
 	 * @param count
 	 * @return
 	 */
-	private int getCappedRemainingSpotOptions(int count) {
+	private int getCappedRemainingSpotOptions(final int count) {
 		if (spotSlotCreationCap < 0) {
 			return count;
 		}
