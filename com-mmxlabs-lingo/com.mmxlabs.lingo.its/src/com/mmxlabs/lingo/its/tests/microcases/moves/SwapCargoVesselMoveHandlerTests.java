@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -487,7 +488,7 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			Assert.assertNull(movePair);
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void testSwapWithinSequence() throws Exception {
@@ -565,6 +566,80 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 			Assert.assertSame(discharge2, result.getSequence(resource1).get(2));
 			Assert.assertSame(load1, result.getSequence(resource1).get(3));
 			Assert.assertSame(discharge1, result.getSequence(resource1).get(4));
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testSwapEventWithinSequence() throws Exception {
+
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+				.withCharterRate("100000") //
+				.build();
+
+		final CharterOutEvent event = cargoModelBuilder.makeCharterOutEvent("CO1", LocalDateTime.of(2017, 2, 1, 0, 0, 0), LocalDateTime.of(2017, 5, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
+				.withRelocatePort(portFinder.findPort("Dominion Cove Point LNG")) //
+				.withVesselAssignment(vesselAvailability1, 1) //
+				.build();
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2017, 2, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withWindowSize(3, TimePeriod.MONTHS) //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2017, 2, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withWindowSize(3, TimePeriod.MONTHS) //
+				.build() //
+				.withVesselAssignment(vesselAvailability1, 2) //
+				.withAssignmentFlags(true, false) //
+				.build();
+
+		runTest((injector, scenarioRunner) -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			@NonNull
+			final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+			final ISequences initialRawSequences = dataTransformer.getInitialSequences();
+
+			final ModelEntityMap modelEntityMap = scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap();
+
+			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+
+			final SwapCargoVesselMoveHandler handler = injector.getInstance(SwapCargoVesselMoveHandler.class);
+			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
+			lookupManager.createLookup(initialRawSequences);
+
+			final Random random = new Random(0);
+
+			final ISequenceElement event1 = portSlotProvider.getElement(modelEntityMap.getOptimiserObjectNullChecked(event, IPortSlot.class));
+			final ISequenceElement load2 = portSlotProvider.getElement(modelEntityMap.getOptimiserObjectNullChecked(cargo2.getSlots().get(0), IPortSlot.class));
+			final ISequenceElement discharge2 = portSlotProvider.getElement(modelEntityMap.getOptimiserObjectNullChecked(cargo2.getSlots().get(1), IPortSlot.class));
+
+			final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+
+			@Nullable
+			final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, event1, random, options, Collections.emptySet());
+
+			Assert.assertNotNull(movePair);
+
+			final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
+			movePair.getFirst().apply(result);
+
+			final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+
+			final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+
+			// Check expectations (2 start/end, 2 cargo, 3 redirected charter out event)
+			Assert.assertEquals(7, result.getSequence(resource1).size());
+
+			Assert.assertSame(load2, result.getSequence(resource1).get(1));
+			Assert.assertSame(discharge2, result.getSequence(resource1).get(2));
+			Assert.assertTrue(result.getSequence(resource1).get(3).getName().contains("CO1"));
+			Assert.assertTrue(result.getSequence(resource1).get(4).getName().contains("CO1"));
+			Assert.assertTrue(result.getSequence(resource1).get(5).getName().contains("CO1"));
 		});
 	}
 }
