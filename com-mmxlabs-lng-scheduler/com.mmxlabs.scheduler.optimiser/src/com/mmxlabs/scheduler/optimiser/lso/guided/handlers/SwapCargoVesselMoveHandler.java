@@ -60,6 +60,19 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 			throw new IllegalStateException();
 		}
 
+		final int slotIndex = slotLocation.getSecond();
+		final int offset = orderedCargoElements.indexOf(element);
+		final int segmentStart = slotIndex - offset;
+		final int segmentEnd = segmentStart + orderedCargoElements.size();
+
+		final ISequenceElement elementBeforeSegment = fromSequence.get(segmentStart - 1);
+		final ISequenceElement elementAfterSegment = fromSequence.get(segmentEnd);
+
+		// TODO: THis should really use the shipping length hint
+		// TODO: Exclude self
+
+		// Find all possible elements that could be inserted into the gap
+
 		final List<IResource> validTargetResources = new LinkedList<>();
 		validTargetResources.addAll(helper.getAllVesselResources());
 
@@ -85,6 +98,10 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 
 			// Do not move into same resource
 			if (precederLocation.getFirst() == fromResource) {
+				// continue LOOP_PRECEDER;
+			}
+
+			if (preceder == elementBeforeSegment) {
 				continue LOOP_PRECEDER;
 			}
 
@@ -96,6 +113,10 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 				final Pair<IResource, Integer> followerLocation = lookupManager.lookup(follower);
 				// Unused? skip
 				if (followerLocation.getFirst() == null) {
+					continue LOOP_FOLLOWER;
+				}
+
+				if (follower == elementAfterSegment) {
 					continue LOOP_FOLLOWER;
 				}
 
@@ -126,23 +147,12 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		final LinkedHashSet<ISequenceElement> suggestedElements = new LinkedHashSet<>();
 		// We may have left a gap, what can we do to fill it?
 		{
-			final int slotIndex = slotLocation.getSecond();
-			final int offset = orderedCargoElements.indexOf(element);
-			final int segmentStart = slotIndex - offset;
-			final int segmentEnd = segmentStart + orderedCargoElements.size();
-
 			// TODO: THis should really use the shipping length hint
 			// TODO: Exclude self
 
 			// Find all possible elements that could be inserted into the gap
-			if (segmentStart > 0) {
-				final ISequenceElement elementBeforeSegment = fromSequence.get(segmentStart - 1);
-				followersAndPreceders.getValidFollowers(elementBeforeSegment).forEach(f -> suggestedElements.add(f));
-			}
-			if (segmentEnd < fromSequence.size()) {
-				final ISequenceElement elementBeforeSegment = fromSequence.get(segmentEnd);
-				followersAndPreceders.getValidPreceders(elementBeforeSegment).forEach(f -> suggestedElements.add(f));
-			}
+			followersAndPreceders.getValidFollowers(elementBeforeSegment).forEach(f -> suggestedElements.add(f));
+			followersAndPreceders.getValidPreceders(elementAfterSegment).forEach(f -> suggestedElements.add(f));
 
 			// Add all elements in the sequence to be considered for further change
 			// TODO: Do we really want to do this? Consider issues with long ballast legs -
