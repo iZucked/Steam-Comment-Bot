@@ -23,12 +23,12 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
-import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertCargoMove;
+import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertSegmentMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
-public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
+public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
 	private @NonNull IMoveHelper helper;
@@ -160,7 +160,7 @@ public class InsertCargoVesselMoveHandler implements IGuidedMoveHandler {
 				continue LOOP_UNUSED;
 			}
 
-			final InsertCargoMove.Builder builder = InsertCargoMove.Builder.newMove();
+			final InsertSegmentMove.Builder builder = InsertSegmentMove.Builder.newMove();
 
 			// TODO: The hint manager could be used here to order by known shipping length
 			// Pick the first random insertion point

@@ -61,10 +61,8 @@ public class MoveTypeHelper {
 		if (!checkResource || resource == null) {
 			// Currently unused
 			if (helper.isVesselEvent(element)) {
-				if (!helper.isRelocatedCharterOutEvent(element)) {
-					// If relocated charter event, do nothing.
-					moveTypes.add(GuidedMoveTypes.Insert_Vessel_Event);
-				}
+				// If relocated charter event, do nothing.
+				moveTypes.add(GuidedMoveTypes.Insert_Vessel_Event);
 			}
 			if (helper.isDESPurchase(element)) {
 				moveTypes.add(GuidedMoveTypes.Insert_DES_Purchase);
@@ -82,14 +80,11 @@ public class MoveTypeHelper {
 		if (!checkResource || resource != null) {
 			// Currently used
 			if (helper.isVesselEvent(element)) {
-				if (!helper.isRelocatedCharterOutEvent(element)) {
-					// If relocated charter event, do nothing.
-					if (helper.isOptional(element)) {
-						moveTypes.add(GuidedMoveTypes.Remove_Vessel_Event);
-					}
-					moveTypes.add(GuidedMoveTypes.Swap_Event_Vessel);
-					moveTypes.add(GuidedMoveTypes.Move_Vessel_Event);
+				// If relocated charter event, do nothing.
+				if (helper.isOptional(element)) {
+					moveTypes.add(GuidedMoveTypes.Remove_Vessel_Event);
 				}
+				moveTypes.add(GuidedMoveTypes.Move_Vessel_Event);
 			} else if (helper.isDESPurchase(element)) {
 				if (helper.isOptional(element)) {
 					moveTypes.add(GuidedMoveTypes.Remove_DES_Purchase);

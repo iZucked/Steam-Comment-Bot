@@ -20,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.finders.BeforeElementFinder;
 import com.mmxlabs.scheduler.optimiser.lso.guided.finders.IFinder;
 import com.mmxlabs.scheduler.optimiser.lso.guided.finders.IndexFinder;
 
-public class InsertCargoMove implements IMove {
+public class InsertSegmentMove implements IMove {
 
 	public static class Builder {
 
@@ -67,7 +67,7 @@ public class InsertCargoMove implements IMove {
 			return this;
 		}
 
-		public InsertCargoMove create() {
+		public InsertSegmentMove create() {
 			IFinder insertionPosition;
 			if (index != -1) {
 				insertionPosition = new IndexFinder(index);
@@ -82,7 +82,7 @@ public class InsertCargoMove implements IMove {
 			if (targetResource == null) {
 				throw new IllegalStateException();
 			}
-			return new InsertCargoMove(fromResource, orderedElements, targetResource, insertionPosition);
+			return new InsertSegmentMove(fromResource, orderedElements, targetResource, insertionPosition);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class InsertCargoMove implements IMove {
 	private final @Nullable IResource fromResource;
 	private final @NonNull IResource targetResource;
 
-	public InsertCargoMove(@Nullable final IResource fromResource, @NonNull final List<ISequenceElement> elements, @NonNull final IResource targetResource, @NonNull final IFinder insertionPosition) {
+	public InsertSegmentMove(@Nullable final IResource fromResource, @NonNull final List<ISequenceElement> elements, @NonNull final IResource targetResource, @NonNull final IFinder insertionPosition) {
 
 		this.fromResource = fromResource;
 		this.elements = elements;

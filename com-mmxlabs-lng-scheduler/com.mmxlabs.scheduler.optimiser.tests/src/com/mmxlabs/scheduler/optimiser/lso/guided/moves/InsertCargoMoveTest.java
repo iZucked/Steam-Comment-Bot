@@ -38,7 +38,7 @@ public class InsertCargoMoveTest {
 
 		final IFinder insertionFinder = new AfterElementFinder(elementResourceBStart);
 
-		final InsertCargoMove move = new InsertCargoMove(resourceA, Lists.newArrayList(elementA, elementB), resourceB, insertionFinder);
+		final InsertSegmentMove move = new InsertSegmentMove(resourceA, Lists.newArrayList(elementA, elementB), resourceB, insertionFinder);
 
 		Assert.assertEquals(2, move.getAffectedResources().size());
 		Assert.assertTrue(move.getAffectedResources().contains(resourceA));
@@ -94,7 +94,7 @@ public class InsertCargoMoveTest {
 
 		final IFinder insertionFinder = new AfterElementFinder(elementResourceBStart);
 
-		final InsertCargoMove move = new InsertCargoMove(null, Lists.newArrayList(elementA, elementB), resourceB, insertionFinder);
+		final InsertSegmentMove move = new InsertSegmentMove(null, Lists.newArrayList(elementA, elementB), resourceB, insertionFinder);
 
 		Assert.assertEquals(1, move.getAffectedResources().size());
 		Assert.assertTrue(move.getAffectedResources().contains(resourceB));

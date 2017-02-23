@@ -80,10 +80,9 @@ public class MoveMapper {
 		case Insert_Slot:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Insert_Slot)));
 		case Insert_Vessel_Event:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Insert_Vessel_Event)));
 		case Move_Vessel_Event:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Move_Vessel_Event)));
-
 		case Remove_Cargo:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Cargo)));
 		case Remove_DES_Purchase:
@@ -91,17 +90,14 @@ public class MoveMapper {
 		case Remove_FOB_Sale:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_FOB_Sale)));
 		case Remove_Slot:
-//			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Slot)));
+			// return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Slot)));
 			break;
 		case Remove_Vessel_Event:
-			break;
-
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Vessel_Event)));
 		case Swap_Cargo_Vessel:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Swap_Cargo_Vessel)));
 		case Move_Slot_NonShipped_Resource:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Move_Slot_NonShipped_Resource)));
-		case Swap_Event_Vessel:
-			break;
 
 		default:
 			break;
@@ -116,7 +112,7 @@ public class MoveMapper {
 	public void initSupportedMoveTypes() {
 
 		supportedTypes = new LinkedList<>();
-		
+
 		if (!useGuidedMoves) {
 			for (final MoveTypes moveType : MoveTypes.values()) {
 				// Skip for now
@@ -129,7 +125,7 @@ public class MoveMapper {
 			}
 		} else {
 			supportedTypes.add(MoveTypes.Guided_Move_Generator);
-		}			
+		}
 		final int ii = 11;
 
 		// // O

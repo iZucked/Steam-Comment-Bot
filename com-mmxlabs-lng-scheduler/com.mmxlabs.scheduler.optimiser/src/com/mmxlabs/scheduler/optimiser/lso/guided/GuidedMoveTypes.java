@@ -11,5 +11,6 @@ public enum GuidedMoveTypes {
 	Insert_Slot, Remove_Slot, Swap_Slot,
 	// Special move type - remove the desired pairing slot from the solution so we can re-insert it later. E.g. due to lateness it may not be possible to bind otherwise
 	Remove_Linked_Slot, //
-	Insert_Vessel_Event, Remove_Vessel_Event, Swap_Event_Vessel, Move_Vessel_Event //
+	Insert_Vessel_Event, Remove_Vessel_Event, Move_Vessel_Event // 
+	// Swap_Event_Vessel, <-- Covered by Move_Vessel_Event?
 }

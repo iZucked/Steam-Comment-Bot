@@ -18,7 +18,7 @@ public enum MoveTypes {
 	Insert_Cargo, Remove_Cargo, //
 	Swap_Cargo_Vessel, //
 	Insert_Slot, Remove_Slot, Swap_Slot, Move_Slot_NonShipped_Resource, //
-	Insert_Vessel_Event, Remove_Vessel_Event, Swap_Event_Vessel, Move_Vessel_Event, Guided_Move_Generator; //
+	Insert_Vessel_Event, Remove_Vessel_Event, Move_Vessel_Event, Guided_Move_Generator; //
 
 	private static final @NonNull MoveTypes @NonNull [] legacyMoveTypes = new @NonNull MoveTypes @NonNull [] { Move_Segment, Swap_Segments, Swap_Tails, Move_Within_Sequence, Rotate_Within_Sequence,
 			Insert_Optional_Element, Remove_Optional_Element, Shuffle_Element, Single_Element_Swap, Move_Within_Sequence_Single_Element_Swap };
@@ -32,7 +32,7 @@ public enum MoveTypes {
 		Insert_Cargo, Remove_Cargo, //
 		Swap_Cargo_Vessel, //
 		Insert_Slot, Remove_Slot, Swap_Slot, Move_Slot_NonShipped_Resource, //
-		Insert_Vessel_Event, Remove_Vessel_Event, Swap_Event_Vessel, Move_Vessel_Event};
+		Insert_Vessel_Event, Remove_Vessel_Event, Move_Vessel_Event};
 
 	public static @NonNull MoveTypes @NonNull [] getGuidedMoveTypes() {
 		return guidedMoveTypes;
