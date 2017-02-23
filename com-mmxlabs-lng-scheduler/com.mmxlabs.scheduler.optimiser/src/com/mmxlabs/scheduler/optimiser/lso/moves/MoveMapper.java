@@ -82,7 +82,7 @@ public class MoveMapper {
 		case Insert_Vessel_Event:
 			break;
 		case Move_Vessel_Event:
-			break;
+			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Move_Vessel_Event)));
 
 		case Remove_Cargo:
 			return injector.getInstance(Key.get(GuidedMoveHandlerWrapper.class, AnnotatedMoveType.annotatedWith(GuidedMoveTypes.Remove_Cargo)));
