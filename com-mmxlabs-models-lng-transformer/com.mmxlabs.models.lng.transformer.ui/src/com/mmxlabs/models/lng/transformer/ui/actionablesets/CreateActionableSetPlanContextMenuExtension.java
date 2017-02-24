@@ -137,7 +137,9 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 											if (plan != null) {
 
 												final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-												eventBroker.post(ChangeSetViewCreatorService_Topic, new AnalyticsSolution(instance, plan, "My Action Set"));
+												AnalyticsSolution data = new AnalyticsSolution(instance, plan, "My Action Set");
+												data.setCreateDiffToBaseAction(true);
+												eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 											}
 										}
 
