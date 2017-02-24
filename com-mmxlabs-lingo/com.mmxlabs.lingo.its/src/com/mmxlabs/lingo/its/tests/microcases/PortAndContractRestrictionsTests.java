@@ -651,6 +651,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeFOBPurchase("L", LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null) //
+				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
@@ -691,6 +692,7 @@ public class PortAndContractRestrictionsTests extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				// Load
 				.makeDESPurchase("L", true, LocalDate.of(2017, 1, 13), portFinder.findPort("Point Fortin"), contract, null, null, vessel) //
+				.with(s -> s.setShippingDaysRestriction(60)) //
 				.build() //
 				// Discharge
 				.makeDESSale("D", LocalDate.of(2017, 2, 13), portFinder.findPort("Sakai"), null, entity, "7")//
