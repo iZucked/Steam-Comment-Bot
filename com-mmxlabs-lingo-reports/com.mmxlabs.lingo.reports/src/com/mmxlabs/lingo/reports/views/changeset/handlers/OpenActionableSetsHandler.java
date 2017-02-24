@@ -4,22 +4,17 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.handlers;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Collections;
 
-import org.eclipse.e4.core.di.annotations.CanExecute;
-import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.lingo.reports.services.ChangeSetViewCreatorService;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
@@ -31,83 +26,79 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class OpenActionableSetsHandler {
+public class OpenActionableSetsHandler extends AbstractHandler {
 
-	private static final Logger LOG = LoggerFactory.getLogger(OpenActionableSetsHandler.class);
+	@Override
+	public void setEnabled(final Object appContext) {
 
-	@Inject
-	private ESelectionService selectionService;
+		final ExecutionEvent event = new ExecutionEvent(null, Collections.EMPTY_MAP, null, appContext);
 
-	@CanExecute
-	public boolean canExecute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part) {
-		//
-		// if (!LicenseFeatures.isPermitted("features:optimisation-actionset")) {
-		// return false;
-		// }
-
-		if (part == null) {
-			return false;
-		}
-		final Object selection = selectionService.getSelection(part.getElementId());
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
 			if (ss.size() == 1) {
 				final Object o = ss.getFirstElement();
 				if (o instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-
+					if (scenarioInstance.getInstance() == null) {
+						setBaseEnabled(false);
+						return;
+					}
 					try (ModelReference ref = scenarioInstance.getReference("OpenNewActionPlansHandler:1")) {
+						if (ref == null) {
+							setBaseEnabled(false);
+							return;
+						}
 						final EObject rootObject = ref.getInstance();
 						if (!(rootObject instanceof LNGScenarioModel)) {
-							return false;
+							setBaseEnabled(false);
+							return;
 						}
 
 						final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 						final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
 						if (analyticsModel == null) {
-							return false;
+							setBaseEnabled(false);
+							return;
 						}
 
-						return !analyticsModel.getActionableSetPlans().isEmpty();
+						setBaseEnabled(!analyticsModel.getActionableSetPlans().isEmpty());
+						return;
 					}
 				}
 			}
 		}
-		return false;
+		setBaseEnabled(false);
 	}
 
-	@Execute
-	public void execute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part, Shell shell) {
-		if (part == null) {
-			return;
-		}
+	@Override
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final Object selection = selectionService.getSelection(part.getElementId());
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
 			final Object o = ss.getFirstElement();
 			if (o instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-
 				try (ModelReference ref = scenarioInstance.getReference("OpenNewActionPlansHandler:2")) {
 					final EObject rootObject = ref.getInstance();
 					if (!(rootObject instanceof LNGScenarioModel)) {
-						return;
+						return null;
 					}
 
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 					final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
 					if (analyticsModel == null) {
-						return;
+						return null;
 					}
 
 					if (analyticsModel.getActionableSetPlans().size() == 1) {
-						ActionableSetPlan plan = analyticsModel.getActionableSetPlans().get(0);
+						final ActionableSetPlan plan = analyticsModel.getActionableSetPlans().get(0);
 						openPlan(scenarioInstance, plan);
 					} else {
-						LocalMenuHelper helper = new LocalMenuHelper(shell);
+						final LocalMenuHelper helper = new LocalMenuHelper(HandlerUtil.getActiveShell(event));
 
-						for (ActionableSetPlan plan : analyticsModel.getActionableSetPlans()) {
+						for (final ActionableSetPlan plan : analyticsModel.getActionableSetPlans()) {
 							helper.addAction(new RunnableAction(generateName(plan), () -> {
 								openPlan(scenarioInstance, plan);
 							}));
@@ -118,16 +109,20 @@ public class OpenActionableSetsHandler {
 				}
 			}
 		}
+		return null;
 	}
 
-	private String generateName(ActionableSetPlan plan) {
+	private String generateName(final ActionableSetPlan plan) {
 
 		return "Action Plan:";
 	}
 
-	private void openPlan(final ScenarioInstance scenarioInstance, ActionableSetPlan plan) {
+	private void openPlan(final ScenarioInstance scenarioInstance, final ActionableSetPlan plan) {
 
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, new AnalyticsSolution(scenarioInstance, plan, generateName(plan)));
+		final AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, plan, generateName(plan));
+		data.setCreateDiffToBaseAction(true);
+		eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, data);
 	}
+
 }

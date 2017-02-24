@@ -4,28 +4,19 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.handlers;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.eclipse.e4.core.di.annotations.CanExecute;
-import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.lingo.reports.services.ChangeSetViewCreatorService;
@@ -39,93 +30,77 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class OpenInsertionPlansHandler {
+public class OpenInsertionPlansHandler extends AbstractHandler {
 
-	private static final Logger LOG = LoggerFactory.getLogger(OpenInsertionPlansHandler.class);
+	@Override
+	public void setEnabled(final Object appContext) {
 
-	@Inject
-	private IEventBroker eventBroker;
+		final ExecutionEvent event = new ExecutionEvent(null, Collections.EMPTY_MAP, null, appContext);
 
-	@Inject
-	private ESelectionService selectionService;
-
-	@Inject
-	private EPartService partService;
-
-	@Inject
-	private EModelService modelService;
-
-	@Inject
-	private MApplication application;
-
-	@CanExecute
-	public boolean canExecute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part) {
-		//
-		// if (!LicenseFeatures.isPermitted("features:optimisation-actionset")) {
-		// return false;
-		// }
-
-		if (part == null) {
-			return false;
-		}
-		final Object selection = selectionService.getSelection(part.getElementId());
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
 			if (ss.size() == 1) {
 				final Object o = ss.getFirstElement();
 				if (o instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-
+					if (scenarioInstance.getInstance() == null) {
+						setBaseEnabled(false);
+						return;
+					}
 					try (ModelReference ref = scenarioInstance.getReference("OpenInsertionPlansHandler:1")) {
+						if (ref == null) {
+							setBaseEnabled(false);
+							return;
+						}
 						final EObject rootObject = ref.getInstance();
 						if (!(rootObject instanceof LNGScenarioModel)) {
-							return false;
+							setBaseEnabled(false);
+							return;
 						}
 
 						final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 						final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
 						if (analyticsModel == null) {
-							return false;
+							setBaseEnabled(false);
+							return;
 						}
 
-						return !analyticsModel.getInsertionOptions().isEmpty();
+						setBaseEnabled(!analyticsModel.getInsertionOptions().isEmpty());
+						return;
 					}
 				}
 			}
 		}
-		return false;
+		setBaseEnabled(false);
 	}
 
-	@Execute
-	public void execute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part, final Shell shell) {
-		if (part == null) {
-			return;
-		}
+	@Override
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		final Object selection = selectionService.getSelection(part.getElementId());
+		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
 			final Object o = ss.getFirstElement();
 			if (o instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-
 				try (ModelReference ref = scenarioInstance.getReference("OpenInsertionPlansHandler:2")) {
 					final EObject rootObject = ref.getInstance();
 					if (!(rootObject instanceof LNGScenarioModel)) {
-						return;
+						return null;
 					}
 
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 					final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
 					if (analyticsModel == null) {
-						return;
+						return null;
 					}
 
 					if (analyticsModel.getInsertionOptions().size() == 1) {
 						final SlotInsertionOptions plan = analyticsModel.getInsertionOptions().get(0);
 						openPlan(scenarioInstance, plan);
 					} else {
-						final LocalMenuHelper helper = new LocalMenuHelper(shell);
+						final LocalMenuHelper helper = new LocalMenuHelper(HandlerUtil.getActiveShell(event));
 
 						for (final SlotInsertionOptions plan : analyticsModel.getInsertionOptions()) {
 							helper.addAction(new RunnableAction(generateName(plan), () -> {
@@ -138,6 +113,7 @@ public class OpenInsertionPlansHandler {
 				}
 			}
 		}
+		return null;
 	}
 
 	private String generateName(final SlotInsertionOptions plan) {

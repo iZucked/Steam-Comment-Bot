@@ -34,6 +34,9 @@
 	<extension point="org.eclipse.ui.commands">
 		<command id="com.mmxlabs.lingo.reports.changeset.insertionplans"
 			name="Open insertion plans">
+			  <defaultHandler
+               class="com.mmxlabs.lingo.reports.views.changeset.handlers.OpenInsertionPlansHandler">
+         </defaultHandler>			
 		</command>
 	</extension>
  

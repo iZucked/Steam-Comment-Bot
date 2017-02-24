@@ -33,6 +33,9 @@
 	<extension point="org.eclipse.ui.commands">
 		<command id="com.mmxlabs.lingo.reports.changeset.openactionplans"
 			name="Open actionable sets">
+			  <defaultHandler
+               class="com.mmxlabs.lingo.reports.views.changeset.handlers.OpenActionableSetsHandler">
+         </defaultHandler>			
 		</command>
 	</extension>
 </plugin>
