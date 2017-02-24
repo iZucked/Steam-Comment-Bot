@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -1210,13 +1211,77 @@ public class LNGScenarioTransformer {
 			final ITimeWindow twUTC = TimeWindowMaker.createInclusiveInclusive(twStart, Math.max(twStart, twEnd), 0, false);
 
 			return twUTC;
+		} else if (modelSlot instanceof DischargeSlot) {
+			final DischargeSlot slot = (DischargeSlot) modelSlot;
+			if (slot.isFOBSale() && slot.isDivertible()) {
+				return getTimewindowAsUTCWithFlex(slot);
+
+			}
+
+		}
+		@Nullable
+		final ITimeWindow timeWindow = optimiserSlot.getTimeWindow();
+		assert timeWindow != null;
+		return timeWindow;
+
+	}
+
+	/**
+	 * Return a time window (with flex) in UTC rather than translated to the port local timezone.
+	 * 
+	 * @param slot
+	 * @return
+	 */
+	private ITimeWindow getTimewindowAsUTCWithFlex(final Slot slot) {
+		LocalDateTime wStart = slot.getWindowStart().atStartOfDay();
+		if (slot.isSetWindowStartTime()) {
+			wStart = wStart.withHour(slot.getWindowStartTime());
 		} else {
-			@Nullable
-			final ITimeWindow timeWindow = optimiserSlot.getTimeWindow();
-			assert timeWindow != null;
-			return timeWindow;
+			wStart = wStart.withHour(slot.getPort().getDefaultStartTime());
 		}
 
+		final int slotFlex = slot.getWindowFlex();
+
+		final TimePeriod p = slot.getWindowFlexUnits();
+		LocalDateTime startTime = wStart;
+		{
+			if (slotFlex < 0) {
+				switch (p) {
+				case DAYS:
+					startTime = startTime.minusDays(slotFlex).plusHours(1);
+					break;
+				case HOURS:
+					startTime = startTime.minusHours(slotFlex);
+					break;
+				case MONTHS:
+					startTime = startTime.minusMonths(slotFlex).plusHours(1);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		LocalDateTime endTime = wStart.plusHours(slot.getWindowSizeInHours());
+		{
+			if (slotFlex > 0) {
+
+				switch (p) {
+				case DAYS:
+					endTime = endTime.plusDays(slotFlex).minusHours(1);
+					break;
+				case HOURS:
+					endTime = endTime.plusHours(slotFlex);
+					break;
+				case MONTHS:
+					endTime = endTime.plusMonths(slotFlex).minusHours(1);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		return TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(startTime.atZone(ZoneId.of("Etc/UTC"))), dateHelper.convertTime(endTime.atZone(ZoneId.of("Etc/UTC"))),
+				slot.getWindowFlex(), false);
 	}
 
 	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allLoadPorts,
@@ -1447,7 +1512,13 @@ public class LNGScenarioTransformer {
 					final int utcEnd = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getExclusiveEnd(), portAssociation.lookup(dischargeSlot.getPort()));
 					localTimeWindow = createUTCPlusTimeWindow(utcStart, utcEnd);
 				} else {
-					localTimeWindow = dischargeWindow;
+
+					if (dischargeSlot.isDivertible()) {
+						final ITimeWindow utcWindow = getTimewindowAsUTCWithFlex(dischargeSlot);
+						localTimeWindow = TimeWindowMaker.createInclusiveExclusive(utcWindow.getInclusiveStart() - 12, utcWindow.getExclusiveEnd(), dischargeSlot.getWindowFlex(), false);
+					} else {
+						localTimeWindow = dischargeWindow;
+					}
 				}
 				final IPort port;
 				if (dischargeSlot instanceof SpotSlot) {
