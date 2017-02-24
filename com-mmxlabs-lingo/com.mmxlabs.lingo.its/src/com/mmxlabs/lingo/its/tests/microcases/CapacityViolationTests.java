@@ -263,12 +263,12 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-			try {
-				MicroCaseUtils.storeToFile(optimiserScenario,"X");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				MicroCaseUtils.storeToFile(optimiserScenario,"X");
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			// Check single cargo
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			// Check correct cargoes remain and spot index has changed.
