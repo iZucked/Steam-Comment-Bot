@@ -72,9 +72,13 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 	@Inject
 	public void initPossibleTargets(final IOptimisationData optimisationData) {
 		potentialElements = new LinkedList<>();
-		for (final Map.Entry<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> e : moveTypeHelper.getMoveTypes(optimisationData).entrySet()) {
-			if (e.getValue().contains(moveType)) {
-				potentialElements.add(e.getKey());
+		@NonNull
+		final Map<ISequenceElement, @NonNull Collection<@NonNull GuidedMoveTypes>> moveTypes = moveTypeHelper.getMoveTypes(optimisationData);
+		for (final ISequenceElement e : optimisationData.getSequenceElements()) {
+			@NonNull
+			final Collection<@NonNull GuidedMoveTypes> collection = moveTypes.get(e);
+			if (collection != null && collection.contains(moveType)) {
+				potentialElements.add(e);
 			}
 		}
 	}
@@ -100,8 +104,8 @@ public class GuidedMoveHandlerWrapper implements IMoveGenerator {
 	}
 
 	/**
-	 * Find all compatible elements for the {@link GuidedMoveTypes}. This should probably be generated once per accepted solution and passed in rather than recomputing each time. Note: Some of this may be
-	 * pre-computable, and further filtered at each accepted solution. E.g. some move types depend on the currently assigned resource.
+	 * Find all compatible elements for the {@link GuidedMoveTypes}. This should probably be generated once per accepted solution and passed in rather than recomputing each time. Note: Some of this
+	 * may be pre-computable, and further filtered at each accepted solution. E.g. some move types depend on the currently assigned resource.
 	 * 
 	 * @param rawSequences
 	 * @return
