@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.schedule.validation;
 
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -98,14 +100,12 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			spotMarketsModel.getFobPurchasesSpotMarket().getMarkets().forEach(m -> loadPorts.add(((FOBPurchasesMarket) m).getNotionalPort()));
 			spotMarketsModel.getDesSalesSpotMarket().getMarkets().forEach(m -> dischargePorts.add(((DESSalesMarket) m).getNotionalPort()));
 
-			RouteDistanceLineCache cache = null;
+			Map<RouteOption, RouteDistanceLineCache> caches = new EnumMap<>(RouteOption.class);
 			for (final Route route : portModel.getRoutes()) {
-				if (route.getRouteOption() == RouteOption.DIRECT) {
-					cache = (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName());
-				}
+				caches.put(route.getRouteOption(), (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName()));
 			}
-			assert cache != null;
-			final RouteDistanceLineCache fCache = cache;
+			final RouteDistanceLineCache fCache = caches.get(RouteOption.DIRECT);
+			assert fCache != null;
 
 			// Lambda function to check two sets of distances
 			final BiFunction<Set<Port>, Set<Port>, Set<Pair<Port, Port>>> distanceChecker = (froms, tos) -> {
@@ -158,6 +158,28 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 
 				statuses.add(failure);
 			}
+
+			// Check load -> discharge and back again - typically needed for notional voyages
+			for (Port from : loadPorts) {
+				for (Port to : dischargePorts) {
+					if (from != to) {
+						for (RouteOption route : RouteOption.values()) {
+							final RouteDistanceLineCache cache = caches.get(route);
+							if (cache.hasDistance(from, to)) {
+								if (!cache.hasDistance(to, from)) {
+									final String msg = String.format("Missing distance between %s and %s for %s route.", getPortName(to), getPortName(from), route);
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+									failure.addEObjectAndFeature(from, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+									failure.addEObjectAndFeature(to, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+
+									statuses.add(failure);
+								}
+							}
+						}
+					}
+				}
+			}
+
 		}
 		return Activator.PLUGIN_ID;
 	}
