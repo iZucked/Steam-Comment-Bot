@@ -494,24 +494,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityDateConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityDateConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Start / End Date Consistency"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Vessel {0}'s {1} requirement has inconsistent start and end dates set (the start date is after the end date).
-               </message>
-               <description>
-                  The start and end window of a vessel event must be set and consistent.
-               </description>
-               <target
-                     class="VesselAvailability">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
                   lang="Java"
@@ -548,7 +530,7 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
                   lang="Java"
                   mode="Batch"

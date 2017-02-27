@@ -107,7 +107,7 @@
                   Index {0} has data preceding {1}
                </message>
                <target
-                     class="CommodityIndex">
+                     class="NamedIndexContainer">
                </target>
             </constraint>
              <constraint

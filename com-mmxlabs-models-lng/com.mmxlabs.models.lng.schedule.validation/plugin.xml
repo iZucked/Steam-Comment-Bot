@@ -88,6 +88,22 @@
                 </message>
                 <target class="Event"/>
             </constraint>
+                        <constraint
+                              class="com.mmxlabs.models.lng.schedule.validation.MissingCurveValueConstraint"
+                              id="com.mmxlabs.models.lng.schedule.validation.MissingCurveValueConstraint"
+                              isEnabledByDefault="true"
+                              lang="java"
+                              mode="Batch"
+                              name="MissingCurveValueConstraint"
+                              severity="ERROR"
+                              statusCode="1">
+                           <message>
+                              {0}
+                           </message>
+                           <target
+                                 class="Sequence">
+                           </target>
+                        </constraint>
          </constraints>
          <constraints></constraints>
       </constraintProvider>

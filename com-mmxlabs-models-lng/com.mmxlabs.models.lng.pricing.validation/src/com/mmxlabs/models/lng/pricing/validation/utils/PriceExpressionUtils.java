@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +20,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -92,7 +94,7 @@ public class PriceExpressionUtils {
 
 	@NonNull
 	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
-			final @Nullable String priceExpression, @NonNull PriceIndexType priceIndexType) {
+			final @Nullable String priceExpression, @NonNull final PriceIndexType priceIndexType) {
 		return validatePriceExpression(ctx, object, feature, priceExpression, getIndexParser(priceIndexType));
 	}
 
@@ -244,7 +246,7 @@ public class PriceExpressionUtils {
 	}
 
 	public static SeriesParser getIndexParser(final @NonNull PriceIndexType priceIndexType) {
-		PricingModel pricingModel = getPricingModel();
+		final PricingModel pricingModel = getPricingModel();
 		if (pricingModel == null) {
 			return null;
 		}
@@ -256,7 +258,7 @@ public class PriceExpressionUtils {
 	}
 
 	public static @Nullable YearMonth getEarliestCurveDate(final @NonNull NamedIndexContainer<?> index) {
-		PricingModel pricingModel = getPricingModel();
+		final PricingModel pricingModel = getPricingModel();
 		if (pricingModel == null) {
 			return null;
 		}
@@ -267,15 +269,15 @@ public class PriceExpressionUtils {
 		return cache.getEarliestDate(index);
 	}
 
-	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute,
-			String expression, @NonNull PriceIndexType priceIndexType) {
+	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, final T target,
+			final EAttribute attribute, final String expression, @NonNull final PriceIndexType priceIndexType) {
 		if (target instanceof LNGPriceCalculatorParameters) {
-			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, attribute, expression, priceIndexType);
+			final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, attribute, expression, priceIndexType);
 			if (!result.isOk()) {
-				EObject eContainer = target.eContainer();
+				final EObject eContainer = target.eContainer();
 				final DetailConstraintStatusDecorator dsd;
 				if (eContainer instanceof Contract) {
-					Contract contract = (Contract) eContainer;
+					final Contract contract = (Contract) eContainer;
 					final String message = String.format("[Contract|'%s']%s", contract.getName(), result.getErrorDetails());
 					dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(eContainer, attribute);
@@ -295,7 +297,7 @@ public class PriceExpressionUtils {
 	 * @param priceExpression
 	 * @return
 	 */
-	public static boolean validateBasicSyntax(String priceExpression) {
+	public static boolean validateBasicSyntax(final String priceExpression) {
 		{
 			final Matcher matcher = pattern.matcher(priceExpression);
 			if (matcher.find()) {
@@ -312,5 +314,18 @@ public class PriceExpressionUtils {
 			}
 		}
 		return true;
+	}
+
+	public static Collection<NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
+		final PricingModel pricingModel = getPricingModel();
+		if (pricingModel == null) {
+			return null;
+		}
+		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
+		if (cache == null) {
+			throw new IllegalStateException("Unable to get market index cache");
+		}
+		return cache.getLinkedCurves(priceExpression);
+
 	}
 }

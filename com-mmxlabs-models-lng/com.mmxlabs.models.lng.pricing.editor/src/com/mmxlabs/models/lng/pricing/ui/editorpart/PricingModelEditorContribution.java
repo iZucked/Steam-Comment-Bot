@@ -62,6 +62,9 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			if (target instanceof UnitConversion) {
 				return true;
 			}
+			if (target instanceof PricingModel) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -77,6 +80,12 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				target = ((IndexPoint<?>) target).eContainer();
 			}
 
+			if (target instanceof PricingModel) {
+				if (indexPane != null) {
+					editorPart.setActivePage(indexPage);
+				}
+				return;
+			}
 			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex) {
 				if (indexPane != null) {
 					editorPart.setActivePage(indexPage);
