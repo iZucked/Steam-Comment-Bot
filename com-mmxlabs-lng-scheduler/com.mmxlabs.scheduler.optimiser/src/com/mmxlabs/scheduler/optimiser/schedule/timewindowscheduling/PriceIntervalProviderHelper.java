@@ -687,8 +687,9 @@ public class PriceIntervalProviderHelper {
 					.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, shiftTimeByTimezoneToUTC(end, slot, portTimeWindowsRecord, pricingEventType)) });
 			priceIntervals.add(getEndInterval(end));
 		} else if (isPricingDateSpecified(slot, pricingEventType)) {
-			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption,
-					timeZoneToUtcOffsetProvider.UTC(getDateFromSlotOrContract(slot, portTimeWindowsRecord), slot.getPort())) });
+			final int slotPricingDate = getDateFromSlotOrContract(slot, portTimeWindowsRecord);
+			assert slotPricingDate != IPortSlot.NO_PRICING_DATE;
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(slotPricingDate, slot.getPort())) });
 			priceIntervals.add(getEndInterval(end));
 		} else {
 			// first add start
