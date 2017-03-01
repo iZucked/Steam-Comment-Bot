@@ -16,10 +16,11 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public interface IPortSlot {
+
 	/**
-	 * FIXME! Bad constant, *could* clash with real time unit.
+	 * Constant to indicate pricing date has not been set. See #getPricingDate in the {@link ILoadSlot} and {@link IDischargeSlot} interfaces.
 	 */
-	public static final int NO_PRICING_DATE = -1000;
+	public static final int NO_PRICING_DATE = Integer.MIN_VALUE;
 
 	@NonNull
 	String getId();
@@ -27,7 +28,7 @@ public interface IPortSlot {
 	@NonNull
 	IPort getPort();
 
-//	@Nullable
+	// @Nullable
 	ITimeWindow getTimeWindow();
 
 	@NonNull
