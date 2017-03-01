@@ -63,7 +63,7 @@ public class PriceIntervalProviderHelper {
 	private final Set<PricingEventType> dischargePricingEventTypeSet = new HashSet<>(Arrays.asList(
 			new PricingEventType[] { PricingEventType.END_OF_DISCHARGE, PricingEventType.END_OF_DISCHARGE_WINDOW, PricingEventType.START_OF_DISCHARGE, PricingEventType.START_OF_DISCHARGE_WINDOW, }));
 
-	private final PriceIntervalsComparator priceIntervalComparator = new PriceIntervalsComparator();
+	private final @NonNull PriceIntervalsComparator priceIntervalComparator = new PriceIntervalsComparator();
 
 	private final static int TOTAL_BOILOFF_COSTS_INDEX = 0;
 	private final static int TOTAL_BUNKER_COSTS_INDEX = 1;
@@ -193,8 +193,8 @@ public class PriceIntervalProviderHelper {
 		return shifted;
 	}
 
-	public List<int @NonNull []> getEndElementPriceIntervals(@NonNull List<@NonNull Integer> times) {
-		List<int @NonNull []> intervals = new LinkedList<>();
+	public List<int @NonNull []> getEndElementPriceIntervals(@NonNull final List<@NonNull Integer> times) {
+		final List<int @NonNull []> intervals = new LinkedList<>();
 		for (int i = 0; i < times.size(); i++) {
 			intervals.add(new int[] { times.get(i), // time
 					0 // 0 for a price of zero (we don't care about price, only cost for end elements
@@ -260,9 +260,9 @@ public class PriceIntervalProviderHelper {
 	}
 
 	public NonNullPair<LadenRouteData, Long> getTotalEstimatedJourneyCost(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
-			long charterRatePerDay, @NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final boolean isLaden) {
+			final long charterRatePerDay, @NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final boolean isLaden) {
 		assert sortedCanalTimes.length > 0;
-		int equivalenceFactor = vesselClass.getBaseFuel().getEquivalenceFactor();
+		final int equivalenceFactor = vesselClass.getBaseFuel().getEquivalenceFactor();
 		long bestMargin = Long.MAX_VALUE;
 		LadenRouteData bestCanal = null;
 
@@ -291,10 +291,10 @@ public class PriceIntervalProviderHelper {
 	}
 
 	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3,
-			final IVesselClass vesselClass, final int cv, int equivalenceFactor, final LadenRouteData canal, long charterRatePerDay, boolean isLaden) {
+			final IVesselClass vesselClass, final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
 		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
 				(int) canal.ladenTimeAtNBOSpeed);
-		long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor,
+		final long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor,
 				vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.transitTime, loadDuration, isLaden);
 
 		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long) (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel
@@ -321,7 +321,7 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	public long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor,
-			final int baseFuelPrice, int canalTransitTime, int durationAtPort, boolean isLaden) {
+			final int baseFuelPrice, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
 		final VesselState vesselState;
 		if (isLaden) {
 			vesselState = VesselState.Laden;
@@ -333,7 +333,7 @@ public class PriceIntervalProviderHelper {
 		// estimate speed and rate
 		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
 		if (totalLegLengthInHours == 0) {
-			int z = 0;
+			final int z = 0;
 		}
 		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);
 		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vesselClass.getMaxSpeed()); // the speed bounded by NBO and Max
@@ -348,7 +348,7 @@ public class PriceIntervalProviderHelper {
 		final long idleBoiloffMMBTU = Calculator.convertM3ToMMBTu(vesselClass.getIdleNBORate(vesselState) * (int) idleTimeInHours, cv) / 24L;
 		final long idleBoiloffCost = Calculator.costFromVolume(idleBoiloffMMBTU, salesPrice);
 
-		long[] fuelCosts = new long[2];
+		final long[] fuelCosts = new long[2];
 		final long totalBoilOffCost;
 		final long totalBunkerCost;
 
@@ -426,11 +426,11 @@ public class PriceIntervalProviderHelper {
 		return new NonNullPair<>(bestCanal, bestBoiloffCostMMBTU);
 	}
 
-	int getMinIndexOfPriceIntervalList(final IntervalData[] purchaseIntervals) {
+	int getMinIndexOfPriceIntervalList(final IntervalData @NonNull [] purchaseIntervals) {
 		return getMinIndex(purchaseIntervals, priceIntervalComparator);
 	}
 
-	private static <T> int getMinIndex(final List<? extends T> coll, final Comparator<? super T> comp) {
+	private static <T> int getMinIndex(final @NonNull List<? extends T> coll, final @NonNull Comparator<? super T> comp) {
 		if (coll.isEmpty()) {
 			return -1;
 		}
@@ -447,7 +447,7 @@ public class PriceIntervalProviderHelper {
 		return bestIdx;
 	}
 
-	private static <T> int getMinIndex(final T[] coll, final Comparator<? super T> comp) {
+	private static <T> int getMinIndex(final T @NonNull [] coll, final @NonNull Comparator<? super T> comp) {
 		if (coll.length == 0) {
 			return -1;
 		}
@@ -468,7 +468,7 @@ public class PriceIntervalProviderHelper {
 		return getMaxIndex(salesIntervals, priceIntervalComparator);
 	}
 
-	private static <T> int getMaxIndex(final List<? extends T> coll, final Comparator<? super T> comp) {
+	private static <T> int getMaxIndex(final @NonNull List<? extends T> coll, final @NonNull Comparator<? super T> comp) {
 		if (coll.isEmpty()) {
 			return -1;
 		}
@@ -511,17 +511,17 @@ public class PriceIntervalProviderHelper {
 		return times[times.length];
 	}
 
-	int getMinimumPossibleTimeForCargoIntervals(final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
+	int getMinimumPossibleTimeForCargoIntervals(final @NonNull List<int[]> loadPriceIntervals, final @NonNull List<int[]> dischargePriceIntervals) {
 		return dischargePriceIntervals.get(0)[0] - loadPriceIntervals.get(loadPriceIntervals.size() - 1)[0];
 	}
 
-	int getMaximumPossibleTimeForCargoIntervals(final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
+	int getMaximumPossibleTimeForCargoIntervals(final @NonNull List<int[]> loadPriceIntervals, final @NonNull List<int[]> dischargePriceIntervals) {
 		return dischargePriceIntervals.get(dischargePriceIntervals.size() - 1)[0] - loadPriceIntervals.get(0)[0] - 1;
 	}
 
-	public int getMinTravelTimeAtMaxSpeed(LadenRouteData[] canalTimes) {
+	public int getMinTravelTimeAtMaxSpeed(@NonNull final LadenRouteData @NonNull [] canalTimes) {
 		int min = Integer.MAX_VALUE;
-		for (LadenRouteData ladenRouteData : canalTimes) {
+		for (final LadenRouteData ladenRouteData : canalTimes) {
 			if (ladenRouteData.ladenTimeAtMaxSpeed < min) {
 				min = (int) ladenRouteData.ladenTimeAtMaxSpeed;
 			}
@@ -959,7 +959,7 @@ public class PriceIntervalProviderHelper {
 		return sortedIntervals;
 	}
 
-	public int getEndInterval(int intervalDataStart, int intervalDataEnd) {
+	public int getEndInterval(final int intervalDataStart, final int intervalDataEnd) {
 		if (intervalDataStart == intervalDataEnd) {
 			return intervalDataStart;
 		} else {
@@ -1020,7 +1020,7 @@ public class PriceIntervalProviderHelper {
 	 * @param end
 	 * @return
 	 */
-	public int processEndTime(int inclusiveEnd) {
+	public int processEndTime(final int inclusiveEnd) {
 		// make exclusive end
 		return inclusiveEnd + 1;
 	}
