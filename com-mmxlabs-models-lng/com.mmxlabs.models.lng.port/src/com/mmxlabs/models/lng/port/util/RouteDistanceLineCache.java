@@ -45,13 +45,13 @@ public class RouteDistanceLineCache extends MMXAdapterImpl {
 	}
 
 	public synchronized Map<Pair<Port, Port>, Integer> buildCache() {
-		Map<Pair<Port, Port>, Integer> distanceCacheObj = new HashMap<>();
-		distanceCache = new SoftReference<>(distanceCacheObj);
+		final Map<Pair<Port, Port>, Integer> distanceCacheObj = new HashMap<>();
 		for (final RouteLine rl : route.getLines()) {
 			if (rl.getDistance() != Integer.MAX_VALUE && rl.getDistance() >= 0) {
 				distanceCacheObj.put(new Pair<>(rl.getFrom(), rl.getTo()), rl.getFullDistance());
 			}
 		}
+		distanceCache = new SoftReference<>(distanceCacheObj);
 		return distanceCacheObj;
 	}
 
