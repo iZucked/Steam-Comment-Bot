@@ -115,7 +115,7 @@ public class MoveHelper implements IMoveHelper {
 
 	@Inject
 	@Named(LEGACY_CHECK_RESOURCE)
-	private final boolean useLegacyCheck = false;
+	private boolean useLegacyCheck = false;
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> desPurchaseResources = new LinkedList<>();
