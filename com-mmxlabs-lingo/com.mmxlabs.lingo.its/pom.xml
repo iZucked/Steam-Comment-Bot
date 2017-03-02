@@ -260,7 +260,7 @@
 			<repositories>
 				<repository>
 					<id>lingo-p2</id>
-					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
+					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>
