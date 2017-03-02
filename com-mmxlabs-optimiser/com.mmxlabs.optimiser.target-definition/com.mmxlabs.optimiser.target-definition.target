@@ -42,7 +42,7 @@
 <unit id="ch.qos.logback.core.source" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j.source" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20150124073747/orbit-buildrepo-R20150124073747.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20150124073747/orbit-buildrepo-R20150124073747.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.googlecode.json-simple.source" version="0.0.0"/>
@@ -67,7 +67,7 @@
 <unit id="com.springsource.org.apache.poi.source" version="3.9.0.FINAL"/>
 <unit id="com.springsource.org.apache.commons.logging" version="1.1.1"/>
 <unit id="com.springsource.org.apache.commons.codec" version="1.6.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.9/mmxlabs-external-1.0.9-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.9/mmxlabs-external-1.0.9-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
@@ -79,7 +79,7 @@
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.common.util.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.common.util.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/3.0.0.RELEASE/com.mmxlabs.common.util.p2-3.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/3.0.0.RELEASE/com.mmxlabs.common.util.p2-3.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
