@@ -13,6 +13,8 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -33,7 +35,17 @@ public class OpenActionableSetsHandler extends AbstractHandler {
 
 		final ExecutionEvent event = new ExecutionEvent(null, Collections.EMPTY_MAP, null, appContext);
 
-		final ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
+		final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
+		if (activeWorkbenchWindow == null) {
+			setBaseEnabled(false);
+			return;
+		}
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		if (activePage == null) {
+			setBaseEnabled(false);
+			return;
+		}
+		final ISelection selection = activePage.getSelection();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
 			if (ss.size() == 1) {
