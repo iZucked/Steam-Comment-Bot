@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -32,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -44,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintChe
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
@@ -86,6 +89,10 @@ public class MoveHelper implements IMoveHelper {
 
 	@Inject
 	@NonNull
+	private IPortExclusionProvider portExclusionProvider;
+
+	@Inject
+	@NonNull
 	private IRoundTripVesselPermissionProvider roundTripVesselPermissionProvider;
 
 	@Inject
@@ -108,7 +115,7 @@ public class MoveHelper implements IMoveHelper {
 
 	@Inject
 	@Named(LEGACY_CHECK_RESOURCE)
-	private boolean useLegacyCheck = false;
+	private final boolean useLegacyCheck = false;
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> desPurchaseResources = new LinkedList<>();
@@ -186,6 +193,25 @@ public class MoveHelper implements IMoveHelper {
 					continue;
 				}
 			}
+
+			if (!portExclusionProvider.hasNoExclusions()) {
+				IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
+				if (vessel == null) {
+					vessel = vesselAvailability.getVessel();
+				}
+				Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
+				// If there are none, pick the class exclusions
+				if (excludedPorts.isEmpty()) {
+					excludedPorts = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
+				}
+				if (!excludedPorts.isEmpty()) {
+					if (excludedPorts.contains(portSlot.getPort())) {
+						itr.remove();
+						continue;
+					}
+				}
+			}
+
 		}
 
 		return allowedResources;
@@ -381,7 +407,7 @@ public class MoveHelper implements IMoveHelper {
 	}
 
 	@Override
-	public boolean isNonShippedResource(@NonNull IResource resource) {
+	public boolean isNonShippedResource(@NonNull final IResource resource) {
 		return desPurchaseResources.contains(resource) || fobSaleResources.contains(resource);
 	}
 }
