@@ -12,7 +12,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>35</version>
+		<version>36</version>
 	</parent>
 
 	<scm>
@@ -92,12 +92,12 @@
 			<repositories>
 				<repository>
 					<id>com-mmxlabs-common-util.hg</id>
-					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
+					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
 					<layout>p2</layout>
 				</repository>
 				<repository>
 					<id>com-mmxlabs-optimiser.hg</id>
-					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
+					<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>
