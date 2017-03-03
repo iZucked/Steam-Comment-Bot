@@ -24,11 +24,13 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.MarketIndexCache;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -187,7 +189,10 @@ public class PriceExpressionUtils {
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
 			final ISeries parsed = expression.evaluate();
-			final double value = parsed.evaluate(0).doubleValue();
+
+			final int pricingTime = Hours.between(PriceIndexUtils.dateZero, date);
+
+			final double value = parsed.evaluate(pricingTime).doubleValue();
 
 			final boolean lessThanMin = minValue != null && value < minValue;
 			final boolean moreThanMax = minValue != null && value > maxValue;

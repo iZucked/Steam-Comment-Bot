@@ -51,8 +51,13 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 						failures.add(dsd);
 					}
-
-					final ZonedDateTime start = slot.getWindowStartWithSlotOrPortTime();
+					final ZonedDateTime start;
+					if (slot.isSetPricingDate()) {
+						start = slot.getPricingDateAsDateTime();
+					} else {
+						// Not strictly correct, may differ on pricing event and actual scheduled date
+						start = slot.getWindowStartWithSlotOrPortTime();
+					}
 					if (start != null) {
 						final YearMonth key = YearMonth.from(start);
 						PriceExpressionUtils.constrainPriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, minExpressionValue, maxExpressionValue, key, failures);
