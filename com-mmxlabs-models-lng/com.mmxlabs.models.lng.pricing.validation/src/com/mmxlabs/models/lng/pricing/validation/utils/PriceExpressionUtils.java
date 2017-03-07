@@ -176,6 +176,10 @@ public class PriceExpressionUtils {
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
 			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
 
+		if (date == null) {
+			return;
+		}
+
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return;
 		}
