@@ -87,7 +87,9 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		final EDataType dt = attribute.getEAttributeType();
 		assert dt != null;
 		try {
-			if (isNumberDataType(dt)) {
+			if (dt == EcorePackage.Literals.ESTRING) {
+				return EncoderUtil.decode(value);
+			} else if (isNumberDataType(dt)) {
 				return importNumberDataType(dt, attribute, value, context);
 			} else if (isDateDataType(dt)) {
 				return importDateDataType(dt, value, context);
@@ -109,7 +111,13 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			return "";
 		}
 
-		if (isNumberDataType(dt)) {
+		if (value == null) {
+			return "";
+		}
+		
+		if (dt == EcorePackage.Literals.ESTRING) {
+			return EncoderUtil.encode((String) value);
+		} else if (isNumberDataType(dt)) {
 			return exportNumberDataType(dt, attribute, value, context);
 		} else if (isDateDataType(dt)) {
 			return exportDateDataType(dt, value, context);

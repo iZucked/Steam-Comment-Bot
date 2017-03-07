@@ -14,11 +14,15 @@ public final class EncoderUtil {
 
 	public static final String HTML_AMPERSAND = "&#38;";
 	public static final String HTML_COMMA = "&#44;";
+	public static final String HTML_SINGLE_QUOTE = "&#39;";
+	public static final String HTML_DOUBLE_QUOTE = "&#34;";
 
 	public static @NonNull String encode(@NonNull String input) {
 		return input.trim() //
 				// Do first as control character
 				.replaceAll("&", HTML_AMPERSAND) //
+				.replaceAll("'", HTML_SINGLE_QUOTE) //
+				.replaceAll("\"", HTML_DOUBLE_QUOTE) //
 				.replaceAll(",", HTML_COMMA) //
 		;
 	}
@@ -26,6 +30,8 @@ public final class EncoderUtil {
 	public static @NonNull String decode(@NonNull String input) {
 		return input.trim() //
 				.replaceAll(HTML_COMMA, ",") //
+				.replaceAll(HTML_SINGLE_QUOTE, "'") //
+				.replaceAll(HTML_DOUBLE_QUOTE, "\"") //
 				// Do last as control character
 				.replaceAll(HTML_AMPERSAND, "&") //
 		;
