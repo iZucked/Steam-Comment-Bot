@@ -96,28 +96,31 @@ public class HeadlessJSONParser {
 					} else if (value instanceof JSONObject) {
 						JSONObject innerObject = (JSONObject) value;
 						boolean valid = true;
-						Map<String, Double> doubleMap = new HashMap<String, Double>();
+						Map<String, Object> doubleMap = new HashMap<>();
 						for (Object keyInnerObject : innerObject.keySet()) {
 							if (keyInnerObject instanceof String) {
 								String innerKey = (String) keyInnerObject;
 								Object innerValue = innerObject.get(innerKey);
-								if (innerValue instanceof Integer) {
-									doubleMap.put(innerKey, ((Integer) innerValue).doubleValue());
-								} else if (innerValue instanceof Double) {
-									doubleMap.put(innerKey, (Double) innerValue);
-								} else if (innerValue instanceof Long) {
-									doubleMap.put(innerKey, ((Long) innerValue).doubleValue());
-								} else {
-									valid = false;
-									break;
-								}
+//								if (innerValue instanceof Integer) {
+//									doubleMap.put(innerKey, ((Integer) innerValue).doubleValue());
+//								} else if (innerValue instanceof Double) {
+//									doubleMap.put(innerKey, (Double) innerValue);
+//								} else if (innerValue instanceof Long) {
+//									doubleMap.put(innerKey, ((Long) innerValue).doubleValue());
+//								} else {
+//									valid = false;
+//									break;
+//								}
+								doubleMap.put(innerKey, innerValue);
 							} else {
 								valid = false;
 								break;
 							}
 						}
+						JMap jmap = new JMap(doubleMap);
+						
 						if (valid) {
-							params.put(key, new Pair<Object, Class<?>>(new DoubleMap(doubleMap), DoubleMap.class));
+							params.put(key, new Pair<Object, Class<?>>(jmap, JMap.class));
 						}
 					} else if ((value instanceof String) && matchDate((String) value)) {
 						LocalDate parsedDate = parseDate((String) value);

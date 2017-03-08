@@ -49,20 +49,20 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private ILatenessComponentParameters provideLatenessComponentParameters() {
-		Map<String, Integer> latenessParameterMap = settings.getlatenessParameterMap();
+		Map<String, Integer> latenessParameterMap = settings.getlatenessMap();
 		final LatenessComponentParameters lcp = new LatenessComponentParameters();
 
-		lcp.setThreshold(Interval.PROMPT, latenessParameterMap.get("lcp-set-prompt-period"));
-		lcp.setLowWeight(Interval.PROMPT, latenessParameterMap.get("lcp-set-prompt-lowWeight"));
-		lcp.setHighWeight(Interval.PROMPT, latenessParameterMap.get("lcp-set-prompt-highWeight"));
+		lcp.setThreshold(Interval.PROMPT, latenessParameterMap.get("prompt-period"));
+		lcp.setLowWeight(Interval.PROMPT, latenessParameterMap.get("prompt-low"));
+		lcp.setHighWeight(Interval.PROMPT, latenessParameterMap.get("prompt-high"));
 
-		lcp.setThreshold(Interval.MID_TERM, latenessParameterMap.get("lcp-set-midTerm-period"));
-		lcp.setLowWeight(Interval.MID_TERM, latenessParameterMap.get("lcp-set-midTerm-lowWeight"));
-		lcp.setHighWeight(Interval.MID_TERM, latenessParameterMap.get("lcp-set-midTerm-highWeight"));
+		lcp.setThreshold(Interval.MID_TERM, latenessParameterMap.get("mid-term-period"));
+		lcp.setLowWeight(Interval.MID_TERM, latenessParameterMap.get("mid-term-low"));
+		lcp.setHighWeight(Interval.MID_TERM, latenessParameterMap.get("mid-term-high"));
 
-		lcp.setThreshold(Interval.BEYOND, latenessParameterMap.get("lcp-set-beyond-period"));
-		lcp.setLowWeight(Interval.BEYOND, latenessParameterMap.get("lcp-set-beyond-lowWeight"));
-		lcp.setHighWeight(Interval.BEYOND, latenessParameterMap.get("lcp-set-beyond-highWeight"));
+		lcp.setThreshold(Interval.BEYOND, latenessParameterMap.get("beyond-period"));
+		lcp.setLowWeight(Interval.BEYOND, latenessParameterMap.get("beyond-low"));
+		lcp.setHighWeight(Interval.BEYOND, latenessParameterMap.get("beyond-high"));
 
 
 		return lcp;
@@ -71,19 +71,19 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
-		Map<String, Integer> scpm = settings.getSimilarityParameterMap();
+		Map<String, Integer> scpm = settings.getSimilarityMap();
 		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
 
-		scp.setThreshold(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-weight"));
+		scp.setThreshold(SimilarityComponentParameters.Interval.LOW, scpm.get("low-thresh"));
+		scp.setWeight(SimilarityComponentParameters.Interval.LOW, scpm.get("low-weight"));
 
-		scp.setThreshold(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-weight"));
+		scp.setThreshold(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("med-thresh"));
+		scp.setWeight(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("med-weight"));
 
-		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-weight"));
+		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("high-thresh"));
+		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("high-weight"));
 
-		scp.setOutOfBoundsWeight(scpm.get("scp-set-outOfBounds-weight"));
+		scp.setOutOfBoundsWeight(scpm.get("out-of-bounds-weight"));
 
 		return scp;
 	}

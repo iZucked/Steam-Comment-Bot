@@ -17,15 +17,39 @@ import org.apache.commons.cli.Options;
 
 public final class SettingsOverride {
 
-	public static String[] moveFrequencyParameters = new String[] { "insert-optional-frequency", "remove-optional-frequency", "swap-segments-frequency", "move-segments-frequency",
-			"swap-tails-frequency", "shuffle-elements-frequency",
+	// Lateness
+	Map<String, Integer> latenessMap;
 
-	};
-	public static String[] latenessComponentParameters = new String[] { "lcp-set-prompt-period", "lcp-set-prompt-lowWeight", "lcp-set-prompt-highWeight", "lcp-set-midTerm-period",
-			"lcp-set-midTerm-lowWeight", "lcp-set-midTerm-highWeight", "lcp-set-beyond-period", "lcp-set-beyond-lowWeight", "lcp-set-beyond-highWeight", };
+	public void setlatenessMap(Map<String, Integer> latenessMap) {
+		this.latenessMap = latenessMap;
+	}
 
-	public static String[] similarityComponentParameters = new String[] { "scp-set-low-thresh", "scp-set-low-weight", "scp-set-med-thresh", "scp-set-med-weight", "scp-set-high-thresh",
-			"scp-set-high-weight", "scp-set-outOfBounds-weight", };
+	public Map<String, Integer> getlatenessMap() {
+		return latenessMap;
+	}
+
+	// Similarity
+	Map<String, Integer> similarityMap;
+
+	public void setSimilarityMap(Map<String, Integer> similarityMap) {
+		this.similarityMap = similarityMap;
+	}
+
+	public Map<String, Integer> getSimilarityMap() {
+		return similarityMap;
+	}
+	
+	// Move Frequency
+	Map<String, Double> moveMap;
+	
+	public void setMoveMap(Map<String, Double> moveMap) {
+		this.moveMap = moveMap;
+	}
+
+	public Map<String, Double> getMoveMap() {
+		return moveMap;
+	}
+
 
 	private int iterations = 30000;
 	private int seed = 1;
@@ -37,16 +61,13 @@ public final class SettingsOverride {
 	private String json;
 	private String outputName;
 
-	Map<String, Integer> latenessParameterMap;
-	Map<String, Integer> similarityParameterMap;
-	Map<String, Double> moveFrequencyParameterMap;
+	
 
 	private int actionPlanTotalEvals = 5_000_000;
 	private int actionPlanInRunEvals = 1_500_000;
 	private int actionPlanMaxSearchDepth = 5_000;
 	private boolean actionPlanVerboseLogger = false;
 
-	private boolean movesUseLoopingSCMG = false;
 
 	private int idleTimeLow = 2_500;
 	private int idleTimeHigh = 10_000;
@@ -81,13 +102,7 @@ public final class SettingsOverride {
 		this.equalMoveDistributions = equalMoveDistributions;
 	}
 
-	public Map<String, Double> getMoveFrequencyParameterMap() {
-		return moveFrequencyParameterMap;
-	}
 
-	public void setMoveFrequencyParameterMap(Map<String, Double> moveFrequencyParameterMap) {
-		this.moveFrequencyParameterMap = moveFrequencyParameterMap;
-	}
 
 	private boolean useRouletteWheel = false;
 
@@ -179,22 +194,6 @@ public final class SettingsOverride {
 		this.json = json;
 	}
 
-	public void setlatenessParameterMap(Map<String, Integer> latenessParameterMap) {
-		this.latenessParameterMap = latenessParameterMap;
-	}
-
-	public Map<String, Integer> getlatenessParameterMap() {
-		return latenessParameterMap;
-	}
-
-	public void setSimilarityParameterMap(Map<String, Integer> similarityParameterMap) {
-		this.similarityParameterMap = similarityParameterMap;
-	}
-
-	public Map<String, Integer> getSimilarityParameterMap() {
-		return similarityParameterMap;
-	}
-
 	public int getActionPlanTotalEvals() {
 		return actionPlanTotalEvals;
 	}
@@ -219,13 +218,6 @@ public final class SettingsOverride {
 		this.actionPlanMaxSearchDepth = actionPlanMaxSearchDepth;
 	}
 
-	public boolean isMovesUseLoopingSCMG() {
-		return movesUseLoopingSCMG;
-	}
-
-	public void setMovesUseLoopingSCMG(boolean movesUseLoopingSCMG) {
-		this.movesUseLoopingSCMG = movesUseLoopingSCMG;
-	}
 
 	public boolean isActionPlanVerboseLogger() {
 		return actionPlanVerboseLogger;

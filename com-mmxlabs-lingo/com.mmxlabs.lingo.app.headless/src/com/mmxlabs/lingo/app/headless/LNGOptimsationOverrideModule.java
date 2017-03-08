@@ -37,7 +37,7 @@ public class LNGOptimsationOverrideModule extends AbstractModule {
 	@Provides
 	@Named(RouletteWheelMoveGenerator.MOVE_DISTRIBUTION)
 	private Map<String, Double> getMoveDistributions() {
-		return settings.getMoveFrequencyParameterMap();
+		return settings.getMoveMap();
 	}
 
 	@Provides

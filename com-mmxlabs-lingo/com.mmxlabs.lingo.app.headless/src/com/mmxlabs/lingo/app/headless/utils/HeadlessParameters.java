@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
@@ -25,6 +26,8 @@ public class HeadlessParameters {
 
 	public JSONParseResult setParametersFromJSON(final Map<String, Pair<Object, Class<?>>> jsonParams) {
 		final JSONParseResult parseResult = new JSONParseResult();
+		@NonNull
+		Set<String> x = jsonParams.keySet();
 		for (final String param : jsonParams.keySet()) {
 			final Pair<Object, Class<?>> jsonParam = jsonParams.get(param);
 			final Object jsonValue = jsonParam.getFirst();
@@ -73,6 +76,8 @@ public class HeadlessParameters {
 			parameters.put(key, new LocalDateParameter(key, (LocalDate) value));
 		} else if (clazz.isAssignableFrom(YearMonth.class)) {
 			parameters.put(key, new YearMonthParameter(key, (YearMonth) value));
+		}	else if (clazz.isAssignableFrom(JMap.class)) {
+			parameters.put(key, new JMapParameter(key, (JMap) value));
 		}
 
 	}

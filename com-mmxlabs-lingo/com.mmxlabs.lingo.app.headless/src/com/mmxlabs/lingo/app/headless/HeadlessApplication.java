@@ -51,6 +51,7 @@ import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.utils.DoubleMap;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessJSONParser;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessParameters;
+import com.mmxlabs.lingo.app.headless.utils.JMap;
 import com.mmxlabs.lingo.app.headless.utils.JSONParseResult;
 import com.mmxlabs.lingo.app.headless.utils.LNGHeadlessParameters;
 import com.mmxlabs.lingo.app.headless.utils.StringParameter;
@@ -125,18 +126,18 @@ public class HeadlessApplication implements IApplication {
 		final LNGHeadlessParameters headlessParameters = jsonParse.getSecond();
 		// set output file
 		final String path = overrideSettings.getOutputPath();
-		//Set Idle time levels
-		overrideSettings.setIdleTimeLow(headlessParameters.getParameterValue("idle-time-low", Integer.class));
-		overrideSettings.setIdleTimeHigh(headlessParameters.getParameterValue("idle-time-high", Integer.class));
-		overrideSettings.setIdleTimeEnd(headlessParameters.getParameterValue("idle-time-end", Integer.class));
+		// Set Idle time levels
+		// overrideSettings.setIdleTimeLow(headlessParameters.getParameterValue("idle-time-low", Integer.class));
+		// overrideSettings.setIdleTimeHigh(headlessParameters.getParameterValue("idle-time-high", Integer.class));
+		// overrideSettings.setIdleTimeEnd(headlessParameters.getParameterValue("idle-time-end", Integer.class));
 		// set scenario file
 		overrideSettings
 				.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
 		// Set verbose Logging
-		overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
-		overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("use-roulette-wheel", Boolean.class));
-		overrideSettings.setUseLegacyCheck(headlessParameters.getParameterValue("use-legacy-check", Boolean.class));
-		overrideSettings.setUseGuidedMoves(headlessParameters.getParameterValue("use-guided-moves", Boolean.class));
+		// overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
+		// overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("use-roulette-wheel", Boolean.class));
+		// overrideSettings.setUseLegacyCheck(headlessParameters.getParameterValue("use-legacy-check", Boolean.class));
+		// overrideSettings.setUseGuidedMoves(headlessParameters.getParameterValue("use-guided-moves", Boolean.class));
 		final String scenarioFile = overrideSettings.getScenario();
 		if (scenarioFile == null || scenarioFile.isEmpty()) {
 			System.err.println("No scenario specified");
@@ -373,7 +374,7 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private int getNumThreads(final LNGHeadlessParameters headlessParameters) {
-		final int processorsFromParams = headlessParameters.getParameterValue("actionSets-maxThreads", Integer.class);
+		final int processorsFromParams = headlessParameters.getParameterValue("pool-size", Integer.class);
 		final int recommended = Math.max(1, Runtime.getRuntime().availableProcessors());
 		return Math.min(processorsFromParams, recommended);
 	}
@@ -521,37 +522,29 @@ public class HeadlessApplication implements IApplication {
 
 		final List<ConstraintAndFitnessSettings> constraintsAndFitnesses = new LinkedList<>();
 
-		if (headlessParameters.getParameterValue("do-clean-state", Boolean.class)) {
-			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
-			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
+		final Integer seed = headlessParameters.getParameterValue("seed", Integer.class);
 
-			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("clean-state-iterations", Integer.class));
-
-			stage.getAnnealingSettings().setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
-			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
-			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
-
-			final ParallelOptimisationStage<CleanStateOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
-
-			// Add to list to manipulate
-			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
-
-			pStage.setTemplate(stage);
-			pStage.setJobCount(headlessParameters.getParameterValue("clean-state-jobs", Integer.class));
-
-			plan.getStages().add(pStage);
-		}
+		@NonNull
+		JMap lsoSettings = headlessParameters.getParameterValue("simulated-annealing", JMap.class);
+		final Double coolingFactor = lsoSettings.getValue("cooling-factor", Double.class);
+		final Integer initialTemperature = lsoSettings.getValue("initial-temperature", Integer.class);
+		final Integer epochLength = lsoSettings.getValue("epoch-length", Integer.class);
 
 		{
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
-			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
+			stage.setSeed(seed);
 
 			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
-			stage.getAnnealingSettings().setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
-			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
-			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
-			stage.getAnnealingSettings().setRestarting(headlessParameters.getParameterValue("restarting-useRestarting", Boolean.class));
-			stage.getAnnealingSettings().setRestartIterationsThreshold(headlessParameters.getParameterValue("restarting-restartThreshold", Integer.class));
+
+			// LSO Settings
+			stage.getAnnealingSettings().setCooling(coolingFactor);
+			stage.getAnnealingSettings().setInitialTemperature(initialTemperature);
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+
+			// Restarting
+			JMap restartingSettings = headlessParameters.getParameterValue("restarting", JMap.class);
+			stage.getAnnealingSettings().setRestarting(restartingSettings.getValue("active", Boolean.class));
+			stage.getAnnealingSettings().setRestartIterationsThreshold(restartingSettings.getValue("threshold", Integer.class));
 
 			final ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
@@ -562,14 +555,16 @@ public class HeadlessApplication implements IApplication {
 
 			plan.getStages().add(pStage);
 		}
-		if (headlessParameters.getParameterValue("hillClimbing-useHillClimbing", Boolean.class)) {
+		// Hill-Climbing
+		JMap hillClimbingSettings = headlessParameters.getParameterValue("hill-climbing", JMap.class);
+		if (hillClimbingSettings.getValue("active", Boolean.class)) {
 			final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
-			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("hillClimbing-iterations", Integer.class));
-			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
+			stage.getAnnealingSettings().setIterations(hillClimbingSettings.getValue("iterations", Integer.class));
+			stage.setSeed(seed);
 
-			stage.getAnnealingSettings().setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
-			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
-			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
+			stage.getAnnealingSettings().setInitialTemperature(initialTemperature);
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setCooling(coolingFactor);
 
 			final ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
@@ -580,13 +575,14 @@ public class HeadlessApplication implements IApplication {
 
 			plan.getStages().add(pStage);
 		}
-
-		if (headlessParameters.getParameterValue("actionSets-buildActionSets", Boolean.class)) {
+		// Action Sets
+		JMap actionSettings = headlessParameters.getParameterValue("action-sets-data", JMap.class);
+		if (headlessParameters.getParameterValue("action-sets", Boolean.class)) {
 			final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
-			stage.setTotalEvaluations(headlessParameters.getParameterValue("actionSets-totalEvals", Integer.class));
-			stage.setInRunEvaluations(headlessParameters.getParameterValue("actionSets-inRunEvals", Integer.class));
-			stage.setSearchDepth(headlessParameters.getParameterValue("actionSets-maxSearchDepth", Integer.class));
-			plan.getUserSettings().setBuildActionSets(headlessParameters.getParameterValue("actionSets-buildActionSets", Boolean.class));
+			stage.setTotalEvaluations(actionSettings.getValue("total-evals", Integer.class));
+			stage.setInRunEvaluations(actionSettings.getValue("in-run-evals", Integer.class));
+			stage.setSearchDepth(actionSettings.getValue("max-search-depth", Integer.class));
+			plan.getUserSettings().setBuildActionSets(headlessParameters.getParameterValue("action-sets", Boolean.class));
 
 			// Add to list to manipulate
 			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
@@ -595,31 +591,26 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		// Scenario settings
-		plan.getUserSettings().setShippingOnly(headlessParameters.getParameterValue("shippingonly-optimisation", Boolean.class));
-		plan.getUserSettings().setGenerateCharterOuts(headlessParameters.getParameterValue("generatedcharterouts-optimisation", Boolean.class));
-		plan.getUserSettings().setWithSpotCargoMarkets(headlessParameters.getParameterValue("spotmarket-optimisation", Boolean.class));
+		plan.getUserSettings().setShippingOnly(headlessParameters.getParameterValue("shipping-only-optimisation", Boolean.class));
+		plan.getUserSettings().setGenerateCharterOuts(headlessParameters.getParameterValue("charter-outs-optimisation", Boolean.class));
+		plan.getUserSettings().setWithSpotCargoMarkets(headlessParameters.getParameterValue("spot-market-optimisation", Boolean.class));
 		// action sets
 
 		createDateRanges(plan, headlessParameters);
 
 		for (final ConstraintAndFitnessSettings settings : constraintsAndFitnesses) {
-			createObjectives(settings, headlessParameters.getParameterValue("objectives", DoubleMap.class));
+			createObjectives(settings, headlessParameters.getParameterValue("objectives", JMap.class));
 		}
 		setLatenessParameters(settingsOverride, headlessParameters);
 		setSimilarityParameters(settingsOverride, headlessParameters);
-		setMoveOverrides(settingsOverride, headlessParameters);
 		createPromptDates(rootObject, headlessParameters);
-		setEqualMoveDistributions(settingsOverride, headlessParameters);
 		setMoveDistributions(settingsOverride, headlessParameters);
 	}
 
-	private void setMoveOverrides(final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
-		settingsOverride.setMovesUseLoopingSCMG(headlessParameters.getParameterValue("moves-useLoopingSCMG", Boolean.class));
-	}
-
 	private void createPromptDates(final LNGScenarioModel rootObject, final HeadlessParameters parameters) {
-		final LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
-		final LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
+		final JMap periodSettings = parameters.getParameterValue("period-data", JMap.class);
+		final LocalDate promptStart = periodSettings.getValue("prompt-start", LocalDate.class);
+		final LocalDate promptEnd = periodSettings.getValue("prompt-end", LocalDate.class);
 		if (promptStart != null) {
 			rootObject.setPromptPeriodStart(promptStart);
 		} else {
@@ -631,38 +622,40 @@ public class HeadlessApplication implements IApplication {
 			rootObject.unsetPromptPeriodEnd();
 		}
 	}
-	
-	private void setEqualMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters){
+
+	private void setMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
 		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-move-distributions", Boolean.class));
-	}
-	
-	private void setMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters){
-		final Map<String, Double> moveDistributionsMap = new HashMap<String, Double>();
-		for (final String move : SettingsOverride.moveFrequencyParameters) {
-			moveDistributionsMap.put(move, headlessParameters.getParameterValue(move, Double.class));
+		final JMap moves = headlessParameters.getParameterValue("move-distributions", JMap.class);
+		final Map<String, Double> moveDistributionsMap = new HashMap<>();
+		for (String key : moves.getKeySet()) {
+			System.out.println(key);
+			moveDistributionsMap.put(key, moves.getValue(key, Double.class));
 		}
-		overrideSettings.setMoveFrequencyParameterMap(moveDistributionsMap);
+		overrideSettings.setMoveMap(moveDistributionsMap);
 	}
 
 	private void setLatenessParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
-		final Map<String, Integer> latenessParameterMap = new HashMap<String, Integer>();
-		for (final String latenessKey : SettingsOverride.latenessComponentParameters) {
-			latenessParameterMap.put(latenessKey, headlessParameters.getParameterValue(latenessKey, Integer.class));
+		final JMap lateness = headlessParameters.getParameterValue("lateness-weights", JMap.class);
+		Map<String, Integer> latenessMap = new HashMap<>();
+		for (String key : lateness.getKeySet()) {
+			latenessMap.put(key, lateness.getValue(key, Integer.class));
 		}
-		overrideSettings.setlatenessParameterMap(latenessParameterMap);
+		overrideSettings.setlatenessMap(latenessMap);
 	}
 
 	private void setSimilarityParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
-		final Map<String, Integer> similarityParameterMap = new HashMap<String, Integer>();
-		for (final String key : SettingsOverride.similarityComponentParameters) {
-			similarityParameterMap.put(key, headlessParameters.getParameterValue(key, Integer.class));
+		final JMap similarity = headlessParameters.getParameterValue("similarity", JMap.class);
+		Map<String, Integer> similarityMap = new HashMap<>();
+		for (String key : similarity.getKeySet()) {
+			similarityMap.put(key, similarity.getValue(key, Integer.class));
 		}
-		overrideSettings.setSimilarityParameterMap(similarityParameterMap);
+		overrideSettings.setSimilarityMap(similarityMap);
 	}
 
 	private void createDateRanges(final OptimisationPlan plan, final HeadlessParameters headlessParameters) {
-		final YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
-		final YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);
+		final JMap periodSettings = headlessParameters.getParameterValue("period-data", JMap.class);
+		final YearMonth dateBefore = periodSettings.getValue("period-optimisation-date-before", YearMonth.class);
+		final YearMonth dateAfter = periodSettings.getValue("period-optimisation-date-after", YearMonth.class);
 		if (dateBefore != null) {
 			plan.getUserSettings().setPeriodEnd(dateBefore);
 		}
@@ -671,10 +664,10 @@ public class HeadlessApplication implements IApplication {
 		}
 	}
 
-	private void createObjectives(final ConstraintAndFitnessSettings settings, final DoubleMap doubleMap) {
+	private void createObjectives(final ConstraintAndFitnessSettings settings, final JMap jMap) {
 		settings.getObjectives().clear();
-		for (final String objectiveName : doubleMap.getDoubleMap().keySet()) {
-			settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, doubleMap.getDoubleMap().get(objectiveName)));
+		for (final String objectiveName : jMap.getJMap().keySet()) {
+			settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
 		}
 	}
 
