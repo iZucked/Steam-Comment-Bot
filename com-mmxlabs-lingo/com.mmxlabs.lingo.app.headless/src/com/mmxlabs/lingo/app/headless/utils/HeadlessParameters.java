@@ -70,8 +70,6 @@ public class HeadlessParameters {
 			parameters.put(key, new StringParameter(key, (String) value));
 		} else if (clazz.isAssignableFrom(StringList.class)) {
 			parameters.put(key, new StringListParameter(key, (StringList) value));
-		} else if (clazz.isAssignableFrom(DoubleMap.class)) {
-			parameters.put(key, new DoubleMapParameter(key, (DoubleMap) value));
 		} else if (clazz.isAssignableFrom(LocalDate.class)) {
 			parameters.put(key, new LocalDateParameter(key, (LocalDate) value));
 		} else if (clazz.isAssignableFrom(YearMonth.class)) {

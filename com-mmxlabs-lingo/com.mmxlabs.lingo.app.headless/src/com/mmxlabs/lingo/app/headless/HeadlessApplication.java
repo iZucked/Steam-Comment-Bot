@@ -48,7 +48,6 @@ import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
 import com.mmxlabs.lingo.app.headless.exporter.GeneralAnnotationsExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
-import com.mmxlabs.lingo.app.headless.utils.DoubleMap;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessJSONParser;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessParameters;
 import com.mmxlabs.lingo.app.headless.utils.JMap;
@@ -56,7 +55,6 @@ import com.mmxlabs.lingo.app.headless.utils.JSONParseResult;
 import com.mmxlabs.lingo.app.headless.utils.LNGHeadlessParameters;
 import com.mmxlabs.lingo.app.headless.utils.StringParameter;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
-import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
@@ -281,7 +279,7 @@ public class HeadlessApplication implements IApplication {
 						return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
 					}
 					if (moduleType == ModuleType.Module_Optimisation) {
-						LinkedList<@NonNull Module> modules = new LinkedList<@NonNull Module>();
+						final LinkedList<@NonNull Module> modules = new LinkedList<@NonNull Module>();
 						modules.add(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
 						modules.add(new LNGOptimsationOverrideModule(overrideSettings));
 						return modules;
@@ -525,6 +523,7 @@ public class HeadlessApplication implements IApplication {
 		final Integer seed = headlessParameters.getParameterValue("seed", Integer.class);
 
 		@NonNull
+		final
 		JMap lsoSettings = headlessParameters.getParameterValue("simulated-annealing", JMap.class);
 		final Double coolingFactor = lsoSettings.getValue("cooling-factor", Double.class);
 		final Integer initialTemperature = lsoSettings.getValue("initial-temperature", Integer.class);
@@ -542,7 +541,7 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 
 			// Restarting
-			JMap restartingSettings = headlessParameters.getParameterValue("restarting", JMap.class);
+			final JMap restartingSettings = headlessParameters.getParameterValue("restarting", JMap.class);
 			stage.getAnnealingSettings().setRestarting(restartingSettings.getValue("active", Boolean.class));
 			stage.getAnnealingSettings().setRestartIterationsThreshold(restartingSettings.getValue("threshold", Integer.class));
 
@@ -556,7 +555,7 @@ public class HeadlessApplication implements IApplication {
 			plan.getStages().add(pStage);
 		}
 		// Hill-Climbing
-		JMap hillClimbingSettings = headlessParameters.getParameterValue("hill-climbing", JMap.class);
+		final JMap hillClimbingSettings = headlessParameters.getParameterValue("hill-climbing", JMap.class);
 		if (hillClimbingSettings.getValue("active", Boolean.class)) {
 			final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			stage.getAnnealingSettings().setIterations(hillClimbingSettings.getValue("iterations", Integer.class));
@@ -576,7 +575,7 @@ public class HeadlessApplication implements IApplication {
 			plan.getStages().add(pStage);
 		}
 		// Action Sets
-		JMap actionSettings = headlessParameters.getParameterValue("action-sets-data", JMap.class);
+		final JMap actionSettings = headlessParameters.getParameterValue("action-sets-data", JMap.class);
 		if (headlessParameters.getParameterValue("action-sets", Boolean.class)) {
 			final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			stage.setTotalEvaluations(actionSettings.getValue("total-evals", Integer.class));
@@ -627,8 +626,7 @@ public class HeadlessApplication implements IApplication {
 		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-move-distributions", Boolean.class));
 		final JMap moves = headlessParameters.getParameterValue("move-distributions", JMap.class);
 		final Map<String, Double> moveDistributionsMap = new HashMap<>();
-		for (String key : moves.getKeySet()) {
-			System.out.println(key);
+		for (final String key : moves.getKeySet()) {
 			moveDistributionsMap.put(key, moves.getValue(key, Double.class));
 		}
 		overrideSettings.setMoveMap(moveDistributionsMap);
@@ -636,8 +634,8 @@ public class HeadlessApplication implements IApplication {
 
 	private void setLatenessParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
 		final JMap lateness = headlessParameters.getParameterValue("lateness-weights", JMap.class);
-		Map<String, Integer> latenessMap = new HashMap<>();
-		for (String key : lateness.getKeySet()) {
+		final Map<String, Integer> latenessMap = new HashMap<>();
+		for (final String key : lateness.getKeySet()) {
 			latenessMap.put(key, lateness.getValue(key, Integer.class));
 		}
 		overrideSettings.setlatenessMap(latenessMap);
@@ -645,8 +643,8 @@ public class HeadlessApplication implements IApplication {
 
 	private void setSimilarityParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
 		final JMap similarity = headlessParameters.getParameterValue("similarity", JMap.class);
-		Map<String, Integer> similarityMap = new HashMap<>();
-		for (String key : similarity.getKeySet()) {
+		final Map<String, Integer> similarityMap = new HashMap<>();
+		for (final String key : similarity.getKeySet()) {
 			similarityMap.put(key, similarity.getValue(key, Integer.class));
 		}
 		overrideSettings.setSimilarityMap(similarityMap);

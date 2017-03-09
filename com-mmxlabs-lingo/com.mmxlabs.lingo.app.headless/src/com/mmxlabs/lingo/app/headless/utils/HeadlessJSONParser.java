@@ -101,16 +101,6 @@ public class HeadlessJSONParser {
 							if (keyInnerObject instanceof String) {
 								String innerKey = (String) keyInnerObject;
 								Object innerValue = innerObject.get(innerKey);
-//								if (innerValue instanceof Integer) {
-//									doubleMap.put(innerKey, ((Integer) innerValue).doubleValue());
-//								} else if (innerValue instanceof Double) {
-//									doubleMap.put(innerKey, (Double) innerValue);
-//								} else if (innerValue instanceof Long) {
-//									doubleMap.put(innerKey, ((Long) innerValue).doubleValue());
-//								} else {
-//									valid = false;
-//									break;
-//								}
 								doubleMap.put(innerKey, innerValue);
 							} else {
 								valid = false;
