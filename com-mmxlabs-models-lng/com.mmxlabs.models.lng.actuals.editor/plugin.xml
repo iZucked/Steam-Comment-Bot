@@ -124,5 +124,12 @@
          </FeatureAnyOf>
       </editorFactory>
    </extension>
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="cargo-actuals"
+            plugin.xml="actuals.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>
 
 </plugin>

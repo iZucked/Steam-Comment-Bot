@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="org.eclipse.ui.views">
+		<view class="com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsEditorView"
+			id="com.mmxlabs.models.lng.actuals.editor.ActualsEditorView" name="Actuals Editor"
+			restorable="true">
+		</view>
+	</extension>
+	<extension point="com.mmxlabs.models.util.import.extramodelimporters">
+		<extramodelimporter
+			class="com.mmxlabs.models.lng.actuals.importer.ActualsModelExtraImporter">
+		</extramodelimporter>
+	</extension>
+	<extension
+		point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
+		<TradesTableContextMenuExtension
+			class="com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsTradesContextMenu">
+		</TradesTableContextMenuExtension>
+	</extension>
+</plugin>
