@@ -162,7 +162,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 							if (va.isSetStartAfter() || va.isSetStartBy()) {
 								// check dates match. Note start by/after is UTC, cargo/event local time.
 
-								if (va.getStartAfterAsDateTime() != null && !va.getStartAfterAsDateTime().equals(actualOperationsStart)) {
+								ZonedDateTime startAfterAsDateTime = va.getStartAfterAsDateTime();
+								if (startAfterAsDateTime != null && !startAfterAsDateTime.isEqual(actualOperationsStart)) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
 											getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
 
@@ -173,7 +174,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									statuses.add(failure);
 
 								}
-								if (va.getStartBy() != null && !va.getStartBy().equals(actualOperationsStart)) {
+								ZonedDateTime startByAsDateTime = va.getStartByAsDateTime();
+								if (startByAsDateTime != null && !startByAsDateTime.isEqual(actualOperationsStart)) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
 											getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
 
