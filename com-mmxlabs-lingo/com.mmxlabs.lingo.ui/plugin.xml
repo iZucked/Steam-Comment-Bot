@@ -11,10 +11,17 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.mmxlabs.shiplingo.platform.ui.AnalysisPerspective"
+            class="com.mmxlabs.lingo.platform.ui.AnalysisPerspective"
             icon="icons/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.app.perspective.analysis"
             name="Analysis">
       </perspective>
+   </extension>
+   <extension
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="cargo-actuals"
+            plugin.xml="actuals.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
 </plugin>
