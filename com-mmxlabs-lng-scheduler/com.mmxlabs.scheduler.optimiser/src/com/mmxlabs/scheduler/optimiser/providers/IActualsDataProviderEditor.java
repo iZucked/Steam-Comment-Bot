@@ -26,4 +26,8 @@ public interface IActualsDataProviderEditor extends IActualsDataProvider {
 
 	void setNextDestinationActuals(IPortSlot lastSlot, IPort returnPort, int returnTime, long endHeelInM3);
 
+	void createLoadSlotExtraActuals(ILoadOption slot, long capacityCosts, long crewBonusCosts, long insuranceCosts);
+
+	void createDischargeSlotExtraActuals(IDischargeOption slot, long capacityCosts, long crewBonusCosts);
+
 }

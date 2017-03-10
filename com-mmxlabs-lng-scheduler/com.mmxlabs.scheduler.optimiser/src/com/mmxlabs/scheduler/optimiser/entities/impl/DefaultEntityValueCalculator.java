@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
@@ -99,6 +100,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	/**
 	 * Evaluate the group value of the given cargo. This method first calculates sales prices, then purchase prices and additional P&L, then shipping costs and charter out revenue.
@@ -552,11 +556,25 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			return;
 		}
 
+		long capacityCosts = 0;
+		long crewBonusCosts = 0;
+		long insuranceCosts = 0;
+
+		// Add in actuals
+		for (final IPortSlot slot : cargoPNLData.getSlots()) {
+
+			if (actualsDataProvider.hasActuals(slot)) {
+				capacityCosts += actualsDataProvider.getCapacityCosts(slot);
+				crewBonusCosts += actualsDataProvider.getCrewBonusCosts(slot);
+				insuranceCosts += actualsDataProvider.getInsuranceCosts(slot);
+			}
+		}
+
 		final long shippingCosts = shippingCostHelper.getRouteExtraCosts(plan) + shippingCostHelper.getFuelCosts(plan, includeLNG);
 		final long portCosts = shippingCostHelper.getPortCosts(vesselAvailability.getVessel(), plan);
 		final long hireCosts = shippingCostHelper.getHireCosts(plan);
 
-		final long totalShippingCosts = shippingCosts + portCosts + hireCosts;
+		final long totalShippingCosts = shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 		addEntityBookProfit(entityPreTaxProfit, tradingEntity.getTradingBook(), -totalShippingCosts);
 	}
 

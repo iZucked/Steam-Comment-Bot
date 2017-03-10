@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -27,8 +28,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class ShippingCostHelper {
+
 	@Inject
-	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
+	private IActualsDataProvider actualsDataProvider;
 
 	public long getFuelCosts(final @NonNull VoyagePlan plan, final boolean includeLNG) {
 
@@ -185,12 +187,32 @@ public class ShippingCostHelper {
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return 0L;
 		}
+		long capacityCosts = 0;
+		long crewBonusCosts = 0;
+		long insuranceCosts = 0;
+		// Add in actuals
+		final Object[] sequence = plan.getSequence();
+		final int offset = plan.isIgnoreEnd() ? 1 : 0;
+		for (int i = 0; i < sequence.length - offset; ++i) {
+			final Object obj = sequence[i];
+			if (obj instanceof PortDetails) {
+
+				final PortDetails portDetails = (PortDetails) obj;
+				@NonNull
+				final IPortSlot slot = portDetails.getOptions().getPortSlot();
+				if (actualsDataProvider.hasActuals(slot)) {
+					capacityCosts += actualsDataProvider.getCapacityCosts(slot);
+					crewBonusCosts += actualsDataProvider.getCrewBonusCosts(slot);
+					insuranceCosts += actualsDataProvider.getInsuranceCosts(slot);
+				}
+			}
+		}
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
 		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
 
-		return shippingCosts + portCosts + hireCosts;
+		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 	}
 
 	public long getShippingRepositioningCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime) {
