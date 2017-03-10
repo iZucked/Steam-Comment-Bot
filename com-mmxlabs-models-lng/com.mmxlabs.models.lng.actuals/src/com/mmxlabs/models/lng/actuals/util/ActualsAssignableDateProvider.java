@@ -67,10 +67,14 @@ public class ActualsAssignableDateProvider implements IAssignableElementDateProv
 	}
 
 	@Override
-	public @NonNull OptionalInt getSlotDurationInHours(@NonNull Slot slot) {
+	public @NonNull OptionalInt getSlotDurationInHours(@NonNull final Slot slot) {
 		if (slotActualsMap.containsKey(slot)) {
 			final SlotActuals slotActuals = slotActualsMap.get(slot);
-			return OptionalInt.of(Hours.between(slotActuals.getOperationsStartAsDateTime(), slotActuals.getOperationsEndAsDateTime()));
+			final ZonedDateTime from = slotActuals.getOperationsStartAsDateTime();
+			final ZonedDateTime to = slotActuals.getOperationsEndAsDateTime();
+			if (from != null && to != null) {
+				return OptionalInt.of(Hours.between(from, to));
+			}
 		}
 		return OptionalInt.empty();
 	}
