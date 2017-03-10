@@ -49,26 +49,23 @@ public class ChangeSetViewCreatorService {
 	private IEventBroker eventBroker;
 
 	public void start() {
-		if (PlatformUI.isWorkbenchRunning()) {
-			eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-			eventBroker.subscribe(ChangeSetViewCreatorService_Topic, eventHandler);
-		} else {
-			new Thread() {
-				public void run() {
-					while (!PlatformUI.isWorkbenchRunning()) {
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+
+		new Thread() {
+			@Override
+			public void run() {
+				while (!PlatformUI.isWorkbenchRunning()) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
-					if (PlatformUI.isWorkbenchRunning()) {
-						eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-						eventBroker.subscribe(ChangeSetViewCreatorService_Topic, eventHandler);
-					}
-				};
-			}.start();
-		}
+				}
+				if (PlatformUI.isWorkbenchRunning()) {
+					eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+					eventBroker.subscribe(ChangeSetViewCreatorService_Topic, eventHandler);
+				}
+			};
+		}.start();
 	}
 
 	public void stop() {
