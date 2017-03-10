@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="com.mmxlabs.lingo.reports.PortRotationBasedColumnFactory">
+		<PortRotationBasedColumnFactory
+			factory="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory">
+		</PortRotationBasedColumnFactory>
+	</extension>
+	<extension point="com.mmxlabs.lingo.reports.PortRotationBasedColumn">
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.reports.portrotations.actuals.startdate">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.reports.portrotations.actuals.enddate">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.reports.portrotations.actuals.basefuel">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.reports.portrotations.actuals.cv">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.counterparty">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.penalty">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.pricedol">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.titletransfer">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.transfervolume_m3">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.transfervolume_mmbtu">
+		</PortRotationBasedColumn>
+		<PortRotationBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.portrotation.PortRotationActualsColumnFactory"
+			id="com.mmxlabs.lingo.eni.reports.portrotations.actuals.portcosts">
+		</PortRotationBasedColumn>
+	</extension>
+</plugin>

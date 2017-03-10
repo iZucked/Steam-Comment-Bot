@@ -691,6 +691,10 @@
             feature="actionable-set-optimiser"
             plugin.xml="actionable-set-optimiser.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="cargo-actuals"
+            plugin.xml="actuals.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="com.mmxlabs.rcp.common.ReplaceableView">
