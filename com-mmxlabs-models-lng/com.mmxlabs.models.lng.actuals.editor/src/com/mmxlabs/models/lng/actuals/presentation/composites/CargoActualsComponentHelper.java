@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -45,17 +46,17 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	public CargoActualsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 	}
-	
+
 	/**
 	 * add editors to a composite, using CargoActuals as the supertype
 	 *
 	 * @generated
 	 */
-	 @Override
+	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ActualsPackage.Literals.CARGO_ACTUALS);	
+		addEditorsToComposite(detailComposite, ActualsPackage.Literals.CARGO_ACTUALS);
 	}
-	
+
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
@@ -63,7 +64,8 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_actualsEditor(detailComposite, topClass);
 		add_returnActualsEditor(detailComposite, topClass);
 		add_contractYearEditor(detailComposite, topClass);
@@ -78,6 +80,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 		add_baseFuelPriceEditor(detailComposite, topClass);
 		add_insurancePremiumEditor(detailComposite, topClass);
 	}
+
 	/**
 	 * Create the editor for the baseFuelPrice feature on CargoActuals
 	 *
@@ -86,6 +89,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	protected void add_baseFuelPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__BASE_FUEL_PRICE));
 	}
+
 	/**
 	 * Create the editor for the insurancePremium feature on CargoActuals
 	 *
@@ -94,6 +98,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	protected void add_insurancePremiumEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__INSURANCE_PREMIUM));
 	}
+
 	/**
 	 * Create the editor for the actuals feature on CargoActuals
 	 *
@@ -115,55 +120,67 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the contractYear feature on CargoActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_contractYearEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CONTRACT_YEAR));
+		if (LicenseFeatures.isPermitted("features:cargo-actual-additional-attributes")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CONTRACT_YEAR));
+		}
 	}
 
 	/**
 	 * Create the editor for the operationNumber feature on CargoActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_operationNumberEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__OPERATION_NUMBER));
+		if (LicenseFeatures.isPermitted("features:cargo-actual-additional-attributes")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__OPERATION_NUMBER));
+		}
 	}
 
 	/**
 	 * Create the editor for the subOperationNumber feature on CargoActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_subOperationNumberEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__SUB_OPERATION_NUMBER));
+		if (LicenseFeatures.isPermitted("features:cargo-actual-additional-attributes")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__SUB_OPERATION_NUMBER));
+		}
 	}
 
 	/**
 	 * Create the editor for the sellerID feature on CargoActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_sellerIDEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__SELLER_ID));
+		if (LicenseFeatures.isPermitted("features:cargo-actual-additional-attributes")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__SELLER_ID));
+		}
 	}
 
 	/**
 	 * Create the editor for the cargoReference feature on CargoActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_cargoReferenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE));
+		if (LicenseFeatures.isPermitted("features:cargo-actual-additional-attributes")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE));
+		}
 	}
 
 	/**
 	 * Create the editor for the cargoReferenceSeller feature on CargoActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_cargoReferenceSellerEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE_SELLER));
+		if (LicenseFeatures.isPermitted("features:cargo-actual-additional-attributes")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE_SELLER));
+		}
 	}
 
 	/**
