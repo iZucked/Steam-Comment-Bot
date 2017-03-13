@@ -109,9 +109,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						@Override
 						public String getColumnText(final IndexExposureData data) {
 							final ScenarioResult scenarioResult = data.scenarioResult;
-							final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-							if (scenarioInstance != null) {
-								return scenarioInstance.getName();
+							if (scenarioResult != null) {
+								final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+								if (scenarioInstance != null) {
+									return scenarioInstance.getName();
+								}
 							}
 							return null;
 						}
