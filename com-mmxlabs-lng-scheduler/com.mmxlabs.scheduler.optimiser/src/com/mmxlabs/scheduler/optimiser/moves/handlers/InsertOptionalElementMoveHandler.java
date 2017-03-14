@@ -53,6 +53,11 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
+
+		if (optionalElementsProvider.getOptionalElements().isEmpty()) {
+			return new NullMove("RemoveOptionalElementMoveHandler", "No optional elements");
+		}
+
 		final List<@NonNull ISequenceElement> optionalElements = new ArrayList<>(optionalElementsProvider.getOptionalElements());
 		Collections.shuffle(optionalElements, random);
 

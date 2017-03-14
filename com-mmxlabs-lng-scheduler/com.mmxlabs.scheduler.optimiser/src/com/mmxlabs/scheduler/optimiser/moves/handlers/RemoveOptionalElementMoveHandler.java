@@ -43,6 +43,11 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 
 	@Override
 	public IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
+
+		if (optionalElementsProvider.getOptionalElements().isEmpty()) {
+			return new NullMove("RemoveOptionalElementMoveHandler", "No optional elements");
+		}
+
 		// select an optional element at random
 		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
