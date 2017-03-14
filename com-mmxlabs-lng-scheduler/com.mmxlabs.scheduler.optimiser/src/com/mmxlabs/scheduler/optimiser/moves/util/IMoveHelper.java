@@ -58,4 +58,6 @@ public interface IMoveHelper {
 	boolean isSimpleCharterOutEvent(@NonNull ISequenceElement element);
 
 	boolean isNonShippedResource(@NonNull IResource resource);
+
+	boolean isShippedResource(@NonNull IResource resource);
 }
