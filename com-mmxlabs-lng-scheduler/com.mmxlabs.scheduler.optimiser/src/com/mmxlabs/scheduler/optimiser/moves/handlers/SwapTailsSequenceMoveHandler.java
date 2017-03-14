@@ -10,6 +10,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -56,16 +57,19 @@ public class SwapTailsSequenceMoveHandler implements IMoveGenerator {
 			return new NullMove("SwapTails", "Same sequence selected.");
 		}
 
-		final boolean valid2opt2 = moveHelper.valid2opt2(sequence1, sequence2, position1, position2, lookupManager.getRawSequences(), followersAndPreceders);
+		final ISequence seq1 = rawSequences.getSequence(sequence1);
+		final ISequence seq2 = rawSequences.getSequence(sequence2);
+
+		boolean valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 
 		if (valid2opt2) {
-			return swapTailsMove(sequence1, sequence2, position1, position2, "A");
+			return swapTailsMove(sequence1, sequence2, position1, position2);
 		}
 
 		return new NullMove("SwapTails", "Cannot swap tails.");
 	}
 
-	public IMove swapTailsMove(final IResource sequence1, final IResource sequence2, final int position1, final int position2, final String type) {
+	public IMove swapTailsMove(final IResource sequence1, final IResource sequence2, final int position1, final int position2) {
 		// make 2opt2
 		final Move2over2 result = new Move2over2();
 

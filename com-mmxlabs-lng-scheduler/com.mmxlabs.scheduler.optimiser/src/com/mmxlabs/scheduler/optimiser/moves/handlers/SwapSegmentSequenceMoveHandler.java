@@ -70,6 +70,7 @@ public class SwapSegmentSequenceMoveHandler implements IMoveGenerator {
 				// rewind position 2? after all if we don't have a valid 2opt2
 				// we probably won't get a valid 4opt2 out of it either?
 				position2--;
+				// FIXME: This changes the original break point and we can longer assume the reverse position is still valid
 				valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 			}
 
@@ -91,19 +92,14 @@ public class SwapSegmentSequenceMoveHandler implements IMoveGenerator {
 					if (first == sequence1) {
 						// it can be adjacent to something in sequence 1,
 						// that's good
-						if (loc.getSecond() > position1) {
+						if (loc.getSecond() > position1 + 1) {
 							// it's something after A, that's even better!
 							// now we need to check that we can put the
 							// chunk cut out of S1 into S2 here
 
-							if (loc.getSecond() == (position1 + 1)) {
-
-								// 4opt2 check
-								if (valid2opt2 && followersAndPreceders.getValidFollowers(stateManager.getRawSequences().getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
-									viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
-
-								}
-
+							// 4opt2 check
+							if (valid2opt2 && followersAndPreceders.getValidFollowers(stateManager.getRawSequences().getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
+								viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
 							}
 						}
 					}

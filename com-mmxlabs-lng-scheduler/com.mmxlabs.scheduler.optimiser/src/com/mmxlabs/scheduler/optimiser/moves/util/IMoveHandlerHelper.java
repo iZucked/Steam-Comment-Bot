@@ -28,7 +28,4 @@ public interface IMoveHandlerHelper {
 
 	List<Pair<Integer, Integer>> determineViableSecondBreaks(IResource sequence1, int position1, int position2, ISequence seq2, boolean valid2opt2, ILookupManager lookupManager,
 			IFollowersAndPreceders followersAndPreceders);
-
-	boolean valid2opt2(IResource sequence1, IResource sequence2, int position1, int position2, ISequences sequences, IFollowersAndPreceders followersAndPreceders);
-
 }

@@ -16,7 +16,6 @@ import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -207,26 +206,5 @@ public class MoveHandlerHelper implements IMoveHandlerHelper {
 			}
 		}
 		return viableSecondBreaks;
-
-	}
-
-	@Override
-	public boolean valid2opt2(final IResource sequence1, final IResource sequence2, final int position1, int position2, final ISequences sequences,
-			final IFollowersAndPreceders followersAndPreceders) {
-
-		final ISequence seq1 = sequences.getSequence(sequence1);
-		final ISequence seq2 = sequences.getSequence(sequence2);
-
-		boolean valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
-
-		while (!valid2opt2 && (position2 > 1)) {
-			// rewind position 2? after all if we don't have a valid 2opt2
-			// we probably won't get a valid 4opt2 out of it either?
-			position2--;
-			valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
-		}
-
-		return valid2opt2;
-
 	}
 }
