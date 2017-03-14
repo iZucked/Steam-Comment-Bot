@@ -23,15 +23,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 public class MoveHandlerHelper implements IMoveHandlerHelper {
 
 	@Inject
-	private @NonNull MoveHelper helper;
+	private IMoveHelper helper;
 
 	@Inject
 	private @NonNull IPortSlotProvider portSlotProvider;
-
-	@Override
-	public MoveHelper getMoveHelper() {
-		return helper;
-	}
 
 	@Override
 	public List<ISequenceElement> extractSegment(final ISequence fromSequence, final ISequenceElement element) {

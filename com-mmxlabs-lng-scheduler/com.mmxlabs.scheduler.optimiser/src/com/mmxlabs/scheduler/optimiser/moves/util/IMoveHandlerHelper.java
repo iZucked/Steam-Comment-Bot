@@ -11,11 +11,8 @@ import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 
 public interface IMoveHandlerHelper {
-
-	MoveHelper getMoveHelper();
 
 	@NonNull
 	List<ISequenceElement> extractSegment(@NonNull ISequence fromSequence, @NonNull ISequenceElement element);
