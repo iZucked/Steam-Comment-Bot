@@ -45,12 +45,25 @@ public class Move3over2 implements IMove {
 
 		// Get the moving segments
 		final ISegment segment1 = sequence1.getSegment(resource1Start, resource1End);
+		if (resource1 == resource2) {
+			if (resource2Position < resource1Start) {
+				// insert earlier in sequence, remove then add
+				sequence1.remove(segment1);
+				sequence2.insert(resource2Position, segment1);
+			} else {
+				// insert later in sequence, insert then remove
+				sequence2.insert(resource2Position, segment1);
+				sequence1.remove(segment1);
 
-		// Insert the segments in the other sequence
-		sequence2.insert(resource2Position, segment1);
+			}
+		} else {
 
-		// Remove segments from original sequences
-		sequence1.remove(segment1);
+			// Insert the segments in the other sequence
+			sequence2.insert(resource2Position, segment1);
+
+			// Remove segments from original sequences
+			sequence1.remove(segment1);
+		}
 	}
 
 	@Override
