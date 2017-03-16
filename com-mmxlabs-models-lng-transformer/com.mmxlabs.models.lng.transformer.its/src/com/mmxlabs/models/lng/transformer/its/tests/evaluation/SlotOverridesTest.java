@@ -84,7 +84,8 @@ public class SlotOverridesTest {
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new PerChainUnitScopeModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, settings, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule,
+					hints));
 
 			parentInjector = Guice.createInjector(modules);
 

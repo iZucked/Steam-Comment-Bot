@@ -83,6 +83,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -392,16 +393,18 @@ public class LNGScenarioTransformer {
 	@Named(LIMIT_SPOT_SLOT_CREATION)
 	private int spotSlotCreationCap;
 
+	private UserSettings userSettings;
+
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
 	 */
 	@Inject
-	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject) {
+	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject, UserSettings userSettings) {
 
 		this.rootObject = rootObject;
-		// this.optimiserParameters = optimiserParameters;
+		this.userSettings = userSettings;
 	}
 
 	/**
@@ -484,6 +487,15 @@ public class LNGScenarioTransformer {
 
 		if (rootObject.isSetSchedulingEndDate()) {
 			promptPeriodProviderEditor.setEndOfSchedulingPeriod(dateHelper.convertTime(rootObject.getSchedulingEndDate()));
+		}
+
+		if (userSettings.isSetPeriodStart()) {
+			promptPeriodProviderEditor.setPeriodOptimisation(true);
+			promptPeriodProviderEditor.setStartOfOptimisationPeriod(dateHelper.convertTime(userSettings.getPeriodStart()));
+		}
+		if (userSettings.isSetPeriodEnd()) {
+			promptPeriodProviderEditor.setPeriodOptimisation(true);
+			promptPeriodProviderEditor.setEndOfOptimisationPeriod(dateHelper.convertTime(userSettings.getPeriodEnd()));
 		}
 
 		/**

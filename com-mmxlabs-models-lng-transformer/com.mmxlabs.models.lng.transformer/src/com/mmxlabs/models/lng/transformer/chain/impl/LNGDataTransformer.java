@@ -77,7 +77,8 @@ public class LNGDataTransformer {
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, userSettings, hints), services,
+				IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 		final Injector parentInjector = Guice.createInjector(modules);
 

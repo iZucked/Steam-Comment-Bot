@@ -19,6 +19,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -103,10 +104,13 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean withNoNominalsInPrompt;
 
+	private @NonNull UserSettings userSettings;
+
 	/**
 	 */
-	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull final Collection<@NonNull String> hints) {
+	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull UserSettings userSettings, @NonNull final Collection<@NonNull String> hints) {
 		this.scenario = scenario;
+		this.userSettings = userSettings;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
 		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
 		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);
@@ -117,6 +121,8 @@ public class LNGTransformerModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		install(new ScheduleBuilderModule());
+
+		bind(UserSettings.class).toInstance(userSettings);
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);
