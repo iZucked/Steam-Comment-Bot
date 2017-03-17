@@ -101,7 +101,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 		// Enable new move if this is a full optimisation or a period greater than 6 months AND there is at least one nominal cargo.
 		if (!promptPeriodProvider.isPeriodOptimisation() //
-				|| (promptPeriodProvider.getEndOfOptimisationPeriod() - promptPeriodProvider.getStartOfOptimisationPeriod() > 30 * 6)) {
+				|| (promptPeriodProvider.getEndOfOptimisationPeriod() - promptPeriodProvider.getStartOfOptimisationPeriod() > 30 * 6 * 24)) {
 			boolean hasNominalCargoes = false;
 			for (final IResource r : inputRawSequences.getResources()) {
 				@NonNull
