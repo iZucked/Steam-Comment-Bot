@@ -224,10 +224,14 @@ public class LNGScenarioToOptimiserBridge {
 				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
 			}
 
+			// Blank command for undo/redo naming
+			@NonNull
+			final CompoundCommand cc = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
 			final Command cmd = LNGSchedulerJobUtils.exportSchedule(originalDataTransformer.getInjector(), originalScenario, originalEditingDomain, schedule);
 			assert cmd != null;
-			originalEditingDomain.getCommandStack().execute(cmd);
-			previousOverwriteCommand = cmd;
+			cc.append(cmd);
+			originalEditingDomain.getCommandStack().execute(cc);
+			previousOverwriteCommand = cc;
 			++overwriteCommandStackCounter;
 
 			canExportAsCopy = currentProgress == 0;
@@ -255,57 +259,56 @@ public class LNGScenarioToOptimiserBridge {
 			throw new IllegalStateException("Unable to export copy - already overwritten data");
 		}
 
-			// Alt code path to avoid second transform.
-			final Schedule child_schedule = createSchedule(rawOptimiserSequences, extraAnnotations);
+		// Alt code path to avoid second transform.
+		final Schedule child_schedule = createSchedule(rawOptimiserSequences, extraAnnotations);
 
-			// Gather uncontained slots to manually copy
-			final Set<Slot> extraSlots = new HashSet<>();
+		// Gather uncontained slots to manually copy
+		final Set<Slot> extraSlots = new HashSet<>();
 
-			// New spot slots etc will need to be contained here.
-			for (final SlotAllocation a : child_schedule.getSlotAllocations()) {
+		// New spot slots etc will need to be contained here.
+		for (final SlotAllocation a : child_schedule.getSlotAllocations()) {
+			final Slot slot = a.getSlot();
+			if (slot != null && slot.eContainer() == null) {
+				extraSlots.add(slot);
+			}
+		}
+
+		for (final CargoAllocation ca : child_schedule.getCargoAllocations()) {
+
+			for (final SlotAllocation a : ca.getSlotAllocations()) {
 				final Slot slot = a.getSlot();
 				if (slot != null && slot.eContainer() == null) {
 					extraSlots.add(slot);
 				}
 			}
-
-			for (final CargoAllocation ca : child_schedule.getCargoAllocations()) {
-
-				for (final SlotAllocation a : ca.getSlotAllocations()) {
-					final Slot slot = a.getSlot();
-					if (slot != null && slot.eContainer() == null) {
-						extraSlots.add(slot);
-					}
-				}
+		}
+		for (final OpenSlotAllocation ca : child_schedule.getOpenSlotAllocations()) {
+			final Slot slot = ca.getSlot();
+			if (slot != null && slot.eContainer() == null) {
+				assert false;
 			}
-			for (final OpenSlotAllocation ca : child_schedule.getOpenSlotAllocations()) {
-				final Slot slot = ca.getSlot();
-				if (slot != null && slot.eContainer() == null) {
-					assert false;
-				}
-			}
+		}
 
-			final EcoreUtil.Copier copier = new EcoreUtil.Copier();
-			// Copy base
-			final LNGScenarioModel copiedOriginalScenario = (LNGScenarioModel) copier.copy(originalScenario);
-			// Copy uncontained slots before the schedule
-			extraSlots.forEach(s -> copier.copy(s));
-			// Finally copy the schedule
-			final Schedule copiedSchedule = (Schedule) copier.copy(child_schedule);
+		final EcoreUtil.Copier copier = new EcoreUtil.Copier();
+		// Copy base
+		final LNGScenarioModel copiedOriginalScenario = (LNGScenarioModel) copier.copy(originalScenario);
+		// Copy uncontained slots before the schedule
+		extraSlots.forEach(s -> copier.copy(s));
+		// Finally copy the schedule
+		final Schedule copiedSchedule = (Schedule) copier.copy(child_schedule);
 
-			copier.copyReferences();
+		copier.copyReferences();
 
-			// Construct internal command stack to generate correct output schedule
-			final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
+		// Construct internal command stack to generate correct output schedule
+		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			// This injector is only needed for post-export handlers
-			final Command cmd = LNGSchedulerJobUtils.exportSchedule(originalDataTransformer.getInjector(), copiedOriginalScenario, ed, copiedSchedule);
-			assert cmd != null;
-			ed.getCommandStack().execute(cmd);
+		// This injector is only needed for post-export handlers
+		final Command cmd = LNGSchedulerJobUtils.exportSchedule(originalDataTransformer.getInjector(), copiedOriginalScenario, ed, copiedSchedule);
+		assert cmd != null;
+		ed.getCommandStack().execute(cmd);
 
-			return copiedOriginalScenario;
+		return copiedOriginalScenario;
 	}
- 
 
 	private ISequences getTransformedOriginalRawSequences(final ISequences rawSequences) {
 		// TODO: Wrap this in the period exporter
