@@ -2,10 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.export;
+package com.mmxlabs.models.lng.transformer.export.exporters;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -22,22 +23,27 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
-import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
+import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -46,17 +52,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.DetailedCargoType;
-import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
-import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
  * Exporter for getting out the details of {@link IPortVisitEvent}
@@ -64,30 +66,25 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
  * @author hinton
  * 
  */
-public class VisitEventExporter extends BaseAnnotationExporter {
+public class VisitEventExporter {
+
+	@Inject
+	private ModelEntityMap modelEntityMap;
+
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	@Inject
-	private IPortTypeProvider portTypeProvider;
 	@Inject
 	private IPortSlotEventProvider portSlotEventProvider;
 
 	@Inject
 	private CargoTypeUtil cargoTypeUtil;
 
-	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
-	private Port lastPortVisited = null;
+	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<>();
 
-	@Override
-	public void init() {
-		allocations.clear();
-	}
-
-	@Override
-	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
+	public PortVisit export(final PortDetails details, VolumeAllocatedSequence sequence, IAnnotatedSolution annotatedSolution, Schedule output) {
 
 		// "element" represents an IPortSlot
-		final IPortSlot slot = portSlotProvider.getPortSlot(element);
+		final IPortSlot slot = details.getOptions().getPortSlot();
 
 		if (slot == null) {
 			return null;
@@ -101,12 +98,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		PortVisit portVisit = null;
 
-		lastPortVisited = ePort;
 		CargoAllocation eAllocation = null;
 		if (slot instanceof IDischargeOption || slot instanceof ILoadOption) {
 
-			final SlotVisit sv = factory.createSlotVisit();
-			final SlotAllocation slotAllocation = factory.createSlotAllocation();
+			final SlotVisit sv = ScheduleFactory.eINSTANCE.createSlotVisit();
+			final SlotAllocation slotAllocation = ScheduleFactory.eINSTANCE.createSlotAllocation();
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setSlotAllocationType(slot instanceof ILoadOption ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);
 			output.getSlotAllocations().add(slotAllocation);
@@ -119,14 +115,15 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			portVisit = sv;
 
 			// Output allocation info
-			// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
-			// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
+			final ISequenceElement element = portSlotProvider.getElement(slot);
+			// get annotations for this element
+			final Map<String, IElementAnnotation> annotations = annotatedSolution.getElementAnnotations().getAnnotations(element);
 			final ICargoValueAnnotation allocation = (ICargoValueAnnotation) annotations.get(SchedulerConstants.AI_cargoValueAllocationInfo);
 
 			eAllocation = allocations.get(slot);
 
 			if (eAllocation == null) {
-				eAllocation = scheduleFactory.createCargoAllocation();
+				eAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 				for (final IPortSlot allocationSlot : allocation.getSlots()) {
 					allocations.put(allocationSlot, eAllocation);
 				}
@@ -135,7 +132,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 				@NonNull
 				final DetailedCargoType type = cargoTypeUtil.getDetailedCargoType(allocation.getSlots());
-				
+
 				CargoType cargoType = null;
 				switch (type) {
 				case DES_PURCHASE:
@@ -177,16 +174,10 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
 
-			final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
-
-			if (event != null) {
-				sv.getFuels().addAll(super.createFuelQuantities(event));
-			}
-
 		} else if (slot instanceof IVesselEventPortSlot) {
 			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 				// GCO logic
-				final GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
+				final GeneratedCharterOut generatedCharterOutEvent = ScheduleFactory.eINSTANCE.createGeneratedCharterOut();
 				final IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
 				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
 
@@ -209,54 +200,44 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 					// final CharterOutVisit cov = factory.createCharterOutVisit();
 					// vev = cov;
 					// cov.setCharterOut(charterOut);
-					vev = factory.createVesselEventVisit();
+					vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
 				} else {
-					vev = factory.createVesselEventVisit();
+					vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
 				}
 				vev.setVesselEvent(event);
 				portVisit = vev;
 			}
 		} else {
-
-			final PortType portType = portTypeProvider.getPortType(element);
+			final PortType portType = slot.getPortType();
 			if (portType == PortType.Start) {
 				final StartEvent startEvent = ScheduleFactory.eINSTANCE.createStartEvent();
-
-				final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
-				if (event != null) {
-					startEvent.getFuels().addAll(super.createFuelQuantities(event));
-				}
-
 				portVisit = startEvent;
 			} else if (portType == PortType.End) {
 				final EndEvent endEvent = ScheduleFactory.eINSTANCE.createEndEvent();
-
-				final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
-				if (event != null) {
-					endEvent.getFuels().addAll(super.createFuelQuantities(event));
-				}
-
 				portVisit = endEvent;
 			} else {
-				portVisit = factory.createPortVisit();
+				portVisit = ScheduleFactory.eINSTANCE.createPortVisit();
 			}
+		}
+
+		if (portVisit instanceof FuelUsage) {
+			FuelUsage fuelUsage = (FuelUsage) portVisit;
+			fuelUsage.getFuels().addAll(exportFuelData(details));
 		}
 
 		portVisit.setPort(ePort);
 
-		final IPortVisitEvent visitEvent = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
+		int startTime = sequence.getArrivalTime(slot);
+		int endTime = startTime + sequence.getVisitDuration(slot);
 
-		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
-
-		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime(), slot.getPort()));
-		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime(), slot.getPort()));
-
-		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
-		if (capacityViolationAnnotation != null) {
-			final Collection<ICapacityEntry> capacityViolations = capacityViolationAnnotation.getEntries();
-			for (final ICapacityEntry violation : capacityViolations) {
+		portVisit.setStart(modelEntityMap.getDateFromHours(startTime, slot.getPort()));
+		// Note, end port may be different for CO event!
+		portVisit.setEnd(modelEntityMap.getDateFromHours(endTime, slot.getPort()));
+		{
+			final Collection<CapacityViolationType> capacityViolations = sequence.getCapacityViolations(slot);
+			for (final CapacityViolationType violation : capacityViolations) {
 				com.mmxlabs.models.lng.schedule.CapacityViolationType type = null;
-				final CapacityViolationType x = violation.getType();
+				final CapacityViolationType x = violation;
 				switch (x) {
 				case FORCED_COOLDOWN:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.FORCED_COOLDOWN;
@@ -284,35 +265,32 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 					break;
 				}
 
-				final long volume = OptimiserUnitConvertor.convertToExternalVolume(violation.getVolume());
+				final long volume = OptimiserUnitConvertor.convertToExternalVolume(sequence.getCapacityViolationVolume(violation, slot));
 				portVisit.getViolations().put(type, volume);
 			}
-		}
-		final ILatenessAnnotation latenessAnnotation = (ILatenessAnnotation) annotations.get(SchedulerConstants.AI_latenessInfo);
-		if (latenessAnnotation != null) {
-			final PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
-			PortVisitLatenessType type = null;
-			final Interval interval = latenessAnnotation.getIntervalWithoutFlex();
-			switch (interval) {
-			case PROMPT:
-				type = PortVisitLatenessType.PROMPT;
-				break;
-			case MID_TERM:
-				type = PortVisitLatenessType.MID_TERM;
-				break;
-			case BEYOND:
-				type = PortVisitLatenessType.BEYOND;
-				break;
+
+			if (sequence.getLatenessWithoutFlex(slot) > 0 || sequence.getLatenessWithFlex(slot) > 0) {
+				final PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
+				PortVisitLatenessType type = null;
+				final Interval interval = sequence.getLatenessInterval(slot);
+				switch (interval) {
+				case PROMPT:
+					type = PortVisitLatenessType.PROMPT;
+					break;
+				case MID_TERM:
+					type = PortVisitLatenessType.MID_TERM;
+					break;
+				case BEYOND:
+					type = PortVisitLatenessType.BEYOND;
+					break;
+				}
+				portVisitLateness.setType(type);
+				portVisitLateness.setLatenessInHours(sequence.getLatenessWithoutFlex(slot));
+				portVisit.setLateness(portVisitLateness);
 			}
-			portVisitLateness.setType(type);
-			portVisitLateness.setLatenessInHours(latenessAnnotation.getlatenessWithoutFlex());
-			portVisit.setLateness(portVisitLateness);
 		}
 
-		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
-		if (cost != null) {
-			portVisit.setPortCost(OptimiserUnitConvertor.convertToExternalFixedCost(cost.getPortCost()));
-		}
+		portVisit.setPortCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPortCosts()));
 
 		// Handle FOB/DES stuff
 		if (eAllocation != null) {
@@ -353,29 +331,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			}
 		}
 
-		// set up hire cost
-		portVisit.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(visitEvent.getCharterCost()));
-
-		// Output allocation info
-		// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
-		// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
-		final IHeelLevelAnnotation heelLevel = (IHeelLevelAnnotation) annotations.get(SchedulerConstants.AI_heelLevelInfo);
-
-		if (heelLevel != null) {
-			assert visitEvent.getStartHeelInM3() == heelLevel.getStartHeelInM3();
-			assert visitEvent.getEndHeelInM3() == heelLevel.getEndHeelInM3();
-		}
-
-		portVisit.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(visitEvent.getStartHeelInM3()));
-		portVisit.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(visitEvent.getEndHeelInM3()));
-
 		return portVisit;
 	}
 
-	/**
-	 * @return
-	 */
-	public Port getLastPortVisited() {
-		return lastPortVisited;
+	private List<FuelQuantity> exportFuelData(PortDetails details) {
+
+		return FuelExportHelper.exportFuelData(details, FuelExportHelper.portFuelComponentNames, PortDetails::getFuelConsumption, PortDetails::getFuelUnitPrice);
 	}
 }

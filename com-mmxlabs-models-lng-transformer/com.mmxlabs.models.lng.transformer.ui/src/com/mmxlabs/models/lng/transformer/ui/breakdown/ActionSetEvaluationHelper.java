@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -16,7 +15,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -28,14 +26,12 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -136,7 +132,7 @@ public class ActionSetEvaluationHelper {
 		long sumPNL = 0;
 
 		for (final VolumeAllocatedSequence scheduledSequence : scheduledSequences.getVolumeAllocatedSequences()) {
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
+			for (final Pair<VoyagePlan, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
 				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
 			}
 		}
@@ -155,11 +151,8 @@ public class ActionSetEvaluationHelper {
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 			for (final IPortSlot lateSlot : volumeAllocatedSequence.getLateSlotsSet()) {
-				@Nullable
-				final Pair<Interval, Long> latenessCost = volumeAllocatedSequence.getLatenessCost(lateSlot);
-				if (latenessCost != null) {
-					sumCost += latenessCost.getSecond();
-				}
+				int latenessCost = volumeAllocatedSequence.getLatenessWithFlex(lateSlot);
+				sumCost += latenessCost;
 			}
 		}
 		return sumCost;

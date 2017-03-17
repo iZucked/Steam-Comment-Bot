@@ -6,12 +6,11 @@ package com.mmxlabs.models.lng.transformer.stochasticactionsets;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,7 +21,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -155,7 +153,7 @@ public class BreakEvenOptimiser {
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : scheduledSequences.getVolumeAllocatedSequences()) {
 
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : volumeAllocatedSequence.getVoyagePlans()) {
+			for (final Pair<VoyagePlan, IPortTimesRecord> p : volumeAllocatedSequence.getVoyagePlans()) {
 				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
 			}
 		}

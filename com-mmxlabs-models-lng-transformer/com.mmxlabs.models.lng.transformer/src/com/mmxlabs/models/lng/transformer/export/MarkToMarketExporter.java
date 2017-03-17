@@ -26,7 +26,6 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -144,15 +143,15 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			sv.setEnd(modelEntityMap.getDateFromHours(cargoValueAnnotation.getSlotTime(slot), slot.getPort()));
 
 			sv.setSlotAllocation(slotAllocation);
-
-			final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
-
-			if (event != null) {
-				sv.getFuels().addAll(super.createFuelQuantities(event));
-			}
-
-			sv.setPort(ePort);
-			return sv;
+			throw new UnsupportedOperationException("no longer supported");
+			// final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
+			//
+			// if (event != null) {
+			// sv.getFuels().addAll(super.createFuelQuantities(event));
+			// }
+			//
+			// sv.setPort(ePort);
+			// return sv;
 
 		}
 

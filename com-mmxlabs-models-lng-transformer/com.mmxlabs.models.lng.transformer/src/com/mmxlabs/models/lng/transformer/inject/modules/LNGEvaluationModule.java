@@ -33,14 +33,12 @@ import com.mmxlabs.scheduler.optimiser.schedule.IdleTimeChecker;
 import com.mmxlabs.scheduler.optimiser.schedule.LatenessChecker;
 import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
-import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
@@ -69,7 +67,6 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 
 		bind(VoyagePlanner.class);
-		bind(IVoyagePlanAnnotator.class).to(VoyagePlanAnnotator.class);
 		bind(PortTimesPlanner.class);
 		bind(IdleTimeChecker.class);
 		bind(LatenessChecker.class);
