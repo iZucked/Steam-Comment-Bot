@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -18,16 +17,14 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -181,8 +178,7 @@ public class LatenessComponentTest {
 		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime - 1 + loadLateTime);
 		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime - 1 + dischargeLateTime);
 		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime,
-				new LinkedList<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>>(
-						Arrays.asList(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(voyagePlan, null, portTimesRecord))));
+				new LinkedList<Pair<VoyagePlan, IPortTimesRecord>>(Arrays.asList(new Pair<VoyagePlan, IPortTimesRecord>(voyagePlan, portTimesRecord))));
 
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
 		volumeAllocatedSequences.add(vesselAvailability, scheduledSequence);

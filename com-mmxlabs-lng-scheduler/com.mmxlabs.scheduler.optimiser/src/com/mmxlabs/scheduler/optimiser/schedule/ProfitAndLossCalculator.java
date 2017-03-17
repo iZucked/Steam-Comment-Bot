@@ -10,7 +10,6 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Provider;
 
@@ -19,14 +18,12 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -117,10 +114,10 @@ public class ProfitAndLossCalculator {
 			int time = sequence.getStartTime();
 
 			// for (final VoyagePlan plan : sequence.getVoyagePlans()) {
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> entry : sequence.getVoyagePlans()) {
+			for (final Pair<VoyagePlan, IPortTimesRecord> entry : sequence.getVoyagePlans()) {
 				boolean cargo = false;
 				final VoyagePlan plan = entry.getFirst();
-				final IPortTimesRecord portTimesRecord = entry.getThird();
+				final IPortTimesRecord portTimesRecord = entry.getSecond();
 				final IAllocationAnnotation currentAllocation = (portTimesRecord instanceof IAllocationAnnotation) ? (IAllocationAnnotation) portTimesRecord : null;
 				if (plan.getSequence().length >= 2) {
 

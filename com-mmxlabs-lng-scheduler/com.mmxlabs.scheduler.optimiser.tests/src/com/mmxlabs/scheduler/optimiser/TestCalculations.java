@@ -60,10 +60,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
-import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
-import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
-import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
-import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
@@ -83,14 +80,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
-import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -250,311 +246,172 @@ public class TestCalculations {
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
 			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 			// }
 			Assert.assertNotNull(volumeAllocatedSequences);
 			// TODO: Start checking results
 			{
-				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(0, event.getDuration());
-				Assert.assertEquals(1, event.getStartTime());
-				Assert.assertEquals(1, event.getEndTime());
-				Assert.assertEquals(startElement, event.getSequenceElement());
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
+				Assert.assertEquals(1, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
-				Assert.assertEquals(1, journeyEvent.getStartTime());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
 
-				Assert.assertEquals(24 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(24, journeyEvent.getDuration());
+				Assert.assertEquals(24 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(24, journeyDetails.getTravelTime());
 
-				Assert.assertEquals(12000, journeyEvent.getSpeed());
+				Assert.assertEquals(12000, journeyDetails.getSpeed());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Ballast, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Ballast, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(500, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(500, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.Base));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertSame(port2, journeyDetails.getOptions().getToPortSlot().getPort());
+				Assert.assertEquals(0, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals((500L * baseFuelUnitPrice) / Calculator.HighScaleFactor, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+			}
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(loadElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port2, idleEvent.getPort());
-				Assert.assertSame(VesselState.Ballast, idleEvent.getVesselState());
-				Assert.assertEquals(0, idleEvent.getDuration());
-				Assert.assertEquals(25, idleEvent.getStartTime());
-				Assert.assertEquals(25, idleEvent.getEndTime());
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(1, event.getDuration());
-				Assert.assertEquals(25, event.getStartTime());
-				Assert.assertEquals(26, event.getEndTime());
-				Assert.assertEquals(loadElement, event.getSequenceElement());
+				Assert.assertEquals(25, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
-				Assert.assertEquals(26, journeyEvent.getStartTime());
-				Assert.assertEquals(24 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(24, journeyEvent.getDuration());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(24 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(24, journeyDetails.getTravelTime());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Laden, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Laden, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(12000, journeyEvent.getSpeed());
+				Assert.assertEquals(12000, journeyDetails.getSpeed());
 
-				Assert.assertEquals(laden_nboRateInM3PerDay, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals((1200L * 500000) / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals((long) laden_nboRateInM3PerDay * (long) cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(laden_nboRateInM3PerDay, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals((1200L * 500000) / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals((long) laden_nboRateInM3PerDay * (long) cargoCVValue / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 				// Assert.assertEquals(25 * 1200 * 2,
 				// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 				// FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.NBO));
 
-				Assert.assertEquals(laden_nboRateInM3PerDay * 2 * 5, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+			}
+			{
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(dischargeElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port3, idleEvent.getPort());
-				Assert.assertSame(VesselState.Laden, idleEvent.getVesselState());
-				Assert.assertEquals(0, idleEvent.getDuration());
-				Assert.assertEquals(50, idleEvent.getStartTime());
-				Assert.assertEquals(50, idleEvent.getEndTime());
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
 
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(1, event.getDuration());
-				Assert.assertEquals(50, event.getStartTime());
-				Assert.assertEquals(51, event.getEndTime());
-				Assert.assertEquals(dischargeElement, event.getSequenceElement());
+				Assert.assertEquals(50, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
 
-				Assert.assertEquals(24 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(24, journeyEvent.getDuration());
-				Assert.assertEquals(51, journeyEvent.getStartTime());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(24 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(24, journeyDetails.getTravelTime());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Ballast, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Ballast, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(12000, journeyEvent.getSpeed());
+				Assert.assertEquals(12000, journeyDetails.getSpeed());
 
-				Assert.assertEquals(24 * ballast_nboRateInM3PerHour / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals((24L * ballast_nboRateInM3PerHour * cargoCVValue / baseFuelEquivalence) / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(24L * ballast_nboRateInM3PerHour * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(24 * ballast_nboRateInM3PerHour / 24L, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals((24L * ballast_nboRateInM3PerHour * cargoCVValue / baseFuelEquivalence) / 24L, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(24L * ballast_nboRateInM3PerHour * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 				// Assert.assertEquals(25 * 1000 * 2,
 				// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 				// FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.NBO));
 
-				Assert.assertEquals(24 * ballast_nboRateInM3PerHour * 2 * 5 / 24L, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+			}
+			{
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(endElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port4, idleEvent.getPort());
-				Assert.assertSame(VesselState.Ballast, idleEvent.getVesselState());
-				Assert.assertEquals(0, idleEvent.getDuration());
-				Assert.assertEquals(75, idleEvent.getStartTime());
-				Assert.assertEquals(75, idleEvent.getEndTime());
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(endElement);
 
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(0, event.getDuration());
-				Assert.assertEquals(75, event.getStartTime());
-				Assert.assertEquals(75, event.getEndTime());
-				Assert.assertEquals(endElement, event.getSequenceElement());
+				Assert.assertEquals(75, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 		}
 	}
@@ -644,7 +501,6 @@ public class TestCalculations {
 			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 			final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
-			final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
 
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
@@ -699,310 +555,172 @@ public class TestCalculations {
 
 			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
+			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 
-			// TODO: Start checking results
 			{
-				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(0, event.getDuration());
-				Assert.assertEquals(1, event.getStartTime());
-				Assert.assertEquals(1, event.getEndTime());
-				Assert.assertEquals(startElement, event.getSequenceElement());
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
+				Assert.assertEquals(1, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
+			}
+
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
+
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(18, journeyDetails.getTravelTime());
+
+				Assert.assertEquals(16000, journeyDetails.getSpeed());
+
+				// Expect only base fuel use on this ballast leg
+
+				Assert.assertSame(VesselState.Ballast, journeyDetails.getOptions().getVesselState());
+
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(900 * 18 / 24, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.Base));
+
+				Assert.assertEquals(6, journeyDetails.getIdleTime());
+
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(6 * 400 / 24L, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.IdleBase));
+			}
+			{
+
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
+				Assert.assertEquals(25, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
 
-				Assert.assertEquals(1, journeyEvent.getStartTime());
-				Assert.assertEquals(25 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(18, journeyEvent.getDuration());
-
-				Assert.assertEquals(16000, journeyEvent.getSpeed());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(18, journeyDetails.getTravelTime());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Ballast, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Laden, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(16000, journeyDetails.getSpeed());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(900 * 18 / 24, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals((900L * 18L / 24 * baseFuelUnitPrice) / Calculator.HighScaleFactor, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(loadElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port2, idleEvent.getPort());
-				Assert.assertSame(VesselState.Ballast, idleEvent.getVesselState());
-				Assert.assertEquals(6, idleEvent.getDuration());
-				Assert.assertEquals(19, idleEvent.getStartTime());
-				Assert.assertEquals(25, idleEvent.getEndTime());
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(6 * 400 / 24L, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals((6L * 400 * baseFuelUnitPrice) / 24L / Calculator.HighScaleFactor, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(1, event.getDuration());
-				Assert.assertEquals(25, event.getStartTime());
-				Assert.assertEquals(26, event.getEndTime());
-				Assert.assertEquals(loadElement, event.getSequenceElement());
-			}
-
-			{
-
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
-
-				Assert.assertEquals(25 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(18, journeyEvent.getDuration());
-				Assert.assertEquals(26, journeyEvent.getStartTime());
-
-				// Expect only base fuel use on this ballast leg
-
-				Assert.assertSame(VesselState.Laden, journeyEvent.getVesselState());
-
-				Assert.assertEquals(16000, journeyEvent.getSpeed());
-
-				Assert.assertEquals(18 * laden_nboRateInM3PerHour / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals((18L * laden_nboRateInM3PerHour * cargoCVValue / baseFuelUnitEquivalence) / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(18L * laden_nboRateInM3PerHour * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(18 * laden_nboRateInM3PerHour / 24L, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals((18L * laden_nboRateInM3PerHour * cargoCVValue / baseFuelUnitEquivalence) / 24L, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(18L * laden_nboRateInM3PerHour * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 				// Assert.assertEquals(25 * 1200 * 2,
 				// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 				// FuelUnit.MMBTu));
 
-				Assert.assertEquals(18 * 800 / 24L, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals((18L * 800 * cargoCVValue / baseFuelUnitEquivalence) / 24L, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(18L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(18 * 800 / 24L, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals((18L * 800 * cargoCVValue / baseFuelUnitEquivalence) / 24L, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(18L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.NBO));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.FBO));
 
-				Assert.assertEquals(18L * 1200 * 2 * 5 / 24L, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(18 * 800 * 2 * 5 / 24L, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(6, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(6 * 1000 / 24L, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals((6L * 1000 * 500) / 24L / Calculator.ScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(6L * 1000 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.IdleNBO));
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(dischargeElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port3, idleEvent.getPort());
-				Assert.assertSame(VesselState.Laden, idleEvent.getVesselState());
-				Assert.assertEquals(6, idleEvent.getDuration());
-				Assert.assertEquals(44, idleEvent.getStartTime());
-				Assert.assertEquals(50, idleEvent.getEndTime());
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(6 * 1000 / 24L, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals((6L * 1000 * 500) / 24L / Calculator.ScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(6L * 1000 * cargoCVValue / 24L / Calculator.HighScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(6 * 1000 * 2 * 5 / 24L, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(1, event.getDuration());
-				Assert.assertEquals(50, event.getStartTime());
-				Assert.assertEquals(51, event.getEndTime());
-				Assert.assertEquals(dischargeElement, event.getSequenceElement());
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
 			}
-
 			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
+				Assert.assertEquals(50, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
+			}
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
-
-				Assert.assertEquals(25 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(18, journeyEvent.getDuration());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(18, journeyDetails.getTravelTime());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Ballast, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Ballast, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(16000, journeyEvent.getSpeed());
+				Assert.assertEquals(16000, journeyDetails.getSpeed());
 
-				Assert.assertEquals(18 * 1000 / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals((18L * 1000L * 500) / 24L / Calculator.ScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(18L * 1000 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(18 * 1000 / 24L, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals((18L * 1000L * 500) / 24L / Calculator.ScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(18L * 1000 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 				// Assert.assertEquals(25 * 1000 * 2,
 				// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 				// FuelUnit.MMBTu));
 				//
-				Assert.assertEquals(18 * 800 / 24L, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals((18L * 800L * 500) / 24L / Calculator.ScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(18L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(18 * 800 / 24L, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals((18L * 800L * 500) / 24L / Calculator.ScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(18L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.NBO));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.FBO));
 
-				Assert.assertEquals(18 * 1000 * 2 * 5 / 24L, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(18 * 800 * 2 * 5 / 24L, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(6, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(6 * 800 / 24L, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals((6 * 800 * 500) / 24L / Calculator.ScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(6L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(5_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.IdleNBO));
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(endElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port4, idleEvent.getPort());
-				Assert.assertSame(VesselState.Ballast, idleEvent.getVesselState());
-				Assert.assertEquals(6, idleEvent.getDuration());
-				Assert.assertEquals(69, idleEvent.getStartTime());
-				Assert.assertEquals(75, idleEvent.getEndTime());
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(6 * 800 / 24L, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals((6 * 800 * 500) / 24L / Calculator.ScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(6L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(6 * 800 * 2 * 5 / 24L, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(0, event.getDuration());
-				Assert.assertEquals(75, event.getStartTime());
-				Assert.assertEquals(75, event.getEndTime());
-				Assert.assertEquals(endElement, event.getSequenceElement());
+			}
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(endElement);
+				Assert.assertEquals(75, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 		}
 	}
@@ -1023,7 +741,7 @@ public class TestCalculations {
 		test3Logic(true);
 	}
 
-	private void test3Logic(boolean isOptional) {
+	private void test3Logic(final boolean isOptional) {
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(1);
 		final Injector injector = createTestInjector(volumeAllocator, baseFuelUnitPrice);
@@ -1156,326 +874,177 @@ public class TestCalculations {
 
 			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
+
+			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
+
 			// TODO: Start checking results
 			{
-				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
-				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class));
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(0, event.getDuration());
-				Assert.assertEquals(1, event.getStartTime());
-				Assert.assertEquals(1, event.getEndTime());
-				Assert.assertEquals(startElement, event.getSequenceElement());
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
+				Assert.assertEquals(1, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(startElement);
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(18, journeyDetails.getTravelTime());
 
-				Assert.assertEquals(25 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(18, journeyEvent.getDuration());
-				Assert.assertEquals(1, journeyEvent.getStartTime());
-
-				Assert.assertEquals(16000, journeyEvent.getSpeed());
+				Assert.assertEquals(16000, journeyDetails.getSpeed());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Ballast, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Ballast, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(900 * 18 / 24, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(900 * 18 / 24, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.Base));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(6, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals((900L * 18L / 24 * baseFuelUnitPrice) / Calculator.HighScaleFactor, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(6 * 400 / 24L, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(loadElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port2, idleEvent.getPort());
-				Assert.assertSame(VesselState.Ballast, idleEvent.getVesselState());
-				Assert.assertEquals(6, idleEvent.getDuration());
-				Assert.assertEquals(19, idleEvent.getStartTime());
-				Assert.assertEquals(25, idleEvent.getEndTime());
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(6 * 400 / 24L, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals((6L * 400 * baseFuelUnitPrice) / 24L / Calculator.HighScaleFactor, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(loadElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(1, event.getDuration());
-				Assert.assertEquals(25, event.getStartTime());
-				Assert.assertEquals(26, event.getEndTime());
-				Assert.assertEquals(loadElement, event.getSequenceElement());
-
-				Assert.assertTrue(event instanceof ILoadEvent);
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.IdleBase));
+			}
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
+				Assert.assertEquals(25, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(loadElement);
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
-
-				Assert.assertEquals(25 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(18, journeyEvent.getDuration());
-				Assert.assertEquals(26, journeyEvent.getStartTime());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(18, journeyDetails.getTravelTime());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Laden, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Laden, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(16000, journeyEvent.getSpeed());
+				Assert.assertEquals(16000, journeyDetails.getSpeed());
 
-				Assert.assertEquals(18 * 1200 / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals((18L * 1200L * 500) / 24L / Calculator.ScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(18 * 1200 / 24L, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals((18L * 1200L * 500) / 24L / Calculator.ScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
 				// Not yet set
-				Assert.assertEquals(18L * laden_nboRateInM3PerDay * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(18L * laden_nboRateInM3PerDay * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 				// Assert.assertEquals(25 * 1200 * 2,
 				// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 				// FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(200_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.NBO));
 
-				Assert.assertEquals(18 * 1200 * 2 * 200 / 24L, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(18 * 400 / 24L, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(18 * 400 / 24L, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.Base_Supplemental));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(6, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals((18L * 400 * baseFuelUnitPrice) / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(6 * 1000 / 24L, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals((6L * 1000 * 500) / 24L / Calculator.ScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(6L * 1000 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(dischargeElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port3, idleEvent.getPort());
-				Assert.assertSame(VesselState.Laden, idleEvent.getVesselState());
-				Assert.assertEquals(6, idleEvent.getDuration());
-				Assert.assertEquals(44, idleEvent.getStartTime());
-				Assert.assertEquals(50, idleEvent.getEndTime());
+				Assert.assertEquals(200_000_000, journeyDetails.getFuelUnitPrice(FuelComponent.IdleNBO));
 
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(6 * 1000 / 24L, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals((6L * 1000 * 500) / 24L / Calculator.ScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(6L * 1000 * cargoCVValue / 24L / Calculator.HighScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(6 * 1000 * 2 * 200 / 24L, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(dischargeElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(1, event.getDuration());
-				Assert.assertEquals(50, event.getStartTime());
-				Assert.assertEquals(51, event.getEndTime());
-				Assert.assertEquals(dischargeElement, event.getSequenceElement());
-
-				// Assert.assertTrue(event instanceof IDischargeEvent);
-				//
-				// final IDischargeEvent discharge = (IDischargeEvent) event;
-				// Assert.assertEquals(loadSlot.getMaxLoadVolume() - (18 * 1200 + 6 * 1000), discharge.getDischargeVolume());
-				//
-				// Assert.assertEquals((loadSlot.getMaxLoadVolume() - (18 * 1200 + 6 * 1000)) * 2 * 200, discharge.getSalesPrice());
+			}
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
+				Assert.assertEquals(50, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(1, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 
 			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(dischargeElement);
 
-				final IJourneyEvent journeyEvent = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
-				Assert.assertNotNull(journeyEvent);
-
-				Assert.assertEquals(25 * 12, journeyEvent.getDistance());
-				Assert.assertEquals(18, journeyEvent.getDuration());
-				Assert.assertEquals(51, journeyEvent.getStartTime());
+				final VoyageDetails journeyDetails = volumeAllocatedSequence.getVoyageDetailsFrom(portSlot);
+				Assert.assertNotNull(journeyDetails);
+				Assert.assertEquals(25 * 12, journeyDetails.getOptions().getDistance());
+				Assert.assertEquals(18, journeyDetails.getTravelTime());
 
 				// Expect only base fuel use on this ballast leg
 
-				Assert.assertSame(VesselState.Ballast, journeyEvent.getVesselState());
+				Assert.assertSame(VesselState.Ballast, journeyDetails.getOptions().getVesselState());
 
-				Assert.assertEquals(16000, journeyEvent.getSpeed());
+				Assert.assertEquals(16000, journeyDetails.getSpeed());
 
 				// Why still nbo? NEED TO CHECK vpo COST CALS. -- Basefuel should be
 				// the cheaper option!
 				// -- is base fuel being evaluated or is the choice not being
 				// allowed?
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
 				// Not yet set
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-				// Assert.assertEquals(25 * 1000 * 2,
-				// journeyEvent.getFuelConsumption(FuelComponent.NBO,
-				// FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 				//
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
+				Assert.assertEquals(18 * 900 / 24L, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleNBO));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(18 * 900 / 24L, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.Base));
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
+				Assert.assertEquals(6, journeyDetails.getIdleTime());
 
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
-				Assert.assertEquals((18L * 900 * baseFuelUnitPrice) / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals(0, journeyEvent.getFuelCost(FuelComponent.IdleBase));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
+				Assert.assertEquals(6 * 400 / 24L, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
+				Assert.assertEquals(0, journeyDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
 
-				final IIdleEvent idleEvent = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_idleInfo, IIdleEvent.class);
-				Assert.assertNotNull(idleEvent);
-				Assert.assertSame(endElement, idleEvent.getSequenceElement());
-				Assert.assertSame(port4, idleEvent.getPort());
-				Assert.assertSame(VesselState.Ballast, idleEvent.getVesselState());
-				Assert.assertEquals(6, idleEvent.getDuration());
-				Assert.assertEquals(69, idleEvent.getStartTime());
-				Assert.assertEquals(75, idleEvent.getEndTime());
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.IdleNBO));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.M3));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.M3));
-				Assert.assertEquals(6 * 400 / 24L, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT));
-				Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MMBTu));
-
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base));
-				Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.Base_Supplemental));
-				Assert.assertEquals((6L * 400 * baseFuelUnitPrice) / 24L / Calculator.HighScaleFactor, idleEvent.getFuelCost(FuelComponent.IdleBase));
-
-				final IPortVisitEvent event = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_visitInfo, IPortVisitEvent.class);
-				Assert.assertNotNull(event);
-				Assert.assertEquals(0, event.getDuration());
-				Assert.assertEquals(75, event.getStartTime());
-				Assert.assertEquals(75, event.getEndTime());
-				Assert.assertEquals(endElement, event.getSequenceElement());
+				Assert.assertEquals(baseFuelUnitPrice, journeyDetails.getFuelUnitPrice(FuelComponent.IdleBase));
+			}
+			{
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(endElement);
+				Assert.assertEquals(75, volumeAllocatedSequence.getArrivalTime(portSlot));
+				Assert.assertEquals(0, volumeAllocatedSequence.getVisitDuration(portSlot));
 			}
 		}
 	}
@@ -1514,8 +1083,8 @@ public class TestCalculations {
 			@Singleton
 			private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
 				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
-				int highPeriodInDays = 15;
-				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+				final int highPeriodInDays = 15;
+				final int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
 				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
 				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
@@ -1528,7 +1097,6 @@ public class TestCalculations {
 			@Override
 			protected void configure() {
 
-				bind(IVoyagePlanAnnotator.class).to(VoyagePlanAnnotator.class);
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);

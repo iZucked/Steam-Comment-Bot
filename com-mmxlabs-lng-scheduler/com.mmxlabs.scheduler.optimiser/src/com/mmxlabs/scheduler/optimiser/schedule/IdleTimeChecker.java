@@ -5,14 +5,12 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -46,8 +44,8 @@ public class IdleTimeChecker {
 	 * @param annotatedSolution
 	 */
 	public void calculateIdleTime(final VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = volumeAllocatedSequence.getVoyagePlans();
-		for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> planStructure : voyagePlans) {
+		final List<Pair<VoyagePlan,   IPortTimesRecord>> voyagePlans = volumeAllocatedSequence.getVoyagePlans();
+		for (final Pair<VoyagePlan,   IPortTimesRecord> planStructure : voyagePlans) {
 			final VoyagePlan plan = planStructure.getFirst();
 			applyPenaltyToPlan(volumeAllocatedSequence, plan, annotatedSolution);
 		}

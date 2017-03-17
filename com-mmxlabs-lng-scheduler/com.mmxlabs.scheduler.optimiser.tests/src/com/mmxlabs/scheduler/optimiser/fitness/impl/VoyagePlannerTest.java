@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
@@ -22,7 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -38,10 +36,8 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
@@ -303,7 +299,7 @@ public final class VoyagePlannerTest {
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2)).thenReturn(testVoyagePlan);
 
 		// Schedule sequence
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
+		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
 
 		Assert.assertNotNull(plans);
 		Assert.assertEquals(2, plans.size());

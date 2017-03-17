@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -65,15 +64,14 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 				if (lateSlots != null && !lateSlots.contains(lateSlot)) {
 					newLateness = true;
 				}
-				final Pair<Interval, Long> latenessDetails = volumeAllocatedSequence.getLatenessCost(lateSlot);
-				if (latenessDetails != null) {
-					final long lateness = latenessDetails.getSecond();
-					if (latenessDetails.getFirst() == Interval.PROMPT) {
+				final Interval latenessInterval = volumeAllocatedSequence.getLatenessInterval(lateSlot);
+				if (latenessInterval != null) {
+					final long lateness = volumeAllocatedSequence.getLatenessWithFlex(lateSlot);
+					if (latenessInterval == Interval.PROMPT) {
 						promptLateness += lateness;
 					}
 					totalLateness += lateness;
 				}
-
 				if (lateSlots != null) {
 					if ((promptLateness > initialPromptLateness || totalLateness > initialTotalLateness) || newLateness == true) {
 						return false;

@@ -12,9 +12,8 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -35,18 +34,17 @@ public class VolumeAllocatedSequences extends ArrayList<@NonNull VolumeAllocated
 	private final Map<@NonNull IResource, @NonNull VolumeAllocatedSequence> resourceToScheduledSequenceMap = new HashMap<>();
 	private final Map<IPortSlot, VolumeAllocatedSequence> slotToSequenceCache = new HashMap<>();
 	private final Map<@NonNull VolumeAllocatedSequence, @NonNull IVesselAvailability> sequenceToAvailabilityMap = new HashMap<>();
-	
-	public VolumeAllocatedSequences(){
-		
+
+	public VolumeAllocatedSequences() {
+
 	}
-	
-	//Unit Test Constructor
+
+	// Unit Test Constructor
 	public VolumeAllocatedSequences(ArrayList<VolumeAllocatedSequence> list) {
-			super.addAll(list);
+		super.addAll(list);
 	}
 
-
-	//	@Override 
+	// @Override
 	@Deprecated
 	public boolean add(@NonNull final VolumeAllocatedSequence scheduledSequence) {
 		// Call the other #add(IVesselAvailability,VolumeAllocatedSequence) method
@@ -104,22 +102,21 @@ public class VolumeAllocatedSequences extends ArrayList<@NonNull VolumeAllocated
 		}
 		return null;
 	}
-	
+
 	@Nullable
 	public Integer getVesselEndTime(final @NonNull IPortSlot portSlot) {
 		final VolumeAllocatedSequence sequence = getScheduledSequence(portSlot);
 		if (sequence != null) {
-			List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = sequence.getVoyagePlans();
+			List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans = sequence.getVoyagePlans();
 			@NonNull
-			Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> triple = voyagePlans.get(voyagePlans.size() - 1);
-			IPortTimesRecord third = triple.getThird();
+			Pair<VoyagePlan, IPortTimesRecord> triple = voyagePlans.get(voyagePlans.size() - 1);
+			IPortTimesRecord third = triple.getSecond();
 			int endTime = third.getSlotTime(third.getSlots().get(0));
 			int endDuration = third.getSlotDuration(third.getSlots().get(0));
 			return endTime + endDuration;
 		}
 		return null;
 	}
-
 
 	@Nullable
 	public IAllocationAnnotation getAllocationAnnotation(final @NonNull IPortSlot portSlot) {

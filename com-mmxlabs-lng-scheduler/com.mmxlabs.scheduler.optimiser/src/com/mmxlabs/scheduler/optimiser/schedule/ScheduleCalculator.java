@@ -10,7 +10,6 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Provider;
@@ -21,7 +20,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -31,7 +29,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -47,7 +44,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -62,7 +58,7 @@ public class ScheduleCalculator {
 	@Inject
 	@Named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)
 	private boolean enableCache;
-	
+
 	@Inject
 	@Named("hint-lngtransformer-disable-caches")
 	private boolean hintEnableCache;
@@ -106,9 +102,6 @@ public class ScheduleCalculator {
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-
-	@Inject
-	private IVoyagePlanAnnotator voyagePlanAnnotator;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -241,7 +234,7 @@ public class ScheduleCalculator {
 		}
 
 		if (arrivalTimes == null) {
-			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
+			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 
 		// If this a cargo round trip sequence, but we have no data (i.e. there are no cargoes), return the basic data structure to avoid any exceptions
@@ -250,7 +243,7 @@ public class ScheduleCalculator {
 			int ii = 0;
 		}
 		if (isRoundTripSequence && arrivalTimes.length == 0) {
-			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
+			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 
 		// Get start time
@@ -259,7 +252,7 @@ public class ScheduleCalculator {
 		final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes);
 
 		// Generate all the voyageplans and extra annotations for this sequence
-		final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, portTimesRecords);
+		final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, portTimesRecords);
 		if (voyagePlans == null) {
 			return null;
 		}
@@ -282,29 +275,19 @@ public class ScheduleCalculator {
 	private VolumeAllocatedSequence desOrFobSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final @Nullable IPortTimesRecord portTimesRecord) {
 
 		if (portTimesRecord == null) {
-			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
+			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 		@NonNull
 		final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = voyagePlanner.makeDESOrFOBVoyagePlanPair(resource, sequence, portTimesRecord);
 
 		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
 		final VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, sequence, vesselStartTime,
-				Collections.singletonList(new Triple<>(p.getFirst(), Collections.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) p.getSecond())));
+				Collections.singletonList(new Pair<>(p.getFirst(), (IPortTimesRecord) p.getSecond())));
 
 		return scheduledSequence;
 	}
 
 	private void annotate(final @NonNull ISequences sequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences, final @NonNull IAnnotatedSolution annotatedSolution) {
-
-		// Do basic voyageplan annotation
-		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-			final IResource resource = volumeAllocatedSequence.getResource();
-			final ISequence sequence = sequences.getSequence(resource);
-
-			if (sequence.size() > 0) {
-				voyagePlanAnnotator.annotateFromScheduledSequence(volumeAllocatedSequence, annotatedSolution);
-			}
-		}
 
 		// now add some more data for each load slot
 		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();

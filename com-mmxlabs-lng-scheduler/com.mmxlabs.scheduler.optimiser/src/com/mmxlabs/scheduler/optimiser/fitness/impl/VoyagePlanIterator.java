@@ -6,11 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.mmxlabs.common.Triple;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -25,9 +22,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class VoyagePlanIterator {
 	private static final Object[] EMPTY_SEQUENCE = new Object[] {};
-	private List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans;
-	private Iterator<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> planIterator;
-	private Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> currentPlan;
+	private List<Pair<VoyagePlan, IPortTimesRecord>> plans;
+	private Iterator<Pair<VoyagePlan, IPortTimesRecord>> planIterator;
+	private Pair<VoyagePlan, IPortTimesRecord> currentPlan;
 	private Object[] currentSequence;
 	private int currentPlanIndex;
 
@@ -72,7 +69,7 @@ public class VoyagePlanIterator {
 		if (obj instanceof PortDetails) {
 			final PortDetails details = (PortDetails) obj;
 			if (!currentPlan.getFirst().isIgnoreEnd() || currentPlanIndex != (currentSequence.length - 1)) {
-				currentTime = currentPlan.getThird().getSlotTime(details.getOptions().getPortSlot());
+				currentTime = currentPlan.getSecond().getSlotTime(details.getOptions().getPortSlot());
 				extraTime = details.getOptions().getVisitDuration();
 			}
 		} else if (obj instanceof VoyageDetails) {
@@ -101,10 +98,6 @@ public class VoyagePlanIterator {
 	}
 
 	public IPortTimesRecord getCurrentPortTimeRecord() {
-		return currentPlan.getThird();
-	}
-
-	public Map<IPortSlot, IHeelLevelAnnotation> getCurrentHeelLevelAnnotations() {
 		return currentPlan.getSecond();
 	}
 }

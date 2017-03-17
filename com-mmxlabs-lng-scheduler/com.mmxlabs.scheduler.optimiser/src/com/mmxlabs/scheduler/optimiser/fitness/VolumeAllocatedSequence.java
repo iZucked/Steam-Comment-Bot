@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,10 +17,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -27,38 +26,44 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class VolumeAllocatedSequence {
 	private final @NonNull IResource resource;
 	private final @NonNull ISequence sequence;
 	private final int startTime;
-	private final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans;
+	private final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans;
 
 	// Cached Lookup data
 	private final Map<IPortSlot, Integer> portSlotToTimeMap = new HashMap<>();
 	private final Map<IPortSlot, VoyagePlan> portSlotToVoyagePlanMap = new HashMap<>();
 	private final Map<IPortSlot, IPortTimesRecord> portSlotToPortTimesRecordMap = new HashMap<>();
-	private final Map<IPortSlot, IHeelLevelAnnotation> portSlotToHeelLevelAnnotationMap = new HashMap<>();
 	private final List<@NonNull IPortSlot> sequencePortSlots;
 
 	private final @NonNull Set<@NonNull IPortSlot> lateSlots = new HashSet<>();
 
 	private static class SlotRecord {
 		public int arrivalTime;
+		public int visitDuration;
 		public VoyagePlan voyagePlan;
 		public IPortTimesRecord portTimesRecord;
-		public IHeelLevelAnnotation heelLevelAnnotation;
+		// public IHeelLevelAnnotation heelLevelAnnotation;
 		public int violatingIdleHours;
 		public long weightedIdleCost;
-		public long weightedLatenessSum;
 		public long capacityViolationSum;
-		public Pair<Interval, Long> latenessSum;
+		public boolean forcedCooldown;
 		public List<@NonNull CapacityViolationType> capacityViolations = new ArrayList<>();
+		public Map<@NonNull CapacityViolationType, Long> capacityViolationVolumes = new EnumMap<>(CapacityViolationType.class);
 
-		public List<CapacityViolationType> getCapacityViolations() {
-			return capacityViolations;
-		}
+		public long weightedLateness;
+		public int latenessWithFlex;
+		public int latenessWithoutFlex;
+		public Interval interval;
+		public VoyageDetails fromVoyageDetails;
+		public VoyageDetails toVoyageDetails;
+		public PortDetails portDetails;
 
 	}
 
@@ -66,8 +71,7 @@ public class VolumeAllocatedSequence {
 
 	/**
 	 */
-	public VolumeAllocatedSequence(final @NonNull IResource resource, final @NonNull ISequence sequence, final int startTime,
-			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
+	public VolumeAllocatedSequence(final @NonNull IResource resource, final @NonNull ISequence sequence, final int startTime, final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans) {
 		super();
 		this.sequence = sequence;
 		this.startTime = startTime;
@@ -93,7 +97,7 @@ public class VolumeAllocatedSequence {
 		return startTime;
 	}
 
-	public List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> getVoyagePlans() {
+	public List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> getVoyagePlans() {
 		return voyagePlans;
 	}
 
@@ -101,8 +105,24 @@ public class VolumeAllocatedSequence {
 		return getOrExceptionSlotRecord(portSlot).arrivalTime;
 	}
 
+	public int getVisitDuration(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).visitDuration;
+	}
+
 	public VoyagePlan getVoyagePlan(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).voyagePlan;
+	}
+
+	public VoyageDetails getVoyageDetailsFrom(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).fromVoyageDetails;
+	}
+
+	public VoyageDetails getVoyageDetailsTo(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).toVoyageDetails;
+	}
+
+	public PortDetails getPortDetails(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).portDetails;
 	}
 
 	public List<@NonNull IPortSlot> getSequenceSlots() {
@@ -120,40 +140,66 @@ public class VolumeAllocatedSequence {
 			return (IAllocationAnnotation) portTimesRecord;
 		}
 		return null;
-
 	}
 
-	public void addCapacityViolation(final @NonNull IPortSlot portSlot, @NonNull CapacityViolationType cvt) {
+	public boolean isForcedCooldown(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).forcedCooldown;
+	}
+
+	public void addCapacityViolation(final @NonNull IPortSlot portSlot, @NonNull CapacityViolationType cvt, long volume) {
 
 		@NonNull
 		final SlotRecord record = getOrExceptionSlotRecord(portSlot);
 		record.capacityViolationSum += 1;
 		record.capacityViolations.add(cvt);
+		record.capacityViolationVolumes.put(cvt, volume);
+	}
+
+	public long getCapacityViolationVolume(@NonNull CapacityViolationType violation, @NonNull IPortSlot portSlot) {
+		final SlotRecord record = getOrExceptionSlotRecord(portSlot);
+
+		return record.capacityViolationVolumes.getOrDefault(violation, 0L);
 	}
 
 	public long getCapacityViolationCount(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).capacityViolationSum;
 	}
 
-	public void addLatenessCost(@NonNull final IPortSlot portSlot, final Pair<Interval, Long> lateness) {
-		getOrExceptionSlotRecord(portSlot).latenessSum = lateness;
+	/**
+	 * Record lateness. Slot will only be marked as late if latenessWithFlex is greater than zero.
+	 * 
+	 * @param portSlot
+	 * @param weightedLateness
+	 * @param interval
+	 * @param latenessWithFlex
+	 * @param latenessWithoutFlex
+	 */
+	public void addLateness(final @NonNull IPortSlot portSlot, long weightedLateness, final @NonNull Interval interval, int latenessWithFlex, int latenessWithoutFlex) {
+
+		final SlotRecord record = getOrExceptionSlotRecord(portSlot);
+		record.weightedLateness = weightedLateness;
+		record.latenessWithFlex = latenessWithFlex;
+		record.latenessWithoutFlex = latenessWithoutFlex;
+		record.interval = interval;
+		if (latenessWithFlex > 0) {
+			lateSlots.add(portSlot);
+		}
 	}
 
-	public void addWeightedLatenessCost(@NonNull final IPortSlot portSlot, final long weightedLateness) {
-		getOrExceptionSlotRecord(portSlot).weightedLatenessSum = weightedLateness;
+	public @Nullable Interval getLatenessInterval(@NonNull final IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).interval;
 	}
 
-	public @Nullable Pair<Interval, Long> getLatenessCost(@NonNull final IPortSlot portSlot) {
-		return getOrExceptionSlotRecord(portSlot).latenessSum;
+	public int getLatenessWithFlex(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).latenessWithFlex;
+	}
+
+	public int getLatenessWithoutFlex(final @NonNull IPortSlot portSlot) {
+		return getOrExceptionSlotRecord(portSlot).latenessWithoutFlex;
 	}
 
 	public long getWeightedLatenessCost(final @NonNull IPortSlot portSlot) {
-		return getOrExceptionSlotRecord(portSlot).weightedLatenessSum;
-
-	}
-
-	public void addLateSlot(final @NonNull IPortSlot portSlot) {
-		lateSlots.add(portSlot);
+		return getOrExceptionSlotRecord(portSlot).weightedLateness;
 	}
 
 	public void addIdleHoursViolation(@NonNull final IPortSlot portSlot, final int violatingHours) {
@@ -207,7 +253,8 @@ public class VolumeAllocatedSequence {
 	private void buildLookup() {
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(this);
 
-		// Lists to store the voyageplan data
+		// Forced cooldown volumes are stored on the VoyageDetails, so record the last one for use in the next iteration so we can record the cooldown at the port
+		boolean isForcedCooldown = false;
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 			if (e instanceof PortDetails) {
@@ -220,13 +267,35 @@ public class VolumeAllocatedSequence {
 				@NonNull
 				final SlotRecord record = getOrCreateSlotRecord(portSlot);
 				record.arrivalTime = currentTime;
+				record.visitDuration = details.getOptions().getVisitDuration();
 				record.voyagePlan = vpi.getCurrentPlan();
 				record.portTimesRecord = vpi.getCurrentPortTimeRecord();
-				Map<IPortSlot, IHeelLevelAnnotation> currentHeelLevelAnnotations = vpi.getCurrentHeelLevelAnnotations();
-				if (currentHeelLevelAnnotations != null) {
-					record.heelLevelAnnotation = currentHeelLevelAnnotations.get(portSlot);
-				}
+				// Map<IPortSlot, IHeelLevelAnnotation> currentHeelLevelAnnotations = vpi.getCurrentHeelLevelAnnotations();
+				// if (currentHeelLevelAnnotations != null) {
+				// record.heelLevelAnnotation = currentHeelLevelAnnotations.get(portSlot);
+				// }
 
+				record.forcedCooldown = isForcedCooldown;
+				// Reset, do not re-record cooldown problems
+				isForcedCooldown = false;
+
+				record.portDetails = details;
+			} else if (e instanceof VoyageDetails) {
+				VoyageDetails voyageDetails = (VoyageDetails) e;
+				@NonNull
+				VoyageOptions options = voyageDetails.getOptions();
+				// Cooldown performed even though not permitted
+				if (!options.getAllowCooldown() && voyageDetails.isCooldownPerformed()) {
+					isForcedCooldown = true;
+				}
+				{
+					final SlotRecord record = getOrCreateSlotRecord(options.getFromPortSlot());
+					record.fromVoyageDetails = voyageDetails;
+				}
+				{
+					final SlotRecord record = getOrCreateSlotRecord(options.getToPortSlot());
+					record.toVoyageDetails = voyageDetails;
+				}
 			}
 		}
 	}
@@ -235,7 +304,6 @@ public class VolumeAllocatedSequence {
 
 		return this.startTime == other.startTime //
 				&& Objects.deepEquals(this.resource, other.resource) //
-				&& Objects.deepEquals(this.portSlotToHeelLevelAnnotationMap, other.portSlotToHeelLevelAnnotationMap) //
 				&& Objects.deepEquals(this.portSlotToPortTimesRecordMap, other.portSlotToPortTimesRecordMap) //
 				&& Objects.deepEquals(this.portSlotToTimeMap, other.portSlotToTimeMap) //
 				&& Objects.deepEquals(this.portSlotToVoyagePlanMap, other.portSlotToVoyagePlanMap) //
@@ -243,5 +311,4 @@ public class VolumeAllocatedSequence {
 				&& Objects.deepEquals(this.sequence, other.sequence) //
 				&& Objects.deepEquals(this.voyagePlans, other.voyagePlans);
 	}
-
 }

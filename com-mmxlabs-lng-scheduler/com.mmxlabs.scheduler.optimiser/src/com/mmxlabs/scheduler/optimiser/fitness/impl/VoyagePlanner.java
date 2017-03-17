@@ -5,10 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -21,8 +19,6 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
-import com.mmxlabs.scheduler.optimiser.annotations.impl.HeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
@@ -301,11 +297,11 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> makeVoyagePlans(final @NonNull IResource resource, final @NonNull ISequence sequence,
+	final public List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> makeVoyagePlans(final @NonNull IResource resource, final @NonNull ISequence sequence,
 			final @NonNull List<IPortTimesRecord> portTimesRecords) {
 
 		final IVoyagePlanOptimiser voyagePlanOptimiser = voyagePlanOptimiserProvider.get();
-		final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap = new LinkedList<>();
+		final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap = new LinkedList<>();
 		final List<@NonNull VoyagePlan> voyagePlansList = new LinkedList<>();
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
@@ -468,9 +464,8 @@ public class VoyagePlanner {
 	}
 
 	private long generateActualsVoyagePlan(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final @NonNull List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final @NonNull List<@NonNull VoyagePlan> voyagePlansList,
+			final @NonNull List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap, final @NonNull List<@NonNull VoyagePlan> voyagePlansList,
 			final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptions, final @NonNull IPortTimesRecord portTimesRecord, final long startHeelVolumeInM3) {
-		final @NonNull Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 
 		final VoyagePlan plan = new VoyagePlan();
 		// Replace with actuals later if needed
@@ -589,11 +584,6 @@ public class VoyagePlanner {
 						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
 
 						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
-
-						final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(actualsDataProvider.getStartHeelInM3(voyageOptions.getFromPortSlot()),
-								actualsDataProvider.getStartHeelInM3(voyageOptions.getFromPortSlot()) + actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot()));
-						heelLevelAnnotations.put(voyageOptions.getFromPortSlot(), heelLevelAnnotation);
-
 					} else {
 						assert voyageOptions.getVesselState() == VesselState.Ballast;
 						// Volume after discharging
@@ -617,12 +607,6 @@ public class VoyagePlanner {
 						lngInM3 -= endHeelInM3;
 						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
 						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
-
-						final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(
-								actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot()) + actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot()),
-								actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot()));
-						heelLevelAnnotations.put(voyageOptions.getFromPortSlot(), heelLevelAnnotation);
-
 					}
 
 					final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(lngInM3, cargoCV);
@@ -672,15 +656,14 @@ public class VoyagePlanner {
 			assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
 		}
 		final IPortTimesRecord rec = allocationAnnotation == null ? portTimesRecord : allocationAnnotation;
-		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, rec));
+		voyagePlansMap.add(new Pair<>(plan, rec));
 
 		return plan.getRemainingHeelInM3();
 	}
 
 	// TODO: Better naming?
-	private long evaluateVoyagePlan(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final @NonNull List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList,
-			final @NonNull IPortTimesRecord portTimesRecord, final long startHeelVolumeInM3, final @NonNull VoyagePlan originalPlan) {
+	private long evaluateVoyagePlan(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final @NonNull List<Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap,
+			final List<@NonNull VoyagePlan> voyagePlansList, final @NonNull IPortTimesRecord portTimesRecord, final long startHeelVolumeInM3, final @NonNull VoyagePlan originalPlan) {
 
 		// Take a copy so we can retain isIgnoreEnd flag later on
 		final VoyagePlan plan = originalPlan; // TODO: remove
@@ -1077,16 +1060,13 @@ public class VoyagePlanner {
 	 * @return
 	 */
 	private void evaluateBrokenUpVoyagePlan(final @NonNull PlanEvaluationData planData, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList,
-			final VoyagePlan originalPlan) {
+			final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList, final VoyagePlan originalPlan) {
 
 		assert planData.getStartHeelVolumeInM3() >= 0;
 		assert planData.getEndHeelVolumeInM3() >= 0;
 		assert planData.getPlan().getStartingHeelInM3() >= 0;
 		assert planData.getPlan().getLNGFuelVolume() >= 0;
 		assert planData.getPlan().getRemainingHeelInM3() >= 0;
-		// Generate heel level annotations
-		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 		{
 			final IDetailsSequenceElement[] sequence = planData.getPlan().getSequence();
 			long currentHeelInM3 = planData.getPlan().getStartingHeelInM3();
@@ -1121,9 +1101,6 @@ public class VoyagePlanner {
 						}
 					}
 					final long end = currentHeelInM3;
-
-					final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(start, end);
-					heelLevelAnnotations.put(portSlot, heelLevelAnnotation);
 				} else if (e instanceof VoyageDetails) {
 					final VoyageDetails voyageDetails = (VoyageDetails) e;
 					long voyageBOGInM3 = 0;
@@ -1150,7 +1127,7 @@ public class VoyagePlanner {
 			planData.getPlan().setIgnoreEnd(originalPlan.isIgnoreEnd());
 		}
 
-		voyagePlansMap.add(new Triple<>(planData.getPlan(), heelLevelAnnotations, planData.getPortTimesRecord()));
+		voyagePlansMap.add(new Pair<>(planData.getPlan(), planData.getPortTimesRecord()));
 
 	}
 }

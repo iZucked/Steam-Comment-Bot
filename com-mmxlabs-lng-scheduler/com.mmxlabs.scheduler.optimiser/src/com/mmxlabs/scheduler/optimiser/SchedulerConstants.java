@@ -21,15 +21,15 @@ public final class SchedulerConstants {
 	public static final String Key_ProfitandLossCache = "cache-profit-and-loss";
 
 	// Additional Info keys
-	public static final String AI_idleInfo = "info-idle";
-	public static final String AI_journeyInfo = "info-journey";
-	public static final String AI_visitInfo = "info-visit";
+//	public static final String AI_idleInfo = "info-idle";
+//	public static final String AI_journeyInfo = "info-journey";
+//	public static final String AI_visitInfo = "info-visit";
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
 	public static final String AI_cargoValueAllocationInfo = "info-cargo-value-allocation";
-	public static final String AI_heelLevelInfo = "info-heel-level";
+//	public static final String AI_heelLevelInfo = "info-heel-level";
 	public static final String AI_generatedCharterOutInfo = "info-generated-charter-out";
 	public static final String AI_capacityViolationInfo = "info-capacity-violation";
-	public static final String AI_portCostInfo = "info-port-cost";
+//	public static final String AI_portCostInfo = "info-port-cost";
 	public static final String AI_hedgingValue = "element-hedging-value";
 	public static final String AI_miscCostsValue = "element-misc-costs-value";
 	public static final String AI_cancellationFees = "element-cancellation-fees";

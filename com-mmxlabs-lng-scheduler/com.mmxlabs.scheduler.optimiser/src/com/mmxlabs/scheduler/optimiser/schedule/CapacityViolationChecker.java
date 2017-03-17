@@ -4,21 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
@@ -32,10 +25,6 @@ import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.SimpleCargo
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityEntry;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -97,9 +86,9 @@ public class CapacityViolationChecker {
 		long remainingHeelInM3 = 0;
 		PortDetails lastHeelDetails = null;
 		// Loop over all voyage plans in turn. We Use the VoyagePlan directly to obtain allocation annotations
-		for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> entry : volumeAllocatedSequence.getVoyagePlans()) {
+		for (final Pair<VoyagePlan, IPortTimesRecord> entry : volumeAllocatedSequence.getVoyagePlans()) {
 			final VoyagePlan voyagePlan = entry.getFirst();
-			final IPortTimesRecord portTimesRecord = entry.getThird();
+			final IPortTimesRecord portTimesRecord = entry.getSecond();
 			// Get the allocation annotation if this is a cargo, otherwise this will be null
 			final IAllocationAnnotation allocationAnnotation = (portTimesRecord instanceof IAllocationAnnotation) ? (IAllocationAnnotation) portTimesRecord : null;
 
@@ -116,7 +105,7 @@ public class CapacityViolationChecker {
 					// If this is a cargo, get the load or discharge volume
 					final long commercialVolumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInM3(portSlot);
 					final long commercialVolumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
-					
+
 					final long physicalVolumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getPhysicalSlotVolumeInM3(portSlot);
 					final long physicalVolumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getPhysicalSlotVolumeInMMBTu(portSlot);
 
@@ -135,10 +124,10 @@ public class CapacityViolationChecker {
 							}
 
 							if (remainingHeelInM3 + physicalVolumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + physicalVolumeInM3 - vesselCapacityInM3,
-										volumeAllocatedSequence);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY,
+										remainingHeelInM3 + physicalVolumeInM3 - vesselCapacityInM3, volumeAllocatedSequence);
 							}
-						
+
 						} else {
 							// input is set in MMBTu
 							assert allocationAnnotation != null;
@@ -157,7 +146,7 @@ public class CapacityViolationChecker {
 									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, physicalVolumeInM3 - vesselCapacityInM3,
 											volumeAllocatedSequence);
 								}
-							}	
+							}
 						}
 						// Reset heel as we have now taken it into account
 						remainingHeelInM3 = 0;
@@ -170,15 +159,16 @@ public class CapacityViolationChecker {
 
 						if (dischargeOption.isVolumeSetInM3()) {
 							if (commercialVolumeInM3 > dischargeOption.getMaxDischargeVolume(-1)) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, commercialVolumeInM3 - dischargeOption.getMaxDischargeVolume(-1),
-										volumeAllocatedSequence);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE,
+										commercialVolumeInM3 - dischargeOption.getMaxDischargeVolume(-1), volumeAllocatedSequence);
 							} else if (commercialVolumeInM3 < dischargeOption.getMinDischargeVolume(-1)) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume(-1) - commercialVolumeInM3,
-										volumeAllocatedSequence);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE,
+										dischargeOption.getMinDischargeVolume(-1) - commercialVolumeInM3, volumeAllocatedSequence);
 							}
 
 							if (physicalVolumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, physicalVolumeInM3 - vesselCapacityInM3, volumeAllocatedSequence);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, physicalVolumeInM3 - vesselCapacityInM3,
+										volumeAllocatedSequence);
 							}
 
 						} else {
@@ -308,26 +298,7 @@ public class CapacityViolationChecker {
 	private void addEntryToCapacityViolationAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final @NonNull PortDetails portDetails, final @NonNull CapacityViolationType cvt,
 			final long volume, final @NonNull VolumeAllocatedSequence volumeAllocatedSequence) {
 		// Set port details entry
-		volumeAllocatedSequence.addCapacityViolation(portDetails.getOptions().getPortSlot(),cvt);
-
-		if (annotatedSolution != null) {
-
-			// Set annotation
-			final List<@NonNull ICapacityEntry> entries = new ArrayList<>(1);
-			final ISequenceElement element = portSlotProvider.getElement(portDetails.getOptions().getPortSlot());
-			// Add in existing entries as we will replace the annotation
-			{
-				final ICapacityAnnotation annotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, ICapacityAnnotation.class);
-				if (annotation != null) {
-					entries.addAll(annotation.getEntries());
-				}
-			}
-			entries.add(new CapacityEntry(cvt, volume));
-			if (!entries.isEmpty()) {
-				final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
-				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
-			}
-		}
+		volumeAllocatedSequence.addCapacityViolation(portDetails.getOptions().getPortSlot(), cvt, volume);
 	}
 
 	private long getViolationInM3(long violationInMMBTu, int cargoCV) {

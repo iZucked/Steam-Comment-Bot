@@ -6,13 +6,7 @@ package com.mmxlabs.scheduler.optimiser.events.impl;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.events.IGeneratedCharterOutEvent;
-import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 
-/**
- * Implementation of {@link IIdleEvent}.
- * 
- * @author Simon Goodall
- */
 public final class GeneratedCharterOutEventImpl extends AbstractScheduledEventImpl implements IGeneratedCharterOutEvent {
 
 	private IPort port;
