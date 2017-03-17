@@ -711,6 +711,7 @@ public class PeriodTransformer {
 			final Collection<@NonNull Cargo> cargoesToRemove) {
 		// <<<
 		// Delete slots and cargoes outside of range.
+		List<EObject> objectsToDelete = new LinkedList<>();
 		for (final Slot slot : slotsToRemove) {
 			@Nullable
 			final Slot originalFromCopy = mapping.getOriginalFromCopy(slot);
@@ -723,7 +724,7 @@ public class PeriodTransformer {
 			} else {
 				throw new IllegalStateException("Unknown slot type");
 			}
-			internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, slot));
+			objectsToDelete.add(slot);
 		}
 		for (final Cargo cargo : cargoesToRemove) {
 			// cargoModel.getCargoes().remove(cargo);
@@ -731,8 +732,9 @@ public class PeriodTransformer {
 			final Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
-			internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, cargo));
+			objectsToDelete.add(cargo);
 		}
+		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, objectsToDelete));
 	}
 
 	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo) {
