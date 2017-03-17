@@ -442,13 +442,15 @@ public class EquivalanceGroupBuilder {
 			} else {
 				prefix = "fob-purchase";
 			}
-		} else {
+		} else if (slot instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 			if (dischargeSlot.isFOBSale()) {
 				prefix = "fob-sale";
 			} else {
 				prefix = "des-sale";
 			}
+		} else {
+			prefix = "unknownslottype";
 		}
 		return prefix;
 	}
