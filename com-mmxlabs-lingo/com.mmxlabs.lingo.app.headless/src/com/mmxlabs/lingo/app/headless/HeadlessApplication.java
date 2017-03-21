@@ -623,7 +623,8 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void setMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
-		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-move-distributions", Boolean.class));
+		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-move-distribution", Boolean.class));
+		overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("roulette-wheel", Boolean.class));
 		final JMap moves = headlessParameters.getParameterValue("move-distributions", JMap.class);
 		final Map<String, Double> moveDistributionsMap = new HashMap<>();
 		for (final String key : moves.getKeySet()) {

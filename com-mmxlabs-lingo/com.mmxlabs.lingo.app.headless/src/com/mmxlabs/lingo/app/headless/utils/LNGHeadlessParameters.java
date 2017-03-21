@@ -101,15 +101,28 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("objectives", new JMap(defaultObjectives), JMap.class, true);
 
 		// Moves
-		setParameter("use-roulette-wheel", false, Boolean.class, false);
-		setParameter("equal-move-distributions", true, Boolean.class, false);
+		setParameter("roulette-wheel", false, Boolean.class, false);
+		setParameter("equal-move-distribution", true, Boolean.class, false);
 		Map<String, Object> defaultMoveDistributions = new HashMap<>();
-		defaultMoveDistributions.put("insert-optional-frequency", 0.1);
-		defaultMoveDistributions.put("move-segments-frequency", 0.3);
-		defaultMoveDistributions.put("remove-optional-frequency", 0.5);
-		defaultMoveDistributions.put("shuffle-elements-frequency", 0.6);
-		defaultMoveDistributions.put("swap-segments-frequency", 0.8);
-		defaultMoveDistributions.put("swap-tails-frequency", 1.0);
+		defaultMoveDistributions.put("move-segment", 1.0);
+		defaultMoveDistributions.put("swap-segments", 1.0);
+		defaultMoveDistributions.put("swap-tails", 1.0);
+		defaultMoveDistributions.put("insert-optional-element", 1.0);
+		defaultMoveDistributions.put("remove-optional-element", 1.0);
+		defaultMoveDistributions.put("shuffle-element", 1.0);
+		defaultMoveDistributions.put("insert-des-purchase", 1.0);
+		defaultMoveDistributions.put("remove-des-purchase", 1.0);
+		defaultMoveDistributions.put("insert-fob-sale", 3.0);
+		defaultMoveDistributions.put("remove-fob-sale", 1.0);
+		defaultMoveDistributions.put("insert-cargo", 1.0);
+		defaultMoveDistributions.put("remove-cargo", 1.0);
+		defaultMoveDistributions.put("swap-cargo-vessel", 1.0);
+		defaultMoveDistributions.put("insert-slot", 1.0);
+		defaultMoveDistributions.put("swap-slot", 1.0);
+		defaultMoveDistributions.put("move-slot-nonshipped-resource", 1.0);
+		defaultMoveDistributions.put("insert-vessel-event", 1.0);
+		defaultMoveDistributions.put("remove-vessel-event", 1.0);
+		defaultMoveDistributions.put("move-vessel-event", 1.0);
 		setParameter("move-distributions", new JMap(defaultMoveDistributions), JMap.class, false);
 
 		// Parallel
