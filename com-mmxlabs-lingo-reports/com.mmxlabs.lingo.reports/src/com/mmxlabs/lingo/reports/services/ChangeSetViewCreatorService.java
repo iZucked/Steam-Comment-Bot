@@ -36,14 +36,14 @@ public class ChangeSetViewCreatorService {
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
 
 	private static final Logger log = LoggerFactory.getLogger(ChangeSetViewCreatorService.class);
-	private EventHandler eventHandler = new EventHandler() {
+	private final EventHandler eventHandler = new EventHandler() {
 
 		@Override
-		public void handleEvent(Event event) {
+		public void handleEvent(final Event event) {
 			try {
-				AnalyticsSolution solution = (AnalyticsSolution) event.getProperty(IEventBroker.DATA);
+				final AnalyticsSolution solution = (AnalyticsSolution) event.getProperty(IEventBroker.DATA);
 				openView(solution);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				log.error("Error handling create change set view event", e);
 			}
 		}
@@ -60,14 +60,19 @@ public class ChangeSetViewCreatorService {
 				while (!PlatformUI.isWorkbenchRunning()) {
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
+					} catch (final InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-				if (PlatformUI.isWorkbenchRunning()) {
+
+				// Here the workbench has been marked as running. But it may not be really.
+				// https://bugs.eclipse.org/bugs/show_bug.cgi?id=49316
+				// This suggests running on the display thread to guarantee this.
+				// Note: The previous code got to a point where the workbench service locator was null during an ITS run.
+				RunnerHelper.asyncExec(() -> {
 					eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 					eventBroker.subscribe(ChangeSetViewCreatorService_Topic, eventHandler);
-				}
+				});
 			};
 		}.start();
 	}
@@ -79,12 +84,12 @@ public class ChangeSetViewCreatorService {
 		}
 	}
 
-	private void openView(AnalyticsSolution solution) {
-		EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
-		EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
-		MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
+	private void openView(final AnalyticsSolution solution) {
+		final EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
+		final EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
+		final MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
 
-		String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.CustomChangeSetView:" + solution.getID();
+		final String viewPartId = "com.mmxlabs.lingo.reports.views.changeset.CustomChangeSetView:" + solution.getID();
 
 		RunnerHelper.asyncExec(() -> {
 			boolean foundPerspective = false;
@@ -109,8 +114,8 @@ public class ChangeSetViewCreatorService {
 				viewPart = partService.showPart(viewPart, PartState.ACTIVATE); // Show part
 			} else {
 
-				MPartStack stack = (MPartStack) modelService.find("reportsArea", application);
-				MPart part = modelService.createModelElement(MPart.class);
+				final MPartStack stack = (MPartStack) modelService.find("reportsArea", application);
+				final MPart part = modelService.createModelElement(MPart.class);
 				part.setElementId(viewPartId);
 				part.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
 				part.setCloseable(true);
@@ -119,11 +124,11 @@ public class ChangeSetViewCreatorService {
 				part.getTags().add("disable-event-handlers");
 				part.setLabel(solution.getTitle());
 
-				MToolBar toolbar = modelService.createModelElement(MToolBar.class);
+				final MToolBar toolbar = modelService.createModelElement(MToolBar.class);
 				part.setToolbar(toolbar);
 
 				{
-					MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
 					item.setType(ItemType.CHECK);
 					item.setLabel("Filter Non Structural Changes");
@@ -135,7 +140,7 @@ public class ChangeSetViewCreatorService {
 					toolbar.getChildren().add(item);
 				}
 				if (solution.isCreateDiffToBaseAction()) {
-					MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
 					item.setType(ItemType.CHECK);
 					item.setLabel("Compare to Base");
@@ -147,7 +152,7 @@ public class ChangeSetViewCreatorService {
 					toolbar.getChildren().add(item);
 				}
 				{
-					MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.copy");
 					item.setType(ItemType.CHECK);
 					item.setTooltip("Copy to clipboard");
@@ -165,7 +170,7 @@ public class ChangeSetViewCreatorService {
 			}
 
 			// Pass in the input data
-			Object viewObject = viewPart.getObject();
+			final Object viewObject = viewPart.getObject();
 			final IEclipseContext componentContext = EclipseContextFactory.create();
 			componentContext.set(AnalyticsSolution.class, solution);
 
