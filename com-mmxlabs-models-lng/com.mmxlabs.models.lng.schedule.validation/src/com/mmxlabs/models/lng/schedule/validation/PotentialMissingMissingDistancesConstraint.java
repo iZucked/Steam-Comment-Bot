@@ -165,7 +165,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 					if (from != to) {
 						for (RouteOption route : RouteOption.values()) {
 							final RouteDistanceLineCache cache = caches.get(route);
-							if (cache.hasDistance(from, to)) {
+							if (cache != null && cache.hasDistance(from, to)) {
 								if (!cache.hasDistance(to, from)) {
 									final String msg = String.format("Missing distance between %s and %s for %s route.", getPortName(to), getPortName(from), route);
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
