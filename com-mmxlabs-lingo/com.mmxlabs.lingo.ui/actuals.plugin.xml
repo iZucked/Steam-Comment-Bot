@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="org.eclipse.ui.perspectives">
+		<perspective class="com.mmxlabs.lingo.platform.ui.ActualsPerspectiveFactory"
+			id="com.mmxlabs.lingo.platform.ui.ActualsPerspectiveFactory" name="Actuals">
+		</perspective>
+	</extension>
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension
+			targetID="com.mmxlabs.lingo.platform.ui.ActualsPerspectiveFactory">
+			<view closeable="false" id="com.mmxlabs.scenario.service.ui.navigator"
+				minimized="false" moveable="false" ratio="0.7" relationship="top"
+				relative="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
+				showTitle="true" standalone="true">
+			</view>
+			<viewShortcut id="com.mmxlabs.scenario.service.ui.navigator">
+			</viewShortcut>
+		</perspectiveExtension>
+	</extension>
+</plugin>
