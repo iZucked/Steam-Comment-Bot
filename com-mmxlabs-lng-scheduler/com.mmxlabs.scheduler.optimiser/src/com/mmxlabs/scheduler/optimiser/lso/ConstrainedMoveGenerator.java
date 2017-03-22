@@ -15,11 +15,21 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveTypes;
+import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypesAnnotation;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.ShuffleElementsMoveHandler;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * <p>
@@ -60,7 +70,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private GuidedMoveGenerator guidedMoveGenerator;
 
 	// TODO: Inject
-	private boolean enableSwapElementsMoveGenerator = false;
+	private final boolean enableSwapElementsMoveGenerator = false;
 
 	@com.google.inject.Inject(optional = true)
 	private IOptionalElementsProvider optionalElementsProvider;
@@ -75,7 +85,37 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private boolean isLoopingSCMG;
 
 	@Inject
-	public void init() {
+	@MoveTypesAnnotation(GuidedMoveTypes.Swap_Cargo_Vessel)
+	private GuidedMoveHandlerWrapper moveCargoOrVesselEventHandler;
+
+	private boolean enableSwapCargoMove = false;
+
+	@Inject
+	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IPromptPeriodProvider promptPeriodProvider;
+
+	@Inject
+	public void init(@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences inputRawSequences) {
+
+		// Enable new move if this is a full optimisation or a period greater than 6 months AND there is at least one nominal cargo.
+		if (!promptPeriodProvider.isPeriodOptimisation() //
+				|| (promptPeriodProvider.getEndOfOptimisationPeriod() - promptPeriodProvider.getStartOfOptimisationPeriod() > 30 * 6 * 24)) {
+			boolean hasNominalCargoes = false;
+			for (final IResource r : inputRawSequences.getResources()) {
+				@NonNull
+				final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(r);
+				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+					final ISequence s = inputRawSequences.getSequence(r);
+					if (s.size() > 2) {
+						hasNominalCargoes = true;
+						break;
+					}
+				}
+			}
+			enableSwapCargoMove = hasNominalCargoes;
+		}
 
 		if (isLoopingSCMG) {
 			this.sequencesMoveGenerator = new SequencesConstrainedLoopingMoveGeneratorUnit();
@@ -104,7 +144,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
-	public @Nullable IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager stateManager, @NonNull Random random) {
+	public @Nullable IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager stateManager, @NonNull final Random random) {
+		if (enableSwapCargoMove) {
+			if (random.nextDouble() < 0.05) {
+				return moveCargoOrVesselEventHandler.generateMove(rawSequences, stateManager, random);
+			}
+		}
+
 		if (enableSwapElementsMoveGenerator && ((elementSwapMoveGenerator != null) && (random.nextDouble() < elementSwapMoveFrequency))) {
 			return elementSwapMoveGenerator.generateMove(rawSequences, stateManager, random);
 		} else if ((optionalMoveGenerator != null) && (random.nextDouble() < optionalMoveFrequency)) {

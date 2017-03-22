@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.List;
@@ -11,11 +15,8 @@ import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 
 public interface IMoveHandlerHelper {
-
-	MoveHelper getMoveHelper();
 
 	@NonNull
 	List<ISequenceElement> extractSegment(@NonNull ISequence fromSequence, @NonNull ISequenceElement element);
@@ -28,7 +29,4 @@ public interface IMoveHandlerHelper {
 
 	List<Pair<Integer, Integer>> determineViableSecondBreaks(IResource sequence1, int position1, int position2, ISequence seq2, boolean valid2opt2, ILookupManager lookupManager,
 			IFollowersAndPreceders followersAndPreceders);
-
-	boolean valid2opt2(IResource sequence1, IResource sequence2, int position1, int position2, ISequences sequences, IFollowersAndPreceders followersAndPreceders);
-
 }

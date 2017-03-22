@@ -139,4 +139,11 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	long getReturnHeelInM3(@NonNull IPortSlot slot);
 
 	IPort getReturnPort(@NonNull IPortSlot slot);
+
+	long getCrewBonusCosts(IPortSlot portSlot);
+
+	long getInsuranceCosts(IPortSlot portSlot);
+
+	long getCapacityCosts(IPortSlot portSlot);
+
 }

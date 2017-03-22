@@ -410,4 +410,24 @@ public class MoveHelper implements IMoveHelper {
 	public boolean isNonShippedResource(@NonNull final IResource resource) {
 		return desPurchaseResources.contains(resource) || fobSaleResources.contains(resource);
 	}
+
+	@Override
+	public boolean isShippedResource(@NonNull final IResource resource) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		@NonNull
+		VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+
+		switch (vesselInstanceType) {
+		case TIME_CHARTER:
+		case FLEET:
+		case SPOT_CHARTER:
+		case ROUND_TRIP:
+			return true;
+		case FOB_SALE:
+		case DES_PURCHASE:
+		case UNKNOWN:
+		default:
+			return false;
+		}
+	}
 }

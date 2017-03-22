@@ -45,6 +45,10 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	private final Map<IPortSlot, Long> returnHeelInM3 = new HashMap<>();
 	private final Map<IPortSlot, IPort> returnPort = new HashMap<>();
 
+	private final Map<IPortSlot, Long> capacityCosts = new HashMap<>();
+	private final Map<IPortSlot, Long> crewBonusCosts = new HashMap<>();
+	private final Map<IPortSlot, Long> insuranceCosts = new HashMap<>();
+
 	@Override
 	public boolean hasActuals(final IPortSlot slot) {
 		if (actualsPresent.containsKey(slot)) {
@@ -225,5 +229,40 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	@Override
 	public ERouteOption getNextVoyageRoute(final IPortSlot slot) {
 		return nextVoyageRoute.get(slot);
+	}
+
+	@Override
+	public long getCapacityCosts(final IPortSlot slot) {
+		return capacityCosts.get(slot);
+	}
+
+	@Override
+	public long getCrewBonusCosts(final IPortSlot slot) {
+		return crewBonusCosts.get(slot);
+	}
+
+	@Override
+	public long getInsuranceCosts(final IPortSlot slot) {
+		return insuranceCosts.get(slot);
+	}
+
+	@Override
+	public void createLoadSlotExtraActuals(final ILoadOption slot, final long capacityCosts, final long crewBonusCosts, final long insuranceCosts) {
+
+		this.actualsPresent.put(slot, true);
+
+		this.capacityCosts.put(slot, capacityCosts);
+		this.crewBonusCosts.put(slot, crewBonusCosts);
+		this.insuranceCosts.put(slot, insuranceCosts);
+	}
+
+	@Override
+	public void createDischargeSlotExtraActuals(final IDischargeOption slot, final long capacityCosts, final long crewBonusCosts) {
+		this.actualsPresent.put(slot, true);
+
+		this.capacityCosts.put(slot, capacityCosts);
+		this.crewBonusCosts.put(slot, crewBonusCosts);
+		this.insuranceCosts.put(slot, 0l);
+
 	}
 }

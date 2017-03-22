@@ -11,6 +11,13 @@ public interface IPromptPeriodProvider extends IDataComponentProvider {
 	int getStartOfPromptPeriod();
 
 	int getEndOfPromptPeriod();
-	
+
 	int getEndOfSchedulingPeriod();
+
+	boolean isPeriodOptimisation();
+
+	int getStartOfOptimisationPeriod();
+
+	int getEndOfOptimisationPeriod();
+
 }
