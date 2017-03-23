@@ -6,14 +6,12 @@ package com.mmxlabs.common.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -28,7 +26,6 @@ public class RouletteWheel<T> {
 
 		final Iterator<@NonNull T> itr = validMoves.iterator();
 		double currentTotal = 0.0;
-		int curInd = 0;
 
 		while (itr.hasNext()) {
 
@@ -37,13 +34,13 @@ public class RouletteWheel<T> {
 				wheel.put(itr.next(), currentTotal);
 			} else {
 				@NonNull
-				T element = itr.next();
-				double value = getCorrespondingDistribution(element.toString(), distribution);
+				final T element = itr.next();
+				final double value = getCorrespondingDistribution(element.toString(), distribution);
 				wheel.put(element, value);
-				curInd++;
 			}
 			itr.remove();
 		}
+
 	}
 
 	public T spin(final Random random) {
@@ -64,13 +61,13 @@ public class RouletteWheel<T> {
 		return new ArrayList<Double>(wheel.values());
 	}
 
-	public double getCorrespondingDistribution(String entry, Map<String, Double> distribution) {
-		String jsonName = entry.toLowerCase().replace("_", "-");
-		Object[] keys = distribution.keySet().toArray();
+	public double getCorrespondingDistribution(final String entry, final Map<String, Double> distribution) {
+		final String jsonName = entry.toLowerCase().replace("_", "-");
+		final Object[] keys = distribution.keySet().toArray();
 
 		for (int i = 0; i < keys.length; i++) {
 			if (jsonName.equals(keys[i])) {
-				Double x = distribution.get(keys[i]);
+				final Double x = distribution.get(keys[i]);
 				return x;
 			}
 		}
