@@ -16,7 +16,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 	public LNGHeadlessParameters() {
 
 		// Scenario parameters
-		setParameter("scenario", "", String.class, true);
+		setParameter("scenario", "XX", String.class, true);
 		setParameter("scenario-path", "", String.class, true);
 
 		// Search Parameters
@@ -102,7 +102,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 
 		// Moves
 		setParameter("roulette-wheel", false, Boolean.class, false);
-		setParameter("equal-move-distribution", true, Boolean.class, false);
+		setParameter("equal-moves-distribution", true, Boolean.class, false);
 		Map<String, Object> defaultMoveDistributions = new HashMap<>();
 		defaultMoveDistributions.put("move-segment", 1.0);
 		defaultMoveDistributions.put("swap-segments", 1.0);

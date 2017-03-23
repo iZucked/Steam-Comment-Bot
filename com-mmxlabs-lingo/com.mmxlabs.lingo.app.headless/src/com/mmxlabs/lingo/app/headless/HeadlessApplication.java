@@ -130,7 +130,7 @@ public class HeadlessApplication implements IApplication {
 		// overrideSettings.setIdleTimeEnd(headlessParameters.getParameterValue("idle-time-end", Integer.class));
 		// set scenario file
 		overrideSettings
-				.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
+				.setScenario(headlessParameters.getParameterValue("scenario-path", String.class) + "/" + headlessParameters.getParameterValue("scenario", String.class));
 		// Set verbose Logging
 		// overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
 		// overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("use-roulette-wheel", Boolean.class));
@@ -623,7 +623,7 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void setMoveDistributions(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
-		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-move-distribution", Boolean.class));
+		overrideSettings.setEqualMoveDistributions(headlessParameters.getParameterValue("equal-moves-distribution", Boolean.class));
 		overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("roulette-wheel", Boolean.class));
 		final JMap moves = headlessParameters.getParameterValue("move-distributions", JMap.class);
 		final Map<String, Double> moveDistributionsMap = new HashMap<>();
@@ -666,8 +666,13 @@ public class HeadlessApplication implements IApplication {
 	private void createObjectives(final ConstraintAndFitnessSettings settings, final JMap jMap) {
 		settings.getObjectives().clear();
 		for (final String objectiveName : jMap.getJMap().keySet()) {
+			if(jMap.getClass(objectiveName) == Double.class){
 			settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
-		}
+			} else {
+				settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Integer.class)));
+
+			}
+			}
 	}
 
 	private String getFolderNameFromSettings(final OptimisationPlan settings) {
