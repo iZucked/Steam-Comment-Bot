@@ -49,6 +49,10 @@ public class RemoveOptionalElementMoveHandler implements IMoveGenerator {
 		}
 
 		// select an optional element at random
+
+		if(optionalElementsProvider.getOptionalElements().size() == 0){
+			return new NullMove("RemoveOptionalElement", "No Optional Elements");
+		}
 		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
 

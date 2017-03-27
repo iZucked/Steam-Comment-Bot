@@ -67,6 +67,10 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 		// return generateAddingMove(optional, location.getSecond());
 		// }
 		// }
+		
+		if(optionalElementsProvider.getOptionalElements().size() == 0){
+			return new NullMove("InsertOptionalElement", "No Optional Elements");
+		}
 
 		final ISequenceElement optional = RandomHelper.chooseElementFrom(random, optionalElementsProvider.getOptionalElements());
 		final Pair<IResource, Integer> location = lookupManager.lookup(optional);
