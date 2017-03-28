@@ -489,11 +489,11 @@ public class LNGScenarioTransformer {
 			promptPeriodProviderEditor.setEndOfSchedulingPeriod(dateHelper.convertTime(rootObject.getSchedulingEndDate()));
 		}
 
-		if (userSettings.isSetPeriodStart()) {
+		if (userSettings.isSetPeriodStart() && userSettings.getPeriodStart() != null) {
 			promptPeriodProviderEditor.setPeriodOptimisation(true);
 			promptPeriodProviderEditor.setStartOfOptimisationPeriod(dateHelper.convertTime(userSettings.getPeriodStart()));
 		}
-		if (userSettings.isSetPeriodEnd()) {
+		if (userSettings.isSetPeriodEnd() && userSettings.getPeriodEnd() != null) {
 			promptPeriodProviderEditor.setPeriodOptimisation(true);
 			promptPeriodProviderEditor.setEndOfOptimisationPeriod(dateHelper.convertTime(userSettings.getPeriodEnd()));
 		}

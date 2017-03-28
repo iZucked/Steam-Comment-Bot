@@ -712,12 +712,12 @@ public final class OptimisationHelper {
 		}
 		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
 		// them doing the right thing
-		if (from.isSetPeriodStart() == false) {
+		if (from.isSetPeriodStart() == false || from.getPeriodStart() == null) {
 			to.unsetPeriodStart();
 		} else {
 			to.setPeriodStart(from.getPeriodStart());
 		}
-		if (from.isSetPeriodEnd() == false) {
+		if (from.isSetPeriodEnd() == false || from.getPeriodEnd() == null) {
 			to.unsetPeriodEnd();
 		} else {
 			to.setPeriodEnd(from.getPeriodEnd());
