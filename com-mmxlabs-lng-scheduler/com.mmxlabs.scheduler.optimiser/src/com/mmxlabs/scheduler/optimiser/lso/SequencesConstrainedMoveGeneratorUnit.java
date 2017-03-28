@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.lso.impl.Move4over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
@@ -51,6 +52,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IMoveGenerator {
 
 	@Inject
 	private IBreakPointHelper breakPointHelper;
+
+	@Inject
+	private IMoveHelper moveHelper;
 
 	@Inject
 	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) final boolean ENABLE_4_OPT_2_FIX) {
@@ -168,6 +172,12 @@ public class SequencesConstrainedMoveGeneratorUnit implements IMoveGenerator {
 					if ((position3 >= beforeFirstCut) && (position3 <= beforeSecondCut)) {
 						return new NullMove("SCMG", "Self Insertion"); // stupidity has happened.
 					}
+
+					if (moveHelper.isRoundTripResource(first)) {
+						// Attempting to move stuff around within a round trip resource. This is forbidden.
+						return new NullMove("SCMG", "Within roundtrip swap"); // stupidity has happened.
+					}
+
 				}
 
 				final Move3over2 result = new Move3over2();
