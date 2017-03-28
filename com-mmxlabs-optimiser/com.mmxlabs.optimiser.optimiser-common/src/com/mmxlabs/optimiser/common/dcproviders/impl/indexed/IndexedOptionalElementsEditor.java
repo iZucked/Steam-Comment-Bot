@@ -24,7 +24,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 public class IndexedOptionalElementsEditor implements IOptionalElementsProviderEditor {
 
 	private final List<@NonNull ISequenceElement> optionalList = new ArrayList<>();
-	private final List<@NonNull ISequenceElement> requiredList = new ArrayList<>();
+//	private final List<@NonNull ISequenceElement> requiredList = new ArrayList<>();
 	private final List<@NonNull ISequenceElement> softRequiredList = new ArrayList<>();
 	private final IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<>();
 
@@ -43,10 +43,13 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		return Collections.unmodifiableList(optionalList);
 	}
 
-	@Override
-	public List<@NonNull ISequenceElement> getRequiredElements() {
-		return Collections.unmodifiableList(requiredList);
-	}
+//	@Override
+//	public List<@NonNull ISequenceElement> getRequiredElements() {
+//		
+//		
+//		
+//		return Collections.unmodifiableList(requiredList);
+//	}
 
 	@Override
 	public List<@NonNull ISequenceElement> getSoftRequiredElements() {
@@ -64,9 +67,9 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		while (optionalList.remove(element)) {
 			;
 		}
-		while (requiredList.remove(element)) {
-			;
-		}
+//		while (requiredList.remove(element)) {
+//			;
+//		}
 		while (softRequiredList.remove(element)) {
 			;
 		}

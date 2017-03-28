@@ -69,14 +69,6 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 			elementCount += sequences.getSequence(resource).size();
 		}
 
-		final int desiredCount = optionalElementsProvider.getOptionalElements().size() + optionalElementsProvider.getRequiredElements().size();
-		if (elementCount != desiredCount) {
-			if (messages != null) {
-				messages.add("There are " + elementCount + " elements in the solution, but there should be " + desiredCount);
-			}
-			return false;
-		}
-
 		return true;
 	}
 

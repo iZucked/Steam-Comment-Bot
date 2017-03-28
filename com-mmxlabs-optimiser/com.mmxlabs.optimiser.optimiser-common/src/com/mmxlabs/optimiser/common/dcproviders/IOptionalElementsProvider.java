@@ -48,14 +48,14 @@ public interface IOptionalElementsProvider extends IDataComponentProvider {
 	 */
 	List<@NonNull ISequenceElement> getOptionalElements();
 
-	/**
-	 * Get all the elements which aren't optional in the {@link IOptimisationData}
-	 * 
-	 * The union of this with {@link #getOptionalElements()} should be all the elements.
-	 * 
-	 * @return
-	 */
-	List<@NonNull ISequenceElement> getRequiredElements();
+//	/**
+//	 * Get all the elements which aren't optional in the {@link IOptimisationData}
+//	 * 
+//	 * The union of this with {@link #getOptionalElements()} should be all the elements.
+//	 * 
+//	 * @return
+//	 */
+//	List<@NonNull ISequenceElement> getRequiredElements();
 
 	/**
 	 * Get all the elements which are treated as optional but are really non-optional. Such elements will typically have a penalty associated with them for non-use. These elements will be considered
