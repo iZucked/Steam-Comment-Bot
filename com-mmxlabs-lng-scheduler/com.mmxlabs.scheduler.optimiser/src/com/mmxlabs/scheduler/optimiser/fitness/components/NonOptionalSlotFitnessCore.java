@@ -54,6 +54,10 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 
 	@Override
 	public void init(@NonNull final IOptimisationData data) {
+
+		interestingElements.addAll(data.getSequenceElements());
+		interestingElements.removeAll(optionalElementsProvider.getOptionalElements());
+		// Make sure these are retained
 		interestingElements.addAll(optionalElementsProvider.getSoftRequiredElements());
 	}
 
