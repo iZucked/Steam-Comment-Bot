@@ -110,7 +110,7 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 			} else if (helper.isFOBSale(other)) {
 				validTargetResources.add(helper.getFOBSaleResource(other));
 			} else {
-				validTargetResources.addAll(helper.getAllVesselResources());
+				validTargetResources.addAll(helper.getAllVesselResources(true));
 			}
 
 			// Filter the valid target resource list to the common set.

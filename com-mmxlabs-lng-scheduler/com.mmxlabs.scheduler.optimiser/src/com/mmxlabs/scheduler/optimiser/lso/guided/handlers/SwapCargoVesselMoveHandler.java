@@ -54,8 +54,8 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		if (fromResource == null) {
 			// Invalid state
 			return null;
-
 		}
+		
 		final ISequence fromSequence = sequences.getSequence(fromResource);
 
 		final List<ISequenceElement> orderedCargoElements = moveHelper.extractSegment(fromSequence, element);
@@ -78,7 +78,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		// Find all possible elements that could be inserted into the gap
 
 		final List<IResource> validTargetResources = new LinkedList<>();
-		validTargetResources.addAll(helper.getAllVesselResources());
+		validTargetResources.addAll(helper.getAllVesselResources(true));
 
 		// Filter to the common set of valid resources.
 		for (final ISequenceElement e : orderedCargoElements) {

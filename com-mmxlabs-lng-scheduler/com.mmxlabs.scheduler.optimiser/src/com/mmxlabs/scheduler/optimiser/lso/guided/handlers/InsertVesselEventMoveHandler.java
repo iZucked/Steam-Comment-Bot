@@ -68,7 +68,7 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 		// Assume we can, in principle, use any fleet vessel
 		final List<IResource> validTargetResources = new LinkedList<>();
 
-		validTargetResources.addAll(helper.getAllVesselResources());
+		validTargetResources.addAll(helper.getAllVesselResources(true));
 
 		// Filter the valid target resource list to the common set.
 		for (final ISequenceElement e : orderedElements) {

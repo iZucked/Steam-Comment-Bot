@@ -115,9 +115,10 @@ public class MoveHelper implements IMoveHelper {
 
 	@Inject
 	@Named(LEGACY_CHECK_RESOURCE)
-	private boolean useLegacyCheck = false;
+	private boolean useLegacyCheck;
 
 	private final @NonNull List<@NonNull IResource> vesselResources = new LinkedList<>();
+	private final @NonNull List<@NonNull IResource> vesselResourcesIncludingRoundTrip = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> desPurchaseResources = new LinkedList<>();
 	private final @NonNull List<@NonNull IResource> fobSaleResources = new LinkedList<>();
 
@@ -255,21 +256,25 @@ public class MoveHelper implements IMoveHelper {
 			final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
 			switch (vesselInstanceType) {
 			case ROUND_TRIP:
+				vesselResourcesIncludingRoundTrip.add(resource);
 				break;
 			case DES_PURCHASE:
 				desPurchaseResources.add(resource);
 				break;
 			case FLEET:
 				vesselResources.add(resource);
+				vesselResourcesIncludingRoundTrip.add(resource);
 				break;
 			case FOB_SALE:
 				fobSaleResources.add(resource);
 				break;
 			case SPOT_CHARTER:
 				vesselResources.add(resource);
+				vesselResourcesIncludingRoundTrip.add(resource);
 				break;
 			case TIME_CHARTER:
 				vesselResources.add(resource);
+				vesselResourcesIncludingRoundTrip.add(resource);
 				break;
 			case UNKNOWN:
 				break;
@@ -368,8 +373,12 @@ public class MoveHelper implements IMoveHelper {
 
 	@Override
 	@NonNull
-	public Collection<@NonNull IResource> getAllVesselResources() {
-		return vesselResources;
+	public Collection<@NonNull IResource> getAllVesselResources(final boolean includeRoundTrip) {
+		if (includeRoundTrip) {
+			return vesselResourcesIncludingRoundTrip;
+		} else {
+			return vesselResources;
+		}
 	}
 
 	@Override
@@ -415,7 +424,7 @@ public class MoveHelper implements IMoveHelper {
 	public boolean isShippedResource(@NonNull final IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		@NonNull
-		VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+		final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
 
 		switch (vesselInstanceType) {
 		case TIME_CHARTER:
@@ -429,5 +438,13 @@ public class MoveHelper implements IMoveHelper {
 		default:
 			return false;
 		}
+	}
+
+	@Override
+	public boolean isRoundTripResource(@NonNull final IResource resource) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		@NonNull
+		final VesselInstanceType vesselInstanceType = vesselAvailability.getVesselInstanceType();
+		return (vesselInstanceType == VesselInstanceType.ROUND_TRIP);
 	}
 }

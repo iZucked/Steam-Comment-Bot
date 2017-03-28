@@ -48,7 +48,7 @@ public interface IMoveHelper {
 	boolean isMaintenanceEvent(@NonNull ISequenceElement element);
 
 	@NonNull
-	Collection<@NonNull IResource> getAllVesselResources();
+	Collection<@NonNull IResource> getAllVesselResources(boolean includeRoundTrip);
 
 	boolean isStartOrEndSlot(@NonNull ISequenceElement element);
 
@@ -64,4 +64,6 @@ public interface IMoveHelper {
 	boolean isNonShippedResource(@NonNull IResource resource);
 
 	boolean isShippedResource(@NonNull IResource resource);
+
+	boolean isRoundTripResource(@NonNull IResource resource);
 }
