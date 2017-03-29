@@ -62,11 +62,15 @@ public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTri
 		if (elementSequencePair.containsKey(first)) {
 			return elementSequencePair.get(first) == second;
 		}
+		if (elementSequencePair.containsKey(second)) {
+			return elementSequencePair.get(second) == first;
+		}
 		return true;
 	}
 
 	@Override
 	public void makeBoundPair(@NonNull ISequenceElement first, @NonNull ISequenceElement second) {
 		elementSequencePair.put(first, second);
+		elementSequencePair.put(second, first);
 	}
 }
