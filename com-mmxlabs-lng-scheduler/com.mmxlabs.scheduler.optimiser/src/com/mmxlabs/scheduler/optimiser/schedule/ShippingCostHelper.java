@@ -7,14 +7,15 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -222,13 +223,26 @@ public class ShippingCostHelper {
 		return 0L;
 	}
 
+//	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime) {
+//		if (portSlot.getPortType() == PortType.End) {
+//			return vesselAvailability.getBallastBonus().getValueAtPoint(vesselEndTime);
+//		}
+//		return 0L;
+//	}
+
 	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
-			return vesselAvailability.getBallastBonus().getValueAtPoint(vesselEndTime);
+			@Nullable
+			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
+			if (ballastBonusContract == null) {
+				return 0L;
+			} else {
+				return ballastBonusContract.calculateBallastBonus(portSlot, vesselAvailability, vesselEndTime);
+			}
 		}
 		return 0L;
 	}
-
+	
 	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG,
 			final boolean includeCharterInCosts) {
 		final long @NonNull [] costs = new long[4];
