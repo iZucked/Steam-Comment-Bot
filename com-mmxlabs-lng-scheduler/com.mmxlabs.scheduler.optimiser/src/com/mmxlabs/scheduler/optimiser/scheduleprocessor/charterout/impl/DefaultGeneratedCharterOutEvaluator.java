@@ -209,6 +209,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// now we set the heel options on the charter out event as it will be need when the second voyage plan is calculated
 				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
 				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
+			} else {
+				final IGeneratedCharterOutVesselEventPortSlot charter = (IGeneratedCharterOutVesselEventPortSlot) ((PortDetails) charterToEndPlan.getSequence()[0]).getOptions().getPortSlot();
+				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), upToCharterPlan.getRemainingHeelInM3());
 			}
 
 			// TODO: really we need partial boiloff here (see BugzID: 1798)
