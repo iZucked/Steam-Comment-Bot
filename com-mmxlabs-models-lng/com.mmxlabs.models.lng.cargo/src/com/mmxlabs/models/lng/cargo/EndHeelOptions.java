@@ -66,11 +66,9 @@ public interface EndHeelOptions extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Minimum End Heel</em>' attribute.
-	 * @see #isSetMinimumEndHeel()
-	 * @see #unsetMinimumEndHeel()
 	 * @see #setMinimumEndHeel(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_MinimumEndHeel()
-	 * @model unsettable="true"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
 	int getMinimumEndHeel();
@@ -80,35 +78,10 @@ public interface EndHeelOptions extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Minimum End Heel</em>' attribute.
-	 * @see #isSetMinimumEndHeel()
-	 * @see #unsetMinimumEndHeel()
 	 * @see #getMinimumEndHeel()
 	 * @generated
 	 */
 	void setMinimumEndHeel(int value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetMinimumEndHeel()
-	 * @see #getMinimumEndHeel()
-	 * @see #setMinimumEndHeel(int)
-	 * @generated
-	 */
-	void unsetMinimumEndHeel();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Minimum End Heel</em>' attribute is set.
-	 * @see #unsetMinimumEndHeel()
-	 * @see #getMinimumEndHeel()
-	 * @see #setMinimumEndHeel(int)
-	 * @generated
-	 */
-	boolean isSetMinimumEndHeel();
 
 	/**
 	 * Returns the value of the '<em><b>Maximum End Heel</b></em>' attribute.
@@ -119,11 +92,9 @@ public interface EndHeelOptions extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Maximum End Heel</em>' attribute.
-	 * @see #isSetMaximumEndHeel()
-	 * @see #unsetMaximumEndHeel()
 	 * @see #setMaximumEndHeel(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_MaximumEndHeel()
-	 * @model unsettable="true"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
 	int getMaximumEndHeel();
@@ -133,35 +104,10 @@ public interface EndHeelOptions extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Maximum End Heel</em>' attribute.
-	 * @see #isSetMaximumEndHeel()
-	 * @see #unsetMaximumEndHeel()
 	 * @see #getMaximumEndHeel()
 	 * @generated
 	 */
 	void setMaximumEndHeel(int value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetMaximumEndHeel()
-	 * @see #getMaximumEndHeel()
-	 * @see #setMaximumEndHeel(int)
-	 * @generated
-	 */
-	void unsetMaximumEndHeel();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Maximum End Heel</em>' attribute is set.
-	 * @see #unsetMaximumEndHeel()
-	 * @see #getMaximumEndHeel()
-	 * @see #setMaximumEndHeel(int)
-	 * @generated
-	 */
-	boolean isSetMaximumEndHeel();
 
 	/**
 	 * Returns the value of the '<em><b>Price Expression</b></em>' attribute.

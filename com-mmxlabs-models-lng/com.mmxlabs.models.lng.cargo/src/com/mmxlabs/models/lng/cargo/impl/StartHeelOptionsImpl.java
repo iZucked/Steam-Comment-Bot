@@ -71,15 +71,6 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	protected double minVolumeAvailable = MIN_VOLUME_AVAILABLE_EDEFAULT;
 
 	/**
-	 * This is true if the Min Volume Available attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean minVolumeAvailableESet;
-
-	/**
 	 * The default value of the '{@link #getMaxVolumeAvailable() <em>Max Volume Available</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -98,15 +89,6 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	 * @ordered
 	 */
 	protected double maxVolumeAvailable = MAX_VOLUME_AVAILABLE_EDEFAULT;
-
-	/**
-	 * This is true if the Max Volume Available attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean maxVolumeAvailableESet;
 
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
@@ -185,33 +167,8 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	public void setMinVolumeAvailable(double newMinVolumeAvailable) {
 		double oldMinVolumeAvailable = minVolumeAvailable;
 		minVolumeAvailable = newMinVolumeAvailable;
-		boolean oldMinVolumeAvailableESet = minVolumeAvailableESet;
-		minVolumeAvailableESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE, oldMinVolumeAvailable, minVolumeAvailable, !oldMinVolumeAvailableESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetMinVolumeAvailable() {
-		double oldMinVolumeAvailable = minVolumeAvailable;
-		boolean oldMinVolumeAvailableESet = minVolumeAvailableESet;
-		minVolumeAvailable = MIN_VOLUME_AVAILABLE_EDEFAULT;
-		minVolumeAvailableESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE, oldMinVolumeAvailable, MIN_VOLUME_AVAILABLE_EDEFAULT, oldMinVolumeAvailableESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetMinVolumeAvailable() {
-		return minVolumeAvailableESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE, oldMinVolumeAvailable, minVolumeAvailable));
 	}
 
 	/**
@@ -231,33 +188,8 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	public void setMaxVolumeAvailable(double newMaxVolumeAvailable) {
 		double oldMaxVolumeAvailable = maxVolumeAvailable;
 		maxVolumeAvailable = newMaxVolumeAvailable;
-		boolean oldMaxVolumeAvailableESet = maxVolumeAvailableESet;
-		maxVolumeAvailableESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE, oldMaxVolumeAvailable, maxVolumeAvailable, !oldMaxVolumeAvailableESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetMaxVolumeAvailable() {
-		double oldMaxVolumeAvailable = maxVolumeAvailable;
-		boolean oldMaxVolumeAvailableESet = maxVolumeAvailableESet;
-		maxVolumeAvailable = MAX_VOLUME_AVAILABLE_EDEFAULT;
-		maxVolumeAvailableESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE, oldMaxVolumeAvailable, MAX_VOLUME_AVAILABLE_EDEFAULT, oldMaxVolumeAvailableESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetMaxVolumeAvailable() {
-		return maxVolumeAvailableESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE, oldMaxVolumeAvailable, maxVolumeAvailable));
 	}
 
 	/**
@@ -337,10 +269,10 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 				setCvValue(CV_VALUE_EDEFAULT);
 				return;
 			case CargoPackage.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE:
-				unsetMinVolumeAvailable();
+				setMinVolumeAvailable(MIN_VOLUME_AVAILABLE_EDEFAULT);
 				return;
 			case CargoPackage.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE:
-				unsetMaxVolumeAvailable();
+				setMaxVolumeAvailable(MAX_VOLUME_AVAILABLE_EDEFAULT);
 				return;
 			case CargoPackage.START_HEEL_OPTIONS__PRICE_EXPRESSION:
 				setPriceExpression(PRICE_EXPRESSION_EDEFAULT);
@@ -360,9 +292,9 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 			case CargoPackage.START_HEEL_OPTIONS__CV_VALUE:
 				return cvValue != CV_VALUE_EDEFAULT;
 			case CargoPackage.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE:
-				return isSetMinVolumeAvailable();
+				return minVolumeAvailable != MIN_VOLUME_AVAILABLE_EDEFAULT;
 			case CargoPackage.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE:
-				return isSetMaxVolumeAvailable();
+				return maxVolumeAvailable != MAX_VOLUME_AVAILABLE_EDEFAULT;
 			case CargoPackage.START_HEEL_OPTIONS__PRICE_EXPRESSION:
 				return PRICE_EXPRESSION_EDEFAULT == null ? priceExpression != null : !PRICE_EXPRESSION_EDEFAULT.equals(priceExpression);
 		}
@@ -382,9 +314,9 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 		result.append(" (cvValue: ");
 		result.append(cvValue);
 		result.append(", minVolumeAvailable: ");
-		if (minVolumeAvailableESet) result.append(minVolumeAvailable); else result.append("<unset>");
+		result.append(minVolumeAvailable);
 		result.append(", maxVolumeAvailable: ");
-		if (maxVolumeAvailableESet) result.append(maxVolumeAvailable); else result.append("<unset>");
+		result.append(maxVolumeAvailable);
 		result.append(", priceExpression: ");
 		result.append(priceExpression);
 		result.append(')');

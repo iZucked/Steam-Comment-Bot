@@ -73,15 +73,6 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	protected int minimumEndHeel = MINIMUM_END_HEEL_EDEFAULT;
 
 	/**
-	 * This is true if the Minimum End Heel attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean minimumEndHeelESet;
-
-	/**
 	 * The default value of the '{@link #getMaximumEndHeel() <em>Maximum End Heel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -100,15 +91,6 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * @ordered
 	 */
 	protected int maximumEndHeel = MAXIMUM_END_HEEL_EDEFAULT;
-
-	/**
-	 * This is true if the Maximum End Heel attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean maximumEndHeelESet;
 
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
@@ -187,33 +169,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	public void setMinimumEndHeel(int newMinimumEndHeel) {
 		int oldMinimumEndHeel = minimumEndHeel;
 		minimumEndHeel = newMinimumEndHeel;
-		boolean oldMinimumEndHeelESet = minimumEndHeelESet;
-		minimumEndHeelESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL, oldMinimumEndHeel, minimumEndHeel, !oldMinimumEndHeelESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetMinimumEndHeel() {
-		int oldMinimumEndHeel = minimumEndHeel;
-		boolean oldMinimumEndHeelESet = minimumEndHeelESet;
-		minimumEndHeel = MINIMUM_END_HEEL_EDEFAULT;
-		minimumEndHeelESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL, oldMinimumEndHeel, MINIMUM_END_HEEL_EDEFAULT, oldMinimumEndHeelESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetMinimumEndHeel() {
-		return minimumEndHeelESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL, oldMinimumEndHeel, minimumEndHeel));
 	}
 
 	/**
@@ -233,33 +190,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	public void setMaximumEndHeel(int newMaximumEndHeel) {
 		int oldMaximumEndHeel = maximumEndHeel;
 		maximumEndHeel = newMaximumEndHeel;
-		boolean oldMaximumEndHeelESet = maximumEndHeelESet;
-		maximumEndHeelESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL, oldMaximumEndHeel, maximumEndHeel, !oldMaximumEndHeelESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetMaximumEndHeel() {
-		int oldMaximumEndHeel = maximumEndHeel;
-		boolean oldMaximumEndHeelESet = maximumEndHeelESet;
-		maximumEndHeel = MAXIMUM_END_HEEL_EDEFAULT;
-		maximumEndHeelESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL, oldMaximumEndHeel, MAXIMUM_END_HEEL_EDEFAULT, oldMaximumEndHeelESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetMaximumEndHeel() {
-		return maximumEndHeelESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL, oldMaximumEndHeel, maximumEndHeel));
 	}
 
 	/**
@@ -339,10 +271,10 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 				setTankState(TANK_STATE_EDEFAULT);
 				return;
 			case CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL:
-				unsetMinimumEndHeel();
+				setMinimumEndHeel(MINIMUM_END_HEEL_EDEFAULT);
 				return;
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
-				unsetMaximumEndHeel();
+				setMaximumEndHeel(MAXIMUM_END_HEEL_EDEFAULT);
 				return;
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				setPriceExpression(PRICE_EXPRESSION_EDEFAULT);
@@ -362,9 +294,9 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 			case CargoPackage.END_HEEL_OPTIONS__TANK_STATE:
 				return tankState != TANK_STATE_EDEFAULT;
 			case CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL:
-				return isSetMinimumEndHeel();
+				return minimumEndHeel != MINIMUM_END_HEEL_EDEFAULT;
 			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
-				return isSetMaximumEndHeel();
+				return maximumEndHeel != MAXIMUM_END_HEEL_EDEFAULT;
 			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				return PRICE_EXPRESSION_EDEFAULT == null ? priceExpression != null : !PRICE_EXPRESSION_EDEFAULT.equals(priceExpression);
 		}
@@ -384,9 +316,9 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 		result.append(" (tankState: ");
 		result.append(tankState);
 		result.append(", minimumEndHeel: ");
-		if (minimumEndHeelESet) result.append(minimumEndHeel); else result.append("<unset>");
+		result.append(minimumEndHeel);
 		result.append(", maximumEndHeel: ");
-		if (maximumEndHeelESet) result.append(maximumEndHeel); else result.append("<unset>");
+		result.append(maximumEndHeel);
 		result.append(", priceExpression: ");
 		result.append(priceExpression);
 		result.append(')');
