@@ -333,6 +333,14 @@
       </ScheduleBasedColumn>      
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.heel_cost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.heel_revenue">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.load-notes">
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
@@ -559,6 +567,14 @@
       <PortRotationBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.portrotation.heelend">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.heel_cost">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.heel_revenue">
       </PortRotationBasedColumn>
       <PortRotationBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"

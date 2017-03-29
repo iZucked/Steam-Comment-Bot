@@ -91,6 +91,8 @@ public class CapacityViolationReportView extends EMFReportView {
 						return "Lost Heel";
 					case MAX_DISCHARGE:
 						return "Max Discharge";
+					case MIN_HEEL:
+						return "Min Heel";
 					case MAX_HEEL:
 						return "Max Heel";
 					case MAX_LOAD:

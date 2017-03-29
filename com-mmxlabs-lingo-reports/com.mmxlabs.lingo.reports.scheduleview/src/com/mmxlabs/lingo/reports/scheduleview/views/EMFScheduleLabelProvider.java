@@ -313,8 +313,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 				}
 			} else if (element instanceof VesselEventVisit) {
-				eventText.append("Duration: " + durationTime + "\n");
 				final VesselEventVisit vev = (VesselEventVisit) element;
+				eventText.append("Duration: " + durationTime + "\n");
 				if (LatenessUtils.isLateExcludingFlex(vev)) {
 					final int lateHours = LatenessUtils.getLatenessInHours(vev);
 					if (lateHours != 0) {
