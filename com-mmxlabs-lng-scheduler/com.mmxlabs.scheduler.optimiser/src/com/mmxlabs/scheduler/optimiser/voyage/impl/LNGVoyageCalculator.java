@@ -673,7 +673,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final int endHeelState = getExpectedCargoEndHeelState(vesselClass.getWarmupTime(), lastVoyageDetailsElement);
 
 			final long[] expectedRemainingHeelRangeInM3_Plus_Safety_Heel = calculateCargoEndHeelRange(vesselClass, lastVoyageDetailsElement, endHeelState);
-			final long heelLevelInM3 = endHeelState == STATE_COLD_MIN_HEEL ? expectedRemainingHeelRangeInM3_Plus_Safety_Heel[2] : 0L;
+			final long heelLevelInM3 = (endHeelState == STATE_COLD_MIN_HEEL || endHeelState == STATE_COLD_NO_VOYAGE) ? expectedRemainingHeelRangeInM3_Plus_Safety_Heel[2] : 0L;
 
 			// Set our minimum heel here. Volume allocator may increase this in the allocation annotation.
 			voyagePlan.setRemainingHeelInM3(heelLevelInM3);
@@ -1073,7 +1073,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		// TODO: Needs fixing for LDD!
 		// NOTE: Strict checking may be too much for actuals
-		
+
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
 		long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
@@ -1127,8 +1127,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (e instanceof PortDetails) {
 					final PortDetails portDetails = (PortDetails) e;
 					@NonNull
-					final
-					IPortSlot portSlot = portDetails.getOptions().getPortSlot();
+					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					if (portSlot instanceof IDischargeOption) {
 						final IDischargeOption dischargeOption = (IDischargeOption) portSlot;
 						final int cargoCVValue = portDetails.getOptions().getCargoCVValue();
