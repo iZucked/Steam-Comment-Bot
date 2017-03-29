@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 
 public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 
@@ -116,6 +117,7 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 			protected void configure() {
 				bind(IBreakPointHelper.class).toInstance(breakPointHelper);
 				bind(IFollowersAndPreceders.class).toInstance(Mockito.mock(IFollowersAndPreceders.class));
+				bind(IMoveHelper.class).toInstance(Mockito.mock(IMoveHelper.class));
 				bind(Boolean.class).annotatedWith(Names.named(SequencesConstrainedLoopingMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)).toInstance(Boolean.TRUE);
 			}
 		});
