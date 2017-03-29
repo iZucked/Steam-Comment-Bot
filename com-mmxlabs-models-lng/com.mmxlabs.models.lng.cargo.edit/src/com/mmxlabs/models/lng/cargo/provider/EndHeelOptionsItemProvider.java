@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 
 /**
@@ -63,29 +64,98 @@ public class EndHeelOptionsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addTargetEndHeelPropertyDescriptor(object);
+			addTankStatePropertyDescriptor(object);
+			addMinimumEndHeelPropertyDescriptor(object);
+			addMaximumEndHeelPropertyDescriptor(object);
+			addPriceExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Target End Heel feature.
+	 * This adds a property descriptor for the Tank State feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addTargetEndHeelPropertyDescriptor(Object object) {
+	protected void addTankStatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_EndHeelOptions_targetEndHeel_feature"),
-				 getString("_UI_EndHeelOptions_targetEndHeel_description"),
-				 CargoPackage.Literals.END_HEEL_OPTIONS__TARGET_END_HEEL,
+				 getString("_UI_EndHeelOptions_tankState_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EndHeelOptions_tankState_feature", "_UI_EndHeelOptions_type"),
+				 CargoPackage.Literals.END_HEEL_OPTIONS__TANK_STATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Minimum End Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinimumEndHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EndHeelOptions_minimumEndHeel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EndHeelOptions_minimumEndHeel_feature", "_UI_EndHeelOptions_type"),
+				 CargoPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Maximum End Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaximumEndHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EndHeelOptions_maximumEndHeel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EndHeelOptions_maximumEndHeel_feature", "_UI_EndHeelOptions_type"),
+				 CargoPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Price Expression feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceExpressionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EndHeelOptions_priceExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EndHeelOptions_priceExpression_feature", "_UI_EndHeelOptions_type"),
+				 CargoPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -109,8 +179,11 @@ public class EndHeelOptionsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		EndHeelOptions endHeelOptions = (EndHeelOptions)object;
-		return getString("_UI_EndHeelOptions_type") + " " + endHeelOptions.getTargetEndHeel();
+		EVesselTankState labelValue = ((EndHeelOptions)object).getTankState();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_EndHeelOptions_type") :
+			getString("_UI_EndHeelOptions_type") + " " + label;
 	}
 
 	/**
@@ -125,7 +198,10 @@ public class EndHeelOptionsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(EndHeelOptions.class)) {
-			case CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL:
+			case CargoPackage.END_HEEL_OPTIONS__TANK_STATE:
+			case CargoPackage.END_HEEL_OPTIONS__MINIMUM_END_HEEL:
+			case CargoPackage.END_HEEL_OPTIONS__MAXIMUM_END_HEEL:
+			case CargoPackage.END_HEEL_OPTIONS__PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

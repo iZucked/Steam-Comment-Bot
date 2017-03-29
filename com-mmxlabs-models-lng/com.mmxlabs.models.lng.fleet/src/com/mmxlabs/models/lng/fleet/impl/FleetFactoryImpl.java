@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -72,7 +71,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.VESSEL: return createVessel();
 			case FleetPackage.VESSEL_CLASS: return createVesselClass();
 			case FleetPackage.VESSEL_GROUP: return createVesselGroup();
-			case FleetPackage.HEEL_OPTIONS: return createHeelOptions();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
@@ -119,16 +117,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public BaseFuel createBaseFuel() {
 		BaseFuelImpl baseFuel = new BaseFuelImpl();
 		return baseFuel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public HeelOptions createHeelOptions() {
-		HeelOptionsImpl heelOptions = new HeelOptionsImpl();
-		return heelOptions;
 	}
 
 	/**

@@ -46,6 +46,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getHeelCost <em>Heel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getHeelRevenue <em>Heel Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getEvents <em>Events</em>}</li>
@@ -104,6 +106,46 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * @ordered
 	 */
 	protected PortVisitLateness lateness;
+
+	/**
+	 * The default value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelCost = HEEL_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_REVENUE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelRevenue = HEEL_REVENUE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
@@ -250,6 +292,48 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__LATENESS, newLateness, newLateness));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelCost() {
+		return heelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelCost(int newHeelCost) {
+		int oldHeelCost = heelCost;
+		heelCost = newHeelCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__HEEL_COST, oldHeelCost, heelCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelRevenue() {
+		return heelRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelRevenue(int newHeelRevenue) {
+		int oldHeelRevenue = heelRevenue;
+		heelRevenue = newHeelRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__HEEL_REVENUE, oldHeelRevenue, heelRevenue));
 	}
 
 	/**
@@ -409,6 +493,10 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return getPortCost();
 			case SchedulePackage.END_EVENT__LATENESS:
 				return getLateness();
+			case SchedulePackage.END_EVENT__HEEL_COST:
+				return getHeelCost();
+			case SchedulePackage.END_EVENT__HEEL_REVENUE:
+				return getHeelRevenue();
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
 			case SchedulePackage.END_EVENT__GENERAL_PNL_DETAILS:
@@ -443,6 +531,12 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return;
 			case SchedulePackage.END_EVENT__LATENESS:
 				setLateness((PortVisitLateness)newValue);
+				return;
+			case SchedulePackage.END_EVENT__HEEL_COST:
+				setHeelCost((Integer)newValue);
+				return;
+			case SchedulePackage.END_EVENT__HEEL_REVENUE:
+				setHeelRevenue((Integer)newValue);
 				return;
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
@@ -482,6 +576,12 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__LATENESS:
 				setLateness((PortVisitLateness)null);
 				return;
+			case SchedulePackage.END_EVENT__HEEL_COST:
+				setHeelCost(HEEL_COST_EDEFAULT);
+				return;
+			case SchedulePackage.END_EVENT__HEEL_REVENUE:
+				setHeelRevenue(HEEL_REVENUE_EDEFAULT);
+				return;
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
@@ -514,6 +614,10 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.END_EVENT__LATENESS:
 				return lateness != null;
+			case SchedulePackage.END_EVENT__HEEL_COST:
+				return heelCost != HEEL_COST_EDEFAULT;
+			case SchedulePackage.END_EVENT__HEEL_REVENUE:
+				return heelRevenue != HEEL_REVENUE_EDEFAULT;
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
 			case SchedulePackage.END_EVENT__GENERAL_PNL_DETAILS:
@@ -549,6 +653,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			switch (derivedFeatureID) {
 				case SchedulePackage.END_EVENT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
 				case SchedulePackage.END_EVENT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
+				case SchedulePackage.END_EVENT__HEEL_COST: return SchedulePackage.PORT_VISIT__HEEL_COST;
+				case SchedulePackage.END_EVENT__HEEL_REVENUE: return SchedulePackage.PORT_VISIT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -591,6 +697,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.END_EVENT__PORT_COST;
 				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.END_EVENT__LATENESS;
+				case SchedulePackage.PORT_VISIT__HEEL_COST: return SchedulePackage.END_EVENT__HEEL_COST;
+				case SchedulePackage.PORT_VISIT__HEEL_REVENUE: return SchedulePackage.END_EVENT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -672,6 +780,10 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portCost: ");
 		result.append(portCost);
+		result.append(", heelCost: ");
+		result.append(heelCost);
+		result.append(", heelRevenue: ");
+		result.append(heelRevenue);
 		result.append(')');
 		return result.toString();
 	}
@@ -683,6 +795,15 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 */
 	public String name() {
 		return "End " + getSequence().getName();
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String type() {
+		return "End Event";
 	}
 
 } // end of EndEventImpl

@@ -791,6 +791,38 @@
                   <target
                         class="VesselAvailability">
                   </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.StartHeelOptionsConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.StartHeelOptionsConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="StartHeelOptionsConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="StartHeelOptions">
+                  </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.EndHeelOptionsConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.EndHeelOptionsConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="EndHeelOptionsConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="EndHeelOptions">
+                  </target>
                </constraint>       
         </constraints>
       </constraintProvider>

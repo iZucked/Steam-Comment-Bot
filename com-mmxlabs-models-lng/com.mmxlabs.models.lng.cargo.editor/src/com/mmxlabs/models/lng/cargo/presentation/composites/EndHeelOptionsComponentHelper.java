@@ -64,14 +64,44 @@ public class EndHeelOptionsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_targetEndHeelEditor(detailComposite, topClass);
+		add_tankStateEditor(detailComposite, topClass);
+		add_minimumEndHeelEditor(detailComposite, topClass);
+		add_maximumEndHeelEditor(detailComposite, topClass);
+		add_priceExpressionEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the targetEndHeel feature on EndHeelOptions
+	 * Create the editor for the tankState feature on EndHeelOptions
 	 *
 	 * @generated
 	 */
-	protected void add_targetEndHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__TARGET_END_HEEL));
+	protected void add_tankStateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__TANK_STATE));
+	}
+
+	/**
+	 * Create the editor for the minimumEndHeel feature on EndHeelOptions
+	 *
+	 * @generated
+	 */
+	protected void add_minimumEndHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL));
+	}
+
+	/**
+	 * Create the editor for the maximumEndHeel feature on EndHeelOptions
+	 *
+	 * @generated
+	 */
+	protected void add_maximumEndHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL));
+	}
+
+	/**
+	 * Create the editor for the priceExpression feature on EndHeelOptions
+	 *
+	 * @generated
+	 */
+	protected void add_priceExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION));
 	}
 }

@@ -787,6 +787,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getVesselEventVisit_RedeliveryPort() {
+		return (EReference)vesselEventVisitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getJourney() {
 		return journeyEClass;
 	}
@@ -1329,6 +1338,24 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EReference getPortVisit_Lateness() {
 		return (EReference)portVisitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortVisit_HeelCost() {
+		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortVisit_HeelRevenue() {
+		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1988,12 +2015,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		portVisitEClass = createEClass(PORT_VISIT);
 		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
 		createEReference(portVisitEClass, PORT_VISIT__LATENESS);
+		createEAttribute(portVisitEClass, PORT_VISIT__HEEL_COST);
+		createEAttribute(portVisitEClass, PORT_VISIT__HEEL_REVENUE);
 
 		slotVisitEClass = createEClass(SLOT_VISIT);
 		createEReference(slotVisitEClass, SLOT_VISIT__SLOT_ALLOCATION);
 
 		vesselEventVisitEClass = createEClass(VESSEL_EVENT_VISIT);
 		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__VESSEL_EVENT);
+		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__REDELIVERY_PORT);
 
 		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
@@ -2283,12 +2313,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortVisit_Lateness(), this.getPortVisitLateness(), null, "lateness", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortVisit_HeelCost(), ecorePackage.getEInt(), "heelCost", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortVisit_HeelRevenue(), ecorePackage.getEInt(), "heelRevenue", null, 0, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotVisitEClass, SlotVisit.class, "SlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotVisit_SlotAllocation(), this.getSlotAllocation(), this.getSlotAllocation_SlotVisit(), "slotAllocation", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselEventVisitEClass, VesselEventVisit.class, "VesselEventVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselEventVisit_VesselEvent(), theCargoPackage.getVesselEvent(), null, "vesselEvent", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselEventVisit_RedeliveryPort(), thePortPackage.getPort(), null, "redeliveryPort", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2398,6 +2431,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.FORCED_COOLDOWN);
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.VESSEL_CAPACITY);
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.LOST_HEEL);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MIN_HEEL);
 
 		initEEnum(portVisitLatenessTypeEEnum, PortVisitLatenessType.class, "PortVisitLatenessType");
 		addEEnumLiteral(portVisitLatenessTypeEEnum, PortVisitLatenessType.PROMPT);

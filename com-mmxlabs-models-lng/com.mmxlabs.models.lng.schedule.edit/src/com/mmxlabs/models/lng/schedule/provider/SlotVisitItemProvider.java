@@ -51,6 +51,8 @@ public class SlotVisitItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostPropertyDescriptor(object);
+			addHeelCostPropertyDescriptor(object);
+			addHeelRevenuePropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -70,6 +72,50 @@ public class SlotVisitItemProvider
 				 getString("_UI_PortVisit_portCost_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_portCost_feature", "_UI_PortVisit_type"),
 				 SchedulePackage.Literals.PORT_VISIT__PORT_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Heel Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_heelCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_heelCost_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__HEEL_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Heel Revenue feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelRevenuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_heelRevenue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_heelRevenue_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__HEEL_REVENUE,
 				 true,
 				 false,
 				 false,
@@ -161,6 +207,8 @@ public class SlotVisitItemProvider
 
 		switch (notification.getFeatureID(SlotVisit.class)) {
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
+			case SchedulePackage.SLOT_VISIT__HEEL_COST:
+			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SLOT_VISIT__FUELS:

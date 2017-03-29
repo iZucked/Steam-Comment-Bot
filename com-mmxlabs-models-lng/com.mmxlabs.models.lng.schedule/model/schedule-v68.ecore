@@ -234,6 +234,10 @@
     <eLiterals name="FORCED_COOLDOWN" value="5"/>
     <eLiterals name="VESSEL_CAPACITY" value="6" literal="VESSEL_CAPACITY"/>
     <eLiterals name="LOST_HEEL" value="7"/>
+<<<<<<< HEAD
+=======
+    <eLiterals name="MIN_HEEL" value="8" literal="MIN_HEEL"/>
+>>>>>>> origin/FEATURE_2401
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Calendar" instanceClassName="java.util.Calendar"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">

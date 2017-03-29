@@ -180,29 +180,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.HeelOptions} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected HeelOptionsItemProvider heelOptionsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.HeelOptions}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createHeelOptionsAdapter() {
-		if (heelOptionsItemProvider == null) {
-			heelOptionsItemProvider = new HeelOptionsItemProvider(this);
-		}
-
-		return heelOptionsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselStateAttributes} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -425,7 +402,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselItemProvider != null) vesselItemProvider.dispose();
 		if (vesselClassItemProvider != null) vesselClassItemProvider.dispose();
 		if (vesselGroupItemProvider != null) vesselGroupItemProvider.dispose();
-		if (heelOptionsItemProvider != null) heelOptionsItemProvider.dispose();
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
 		if (vesselClassRouteParametersItemProvider != null) vesselClassRouteParametersItemProvider.dispose();

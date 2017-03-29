@@ -67,9 +67,10 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_relocateToEditor(detailComposite, topClass);
 		add_hireRateEditor(detailComposite, topClass);
-		add_heelOptionsEditor(detailComposite, topClass);
 		add_ballastBonusEditor(detailComposite, topClass);
 		add_repositioningFeeEditor(detailComposite, topClass);
+		add_requiredHeelEditor(detailComposite, topClass);
+		add_availableHeelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the relocateTo feature on CharterOutEvent
@@ -80,14 +81,6 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__RELOCATE_TO));
 	}
 	/**
-	 * Create the editor for the heelOptions feature on CharterOutEvent
-	 *
-	 * @generated
-	 */
-	protected void add_heelOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__HEEL_OPTIONS));
-	}
-	/**
 	 * Create the editor for the repositioningFee feature on CharterOutEvent
 	 *
 	 * @generated
@@ -95,6 +88,24 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__REPOSITIONING_FEE));
 	}
+	/**
+	 * Create the editor for the requiredHeel feature on CharterOutEvent
+	 *
+	 * @generated
+	 */
+	protected void add_requiredHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__REQUIRED_HEEL));
+	}
+
+	/**
+	 * Create the editor for the availableHeel feature on CharterOutEvent
+	 *
+	 * @generated
+	 */
+	protected void add_availableHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__AVAILABLE_HEEL));
+	}
+
 	/**
 	 * Create the editor for the hireRate feature on CharterOutEvent
 	 *

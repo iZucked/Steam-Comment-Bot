@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -45,10 +46,13 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getHeelCost <em>Heel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getHeelRevenue <em>Heel Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getRedeliveryPort <em>Redelivery Port</em>}</li>
  * </ul>
  *
  * @generated
@@ -91,6 +95,42 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 */
 	protected PortVisitLateness lateness;
 	/**
+	 * The default value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_COST_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelCost = HEEL_COST_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_REVENUE_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelRevenue = HEEL_REVENUE_EDEFAULT;
+	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -126,6 +166,24 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @ordered
 	 */
 	protected VesselEvent vesselEvent;
+
+	/**
+	 * The cached value of the '{@link #getRedeliveryPort() <em>Redelivery Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRedeliveryPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port redeliveryPort;
+	/**
+	 * This is true if the Redelivery Port reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean redeliveryPortESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -220,6 +278,48 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__LATENESS, newLateness, newLateness));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelCost() {
+		return heelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelCost(int newHeelCost) {
+		int oldHeelCost = heelCost;
+		heelCost = newHeelCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST, oldHeelCost, heelCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelRevenue() {
+		return heelRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelRevenue(int newHeelRevenue) {
+		int oldHeelRevenue = heelRevenue;
+		heelRevenue = newHeelRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE, oldHeelRevenue, heelRevenue));
 	}
 
 	/**
@@ -332,6 +432,69 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Port getRedeliveryPort() {
+		if (redeliveryPort != null && redeliveryPort.eIsProxy()) {
+			InternalEObject oldRedeliveryPort = (InternalEObject)redeliveryPort;
+			redeliveryPort = (Port)eResolveProxy(oldRedeliveryPort);
+			if (redeliveryPort != oldRedeliveryPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT, oldRedeliveryPort, redeliveryPort));
+			}
+		}
+		return redeliveryPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetRedeliveryPort() {
+		return redeliveryPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRedeliveryPort(Port newRedeliveryPort) {
+		Port oldRedeliveryPort = redeliveryPort;
+		redeliveryPort = newRedeliveryPort;
+		boolean oldRedeliveryPortESet = redeliveryPortESet;
+		redeliveryPortESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT, oldRedeliveryPort, redeliveryPort, !oldRedeliveryPortESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetRedeliveryPort() {
+		Port oldRedeliveryPort = redeliveryPort;
+		boolean oldRedeliveryPortESet = redeliveryPortESet;
+		redeliveryPort = null;
+		redeliveryPortESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT, oldRedeliveryPort, null, oldRedeliveryPortESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetRedeliveryPort() {
+		return redeliveryPortESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -362,6 +525,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return getPortCost();
 			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
 				return getLateness();
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST:
+				return getHeelCost();
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
+				return getHeelRevenue();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -371,6 +538,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				if (resolve) return getVesselEvent();
 				return basicGetVesselEvent();
+			case SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT:
+				if (resolve) return getRedeliveryPort();
+				return basicGetRedeliveryPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -393,6 +563,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
 				setLateness((PortVisitLateness)newValue);
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST:
+				setHeelCost((Integer)newValue);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
+				setHeelRevenue((Integer)newValue);
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
 				return;
@@ -406,6 +582,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				setVesselEvent((VesselEvent)newValue);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT:
+				setRedeliveryPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -428,6 +607,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
 				setLateness((PortVisitLateness)null);
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST:
+				setHeelCost(HEEL_COST_EDEFAULT);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
+				setHeelRevenue(HEEL_REVENUE_EDEFAULT);
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
@@ -439,6 +624,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				setVesselEvent((VesselEvent)null);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT:
+				unsetRedeliveryPort();
 				return;
 		}
 		super.eUnset(featureID);
@@ -458,6 +646,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
 				return lateness != null;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST:
+				return heelCost != HEEL_COST_EDEFAULT;
+			case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE:
+				return heelRevenue != HEEL_REVENUE_EDEFAULT;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -466,6 +658,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return events != null && !events.isEmpty();
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				return vesselEvent != null;
+			case SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT:
+				return isSetRedeliveryPort();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -487,6 +681,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			switch (derivedFeatureID) {
 				case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
 				case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
+				case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST: return SchedulePackage.PORT_VISIT__HEEL_COST;
+				case SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE: return SchedulePackage.PORT_VISIT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -523,6 +719,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST;
 				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.VESSEL_EVENT_VISIT__LATENESS;
+				case SchedulePackage.PORT_VISIT__HEEL_COST: return SchedulePackage.VESSEL_EVENT_VISIT__HEEL_COST;
+				case SchedulePackage.PORT_VISIT__HEEL_REVENUE: return SchedulePackage.VESSEL_EVENT_VISIT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -554,6 +752,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portCost: ");
 		result.append(portCost);
+		result.append(", heelCost: ");
+		result.append(heelCost);
+		result.append(", heelRevenue: ");
+		result.append(heelRevenue);
 		result.append(')');
 		return result.toString();
 	}

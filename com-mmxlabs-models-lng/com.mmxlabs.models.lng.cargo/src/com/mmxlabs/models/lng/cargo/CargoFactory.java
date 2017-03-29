@@ -141,6 +141,15 @@ public interface CargoFactory extends EFactory {
 	EndHeelOptions createEndHeelOptions();
 
 	/**
+	 * Returns a new object of class '<em>Start Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Start Heel Options</em>'.
+	 * @generated
+	 */
+	StartHeelOptions createStartHeelOptions();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

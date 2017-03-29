@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -102,10 +101,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseVesselGroup(VesselGroup object) {
 				return createVesselGroupAdapter();
-			}
-			@Override
-			public Adapter caseHeelOptions(HeelOptions object) {
-				return createHeelOptionsAdapter();
 			}
 			@Override
 			public Adapter caseVesselStateAttributes(VesselStateAttributes object) {
@@ -212,20 +207,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBaseFuelAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.HeelOptions <em>Heel Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.HeelOptions
-	 * @generated
-	 */
-	public Adapter createHeelOptionsAdapter() {
 		return null;
 	}
 

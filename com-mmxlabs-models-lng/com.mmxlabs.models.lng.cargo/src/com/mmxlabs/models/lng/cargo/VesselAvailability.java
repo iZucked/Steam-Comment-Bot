@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -44,7 +43,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
  * </ul>
  *
@@ -413,12 +411,12 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start Heel</em>' containment reference.
-	 * @see #setStartHeel(HeelOptions)
+	 * @see #setStartHeel(StartHeelOptions)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_StartHeel()
 	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
-	HeelOptions getStartHeel();
+	StartHeelOptions getStartHeel();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel <em>Start Heel</em>}' containment reference.
@@ -428,7 +426,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see #getStartHeel()
 	 * @generated
 	 */
-	void setStartHeel(HeelOptions value);
+	void setStartHeel(StartHeelOptions value);
 
 	/**
 	 * Returns the value of the '<em><b>End Heel</b></em>' containment reference.
@@ -537,54 +535,26 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	void setRepositioningFee(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Ballast Bonus</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Ballast Bonus</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ballast Bonus</em>' attribute.
-	 * @see #setBallastBonus(String)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_BallastBonus()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
-	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
-	 * @generated
-	 */
-	String getBallastBonus();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Ballast Bonus</em>' attribute.
-	 * @see #getBallastBonus()
-	 * @generated
-	 */
-	void setBallastBonus(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Ballast Bonus Contract</b></em>' reference.
+	 * Returns the value of the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Ballast Bonus Contract</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ballast Bonus Contract</em>' reference.
+	 * @return the value of the '<em>Ballast Bonus Contract</em>' containment reference.
 	 * @see #setBallastBonusContract(BallastBonusContract)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_BallastBonusContract()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	BallastBonusContract getBallastBonusContract();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Ballast Bonus Contract</em>' reference.
+	 * @param value the new value of the '<em>Ballast Bonus Contract</em>' containment reference.
 	 * @see #getBallastBonusContract()
 	 * @generated
 	 */

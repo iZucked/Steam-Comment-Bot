@@ -181,6 +181,9 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			}
 
 		}
+		// DO NOT COMMIT
+		statuses.clear();
+		// DO NOT COMMIT
 		return Activator.PLUGIN_ID;
 	}
 

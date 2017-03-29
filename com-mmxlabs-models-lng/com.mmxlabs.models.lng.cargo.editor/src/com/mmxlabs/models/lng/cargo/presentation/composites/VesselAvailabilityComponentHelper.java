@@ -84,7 +84,6 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
 		add_repositioningFeeEditor(detailComposite, topClass);
-		add_ballastBonusEditor(detailComposite, topClass);
 		add_ballastBonusContractEditor(detailComposite, topClass);
 	}
 	/**

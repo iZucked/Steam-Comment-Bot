@@ -66,6 +66,8 @@ public class PortVisitComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_portCostEditor(detailComposite, topClass);
 		add_latenessEditor(detailComposite, topClass);
+		add_heelCostEditor(detailComposite, topClass);
+		add_heelRevenueEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the portCost feature on PortVisit
@@ -83,5 +85,23 @@ public class PortVisitComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_latenessEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PORT_VISIT__LATENESS));
+	}
+
+	/**
+	 * Create the editor for the heelCost feature on PortVisit
+	 *
+	 * @generated
+	 */
+	protected void add_heelCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PORT_VISIT__HEEL_COST));
+	}
+
+	/**
+	 * Create the editor for the heelRevenue feature on PortVisit
+	 *
+	 * @generated
+	 */
+	protected void add_heelRevenueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PORT_VISIT__HEEL_REVENUE));
 	}
 }

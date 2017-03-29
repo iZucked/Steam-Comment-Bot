@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.cargo.provider;
 
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -159,7 +160,8 @@ public class CharterOutEventItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CargoPackage.Literals.CHARTER_OUT_EVENT__HEEL_OPTIONS);
+			childrenFeatures.add(CargoPackage.Literals.CHARTER_OUT_EVENT__REQUIRED_HEEL);
+			childrenFeatures.add(CargoPackage.Literals.CHARTER_OUT_EVENT__AVAILABLE_HEEL);
 		}
 		return childrenFeatures;
 	}
@@ -219,7 +221,8 @@ public class CharterOutEventItemProvider
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
+			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:
+			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -239,8 +242,13 @@ public class CharterOutEventItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CargoPackage.Literals.CHARTER_OUT_EVENT__HEEL_OPTIONS,
-				 FleetFactory.eINSTANCE.createHeelOptions()));
+				(CargoPackage.Literals.CHARTER_OUT_EVENT__REQUIRED_HEEL,
+				 CargoFactory.eINSTANCE.createEndHeelOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CHARTER_OUT_EVENT__AVAILABLE_HEEL,
+				 CargoFactory.eINSTANCE.createStartHeelOptions()));
 	}
 
 }

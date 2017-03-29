@@ -57,6 +57,7 @@ public class MigrateToV68 extends AbstractMigrationUnit {
 				rules.add(rule);
 				contract_instance.setRef("rules", rules);
 				va.setRef("ballastBonusContract", contract_instance);
+ 
 			}
 		}
 	}

@@ -46,6 +46,8 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getHeelCost <em>Heel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getHeelRevenue <em>Heel Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getEvents <em>Events</em>}</li>
@@ -104,6 +106,46 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * @ordered
 	 */
 	protected PortVisitLateness lateness;
+
+	/**
+	 * The default value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelCost = HEEL_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_REVENUE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelRevenue = HEEL_REVENUE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
@@ -250,6 +292,48 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__LATENESS, newLateness, newLateness));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelCost() {
+		return heelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelCost(int newHeelCost) {
+		int oldHeelCost = heelCost;
+		heelCost = newHeelCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__HEEL_COST, oldHeelCost, heelCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelRevenue() {
+		return heelRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelRevenue(int newHeelRevenue) {
+		int oldHeelRevenue = heelRevenue;
+		heelRevenue = newHeelRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__HEEL_REVENUE, oldHeelRevenue, heelRevenue));
 	}
 
 	/**
@@ -409,6 +493,10 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return getPortCost();
 			case SchedulePackage.START_EVENT__LATENESS:
 				return getLateness();
+			case SchedulePackage.START_EVENT__HEEL_COST:
+				return getHeelCost();
+			case SchedulePackage.START_EVENT__HEEL_REVENUE:
+				return getHeelRevenue();
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
@@ -443,6 +531,12 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return;
 			case SchedulePackage.START_EVENT__LATENESS:
 				setLateness((PortVisitLateness)newValue);
+				return;
+			case SchedulePackage.START_EVENT__HEEL_COST:
+				setHeelCost((Integer)newValue);
+				return;
+			case SchedulePackage.START_EVENT__HEEL_REVENUE:
+				setHeelRevenue((Integer)newValue);
 				return;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
@@ -482,6 +576,12 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__LATENESS:
 				setLateness((PortVisitLateness)null);
 				return;
+			case SchedulePackage.START_EVENT__HEEL_COST:
+				setHeelCost(HEEL_COST_EDEFAULT);
+				return;
+			case SchedulePackage.START_EVENT__HEEL_REVENUE:
+				setHeelRevenue(HEEL_REVENUE_EDEFAULT);
+				return;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
@@ -514,6 +614,10 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.START_EVENT__LATENESS:
 				return lateness != null;
+			case SchedulePackage.START_EVENT__HEEL_COST:
+				return heelCost != HEEL_COST_EDEFAULT;
+			case SchedulePackage.START_EVENT__HEEL_REVENUE:
+				return heelRevenue != HEEL_REVENUE_EDEFAULT;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
@@ -549,6 +653,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			switch (derivedFeatureID) {
 				case SchedulePackage.START_EVENT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
 				case SchedulePackage.START_EVENT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
+				case SchedulePackage.START_EVENT__HEEL_COST: return SchedulePackage.PORT_VISIT__HEEL_COST;
+				case SchedulePackage.START_EVENT__HEEL_REVENUE: return SchedulePackage.PORT_VISIT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -591,6 +697,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.START_EVENT__PORT_COST;
 				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.START_EVENT__LATENESS;
+				case SchedulePackage.PORT_VISIT__HEEL_COST: return SchedulePackage.START_EVENT__HEEL_COST;
+				case SchedulePackage.PORT_VISIT__HEEL_REVENUE: return SchedulePackage.START_EVENT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -673,6 +781,10 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portCost: ");
 		result.append(portCost);
+		result.append(", heelCost: ");
+		result.append(heelCost);
+		result.append(", heelRevenue: ");
+		result.append(heelRevenue);
 		result.append(')');
 		return result.toString();
 	}
@@ -684,6 +796,15 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 */
 	public String name() {
 		return getSequence().getName();
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String type() {
+		return "Start Event";
 	}
 	
 } // end of StartEventImpl

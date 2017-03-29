@@ -43,6 +43,8 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getHeelCost <em>Heel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getHeelRevenue <em>Heel Revenue</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  *
@@ -94,6 +96,42 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * @ordered
 	 */
 	protected PortVisitLateness lateness;
+	/**
+	 * The default value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_COST_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelCost = HEEL_COST_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_REVENUE_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelRevenue = HEEL_REVENUE_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -208,6 +246,48 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__LATENESS, newLateness, newLateness));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelCost() {
+		return heelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelCost(int newHeelCost) {
+		int oldHeelCost = heelCost;
+		heelCost = newHeelCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__HEEL_COST, oldHeelCost, heelCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelRevenue() {
+		return heelRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelRevenue(int newHeelRevenue) {
+		int oldHeelRevenue = heelRevenue;
+		heelRevenue = newHeelRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__HEEL_REVENUE, oldHeelRevenue, heelRevenue));
 	}
 
 	/**
@@ -336,6 +416,10 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				return getPortCost();
 			case SchedulePackage.SLOT_VISIT__LATENESS:
 				return getLateness();
+			case SchedulePackage.SLOT_VISIT__HEEL_COST:
+				return getHeelCost();
+			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE:
+				return getHeelRevenue();
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -365,6 +449,12 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			case SchedulePackage.SLOT_VISIT__LATENESS:
 				setLateness((PortVisitLateness)newValue);
 				return;
+			case SchedulePackage.SLOT_VISIT__HEEL_COST:
+				setHeelCost((Integer)newValue);
+				return;
+			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE:
+				setHeelRevenue((Integer)newValue);
+				return;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
@@ -392,6 +482,12 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			case SchedulePackage.SLOT_VISIT__LATENESS:
 				setLateness((PortVisitLateness)null);
 				return;
+			case SchedulePackage.SLOT_VISIT__HEEL_COST:
+				setHeelCost(HEEL_COST_EDEFAULT);
+				return;
+			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE:
+				setHeelRevenue(HEEL_REVENUE_EDEFAULT);
+				return;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
@@ -415,6 +511,10 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.SLOT_VISIT__LATENESS:
 				return lateness != null;
+			case SchedulePackage.SLOT_VISIT__HEEL_COST:
+				return heelCost != HEEL_COST_EDEFAULT;
+			case SchedulePackage.SLOT_VISIT__HEEL_REVENUE:
+				return heelRevenue != HEEL_REVENUE_EDEFAULT;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -444,6 +544,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			switch (derivedFeatureID) {
 				case SchedulePackage.SLOT_VISIT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
 				case SchedulePackage.SLOT_VISIT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
+				case SchedulePackage.SLOT_VISIT__HEEL_COST: return SchedulePackage.PORT_VISIT__HEEL_COST;
+				case SchedulePackage.SLOT_VISIT__HEEL_REVENUE: return SchedulePackage.PORT_VISIT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -473,6 +575,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.SLOT_VISIT__PORT_COST;
 				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.SLOT_VISIT__LATENESS;
+				case SchedulePackage.PORT_VISIT__HEEL_COST: return SchedulePackage.SLOT_VISIT__HEEL_COST;
+				case SchedulePackage.PORT_VISIT__HEEL_REVENUE: return SchedulePackage.SLOT_VISIT__HEEL_REVENUE;
 				default: return -1;
 			}
 		}
@@ -531,6 +635,10 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portCost: ");
 		result.append(portCost);
+		result.append(", heelCost: ");
+		result.append(heelCost);
+		result.append(", heelRevenue: ");
+		result.append(heelRevenue);
 		result.append(')');
 		return result.toString();
 	}

@@ -198,29 +198,6 @@
                      class="BaseFuel">
                </target>
             </constraint>
-          
-            <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.HeelOptionsConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.HeelOptionsConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Heel Options"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  Heel options constraint
-               </description>
-               <target
-                     class="Vessel">
-               </target>
-               <target
-                     class="HeelOptions">
-               </target>
-            </constraint>
-         
             <constraint
                   class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
                   id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"

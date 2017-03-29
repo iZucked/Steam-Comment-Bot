@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -54,11 +55,33 @@ public class CargoModelBuilder {
 		return new CargoMaker(this);
 	}
 
-	public @NonNull EndHeelOptions createEndHeelOptions(@Nullable final Integer targetEndHeelInM3) {
+	public @NonNull EndHeelOptions createEndHeelOptions(int minVolumeInM3, int maxVolumeInM3, @NonNull EVesselTankState state) {
 		final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
-		if (targetEndHeelInM3 != null) {
-			result.setTargetEndHeel(targetEndHeelInM3);
+
+		if (minVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
 		}
+
+		if (maxVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (minVolumeInM3 > maxVolumeInM3) {
+			throw new IllegalArgumentException();
+		}
+
+		if (state == EVesselTankState.MUST_BE_WARM) {
+			if (minVolumeInM3 > 0) {
+				throw new IllegalArgumentException();
+			}
+			if (maxVolumeInM3 > 0) {
+				throw new IllegalArgumentException();
+			}
+		}
+
+		result.setMinimumEndHeel(minVolumeInM3);
+		result.setMaximumEndHeel(maxVolumeInM3);
+		result.setTankState(state);
+
 		return result;
 	}
 
@@ -126,7 +149,7 @@ public class CargoModelBuilder {
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
 		} else if (divertable) {
-//			throw new IllegalArgumentException("Divertable DES Purchases need a nominated vessel");
+			// throw new IllegalArgumentException("Divertable DES Purchases need a nominated vessel");
 		}
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -190,7 +213,7 @@ public class CargoModelBuilder {
 		if (nominatedVessel != null) {
 			slot.setNominatedVessel(nominatedVessel);
 		} else if (divertable) {
-//			throw new IllegalArgumentException("Divertable FOB sale need a nominated vessel");
+			// throw new IllegalArgumentException("Divertable FOB sale need a nominated vessel");
 		}
 		slot.setFOBSale(true);
 		slot.setDivertible(divertable);

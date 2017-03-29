@@ -34,12 +34,11 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -72,7 +71,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-			
+
 			// Build up lookup tables
 			final Map<Cargo, CargoActuals> cargoActualsMap = new HashMap<>();
 			final Map<Slot, SlotActuals> slotActualsMap = new HashMap<>();
@@ -164,8 +163,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 								ZonedDateTime startAfterAsDateTime = va.getStartAfterAsDateTime();
 								if (startAfterAsDateTime != null && !startAfterAsDateTime.isEqual(actualOperationsStart)) {
-									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
-											getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
+									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
+											getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER);
@@ -176,8 +175,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								}
 								ZonedDateTime startByAsDateTime = va.getStartByAsDateTime();
 								if (startByAsDateTime != null && !startByAsDateTime.isEqual(actualOperationsStart)) {
-									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
-											getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
+									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
+											getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY);
@@ -187,45 +186,34 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								}
 							}
 
-							final HeelOptions startHeel = va.getStartHeel();
-							if (loadActuals.getStartingHeelM3() > 0) {
-								if (!startHeel.isSetVolumeAvailable() || Math.abs(loadActuals.getStartingHeelM3() - startHeel.getVolumeAvailable()) > 0.0005) {
-									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - %,.3f)", getID(assignment),
-											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getVolumeAvailable());
-
-									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-									failure.addEObjectAndFeature(startHeel, FleetPackage.Literals.HEEL_OPTIONS__VOLUME_AVAILABLE);
-									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
-
-									statuses.add(failure);
-
-								}
+							final StartHeelOptions startHeel = va.getStartHeel();
+							if (loadActuals.getStartingHeelM3() > 0 || startHeel.getMaxVolumeAvailable() > 0) {
 								if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.0005) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment), getVesselName(va.getVessel()),
 											loadActuals.getCV(), startHeel.getCvValue());
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-									failure.addEObjectAndFeature(startHeel, FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE);
+									failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__CV_VALUE);
 									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__CV);
 
 									statuses.add(failure);
 
 								}
-							} else {
-								if (startHeel.isSetVolumeAvailable() || loadActuals.getStartingHeelM3() > 0) {
-									// Error
-									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - %,.3f)", getID(assignment),
-											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getVolumeAvailable());
+							}
+							if (loadActuals.getStartingHeelM3() < startHeel.getMinVolumeAvailable() || loadActuals.getStartingHeelM3() > startHeel.getMaxVolumeAvailable()) {
+								// Error
+								final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - [%,.3f, %,.3f])", getID(assignment),
+										getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getMinVolumeAvailable(),
+										(double) startHeel.getMaxVolumeAvailable());
 
-									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-									failure.addEObjectAndFeature(startHeel, FleetPackage.Literals.HEEL_OPTIONS__VOLUME_AVAILABLE);
-									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+								failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+								failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
+								failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
+								failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
 
-									statuses.add(failure);
-								}
+								statuses.add(failure);
 							}
 						}
 						// Reset this variable so no longer in scope for future iterations. We could also use a "firstElement" boolean.
@@ -234,7 +222,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 					if (prevObject != null && previousElementHasActuals == false && currentElementHasActuals == true) {
 						// Only warn about previous missing actuals if an event.
-						final int status = /*prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
+						final int status = /* prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
 
 						final String msg = String.format("Cargo %s is not preceded by another actualised event.", getID(prevObject));
 
@@ -270,7 +258,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 							}
 
-							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null || !returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
+							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null
+									|| !returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
 								final String message = String.format("Load actuals and previous return actuals %s does not match", "operations start");
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);

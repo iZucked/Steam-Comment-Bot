@@ -23,6 +23,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
@@ -69,8 +70,6 @@ public class VesselAvailabilityItemProvider
 			addEndByPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
-			addBallastBonusPropertyDescriptor(object);
-			addBallastBonusContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -340,50 +339,6 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Ballast Bonus feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBallastBonusPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselAvailability_ballastBonus_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_ballastBonus_feature", "_UI_VesselAvailability_type"),
-				 CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Ballast Bonus Contract feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBallastBonusContractPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselAvailability_ballastBonusContract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_ballastBonusContract_feature", "_UI_VesselAvailability_type"),
-				 CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -419,6 +374,7 @@ public class VesselAvailabilityItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
 			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL);
+			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT);
 		}
 		return childrenFeatures;
 	}
@@ -494,11 +450,11 @@ public class VesselAvailabilityItemProvider
 			case CargoPackage.VESSEL_AVAILABILITY__END_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
+			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -519,12 +475,17 @@ public class VesselAvailabilityItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL,
-				 FleetFactory.eINSTANCE.createHeelOptions()));
+				 CargoFactory.eINSTANCE.createStartHeelOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL,
 				 CargoFactory.eINSTANCE.createEndHeelOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT,
+				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
 	}
 
 }

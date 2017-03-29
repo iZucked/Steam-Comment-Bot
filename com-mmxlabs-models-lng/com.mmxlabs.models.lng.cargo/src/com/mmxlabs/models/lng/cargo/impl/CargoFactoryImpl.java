@@ -87,6 +87,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
 			case CargoPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
+			case CargoPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -104,6 +105,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return createCargoTypeFromString(eDataType, initialValue);
 			case CargoPackage.VESSEL_TYPE:
 				return createVesselTypeFromString(eDataType, initialValue);
+			case CargoPackage.EVESSEL_TANK_STATE:
+				return createEVesselTankStateFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -121,6 +124,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return convertCargoTypeToString(eDataType, instanceValue);
 			case CargoPackage.VESSEL_TYPE:
 				return convertVesselTypeToString(eDataType, instanceValue);
+			case CargoPackage.EVESSEL_TANK_STATE:
+				return convertEVesselTankStateToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -261,6 +266,16 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public StartHeelOptions createStartHeelOptions() {
+		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
+		return startHeelOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public CargoType createCargoTypeFromString(EDataType eDataType, String initialValue) {
 		CargoType result = CargoType.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -293,6 +308,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	public String convertVesselTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EVesselTankState createEVesselTankStateFromString(EDataType eDataType, String initialValue) {
+		EVesselTankState result = EVesselTankState.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertEVesselTankStateToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

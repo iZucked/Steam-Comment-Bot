@@ -1,39 +1,38 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet.provider;
+package com.mmxlabs.models.lng.cargo.provider;
 
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
+
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.HeelOptions} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.StartHeelOptions} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class HeelOptionsItemProvider
-	extends MMXObjectItemProvider {
+public class StartHeelOptionsItemProvider extends MMXObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public HeelOptionsItemProvider(AdapterFactory adapterFactory) {
+	public StartHeelOptionsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -48,33 +47,12 @@ public class HeelOptionsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVolumeAvailablePropertyDescriptor(object);
 			addCvValuePropertyDescriptor(object);
-			addPricePerMMBTUPropertyDescriptor(object);
+			addMinVolumeAvailablePropertyDescriptor(object);
+			addMaxVolumeAvailablePropertyDescriptor(object);
+			addPriceExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Volume Available feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVolumeAvailablePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_HeelOptions_volumeAvailable_feature"),
-				 getString("_UI_HeelOptions_volumeAvailable_description"),
-				 FleetPackage.Literals.HEEL_OPTIONS__VOLUME_AVAILABLE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -88,9 +66,9 @@ public class HeelOptionsItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_HeelOptions_cvValue_feature"),
-				 getString("_UI_HeelOptions_cvValue_description"),
-				 FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE,
+				 getString("_UI_StartHeelOptions_cvValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StartHeelOptions_cvValue_feature", "_UI_StartHeelOptions_type"),
+				 CargoPackage.Literals.START_HEEL_OPTIONS__CV_VALUE,
 				 true,
 				 false,
 				 false,
@@ -100,19 +78,19 @@ public class HeelOptionsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Price Per MMBTU feature.
+	 * This adds a property descriptor for the Min Volume Available feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPricePerMMBTUPropertyDescriptor(Object object) {
+	protected void addMinVolumeAvailablePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_HeelOptions_pricePerMMBTU_feature"),
-				 getString("_UI_HeelOptions_pricePerMMBTU_description"),
-				 FleetPackage.Literals.HEEL_OPTIONS__PRICE_PER_MMBTU,
+				 getString("_UI_StartHeelOptions_minVolumeAvailable_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StartHeelOptions_minVolumeAvailable_feature", "_UI_StartHeelOptions_type"),
+				 CargoPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE,
 				 true,
 				 false,
 				 false,
@@ -122,14 +100,58 @@ public class HeelOptionsItemProvider
 	}
 
 	/**
-	 * This returns HeelOptions.gif.
+	 * This adds a property descriptor for the Max Volume Available feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxVolumeAvailablePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_StartHeelOptions_maxVolumeAvailable_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StartHeelOptions_maxVolumeAvailable_feature", "_UI_StartHeelOptions_type"),
+				 CargoPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Price Expression feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceExpressionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_StartHeelOptions_priceExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StartHeelOptions_priceExpression_feature", "_UI_StartHeelOptions_type"),
+				 CargoPackage.Literals.START_HEEL_OPTIONS__PRICE_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns StartHeelOptions.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/HeelOptions"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/StartHeelOptions"));
 	}
 
 	/**
@@ -140,9 +162,10 @@ public class HeelOptionsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		HeelOptions heelOptions = (HeelOptions)object;
-		return getString("_UI_HeelOptions_type") + " " + heelOptions.getVolumeAvailable();
+		StartHeelOptions startHeelOptions = (StartHeelOptions)object;
+		return getString("_UI_StartHeelOptions_type") + " " + startHeelOptions.getCvValue();
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -155,10 +178,11 @@ public class HeelOptionsItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(HeelOptions.class)) {
-			case FleetPackage.HEEL_OPTIONS__VOLUME_AVAILABLE:
-			case FleetPackage.HEEL_OPTIONS__CV_VALUE:
-			case FleetPackage.HEEL_OPTIONS__PRICE_PER_MMBTU:
+		switch (notification.getFeatureID(StartHeelOptions.class)) {
+			case CargoPackage.START_HEEL_OPTIONS__CV_VALUE:
+			case CargoPackage.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE:
+			case CargoPackage.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE:
+			case CargoPackage.START_HEEL_OPTIONS__PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

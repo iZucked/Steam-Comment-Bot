@@ -506,16 +506,6 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getHeelOptions()
-	 * @generated
-	 */
-	int HEEL_OPTIONS = 5;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -523,7 +513,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselStateAttributes()
 	 * @generated
 	 */
-	int VESSEL_STATE_ATTRIBUTES = 6;
+	int VESSEL_STATE_ATTRIBUTES = 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
@@ -533,7 +523,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelConsumption()
 	 * @generated
 	 */
-	int FUEL_CONSUMPTION = 7;
+	int FUEL_CONSUMPTION = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl <em>Vessel Class Route Parameters</em>}' class.
@@ -543,7 +533,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClassRouteParameters()
 	 * @generated
 	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS = 8;
+	int VESSEL_CLASS_ROUTE_PARAMETERS = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
@@ -600,51 +590,6 @@ public interface FleetPackage extends EPackage {
 	 */
 	int VESSEL_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
 
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Volume Available</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__PRICE_PER_MMBTU = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Heel Options</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1197,49 +1142,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getBaseFuel_EquivalenceFactor();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.HeelOptions <em>Heel Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Heel Options</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.HeelOptions
-	 * @generated
-	 */
-	EClass getHeelOptions();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable <em>Volume Available</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Volume Available</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable()
-	 * @see #getHeelOptions()
-	 * @generated
-	 */
-	EAttribute getHeelOptions_VolumeAvailable();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getCvValue <em>Cv Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cv Value</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.HeelOptions#getCvValue()
-	 * @see #getHeelOptions()
-	 * @generated
-	 */
-	EAttribute getHeelOptions_CvValue();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.HeelOptions#getPricePerMMBTU()
-	 * @see #getHeelOptions()
-	 * @generated
-	 */
-	EAttribute getHeelOptions_PricePerMMBTU();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes <em>Vessel State Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1756,40 +1658,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASE_FUEL__EQUIVALENCE_FACTOR = eINSTANCE.getBaseFuel_EquivalenceFactor();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl
-		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getHeelOptions()
-		 * @generated
-		 */
-		EClass HEEL_OPTIONS = eINSTANCE.getHeelOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>Volume Available</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute HEEL_OPTIONS__VOLUME_AVAILABLE = eINSTANCE.getHeelOptions_VolumeAvailable();
-
-		/**
-		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute HEEL_OPTIONS__CV_VALUE = eINSTANCE.getHeelOptions_CvValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute HEEL_OPTIONS__PRICE_PER_MMBTU = eINSTANCE.getHeelOptions_PricePerMMBTU();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.

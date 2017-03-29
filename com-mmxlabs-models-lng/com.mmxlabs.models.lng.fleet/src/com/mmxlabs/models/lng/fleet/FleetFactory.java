@@ -60,15 +60,6 @@ public interface FleetFactory extends EFactory {
 	BaseFuel createBaseFuel();
 
 	/**
-	 * Returns a new object of class '<em>Heel Options</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Heel Options</em>'.
-	 * @generated
-	 */
-	HeelOptions createHeelOptions();
-
-	/**
 	 * Returns a new object of class '<em>Vessel State Attributes</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

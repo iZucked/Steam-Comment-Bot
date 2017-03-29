@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.port.Port;
 
 /**
@@ -20,9 +19,10 @@ import com.mmxlabs.models.lng.port.Port;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHeelOptions <em>Heel Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRequiredHeel <em>Required Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getAvailableHeel <em>Available Heel</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent()
@@ -84,32 +84,6 @@ public interface CharterOutEvent extends VesselEvent {
 	boolean isSetRelocateTo();
 
 	/**
-	 * Returns the value of the '<em><b>Heel Options</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Heel Options</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Heel Options</em>' containment reference.
-	 * @see #setHeelOptions(HeelOptions)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_HeelOptions()
-	 * @model containment="true" resolveProxies="true" required="true"
-	 * @generated
-	 */
-	HeelOptions getHeelOptions();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHeelOptions <em>Heel Options</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Heel Options</em>' containment reference.
-	 * @see #getHeelOptions()
-	 * @generated
-	 */
-	void setHeelOptions(HeelOptions value);
-
-	/**
 	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -135,6 +109,58 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @generated
 	 */
 	void setRepositioningFee(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Required Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Required Heel</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Required Heel</em>' containment reference.
+	 * @see #setRequiredHeel(EndHeelOptions)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_RequiredHeel()
+	 * @model containment="true" resolveProxies="true" required="true"
+	 * @generated
+	 */
+	EndHeelOptions getRequiredHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRequiredHeel <em>Required Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Required Heel</em>' containment reference.
+	 * @see #getRequiredHeel()
+	 * @generated
+	 */
+	void setRequiredHeel(EndHeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Available Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Available Heel</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Available Heel</em>' containment reference.
+	 * @see #setAvailableHeel(StartHeelOptions)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_AvailableHeel()
+	 * @model containment="true" resolveProxies="true" required="true"
+	 * @generated
+	 */
+	StartHeelOptions getAvailableHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getAvailableHeel <em>Available Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Available Heel</em>' containment reference.
+	 * @see #getAvailableHeel()
+	 * @generated
+	 */
+	void setAvailableHeel(StartHeelOptions value);
 
 	/**
 	 * Returns the value of the '<em><b>Hire Rate</b></em>' attribute.

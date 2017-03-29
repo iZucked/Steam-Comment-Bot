@@ -94,7 +94,15 @@ public enum CapacityViolationType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	LOST_HEEL(7, "LOST_HEEL", "LOST_HEEL");
+	LOST_HEEL(7, "LOST_HEEL", "LOST_HEEL"), /**
+	 * The '<em><b>MIN HEEL</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #MIN_HEEL_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	MIN_HEEL(8, "MIN_HEEL", "MIN_HEEL");
 
 	/**
 	 * The '<em><b>MAX LOAD</b></em>' literal value.
@@ -217,6 +225,21 @@ public enum CapacityViolationType implements Enumerator {
 	public static final int LOST_HEEL_VALUE = 7;
 
 	/**
+	 * The '<em><b>MIN HEEL</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>MIN HEEL</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #MIN_HEEL
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int MIN_HEEL_VALUE = 8;
+
+	/**
 	 * An array of all the '<em><b>Capacity Violation Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -232,6 +255,7 @@ public enum CapacityViolationType implements Enumerator {
 			FORCED_COOLDOWN,
 			VESSEL_CAPACITY,
 			LOST_HEEL,
+			MIN_HEEL,
 		};
 
 	/**
@@ -296,6 +320,7 @@ public enum CapacityViolationType implements Enumerator {
 			case FORCED_COOLDOWN_VALUE: return FORCED_COOLDOWN;
 			case VESSEL_CAPACITY_VALUE: return VESSEL_CAPACITY;
 			case LOST_HEEL_VALUE: return LOST_HEEL;
+			case MIN_HEEL_VALUE: return MIN_HEEL;
 		}
 		return null;
 	}

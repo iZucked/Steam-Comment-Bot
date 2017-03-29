@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -60,13 +59,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	private EClass baseFuelEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass heelOptionsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -471,42 +463,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getHeelOptions() {
-		return heelOptionsEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getHeelOptions_VolumeAvailable() {
-		return (EAttribute)heelOptionsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getHeelOptions_CvValue() {
-		return (EAttribute)heelOptionsEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getHeelOptions_PricePerMMBTU() {
-		return (EAttribute)heelOptionsEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getVesselStateAttributes() {
 		return vesselStateAttributesEClass;
 	}
@@ -751,11 +707,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
 
-		heelOptionsEClass = createEClass(HEEL_OPTIONS);
-		createEAttribute(heelOptionsEClass, HEEL_OPTIONS__VOLUME_AVAILABLE);
-		createEAttribute(heelOptionsEClass, HEEL_OPTIONS__CV_VALUE);
-		createEAttribute(heelOptionsEClass, HEEL_OPTIONS__PRICE_PER_MMBTU);
-
 		vesselStateAttributesEClass = createEClass(VESSEL_STATE_ATTRIBUTES);
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__NBO_RATE);
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE);
@@ -826,7 +777,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		g2 = createEGenericType(this.getVessel());
 		g1.getETypeArguments().add(g2);
 		vesselGroupEClass.getEGenericSuperTypes().add(g1);
-		heelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		vesselStateAttributesEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		vesselClassRouteParametersEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
@@ -883,11 +833,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 		initEClass(vesselGroupEClass, VesselGroup.class, "VesselGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselGroup_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(heelOptionsEClass, HeelOptions.class, "HeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getHeelOptions_VolumeAvailable(), ecorePackage.getEDouble(), "volumeAvailable", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getHeelOptions_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getHeelOptions_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselStateAttributesEClass, VesselStateAttributes.class, "VesselStateAttributes", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVesselStateAttributes_NboRate(), ecorePackage.getEDouble(), "nboRate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1015,27 +960,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "unit", "MT/day",
 			 "formatString", "##0.###"
-		   });	
-		addAnnotation
-		  (getHeelOptions_VolumeAvailable(), 
-		   source, 
-		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0.###"
-		   });	
-		addAnnotation
-		  (getHeelOptions_CvValue(), 
-		   source, 
-		   new String[] {
-			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.######"
-		   });	
-		addAnnotation
-		  (getHeelOptions_PricePerMMBTU(), 
-		   source, 
-		   new String[] {
-			 "unit", "$/mmBtu",
-			 "formatString", "#0.###"
 		   });	
 		addAnnotation
 		  (getVesselStateAttributes_NboRate(), 

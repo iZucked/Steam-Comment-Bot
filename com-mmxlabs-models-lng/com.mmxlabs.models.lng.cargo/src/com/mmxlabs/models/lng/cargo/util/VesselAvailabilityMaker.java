@@ -10,11 +10,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 
@@ -28,7 +27,7 @@ public class VesselAvailabilityMaker {
 	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull Vessel vessel, @NonNull BaseLegalEntity entity) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-		this.vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+		this.vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
 		this.vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 		this.vesselAvailability.setVessel(vessel);
 		this.vesselAvailability.setEntity(entity);
@@ -73,7 +72,7 @@ public class VesselAvailabilityMaker {
 	public VesselAvailabilityMaker withEndWindow(@NonNull final LocalDateTime exactTime) {
 		return withEndWindow(exactTime, exactTime);
 	}
-	
+
 	public VesselAvailabilityMaker withEndWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
 			vesselAvailability.setEndAfter(windowStart);
@@ -87,7 +86,7 @@ public class VesselAvailabilityMaker {
 		}
 		return this;
 	}
-	
+
 	public VesselAvailabilityMaker withOptionality(final boolean isOptional) {
 		vesselAvailability.setOptional(isOptional);
 		return this;
@@ -111,30 +110,54 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
-	public VesselAvailabilityMaker withStartHeel(@Nullable final Double startingHeelInM3, final double cv, final double pricePerMMBTu) {
-
-		final HeelOptions heelOptions = vesselAvailability.getStartHeel();
-		if (startingHeelInM3 != null) {
-			heelOptions.setVolumeAvailable(startingHeelInM3);
-			heelOptions.setCvValue(cv);
-			heelOptions.setPricePerMMBTU(pricePerMMBTu);
-		} else {
-			heelOptions.unsetVolumeAvailable();
-			heelOptions.setCvValue(0.0);
-			heelOptions.setPricePerMMBTU(0.0);
+	public VesselAvailabilityMaker withStartHeel(double minVolumeInM3, double maxVolumeInM3, double cvValue, String pricePerMMBTu) {
+		if (minVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
 		}
+
+		if (maxVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (minVolumeInM3 > maxVolumeInM3) {
+			throw new IllegalArgumentException();
+		}
+
+		vesselAvailability.getStartHeel().setMinVolumeAvailable(minVolumeInM3);
+		vesselAvailability.getStartHeel().setMaxVolumeAvailable(maxVolumeInM3);
+		vesselAvailability.getStartHeel().setCvValue(cvValue);
+		vesselAvailability.getStartHeel().setPriceExpression(pricePerMMBTu);
+
 		return this;
 
 	}
 
-	public VesselAvailabilityMaker withEndHeel(@Nullable final Integer targetEndHeelInM3) {
+	public VesselAvailabilityMaker withEndHeel(int minVolumeInM3, int maxVolumeInM3, @NonNull EVesselTankState state, @Nullable String priceExpression) {
 
-		final EndHeelOptions heelOptions = vesselAvailability.getEndHeel();
-		if (targetEndHeelInM3 != null) {
-			heelOptions.setTargetEndHeel(targetEndHeelInM3);
-		} else {
-			heelOptions.unsetTargetEndHeel();
+		if (minVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
 		}
+
+		if (maxVolumeInM3 < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (minVolumeInM3 > maxVolumeInM3) {
+			throw new IllegalArgumentException();
+		}
+
+		if (state == EVesselTankState.MUST_BE_WARM) {
+			if (minVolumeInM3 > 0) {
+				throw new IllegalArgumentException();
+			}
+			if (maxVolumeInM3 > 0) {
+				throw new IllegalArgumentException();
+			}
+		}
+
+		vesselAvailability.getEndHeel().setMinimumEndHeel(minVolumeInM3);
+		vesselAvailability.getEndHeel().setMaximumEndHeel(maxVolumeInM3);
+		vesselAvailability.getEndHeel().setTankState(state);
+		vesselAvailability.getEndHeel().setPriceExpression(priceExpression);
+
 		return this;
 
 	}

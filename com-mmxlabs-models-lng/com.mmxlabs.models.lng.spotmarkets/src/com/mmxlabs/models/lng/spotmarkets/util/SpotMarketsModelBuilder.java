@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -41,6 +42,20 @@ public class SpotMarketsModelBuilder {
 
 		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 		return charterInMarket;
+	}
+	
+	@NonNull
+	public CharterOutMarket createCharterOutMarket(@NonNull final String name, @NonNull final VesselClass vesselClass, @NonNull final String charterOutRate, int minDurationInDays) {
+		
+		final CharterOutMarket charterOutMarket = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
+		charterOutMarket.setName(name);
+		charterOutMarket.setEnabled(true);
+		charterOutMarket.setVesselClass(vesselClass);
+		charterOutMarket.setCharterOutRate(charterOutRate);
+		charterOutMarket.setMinCharterOutDuration(minDurationInDays);
+		
+		spotMarketsModel.getCharterOutMarkets().add(charterOutMarket);
+		return charterOutMarket;
 	}
 
 	@NonNull

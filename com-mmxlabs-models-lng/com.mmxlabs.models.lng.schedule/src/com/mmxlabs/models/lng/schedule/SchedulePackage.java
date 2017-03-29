@@ -1608,13 +1608,31 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__LATENESS = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__HEEL_COST = EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__HEEL_REVENUE = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 4;
+	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -1623,7 +1641,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -1632,7 +1650,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__EVENTS = EVENT_FEATURE_COUNT + 6;
+	int START_EVENT__EVENTS = EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -1641,7 +1659,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 7;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1650,7 +1668,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 8;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1860,13 +1878,31 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__LATENESS = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__HEEL_COST = EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__HEEL_REVENUE = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 4;
+	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -1875,7 +1911,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -1884,7 +1920,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__EVENTS = EVENT_FEATURE_COUNT + 6;
+	int END_EVENT__EVENTS = EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -1893,7 +1929,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 7;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1902,7 +1938,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 8;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2544,13 +2580,31 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__HEEL_COST = EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__HEEL_REVENUE = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Port Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2751,13 +2805,31 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__HEEL_COST = EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__HEEL_REVENUE = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
+	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Slot Visit</em>' class.
@@ -2766,7 +2838,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
+	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2967,13 +3039,31 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__HEEL_COST = EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__HEEL_REVENUE = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -2982,7 +3072,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -2991,7 +3081,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__EVENTS = EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_VISIT__EVENTS = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -3000,7 +3090,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 6;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Redelivery Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__REDELIVERY_PORT = EVENT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -3009,7 +3108,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3199,6 +3298,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int GENERATED_CHARTER_OUT__LATENESS = PORT_VISIT__LATENESS;
+
+	/**
+	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__HEEL_COST = PORT_VISIT__HEEL_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__HEEL_REVENUE = PORT_VISIT__HEEL_REVENUE;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
@@ -4773,6 +4890,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getVesselEventVisit_VesselEvent();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.VesselEventVisit#getRedeliveryPort <em>Redelivery Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Redelivery Port</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.VesselEventVisit#getRedeliveryPort()
+	 * @see #getVesselEventVisit()
+	 * @generated
+	 */
+	EReference getVesselEventVisit_RedeliveryPort();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Journey <em>Journey</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5424,6 +5552,28 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPortVisit_Lateness();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelCost <em>Heel Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisit#getHeelCost()
+	 * @see #getPortVisit()
+	 * @generated
+	 */
+	EAttribute getPortVisit_HeelCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PortVisit#getHeelRevenue <em>Heel Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisit#getHeelRevenue()
+	 * @see #getPortVisit()
+	 * @generated
+	 */
+	EAttribute getPortVisit_HeelRevenue();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.StartEvent <em>Start Event</em>}'.
@@ -6403,6 +6553,14 @@ public interface SchedulePackage extends EPackage {
 		EReference VESSEL_EVENT_VISIT__VESSEL_EVENT = eINSTANCE.getVesselEventVisit_VesselEvent();
 
 		/**
+		 * The meta object literal for the '<em><b>Redelivery Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT_VISIT__REDELIVERY_PORT = eINSTANCE.getVesselEventVisit_RedeliveryPort();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6915,6 +7073,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_VISIT__LATENESS = eINSTANCE.getPortVisit_Lateness();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_VISIT__HEEL_COST = eINSTANCE.getPortVisit_HeelCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_VISIT__HEEL_REVENUE = eINSTANCE.getPortVisit_HeelRevenue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.
