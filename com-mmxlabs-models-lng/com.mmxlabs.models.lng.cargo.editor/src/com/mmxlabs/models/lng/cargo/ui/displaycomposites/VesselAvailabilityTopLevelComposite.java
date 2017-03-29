@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -21,7 +22,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -89,7 +92,10 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
+			EObject next = childObjectsItr.next();
+			if (!(next instanceof BallastBonusContract)) {
+				children.next().display(dialogContext, root, next, range, dbc);
+			}
 		}
 
 		// Overrides default layout factory so we get two columns columns
@@ -121,4 +127,10 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		super.displayValidationStatus(status);
 		ballastBonusComposite.displayValidationStatus(status);
 	}
+	
+	@Override
+	protected boolean shouldDisplay(final EReference ref) {
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
+	}
+
 }
