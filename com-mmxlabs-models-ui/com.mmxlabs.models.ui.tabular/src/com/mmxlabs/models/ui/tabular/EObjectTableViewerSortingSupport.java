@@ -77,7 +77,9 @@ public class EObjectTableViewerSortingSupport {
 	public void sortColumnsBy(final GridColumn tColumn) {
 		// Sort order changed - clear fixed ordering
 		fixedSortOrder = null;
-		
+		if (getColumnSortOrder().isEmpty()) {
+			return;
+		}
 		if (getColumnSortOrder().get(0) == tColumn) {
 			setSortDescending(!isSortDescending());
 		} else {

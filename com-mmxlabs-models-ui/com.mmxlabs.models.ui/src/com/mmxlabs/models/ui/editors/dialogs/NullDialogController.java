@@ -21,7 +21,7 @@ public class NullDialogController implements IDialogController {
 	}
 
 	@Override
-	public void relayout() {
+	public void rebuild(boolean pack) {
 
 	}
 
@@ -37,6 +37,11 @@ public class NullDialogController implements IDialogController {
 
 	@Override
 	public void updateEditorVisibility() {
+
+	}
+
+	@Override
+	public void relayout() {
 
 	}
 }
