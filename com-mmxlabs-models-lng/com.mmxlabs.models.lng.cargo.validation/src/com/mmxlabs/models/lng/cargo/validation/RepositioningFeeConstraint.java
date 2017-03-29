@@ -42,11 +42,7 @@ public class RepositioningFeeConstraint extends AbstractModelMultiConstraint {
 			if (vesselAvailability.getRepositioningFee() != null && !vesselAvailability.getRepositioningFee().isEmpty()) {
 				addErrors(vesselAvailability, vesselName, CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), "repositioning", ctx, failures);
 			}
-			if (vesselAvailability.getBallastBonus() != null && !vesselAvailability.getBallastBonus().isEmpty()) {
-				addErrors(vesselAvailability, vesselName, CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), "ballast bonus", ctx, failures);
-			}
 		}
-
 		return Activator.PLUGIN_ID;
 	}
 

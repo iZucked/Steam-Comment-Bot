@@ -101,15 +101,6 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
-	public VesselAvailabilityMaker withBallastBonus(final String fee) {
-		if (fee != null) {
-			vesselAvailability.setBallastBonus(fee);
-		} else {
-			vesselAvailability.setBallastBonus("");
-		}
-		return this;
-	}
-
 	public VesselAvailabilityMaker withStartHeel(double minVolumeInM3, double maxVolumeInM3, double cvValue, String pricePerMMBTu) {
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();

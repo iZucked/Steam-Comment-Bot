@@ -120,21 +120,6 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						}
 					}
 				}
-				final String ballastBonus = availability.getBallastBonus();
-				if (ballastBonus != null && !ballastBonus.trim().isEmpty()) {
-					for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(ballastBonus)) {
-						@Nullable
-						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-						if (date == null || date.isAfter(earliestDate)) {
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] There is no charter cost pricing data before %s %04d for curve %s", vesselName,
-											date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
-							dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS);
-							statuses.add(dcsd);
-						}
-					}
-				}
-
 			}
 			if (earliestDate != null && vessel != null) {
 				final VesselClass vesselClass = vessel.getVesselClass();

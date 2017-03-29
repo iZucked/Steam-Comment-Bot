@@ -478,7 +478,6 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
 				vesselAvailability.setFleet(false);
-				vesselAvailability.setBallastBonus(optionalAvailabilityShippingOption.getBallastBonus());
 				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
@@ -563,7 +562,6 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
 				vesselAvailability.setFleet(false);
-				vesselAvailability.setBallastBonus(optionalAvailabilityShippingOption.getBallastBonus());
 				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
