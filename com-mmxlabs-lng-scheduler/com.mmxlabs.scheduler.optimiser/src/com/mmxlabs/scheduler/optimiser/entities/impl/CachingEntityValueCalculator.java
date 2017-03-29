@@ -69,9 +69,9 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 	}
 
 	@Override
-	public long evaluate(final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
+	public long evaluateNonCargoPlan(final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
 			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-		return delegate.evaluate(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		return delegate.evaluateNonCargoPlan(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 	}
 
 	@Override

@@ -95,9 +95,6 @@ public class ScheduleCalculator {
 	}
 
 	@Inject
-	private Provider<IVolumeAllocator> volumeAllocatorProvider;
-
-	@Inject
 	private ICalculatorProvider calculatorProvider;
 
 	@Inject
@@ -234,16 +231,14 @@ public class ScheduleCalculator {
 		}
 
 		if (arrivalTimes == null) {
-			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
+			return new VolumeAllocatedSequence(resource, vesselAvailability, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 
 		// If this a cargo round trip sequence, but we have no data (i.e. there are no cargoes), return the basic data structure to avoid any exceptions
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
-		if (isRoundTripSequence) {
-			int ii = 0;
-		}
+
 		if (isRoundTripSequence && arrivalTimes.length == 0) {
-			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
+			return new VolumeAllocatedSequence(resource, vesselAvailability, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 
 		// Get start time
@@ -258,7 +253,7 @@ public class ScheduleCalculator {
 		}
 
 		// Put it all together and return
-		final VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, sequence, startTime, voyagePlans);
+		final VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, vesselAvailability, sequence, startTime, voyagePlans);
 
 		return scheduledSequence;
 	}
@@ -274,14 +269,16 @@ public class ScheduleCalculator {
 	@NonNull
 	private VolumeAllocatedSequence desOrFobSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final @Nullable IPortTimesRecord portTimesRecord) {
 
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+
 		if (portTimesRecord == null) {
-			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
+			return new VolumeAllocatedSequence(resource, vesselAvailability, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 		@NonNull
 		final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = voyagePlanner.makeDESOrFOBVoyagePlanPair(resource, sequence, portTimesRecord);
 
 		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
-		final VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, sequence, vesselStartTime,
+		final VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, vesselAvailability, sequence, vesselStartTime,
 				Collections.singletonList(new Pair<>(p.getFirst(), (IPortTimesRecord) p.getSecond())));
 
 		return scheduledSequence;

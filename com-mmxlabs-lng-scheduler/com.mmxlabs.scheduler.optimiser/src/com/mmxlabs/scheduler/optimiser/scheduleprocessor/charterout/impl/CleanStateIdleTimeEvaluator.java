@@ -20,7 +20,8 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -28,7 +29,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -93,13 +98,11 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	private final int minDays = 60;
 
 	@Override
-	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long startHeelVolumeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord) {
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
-
-		final long startHeelInM3 = startHeelVolumeInM3;
 
 		// First step, find a ballast leg which is long enough to charter-out
 		final Object[] currentSequence = vp.getSequence();
@@ -162,7 +165,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelInM3, bigSequence);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelVolumeRangeInM3, bigSequence);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -180,7 +183,11 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			setPlanParameters(bigVoyagePlan, charterToEndPlan, upToCharterPlan, vp, remainingHeelInM3);
 			final long firstPlanRemainingHeel = upToCharterPlan.getRemainingHeelInM3();
 			// calculate pre-charter plan
-			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), bigVoyagePlan.getStartingHeelInM3(),
+			long[] bigVoyageStartingHeelRangeInM3 = new long[2];
+			bigVoyageStartingHeelRangeInM3[0] = bigVoyagePlan.getStartingHeelInM3();
+			bigVoyageStartingHeelRangeInM3[1] = bigVoyagePlan.getStartingHeelInM3();
+
+			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), bigVoyageStartingHeelRangeInM3,
 					vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
@@ -201,7 +208,11 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			final long secondPlanStartHeel = charterToEndPlan.getStartingHeelInM3();
 			final long secondPlanRemainingHeel = charterToEndPlan.getRemainingHeelInM3();
 			// calculate post-charter plan
-			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlan.getStartingHeelInM3(),
+			long[] charterToEndPlanStartingHeelRangeInM3 = new long[2];
+			charterToEndPlanStartingHeelRangeInM3[0] = charterToEndPlan.getStartingHeelInM3();
+			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
+
+			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlanStartingHeelRangeInM3,
 					vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
@@ -356,13 +367,19 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
 		final IPortSlot existingSlotUsedToGenerateCharterOut = originalBallast.getOptions().getFromPortSlot();
 
+		// These will be updated later on
+		HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0));
+		HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
+
 		// now update port slot
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
 
 				/* ID */ String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), //
-				/* Start / End Port */ charterOutOption.getPort(), //
+				/* Time window */ null, /* Start / End Port */ charterOutOption.getPort(), //
 				/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
-				/* Repositioning */ 0, /* Duration */ charterOutOption.getCharterDuration());
+				/* Repositioning */ 0, /* Duration */ charterOutOption.getCharterDuration(), //
+				heelOptionConsumer, heelOptionSupplier //
+		);
 		// injector.injectMembers(charterOutPortSlot);
 
 		// copy port times record
@@ -399,6 +416,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		final PortOptions generatedCharterPortOptions = new PortOptions(charterOutPortSlot);
 		generatedCharterPortOptions.setVessel(originalBallast.getOptions().getVessel());
 		generatedCharterPortOptions.setVisitDuration(charterOutOption.getCharterDuration());
+		generatedCharterPortOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
 
 		// final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
 		// charterOutEvent.setStartPort(charterOutOption.getPort());
@@ -503,7 +521,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	 * @param bigSequence
 	 * @return
 	 */
-	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final long startHeelInM3, final ExtendedCharterOutSequence bigSequence) {
+	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence) {
 		// // We will use the VPO to optimise fuel and route choices
 		// vpo.reset();
 		//
@@ -537,7 +555,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// Calculate our new plan
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
-		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
+		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
 				bigSequence.getSequence(), vpoChoices);
 
 		return newVoyagePlan;
@@ -628,15 +646,15 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	 */
 	private void setHeelOptions(final IGeneratedCharterOutVesselEvent generatedCharterOutVesselEvent, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement[] sequence,
 			final long heelVolume) {
-		int pricePerMBTU = 0;
+		IHeelPriceCalculator heelPriceCalculator = null;
 		int cv = 0;
 
 		final IDetailsSequenceElement startOfSequence = sequence[0];
 		if (startOfSequence instanceof PortDetails) {
 			final IPortSlot portSlot = ((PortDetails) startOfSequence).getOptions().getPortSlot();
-			if (portSlot instanceof IHeelOptionsPortSlot) {
-				pricePerMBTU = ((IHeelOptionsPortSlot) portSlot).getHeelOptions().getHeelUnitPrice();
-				cv = ((IHeelOptionsPortSlot) portSlot).getHeelOptions().getHeelCVValue();
+			if (portSlot instanceof IHeelOptionSupplierPortSlot) {
+				heelPriceCalculator = ((IHeelOptionSupplierPortSlot) portSlot).getHeelOptionsSupplier().getHeelPriceCalculator();
+				cv = ((IHeelOptionSupplierPortSlot) portSlot).getHeelOptionsSupplier().getHeelCVValue();
 			} else if (portSlot instanceof ILoadSlot) {
 				IDischargeSlot discharge = null;
 				for (int i = sequence.length - 1; i >= 0; i--) {
@@ -648,50 +666,15 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 					}
 				}
 				if (discharge != null) {
-					pricePerMBTU = discharge.getDischargePriceCalculator().estimateSalesUnitPrice(discharge, portTimesRecord, null);
+					heelPriceCalculator = new ConstantHeelPriceCalculator(discharge.getDischargePriceCalculator().estimateSalesUnitPrice(discharge, portTimesRecord, null));
 				}
 				cv = ((ILoadSlot) portSlot).getCargoCVValue();
 			}
 		}
-		generatedCharterOutVesselEvent.setHeelOptions(pricePerMBTU, cv, heelVolume);
-	}
-
-	// private boolean isSolutionCached(final int firstLoadTime, final long startHeel, final int ballastStartTime, final int availableTime, final IPortSlot firstLoad, final IPortSlot discharge,
-	// final IPortSlot nextLoad, final IVesselAvailability vesselAvailability) {
-	// return generatedCharterOutOptionCache.isSolutionCached(firstLoadTime, startHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability);
-	// }
-	//
-	// private List<Pair<VoyagePlan, IPortTimesRecord>> getCachedSolution(final int firstLoadTime, final long startHeel, final int ballastStartTime, final int availableTime, final IPortSlot firstLoad,
-	// final IPortSlot discharge, final IPortSlot nextLoad, final IVesselAvailability vesselAvailability) {
-	// return generatedCharterOutOptionCache.getSplitVoyagePlans(firstLoadTime, startHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability);
-	// }
-	//
-	// private void addCachedSolution(final int firstLoadTime, final long startHeel, final int ballastStartTime, final int availableTime, final IPortSlot firstLoad, final IPortSlot discharge,
-	// final IPortSlot nextLoad, final IVesselAvailability vesselAvailability, final List<Pair<VoyagePlan, IPortTimesRecord>> solution, final GeneratedCharterOutOption charterOutOption) {
-	// Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption> solutionToCache = null;
-	// if (solution != null) {
-	// solutionToCache = new Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption>(solution, charterOutOption);
-	// }
-	// generatedCharterOutOptionCache.addSplitVoyagePlans(firstLoadTime, startHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability, solutionToCache);
-	// }
-
-	private void setAdditionalDataForCaching(final GeneratedCharterOutOption gcoo) {
-		final PortOptions gcoOptions = gcoo.getPortOptions();
-		// options
-		gcoo.setGCOVessel(gcoOptions.getVessel());
-		gcoo.setGCODuration(gcoOptions.getVisitDuration());
-
-		// port slot
-		gcoo.setGCOID(gcoOptions.getPortSlot().getId());
-		gcoo.setGCOPort(gcoOptions.getPortSlot().getPort());
-
-		// event
-		gcoo.setGCOEventStartPort(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getStartPort());
-		gcoo.setGCOEventEndPort(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getEndPort());
-		gcoo.setGCOEventHireOutRevenue(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getHireOutRevenue());
-		gcoo.setGCOEventDurationHours(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getDurationHours());
-		gcoo.setGCOEventHeelPrice(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getHeelUnitPrice());
-		gcoo.setGCOEventHeelCV(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getHeelCVValue());
-		gcoo.setGCOEventHeelVolume(((IGeneratedCharterOutVesselEventPortSlot) gcoOptions.getPortSlot()).getVesselEvent().getHeelLimit());
+		assert heelPriceCalculator != null;
+		HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator);
+		HeelOptionSupplier heelSupplier = new HeelOptionSupplier(heelVolume, heelVolume, cv, heelPriceCalculator);
+		generatedCharterOutVesselEvent.setHeelConsumer(heelConsumer);
+		generatedCharterOutVesselEvent.setHeelSupplier(heelSupplier);
 	}
 }

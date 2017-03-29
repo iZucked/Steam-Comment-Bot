@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -16,12 +17,12 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author Tom Hinton
  * 
  */
-public interface IVesselEventPortSlot extends IHeelOptionsPortSlot {
+@NonNullByDefault
+public interface IVesselEventPortSlot extends IPortSlot {
+
 	IVesselEvent getVesselEvent();
 
-	@NonNull
-	List<@NonNull ISequenceElement> getEventSequenceElements();
+	List<ISequenceElement> getEventSequenceElements();
 
-	@NonNull
-	List<@NonNull IPortSlot> getEventPortSlots();
+	List<IPortSlot> getEventPortSlots();
 }

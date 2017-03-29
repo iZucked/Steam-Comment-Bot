@@ -157,25 +157,6 @@ public class LatenessChecker {
 
 	}
 
-	// private void addEntryToLatenessAnnotation(final @NonNull IPortSlot portSlot, final @NonNull ITimeWindow tw, final int latenessInHours,
-	// final @NonNull VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
-	// // Set port details entry
-	//
-	// final Pair<ILatenessComponentParameters.Interval, Long> weightedLatenessPair = getWeightedLateness(tw, latenessInHours);
-	// final Interval interval = weightedLatenessPair.getFirst();
-	// final long weightedLateness = weightedLatenessPair.getSecond();
-	// final int latenessInHoursWithoutFlex = getLatenessWithoutFlex(portSlot, tw, volumeAllocatedSequence.getArrivalTime(portSlot));
-	// final Interval intervalWithoutFlex = getWeightedLateness(tw, latenessInHoursWithoutFlex).getFirst();
-	//
-	// volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessInHours, latenessInHoursWithoutFlex, intervalWithoutFlex);
-	//
-	// if (annotatedSolution != null) {
-	// final ILatenessAnnotation annotation = new LatenessAnnotation(latenessInHours, weightedLateness, interval, latenessInHoursWithoutFlex, intervalWithoutFlex);
-	// annotatedSolution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(portSlot), SchedulerConstants.AI_latenessInfo, annotation);
-	// setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
-	// }
-	// }
-
 	private void setLatenessAnnotationsOnAnnotatedSolution(@NonNull final IAnnotatedSolution annotatedSolution, @NonNull final ILatenessAnnotation latenessAnnotation) {
 		final int lateness = latenessAnnotation.getLateness();
 		final String key = getKey(latenessAnnotation, lateness);

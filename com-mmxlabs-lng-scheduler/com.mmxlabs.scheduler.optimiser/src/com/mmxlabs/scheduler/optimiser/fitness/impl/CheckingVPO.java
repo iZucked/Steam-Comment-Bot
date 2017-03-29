@@ -30,11 +30,11 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public VoyagePlan optimise(@Nullable final IResource resource, @NonNull final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final long vesselCharterInRatePerDay,
+	public VoyagePlan optimise(@Nullable final IResource resource, @NonNull final IVessel vessel, final long[] startHeelRangeInM3, final int baseFuelPricePerMT, final long vesselCharterInRatePerDay,
 			@NonNull final IPortTimesRecord portTimesRecord, @NonNull final List<@NonNull IOptionsSequenceElement> basicSequence, @NonNull final List<@NonNull IVoyagePlanChoice> choices) {
 
-		final VoyagePlan ref = reference.optimise(resource, vessel, startHeelInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
-		final VoyagePlan res = delegate.optimise(resource, vessel, startHeelInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+		final VoyagePlan ref = reference.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+		final VoyagePlan res = delegate.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
 
 		@NonNull
 		String refStr = getString(ref);

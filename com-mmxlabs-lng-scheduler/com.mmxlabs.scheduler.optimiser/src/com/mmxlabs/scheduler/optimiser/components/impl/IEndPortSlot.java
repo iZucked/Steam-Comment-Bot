@@ -4,12 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
-public interface IEndPortSlot extends IPortSlot {
-
-	boolean isEndCold();
-
-	long getTargetEndHeelInM3();
+public interface IEndPortSlot extends IPortSlot, IHeelOptionConsumerPortSlot {
 
 }

@@ -110,12 +110,12 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	@Override
 	protected @NonNull AllocationAnnotation calculateShippedMode(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
-		
+
 		if (slots.size() > 2) {
 			// Fixed discharge volumes, so no decision to make here.
 			return calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
 		}
-		
+
 		final IEntityValueCalculator entityValueCalculator = entityValueCalculatorProvider.get();
 
 		final AllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
@@ -159,7 +159,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		}
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
-		final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3,
+		final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minimumEndVolumeInM3,
 				scaleFactor * cargoCV);
 
 		// greedy assumption: always load as much as possible
@@ -173,7 +173,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		// the amount of LNG available for discharge
 		long unusedVolumeInMMBTU = loadVolumeInMMBTU
-				+ Calculator.convertM3ToMMBTu(allocationRecord.startVolumeInM3 - allocationRecord.minEndVolumeInM3 - allocationRecord.requiredFuelVolumeInM3, scaleFactor * cargoCV);
+				+ Calculator.convertM3ToMMBTu(allocationRecord.startVolumeInM3 - allocationRecord.minimumEndVolumeInM3 - allocationRecord.requiredFuelVolumeInM3, scaleFactor * cargoCV);
 
 		// available volume is non-negative
 		assert (unusedVolumeInMMBTU >= 0);
@@ -202,8 +202,10 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			// Adjust unused volume for new discharge volume
 			unusedVolumeInMMBTU += currentDischargeVolumeInMMBTU;
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
-			if (allocationRecord.preferShortLoadOverLeftoverHeel) {
-				loadVolumeInMMBTU -= unusedVolumeInMMBTU;
+			if (unusedVolumeInMMBTU > 0 && allocationRecord.preferShortLoadOverLeftoverHeel) {
+				// Use up the full heel range before short loading....
+				final long additionalEndHeelInMMBtu = allocationRecord.maximumEndVolumeInM3 == Long.MAX_VALUE ? unusedVolumeInMMBTU : Calculator.convertM3ToMMBTu(allocationRecord.maximumEndVolumeInM3 - allocationRecord.minimumEndVolumeInM3, scaleFactor * cargoCV);
+				loadVolumeInMMBTU -= Math.max(0, unusedVolumeInMMBTU - additionalEndHeelInMMBtu);
 			}
 		}
 
@@ -247,7 +249,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		annotation.setPhysicalSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU - loadBoilOffInMMBTu);
 
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
-		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + (Calculator.convertMMBTuToM3(unusedVolumeInMMBTU, cargoCV) + 5L) / scaleFactorL);
+		annotation.setRemainingHeelVolumeInM3(allocationRecord.minimumEndVolumeInM3 + (Calculator.convertMMBTuToM3(unusedVolumeInMMBTU, cargoCV) + 5L) / scaleFactorL);
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
 
 		for (int i = 0; i < slots.size(); i++) {
@@ -260,6 +262,10 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			annotation.setCommercialSlotVolumeInMMBTu(slot, (annotation.getCommercialSlotVolumeInMMBTu(slot) + 5L) / scaleFactorL);
 			annotation.setPhysicalSlotVolumeInMMBTu(slot, (annotation.getPhysicalSlotVolumeInMMBTu(slot) + 5L) / scaleFactorL);
 		}
+		
+		assert annotation.getStartHeelVolumeInM3() >= 0;
+		assert annotation.getRemainingHeelVolumeInM3() >= 0;
+		
 		return annotation;
 	}
 }

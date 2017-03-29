@@ -7,15 +7,14 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -33,7 +32,7 @@ public class ShippingCostHelper {
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
-	public long getFuelCosts(final @NonNull VoyagePlan plan, final boolean includeLNG) {
+	public long getFuelCosts(final @NonNull VoyagePlan plan) {
 
 		// @formatter:off
 		final long fuelCost = plan.getTotalFuelCost(FuelComponent.Base)
@@ -41,10 +40,7 @@ public class ShippingCostHelper {
 				+ plan.getTotalFuelCost(FuelComponent.Cooldown)
 				+ plan.getTotalFuelCost(FuelComponent.IdleBase)
 				+ plan.getTotalFuelCost(FuelComponent.IdlePilotLight) 
-				+ plan.getTotalFuelCost(FuelComponent.PilotLight)
-				+ (includeLNG ? plan.getTotalFuelCost(FuelComponent.NBO) 
-						+ plan.getTotalFuelCost(FuelComponent.FBO)
-						+ plan.getTotalFuelCost(FuelComponent.IdleNBO) : 0);
+				+ plan.getTotalFuelCost(FuelComponent.PilotLight);
 		// @formatter:on
 		return fuelCost;
 	}
@@ -183,7 +179,7 @@ public class ShippingCostHelper {
 		return false;
 	}
 
-	public long getShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterInCosts) {
+	public long getShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeCharterInCosts) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return 0L;
@@ -209,7 +205,7 @@ public class ShippingCostHelper {
 			}
 		}
 
-		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
+		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
 		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
 
@@ -223,34 +219,20 @@ public class ShippingCostHelper {
 		return 0L;
 	}
 
-//	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime) {
-//		if (portSlot.getPortType() == PortType.End) {
-//			return vesselAvailability.getBallastBonus().getValueAtPoint(vesselEndTime);
-//		}
-//		return 0L;
-//	}
-
 	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End) {
-			@Nullable
-			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
-			if (ballastBonusContract == null) {
-				return 0L;
-			} else {
-				return ballastBonusContract.calculateBallastBonus(portSlot, vesselAvailability, vesselEndTime);
-			}
+			return vesselAvailability.getBallastBonus().getValueAtPoint(vesselEndTime);
 		}
 		return 0L;
 	}
-	
-	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG,
-			final boolean includeCharterInCosts) {
+
+	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeCharterInCosts) {
 		final long @NonNull [] costs = new long[4];
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return costs;
 		}
 
-		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
+		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
 		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
 		final long shippingDays = includeCharterInCosts ? getDurationInDays(plan) : 0L;

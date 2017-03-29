@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public interface IVoyagePlanOptimiser {
 
 	/**
@@ -30,7 +31,7 @@ public interface IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Nullable
-	VoyagePlan optimise(@Nullable IResource resource, @NonNull IVessel vessel, long startHeelInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, @NonNull IPortTimesRecord portTimesRecord,
-			@NonNull List<@NonNull IOptionsSequenceElement> basicSequence, @NonNull List<@NonNull IVoyagePlanChoice> choices);
+	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices);
 
 }

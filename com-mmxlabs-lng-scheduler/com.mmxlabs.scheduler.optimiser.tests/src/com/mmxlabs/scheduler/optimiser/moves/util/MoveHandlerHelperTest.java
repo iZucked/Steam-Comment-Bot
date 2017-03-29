@@ -40,6 +40,7 @@ public class MoveHandlerHelperTest {
 		final ListModifiableSequence sequenceA = new ListModifiableSequence(Lists.newArrayList(elementResourceAStart, elementA, elementB, elementC, elementD, elementE, elementF, elementResourceAEnd));
 
 		IMoveHelper helper = Mockito.mock(IMoveHelper.class);
+		IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
 
 		Mockito.when(helper.isLoadSlot(elementA)).thenReturn(Boolean.TRUE);
 		Mockito.when(helper.isLoadSlot(elementC)).thenReturn(Boolean.TRUE);
@@ -57,9 +58,6 @@ public class MoveHandlerHelperTest {
 
 		Mockito.when(helper.isStartOrEndSlot(elementResourceAStart)).thenReturn(Boolean.TRUE);
 		Mockito.when(helper.isStartOrEndSlot(elementResourceAEnd)).thenReturn(Boolean.TRUE);
-
-		IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-
 		MoveHandlerHelper moveHandlerHelper = createInstance(helper, portSlotProvider);
 
 		// Check sequence extracts
@@ -95,7 +93,7 @@ public class MoveHandlerHelperTest {
 		}
 	}
 
-	private MoveHandlerHelper createInstance(final @NonNull IMoveHelper helper, @NonNull IPortSlotProvider portSlotProvider) {
+	private MoveHandlerHelper createInstance(final @NonNull IMoveHelper helper, final @NonNull IPortSlotProvider portSlotProvider) {
 		Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {

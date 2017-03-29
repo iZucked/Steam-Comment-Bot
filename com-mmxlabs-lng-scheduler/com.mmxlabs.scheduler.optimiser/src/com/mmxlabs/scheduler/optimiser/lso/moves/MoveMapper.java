@@ -130,7 +130,6 @@ public class MoveMapper {
 		} else {
 			supportedTypes.add(MoveTypes.Guided_Move_Generator);
 		}
-		final int ii = 11;
 
 		// // O
 		// // 10 % Optional

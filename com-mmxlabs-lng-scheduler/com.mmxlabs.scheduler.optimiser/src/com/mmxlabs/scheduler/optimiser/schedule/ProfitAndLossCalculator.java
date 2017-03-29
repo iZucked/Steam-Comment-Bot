@@ -166,7 +166,7 @@ public class ProfitAndLossCalculator {
 				}
 
 				if (!cargo) {
-					final long otherGroupValue = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, portTimesRecord, vesselAvailability, time, sequence.getStartTime(),
+					final long otherGroupValue = entityValueCalculatorProvider.get().evaluateNonCargoPlan(EvaluationMode.FullPNL, plan, portTimesRecord, vesselAvailability, time, sequence.getStartTime(),
 							volumeAllocatedSequences, annotatedSolution);
 					profitAndLossSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
 				}

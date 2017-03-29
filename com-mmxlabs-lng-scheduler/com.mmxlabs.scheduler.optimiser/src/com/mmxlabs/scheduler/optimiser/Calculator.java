@@ -51,7 +51,7 @@ public final class Calculator {
 		return (m3 * (long) factor) / HighScaleFactor;
 	}
 
-	public static long convertM3ToMMBTuWithOverflowProtection(long volumeInM3, int cv) {
+	public static long convertM3ToMMBTuWithOverflowProtection(final long volumeInM3, final int cv) {
 		if (volumeInM3 == Long.MAX_VALUE) {
 			return Long.MAX_VALUE;
 		} else {
@@ -69,7 +69,7 @@ public final class Calculator {
 		return (mmbtu * HighScaleFactor) / (long) factor;
 	}
 
-	public static long convertMMBTuToM3WithOverflowProtection(long volumeInMMBTu, int cv) {
+	public static long convertMMBTuToM3WithOverflowProtection(final long volumeInMMBTu, final int cv) {
 		if (volumeInMMBTu == Long.MAX_VALUE) {
 			return Long.MAX_VALUE;
 		} else {
@@ -205,7 +205,7 @@ public final class Calculator {
 	public static long multiplyHigh(final long a, final long b) {
 		return (a * b) / HighScaleFactor;
 	}
-	
+
 	/**
 	 * Simple percentage (scaled by 1,000,000)
 	 * 
@@ -217,5 +217,4 @@ public final class Calculator {
 		return (input * percentage) / HighScaleFactor;
 	}
 
-	
 }

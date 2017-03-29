@@ -185,7 +185,7 @@ public class SearchingSequenceScheduler extends EnumeratingSequenceScheduler {
 		@NonNull
 		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		// TODO: Handle better?
-		long heelVolumeInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+		long[] heelVolumeInM3 = new long[] { vesselAvailability.getVessel().getVesselClass().getSafetyHeel(), vesselAvailability.getVessel().getVesselClass().getSafetyHeel() };
 		int lastIndex = sequence.size();
 		if (isSequenceBreak) {
 			VoyagePlan leftPlan = null;
@@ -252,9 +252,6 @@ public class SearchingSequenceScheduler extends EnumeratingSequenceScheduler {
 
 						for (int j = i; j < lastIndex; ++j) {
 							ISequenceElement element = sequence.get(j);
-							if (element.getName().contains("CPK-2")) {
-								int ii = 90;
-							}
 							IPortSlot slot = portSlotProvider.getPortSlot(element);
 							if (j != i && breakSequence[j]) {
 								record.setReturnSlotTime(slot, arrivalTimes[seq][j]);
@@ -312,9 +309,10 @@ public class SearchingSequenceScheduler extends EnumeratingSequenceScheduler {
 			long lngValue = Calculator.costFromConsumption(lngMMBTU, margin);
 
 			// Return Pair<Cost,ViolationCount>
-			return -(h.getShippingCosts(plan, vesselAvailability, false, true) + lngValue + purchaseCost);
+			return -(h.getShippingCosts(plan, vesselAvailability, true) + lngValue + purchaseCost);
 		} else {
-			return -h.getShippingCosts(plan, vesselAvailability, true, true);
+			// TODO: Consider heel costs/revenue?
+			return -h.getShippingCosts(plan, vesselAvailability, true);
 		}
 	}
 }

@@ -49,7 +49,7 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull EvaluationMode evaluationMode, @NonNull VoyagePlan plan, @NonNull IPortTimesRecord portTimesRecord, @NonNull IVesselAvailability vesselAvailability, int planStartTime,
+	long evaluateNonCargoPlan(@NonNull EvaluationMode evaluationMode, @NonNull VoyagePlan plan, @NonNull IPortTimesRecord portTimesRecord, @NonNull IVesselAvailability vesselAvailability, int planStartTime,
 			int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**

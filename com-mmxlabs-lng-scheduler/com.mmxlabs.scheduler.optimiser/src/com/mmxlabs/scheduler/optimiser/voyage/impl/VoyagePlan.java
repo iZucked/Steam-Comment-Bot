@@ -123,6 +123,7 @@ public final class VoyagePlan implements Cloneable {
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
 					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
+					&& Objects.equal(startHeelCost, plan.startHeelCost)
 					&& Arrays.deepEquals(sequence, plan.sequence)
 
 					;
@@ -178,6 +179,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	private long totalRouteCost;
+	private long startHeelCost;
 
 	public void setTotalRouteCost(final long routeCost) {
 		totalRouteCost = routeCost;
@@ -229,5 +231,18 @@ public final class VoyagePlan implements Cloneable {
 
 	public void setCharterInRatePerDay(final long charterInRatePerDay) {
 		this.charterInRatePerDay = charterInRatePerDay;
+	}
+
+	public void setStartHeelCost(long startHeelCost) {
+		this.startHeelCost = startHeelCost;
+	}
+
+	/**
+	 * Return the cost for *just* the start heel of the plan. There may be other heel costs or revenue contained within the plan.
+	 * 
+	 * @return
+	 */
+	public long getStartHeelCost() {
+		return startHeelCost;
 	}
 }

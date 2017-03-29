@@ -61,6 +61,7 @@ public class SwapCargoVesselMoveHandler implements IGuidedMoveHandler {
 		final List<ISequenceElement> orderedCargoElements = moveHelper.extractSegment(fromSequence, element);
 
 		if (orderedCargoElements.isEmpty()) {
+			moveHelper.extractSegment(fromSequence, element);
 			throw new IllegalStateException();
 		}
 

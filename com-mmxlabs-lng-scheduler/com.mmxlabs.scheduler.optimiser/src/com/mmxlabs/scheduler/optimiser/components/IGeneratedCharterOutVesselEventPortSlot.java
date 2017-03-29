@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
@@ -14,15 +14,15 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
  * @author achurchill
  * 
  */
-public interface IGeneratedCharterOutVesselEventPortSlot extends IVesselEventPortSlot {
+@NonNullByDefault
+public interface IGeneratedCharterOutVesselEventPortSlot extends ICharterOutVesselEventPortSlot, IHeelOptionSupplierPortSlot, IHeelOptionConsumerPortSlot {
 
 	@Override
 	IGeneratedCharterOutVesselEvent getVesselEvent();
 
-	void setPort(@NonNull IPort port);
+	void setPort(IPort port);
 
-	void setTimeWindow(@NonNull ITimeWindow port);
+	void setTimeWindow(ITimeWindow port);
 
-	void setVesselEvent(@NonNull IGeneratedCharterOutVesselEvent event);
-
+	void setVesselEvent(IGeneratedCharterOutVesselEvent event);
 }
