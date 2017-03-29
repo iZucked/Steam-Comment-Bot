@@ -129,17 +129,8 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 		return this.repositioningFee;
 	}
 
-	@Override
-	public ILongCurve getBallastBonus() {
-		return this.ballastBonus;
-	}
-
 	public void setRepositioningFee(ILongCurve repositioningFee) {
 		this.repositioningFee = repositioningFee;
-	}
-
-	public void setBallastBonus(ILongCurve ballastBonus) {
-		this.ballastBonus = ballastBonus;
 	}
 
 	@Override

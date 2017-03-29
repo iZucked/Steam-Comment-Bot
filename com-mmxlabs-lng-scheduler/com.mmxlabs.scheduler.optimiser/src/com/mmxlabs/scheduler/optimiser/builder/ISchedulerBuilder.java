@@ -226,15 +226,13 @@ public interface ISchedulerBuilder {
 	 * @param end
 	 * @param repositioningFee
 	 *            TODO
-	 * @param ballastBonus
-	 *            TODO
 	 * @param isOptional
 	 *            TODO
 	 * @return
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
-			@NonNull IEndRequirement end, ILongCurve repositioningFee, ILongCurve ballastBonus, boolean isOptional);
+			@NonNull IEndRequirement end, ILongCurve repositioningFee, boolean isOptional);
 
 	/**
 	 * Boolean flag to indicate hard start time window. If false, provider timeWindow is a notional start date.

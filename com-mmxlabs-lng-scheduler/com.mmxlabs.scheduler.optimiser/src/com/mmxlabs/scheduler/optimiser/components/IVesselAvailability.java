@@ -51,14 +51,6 @@ public interface IVesselAvailability {
 	ILongCurve getRepositioningFee();
 	
 	/**
-	 * Returns the ballast bonus of the vessel.
-	 * 
-	 * @return ballast bonus
-	 */
-	@NonNull
-	ILongCurve getBallastBonus();
-	
-	/**
 	 * Sets the ballast bonus contract of the vessel availability.
 	 * 
 	 */

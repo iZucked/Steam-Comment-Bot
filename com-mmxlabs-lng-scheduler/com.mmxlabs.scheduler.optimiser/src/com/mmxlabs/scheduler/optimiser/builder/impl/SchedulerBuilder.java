@@ -819,7 +819,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
 		final IVesselAvailability spotAvailability = createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotIndex,
-				new ZeroLongCurve(), new ZeroLongCurve(), true);
+				new ZeroLongCurve(), true);
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
 
 		return spotAvailability;
@@ -853,14 +853,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartRequirement start,
-			final IEndRequirement end, final ILongCurve repositioningFee, final ILongCurve ballastBonus, final boolean isOptional) {
-		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, -1, repositioningFee, ballastBonus, isOptional);
+			final IEndRequirement end, final ILongCurve repositioningFee, final boolean isOptional) {
+		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, -1, repositioningFee, isOptional);
 	}
 
 	@NonNull
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
 			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final int spotIndex,
-			final ILongCurve repositioningFee, final ILongCurve ballastBonus, final boolean isOptional) {
+			final ILongCurve repositioningFee, final boolean isOptional) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
@@ -946,7 +946,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vesselAvailability.setOptional(isOptional);
 		vesselAvailability.setRepositioningFee(repositioningFee);
-		vesselAvailability.setBallastBonus(ballastBonus);
 		return vesselAvailability;
 	}
 
@@ -1241,7 +1240,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		assert virtualClass != null;
 		final IVessel virtualVessel = createVessel("virtual-" + type.toString() + "-" + element.getName(), virtualClass, virtualClass.getCargoCapacity());
 		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, new ZeroLongCurve(), type, createStartRequirement(), createEndRequirement(), new ZeroLongCurve(),
-				new ZeroLongCurve(), true);
+				true);
 		// Bind every slot to its vessel
 		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 		assert portSlot != null;
@@ -2004,7 +2003,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				createHeelConsumer(roundTripCargoVesselClass.getSafetyHeel(), roundTripCargoVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 
 		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP, start, end,
-				spotCharterInMarket, -1, new ZeroLongCurve(), new ZeroLongCurve(), true);
+				spotCharterInMarket, -1, new ZeroLongCurve(), true);
 
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(vesselAvailability, spotCharterInMarket, -1);
 		return vesselAvailability;

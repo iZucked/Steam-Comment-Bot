@@ -130,13 +130,13 @@ public class SimpleSchedulerTest {
 
 		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
 				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
-				new ConstantValueLongCurve(0), false);
+				false);
 		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
 				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
-				new ConstantValueLongCurve(0), false);
+				false);
 		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
 				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
-				new ConstantValueLongCurve(0), false);
+				false);
 
 		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
 		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);
