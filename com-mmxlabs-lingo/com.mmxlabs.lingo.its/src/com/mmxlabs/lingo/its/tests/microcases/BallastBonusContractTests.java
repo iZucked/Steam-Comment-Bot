@@ -92,7 +92,6 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 	}
 
 	@Test
-	@Ignore
 	@Category({ MicroTest.class })
 	public void testLumpSumBallastBonusOff() throws Exception {
 
@@ -117,12 +116,11 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			EndEvent end = getEndEvent(vesselAvailability);
 			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), 0);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_941_033);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173);
 		});
 	}
 
 	@Test
-	@Ignore
 	@Category({ MicroTest.class })
 	public void testLumpSumBallastBonusOn_Matching() throws Exception {
 
@@ -149,12 +147,11 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			EndEvent end = getEndEvent(vesselAvailability);
 			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), -1_000_000);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_941_033 - 1_000_000);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 1_000_000);
 		});
 	}
 
 	@Test
-	@Ignore
 	@Category({ MicroTest.class })
 	public void testLumpSumBallastBonusOn_NotMatching() throws Exception {
 
@@ -181,7 +178,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			EndEvent end = getEndEvent(vesselAvailability);
 			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), 0);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_941_033 - 0);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 0);
 		});
 	}
 
@@ -229,7 +226,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			EndEvent end = getEndEvent(vesselAvailability);
 			Assert.assertEquals(-62_499, end.getGroupProfitAndLoss().getProfitAndLoss());
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_941_033 - 0);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 62_499);
 		});
 	}
 	
@@ -277,7 +274,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			EndEvent end = getEndEvent(vesselAvailability);
 			Assert.assertEquals(-62_499, end.getGroupProfitAndLoss().getProfitAndLoss());
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_941_033 - 0);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 62_499);
 		});
 	}
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
