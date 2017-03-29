@@ -211,6 +211,43 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.BALLAST_BONUS_CONTRACT: {
+				BallastBonusContract ballastBonusContract = (BallastBonusContract)theEObject;
+				T result = caseBallastBonusContract(ballastBonusContract);
+				if (result == null) result = caseUUIDObject(ballastBonusContract);
+				if (result == null) result = caseMMXObject(ballastBonusContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.RULE_BASED_BALLAST_BONUS_CONTRACT: {
+				RuleBasedBallastBonusContract ruleBasedBallastBonusContract = (RuleBasedBallastBonusContract)theEObject;
+				T result = caseRuleBasedBallastBonusContract(ruleBasedBallastBonusContract);
+				if (result == null) result = caseBallastBonusContract(ruleBasedBallastBonusContract);
+				if (result == null) result = caseUUIDObject(ruleBasedBallastBonusContract);
+				if (result == null) result = caseMMXObject(ruleBasedBallastBonusContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.BALLAST_BONUS_CONTRACT_LINE: {
+				BallastBonusContractLine ballastBonusContractLine = (BallastBonusContractLine)theEObject;
+				T result = caseBallastBonusContractLine(ballastBonusContractLine);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE: {
+				LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = (LumpSumBallastBonusContractLine)theEObject;
+				T result = caseLumpSumBallastBonusContractLine(lumpSumBallastBonusContractLine);
+				if (result == null) result = caseBallastBonusContractLine(lumpSumBallastBonusContractLine);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: {
+				NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusContractLine)theEObject;
+				T result = caseNotionalJourneyBallastBonusContractLine(notionalJourneyBallastBonusContractLine);
+				if (result == null) result = caseBallastBonusContractLine(notionalJourneyBallastBonusContractLine);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -437,6 +474,81 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDateShiftExpressionPriceParameters(DateShiftExpressionPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBallastBonusContract(BallastBonusContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRuleBasedBallastBonusContract(RuleBasedBallastBonusContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Contract Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Contract Line</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBallastBonusContractLine(BallastBonusContractLine object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLumpSumBallastBonusContractLine(LumpSumBallastBonusContractLine object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNotionalJourneyBallastBonusContractLine(NotionalJourneyBallastBonusContractLine object) {
 		return null;
 	}
 

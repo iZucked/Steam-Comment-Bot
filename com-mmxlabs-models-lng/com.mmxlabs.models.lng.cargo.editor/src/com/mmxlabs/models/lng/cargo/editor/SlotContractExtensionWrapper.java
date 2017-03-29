@@ -70,6 +70,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 								dialogContext.getDialogController().updateEditorVisibility();
 								super.display(dialogContext, scenario, r, range);
 								getLabel().pack();
+								dialogContext.getDialogController().relayout();
 								return true;
 							}
 						}
@@ -88,7 +89,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 					dialogContext.getDialogController().updateEditorVisibility();
 					super.display(dialogContext, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
 					getLabel().pack();
-
+					dialogContext.getDialogController().relayout();
 					return true;
 
 				}

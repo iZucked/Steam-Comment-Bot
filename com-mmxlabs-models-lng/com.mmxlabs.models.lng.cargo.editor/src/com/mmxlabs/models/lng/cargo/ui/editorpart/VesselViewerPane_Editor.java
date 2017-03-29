@@ -73,19 +73,6 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 			}
 		}});
 
-		addTypicalColumn("Ballast Bonus", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), jointModelEditor.getEditingDomain()) {@Override
-			public boolean canEdit(Object object) {
-			if (object instanceof VesselAvailability) {
-				if (!((VesselAvailability) object).isFleet()) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return super.canEdit(object);
-			}
-		}});
-		
 		addTypicalColumn("Start Port",
 				new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));

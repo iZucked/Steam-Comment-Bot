@@ -3674,13 +3674,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__BALLAST_BONUS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
+	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5910,6 +5919,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_BallastBonus();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ballast Bonus Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_BallastBonusContract();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7129,6 +7149,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_AVAILABILITY__BALLAST_BONUS = eINSTANCE.getVesselAvailability_BallastBonus();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability_BallastBonusContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.

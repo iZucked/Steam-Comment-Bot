@@ -80,6 +80,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
 			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: return createDateShiftExpressionPriceParameters();
+			case CommercialPackage.RULE_BASED_BALLAST_BONUS_CONTRACT: return createRuleBasedBallastBonusContract();
+			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE: return createLumpSumBallastBonusContractLine();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: return createNotionalJourneyBallastBonusContractLine();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -217,6 +220,36 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public DateShiftExpressionPriceParameters createDateShiftExpressionPriceParameters() {
 		DateShiftExpressionPriceParametersImpl dateShiftExpressionPriceParameters = new DateShiftExpressionPriceParametersImpl();
 		return dateShiftExpressionPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RuleBasedBallastBonusContract createRuleBasedBallastBonusContract() {
+		RuleBasedBallastBonusContractImpl ruleBasedBallastBonusContract = new RuleBasedBallastBonusContractImpl();
+		return ruleBasedBallastBonusContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LumpSumBallastBonusContractLine createLumpSumBallastBonusContractLine() {
+		LumpSumBallastBonusContractLineImpl lumpSumBallastBonusContractLine = new LumpSumBallastBonusContractLineImpl();
+		return lumpSumBallastBonusContractLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine() {
+		NotionalJourneyBallastBonusContractLineImpl notionalJourneyBallastBonusContractLine = new NotionalJourneyBallastBonusContractLineImpl();
+		return notionalJourneyBallastBonusContractLine;
 	}
 
 	/**

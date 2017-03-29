@@ -70,6 +70,7 @@ public class VesselAvailabilityItemProvider
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
 			addBallastBonusPropertyDescriptor(object);
+			addBallastBonusContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -356,6 +357,28 @@ public class VesselAvailabilityItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ballast Bonus Contract feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBallastBonusContractPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_ballastBonusContract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_ballastBonusContract_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

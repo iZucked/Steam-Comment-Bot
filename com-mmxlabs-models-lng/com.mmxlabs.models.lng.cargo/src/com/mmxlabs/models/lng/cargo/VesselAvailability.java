@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
@@ -44,6 +45,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
@@ -561,6 +563,32 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	void setBallastBonus(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Bonus Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Bonus Contract</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Bonus Contract</em>' reference.
+	 * @see #setBallastBonusContract(BallastBonusContract)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_BallastBonusContract()
+	 * @model
+	 * @generated
+	 */
+	BallastBonusContract getBallastBonusContract();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Bonus Contract</em>' reference.
+	 * @see #getBallastBonusContract()
+	 * @generated
+	 */
+	void setBallastBonusContract(BallastBonusContract value);
 
 	/**
 	 * <!-- begin-user-doc -->

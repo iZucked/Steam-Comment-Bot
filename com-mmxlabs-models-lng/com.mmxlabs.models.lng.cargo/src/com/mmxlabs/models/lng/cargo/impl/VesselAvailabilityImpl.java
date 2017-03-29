@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -54,6 +55,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getBallastBonus <em>Ballast Bonus</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
  * </ul>
  *
  * @generated
@@ -363,6 +365,16 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected String ballastBonus = BALLAST_BONUS_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getBallastBonusContract() <em>Ballast Bonus Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonusContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected BallastBonusContract ballastBonusContract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -915,6 +927,44 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BallastBonusContract getBallastBonusContract() {
+		if (ballastBonusContract != null && ballastBonusContract.eIsProxy()) {
+			InternalEObject oldBallastBonusContract = (InternalEObject)ballastBonusContract;
+			ballastBonusContract = (BallastBonusContract)eResolveProxy(oldBallastBonusContract);
+			if (ballastBonusContract != oldBallastBonusContract) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, oldBallastBonusContract, ballastBonusContract));
+			}
+		}
+		return ballastBonusContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BallastBonusContract basicGetBallastBonusContract() {
+		return ballastBonusContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastBonusContract(BallastBonusContract newBallastBonusContract) {
+		BallastBonusContract oldBallastBonusContract = ballastBonusContract;
+		ballastBonusContract = newBallastBonusContract;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, oldBallastBonusContract, ballastBonusContract));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZonedDateTime getStartByAsDateTime() {
@@ -1071,6 +1121,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return getRepositioningFee();
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				return getBallastBonus();
+			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
+				if (resolve) return getBallastBonusContract();
+				return basicGetBallastBonusContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1134,6 +1187,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				setBallastBonus((String)newValue);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
+				setBallastBonusContract((BallastBonusContract)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1194,6 +1250,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				setBallastBonus(BALLAST_BONUS_EDEFAULT);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
+				setBallastBonusContract((BallastBonusContract)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1238,6 +1297,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				return BALLAST_BONUS_EDEFAULT == null ? ballastBonus != null : !BALLAST_BONUS_EDEFAULT.equals(ballastBonus);
+			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
+				return ballastBonusContract != null;
 		}
 		return super.eIsSet(featureID);
 	}

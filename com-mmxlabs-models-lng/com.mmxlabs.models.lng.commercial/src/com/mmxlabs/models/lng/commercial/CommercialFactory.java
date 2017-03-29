@@ -114,6 +114,33 @@ public interface CommercialFactory extends EFactory {
 	DateShiftExpressionPriceParameters createDateShiftExpressionPriceParameters();
 
 	/**
+	 * Returns a new object of class '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * @generated
+	 */
+	RuleBasedBallastBonusContract createRuleBasedBallastBonusContract();
+
+	/**
+	 * Returns a new object of class '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * @generated
+	 */
+	LumpSumBallastBonusContractLine createLumpSumBallastBonusContractLine();
+
+	/**
+	 * Returns a new object of class '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * @generated
+	 */
+	NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

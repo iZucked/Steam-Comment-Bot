@@ -147,6 +147,26 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createDateShiftExpressionPriceParametersAdapter();
 			}
 			@Override
+			public Adapter caseBallastBonusContract(BallastBonusContract object) {
+				return createBallastBonusContractAdapter();
+			}
+			@Override
+			public Adapter caseRuleBasedBallastBonusContract(RuleBasedBallastBonusContract object) {
+				return createRuleBasedBallastBonusContractAdapter();
+			}
+			@Override
+			public Adapter caseBallastBonusContractLine(BallastBonusContractLine object) {
+				return createBallastBonusContractLineAdapter();
+			}
+			@Override
+			public Adapter caseLumpSumBallastBonusContractLine(LumpSumBallastBonusContractLine object) {
+				return createLumpSumBallastBonusContractLineAdapter();
+			}
+			@Override
+			public Adapter caseNotionalJourneyBallastBonusContractLine(NotionalJourneyBallastBonusContractLine object) {
+				return createNotionalJourneyBallastBonusContractLineAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -385,6 +405,76 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDateShiftExpressionPriceParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BallastBonusContract <em>Ballast Bonus Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContract
+	 * @generated
+	 */
+	public Adapter createBallastBonusContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract <em>Rule Based Ballast Bonus Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract
+	 * @generated
+	 */
+	public Adapter createRuleBasedBallastBonusContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BallastBonusContractLine <em>Ballast Bonus Contract Line</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContractLine
+	 * @generated
+	 */
+	public Adapter createBallastBonusContractLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine <em>Lump Sum Ballast Bonus Contract Line</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine
+	 * @generated
+	 */
+	public Adapter createLumpSumBallastBonusContractLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine <em>Notional Journey Ballast Bonus Contract Line</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine
+	 * @generated
+	 */
+	public Adapter createNotionalJourneyBallastBonusContractLineAdapter() {
 		return null;
 	}
 

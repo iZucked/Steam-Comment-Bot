@@ -243,7 +243,7 @@ public class CargoItemProvider
 		String label = ((Cargo)object).getLoadName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Cargo_type") :
-			getString("_UI_Cargo_type") + " " + label;
+			label;
 	}
 
 	/**

@@ -188,6 +188,9 @@ public class PriceExpressionUtils {
 		if (priceExpression.equals("?")) {
 			return;
 		}
+		if (date == null) {
+			return;
+		}
 
 		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
 		try {

@@ -95,6 +95,9 @@ public class MultipleVesselAvailabilitiesConstraint extends AbstractModelMultiCo
 		final Vessel vessel = availability.getVessel();
 		final List<VesselAvailability> conflicts = currentConstraintData.get(vessel);
 		// conflicts.remove(availability);
+		if (conflicts == null) {
+			return;
+		}
 		Collections.sort(conflicts, (a, b) -> {
 			if (a.getStartAfter() == null) {
 				return -1;
