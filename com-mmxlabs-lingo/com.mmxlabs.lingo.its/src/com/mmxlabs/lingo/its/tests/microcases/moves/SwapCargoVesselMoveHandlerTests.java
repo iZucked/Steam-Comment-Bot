@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -134,6 +135,120 @@ public class SwapCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 
 			Assert.assertSame(cargo1.getSlots().get(0), slotMapper.apply(result.getSequence(resource2).get(1)));
 			Assert.assertSame(cargo1.getSlots().get(1), slotMapper.apply(result.getSequence(resource2).get(2)));
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testNominalCargoMove_ThereAndBackAgain() throws Exception {
+
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel2 = fleetModelBuilder.createVessel("My Vessel 2", vesselClass);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+				.withCharterRate("100000") //
+				.build();
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		// Prompt is before this data.
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 10, 1), LocalDate.of(2014, 12, 5));
+
+		runTest((injector, scenarioRunner) -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			@NonNull
+			final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+			final ISequences initialRawSequences = dataTransformer.getInitialSequences();
+
+			final ModelEntityMap modelEntityMap = scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap();
+
+			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+
+			final SwapCargoVesselMoveHandler handler = injector.getInstance(SwapCargoVesselMoveHandler.class);
+			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
+
+			final Random random = new Random(0);
+
+			final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo1.getSlots().get(0), IPortSlot.class);
+			final ISequenceElement element = portSlotProvider.getElement(portSlot);
+
+			final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
+
+			@NonNull
+			final Collection<ISequenceElement> forbiddenElements = Collections.emptySet();
+			final Function<ISequenceElement, Slot> slotMapper = e -> {
+				final IPortSlot ps = portSlotProvider.getPortSlot(e);
+				return modelEntityMap.getModelObjectNullChecked(ps, Slot.class);
+			};
+
+			// Move 1. nominal to fleet
+			{
+				lookupManager.createLookup(initialRawSequences);
+				@Nullable
+				final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
+				Assert.assertNotNull(movePair);
+
+				final ModifiableSequences result = new ModifiableSequences(initialRawSequences);
+				movePair.getFirst().apply(result);
+
+				final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+
+				Assert.assertEquals(2, result.getResources().size());
+				final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+				Assert.assertSame(resource1, result.getResources().get(0));
+
+				// This should be our nominal market
+				final IResource resource2 = result.getResources().get(1);
+
+				// Check expectations
+				Assert.assertEquals(4, result.getSequence(resource1).size());
+				Assert.assertEquals(2, result.getSequence(resource2).size());
+				Assert.assertEquals(0, result.getUnusedElements().size());
+
+				Assert.assertSame(cargo1.getSlots().get(0), slotMapper.apply(result.getSequence(resource1).get(1)));
+				Assert.assertSame(cargo1.getSlots().get(1), slotMapper.apply(result.getSequence(resource1).get(2)));
+				
+				// Prep for move 2
+				lookupManager.createLookup(result);
+
+			}
+			// Move 2. fleet to nominal
+			{
+				final Pair<IMove, Hints> movePair = handler.handleMove(lookupManager, element, random, options, forbiddenElements);
+				Assert.assertNotNull(movePair);
+				
+				final ModifiableSequences result = new ModifiableSequences(lookupManager.getRawSequences());
+				movePair.getFirst().apply(result);
+				
+				final IVesselAvailability o_vesselAvailability1 = modelEntityMap.getOptimiserObjectNullChecked(vesselAvailability1, IVesselAvailability.class);
+				
+				Assert.assertEquals(2, result.getResources().size());
+				final IResource resource1 = vesselProvider.getResource(o_vesselAvailability1);
+				Assert.assertSame(resource1, result.getResources().get(0));
+				
+				// This should be our nominal market
+				final IResource resource2 = result.getResources().get(1);
+				
+				// Check expectations
+				Assert.assertEquals(2, result.getSequence(resource1).size());
+				Assert.assertEquals(4, result.getSequence(resource2).size());
+				Assert.assertEquals(0, result.getUnusedElements().size());
+				
+				Assert.assertSame(cargo1.getSlots().get(0), slotMapper.apply(result.getSequence(resource2).get(1)));
+				Assert.assertSame(cargo1.getSlots().get(1), slotMapper.apply(result.getSequence(resource2).get(2)));
+			}
 		});
 	}
 
