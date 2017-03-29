@@ -247,4 +247,44 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		injector.injectMembers(checker);
 		return checker;
 	}
+
+	@Test
+	public void testCheckConstraintsMixedSequence() {
+
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider();
+
+		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
+		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
+		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
+		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
+		final ISequenceElement obj5 = Mockito.mock(ISequenceElement.class, "5");
+		final ISequenceElement obj6 = Mockito.mock(ISequenceElement.class, "6");
+
+		provider.setElementOrder(obj2, obj3);
+
+		final IResource r = new Resource(index, "r");
+		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
+		// Valid case first.
+		{
+			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4));
+			final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+			final Sequences sequences = new Sequences(Collections.singletonList(r), map);
+			Assert.assertTrue(checker.checkConstraints(sequences, null, null));
+		}
+		// Fail constraint as obj2 is not followed by obj3
+		{
+			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj4));
+			final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+			final Sequences sequences = new Sequences(Collections.singletonList(r), map);
+			Assert.assertFalse(checker.checkConstraints(sequences, null, null));
+		}
+		// Fail constraint as obj3 does not follow obj2
+		{
+			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj3, obj4));
+			final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
+			final Sequences sequences = new Sequences(Collections.singletonList(r), map);
+			Assert.assertFalse(checker.checkConstraints(sequences, null, null));
+		}
+	}
+
 }
