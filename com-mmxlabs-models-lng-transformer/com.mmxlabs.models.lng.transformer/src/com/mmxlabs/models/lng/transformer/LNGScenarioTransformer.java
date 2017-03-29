@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.util.SpotSlotUtils;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
@@ -125,6 +126,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.transformer.contracts.IBallastBonusContractTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
@@ -170,6 +172,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
@@ -396,6 +399,12 @@ public class LNGScenarioTransformer {
 	private UserSettings userSettings;
 
 	/**
+	 * A set of all vessel availability transformers being used;
+	 */
+	@NonNull
+	private final Set<IBallastBonusContractTransformer> ballastBonusContractTransformers = new LinkedHashSet<IBallastBonusContractTransformer>();
+
+	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
@@ -435,6 +444,10 @@ public class LNGScenarioTransformer {
 				final IVesselEventTransformer vesselEventTransformer = (IVesselEventTransformer) transformer;
 				addVesselEventTransformer(vesselEventTransformer);
 			}
+			if (transformer instanceof IBallastBonusContractTransformer) {
+				final IBallastBonusContractTransformer ballastBonusContractTransformer = (IBallastBonusContractTransformer) transformer;
+				addBallastBonusContractTransformer(ballastBonusContractTransformer);
+			}
 		}
 
 		return true;
@@ -457,6 +470,10 @@ public class LNGScenarioTransformer {
 
 	public void addVesselAvailabilityTransformer(@NonNull final IVesselAvailabilityTransformer transformer) {
 		vesselAvailabilityTransformers.add(transformer);
+	}
+
+	public void addBallastBonusContractTransformer(@NonNull final IBallastBonusContractTransformer transformer) {
+		ballastBonusContractTransformers.add(transformer);
 	}
 
 	public void addVesselEventTransformer(@NonNull final IVesselEventTransformer transformer) {
@@ -700,15 +717,25 @@ public class LNGScenarioTransformer {
 				charterIndexAssociation, modelEntityMap);
 		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
 			assert vesselAvailability != null;
+			final VesselAvailability eVesselAvailability = modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class);
 
 			for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 				assert vesselAvailabilityTransformer != null;
 
-				final VesselAvailability eVesselAvailability = modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class);
 				// This can be null if the availability is generated from a Spot option
 				if (eVesselAvailability != null) {
 
 					vesselAvailabilityTransformer.vesselAvailabilityTransformed(eVesselAvailability, vesselAvailability);
+				}
+			}
+			for (final IBallastBonusContractTransformer ballastBonusContractTransformer : ballastBonusContractTransformers) {
+				// This can be null if the availability is generated from a Spot option
+				if (eVesselAvailability != null) {
+					BallastBonusContract eBallastBonusContract = eVesselAvailability.getBallastBonusContract();
+					if (eBallastBonusContract != null) {
+						@Nullable IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
+						vesselAvailability.setBallastBonusContract(ballastBonusContract);
+					}
 				}
 			}
 		}
