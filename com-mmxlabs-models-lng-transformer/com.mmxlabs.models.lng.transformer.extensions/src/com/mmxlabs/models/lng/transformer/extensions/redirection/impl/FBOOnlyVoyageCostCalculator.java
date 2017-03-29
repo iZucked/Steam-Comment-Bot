@@ -10,10 +10,13 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
@@ -63,8 +66,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPrice);
-
-		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+		HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getVesselClass().getSafetyHeel(), vessel.getVesselClass().getSafetyHeel(), VesselTankState.MUST_BE_COLD,
+				ConstantHeelPriceCalculator.ZERO);
+		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
@@ -96,7 +100,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, portTimesRecord, sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, portTimesRecord, sequence);
 
 			return notionalPlan;
 		}
@@ -131,7 +135,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
-		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+		HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getVesselClass().getSafetyHeel(), vessel.getVesselClass().getSafetyHeel(), VesselTankState.MUST_BE_COLD,
+				ConstantHeelPriceCalculator.ZERO);
+		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
@@ -163,7 +169,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, portTimesRecord, sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, portTimesRecord, sequence);
 
 			return notionalPlan;
 		}

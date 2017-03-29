@@ -811,28 +811,32 @@ public class PeriodTransformerTests {
 
 		{
 			final VesselAvailability vesselAvailability1 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability1.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+			vesselAvailability1.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability1.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateStartConditions(vesselAvailability1, assignedObject1, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability1, assignedObject2, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap, mapping);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability1.getStartAt());
-			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getVolumeAvailable(), 0.0);
+			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMinVolumeAvailable(), 0.0);
+			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMaxVolumeAvailable(), 0.0);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartAfter());
 		}
 		// Same again, but reverse order. Should yield same result as before.
 		{
 			final VesselAvailability vesselAvailability2 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability2.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+			vesselAvailability2.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability2.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateStartConditions(vesselAvailability2, assignedObject3, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability2, assignedObject2, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability2, assignedObject1, startConditionMap, mapping);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
-			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getVolumeAvailable(), 0.0);
+			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMinVolumeAvailable(), 0.0);
+			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMaxVolumeAvailable(), 0.0);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartBy());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartAfter());
 		}
@@ -878,7 +882,8 @@ public class PeriodTransformerTests {
 
 		{
 			final VesselAvailability vesselAvailability1 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability1.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+			vesselAvailability1.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability1.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateEndConditions(vesselAvailability1, assignedObject1, endConditionMap, mapping);
 			transformer.updateEndConditions(vesselAvailability1, assignedObject2, endConditionMap, mapping);
@@ -891,7 +896,8 @@ public class PeriodTransformerTests {
 		// Same again, but reverse order. Should yield same result as before.
 		{
 			final VesselAvailability vesselAvailability2 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability2.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+			vesselAvailability2.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability2.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateEndConditions(vesselAvailability2, assignedObject3, endConditionMap, mapping);
 			transformer.updateEndConditions(vesselAvailability2, assignedObject2, endConditionMap, mapping);

@@ -27,12 +27,11 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -41,7 +40,6 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -96,8 +94,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public class DefaultScenarioCreator {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultScenarioCreator.class);
-	public double dischargePrice = 1f;
-	public double purchasePrice = 0.5f;
+	public double dischargePrice = 1d;
+	public double purchasePrice = 0.5d;
 
 	// will need at least one sales contract and purchase contract for any completed transactions
 	public SalesContract salesContract;
@@ -114,7 +112,7 @@ public class DefaultScenarioCreator {
 
 	public final @NonNull LNGScenarioModel scenario;
 
-	final @NonNull ScenarioModelBuilder scenarioModelBuilder;
+	public final @NonNull ScenarioModelBuilder scenarioModelBuilder;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
@@ -122,10 +120,12 @@ public class DefaultScenarioCreator {
 	private static final String timeZone = ZoneId.of("UTC").getId();
 	protected final @NonNull CommercialModelBuilder commercialModelBuilder;
 	private SpotMarketsModelBuilder spotMarketsModelBuilder;
+	private CargoModelBuilder cargoModelBuilder;
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		scenarioModelBuilder = new ScenarioModelBuilder(scenario);
+		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
@@ -216,7 +216,7 @@ public class DefaultScenarioCreator {
 		final int speed = 10;
 		final int defaultCapacity = 10000;
 		final int defaultPilotLightRate = 0;
-		final int defaultMinHeelVolume = 0;
+		final int defaultSafetyHeelVolume = 0;
 
 		final int defaultWarmupTime = Integer.MAX_VALUE;
 		// Same as portcreator default CV
@@ -226,25 +226,6 @@ public class DefaultScenarioCreator {
 		final int startHeelVolume = 0;
 		final int defaultSuezCanalCost = 1;
 		final int defaultPanamaCanalCost = 1;
-
-		// /**
-		// * Creates a heel options with default settings.
-		// *
-		// * @return
-		// */
-		// public @NonNull HeelOptions createDefaultHeelOptions() {
-		// final HeelOptions result = FleetFactory.eINSTANCE.createHeelOptions();
-		// result.setCvValue(portCreator.defaultCv);
-		// result.setPricePerMMBTU(dischargePrice);
-		// result.setVolumeAvailable(startHeelVolume);
-		// return result;
-		// }
-		//
-		// public @NonNull EndHeelOptions createDefaultEndHeelOptions() {
-		// final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
-		// result.unsetTargetEndHeel();
-		// return result;
-		// }
 
 		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price, final YearMonth date) {
 			BaseFuelIndex bfi = bfc.getIndex();
@@ -329,7 +310,7 @@ public class DefaultScenarioCreator {
 			vc.setPilotLightRate(defaultPilotLightRate);
 			vc.setWarmingTime(defaultWarmupTime);
 			vc.setCoolingVolume(cooldownVolume);
-			vc.setMinHeel(defaultMinHeelVolume);
+			vc.setMinHeel(defaultSafetyHeelVolume);
 			vc.setFillCapacity(defaultFillCapacity);
 
 			return vc;
@@ -351,7 +332,7 @@ public class DefaultScenarioCreator {
 
 			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder() //
 					.makeVesselAvailability(vessel, shippingEntity) //
-					.withStartHeel((double) startHeelVolume, portCreator.defaultCv, dischargePrice) //
+					.withStartHeel(0.0, (double) startHeelVolume, portCreator.defaultCv, Double.toString(dischargePrice)) //
 					.build();
 
 			return availability;
@@ -746,9 +727,11 @@ public class DefaultScenarioCreator {
 			final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 			addEventToModel(event, name, startPort, startAfterDate, startAfterDate);
 			event.setHireRate(hireRate);
-			final HeelOptions options = FleetFactory.eINSTANCE.createHeelOptions();
-			event.setHeelOptions(options);
 			event.setRelocateTo(endPort);
+
+			event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+			event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+
 			return event;
 		}
 	}
@@ -818,11 +801,14 @@ public class DefaultScenarioCreator {
 		}
 
 		charterOut.setName(id);
-		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		heelOptions.setVolumeAvailable(heelLimit);
+		final StartHeelOptions heelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+		heelOptions.setMinVolumeAvailable(0);
+		heelOptions.setMaxVolumeAvailable(heelLimit);
 		heelOptions.setCvValue(cvValue);
-		heelOptions.setPricePerMMBTU(dischargePrice);
-		charterOut.setHeelOptions(heelOptions);
+		heelOptions.setPriceExpression(Double.toString(dischargePrice));
+		charterOut.setAvailableHeel(heelOptions);
+
+		charterOut.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 		charterOut.setDurationInDays(charterOutDurationDays);
 

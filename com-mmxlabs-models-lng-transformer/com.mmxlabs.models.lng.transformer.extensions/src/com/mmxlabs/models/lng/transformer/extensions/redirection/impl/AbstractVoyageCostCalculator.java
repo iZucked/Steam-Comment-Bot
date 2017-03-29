@@ -12,6 +12,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -89,7 +90,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
 		voyageOptions.setRoute(route, distance, routeCost);
-		voyageOptions.setShouldBeCold(true);
+		voyageOptions.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageOptions.setUseFBOForSupplement(true);
 		voyageOptions.setUseNBOForIdle(true);
 		voyageOptions.setUseNBOForTravel(true);

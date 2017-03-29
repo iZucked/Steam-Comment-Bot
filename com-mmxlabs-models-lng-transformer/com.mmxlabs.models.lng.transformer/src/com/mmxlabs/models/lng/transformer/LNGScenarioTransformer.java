@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -66,6 +67,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
@@ -79,7 +81,6 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -153,7 +154,9 @@ import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -168,7 +171,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
+import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -396,7 +403,7 @@ public class LNGScenarioTransformer {
 	@Named(LIMIT_SPOT_SLOT_CREATION)
 	private int spotSlotCreationCap;
 
-	private UserSettings userSettings;
+	private final UserSettings userSettings;
 
 	/**
 	 * A set of all vessel availability transformers being used;
@@ -410,7 +417,7 @@ public class LNGScenarioTransformer {
 	 * @param scenario
 	 */
 	@Inject
-	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject, UserSettings userSettings) {
+	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject, final UserSettings userSettings) {
 
 		this.rootObject = rootObject;
 		this.userSettings = userSettings;
@@ -1019,14 +1026,16 @@ public class LNGScenarioTransformer {
 			if (event instanceof CharterOutEvent) {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				final IPort endPort = portAssociation.lookupNullChecked(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
-				final HeelOptions heelOptions = charterOut.getHeelOptions();
-				final long maxHeel = heelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getVolumeAvailable()) : 0l;
+
 				final long totalHireRevenue = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
 				final long repositioning = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getRepositioningFee());
 				final long ballastBonus = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getBallastBonus());
-				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel,
-						OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(heelOptions.getPricePerMMBTU()),
-						totalHireRevenue, repositioning, ballastBonus);
+
+				final IHeelOptionConsumer heelConsumer = createHeelConsumer(charterOut.getRequiredHeel());
+				// IHeelOptionConsumer heelConsumer = new HeelOptionConsumer(0L, Long.MAX_VALUE, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
+				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel());
+
+				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus);
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -2963,19 +2972,11 @@ public class LNGScenarioTransformer {
 
 			final Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
 			final Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
-			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfterAsDateTime() : null,
-					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartByAsDateTime() : null, startingPort, eVesselAvailability.getStartHeel());
 
-			boolean endCold = false;
-			long targetEndHeelInM3 = 0;
-			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
-			if (endHeel != null) {
-				endCold = endHeel.isSetTargetEndHeel();
-				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
-				if (targetEndHeelInM3 == 0) {
-					endCold = false;
-				}
-			}
+			final IHeelOptionSupplier heelSupplier = createHeelSupplier(eVesselAvailability.getStartHeel());
+			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfterAsDateTime() : null,
+					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartByAsDateTime() : null, startingPort, heelSupplier);
+
 			final ZonedDateTime endBy = eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null;
 			ZonedDateTime endAfter = eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null;
 			boolean forceHireCostOnlyEndRule = eVesselAvailability.isForceHireCostOnlyEndRule();
@@ -2990,7 +2991,8 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3,
+			final IHeelOptionConsumer heelConsumer = createHeelConsumer(eVesselAvailability.getEndHeel());
+			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), heelConsumer,
 					forceHireCostOnlyEndRule);
 
 			final ILongCurve dailyCharterInCurve;
@@ -3181,7 +3183,7 @@ public class LNGScenarioTransformer {
 	 */
 	@NonNull
 	private IStartRequirement createStartRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
-			@Nullable final ZonedDateTime to, @Nullable final Port port, @Nullable final HeelOptions eHeelOptions) {
+			@Nullable final ZonedDateTime to, @Nullable final Port port, @Nullable final IHeelOptionSupplier heelSupplier) {
 		final ITimeWindow window;
 		boolean hasTimeRequirement = true;
 		if (from == null && to != null) {
@@ -3195,18 +3197,7 @@ public class LNGScenarioTransformer {
 			hasTimeRequirement = false;
 		}
 
-		IHeelOptions heelOptions;
-		if (eHeelOptions != null) {
-			final long heelLimitInM3 = eHeelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(eHeelOptions.getVolumeAvailable()) : 0;
-
-			final int cvValue = OptimiserUnitConvertor.convertToInternalConversionFactor(eHeelOptions.getCvValue());
-			final int pricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(eHeelOptions.getPricePerMMBTU());
-
-			heelOptions = builder.createHeelOptions(heelLimitInM3, cvValue, pricePerMMBTu);
-		} else {
-			heelOptions = null;
-		}
-		return builder.createStartRequirement(portAssociation.lookup(port), hasTimeRequirement, window, heelOptions);
+		return builder.createStartRequirement(portAssociation.lookup(port), hasTimeRequirement, window, heelSupplier);
 	}
 
 	/**
@@ -3220,7 +3211,7 @@ public class LNGScenarioTransformer {
 	 */
 	@NonNull
 	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
-			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3, final boolean forceHireCostOnlyEndRule) {
+			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final IHeelOptionConsumer heelConsumer, final boolean forceHireCostOnlyEndRule) {
 		final ITimeWindow window;
 
 		boolean isOpenEnded = false;
@@ -3245,9 +3236,9 @@ public class LNGScenarioTransformer {
 		// Is the availability open ended or do we force the end rule?
 		final boolean useHireCostOnlyEndRule = forceHireCostOnlyEndRule || isOpenEnded;
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, !isOpenEnded, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
+			return builder.createEndRequirement(null, !isOpenEnded, window, heelConsumer, useHireCostOnlyEndRule);
 		} else {
-			return builder.createEndRequirement(portSet, !isOpenEnded, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
+			return builder.createEndRequirement(portSet, !isOpenEnded, window, heelConsumer, useHireCostOnlyEndRule);
 		}
 
 	}
@@ -3382,4 +3373,72 @@ public class LNGScenarioTransformer {
 		return Math.min(count, spotSlotCreationCap);
 	}
 
+	private @NonNull IHeelOptionConsumer createHeelConsumer(@NonNull final EndHeelOptions heelOptions) {
+		final long minimumEndHeelInM3 = OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMinimumEndHeel());
+		// Zero can mean unbounded if we do not need to arrive warm.
+		final long maximumEndHeelInM3 = (heelOptions.getTankState() != EVesselTankState.MUST_BE_WARM && heelOptions.getMaximumEndHeel() == 0) ? Long.MAX_VALUE
+				: OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMaximumEndHeel());
+		final IHeelPriceCalculator heelPriceCalculator;
+
+		final String expression = heelOptions.getPriceExpression();
+		if (expression == null || expression.isEmpty()) {
+			heelPriceCalculator = ConstantHeelPriceCalculator.ZERO;
+		} else {
+			final IExpression<ISeries> parsedExpression = commodityIndices.parse(expression);
+			final ISeries parsedSeries = parsedExpression.evaluate();
+
+			final StepwiseIntegerCurve expressionCurve = new StepwiseIntegerCurve();
+			if (parsedSeries.getChangePoints().length == 0) {
+				expressionCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(0).doubleValue()));
+			} else {
+				for (final int i : parsedSeries.getChangePoints()) {
+					expressionCurve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(i).doubleValue()));
+				}
+			}
+			heelPriceCalculator = new ExpressionHeelPriceCalculator(expressionCurve);
+			injector.injectMembers(heelPriceCalculator);
+		}
+		final VesselTankState vesselTankState;
+		switch (heelOptions.getTankState()) {
+		case EITHER:
+			vesselTankState = VesselTankState.EITHER;
+			break;
+		case MUST_BE_COLD:
+			vesselTankState = VesselTankState.MUST_BE_COLD;
+			break;
+		case MUST_BE_WARM:
+			vesselTankState = VesselTankState.MUST_BE_WARM;
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		return builder.createHeelConsumer(minimumEndHeelInM3, maximumEndHeelInM3, vesselTankState, heelPriceCalculator);
+	}
+
+	private @NonNull IHeelOptionSupplier createHeelSupplier(@NonNull final StartHeelOptions heelOptions) {
+		final long minimumHeelInM3 = OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMinVolumeAvailable());
+		final long maximumHeelInM3 = OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMaxVolumeAvailable());
+		final int cargoCV = OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue());
+		final IHeelPriceCalculator heelPriceCalculator;
+		final String expression = heelOptions.getPriceExpression();
+		if (expression == null || expression.isEmpty()) {
+			heelPriceCalculator = ConstantHeelPriceCalculator.ZERO;
+		} else {
+			final IExpression<ISeries> parsedExpression = commodityIndices.parse(expression);
+			final ISeries parsedSeries = parsedExpression.evaluate();
+
+			final StepwiseIntegerCurve expressionCurve = new StepwiseIntegerCurve();
+			if (parsedSeries.getChangePoints().length == 0) {
+				expressionCurve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(0).doubleValue()));
+			} else {
+				for (final int i : parsedSeries.getChangePoints()) {
+					expressionCurve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(i).doubleValue()));
+				}
+			}
+			heelPriceCalculator = new ExpressionHeelPriceCalculator(expressionCurve);
+			injector.injectMembers(heelPriceCalculator);
+		}
+
+		return builder.createHeelSupplier(minimumHeelInM3, maximumHeelInM3, cargoCV, heelPriceCalculator);
+	}
 }

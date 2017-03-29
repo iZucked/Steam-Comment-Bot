@@ -211,6 +211,9 @@ public class MultipleCargoFuelConsumptionTest {
 		final Port portA = PortFactory.eINSTANCE.createPort();
 		final Port portB = PortFactory.eINSTANCE.createPort();
 
+		
+		
+		
 		// add the ports
 		final int distanceBetweenPorts = 110;
 		csc.addPorts(portA, portB, distanceBetweenPorts);

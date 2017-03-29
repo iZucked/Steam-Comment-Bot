@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -73,7 +76,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		msc.vc.setMinHeel(0);
-		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -91,7 +96,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 1000, -970 });
 
 		// End heel in m3 - Unable to meet end heel level
-		checker.setExpectedValue(2000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+		checker.setExpectedValue(2000, Expectations.MIN_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		checker.setupOrdinaryFuelCosts();
 
@@ -318,9 +323,10 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		msc.vesselAvailability.getStartHeel().setCvValue(21);
-		msc.vesselAvailability.getStartHeel().setPricePerMMBTU(1);
+		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
-		msc.vesselAvailability.getStartHeel().setVolumeAvailable(startHeelInM3);
+		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
+		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
 		msc.vc.setMinHeel(0);
 
@@ -360,6 +366,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// Min heel in m3
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		checker.setExpectedValue(1 * 21 * 500, Expectations.HEEL_COST, StartEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -411,9 +419,10 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		msc.vesselAvailability.getStartHeel().setCvValue(21);
-		msc.vesselAvailability.getStartHeel().setPricePerMMBTU(1);
+		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
-		msc.vesselAvailability.getStartHeel().setVolumeAvailable(startHeelInM3);
+		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
+		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
 		msc.vc.setMinHeel(0);
 
@@ -456,6 +465,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// Min heel in m3
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
+		checker.setExpectedValue(1 * 21 * 500, Expectations.HEEL_COST, StartEvent.class, 0);
+
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
@@ -473,9 +484,14 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		msc.vesselAvailability.getStartHeel().setCvValue(21);
-		msc.vesselAvailability.getStartHeel().setPricePerMMBTU(1);
+		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
-		msc.vesselAvailability.getStartHeel().setVolumeAvailable(startHeelInM3);
+		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
+		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
+		
+		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(0);
+		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(0);
+		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 
 		msc.vc.setMinHeel(0);
 
@@ -492,19 +508,19 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// 5 = 1 { journey duration } * 15 { base fuel consumption } - 10 { LNG consumption }
 		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 5, 10, 15 });
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 5, 10, 5 });
 
 		// expected NBO consumptions of journeys
 		// 10 = 1 { voyage duration } * 5 { NBO rate }
 		// 20 = 2 { duration in hours } * 10 { NBO rate }
 		// 0 = (vessel empty)
-		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Journey.class, new Integer[] { 10, 20, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Journey.class, new Integer[] { 10, 20, 10 });
 
 		// expected costs of journeys
 		// 260 = 10 { base fuel unit cost } * 5 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 10 { LNG consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 260, 520, 150 });
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 260, 520, 260 });
 
 		int expectedInitialVoyageBoilOffInM3 = 10;
 		int expectedCargoBoilOffInM3 = 30;
@@ -514,6 +530,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// load will be short by 520m3
 		checker.setExpectedValue(1060 - expectedLoadVolumeInM3, Expectations.MIN_LOAD_VIOLATIONS, SlotVisit.class, 0);
+		checker.setExpectedValue(50, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		checker.setExpectedValue(1 * 21 * 500, Expectations.HEEL_COST, StartEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -571,19 +590,27 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
-		event.getHeelOptions().setVolumeAvailable(2000);
+		// change to default: add a charter out event 2-3 hrs after discharge window ends
+		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
 
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort) //
+				.withRelocatePort(msc.originPort) //
+				.withDurationInDays(1) //
+				.withAvailableHeelOptions(2000, 2000, 21.0, "1") //
+				.withHireRate(24) //
+				.withVesselAssignment(msc.vesselAvailability, 0) //
+				.build();
 
-		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
-		// works.
-		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
-				VesselEventVisit.class, Idle.class, EndEvent.class };
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,
+				EndEvent.class };
 		SequenceTester checker = getDefaultTester(classes);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
@@ -635,6 +662,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		// End heel in m3 - Unable to meet end heel level
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
+		checker.setExpectedValue(1 * 21 * 2000, Expectations.HEEL_COST, VesselEventVisit.class, 0);
+
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
@@ -650,19 +679,29 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
-		event.getHeelOptions().setVolumeAvailable(1000);
+		// change to default: add a charter out event 2-3 hrs after discharge window ends
+		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
 
-		event.setVesselAssignmentType(msc.vesselAvailability);
+		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort) //
+				.withRelocatePort(msc.originPort) //
+				.withDurationInDays(1) //
+				.withAvailableHeelOptions(1000, 1000, 21.0, "1") //
+				.withHireRate(24) //
+				.withVesselAssignment(msc.vesselAvailability, 0) //
+				.build();
 
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
-		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
-				VesselEventVisit.class, Idle.class, EndEvent.class };
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,
+				EndEvent.class };
 		SequenceTester checker = getDefaultTester(classes);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
@@ -713,7 +752,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// End heel in m3 - Unable to meet end heel level
 		// Current check means if anything is left, then no violation.
-		// checker.setExpectedValue(1000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+		 checker.setExpectedValue(1000, Expectations.MIN_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		checker.setExpectedValue(1 * 21 * 1000, Expectations.HEEL_COST, VesselEventVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -731,14 +772,19 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.setupCooldown(30);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
+		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
-		DryDockEvent event = msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
-		event.setVesselAssignmentType(msc.vesselAvailability);
+
+		DryDockEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeDryDockEvent("DryDock", dryDockStartAfterDate, dryDockStartByDate, msc.loadPort) //
+				.withDurationInDays(1) //
+				.withVesselAssignment(msc.vesselAvailability, 0) //
+				.build();
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);
@@ -752,7 +798,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { 6 });
 
 		// End heel in m3 - Unable to meet end heel level
-		checker.setExpectedValue(2000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+		checker.setExpectedValue(1, Expectations.COOLDOWN_VIOLATION, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);

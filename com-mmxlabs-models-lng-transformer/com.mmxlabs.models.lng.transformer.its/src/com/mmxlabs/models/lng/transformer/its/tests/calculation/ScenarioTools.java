@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
@@ -49,7 +50,6 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -80,6 +80,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -99,6 +100,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
@@ -230,6 +232,7 @@ public class ScenarioTools {
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
 
+		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		final CommercialModelBuilder commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
@@ -329,10 +332,10 @@ public class ScenarioTools {
 		vessel.setName("Vessel");
 
 		final VesselAvailability availablility = CargoFactory.eINSTANCE.createVesselAvailability();
+		availablility.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+		availablility.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 		availablility.setVessel(vessel);
-		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		availablility.setStartHeel(heelOptions);
 		availablility.setEntity(s);
 
 		fleetModel.getVessels().add(vessel);
@@ -478,6 +481,7 @@ public class ScenarioTools {
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
+		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		final CommercialModelBuilder commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
@@ -586,11 +590,11 @@ public class ScenarioTools {
 		final LocalDateTime endCharterOut = startCharterOut.plusDays(charterOutTimeDays);
 		final LocalDateTime dryDockJourneyStartDate = endCharterOut.plusHours(travelTime);
 
-		final CharterOutEvent charterOut = scenarioModelBuilder.getCargoModelBuilder() //
+		final CharterOutEvent charterOut = cargoModelBuilder //
 				.makeCharterOutEvent("Charter Out", startCharterOut, startCharterOut, A) //
 				.withRelocatePort(A) //
 				.withDurationInDays(charterOutTimeDays) //
-				.withEndHeelOptions(heelLimit, cvValue, dischargePrice) //
+				.withAvailableHeelOptions(heelLimit, heelLimit, cvValue, Double.toString(dischargePrice))//
 				.withRepositioningFee(0) //
 				.build();
 
@@ -817,6 +821,11 @@ public class ScenarioTools {
 				System.err.println("\tStart: " + e.getStart() + ", End: " + e.getEnd());
 			}
 
+			if (e instanceof Event) {
+				Event portVisit = (Event) e;
+				System.err.printf("\tHeel: %d -> %d\n", e.getHeelAtStart(), e.getHeelAtEnd());
+			}
+			
 			// show any capacity violations
 			if (e instanceof CapacityViolationsHolder) {
 				final EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) e).getViolations();
@@ -848,6 +857,11 @@ public class ScenarioTools {
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);
 
+		port.getCapabilities().add(PortCapability.LOAD);
+		port.getCapabilities().add(PortCapability.DISCHARGE);
+		port.getCapabilities().add(PortCapability.DRYDOCK);
+		port.getCapabilities().add(PortCapability.MAINTENANCE);
+		
 		return port;
 	}
 
