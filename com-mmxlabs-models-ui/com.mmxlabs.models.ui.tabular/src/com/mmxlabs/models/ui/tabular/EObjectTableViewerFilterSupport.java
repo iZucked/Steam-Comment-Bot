@@ -70,14 +70,18 @@ public class EObjectTableViewerFilterSupport {
 		for (final GridColumn column : grid.getColumns()) {
 			if (column.getText().equals(columnName)) {
 				final ICellRenderer renderer = (ICellRenderer) column.getData(EObjectTableViewer.COLUMN_RENDERER);
-				final EMFPath path = (EMFPath) column.getData(EObjectTableViewer.COLUMN_PATH);
-				final Object[] elements = ((IStructuredContentProvider) viewer.getContentProvider()).getElements(viewer.getInput());
-				for (final Object element : elements) { // viewer.getCurrentElements()) {
-					if (element instanceof EObject) {
-						result.add(renderer.render(path.get((EObject) element)));
+				Object pathData = column.getData(EObjectTableViewer.COLUMN_PATH);
+				// TODO support EMFPath arrays/lists
+				if (pathData instanceof EMFPath) {
+					final EMFPath path = (EMFPath) pathData;
+					final Object[] elements = ((IStructuredContentProvider) viewer.getContentProvider()).getElements(viewer.getInput());
+					for (final Object element : elements) { // viewer.getCurrentElements()) {
+						if (element instanceof EObject) {
+							result.add(renderer.render(path.get((EObject) element)));
+						}
 					}
+					return result;
 				}
-				return result;
 			}
 		}
 
