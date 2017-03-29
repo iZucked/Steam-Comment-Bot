@@ -86,16 +86,32 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 		ISequenceElement prevElement = null;
 		for (final ISequenceElement element : sequence) {
 			if (prevElement != null) {
-				final ISequenceElement expected = provider.getNextElement(prevElement);
-				// If null, any element is allowed to follow.
-				if (expected != null) {
-					if (!expected.equals(element)) {
-						if (messages != null) {
-							final String msg = String.format("Element (%s) is not followed by (%s)", prevElement, expected);
-							messages.add(msg);
-						}
+				{
+					final ISequenceElement expected = provider.getNextElement(prevElement);
+					// If null, any element is allowed to follow.
+					if (expected != null) {
+						if (!expected.equals(element)) {
+							if (messages != null) {
+								final String msg = String.format("Element (%s) is not followed by (%s)", prevElement, expected);
+								messages.add(msg);
+							}
 
-						return false;
+							return false;
+						}
+					}
+				}
+				{
+					final ISequenceElement expected = provider.getPreviousElement(element);
+					// If null, any element is allowed to follow.
+					if (expected != null) {
+						if (!expected.equals(prevElement)) {
+							if (messages != null) {
+								final String msg = String.format("Element (%s) is not preceeded by (%s)", expected, prevElement);
+								messages.add(msg);
+							}
+
+							return false;
+						}
 					}
 				}
 			}
