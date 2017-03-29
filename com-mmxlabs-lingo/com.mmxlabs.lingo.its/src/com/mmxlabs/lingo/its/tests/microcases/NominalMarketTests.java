@@ -26,6 +26,8 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -39,7 +41,6 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -50,6 +51,8 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
 
 @SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
@@ -202,6 +205,79 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
+	 * Test: Make sure the slots are kept as a bound pair on the nominal. Test by swapping discharges round.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testNominalSlotBinding() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(true, false) //
+				.build();
+		// Create cargo 1, cargo 2
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 2) // -1 is nominal
+				.withAssignmentFlags(true, false) //
+				.build();
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+
+			// Check correct cargoes remain and spot index has changed.
+			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+			final Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
+
+			LoadSlot l1 = (LoadSlot) optCargo1.getSlots().get(0);
+			DischargeSlot d1 = (DischargeSlot) optCargo1.getSlots().get(1);
+			LoadSlot l2 = (LoadSlot) optCargo2.getSlots().get(0);
+			DischargeSlot d2 = (DischargeSlot) optCargo2.getSlots().get(1);
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+			// Validate the initial sequences are valid
+			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+			final IModifiableSequences lsoSolution = SequenceHelper.createSequences(scenarioToOptimiserBridge);
+			SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_1, -1, l1, d2, l2, d1);
+
+			// Validate the swapped discharges are invalid
+			List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), lsoSolution);
+			Assert.assertNotNull(failedConstraintCheckers);
+
+			// Expect just this one to fail
+			Assert.assertEquals(2, failedConstraintCheckers.size());
+			// Order doesn't really matter. Should make test robust to order change
+			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof RoundTripVesselPermissionConstraintChecker);
+			Assert.assertTrue(failedConstraintCheckers.get(1) instanceof PromptRoundTripVesselPermissionConstraintChecker);
+		});
+	}
+
+	/**
 	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
 	 * 
 	 * @throws Exception
@@ -216,6 +292,127 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withCharterRate("30000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+
+			// Check correct cargoes remain and spot index has changed.
+			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+
+			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+			// Validate the initial sequences are valid
+			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		});
+	}
+
+	/**
+	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates). The non-optional fitness should kick in
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testMoveNominalToFleet_LossMakingCargo_ShipOnly() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		// Half the capacity! So will loose P&L by doing this.
+		vessel.setCapacity(70_000);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withCharterRate("30000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(true, plan -> {
+			plan.getUserSettings().setShippingOnly(true);
+
+			plan.getUserSettings().setShippingOnly(true);
+			ScenarioUtils.setLSOStageIterations(plan, 10_000);
+			// No hill climb
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+
+			// Check correct cargoes remain and spot index has changed.
+			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+
+			Assert.assertEquals(vesselAvailability1, optCargo1.getVesselAssignmentType());
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+			// Validate the initial sequences are valid
+			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		}, null);
+	}
+
+	/**
+	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates). The non-optional fitness should kick in
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testMoveNominalToFleet_LossMakingCargo() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		// Half the capacity! So will loose P&L by doing this.
+		vessel.setCapacity(70_000);
+
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
@@ -424,7 +621,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		evaluateWithLSOTest(true, plan -> {
 			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 1));
-			
+
 			plan.getUserSettings().setShippingOnly(true);
 			ScenarioUtils.setLSOStageIterations(plan, 10_000);
 			// No hill climb
@@ -444,21 +641,21 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * A cargo in the prompt, but outside the optimisation period should not be unpaired. 
+	 * A cargo in the prompt, but outside the optimisation period should not be unpaired.
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Category({ MicroTest.class })
 	public void testOutOfPeriodButInPromptNominalOptimisedStaysNominal() throws Exception {
-		
+
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
-		
+
 		// Construct the cargo scenario
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
@@ -470,9 +667,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
-		
+
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 1, 1));
-		
+
 		evaluateWithLSOTest(true, plan -> {
 			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
@@ -481,9 +678,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			// No hill climb
 			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
-			
+
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 			// Check cargo still exists
@@ -491,9 +688,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 		}, null);
-		
+
 	}
-	
+
 	/**
 	 * Aim of test is to try and ensure a) the action set can work with these solutions correctly and b) support the filtering correctly. (I.e ensure highly profitable but nominal cargoes are not
 	 * used).
