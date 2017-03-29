@@ -922,13 +922,12 @@ public class LNGScenarioTransformer {
 
 			if (assignableElement instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignableElement;
+				List<IPortSlot> allOptimiserSlots = new LinkedList<>();
 				IPortSlot prevSlot = null;
 				for (final Slot slot : cargo.getSortedSlots()) {
-					final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 
-					if (isNominalVessel && vesselAvailability != null) {
-						builder.bindSlotsToRoundTripVessel(vesselAvailability, portSlot);
-					}
+					final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
+					allOptimiserSlots.add(portSlot);
 
 					if (vesselAvailability != null && (freeze || lockedSlots.contains(slot))) {
 						// bind slots to vessel
@@ -942,6 +941,10 @@ public class LNGScenarioTransformer {
 					}
 
 					prevSlot = portSlot;
+				}
+
+				if (isNominalVessel && vesselAvailability != null) {
+					builder.bindSlotsToRoundTripVessel(vesselAvailability, allOptimiserSlots.toArray(new IPortSlot[allOptimiserSlots.size()]));
 				}
 			} else if (assignableElement instanceof VesselEvent) {
 				if (freezeElements) {
