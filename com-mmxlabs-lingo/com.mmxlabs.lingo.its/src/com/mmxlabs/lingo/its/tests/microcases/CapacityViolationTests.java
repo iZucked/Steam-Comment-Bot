@@ -1153,7 +1153,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
-	public void testGCO_OK() throws Exception {
+	public void testGCOAfterCargo_OK() throws Exception {
 
 		// Create the required basic elements
 		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
@@ -1281,15 +1281,190 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
-	public void testShortLoad_OK() throws Exception {
-		// Test short loading works ok
-		Assert.fail("Not yet implemented");
+	public void testGCOAfterStart_OK_TravelThenGCO() throws Exception {
+
+		// Create the required basic elements
+		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vesselClass.setMinHeel(500);
+
+		@NonNull
+		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vesselClass, "50000", 10);
+		// charterOutMarket.getAvailablePorts().add(portFinder.findPort("Sakai"));
+
+		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
+				.withStartHeel(500, 5_000, 22.5, "5.0") //
+				.withEndHeel(0, 0, EVesselTankState.MUST_BE_WARM, "10") //
+				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPort("Sakai")) //
+				.build();
+
+		evaluateWithLSOTest(true, p -> p.getUserSettings().setGenerateCharterOuts(true), null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+			MicroTestUtils.evaluateState(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences, (injector, annotatedSolution) -> {
+				@NonNull
+				final IEvaluationState evaluationState = annotatedSolution.getEvaluationState();
+
+				@NonNull
+				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+				Assert.assertNotNull(volumeAllocatedSequences);
+
+				// There should only be one resource...
+				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				final IResource resource = initialRawSequences.getResources().get(0);
+
+				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
+				// Only expect start and end slot here
+				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				@NonNull
+				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
+				@NonNull
+				final IPortSlot gcoSlot = seq.getSequenceSlots().get(1);
+				@NonNull
+				final IPortSlot endPortSlot = seq.getSequenceSlots().get(2);
+
+				final List<@NonNull CapacityViolationType> startPortViolations = seq.getCapacityViolations(startPortSlot);
+				final List<@NonNull CapacityViolationType> gcoViolations = seq.getCapacityViolations(gcoSlot);
+				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
+
+				Assert.assertEquals(0, startPortViolations.size());
+				Assert.assertEquals(0, gcoViolations.size());
+				Assert.assertEquals(0, endPortViolations.size());
+				{
+					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
+					Assert.assertNotNull(heelRecord);
+					Assert.assertEquals(3277_500, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(3277_500, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(3277_500 * 5 * 22.5, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+
+				}
+
+				{
+					final HeelValueRecord heelRecord = seq.getPortHeelRecord(gcoSlot);
+					Assert.assertNotNull(heelRecord);
+					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					// Includes boil-off
+					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(0, heelRecord.getHeelCost());
+					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+				}
+				{
+					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
+					Assert.assertNotNull(heelRecord);
+					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(0, heelRecord.getHeelCost());
+					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+				}
+			});
+		}, null);
+
 	}
 
 	@Test
 	@Category({ MicroTest.class })
-	public void testPNLCapped_OK() throws Exception {
-		// Test Heel revenue is capped at max
+	public void testGCOAfterStart_OK_GCOThenTravel() throws Exception {
+
+		// Create the required basic elements
+		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vesselClass.setMinHeel(500);
+
+		@NonNull
+		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vesselClass, "50000", 10);
+		charterOutMarket.getAvailablePorts().add(portFinder.findPort("Point Fortin"));
+
+		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
+				.withStartHeel(500, 5_000, 22.5, "5.0") //
+				.withEndHeel(0, 0, EVesselTankState.MUST_BE_WARM, "10") //
+				.withStartPort(portFinder.findPort("Point Fortin")) //
+				.withEndPort(portFinder.findPort("Sakai")) //
+				.build();
+
+		evaluateWithLSOTest(true, p -> p.getUserSettings().setGenerateCharterOuts(true), null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+
+			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+			MicroTestUtils.evaluateState(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences, (injector, annotatedSolution) -> {
+				@NonNull
+				final IEvaluationState evaluationState = annotatedSolution.getEvaluationState();
+
+				@NonNull
+				final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+				Assert.assertNotNull(volumeAllocatedSequences);
+
+				// There should only be one resource...
+				Assert.assertEquals(1, initialRawSequences.getResources().size());
+				final IResource resource = initialRawSequences.getResources().get(0);
+
+				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
+				// Only expect start and end slot here
+				Assert.assertEquals(3, seq.getSequenceSlots().size());
+				@NonNull
+				final IPortSlot startPortSlot = seq.getSequenceSlots().get(0);
+				@NonNull
+				final IPortSlot gcoSlot = seq.getSequenceSlots().get(1);
+				@NonNull
+				final IPortSlot endPortSlot = seq.getSequenceSlots().get(2);
+
+				final List<@NonNull CapacityViolationType> startPortViolations = seq.getCapacityViolations(startPortSlot);
+				final List<@NonNull CapacityViolationType> gcoViolations = seq.getCapacityViolations(gcoSlot);
+				final List<@NonNull CapacityViolationType> endPortViolations = seq.getCapacityViolations(endPortSlot);
+
+				Assert.assertEquals(0, startPortViolations.size());
+				Assert.assertEquals(0, gcoViolations.size());
+				Assert.assertEquals(0, endPortViolations.size());
+				{
+					final HeelValueRecord heelRecord = seq.getPortHeelRecord(startPortSlot);
+					Assert.assertNotNull(heelRecord);
+					Assert.assertEquals(3277_500, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(3277_500, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(3277_500 * 5 * 22.5, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(0, heelRecord.getHeelRevenue());
+
+				}
+
+				{
+					final HeelValueRecord heelRecord = seq.getPortHeelRecord(gcoSlot);
+					Assert.assertNotNull(heelRecord);
+					Assert.assertEquals(3277_500, heelRecord.getHeelAtStartInM3());
+					// Includes boil-off
+					Assert.assertEquals(3277_500, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(3277_500 * 5 * 22.5, heelRecord.getHeelCost(), 0.0);
+					Assert.assertEquals(3277_500 * 5 * 22.5, heelRecord.getHeelRevenue(), 0.0);
+				}
+				{
+					final HeelValueRecord heelRecord = seq.getPortHeelRecord(endPortSlot);
+					Assert.assertNotNull(heelRecord);
+					Assert.assertEquals(0, heelRecord.getHeelAtStartInM3());
+					Assert.assertEquals(0, heelRecord.getHeelAtEndInM3());
+					Assert.assertEquals(0, heelRecord.getHeelCost());
+					Assert.assertEquals(0, heelRecord.getHeelRevenue(), 0.0);
+				}
+			});
+		}, null);
+
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testShortLoad_OK() throws Exception {
+		// Test short loading works ok
 		Assert.fail("Not yet implemented");
 	}
 
