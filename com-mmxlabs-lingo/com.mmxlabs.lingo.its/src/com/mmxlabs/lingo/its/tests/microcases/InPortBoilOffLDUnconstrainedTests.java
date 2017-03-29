@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 
@@ -80,8 +81,8 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 				.build();
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartHeel((double) expectedStartHeelInM3, 22.8, 9)//
-				.withEndHeel(expectedEndHeelInM3)//
+				.withStartHeel((double) expectedStartHeelInM3, (double) expectedStartHeelInM3, 22.8, "9")//
+				.withEndHeel(expectedEndHeelInM3, expectedEndHeelInM3, expectedEndHeelInM3 > 0 ? EVesselTankState.MUST_BE_COLD : EVesselTankState.MUST_BE_WARM, null)//
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0)).build();
 

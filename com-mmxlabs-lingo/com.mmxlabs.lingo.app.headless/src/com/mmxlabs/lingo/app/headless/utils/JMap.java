@@ -5,8 +5,6 @@ import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -19,7 +17,6 @@ public class JMap {
 	public JMap(Map<String, Object> map) {
 		this.map = new HashMap<String, Pair<Object, Class<?>>>();
 		setJMap(map);
-		int ii = 0;
 	}
 
 	public Map<String, Pair<Object, Class<?>>> getJMap() {

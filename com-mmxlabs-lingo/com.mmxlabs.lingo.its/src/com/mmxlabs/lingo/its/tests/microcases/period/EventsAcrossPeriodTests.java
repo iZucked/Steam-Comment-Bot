@@ -482,7 +482,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			}
 
 			// Ensure heel value matches
-			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getVolumeAvailable(), 0.0);
+			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMinVolumeAvailable(), 0.0);
+			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
 
 			// Assert initial state can be evaluted
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();

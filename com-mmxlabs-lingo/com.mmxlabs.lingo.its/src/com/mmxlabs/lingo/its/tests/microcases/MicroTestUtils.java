@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
@@ -37,7 +38,9 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 
@@ -122,6 +125,36 @@ public class MicroTestUtils {
 		}
 
 		return failedCheckers.isEmpty() ? null : failedCheckers;
+	}
+
+	/**
+	 * Returns null on success, or returns the failing evaluated state constraint checkers.
+	 * 
+	 * @param rawSequences
+	 * @return
+	 */
+	public static void evaluateState(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences, BiConsumer<Injector, AnnotatedSolution> action) {
+
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
+		final Injector injector = evaluationTransformerUnit.getInjector();
+
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+			// Apply initial state (store initial lateness etc)
+			{
+				// // Apply sequence manipulators
+				final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
+				final EvaluationState evaluationState = new EvaluationState();
+				final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+
+				final AnnotatedSolution solution = new AnnotatedSolution(fullSequences, evaluationState);
+				process.annotate(fullSequences, evaluationState, solution);
+
+				action.accept(injector, solution);
+			}
+		}
 	}
 
 	public static Pair<LNGEvaluationTransformerUnit, List<IConstraintChecker>> getConstraintCheckers(@NonNull final LNGDataTransformer dataTransformer) {
