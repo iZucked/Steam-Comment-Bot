@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>4.1.6.RELEASE</version>
+		<version>4.1.7-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.ui.p2</artifactId>
-	<version>4.1.6.RELEASE</version>
+	<version>4.1.7-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 	<name>Models: UI: p2 Repository</name>
 </project>
