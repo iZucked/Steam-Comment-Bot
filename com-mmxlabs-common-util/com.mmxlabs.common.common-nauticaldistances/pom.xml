@@ -4,10 +4,10 @@
 	<parent>
 		<artifactId>common-util-parent</artifactId>
 		<groupId>com.mmxlabs.common</groupId>
-		<version>4.1.6.RELEASE</version>
+		<version>4.1.7-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.common.common-nauticaldistances</artifactId>
-	<version>4.1.6.RELEASE</version>
+	<version>4.1.7-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
