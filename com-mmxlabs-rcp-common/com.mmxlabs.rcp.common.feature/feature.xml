@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.rcp.common.feature"
       label="RCP Common Feature"
-      version="4.1.6.RELEASE"
+      version="4.1.7.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description url="http://www.example.com/description">
