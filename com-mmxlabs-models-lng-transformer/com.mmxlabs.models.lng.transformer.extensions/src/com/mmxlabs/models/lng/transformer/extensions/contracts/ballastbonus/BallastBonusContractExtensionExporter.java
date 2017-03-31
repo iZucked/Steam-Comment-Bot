@@ -3,26 +3,27 @@ package com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus;
 import java.util.Map;
 
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.LumpSumContractDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
+import com.mmxlabs.models.lng.transformer.util.SlotContractHelper;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
@@ -67,18 +68,20 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 
 				if (profitAndLossContainer != null) {
 
-					// Find child
-					final BallastBonusAnnotation annotation = ExporterExtensionUtils.findElementAnnotation(element, profitAndLossContainer, annotatedSolution, BallastBonusAnnotation.ANNOTATION_KEY,
+					
+					final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
+							IProfitAndLossAnnotation.class);
+					BallastBonusAnnotation annotation= SlotContractHelper.findDetailsAnnotation(profitAndLoss,   BallastBonusAnnotation.ANNOTATION_KEY,
 							BallastBonusAnnotation.class);
 					if (annotation != null) {
 						final BallastBonusFeeDetails details = ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails();
-						details.setFee((int) OptimiserUnitConvertor.convertToExternalConversionFactor(annotation.ballastBonusFee));
+						details.setFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
 						if (annotation.ballastBonusRuleAnnotation != null) {
 							if (annotation.ballastBonusRuleAnnotation instanceof LumpSumBallastBonusRuleAnnotation) {
 								LumpSumBallastBonusRuleAnnotation ruleA = (LumpSumBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
 								LumpSumContractDetails lumpSumContractDetails = ScheduleFactory.eINSTANCE.createLumpSumContractDetails();
 								lumpSumContractDetails.setMatchedPort(annotation.matchedPort.getName());
-								lumpSumContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalConversionFactor(ruleA.lumpSum));
+								lumpSumContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
 							} else if (annotation.ballastBonusRuleAnnotation instanceof NotionalJourneyBallastBonusRuleAnnotation) {
 								NotionalJourneyBallastBonusRuleAnnotation ruleA = (NotionalJourneyBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
 								NotionalJourneyContractDetails notionalJourneyContractDetails = ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails();
