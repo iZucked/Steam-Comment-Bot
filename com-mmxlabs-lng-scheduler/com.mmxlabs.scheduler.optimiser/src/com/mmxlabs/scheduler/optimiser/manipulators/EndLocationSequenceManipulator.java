@@ -271,14 +271,13 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		if (sequence.size() < 2) {
 			return;
 		}
-		
+
 		final ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
 		final IPort fromPort = portProvider.getPortForElement(lastVisit);
-		final ITimeWindow timeWindow = portSlotProvider.getPortSlot(lastVisit).getTimeWindow();
-		assert timeWindow != null;
-
+		// The time window should not be null for most sequences. However a "bad" sequence (one which the constraint checkers will throw out) may well present a null time window here, so be lenient.
+		final @Nullable ITimeWindow timeWindow = portSlotProvider.getPortSlot(lastVisit).getTimeWindow();
 		final int visitDuration = durationsProvider.getElementDuration(lastVisit, resource);
-		final int lastVoyageStartTime = timeWindow.getInclusiveStart() + visitDuration;
+		final int lastVoyageStartTime = (timeWindow == null ? 0 : timeWindow.getInclusiveStart()) + visitDuration;
 
 		IPort closestPort = null;
 		int closestPortDistance = Integer.MAX_VALUE;
@@ -288,7 +287,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				break;
 			}
 
-			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime, vesselProvider.getVesselAvailability(resource).getVessel());
+			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime,
+					vesselProvider.getVesselAvailability(resource).getVessel());
 			int distance = Integer.MAX_VALUE;
 			for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
 				final int routeDistance = distanceOption.getSecond();
@@ -304,8 +304,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		}
 
 		if (closestPort != null) {
-			@Nullable
-			ISequenceElement elementToReturn = returnElementProvider.getReturnElement(resource, closestPort);
+			final @Nullable ISequenceElement elementToReturn = returnElementProvider.getReturnElement(resource, closestPort);
 			assert elementToReturn != null;
 
 			sequence.set(sequence.size() - 1, elementToReturn);
@@ -335,7 +334,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		 * TODO consider merging this with the start-end-requirement stuff
 		 */
 		@Nullable
-		ISequenceElement elementToReturn = returnElementProvider.getReturnElement(resource, returnPort);
+		final ISequenceElement elementToReturn = returnElementProvider.getReturnElement(resource, returnPort);
 
 		assert elementToReturn != null;
 
