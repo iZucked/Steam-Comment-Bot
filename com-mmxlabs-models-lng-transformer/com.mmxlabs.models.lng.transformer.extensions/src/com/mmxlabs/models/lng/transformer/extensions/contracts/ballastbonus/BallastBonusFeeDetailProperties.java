@@ -34,7 +34,7 @@ public class BallastBonusFeeDetailProperties extends AbstractDetailPropertyFacto
 		final DetailProperty details = PropertiesFactory.eINSTANCE.createDetailProperty();
 		{
 			details.setName("Ballast Bonus Fee Details");
-			addDetailProperty("Fee", "", "$", "", ballastBonusFeeDetails.getFee(), new StringFormatLabelProvider("%,.2f"), details);
+			addDetailProperty("Fee", "", "$", "", ballastBonusFeeDetails.getFee(), new StringFormatLabelProvider("%,d"), details);
 			if (ballastBonusFeeDetails.getMatchingBallastBonusContractLine() != null) {
 				if (ballastBonusFeeDetails.getMatchingBallastBonusContractLine() instanceof LumpSumContractDetails) {
 					LumpSumContractDetails rule = (LumpSumContractDetails) ballastBonusFeeDetails.getMatchingBallastBonusContractLine();
