@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.mmxlabs.models.ui.properties.DetailPropertyFactory">
+      <DetailPropertyFactory
+            EClass="com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails"
+            category="pnl"
+            factory="com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusFeeDetailProperties">
+      </DetailPropertyFactory>
+   </extension>
+
+</plugin>
