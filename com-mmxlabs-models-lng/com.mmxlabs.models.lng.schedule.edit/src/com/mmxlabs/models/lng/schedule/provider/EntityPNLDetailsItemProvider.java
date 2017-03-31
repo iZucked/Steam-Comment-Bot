@@ -173,6 +173,11 @@ public class EntityPNLDetailsItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
 				 ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails()));
 	}
 
 }

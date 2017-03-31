@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
@@ -43,7 +44,10 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.LumpSumContractDetails;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
+import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
@@ -303,6 +307,34 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass exposureDetailEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ballastBonusFeeDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass matchingContractDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lumpSumContractDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass notionalJourneyContractDetailsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1814,6 +1846,168 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getBallastBonusFeeDetails() {
+		return ballastBonusFeeDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBallastBonusFeeDetails_Fee() {
+		return (EAttribute)ballastBonusFeeDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBallastBonusFeeDetails_MatchingBallastBonusContractLine() {
+		return (EReference)ballastBonusFeeDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getMatchingContractDetails() {
+		return matchingContractDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMatchingContractDetails_MatchedPort() {
+		return (EAttribute)matchingContractDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLumpSumContractDetails() {
+		return lumpSumContractDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLumpSumContractDetails_LumpSum() {
+		return (EAttribute)lumpSumContractDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNotionalJourneyContractDetails() {
+		return notionalJourneyContractDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_ReturnPort() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_Distance() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_TotalTimeInDays() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_TotalFuelUsed() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_FuelPrice() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_TotalFuelCost() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_HireRate() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_HireCost() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_RouteTaken() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyContractDetails_CanalCost() {
+		return (EAttribute)notionalJourneyContractDetailsEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -2104,6 +2298,28 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_UNIT);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__CURRENCY_UNIT);
 
+		ballastBonusFeeDetailsEClass = createEClass(BALLAST_BONUS_FEE_DETAILS);
+		createEAttribute(ballastBonusFeeDetailsEClass, BALLAST_BONUS_FEE_DETAILS__FEE);
+		createEReference(ballastBonusFeeDetailsEClass, BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_LINE);
+
+		matchingContractDetailsEClass = createEClass(MATCHING_CONTRACT_DETAILS);
+		createEAttribute(matchingContractDetailsEClass, MATCHING_CONTRACT_DETAILS__MATCHED_PORT);
+
+		lumpSumContractDetailsEClass = createEClass(LUMP_SUM_CONTRACT_DETAILS);
+		createEAttribute(lumpSumContractDetailsEClass, LUMP_SUM_CONTRACT_DETAILS__LUMP_SUM);
+
+		notionalJourneyContractDetailsEClass = createEClass(NOTIONAL_JOURNEY_CONTRACT_DETAILS);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__RETURN_PORT);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__DISTANCE);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_TIME_IN_DAYS);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_FUEL_USED);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__FUEL_PRICE);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__TOTAL_FUEL_COST);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_RATE);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__HIRE_COST);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN);
+		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -2203,6 +2419,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		entityPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
 		slotPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
 		basicSlotPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
+		ballastBonusFeeDetailsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		ballastBonusFeeDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
+		matchingContractDetailsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		lumpSumContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
+		notionalJourneyContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2403,6 +2624,28 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getExposureDetail_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(ballastBonusFeeDetailsEClass, BallastBonusFeeDetails.class, "BallastBonusFeeDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBallastBonusFeeDetails_Fee(), ecorePackage.getEInt(), "fee", "0", 1, 1, BallastBonusFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBallastBonusFeeDetails_MatchingBallastBonusContractLine(), theCommercialPackage.getBallastBonusContractLine(), null, "matchingBallastBonusContractLine", null, 0, 1, BallastBonusFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(matchingContractDetailsEClass, MatchingContractDetails.class, "MatchingContractDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMatchingContractDetails_MatchedPort(), ecorePackage.getEString(), "matchedPort", "", 1, 1, MatchingContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(lumpSumContractDetailsEClass, LumpSumContractDetails.class, "LumpSumContractDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLumpSumContractDetails_LumpSum(), ecorePackage.getEInt(), "lumpSum", "0", 1, 1, LumpSumContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(notionalJourneyContractDetailsEClass, NotionalJourneyContractDetails.class, "NotionalJourneyContractDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNotionalJourneyContractDetails_ReturnPort(), ecorePackage.getEString(), "returnPort", "", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_Distance(), ecorePackage.getEInt(), "distance", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_TotalTimeInDays(), ecorePackage.getEDouble(), "totalTimeInDays", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_TotalFuelUsed(), ecorePackage.getEInt(), "totalFuelUsed", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_FuelPrice(), ecorePackage.getEDouble(), "fuelPrice", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_TotalFuelCost(), ecorePackage.getEInt(), "totalFuelCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_HireRate(), ecorePackage.getEInt(), "hireRate", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_HireCost(), ecorePackage.getEInt(), "hireCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_RouteTaken(), ecorePackage.getEString(), "routeTaken", "", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyContractDetails_CanalCost(), ecorePackage.getEInt(), "canalCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.VESSEL);
@@ -2449,6 +2692,50 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/pricing/expressionType
+		createExpressionTypeAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionTypeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		addAnnotation
+		  (getBallastBonusFeeDetails_Fee(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getMatchingContractDetails_MatchedPort(), 
+		   source, 
+		   new String[] {
+			 "type", "basefuel"
+		   });	
+		addAnnotation
+		  (getLumpSumContractDetails_LumpSum(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getNotionalJourneyContractDetails_ReturnPort(), 
+		   source, 
+		   new String[] {
+			 "type", "basefuel"
+		   });	
+		addAnnotation
+		  (getNotionalJourneyContractDetails_RouteTaken(), 
+		   source, 
+		   new String[] {
+			 "type", "basefuel"
+		   });
 	}
 
 } //SchedulePackageImpl
