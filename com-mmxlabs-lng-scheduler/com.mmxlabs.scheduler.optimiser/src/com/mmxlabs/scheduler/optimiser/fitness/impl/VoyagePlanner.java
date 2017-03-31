@@ -150,7 +150,7 @@ public class VoyagePlanner {
 		} else if (prevPortSlot instanceof IHeelOptionSupplierPortSlot) {
 			IHeelOptionSupplierPortSlot heelOptionsPortSlot = (IHeelOptionSupplierPortSlot) prevPortSlot;
 			useNBO = heelOptionsPortSlot.getHeelOptionsSupplier().getMaximumHeelAvailableInM3() > 0;
-//			forceNBO = heelOptionsPortSlot.getHeelOptionsSupplier().getMinimumHeelAvailableInM3() > 0;
+			// forceNBO = heelOptionsPortSlot.getHeelOptionsSupplier().getMinimumHeelAvailableInM3() > 0;
 		}
 
 		final int cargoCV;
@@ -176,9 +176,7 @@ public class VoyagePlanner {
 		} else {
 			options.setWarm(false);
 		}
-if (cargoCV == 0) {
-	int ii = 0;
-}
+
 		options.setCargoCVValue(cargoCV);
 
 		// Convert rate to MT equivalent per day
@@ -867,7 +865,6 @@ if (cargoCV == 0) {
 			final PortOptions portOptions = new PortOptions(thisPortSlot);
 			portOptions.setVessel(vesselAvailability.getVessel());
 
-			
 			final int cargoCV;
 			if (actualsDataProvider.hasActuals(thisPortSlot)) {
 				cargoCV = actualsDataProvider.getCVValue(thisPortSlot);
@@ -885,7 +882,7 @@ if (cargoCV == 0) {
 				}
 			}
 			portOptions.setCargoCVValue(cargoCV);
-			
+
 			if (thisPortSlot == returnSlot) {
 				portOptions.setVisitDuration(0);
 			} else {
@@ -1122,13 +1119,14 @@ if (cargoCV == 0) {
 	private void evaluateBrokenUpVoyagePlan(final @NonNull PlanEvaluationData planData, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList, final VoyagePlan originalPlan) {
 
-		assert planData.getStartHeelVolumeInM3() >= 0;
-		assert planData.getEndHeelVolumeInM3() >= 0;
-		assert planData.getPlan().getStartingHeelInM3() >= 0;
-		assert planData.getPlan().getLNGFuelVolume() >= 0;
-		assert planData.getPlan().getRemainingHeelInM3() >= 0;
-
+		// This whole block is to sanity check the heel level via asserts.
 		{
+			assert planData.getStartHeelVolumeInM3() >= 0;
+			assert planData.getEndHeelVolumeInM3() >= 0;
+			assert planData.getPlan().getStartingHeelInM3() >= 0;
+			assert planData.getPlan().getLNGFuelVolume() >= 0;
+			assert planData.getPlan().getRemainingHeelInM3() >= 0;
+
 			final IDetailsSequenceElement[] sequence = planData.getPlan().getSequence();
 			long currentHeelInM3 = planData.getPlan().getStartingHeelInM3();
 			long totalVoyageBOG = 0;
