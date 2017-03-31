@@ -9,12 +9,14 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.BallastBonusAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -232,6 +234,19 @@ public class ShippingCostHelper {
 			}
 		}
 		return 0L;
+	}
+
+	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, int vesselEndTime) {
+		if (portSlot.getPortType() == PortType.End) {
+			@Nullable
+			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
+			if (ballastBonusContract == null) {
+				return;
+			} else {
+				BallastBonusAnnotation annotation = ballastBonusContract.annotate(portSlot, vesselAvailability, vesselEndTime);
+				shippingDetails.addChild(BallastBonusAnnotation.ANNOTATION_KEY, annotation);
+			}
+		}
 	}
 
 	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeCharterInCosts) {

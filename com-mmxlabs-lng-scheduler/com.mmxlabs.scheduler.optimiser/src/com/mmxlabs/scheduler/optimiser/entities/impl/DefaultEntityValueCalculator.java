@@ -445,7 +445,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		long heelRevenue = 0;
 		long heelCost = 0;
 		long preTaxValue = 0;
+		DetailTree shippingDetails = null;
+		if (annotatedSolution != null) {
+			shippingDetails = new DetailTree();
+		}
 		{
+
 			final PortDetails firstPortDetails = (PortDetails) plan.getSequence()[0];
 			final IPortSlot firstPortSlot = firstPortDetails.getOptions().getPortSlot();
 			isGeneratedCharterOutPlan = firstPortSlot.getPortType() == PortType.GeneratedCharterOut;
@@ -465,6 +470,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (firstPortSlot.getPortType() == PortType.End) {
 				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
 				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselEndTime);
+				if (annotatedSolution != null) {
+					shippingCostHelper.addBallastBonusAnnotation(shippingDetails, firstPortSlot, vesselAvailability, vesselEndTime);
+				}
 			}
 
 			if (volumeAllocatedSequences != null) {
@@ -492,7 +500,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, preTaxValue, value, planStartTime, exportElement, true);
+			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, value, planStartTime, exportElement, true);
 
 		}
 
@@ -500,14 +508,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	private void generateShippingAnnotations(@NonNull final EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity, final long preTaxValue, long postTaxValue, final int utcEquivTaxTime, final ISequenceElement exportElement,
-			final boolean includeLNG) {
+			final IAnnotatedSolution annotatedSolution, IDetailTree shippingDetails, final IEntity shippingEntity, final long preTaxValue, long postTaxValue, final int utcEquivTaxTime,
+			final ISequenceElement exportElement, final boolean includeLNG) {
 		{
 			// final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true);
 			final long shippingTotalPretaxProfit = preTaxValue;
 			final long shippingProfit = shippingEntity.getShippingBook().getTaxedProfit(shippingTotalPretaxProfit, utcEquivTaxTime);
-
-			final DetailTree shippingDetails = new DetailTree();
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity.getShippingBook(), shippingProfit, shippingTotalPretaxProfit, shippingDetails);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));

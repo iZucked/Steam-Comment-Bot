@@ -27,8 +27,8 @@ public class DefaultBallastBonusContract implements IBallastBonusContract {
 	}
 	
 	@Override
-	public void annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
-		createAnnotation(lastSlot, vesselAvailability, time);
+	public BallastBonusAnnotation annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
+		return createAnnotation(lastSlot, vesselAvailability, time);
 	}
 	
 	private BallastBonusAnnotation createAnnotation(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
