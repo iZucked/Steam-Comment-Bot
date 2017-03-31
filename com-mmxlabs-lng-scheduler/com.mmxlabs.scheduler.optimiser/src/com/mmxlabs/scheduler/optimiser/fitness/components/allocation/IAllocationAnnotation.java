@@ -71,5 +71,9 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 */
 	int getSlotCargoCV(@NonNull IPortSlot slot);
 	
-	
+
+	  boolean isCacheLocked();
+
+	 void setCacheLocked(boolean locked) ;
+	 
 }

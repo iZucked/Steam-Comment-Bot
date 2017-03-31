@@ -70,7 +70,9 @@ public class LinkedFBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public final boolean equals(final Object obj) {
-
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof LinkedFBOVoyagePlanChoice) {
 
 			final LinkedFBOVoyagePlanChoice other = (LinkedFBOVoyagePlanChoice) obj;

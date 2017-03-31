@@ -52,18 +52,20 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int dischargePrice;
 		private final long vesselCharterInRatePerDay;
 		private final @NonNull IVessel vessel;
-		protected final long[] startHeelRangeInM3;
+		private final long @NonNull [] startHeelRangeInM3;
 		private final int baseFuelPricePerMT;
 
 		// Non hashcode fields
 		private final @NonNull List<@NonNull IOptionsSequenceElement> sequence;
 		private final @NonNull List<@NonNull IVoyagePlanChoice> choices;
-		protected @NonNull IPortTimesRecord portTimesRecord;
-		protected @Nullable IResource resource;
+		private @NonNull IPortTimesRecord portTimesRecord;
+		private @Nullable IResource resource;
+
+		private	int originalHashCode;
 
 		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final long vesselCharterInRatePerDay, final int baseFuelPricePerMT,
 				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
-				final long[] startHeelRangeInM3) {
+				final long @NonNull [] startHeelRangeInM3) {
 			super();
 			this.vessel = vessel;
 			this.resource = resource;
@@ -98,19 +100,21 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.startHeelRangeInM3 = startHeelRangeInM3;
 
 			if ((loadix != -1) && (dischargeix != -1)) {
-				// loadPrice =
-				// ((ILoadSlot)
-				// slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
 				dischargePrice = ((IDischargeSlot) slots[dischargeix]).getDischargePriceCalculator().estimateSalesUnitPrice((IDischargeSlot) slots[dischargeix], portTimesRecord, null);
 			} else {
 				// loadPrice =
 				dischargePrice = -1;
 			}
+
+			originalHashCode = doHashCode();
 		}
 
 		@Override
 		public final int hashCode() {
+			return originalHashCode;
+		}
 
+		private int doHashCode() {
 			final int prime = 31;
 			int result = 1;
 			// result = prime * result + getOuterType().hashCode();
@@ -143,11 +147,6 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 			if (obj instanceof CacheKey) {
 				final CacheKey other = (CacheKey) obj;
-				// if (getClass() != obj.getClass())
-				// return false;
-				// CacheKey other = (CacheKey) obj;
-				// if (!getOuterType().equals(other.getOuterType()))
-				// return false;
 
 				return dischargePrice == other.dischargePrice//
 						&& baseFuelPricePerMT == other.baseFuelPricePerMT//
@@ -173,6 +172,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				final VoyagePlan plan = delegate.optimise(arg.resource, arg.vessel, arg.startHeelRangeInM3, arg.baseFuelPricePerMT, arg.vesselCharterInRatePerDay, arg.portTimesRecord, arg.sequence,
 						arg.choices);
 
+				plan.setCacheLocked(true);
 				// don't clone key
 				return new Pair<@NonNull CacheKey, VoyagePlan>(arg, plan);
 			}

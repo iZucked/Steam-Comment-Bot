@@ -25,4 +25,20 @@ public class ConstantHeelPriceCalculator implements IHeelPriceCalculator {
 		return value;
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof ConstantHeelPriceCalculator) {
+			final ConstantHeelPriceCalculator other = (ConstantHeelPriceCalculator) obj;
+			return value == other.value;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return value;
+	}
 }

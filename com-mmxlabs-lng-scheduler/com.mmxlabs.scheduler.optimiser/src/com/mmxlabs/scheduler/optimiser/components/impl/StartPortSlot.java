@@ -28,23 +28,4 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionSupplier
 	public IHeelOptionSupplier getHeelOptionsSupplier() {
 		return heelOptions;
 	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (obj instanceof StartPortSlot) {
-			final StartPortSlot other = (StartPortSlot) obj;
-
-			if (super.equals(other)) {
-				if (!other.heelOptions.equals(heelOptions)) {
-					return false;
-				}
-
-				return true;
-			}
-		}
-		return false;
-	}
 }

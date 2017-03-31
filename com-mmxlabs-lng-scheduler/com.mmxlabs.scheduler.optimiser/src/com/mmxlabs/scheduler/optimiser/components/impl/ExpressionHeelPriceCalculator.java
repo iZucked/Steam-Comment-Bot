@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -16,7 +18,16 @@ public class ExpressionHeelPriceCalculator implements IHeelPriceCalculator {
 
 	private final @NonNull ICurve expressionCurve;
 
-	public ExpressionHeelPriceCalculator(final @NonNull ICurve expressionCurve) {
+	private final @NonNull String expression;
+
+	/**
+	 * The curve is used for data. The expression String is used for equality
+	 * 
+	 * @param expression
+	 * @param expressionCurve
+	 */
+	public ExpressionHeelPriceCalculator(final @NonNull String expression, final @NonNull ICurve expressionCurve) {
+		this.expression = expression;
 		this.expressionCurve = expressionCurve;
 	}
 
@@ -31,4 +42,22 @@ public class ExpressionHeelPriceCalculator implements IHeelPriceCalculator {
 		return getHeelPrice(heelVolume, utcTime);
 	}
 
+	@Override
+	public int hashCode() {
+		return expression.hashCode();
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+
+		if (obj instanceof ExpressionHeelPriceCalculator) {
+			final ExpressionHeelPriceCalculator other = (ExpressionHeelPriceCalculator) obj;
+			return Objects.equals(expression, other.expression);
+
+		}
+		return false;
+	}
 }

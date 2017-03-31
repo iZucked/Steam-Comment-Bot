@@ -19,12 +19,14 @@ public class HeelOptionConsumer implements IHeelOptionConsumer {
 	private final VesselTankState mustEndCold;
 	private final long minHeelLimitInM3;
 	private final long maxHeelLimitInM3;
+	private final int hash;
 
 	public HeelOptionConsumer(final long minHeelLimitInM3, final long maxHeelLimitInM3, final VesselTankState endHeelState, final IHeelPriceCalculator heelUnitPrice) {
 		this.minHeelLimitInM3 = minHeelLimitInM3;
 		this.maxHeelLimitInM3 = maxHeelLimitInM3;
 		this.mustEndCold = endHeelState;
-		heelPriceCalculator = heelUnitPrice;
+		this.heelPriceCalculator = heelUnitPrice;
+		this.hash = Objects.hashCode(minHeelLimitInM3, maxHeelLimitInM3, mustEndCold, heelPriceCalculator);
 	}
 
 	@Override
@@ -60,5 +62,10 @@ public class HeelOptionConsumer implements IHeelOptionConsumer {
 			// @formatter:on
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return hash;
 	}
 }

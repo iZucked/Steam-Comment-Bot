@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -54,11 +55,6 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	private int pricingDate = IPortSlot.NO_PRICING_DATE;
 
 	private PricingEventType pricingEvent = PricingEventType.START_OF_LOAD;
-
-	//
-	// public LoadOption() {
-	// setPortType(PortType.Load);
-	// }
 
 	/**
 	 * Construct a new load option
@@ -138,7 +134,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean doEquals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -156,16 +152,28 @@ public class LoadOption extends PortSlot implements ILoadOption {
 			if (maxLoadVolume != lo.maxLoadVolume) {
 				return false;
 			}
+			if (minLoadVolumeMMBTU != lo.minLoadVolumeMMBTU) {
+				return false;
+			}
 
-			if (loadPriceCalculator != lo.loadPriceCalculator) {
+			if (maxLoadVolumeMMBTU != lo.maxLoadVolumeMMBTU) {
 				return false;
 			}
 
 			if (cargoCVValue != lo.cargoCVValue) {
 				return false;
 			}
+			if (pricingDate != lo.pricingDate) {
+				return false;
+			}
+			if (pricingEvent != lo.pricingEvent) {
+				return false;
+			}
+			if (!Objects.equal(loadPriceCalculator, lo.loadPriceCalculator)) {
+				return false;
+			}
 
-			return super.equals(obj);
+			return super.doEquals(obj);
 		}
 
 		return false;
@@ -207,5 +215,4 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	public boolean isVolumeSetInM3() {
 		return volumeSetInM3;
 	}
-
 }

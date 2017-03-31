@@ -89,15 +89,18 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return id.hashCode();
 	}
 
 	@Override
 	public boolean equals(final @Nullable Object obj) {
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof GeneratedCharterOutVesselEventPortSlot) {
 			return Objects.equals(event, ((GeneratedCharterOutVesselEventPortSlot) obj).getVesselEvent());
 		}
-		return obj == this;
+		return false;
 	}
 
 	@Override

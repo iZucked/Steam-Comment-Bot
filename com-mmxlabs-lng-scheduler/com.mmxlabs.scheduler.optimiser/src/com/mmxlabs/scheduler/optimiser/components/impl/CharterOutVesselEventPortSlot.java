@@ -41,5 +41,4 @@ public class CharterOutVesselEventPortSlot extends AbstractVesselEventPortSlot i
 	public @NonNull IHeelOptionConsumer getHeelOptionsConsumer() {
 		return charterOutEvent.getHeelOptionsConsumer();
 	}
-
 }

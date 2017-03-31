@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  */
 public final class CargoValueAnnotation implements ICargoValueAnnotation {
 
+	private boolean locked;
 	private final IAllocationAnnotation allocationAnnotation;
 
 	private static class SlotAllocationAnnotation {
@@ -66,6 +67,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	private SlotAllocationAnnotation getOrCreateSlotAllocation(final IPortSlot slot) {
 		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation == null) {
+			assert !locked;
 			allocation = new SlotAllocationAnnotation();
 			slotAllocations.put(slot, allocation);
 		}
@@ -82,6 +84,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
 	}
 
@@ -97,6 +100,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotAdditionalOtherPNL(final IPortSlot slot, final long additionalOtherPNL) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).additionalOtherPNL = additionalOtherPNL;
 	}
 
@@ -112,6 +116,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotAdditionalShippingPNL(final IPortSlot slot, final long additionalShippingPNL) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).additionalShippingPNL = additionalShippingPNL;
 	}
 
@@ -127,6 +132,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotUpstreamPNL(final IPortSlot slot, final long upstreamPNL) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).upstreamPNL = upstreamPNL;
 	}
 
@@ -142,6 +148,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotAdditionalUpsidePNL(final IPortSlot slot, final long additionalUpsidePNL) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).additionalUpsidePNL = additionalUpsidePNL;
 	}
 
@@ -157,10 +164,12 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotValue(final IPortSlot slot, final long value) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).value = value;
 	}
 
 	public void setSlotEntity(final IPortSlot slot, final IEntity entity) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).entity = entity;
 	}
 
@@ -222,12 +231,14 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 
 	@Override
 	public void setSlotTime(final IPortSlot slot, final int time) {
+		assert !locked;
 		allocationAnnotation.setSlotTime(slot, time);
 
 	}
 
 	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
+		assert !locked;
 		allocationAnnotation.setSlotDuration(slot, duration);
 
 	}
@@ -263,12 +274,23 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public long getPhysicalSlotVolumeInM3(@NonNull IPortSlot slot) {
+	public long getPhysicalSlotVolumeInM3(@NonNull final IPortSlot slot) {
 		return allocationAnnotation.getPhysicalSlotVolumeInM3(slot);
 	}
 
 	@Override
-	public long getPhysicalSlotVolumeInMMBTu(@NonNull IPortSlot slot) {
+	public long getPhysicalSlotVolumeInMMBTu(@NonNull final IPortSlot slot) {
 		return allocationAnnotation.getPhysicalSlotVolumeInMMBTu(slot);
+	}
+
+	@Override
+	public boolean isCacheLocked() {
+		return locked;
+	}
+
+	@Override
+	public void setCacheLocked(final boolean locked) {
+		assert !this.locked;
+		this.locked = locked;
 	}
 }

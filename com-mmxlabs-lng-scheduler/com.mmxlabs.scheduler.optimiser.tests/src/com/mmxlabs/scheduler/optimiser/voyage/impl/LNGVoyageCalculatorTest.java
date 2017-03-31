@@ -782,7 +782,7 @@ public class LNGVoyageCalculatorTest {
 		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
 		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 		IHeelOptionConsumer heelOptions = new HeelOptionConsumer(0L, 0L, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
-		final IPortSlot otherSlot = new NotionalEndPortSlot(null, null, null, heelOptions);
+		final IPortSlot otherSlot = new NotionalEndPortSlot("notional-end", null, null, heelOptions);
 
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));

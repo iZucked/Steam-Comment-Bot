@@ -16,12 +16,14 @@ public class HeelOptionSupplier implements IHeelOptionSupplier {
 	private final int heelCVValue;
 	private final long minHeelLimitInM3;
 	private final long maxHeelLimitInM3;
+	private final int hash;
 
 	public HeelOptionSupplier(final long minHeelLimitInM3, final long maxHeelLimitInM3, final int heelCVValue, final @NonNull IHeelPriceCalculator heelUnitPrice) {
 		this.minHeelLimitInM3 = minHeelLimitInM3;
 		this.maxHeelLimitInM3 = maxHeelLimitInM3;
 		this.heelCVValue = heelCVValue;
-		heelPriceCalculator = heelUnitPrice;
+		this.heelPriceCalculator = heelUnitPrice;
+		this.hash = Objects.hashCode(minHeelLimitInM3, maxHeelLimitInM3, heelCVValue, heelPriceCalculator);
 	}
 
 	@Override
@@ -57,5 +59,10 @@ public class HeelOptionSupplier implements IHeelOptionSupplier {
 			// @formatter:on
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return hash;
 	}
 }

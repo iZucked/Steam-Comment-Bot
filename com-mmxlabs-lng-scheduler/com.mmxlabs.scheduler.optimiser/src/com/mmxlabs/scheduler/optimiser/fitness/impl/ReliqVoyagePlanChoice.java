@@ -78,7 +78,9 @@ public final class ReliqVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public final boolean equals(final Object obj) {
-
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof ReliqVoyagePlanChoice) {
 
 			final ReliqVoyagePlanChoice other = (ReliqVoyagePlanChoice) obj;
