@@ -1,3 +1,4 @@
+
 package com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl;
 
 import java.util.List;
@@ -25,4 +26,20 @@ public class DefaultBallastBonusContract implements IBallastBonusContract {
 		return 0L;
 	}
 	
+	@Override
+	public void annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
+		createAnnotation(lastSlot, vesselAvailability, time);
+	}
+	
+	private BallastBonusAnnotation createAnnotation(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
+		BallastBonusAnnotation ballastBonusAnnotation = new BallastBonusAnnotation();
+		for (IBallastBonusContractRule rule : rules) {
+			if (rule.match(lastSlot, vesselAvailability, time)) {
+				ballastBonusAnnotation.ballastBonusFee = rule.calculateBallastBonus(lastSlot, vesselAvailability, time);
+				ballastBonusAnnotation.matchedPort = lastSlot.getPort();
+				ballastBonusAnnotation.ballastBonusRuleAnnotation = rule.annotate(lastSlot, vesselAvailability, time);
+			}
+		}
+		return ballastBonusAnnotation;
+	}
 }

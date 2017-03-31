@@ -28,4 +28,11 @@ public class DefaultLumpSumBallastBonusContractRule extends BallastBonusContract
 	public boolean match(IPortSlot slot, IVesselAvailability vesselAvailability, int time) {
 		return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
 	}
+
+	@Override
+	public IBallastBonusRuleAnnotation annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time) {
+		LumpSumBallastBonusRuleAnnotation lumpSumBallastBonusRuleAnnotation = new LumpSumBallastBonusRuleAnnotation();
+		lumpSumBallastBonusRuleAnnotation.lumpSum = calculateBallastBonus(lastSlot, vesselAvailability, time);
+		return lumpSumBallastBonusRuleAnnotation;
+	}
 }

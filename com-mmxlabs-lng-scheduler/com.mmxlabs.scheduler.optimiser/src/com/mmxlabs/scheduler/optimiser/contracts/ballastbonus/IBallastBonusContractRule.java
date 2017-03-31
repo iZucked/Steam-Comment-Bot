@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.ballastbonus;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.IBallastBonusRuleAnnotation;
 
 /**
  * A ballast bonus contract rule
@@ -25,4 +26,7 @@ public interface IBallastBonusContractRule {
 	 * @return
 	 */
 	long calculateBallastBonus(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time);
+	
+	
+	IBallastBonusRuleAnnotation annotate(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int time);
 }
