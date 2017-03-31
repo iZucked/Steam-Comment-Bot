@@ -175,7 +175,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -3386,7 +3385,7 @@ public class LNGScenarioTransformer {
 					expressionCurve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(i).doubleValue()));
 				}
 			}
-			heelPriceCalculator = new ExpressionHeelPriceCalculator(expressionCurve);
+			heelPriceCalculator = new ExpressionHeelPriceCalculator(expression, expressionCurve);
 			injector.injectMembers(heelPriceCalculator);
 		}
 		final VesselTankState vesselTankState;
@@ -3426,7 +3425,7 @@ public class LNGScenarioTransformer {
 					expressionCurve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsedSeries.evaluate(i).doubleValue()));
 				}
 			}
-			heelPriceCalculator = new ExpressionHeelPriceCalculator(expressionCurve);
+			heelPriceCalculator = new ExpressionHeelPriceCalculator(expression, expressionCurve);
 			injector.injectMembers(heelPriceCalculator);
 		}
 
