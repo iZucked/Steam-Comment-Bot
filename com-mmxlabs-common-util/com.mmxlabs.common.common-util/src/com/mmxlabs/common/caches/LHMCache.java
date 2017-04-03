@@ -24,6 +24,7 @@ public final class LHMCache<K, V> extends AbstractCache<K, V> {
 
 			@Override
 			protected boolean removeEldestEntry(final Entry<K, Reference<V>> eldest) {
+				assert this.containsKey(eldest.getKey());
 				return this.size() > intendedSize;
 			}
 		};
