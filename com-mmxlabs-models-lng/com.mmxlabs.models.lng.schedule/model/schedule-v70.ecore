@@ -303,7 +303,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="matchingBallastBonusContractDetails"
-        eType="#//MatchingContractDetails"/>
+        eType="#//MatchingContractDetails" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatchingContractDetails" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
