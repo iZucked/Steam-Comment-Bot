@@ -91,7 +91,7 @@ public final class ChangeSetTransformerUtil {
 
 		final ChangeSetRow row;
 		{
-			LoadSlot loadSlot = (LoadSlot)loadAllocation.getSlot();
+			LoadSlot loadSlot = (LoadSlot) loadAllocation.getSlot();
 			final String rowKey = getKeyName(loadAllocation);
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
@@ -311,9 +311,6 @@ public final class ChangeSetTransformerUtil {
 			lhsRowMap.put(key, row);
 
 			row.setLhsName(eventName);
-			if (event instanceof OpenSlotAllocation) {
-				final int ii = 0;
-			}
 			if (event instanceof ProfitAndLossContainer) {
 				row.setNewGroupProfitAndLoss((ProfitAndLossContainer) event);
 			}
@@ -332,9 +329,6 @@ public final class ChangeSetTransformerUtil {
 				// TODO: Unique name?
 				lhsRowMap.put(key, row);
 
-			}
-			if (event instanceof OpenSlotAllocation) {
-				final int ii = 0;
 			}
 			if (event instanceof ProfitAndLossContainer) {
 				row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
@@ -585,9 +579,10 @@ public final class ChangeSetTransformerUtil {
 		}
 		return slot.getName();
 	}
+
 	@Nullable
 	public static String getKeyName(@Nullable final OpenSlotAllocation slotAllocation) {
-		
+
 		if (slotAllocation == null) {
 			return null;
 		}

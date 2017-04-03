@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -17,6 +18,7 @@ import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
@@ -233,8 +235,12 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fromport":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "From Port", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent_Port(), name);
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.portrotation.toport":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "To Port", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getJourney_Destination(), name);
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.toport": {
+			final ETypedElement[][] paths = new ETypedElement[][] { //
+					{ SchedulePackage.Literals.VESSEL_EVENT_VISIT__REDELIVERY_PORT }, //
+					{ SchedulePackage.Literals.JOURNEY__DESTINATION } };
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "To Port", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, paths));
+		}
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.atport":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "At Port", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent_Port(), name);
@@ -293,6 +299,30 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					if (object instanceof Event) {
 						final Event pv = (Event) object;
 						return pv.getHeelAtEnd();
+					}
+					return null;
+				}
+			});// .setTooltip("In m³");
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heel_cost":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof PortVisit) {
+						final PortVisit pv = (PortVisit) object;
+						return pv.getHeelCost();
+					}
+					return null;
+				}
+			});// .setTooltip("In m³");
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heel_revenue":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Revenue", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof PortVisit) {
+						final PortVisit pv = (PortVisit) object;
+						return pv.getHeelRevenue();
 					}
 					return null;
 				}

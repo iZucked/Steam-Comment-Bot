@@ -542,6 +542,34 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 			}, targetObjectRef));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.heel_cost":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof EventGrouping) {
+						final EventGrouping grouping = (EventGrouping) object;
+						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.HEEL_COST);
+						return (int) total;
+					}
+					return null;
+					
+				}
+			}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.heel_revenue":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Revenue", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof EventGrouping) {
+						final EventGrouping grouping = (EventGrouping) object;
+						final long total = -ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.HEEL_REVENUE);
+						return (int) total;
+					}
+					return null;
+					
+				}
+			}, targetObjectRef));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.shipping_canal":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
