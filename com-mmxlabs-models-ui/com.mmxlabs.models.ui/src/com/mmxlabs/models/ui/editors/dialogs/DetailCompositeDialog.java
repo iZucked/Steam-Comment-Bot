@@ -36,6 +36,7 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -168,8 +169,18 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		@Override
-		public void relayout() {
+		public void rebuild(boolean pack) {
 			updateEditor();
+			if (pack) {
+				getShell().pack(false);
+			}
+		}
+
+		@Override
+		public void relayout() {
+			if (displayComposite != null) {
+				displayComposite.getComposite().layout(true, true);
+			}
 		}
 
 		@Override
@@ -400,13 +411,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.observablesManager = new ObservablesManager();
 
 		// This call means we do not need to manually manage our databinding objects lifecycle manually.
-		observablesManager.runAndCollect(new Runnable() {
-
-			@Override
-			public void run() {
-				doCreateFormContent();
-			}
+		observablesManager.runAndCollect(() -> {
+			doCreateFormContent();
 		});
+		getShell().layout(true, true);
 	}
 
 	/**
@@ -469,7 +477,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		displayComposite.display(dialogContext, rootObject, duplicate, ranges.get(selection), dbc);
 
 		getShell().layout(true, true);
-		getShell().pack();
+		// getShell().pack();
 		// handle enablement
 		validate();
 
@@ -515,9 +523,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		form.setText("");
 		toolkit.decorateFormHeading(form.getForm());
 		{
-			final GridLayout layout = new GridLayout(1, true);
+			final GridLayout layout = GridLayoutFactory.swtDefaults() //
+					.numColumns(1) //
+					.equalWidth(true) //
+					.margins(0, 0) //
+					.extendedMargins(0, 0, 0, 0) //
+					.create();
 			form.getBody().setLayout(layout);
 		}
+		
 		final Composite c = managedForm.getForm().getBody();
 
 		if (displaySidebarList) {
@@ -582,7 +596,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 			});
 
-			dialogArea = new Composite(sidebarSash, SWT.NONE);
+			dialogArea = new Composite(sidebarSash, SWT.BORDER);
 			{
 				final GridLayout layout = new GridLayout(1, false);
 				layout.marginHeight = layout.marginWidth = 0;
@@ -635,7 +649,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				if (newInstance instanceof NamedObject) {
 					((NamedObject) newInstance).setName("New " + factory.getLabel());
 				}
-				
+
 				if (inputs.size() == 1) {
 					if (displayCompositeFactory == null) {
 						// Note, now that we do this here rather than in doCreateFormContent we may show the wrong factory for an object *should* the input be of mixed type. (This is not a currently
@@ -643,7 +657,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 						displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(newInstance.eClass());
 					}
 				}
-				
+
 				// If inputs is now one (i.e. initially zero) trigger a relayout
 				// if (inputs.size() == 1) {
 				// }

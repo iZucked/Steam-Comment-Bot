@@ -20,10 +20,16 @@ public interface IDialogController {
 	/**
 	 * Request the editor be redrawn from the top-down disposing and recreating child composites.
 	 */
+	void rebuild(boolean pack);
+
+	/**
+	 * Request a call to layout(true,true) on the toplevel composite
+	 */
 	void relayout();
 
 	/**
-	 * Change the visibility of an object feature as registered in the framework (features are not necessarily linked directly the the target object). See #updateVisibility() to request UI state change.
+	 * Change the visibility of an object feature as registered in the framework (features are not necessarily linked directly the the target object). See #updateVisibility() to request UI state
+	 * change.
 	 */
 	void setEditorVisibility(EObject object, EStructuralFeature feature, boolean visible);
 

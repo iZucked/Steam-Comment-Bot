@@ -68,6 +68,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	public static final String COLUMN_SORT_PATH = "COLUMN_SORT_PATH";
 
 	private CommandStack currentCommandStack;
+	private boolean autoResizeable = true;
 	private final CommandStackListener commandStackListener = new CommandStackListener() {
 
 		@Override
@@ -330,8 +331,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 		return null;
 	}
 
-	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final ETypedElement... path) {
-		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
+	public <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final ETypedElement... path) {
+		return this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
 	}
 
 	public void dispose() {
@@ -411,24 +412,25 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-						if (oldInput == null) {
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									if (!viewer.getControl().isDisposed()) {
-										if (viewer instanceof GridTableViewer) {
-											for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
-												tc.pack();
-											}
-										} else if (viewer instanceof GridTreeViewer) {
-											for (final GridColumn tc : ((GridTreeViewer) viewer).getGrid().getColumns()) {
-												tc.pack();
+						if (isAutoResizeable()) {
+							if (oldInput == null) {
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										if (!viewer.getControl().isDisposed()) {
+											if (viewer instanceof GridTableViewer) {
+												for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
+													tc.pack();
+												}
+											} else if (viewer instanceof GridTreeViewer) {
+												for (final GridColumn tc : ((GridTreeViewer) viewer).getGrid().getColumns()) {
+													tc.pack();
+												}
 											}
 										}
 									}
-								}
-							});
+								});
+							}
 						}
 
 						contentProvider.inputChanged(viewer, oldInput, newInput);
@@ -645,5 +647,13 @@ public class EObjectTableViewer extends GridTreeViewer {
 	 * @param cellEditor
 	 */
 	protected void cellEditorDeactivated(final Widget widget, final CellEditor cellEditor) {
+	}
+
+	public boolean isAutoResizeable() {
+		return autoResizeable;
+	}
+
+	public void setAutoResizeable(boolean autoResizeable) {
+		this.autoResizeable = autoResizeable;
 	}
 }

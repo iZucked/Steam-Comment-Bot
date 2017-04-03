@@ -67,7 +67,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
