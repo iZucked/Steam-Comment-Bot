@@ -27,10 +27,10 @@ public class VesselTankStateInlineEditorFactory implements IInlineEditorFactory 
 				name = "Warm or cold";
 				break;
 			case MUST_BE_COLD:
-				name = "Must be cold";
+				name = "Cold";
 				break;
 			case MUST_BE_WARM:
-				name = "Must be warm";
+				name = "Warm";
 				break;
 			default:
 				name = type.getName();
