@@ -251,6 +251,8 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
         eType="#//StartHeelOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startHeelTmp" lowerBound="1"
+        eType="#//StartHeelOptions" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="forceHireCostOnlyEndRule"
