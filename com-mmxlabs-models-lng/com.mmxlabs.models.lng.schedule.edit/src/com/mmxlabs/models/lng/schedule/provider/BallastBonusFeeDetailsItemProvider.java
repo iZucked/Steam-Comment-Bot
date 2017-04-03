@@ -48,7 +48,7 @@ public class BallastBonusFeeDetailsItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addFeePropertyDescriptor(object);
-			addMatchingBallastBonusContractLinePropertyDescriptor(object);
+			addMatchingBallastBonusContractDetailsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -76,19 +76,19 @@ public class BallastBonusFeeDetailsItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Matching Ballast Bonus Contract Line feature.
+	 * This adds a property descriptor for the Matching Ballast Bonus Contract Details feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMatchingBallastBonusContractLinePropertyDescriptor(Object object) {
+	protected void addMatchingBallastBonusContractDetailsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_BallastBonusFeeDetails_matchingBallastBonusContractLine_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BallastBonusFeeDetails_matchingBallastBonusContractLine_feature", "_UI_BallastBonusFeeDetails_type"),
-				 SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_LINE,
+				 getString("_UI_BallastBonusFeeDetails_matchingBallastBonusContractDetails_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BallastBonusFeeDetails_matchingBallastBonusContractDetails_feature", "_UI_BallastBonusFeeDetails_type"),
+				 SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS,
 				 true,
 				 false,
 				 true,

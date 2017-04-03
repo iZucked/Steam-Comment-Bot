@@ -16,7 +16,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getFee <em>Fee</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractLine <em>Matching Ballast Bonus Contract Line</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails <em>Matching Ballast Bonus Contract Details</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBallastBonusFeeDetails()
@@ -53,29 +53,29 @@ public interface BallastBonusFeeDetails extends UUIDObject, GeneralPNLDetails {
 	void setFee(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Matching Ballast Bonus Contract Line</b></em>' reference.
+	 * Returns the value of the '<em><b>Matching Ballast Bonus Contract Details</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Matching Ballast Bonus Contract Line</em>' reference isn't clear,
+	 * If the meaning of the '<em>Matching Ballast Bonus Contract Details</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Matching Ballast Bonus Contract Line</em>' reference.
-	 * @see #setMatchingBallastBonusContractLine(BallastBonusContractLine)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBallastBonusFeeDetails_MatchingBallastBonusContractLine()
+	 * @return the value of the '<em>Matching Ballast Bonus Contract Details</em>' reference.
+	 * @see #setMatchingBallastBonusContractDetails(MatchingContractDetails)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBallastBonusFeeDetails_MatchingBallastBonusContractDetails()
 	 * @model
 	 * @generated
 	 */
-	BallastBonusContractLine getMatchingBallastBonusContractLine();
+	MatchingContractDetails getMatchingBallastBonusContractDetails();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractLine <em>Matching Ballast Bonus Contract Line</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails <em>Matching Ballast Bonus Contract Details</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Matching Ballast Bonus Contract Line</em>' reference.
-	 * @see #getMatchingBallastBonusContractLine()
+	 * @param value the new value of the '<em>Matching Ballast Bonus Contract Details</em>' reference.
+	 * @see #getMatchingBallastBonusContractDetails()
 	 * @generated
 	 */
-	void setMatchingBallastBonusContractLine(BallastBonusContractLine value);
+	void setMatchingBallastBonusContractDetails(MatchingContractDetails value);
 
 } // BallastBonusFeeDetails

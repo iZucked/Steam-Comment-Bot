@@ -72,7 +72,7 @@ public class BallastBonusFeeDetailsComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_feeEditor(detailComposite, topClass);
-		add_matchingBallastBonusContractLineEditor(detailComposite, topClass);
+		add_matchingBallastBonusContractDetailsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fee feature on BallastBonusFeeDetails
@@ -83,11 +83,11 @@ public class BallastBonusFeeDetailsComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__FEE));
 	}
 	/**
-	 * Create the editor for the matchingBallastBonusContractLine feature on BallastBonusFeeDetails
+	 * Create the editor for the matchingBallastBonusContractDetails feature on BallastBonusFeeDetails
 	 *
 	 * @generated
 	 */
-	protected void add_matchingBallastBonusContractLineEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_LINE));
+	protected void add_matchingBallastBonusContractDetailsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS));
 	}
 }

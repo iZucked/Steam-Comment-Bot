@@ -302,8 +302,8 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="matchingBallastBonusContractLine"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BallastBonusContractLine"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matchingBallastBonusContractDetails"
+        eType="#//MatchingContractDetails"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatchingContractDetails" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">

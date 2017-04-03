@@ -1864,7 +1864,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBallastBonusFeeDetails_MatchingBallastBonusContractLine() {
+	public EReference getBallastBonusFeeDetails_MatchingBallastBonusContractDetails() {
 		return (EReference)ballastBonusFeeDetailsEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -2300,7 +2300,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		ballastBonusFeeDetailsEClass = createEClass(BALLAST_BONUS_FEE_DETAILS);
 		createEAttribute(ballastBonusFeeDetailsEClass, BALLAST_BONUS_FEE_DETAILS__FEE);
-		createEReference(ballastBonusFeeDetailsEClass, BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_LINE);
+		createEReference(ballastBonusFeeDetailsEClass, BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS);
 
 		matchingContractDetailsEClass = createEClass(MATCHING_CONTRACT_DETAILS);
 		createEAttribute(matchingContractDetailsEClass, MATCHING_CONTRACT_DETAILS__MATCHED_PORT);
@@ -2626,7 +2626,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(ballastBonusFeeDetailsEClass, BallastBonusFeeDetails.class, "BallastBonusFeeDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBallastBonusFeeDetails_Fee(), ecorePackage.getEInt(), "fee", "0", 1, 1, BallastBonusFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBallastBonusFeeDetails_MatchingBallastBonusContractLine(), theCommercialPackage.getBallastBonusContractLine(), null, "matchingBallastBonusContractLine", null, 0, 1, BallastBonusFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBallastBonusFeeDetails_MatchingBallastBonusContractDetails(), this.getMatchingContractDetails(), null, "matchingBallastBonusContractDetails", null, 0, 1, BallastBonusFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(matchingContractDetailsEClass, MatchingContractDetails.class, "MatchingContractDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMatchingContractDetails_MatchedPort(), ecorePackage.getEString(), "matchedPort", "", 1, 1, MatchingContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
