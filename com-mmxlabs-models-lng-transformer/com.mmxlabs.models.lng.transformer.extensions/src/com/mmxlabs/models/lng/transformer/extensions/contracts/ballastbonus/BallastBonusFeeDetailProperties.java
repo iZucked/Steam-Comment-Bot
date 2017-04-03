@@ -35,13 +35,13 @@ public class BallastBonusFeeDetailProperties extends AbstractDetailPropertyFacto
 		{
 			details.setName("Ballast Bonus Fee Details");
 			addDetailProperty("Fee", "", "$", "", ballastBonusFeeDetails.getFee(), new StringFormatLabelProvider("%,d"), details);
-			if (ballastBonusFeeDetails.getMatchingBallastBonusContractLine() != null) {
-				if (ballastBonusFeeDetails.getMatchingBallastBonusContractLine() instanceof LumpSumContractDetails) {
-					LumpSumContractDetails rule = (LumpSumContractDetails) ballastBonusFeeDetails.getMatchingBallastBonusContractLine();
+			if (ballastBonusFeeDetails.getMatchingBallastBonusContractDetails() != null) {
+				if (ballastBonusFeeDetails.getMatchingBallastBonusContractDetails() instanceof LumpSumContractDetails) {
+					LumpSumContractDetails rule = (LumpSumContractDetails) ballastBonusFeeDetails.getMatchingBallastBonusContractDetails();
 					addDetailProperty("Type", "", "", "", "Lump sum", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Matching port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
-				} else if (ballastBonusFeeDetails.getMatchingBallastBonusContractLine() instanceof NotionalJourneyContractDetails) {
-					NotionalJourneyContractDetails rule = (NotionalJourneyContractDetails) ballastBonusFeeDetails.getMatchingBallastBonusContractLine();
+				} else if (ballastBonusFeeDetails.getMatchingBallastBonusContractDetails() instanceof NotionalJourneyContractDetails) {
+					NotionalJourneyContractDetails rule = (NotionalJourneyContractDetails) ballastBonusFeeDetails.getMatchingBallastBonusContractDetails();
 					addDetailProperty("Type", "", "", "", "Notional journey", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Matching port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Return port", "", "", "", rule.getReturnPort(), new StringFormatLabelProvider("%s"), details);
@@ -51,7 +51,7 @@ public class BallastBonusFeeDetailProperties extends AbstractDetailPropertyFacto
 					addDetailProperty("Fuel used", "", "MT", "", rule.getTotalFuelUsed(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Fuel cost", "", "$", "", rule.getTotalFuelCost(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Hire rate", "", "$", "/day", rule.getHireRate(), new StringFormatLabelProvider("%,d"), details);
-					addDetailProperty("Hire cost", "", "$", "", rule.getHireRate(), new StringFormatLabelProvider("%,d"), details);
+					addDetailProperty("Hire cost", "", "$", "", rule.getHireCost(), new StringFormatLabelProvider("%,d"), details);
 					addDetailProperty("Route taken", "", "", "", rule.getRouteTaken(), new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Route cost", "", "$", "", rule.getCanalCost(), new StringFormatLabelProvider("%,d"), details);
 				}

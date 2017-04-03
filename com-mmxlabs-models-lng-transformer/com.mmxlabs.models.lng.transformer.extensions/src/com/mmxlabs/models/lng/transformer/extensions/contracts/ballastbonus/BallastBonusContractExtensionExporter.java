@@ -82,15 +82,18 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 								LumpSumContractDetails lumpSumContractDetails = ScheduleFactory.eINSTANCE.createLumpSumContractDetails();
 								lumpSumContractDetails.setMatchedPort(annotation.matchedPort.getName());
 								lumpSumContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
+								details.setMatchingBallastBonusContractDetails(lumpSumContractDetails);
 							} else if (annotation.ballastBonusRuleAnnotation instanceof NotionalJourneyBallastBonusRuleAnnotation) {
 								NotionalJourneyBallastBonusRuleAnnotation ruleA = (NotionalJourneyBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
 								NotionalJourneyContractDetails notionalJourneyContractDetails = ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails();
+								notionalJourneyContractDetails.setMatchedPort(annotation.matchedPort.getName());
+
 								notionalJourneyContractDetails.setReturnPort(ruleA.returnPort.getName());
 								notionalJourneyContractDetails.setDistance(ruleA.distance);
 								
 								notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
 								notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
-								notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelUsed));
+								notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));
 								
 								notionalJourneyContractDetails.setTotalTimeInDays(((double)ruleA.totalTimeInHours)/24.0);
 								notionalJourneyContractDetails.setHireRate(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.hireRate));
@@ -98,6 +101,7 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 								
 								notionalJourneyContractDetails.setRouteTaken(ruleA.route.name());
 								notionalJourneyContractDetails.setCanalCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.canalCost));
+								details.setMatchingBallastBonusContractDetails(notionalJourneyContractDetails);
 							}
 						}
 //						ExporterExtensionUtils.addSlotPNLDetails(profitAndLossContainer, modelSlot, details);
