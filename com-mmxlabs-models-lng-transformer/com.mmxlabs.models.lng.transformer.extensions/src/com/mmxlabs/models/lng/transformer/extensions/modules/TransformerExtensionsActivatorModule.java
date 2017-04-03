@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.extensions.modules;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
+import com.mmxlabs.models.lng.transformer.extensions.actuals.ActualsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
@@ -35,6 +36,8 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		bindService(TradingExporterExtensionFactory.class).export();
 		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
 		bindService(BallastBonusExporterExtensionFactory.class).export();
+		
+		bindService(ActualsTransformerFactory.class).export();
 	}
 
 }
