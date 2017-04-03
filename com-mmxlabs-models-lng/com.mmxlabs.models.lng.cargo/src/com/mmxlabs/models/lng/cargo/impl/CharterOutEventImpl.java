@@ -17,7 +17,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.port.Port;
 
 /**
@@ -30,9 +31,10 @@ import com.mmxlabs.models.lng.port.Port;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHireRate <em>Hire Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHeelOptions <em>Heel Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getBallastBonus <em>Ballast Bonus</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRequiredHeel <em>Required Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getAvailableHeel <em>Available Heel</em>}</li>
  * </ul>
  *
  * @generated
@@ -78,16 +80,6 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	protected int hireRate = HIRE_RATE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getHeelOptions() <em>Heel Options</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHeelOptions()
-	 * @generated
-	 * @ordered
-	 */
-	protected HeelOptions heelOptions;
-
-	/**
 	 * The default value of the '{@link #getBallastBonus() <em>Ballast Bonus</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -126,6 +118,26 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * @ordered
 	 */
 	protected int repositioningFee = REPOSITIONING_FEE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRequiredHeel() <em>Required Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRequiredHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected EndHeelOptions requiredHeel;
+
+	/**
+	 * The cached value of the '{@link #getAvailableHeel() <em>Available Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAvailableHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected StartHeelOptions availableHeel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -214,72 +226,6 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public HeelOptions getHeelOptions() {
-		if (heelOptions != null && heelOptions.eIsProxy()) {
-			InternalEObject oldHeelOptions = (InternalEObject)heelOptions;
-			heelOptions = (HeelOptions)eResolveProxy(oldHeelOptions);
-			if (heelOptions != oldHeelOptions) {
-				InternalEObject newHeelOptions = (InternalEObject)heelOptions;
-				NotificationChain msgs = oldHeelOptions.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, null, null);
-				if (newHeelOptions.eInternalContainer() == null) {
-					msgs = newHeelOptions.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, oldHeelOptions, heelOptions));
-			}
-		}
-		return heelOptions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public HeelOptions basicGetHeelOptions() {
-		return heelOptions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetHeelOptions(HeelOptions newHeelOptions, NotificationChain msgs) {
-		HeelOptions oldHeelOptions = heelOptions;
-		heelOptions = newHeelOptions;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, oldHeelOptions, newHeelOptions);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setHeelOptions(HeelOptions newHeelOptions) {
-		if (newHeelOptions != heelOptions) {
-			NotificationChain msgs = null;
-			if (heelOptions != null)
-				msgs = ((InternalEObject)heelOptions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, null, msgs);
-			if (newHeelOptions != null)
-				msgs = ((InternalEObject)newHeelOptions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, null, msgs);
-			msgs = basicSetHeelOptions(newHeelOptions, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS, newHeelOptions, newHeelOptions));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getRepositioningFee() {
 		return repositioningFee;
 	}
@@ -294,6 +240,138 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 		repositioningFee = newRepositioningFee;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EndHeelOptions getRequiredHeel() {
+		if (requiredHeel != null && requiredHeel.eIsProxy()) {
+			InternalEObject oldRequiredHeel = (InternalEObject)requiredHeel;
+			requiredHeel = (EndHeelOptions)eResolveProxy(oldRequiredHeel);
+			if (requiredHeel != oldRequiredHeel) {
+				InternalEObject newRequiredHeel = (InternalEObject)requiredHeel;
+				NotificationChain msgs = oldRequiredHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, null, null);
+				if (newRequiredHeel.eInternalContainer() == null) {
+					msgs = newRequiredHeel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, oldRequiredHeel, requiredHeel));
+			}
+		}
+		return requiredHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EndHeelOptions basicGetRequiredHeel() {
+		return requiredHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetRequiredHeel(EndHeelOptions newRequiredHeel, NotificationChain msgs) {
+		EndHeelOptions oldRequiredHeel = requiredHeel;
+		requiredHeel = newRequiredHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, oldRequiredHeel, newRequiredHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRequiredHeel(EndHeelOptions newRequiredHeel) {
+		if (newRequiredHeel != requiredHeel) {
+			NotificationChain msgs = null;
+			if (requiredHeel != null)
+				msgs = ((InternalEObject)requiredHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, null, msgs);
+			if (newRequiredHeel != null)
+				msgs = ((InternalEObject)newRequiredHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, null, msgs);
+			msgs = basicSetRequiredHeel(newRequiredHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL, newRequiredHeel, newRequiredHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StartHeelOptions getAvailableHeel() {
+		if (availableHeel != null && availableHeel.eIsProxy()) {
+			InternalEObject oldAvailableHeel = (InternalEObject)availableHeel;
+			availableHeel = (StartHeelOptions)eResolveProxy(oldAvailableHeel);
+			if (availableHeel != oldAvailableHeel) {
+				InternalEObject newAvailableHeel = (InternalEObject)availableHeel;
+				NotificationChain msgs = oldAvailableHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, null, null);
+				if (newAvailableHeel.eInternalContainer() == null) {
+					msgs = newAvailableHeel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, oldAvailableHeel, availableHeel));
+			}
+		}
+		return availableHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StartHeelOptions basicGetAvailableHeel() {
+		return availableHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetAvailableHeel(StartHeelOptions newAvailableHeel, NotificationChain msgs) {
+		StartHeelOptions oldAvailableHeel = availableHeel;
+		availableHeel = newAvailableHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, oldAvailableHeel, newAvailableHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAvailableHeel(StartHeelOptions newAvailableHeel) {
+		if (newAvailableHeel != availableHeel) {
+			NotificationChain msgs = null;
+			if (availableHeel != null)
+				msgs = ((InternalEObject)availableHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, null, msgs);
+			if (newAvailableHeel != null)
+				msgs = ((InternalEObject)newAvailableHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, null, msgs);
+			msgs = basicSetAvailableHeel(newAvailableHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL, newAvailableHeel, newAvailableHeel));
 	}
 
 	/**
@@ -356,8 +434,10 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
-				return basicSetHeelOptions(null, msgs);
+			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:
+				return basicSetRequiredHeel(null, msgs);
+			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
+				return basicSetAvailableHeel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -375,13 +455,16 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return basicGetRelocateTo();
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 				return getHireRate();
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
-				if (resolve) return getHeelOptions();
-				return basicGetHeelOptions();
 			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
 				return getBallastBonus();
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				return getRepositioningFee();
+			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:
+				if (resolve) return getRequiredHeel();
+				return basicGetRequiredHeel();
+			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
+				if (resolve) return getAvailableHeel();
+				return basicGetAvailableHeel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -400,14 +483,17 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 				setHireRate((Integer)newValue);
 				return;
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
-				setHeelOptions((HeelOptions)newValue);
-				return;
 			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
 				setBallastBonus((Integer)newValue);
 				return;
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				setRepositioningFee((Integer)newValue);
+				return;
+			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:
+				setRequiredHeel((EndHeelOptions)newValue);
+				return;
+			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
+				setAvailableHeel((StartHeelOptions)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -427,14 +513,17 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 				setHireRate(HIRE_RATE_EDEFAULT);
 				return;
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
-				setHeelOptions((HeelOptions)null);
-				return;
 			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
 				setBallastBonus(BALLAST_BONUS_EDEFAULT);
 				return;
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
+				return;
+			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:
+				setRequiredHeel((EndHeelOptions)null);
+				return;
+			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
+				setAvailableHeel((StartHeelOptions)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -452,12 +541,14 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return isSetRelocateTo();
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 				return hireRate != HIRE_RATE_EDEFAULT;
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
-				return heelOptions != null;
 			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
 				return ballastBonus != BALLAST_BONUS_EDEFAULT;
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
+			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:
+				return requiredHeel != null;
+			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
+				return availableHeel != null;
 		}
 		return super.eIsSet(featureID);
 	}

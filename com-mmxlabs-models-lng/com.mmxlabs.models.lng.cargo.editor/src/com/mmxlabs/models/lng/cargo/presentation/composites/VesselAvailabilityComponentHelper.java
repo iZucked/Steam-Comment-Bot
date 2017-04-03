@@ -84,7 +84,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
 		add_repositioningFeeEditor(detailComposite, topClass);
-		add_ballastBonusEditor(detailComposite, topClass);
+		add_ballastBonusContractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fleet feature on VesselAvailability
@@ -209,7 +209,16 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_ballastBonusEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new VesselAvailabilityDetailWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS)));
+//		detailComposite.addInlineEditor(new VesselAvailabilityDetailWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS)));
+	}
+
+	/**
+	 * Create the editor for the ballastBonusContract feature on VesselAvailability
+	 *
+	 * @generated NOT
+	 */
+	protected void add_ballastBonusContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT));
 	}
 
 	/**

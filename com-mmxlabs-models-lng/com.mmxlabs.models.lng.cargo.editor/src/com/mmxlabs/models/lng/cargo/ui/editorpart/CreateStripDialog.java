@@ -103,9 +103,9 @@ public class CreateStripDialog extends FormDialog {
 	public static enum StripType {
 		TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_PURCHASE_SLOT("DES Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_FOB_SALE_SLOT("FOB Sale");
 
-		private final String name;
+		private final @NonNull String name;
 
-		private StripType(final String name) {
+		private StripType(final @NonNull String name) {
 			this.name = name;
 		}
 
@@ -159,7 +159,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		@Override
-		public void relayout() {
+		public void rebuild(boolean pack) {
 
 		}
 
@@ -183,6 +183,11 @@ public class CreateStripDialog extends FormDialog {
 				return visibilityMap.get(object, feature).booleanValue();
 			}
 			return true;
+		}
+
+		@Override
+		public void relayout() {
+
 		}
 	};
 	private IDisplayComposite templateDetailComposite;

@@ -13,7 +13,9 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.ui.manipulators.ContractTypeEnumAttributeManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -31,9 +33,8 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getEditingDomain()));
-		addTypicalColumn("Preferred Port", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_PreferredPort(), getReferenceValueProviderCache(), getEditingDomain()));
-		addTypicalColumn("Allowed Ports", new MultipleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_AllowedPorts(), getReferenceValueProviderCache(), getEditingDomain(),
-				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Type", new ContractTypeEnumAttributeManipulator(CommercialPackage.eINSTANCE.getContract_ContractType(), getEditingDomain()));
+		addTypicalColumn("Volume", new VolumeAttributeManipulator(CommercialPackage.eINSTANCE.getContract_MaxQuantity(), getEditingDomain()));
 
 		defaultSetTitle("Contracts");
 	}

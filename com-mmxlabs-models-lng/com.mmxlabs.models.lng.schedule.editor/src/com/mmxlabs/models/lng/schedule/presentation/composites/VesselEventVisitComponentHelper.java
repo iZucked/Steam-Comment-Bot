@@ -67,6 +67,7 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselEventEditor(detailComposite, topClass);
+		add_redeliveryPortEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselEvent feature on VesselEventVisit
@@ -75,5 +76,14 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT));
+	}
+
+	/**
+	 * Create the editor for the redeliveryPort feature on VesselEventVisit
+	 *
+	 * @generated
+	 */
+	protected void add_redeliveryPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.VESSEL_EVENT_VISIT__REDELIVERY_PORT));
 	}
 }

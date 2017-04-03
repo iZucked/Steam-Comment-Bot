@@ -303,6 +303,33 @@ public interface ScheduleFactory extends EFactory {
 	ExposureDetail createExposureDetail();
 
 	/**
+	 * Returns a new object of class '<em>Ballast Bonus Fee Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Ballast Bonus Fee Details</em>'.
+	 * @generated
+	 */
+	BallastBonusFeeDetails createBallastBonusFeeDetails();
+
+	/**
+	 * Returns a new object of class '<em>Lump Sum Contract Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Lump Sum Contract Details</em>'.
+	 * @generated
+	 */
+	LumpSumContractDetails createLumpSumContractDetails();
+
+	/**
+	 * Returns a new object of class '<em>Notional Journey Contract Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Notional Journey Contract Details</em>'.
+	 * @generated
+	 */
+	NotionalJourneyContractDetails createNotionalJourneyContractDetails();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

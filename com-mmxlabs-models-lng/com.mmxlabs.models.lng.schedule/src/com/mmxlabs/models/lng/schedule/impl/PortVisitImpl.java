@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getHeelCost <em>Heel Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getHeelRevenue <em>Heel Revenue</em>}</li>
  * </ul>
  *
  * @generated
@@ -74,6 +76,46 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * @ordered
 	 */
 	protected PortVisitLateness lateness;
+
+	/**
+	 * The default value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelCost() <em>Heel Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelCost = HEEL_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_REVENUE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelRevenue() <em>Heel Revenue</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelRevenue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelRevenue = HEEL_REVENUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -175,6 +217,48 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getHeelCost() {
+		return heelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelCost(int newHeelCost) {
+		int oldHeelCost = heelCost;
+		heelCost = newHeelCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PORT_VISIT__HEEL_COST, oldHeelCost, heelCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelRevenue() {
+		return heelRevenue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelRevenue(int newHeelRevenue) {
+		int oldHeelRevenue = heelRevenue;
+		heelRevenue = newHeelRevenue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PORT_VISIT__HEEL_REVENUE, oldHeelRevenue, heelRevenue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -201,6 +285,10 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 				return getPortCost();
 			case SchedulePackage.PORT_VISIT__LATENESS:
 				return getLateness();
+			case SchedulePackage.PORT_VISIT__HEEL_COST:
+				return getHeelCost();
+			case SchedulePackage.PORT_VISIT__HEEL_REVENUE:
+				return getHeelRevenue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -221,6 +309,12 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 				return;
 			case SchedulePackage.PORT_VISIT__LATENESS:
 				setLateness((PortVisitLateness)newValue);
+				return;
+			case SchedulePackage.PORT_VISIT__HEEL_COST:
+				setHeelCost((Integer)newValue);
+				return;
+			case SchedulePackage.PORT_VISIT__HEEL_REVENUE:
+				setHeelRevenue((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -243,6 +337,12 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 			case SchedulePackage.PORT_VISIT__LATENESS:
 				setLateness((PortVisitLateness)null);
 				return;
+			case SchedulePackage.PORT_VISIT__HEEL_COST:
+				setHeelCost(HEEL_COST_EDEFAULT);
+				return;
+			case SchedulePackage.PORT_VISIT__HEEL_REVENUE:
+				setHeelRevenue(HEEL_REVENUE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -261,6 +361,10 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.PORT_VISIT__LATENESS:
 				return lateness != null;
+			case SchedulePackage.PORT_VISIT__HEEL_COST:
+				return heelCost != HEEL_COST_EDEFAULT;
+			case SchedulePackage.PORT_VISIT__HEEL_REVENUE:
+				return heelRevenue != HEEL_REVENUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -309,6 +413,10 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portCost: ");
 		result.append(portCost);
+		result.append(", heelCost: ");
+		result.append(heelCost);
+		result.append(", heelRevenue: ");
+		result.append(heelRevenue);
 		result.append(')');
 		return result.toString();
 	}

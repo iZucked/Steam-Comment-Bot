@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -25,8 +27,11 @@ import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
@@ -148,6 +153,41 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass dateShiftExpressionPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ballastBonusContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ruleBasedBallastBonusContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ballastBonusContractLineEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lumpSumBallastBonusContractLineEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass notionalJourneyBallastBonusContractLineEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -674,6 +714,123 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getBallastBonusContract() {
+		return ballastBonusContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getRuleBasedBallastBonusContract() {
+		return ruleBasedBallastBonusContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRuleBasedBallastBonusContract_Rules() {
+		return (EReference)ruleBasedBallastBonusContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBallastBonusContractLine() {
+		return ballastBonusContractLineEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBallastBonusContractLine_RedeliveryPorts() {
+		return (EReference)ballastBonusContractLineEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLumpSumBallastBonusContractLine() {
+		return lumpSumBallastBonusContractLineEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLumpSumBallastBonusContractLine_PriceExpression() {
+		return (EAttribute)lumpSumBallastBonusContractLineEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNotionalJourneyBallastBonusContractLine() {
+		return notionalJourneyBallastBonusContractLineEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyBallastBonusContractLine_Speed() {
+		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyBallastBonusContractLine_FuelPriceExpression() {
+		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyBallastBonusContractLine_HirePriceExpression() {
+		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNotionalJourneyBallastBonusContractLine_ReturnPorts() {
+		return (EReference)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanal() {
+		return (EAttribute)notionalJourneyBallastBonusContractLineEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -779,6 +936,24 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(dateShiftExpressionPriceParametersEClass, DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__SPECIFIC_DAY);
 		createEAttribute(dateShiftExpressionPriceParametersEClass, DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE);
 
+		ballastBonusContractEClass = createEClass(BALLAST_BONUS_CONTRACT);
+
+		ruleBasedBallastBonusContractEClass = createEClass(RULE_BASED_BALLAST_BONUS_CONTRACT);
+		createEReference(ruleBasedBallastBonusContractEClass, RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+
+		ballastBonusContractLineEClass = createEClass(BALLAST_BONUS_CONTRACT_LINE);
+		createEReference(ballastBonusContractLineEClass, BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS);
+
+		lumpSumBallastBonusContractLineEClass = createEClass(LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE);
+		createEAttribute(lumpSumBallastBonusContractLineEClass, LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION);
+
+		notionalJourneyBallastBonusContractLineEClass = createEClass(NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE);
+		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED);
+		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION);
+		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION);
+		createEReference(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS);
+		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL);
+
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
 		pricingEventEEnum = createEEnum(PRICING_EVENT);
@@ -832,6 +1007,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		baseEntityBookEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		simpleEntityBookEClass.getESuperTypes().add(this.getBaseEntityBook());
 		dateShiftExpressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		ballastBonusContractEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		ruleBasedBallastBonusContractEClass.getESuperTypes().add(this.getBallastBonusContract());
+		lumpSumBallastBonusContractLineEClass.getESuperTypes().add(this.getBallastBonusContractLine());
+		notionalJourneyBallastBonusContractLineEClass.getESuperTypes().add(this.getBallastBonusContractLine());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -904,6 +1083,30 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getDateShiftExpressionPriceParameters_SpecificDay(), ecorePackage.getEBoolean(), "specificDay", null, 0, 1, DateShiftExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDateShiftExpressionPriceParameters_Value(), ecorePackage.getEInt(), "value", null, 0, 1, DateShiftExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(ballastBonusContractEClass, BallastBonusContract.class, "BallastBonusContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(ruleBasedBallastBonusContractEClass, RuleBasedBallastBonusContract.class, "RuleBasedBallastBonusContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRuleBasedBallastBonusContract_Rules(), this.getBallastBonusContractLine(), null, "rules", null, 0, -1, RuleBasedBallastBonusContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(ballastBonusContractLineEClass, BallastBonusContractLine.class, "BallastBonusContractLine", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getBallastBonusContractLine_RedeliveryPorts(), g1, null, "redeliveryPorts", null, 0, -1, BallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(lumpSumBallastBonusContractLineEClass, LumpSumBallastBonusContractLine.class, "LumpSumBallastBonusContractLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLumpSumBallastBonusContractLine_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, LumpSumBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(notionalJourneyBallastBonusContractLineEClass, NotionalJourneyBallastBonusContractLine.class, "NotionalJourneyBallastBonusContractLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNotionalJourneyBallastBonusContractLine_Speed(), ecorePackage.getEDouble(), "speed", "0", 1, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), ecorePackage.getEString(), "fuelPriceExpression", "", 1, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), ecorePackage.getEString(), "hirePriceExpression", "", 1, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getNotionalJourneyBallastBonusContractLine_ReturnPorts(), g1, null, "returnPorts", null, 0, -1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyBallastBonusContractLine_IncludeCanal(), ecorePackage.getEBoolean(), "includeCanal", null, 0, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
 		addEEnumLiteral(contractTypeEEnum, ContractType.BOTH);
@@ -947,13 +1150,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
-		   });
-		addAnnotation
-		  (getContract_MaxQuantity(), 
-		   new boolean[] { true },
-		   "http://www.mmxlabs.com/models/ui/numberFormat",
-		   new String[] {
-			 "formatString", "#,###,##0"
 		   });	
 		addAnnotation
 		  (getSalesContract_MinCvValue(), 
@@ -988,6 +1184,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   "http://www.mmxlabs.com/models/ui/numberFormat",
 		   new String[] {
 			 "formatString", "#,###,##0"
+		   });	
+		addAnnotation
+		  (getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day"
 		   });
 	}
 
@@ -1016,6 +1218,30 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source, 
 		   new String[] {
 			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getLumpSumBallastBonusContractLine_PriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getNotionalJourneyBallastBonusContractLine_Speed(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "basefuel"
+		   });	
+		addAnnotation
+		  (getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "charter"
 		   });
 	}
 

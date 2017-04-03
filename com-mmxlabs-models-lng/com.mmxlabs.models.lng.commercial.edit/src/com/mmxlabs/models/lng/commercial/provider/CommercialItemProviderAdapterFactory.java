@@ -318,6 +318,75 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RuleBasedBallastBonusContractItemProvider ruleBasedBallastBonusContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRuleBasedBallastBonusContractAdapter() {
+		if (ruleBasedBallastBonusContractItemProvider == null) {
+			ruleBasedBallastBonusContractItemProvider = new RuleBasedBallastBonusContractItemProvider(this);
+		}
+
+		return ruleBasedBallastBonusContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LumpSumBallastBonusContractLineItemProvider lumpSumBallastBonusContractLineItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLumpSumBallastBonusContractLineAdapter() {
+		if (lumpSumBallastBonusContractLineItemProvider == null) {
+			lumpSumBallastBonusContractLineItemProvider = new LumpSumBallastBonusContractLineItemProvider(this);
+		}
+
+		return lumpSumBallastBonusContractLineItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NotionalJourneyBallastBonusContractLineItemProvider notionalJourneyBallastBonusContractLineItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNotionalJourneyBallastBonusContractLineAdapter() {
+		if (notionalJourneyBallastBonusContractLineItemProvider == null) {
+			notionalJourneyBallastBonusContractLineItemProvider = new NotionalJourneyBallastBonusContractLineItemProvider(this);
+		}
+
+		return notionalJourneyBallastBonusContractLineItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -453,6 +522,9 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (contractExpressionMapEntryItemProvider != null) contractExpressionMapEntryItemProvider.dispose();
 		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
 		if (dateShiftExpressionPriceParametersItemProvider != null) dateShiftExpressionPriceParametersItemProvider.dispose();
+		if (ruleBasedBallastBonusContractItemProvider != null) ruleBasedBallastBonusContractItemProvider.dispose();
+		if (lumpSumBallastBonusContractLineItemProvider != null) lumpSumBallastBonusContractLineItemProvider.dispose();
+		if (notionalJourneyBallastBonusContractLineItemProvider != null) notionalJourneyBallastBonusContractLineItemProvider.dispose();
 	}
 
 }

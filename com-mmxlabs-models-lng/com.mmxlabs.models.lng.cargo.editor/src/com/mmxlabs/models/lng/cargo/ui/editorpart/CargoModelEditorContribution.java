@@ -21,11 +21,12 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -86,8 +87,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			eventViewerPane.setLocked(locked);
 	}
 
-	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, DischargeSlot.class,
-			SlotContractParams.class, SlotVisit.class, EndEvent.class };
+	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, StartHeelOptions.class, EndHeelOptions.class, Cargo.class, LoadSlot.class,
+			DischargeSlot.class, SlotContractParams.class, SlotVisit.class, EndEvent.class };
 
 	@Override
 	public boolean canHandle(final IStatus status) {
@@ -196,7 +197,14 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			editorPart.setActivePage(eventPage);
 
 			// extract viewable target from a faulty HeelOptions object
-			if (target instanceof HeelOptions) {
+			if (target instanceof StartHeelOptions) {
+				final EObject container = target.eContainer();
+				if (container instanceof VesselAvailability) {
+					target = (VesselAvailability) container;
+				} else if (container instanceof CharterOutEvent) {
+					target = container;
+				}
+			} else if (target instanceof EndHeelOptions) {
 				final EObject container = target.eContainer();
 				if (container instanceof VesselAvailability) {
 					target = (VesselAvailability) container;

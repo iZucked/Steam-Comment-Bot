@@ -56,14 +56,6 @@ public class VesselAvailabilityCommandProvider extends BaseModelCommandProvider<
 	public Command provideAdditionalAfterCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides, Set<EObject> editSet, Class<? extends Command> commandClass,
 			CommandParameter parameter, Command input) {
 
-		if (parameter.getFeature() == CargoPackage.Literals.VESSEL_AVAILABILITY__OPTIONAL) {
-			if ((parameter.getValue() instanceof Boolean && ((Boolean) parameter.getValue()) == false)) {
-				// Clear value
-				return new CompoundCommand(Lists.newArrayList(SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE, SetCommand.UNSET_VALUE), SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS, SetCommand.UNSET_VALUE)));
-			}
-
-		}
-
 		return null;
 	}
 

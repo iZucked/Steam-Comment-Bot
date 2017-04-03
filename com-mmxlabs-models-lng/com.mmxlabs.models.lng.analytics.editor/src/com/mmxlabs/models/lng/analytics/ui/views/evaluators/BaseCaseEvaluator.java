@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescri
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -459,14 +460,16 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setVessel(vessel);
 				vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
 
+				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
-					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+//					vesselAvailability.getStartHeel().setPriceExpression(PerMMBTU(0.1);
 
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
-					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 
 				vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
@@ -475,7 +478,6 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
 				vesselAvailability.setFleet(false);
-				vesselAvailability.setBallastBonus(optionalAvailabilityShippingOption.getBallastBonus());
 				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
@@ -502,14 +504,17 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setVessel(vessel);
 				vesselAvailability.setEntity(fleetShippingOption.getEntity());
 
-				if (fleetShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getStartHeel().setCvValue(22.8);
-					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
-					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				if (fleetShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+//					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 				vesselAvailability.setOptional(false);
 				vesselAvailability.setFleet(true);
@@ -538,14 +543,17 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setVessel(vessel);
 				vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
 
-				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getStartHeel().setCvValue(22.8);
-					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
-					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+//					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 
 				vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
@@ -554,7 +562,6 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
 				vesselAvailability.setFleet(false);
-				vesselAvailability.setBallastBonus(optionalAvailabilityShippingOption.getBallastBonus());
 				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
@@ -581,14 +588,17 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setVessel(vessel);
 				vesselAvailability.setEntity(fleetShippingOption.getEntity());
 
-				if (fleetShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getStartHeel().setCvValue(22.8);
-					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
-					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				if (fleetShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+//					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 				vesselAvailability.setOptional(false);
 				vesselAvailability.setFleet(true);

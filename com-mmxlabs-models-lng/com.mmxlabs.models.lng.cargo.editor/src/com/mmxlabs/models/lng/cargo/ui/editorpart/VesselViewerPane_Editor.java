@@ -51,7 +51,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		
 		addTypicalColumn("Name", nameManipulator, CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
-		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain),
+		addTypicalColumn("Class", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain)),
 				CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
 		addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Fleet(), editingDomain));
@@ -73,19 +73,6 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 			}
 		}});
 
-		addTypicalColumn("Ballast Bonus", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), jointModelEditor.getEditingDomain()) {@Override
-			public boolean canEdit(Object object) {
-			if (object instanceof VesselAvailability) {
-				if (!((VesselAvailability) object).isFleet()) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return super.canEdit(object);
-			}
-		}});
-		
 		addTypicalColumn("Start Port",
 				new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));

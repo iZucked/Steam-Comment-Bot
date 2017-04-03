@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselType;
@@ -173,6 +175,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass startHeelOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum cargoTypeEEnum = null;
 
 	/**
@@ -181,6 +190,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EEnum vesselTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum eVesselTankStateEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1178,8 +1194,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailability_BallastBonus() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(15);
+	public EReference getVesselAvailability_BallastBonusContract() {
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -1340,8 +1356,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterOutEvent_HeelOptions() {
-		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(2);
+	public EAttribute getCharterOutEvent_RepositioningFee() {
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1349,8 +1365,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCharterOutEvent_RepositioningFee() {
-		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(4);
+	public EReference getCharterOutEvent_RequiredHeel() {
+		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterOutEvent_AvailableHeel() {
+		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1368,7 +1393,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOutEvent_BallastBonus() {
-		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1457,8 +1482,80 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getEndHeelOptions_TargetEndHeel() {
+	public EAttribute getEndHeelOptions_TankState() {
 		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEndHeelOptions_MinimumEndHeel() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEndHeelOptions_MaximumEndHeel() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEndHeelOptions_PriceExpression() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getStartHeelOptions() {
+		return startHeelOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStartHeelOptions_CvValue() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStartHeelOptions_MinVolumeAvailable() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStartHeelOptions_MaxVolumeAvailable() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStartHeelOptions_PriceExpression() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1477,6 +1574,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EEnum getVesselType() {
 		return vesselTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getEVesselTankState() {
+		return eVesselTankStateEEnum;
 	}
 
 	/**
@@ -1620,7 +1726,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_HEEL);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__REPOSITIONING_FEE);
-		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__BALLAST_BONUS);
+		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME);
@@ -1642,9 +1748,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		charterOutEventEClass = createEClass(CHARTER_OUT_EVENT);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__RELOCATE_TO);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__HIRE_RATE);
-		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__HEEL_OPTIONS);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__BALLAST_BONUS);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__REPOSITIONING_FEE);
+		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__REQUIRED_HEEL);
+		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__AVAILABLE_HEEL);
 		createEOperation(charterOutEventEClass, CHARTER_OUT_EVENT___GET_END_PORT);
 
 		assignableElementEClass = createEClass(ASSIGNABLE_ELEMENT);
@@ -1657,11 +1764,21 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselTypeGroupEClass, VESSEL_TYPE_GROUP__VESSEL_TYPE);
 
 		endHeelOptionsEClass = createEClass(END_HEEL_OPTIONS);
-		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__TARGET_END_HEEL);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__TANK_STATE);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__MINIMUM_END_HEEL);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__MAXIMUM_END_HEEL);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__PRICE_EXPRESSION);
+
+		startHeelOptionsEClass = createEClass(START_HEEL_OPTIONS);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__CV_VALUE);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__PRICE_EXPRESSION);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
+		eVesselTankStateEEnum = createEEnum(EVESSEL_TANK_STATE);
 	}
 
 	/**
@@ -1728,6 +1845,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		EGenericType g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
 		vesselTypeGroupEClass.getEGenericSuperTypes().add(g1);
+		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1875,11 +1993,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getVesselAvailability_EndAt(), g1, null, "endAt", null, 0, -1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_EndAfter(), theDateTimePackage.getLocalDateTime(), "endAfter", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_EndBy(), theDateTimePackage.getLocalDateTime(), "endBy", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselAvailability_StartHeel(), theFleetPackage.getHeelOptions(), null, "startHeel", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselAvailability_StartHeel(), this.getStartHeelOptions(), null, "startHeel", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_EndHeel(), this.getEndHeelOptions(), null, "endHeel", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_ForceHireCostOnlyEndRule(), ecorePackage.getEBoolean(), "forceHireCostOnlyEndRule", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_RepositioningFee(), ecorePackage.getEString(), "repositioningFee", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_BallastBonus(), ecorePackage.getEString(), "ballastBonus", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselAvailability_BallastBonusContract(), theCommercialPackage.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselAvailability__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1910,9 +2028,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(charterOutEventEClass, CharterOutEvent.class, "CharterOutEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutEvent_RelocateTo(), thePortPackage.getPort(), null, "relocateTo", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutEvent_HireRate(), ecorePackage.getEInt(), "hireRate", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCharterOutEvent_HeelOptions(), theFleetPackage.getHeelOptions(), null, "heelOptions", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutEvent_BallastBonus(), ecorePackage.getEInt(), "ballastBonus", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutEvent_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterOutEvent_RequiredHeel(), this.getEndHeelOptions(), null, "requiredHeel", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterOutEvent_AvailableHeel(), this.getStartHeelOptions(), null, "availableHeel", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCharterOutEvent__GetEndPort(), thePortPackage.getPort(), "getEndPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1926,7 +2045,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getVesselTypeGroup_VesselType(), this.getVesselType(), "vesselType", null, 1, 1, VesselTypeGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(endHeelOptionsEClass, EndHeelOptions.class, "EndHeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEndHeelOptions_TargetEndHeel(), ecorePackage.getEInt(), "targetEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_TankState(), this.getEVesselTankState(), "tankState", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_MinimumEndHeel(), ecorePackage.getEInt(), "minimumEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_MaximumEndHeel(), ecorePackage.getEInt(), "maximumEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(startHeelOptionsEClass, StartHeelOptions.class, "StartHeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStartHeelOptions_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartHeelOptions_MinVolumeAvailable(), ecorePackage.getEDouble(), "minVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartHeelOptions_MaxVolumeAvailable(), ecorePackage.getEDouble(), "maxVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
@@ -1937,6 +2065,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEEnum(vesselTypeEEnum, VesselType.class, "VesselType");
 		addEEnumLiteral(vesselTypeEEnum, VesselType.OWNED);
 		addEEnumLiteral(vesselTypeEEnum, VesselType.TIME_CHARTERED);
+
+		initEEnum(eVesselTankStateEEnum, EVesselTankState.class, "EVesselTankState");
+		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.EITHER);
+		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_COLD);
+		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_WARM);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -2050,12 +2183,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			 "unit", "$/day"
 		   });	
 		addAnnotation
-		  (getVesselAvailability_BallastBonus(), 
-		   source, 
-		   new String[] {
-			 "unit", "$/day"
-		   });	
-		addAnnotation
 		  (getVesselEvent_DurationInDays(), 
 		   source, 
 		   new String[] {
@@ -2081,6 +2208,41 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			 "unit", "$",
 			 "formatString", "###,##0"
+		   });	
+		addAnnotation
+		  (getEndHeelOptions_MinimumEndHeel(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
+		   });	
+		addAnnotation
+		  (getEndHeelOptions_MaximumEndHeel(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
+		   });	
+		addAnnotation
+		  (getStartHeelOptions_CvValue(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.######"
+		   });	
+		addAnnotation
+		  (getStartHeelOptions_MinVolumeAvailable(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
+		   });	
+		addAnnotation
+		  (getStartHeelOptions_MaxVolumeAvailable(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
 		   });
 	}
 
@@ -2117,16 +2279,22 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			 "type", "charter"
 		   });	
 		addAnnotation
-		  (getVesselAvailability_BallastBonus(), 
+		  (getCharterOutEvent_HireRate(), 
 		   source, 
 		   new String[] {
 			 "type", "charter"
 		   });	
 		addAnnotation
-		  (getCharterOutEvent_HireRate(), 
+		  (getEndHeelOptions_PriceExpression(), 
 		   source, 
 		   new String[] {
-			 "type", "charter"
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getStartHeelOptions_PriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
 		   });
 	}
 

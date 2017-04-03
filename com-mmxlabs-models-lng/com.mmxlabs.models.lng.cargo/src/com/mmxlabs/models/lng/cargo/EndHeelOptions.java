@@ -17,7 +17,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTargetEndHeel <em>Target End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTankState <em>Tank State</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions()
@@ -26,56 +29,110 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface EndHeelOptions extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Target End Heel</b></em>' attribute.
+	 * Returns the value of the '<em><b>Tank State</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.cargo.EVesselTankState}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Target End Heel</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Tank State</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Target End Heel</em>' attribute.
-	 * @see #isSetTargetEndHeel()
-	 * @see #unsetTargetEndHeel()
-	 * @see #setTargetEndHeel(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_TargetEndHeel()
-	 * @model unsettable="true"
+	 * @return the value of the '<em>Tank State</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.EVesselTankState
+	 * @see #setTankState(EVesselTankState)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_TankState()
+	 * @model
 	 * @generated
 	 */
-	int getTargetEndHeel();
+	EVesselTankState getTankState();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTargetEndHeel <em>Target End Heel</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTankState <em>Tank State</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Target End Heel</em>' attribute.
-	 * @see #isSetTargetEndHeel()
-	 * @see #unsetTargetEndHeel()
-	 * @see #getTargetEndHeel()
+	 * @param value the new value of the '<em>Tank State</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.EVesselTankState
+	 * @see #getTankState()
 	 * @generated
 	 */
-	void setTargetEndHeel(int value);
+	void setTankState(EVesselTankState value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTargetEndHeel <em>Target End Heel</em>}' attribute.
+	 * Returns the value of the '<em><b>Minimum End Heel</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Minimum End Heel</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #isSetTargetEndHeel()
-	 * @see #getTargetEndHeel()
-	 * @see #setTargetEndHeel(int)
+	 * @return the value of the '<em>Minimum End Heel</em>' attribute.
+	 * @see #setMinimumEndHeel(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_MinimumEndHeel()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
-	void unsetTargetEndHeel();
+	int getMinimumEndHeel();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTargetEndHeel <em>Target End Heel</em>}' attribute is set.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Target End Heel</em>' attribute is set.
-	 * @see #unsetTargetEndHeel()
-	 * @see #getTargetEndHeel()
-	 * @see #setTargetEndHeel(int)
+	 * @param value the new value of the '<em>Minimum End Heel</em>' attribute.
+	 * @see #getMinimumEndHeel()
 	 * @generated
 	 */
-	boolean isSetTargetEndHeel();
+	void setMinimumEndHeel(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Maximum End Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Maximum End Heel</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Maximum End Heel</em>' attribute.
+	 * @see #setMaximumEndHeel(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_MaximumEndHeel()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
+	 * @generated
+	 */
+	int getMaximumEndHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Maximum End Heel</em>' attribute.
+	 * @see #getMaximumEndHeel()
+	 * @generated
+	 */
+	void setMaximumEndHeel(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price Expression</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price Expression</em>' attribute.
+	 * @see #setPriceExpression(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getEndHeelOptions_PriceExpression()
+	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 * @generated
+	 */
+	String getPriceExpression();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getPriceExpression <em>Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price Expression</em>' attribute.
+	 * @see #getPriceExpression()
+	 * @generated
+	 */
+	void setPriceExpression(String value);
 
 } // EndHeelOptions

@@ -5,12 +5,10 @@
 package com.mmxlabs.models.lng.fleet.util;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
@@ -19,21 +17,6 @@ public class FleetModelBuilder {
 
 	public FleetModelBuilder(@NonNull final FleetModel fleetModel) {
 		this.fleetModel = fleetModel;
-	}
-
-	/**
-	 * Creates a heel options with default settings.
-	 * 
-	 * @return
-	 */
-	public @NonNull HeelOptions createHeelOptions(@Nullable final Double startHeelVolumeInM3, final double cv, final double pricePerMMBTu) {
-		final HeelOptions result = FleetFactory.eINSTANCE.createHeelOptions();
-		result.setCvValue(cv);
-		result.setPricePerMMBTU(pricePerMMBTu);
-		if (startHeelVolumeInM3 != null) {
-			result.setVolumeAvailable(startHeelVolumeInM3);
-		}
-		return result;
 	}
 
 	@NonNull
@@ -64,7 +47,7 @@ public class FleetModelBuilder {
 		fleetModel.getBaseFuels().add(baseFuel);
 		return baseFuel;
 	}
-	
+
 	public void addVessel(Vessel vessel) {
 		fleetModel.getVessels().add(vessel);
 	}

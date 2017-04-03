@@ -121,6 +121,12 @@
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.EndHeelOptions">
          </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.StartHeelOptionsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.StartHeelOptionsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.StartHeelOptions">
+         </componentHelper>
         
 	</extension>
  <extension
@@ -391,7 +397,26 @@
           </EClassExtends>
        </OwnerAnyOf>
     </editorFactory>
-    
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="EVesselTankState"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="EVesselTankState"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>    
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
@@ -422,6 +447,17 @@
             class="com.mmxlabs.models.lng.cargo.presentation.CargoEditor"
             contributorClass="com.mmxlabs.models.lng.cargo.presentation.CargoActionBarContributor">
       </editor>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.attributes">
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.cargo.editor.attributeImporter1"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="EVesselTankState"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+         </dataType>
+      </attributeImporter>
    </extension>
 
 </plugin>
