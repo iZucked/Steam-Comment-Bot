@@ -17,45 +17,17 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
  * @author Simon Goodall
  * 
  */
-public final class LoadSlot extends LoadOption implements ILoadSlot {
+public class LoadSlot extends LoadOption implements ILoadSlot {
 
 	private boolean cooldownSet;
 
 	private boolean cooldownForbidden;
 
-	// public LoadSlot() {
-	// setPortType(PortType.Load);
-	// }
-
-	public LoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timwWindow, boolean volumeInM3, final long minLoadVolume, final long maxLoadVolume,
+	public LoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, boolean volumeInM3, final long minLoadVolume, final long maxLoadVolume,
 			final @NonNull ILoadPriceCalculator loadPriceCalculator, final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
-		super(id, port, timwWindow, volumeInM3, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
+		super(id, port, timeWindow, volumeInM3, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
 		this.cooldownSet = cooldownSet;
 		this.cooldownForbidden = cooldownForbidden;
-	}
-
-	// @Override
-	// public int getPurchasePriceAtTime(final int time) {
-	// return (int) purchasePriceCurve.getValueAtPoint(time);
-	// }
-
-	@Override
-	public boolean equals(final Object obj) {
-
-		if (obj instanceof LoadSlot) {
-			final LoadSlot slot = (LoadSlot) obj;
-
-			if (cooldownSet != slot.cooldownSet) {
-				return false;
-			}
-
-			if (cooldownForbidden != slot.cooldownForbidden) {
-				return false;
-			}
-
-			return super.equals(obj);
-		}
-		return false;
 	}
 
 	@Override
@@ -74,5 +46,26 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 
 	public final void setCooldownForbidden(final boolean cooldownForbidden) {
 		this.cooldownForbidden = cooldownForbidden;
+	}
+
+	@Override
+	public boolean doEquals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof LoadSlot) {
+			final LoadSlot slot = (LoadSlot) obj;
+
+			if (cooldownSet != slot.cooldownSet) {
+				return false;
+			}
+
+			if (cooldownForbidden != slot.cooldownForbidden) {
+				return false;
+			}
+
+			return super.doEquals(obj);
+		}
+		return false;
 	}
 }

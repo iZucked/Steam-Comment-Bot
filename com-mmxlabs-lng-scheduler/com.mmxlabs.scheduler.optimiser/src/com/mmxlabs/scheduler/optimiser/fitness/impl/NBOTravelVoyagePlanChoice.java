@@ -76,7 +76,9 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public final boolean equals(final Object obj) {
-
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof NBOTravelVoyagePlanChoice) {
 
 			final NBOTravelVoyagePlanChoice other = (NBOTravelVoyagePlanChoice) obj;

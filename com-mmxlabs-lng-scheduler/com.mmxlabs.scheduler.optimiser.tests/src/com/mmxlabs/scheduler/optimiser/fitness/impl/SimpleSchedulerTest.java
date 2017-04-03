@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -55,6 +56,9 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -122,15 +126,17 @@ public class SimpleSchedulerTest {
 		final IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
 		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
+		IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
+
 		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), false, 0, false), new ConstantValueLongCurve(0),
-				new ConstantValueLongCurve(0), false);
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
+				false);
 		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), false, 0, false), new ConstantValueLongCurve(0),
-				new ConstantValueLongCurve(0), false);
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
+				false);
 		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), false, 0, false), new ConstantValueLongCurve(0),
-				new ConstantValueLongCurve(0), false);
+				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
+				false);
 
 		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
 		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);

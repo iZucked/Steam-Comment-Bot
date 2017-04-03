@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 public final class VoyagePlan implements Cloneable {
+	private boolean locked = false;
 
 	private IDetailsSequenceElement[] sequence;
 	private long charterInRatePerDay;
@@ -64,14 +65,17 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
+		assert !locked;
 		fuelConsumptions.put(fuel, consumption);
 	}
 
 	public final long getRouteAdditionalConsumption(final FuelComponent fuel) {
+		
 		return routeAdditionalConsumption.get(fuel);
 	}
 
 	public final void setRouteAdditionalConsumption(final FuelComponent fuel, final long consumption) {
+		assert !locked;
 		routeAdditionalConsumption.put(fuel, consumption);
 	}
 
@@ -80,6 +84,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public final void setTotalFuelCost(final FuelComponent fuel, final long cost) {
+		assert !locked;
 		fuelCosts.put(fuel, cost);
 	}
 
@@ -92,6 +97,7 @@ public final class VoyagePlan implements Cloneable {
 	/**
 	 */
 	public final void setViolationsCount(final int violationsCount) {
+		assert !locked;
 		this.violationsCount = violationsCount;
 	}
 
@@ -104,12 +110,15 @@ public final class VoyagePlan implements Cloneable {
 	/**
 	 */
 	public final void setSequence(final IDetailsSequenceElement[] sequence) {
+		assert !locked;
 		this.sequence = sequence;
 	}
 
 	@Override
 	public final boolean equals(final Object obj) {
-
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof VoyagePlan) {
 			final VoyagePlan plan = (VoyagePlan) obj;
 
@@ -123,6 +132,7 @@ public final class VoyagePlan implements Cloneable {
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
 					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
+					&& Objects.equal(startHeelCost, plan.startHeelCost)
 					&& Arrays.deepEquals(sequence, plan.sequence)
 
 					;
@@ -167,6 +177,7 @@ public final class VoyagePlan implements Cloneable {
 	 * @param lngConsumed
 	 */
 	public void setLNGFuelVolume(final long lngConsumed) {
+		assert !locked;
 		this.lngFuelVolume = lngConsumed;
 	}
 
@@ -178,8 +189,10 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	private long totalRouteCost;
+	private long startHeelCost;
 
 	public void setTotalRouteCost(final long routeCost) {
+		assert !locked;
 		totalRouteCost = routeCost;
 	}
 
@@ -197,6 +210,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setIgnoreEnd(final boolean ignoreEnd) {
+//		assert !locked;
 		this.ignoreEnd = ignoreEnd;
 	}
 
@@ -212,6 +226,7 @@ public final class VoyagePlan implements Cloneable {
 	 * @param remainingHeelInM3
 	 */
 	public void setRemainingHeelInM3(final long remainingHeelInM3) {
+		assert !locked;
 		this.remainingHeelInM3 = remainingHeelInM3;
 	}
 
@@ -220,6 +235,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setStartingHeelInM3(final long startingHeelInM3) {
+		assert !locked;
 		this.startingHeelInM3 = startingHeelInM3;
 	}
 
@@ -228,6 +244,30 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setCharterInRatePerDay(final long charterInRatePerDay) {
+		assert !locked;
 		this.charterInRatePerDay = charterInRatePerDay;
+	}
+
+	public void setStartHeelCost(long startHeelCost) {
+		assert !locked;
+		this.startHeelCost = startHeelCost;
+	}
+
+	/**
+	 * Return the cost for *just* the start heel of the plan. There may be other heel costs or revenue contained within the plan.
+	 * 
+	 * @return
+	 */
+	public long getStartHeelCost() {
+		return startHeelCost;
+	}
+
+	public boolean isCacheLocked() {
+		return locked;
+	}
+
+	public void setCacheLocked(boolean locked) {
+		assert !this.locked;
+		this.locked = locked;
 	}
 }

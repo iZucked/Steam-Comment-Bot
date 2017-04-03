@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IEndRequirement extends IStartEndRequirement {
 	/**
 	 * Returns true if there is no user defined end date and we are using the notional end time.
@@ -12,7 +14,6 @@ public interface IEndRequirement extends IStartEndRequirement {
 	 */
 	boolean isHireCostOnlyEndRule();
 
-	boolean isEndCold();
-
-	long getTargetHeelInM3();
+	@NonNull
+	IHeelOptionConsumer getHeelOptions();
 }

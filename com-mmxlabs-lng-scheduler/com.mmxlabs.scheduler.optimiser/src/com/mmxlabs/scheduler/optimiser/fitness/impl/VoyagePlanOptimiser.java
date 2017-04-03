@@ -52,14 +52,14 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Inject
 	@Named(VPO_SPEED_STEPPING)
 	private boolean useVPOSpeedStepping;
-	
+
 	public static class Record {
 
-		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
 				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
 			this.resource = resource;
 			this.vessel = vessel;
-			this.startHeelInM3 = startHeel;
+			this.startHeelRangeInM3 = startHeelRangeInM3;
 			this.baseFuelPricePerMT = baseFuelPricePerMT;
 			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
 			this.portTimesRecord = portTimesRecord;
@@ -78,7 +78,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		public final int baseFuelPricePerMT;
 
 		public final long vesselCharterInRatePerDay;
-		public final long startHeelInM3;
+		public final long[] startHeelRangeInM3;
 
 		public final @Nullable IResource resource;
 	}
@@ -108,10 +108,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public VoyagePlan optimise(IResource resource, IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
 			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
 
-		Record record = new Record(resource, vessel, startHeel, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
 
 		InternalState state = new InternalState();
 		runLoop(record, state, 0);
@@ -139,9 +139,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				if (useVPOSpeedStepping) {
 					final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
-					final int extraExtent = window == null ? 30 * RELAXATION_STEP
-							: (lastArrivalTime >= window.getExclusiveEnd() ? 0
-									: window.getExclusiveEnd() - lastArrivalTime);
+					final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
 					// If this is non-zero then our end event rules will have
 					// kicked in and we should not engage the speed step code.
 					evaluateVoyagePlan(record, state, extraExtent);
@@ -361,6 +359,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		for (final FuelComponent fuel : FuelComponent.values()) {
 			cost += plan.getTotalFuelCost(fuel);
 		}
+		cost += plan.getStartHeelCost();
+//		cost -= plan.getStartHeelCost();
 
 		cost += plan.getTotalRouteCost();
 		return cost;
@@ -368,7 +368,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
 	 */
-	private VoyagePlan calculateVoyagePlan(Record record) {
+	private @Nullable VoyagePlan calculateVoyagePlan(Record record) {
 		// For each voyage options, calculate new Details.
 
 		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
@@ -377,8 +377,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		currentPlan.setCharterInRatePerDay(record.vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelInM3, record.baseFuelPricePerMT, record.portTimesRecord,
+		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelRangeInM3, record.baseFuelPricePerMT, record.portTimesRecord,
 				currentSequence.toArray(new IDetailsSequenceElement[0]));
+
+		if (violationCount == Integer.MAX_VALUE) {
+			return null;
+		}
 
 		return currentPlan;
 	}

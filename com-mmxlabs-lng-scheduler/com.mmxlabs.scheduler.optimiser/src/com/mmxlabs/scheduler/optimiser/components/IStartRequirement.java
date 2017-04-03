@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface IStartRequirement extends IStartEndRequirement {
 
-	IHeelOptions getHeelOptions();
+	@Nullable
+	IHeelOptionSupplier getHeelOptions();
 }

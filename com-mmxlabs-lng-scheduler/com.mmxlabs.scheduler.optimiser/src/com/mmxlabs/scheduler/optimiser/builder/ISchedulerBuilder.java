@@ -33,7 +33,9 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
@@ -49,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -159,15 +162,12 @@ public interface ISchedulerBuilder {
 	 *            the port where the vessel is being returned to
 	 * @param durationHours
 	 *            how long the charter out is for, in hours
-	 * @param maxHeelOut
-	 *            the maximum amount of heel available for travel
-	 * @param heelCVValue
-	 *            the CV value of heel available for travel
+	 * 
 	 * @return
 	 */
 	@NonNull
-	IVesselEventPortSlot createCharterOutEvent(@NonNull String id, @NonNull ITimeWindow arrivalTimeWindow, @NonNull IPort startPort, @NonNull IPort endPort, int durationHours, long maxHeelOut,
-			int heelCVValue, int heelUnitPrice, final long hireRevenue, final long repositioning, final long ballastBonus);
+	IVesselEventPortSlot createCharterOutEvent(@NonNull String id, @NonNull ITimeWindow arrivalTimeWindow, @NonNull IPort startPort, @NonNull IPort endPort, int durationHours,
+			@NonNull IHeelOptionConsumer heelConsumer, @NonNull IHeelOptionSupplier heelSupplier, final long hireRevenue, final long repositioning, final long ballastBonus);
 
 	/**
 	 * Create a dry dock event
@@ -212,7 +212,10 @@ public interface ISchedulerBuilder {
 	IVessel createVessel(@NonNull String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
 
 	@NonNull
-	IHeelOptions createHeelOptions(final long heelLimitInM3, final int heelCVValue, final int heelUnitPrice);
+	IHeelOptionSupplier createHeelSupplier(long minHeelInM3, long maxHeelInM3, int heelCVValue, @NonNull IHeelPriceCalculator heelPriceCalculator);
+
+	@NonNull
+	IHeelOptionConsumer createHeelConsumer(long minHeelInM3, long maxHeelInM3, @NonNull VesselTankState tankState, @NonNull IHeelPriceCalculator heelPriceCalculator);
 
 	/**
 	 * Create a vessel availability for the with the given vessel .
@@ -223,15 +226,13 @@ public interface ISchedulerBuilder {
 	 * @param end
 	 * @param repositioningFee
 	 *            TODO
-	 * @param ballastBonus
-	 *            TODO
 	 * @param isOptional
 	 *            TODO
 	 * @return
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
-			@NonNull IEndRequirement end, ILongCurve repositioningFee, ILongCurve ballastBonus, boolean isOptional);
+			@NonNull IEndRequirement end, ILongCurve repositioningFee, boolean isOptional);
 
 	/**
 	 * Boolean flag to indicate hard start time window. If false, provider timeWindow is a notional start date.
@@ -243,7 +244,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, @Nullable IHeelOptions heelOptions);
+	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, @Nullable IHeelOptionSupplier heelSuppliertions);
 
 	/**
 	 * Boolean flag to indicate hard end time window. If false, provider timeWindow is a notional end date and should be an instanceof of a {@link MutableTimeWindow}.
@@ -255,7 +256,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, boolean endCold, long targetHeelInM3,
+	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
 			boolean isOpenEnded);
 
 	/**

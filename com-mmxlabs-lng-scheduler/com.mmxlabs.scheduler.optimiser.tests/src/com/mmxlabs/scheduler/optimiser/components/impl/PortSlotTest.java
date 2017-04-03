@@ -10,84 +10,43 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public class PortSlotTest {
-
-	@Test
-	public void testPortSlot() {
-		final String id = "id";
-		final IPort port = Mockito.mock(IPort.class);
-		final ITimeWindow tw = Mockito.mock(ITimeWindow.class);
-
-		final long heelLimit = 1;
-		final int heelUnitPrice = 2;
-		final int heelCVValue = 3;
-
-		HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
-		final StartPortSlot slot = new StartPortSlot(id, port, tw, heelOptions);
-
-		Assert.assertSame(id, slot.getId());
-		Assert.assertSame(port, slot.getPort());
-		Assert.assertSame(tw, slot.getTimeWindow());
-
-		Assert.assertEquals(heelLimit, slot.getHeelOptions().getHeelLimit());
-		Assert.assertEquals(heelUnitPrice, slot.getHeelOptions().getHeelUnitPrice());
-		Assert.assertEquals(heelCVValue, slot.getHeelOptions().getHeelCVValue());
-	}
 
 	@Test
 	public void testGetSetPort() {
 
 		final IPort port = Mockito.mock(IPort.class);
 
-		final long heelLimit = 1;
-		final int heelUnitPrice = 2;
-		final int heelCVValue = 3;
-
-		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final IHeelOptionSupplier heelOptions = Mockito.mock(IHeelOptionSupplier.class);
 		final StartPortSlot slot = new StartPortSlot("id", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
-		Assert.assertNotNull(slot.getPort());
+		Assert.assertNotSame(port, slot.getPort());
 		slot.setPort(port);
 		Assert.assertSame(port, slot.getPort());
 
-		Assert.assertEquals(heelLimit, slot.getHeelOptions().getHeelLimit());
-		Assert.assertEquals(heelCVValue, slot.getHeelOptions().getHeelCVValue());
-		Assert.assertEquals(heelUnitPrice, slot.getHeelOptions().getHeelUnitPrice());
 	}
 
 	@Test
 	public void testGetSetTimeWindow() {
 		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
-		final long heelLimit = 1;
-		final int heelUnitPrice = 2;
-		final int heelCVValue = 3;
-
-		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final IHeelOptionSupplier heelOptions = Mockito.mock(IHeelOptionSupplier.class);
 		final StartPortSlot slot = new StartPortSlot("id", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
 		Assert.assertNotNull(slot.getTimeWindow());
 		slot.setTimeWindow(window);
 		Assert.assertSame(window, slot.getTimeWindow());
-
-		Assert.assertEquals(heelLimit, slot.getHeelOptions().getHeelLimit());
-		Assert.assertEquals(heelCVValue, slot.getHeelOptions().getHeelCVValue());
-		Assert.assertEquals(heelUnitPrice, slot.getHeelOptions().getHeelUnitPrice());
 	}
 
 	@Test
 	public void testGetSetID() {
 		final @NonNull String id = "id";
-		final long heelLimit = 1;
-		final int heelUnitPrice = 2;
-		final int heelCVValue = 3;
 
-		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final IHeelOptionSupplier heelOptions = Mockito.mock(IHeelOptionSupplier.class);
 		final StartPortSlot slot = new StartPortSlot(id, Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
 
 		Assert.assertSame(id, slot.getId());
-		Assert.assertEquals(heelLimit, slot.getHeelOptions().getHeelLimit());
-		Assert.assertEquals(heelCVValue, slot.getHeelOptions().getHeelCVValue());
-		Assert.assertEquals(heelUnitPrice, slot.getHeelOptions().getHeelUnitPrice());
 	}
 
 	@Test
@@ -101,8 +60,11 @@ public class PortSlotTest {
 		final ITimeWindow tw1 = Mockito.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = Mockito.mock(ITimeWindow.class, "tw2");
 
-		HeelOptions heelOptions1 = new HeelOptions(1, 2, 3);
-		HeelOptions heelOptions2 = new HeelOptions(1, 2, 4);
+		final IHeelPriceCalculator heelPriceCalculator1 = Mockito.mock(IHeelPriceCalculator.class, "price1");
+		final IHeelPriceCalculator heelPriceCalculator2 = Mockito.mock(IHeelPriceCalculator.class, "price2");
+
+		HeelOptionSupplier heelOptions1 = new HeelOptionSupplier(1, 2, 3, heelPriceCalculator1);
+		HeelOptionSupplier heelOptions2 = new HeelOptionSupplier(1, 2, 3, heelPriceCalculator2);
 
 		final StartPortSlot slot1 = new StartPortSlot(id1, port1, tw1, heelOptions1);
 		final StartPortSlot slot2 = new StartPortSlot(id1, port1, tw1, heelOptions1);

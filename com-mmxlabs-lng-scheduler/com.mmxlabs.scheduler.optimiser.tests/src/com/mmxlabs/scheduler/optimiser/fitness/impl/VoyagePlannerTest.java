@@ -40,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -212,7 +213,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setVessel(vessel);
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
-		expectedVoyageOptions2.setShouldBeCold(true);
+		expectedVoyageOptions2.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
 		expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
@@ -295,8 +296,8 @@ public final class VoyagePlannerTest {
 		vpoChoices2.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions3));
 
 		// Matchers.eq!!
-		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord1, expectedBasicSequence1, vpoChoices1)).thenReturn(testVoyagePlan);
-		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2)).thenReturn(testVoyagePlan);
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, 0, 0, portTimesRecord1, expectedBasicSequence1, vpoChoices1)).thenReturn(testVoyagePlan);
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, 0, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2)).thenReturn(testVoyagePlan);
 
 		// Schedule sequence
 		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);

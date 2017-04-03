@@ -172,8 +172,7 @@ public class EvaluationHelper {
 
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 			for (final IPortSlot lateSlot : volumeAllocatedSequence.getLateSlotsSet()) {
-				int latenessCost = volumeAllocatedSequence.getLatenessWithFlex(lateSlot);
-				sumCost += latenessCost;
+				sumCost += volumeAllocatedSequence.getLatenessWithFlex(lateSlot);
 			}
 		}
 		return sumCost;

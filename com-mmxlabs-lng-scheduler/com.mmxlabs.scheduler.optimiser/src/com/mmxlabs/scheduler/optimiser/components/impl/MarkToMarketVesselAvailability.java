@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 /**
  */
@@ -116,17 +117,18 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 		return this.repositioningFee;
 	}
 
-	@Override
-	public ILongCurve getBallastBonus() {
-		return this.ballastBonus;
-	}
-
 	public void setRepositioningFee(ILongCurve repositioningFee) {
 		this.repositioningFee = repositioningFee;
 	}
 
-	public void setBallastBonus(ILongCurve ballastBonus) {
-		this.ballastBonus = ballastBonus;
+	@Override
+	public void setBallastBonusContract(@Nullable IBallastBonusContract contract) {
+		throw new java.lang.UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public @Nullable IBallastBonusContract getBallastBonusContract() {
+		throw new java.lang.UnsupportedOperationException("Not supported yet.");
 	}
 
 }

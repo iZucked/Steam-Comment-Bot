@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
@@ -685,7 +686,7 @@ public class NewLNGVoyageCalculatorTest {
 		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
-//		Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
+		// Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
@@ -734,7 +735,7 @@ public class NewLNGVoyageCalculatorTest {
 		options.setRoute(ERouteOption.SUEZ, 0, routeCost);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
-//		Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
+		// Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
@@ -890,8 +891,8 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
 		loadDetails.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1);
-		loadDetails.setFuelConsumption(FuelComponent.NBO,FuelComponent.NBO.getDefaultFuelUnit(), 2);
-		loadDetails.setFuelConsumption(FuelComponent.FBO,FuelComponent.FBO.getDefaultFuelUnit(), 3);
+		loadDetails.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 2);
+		loadDetails.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 3);
 		loadDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 4);
 		loadDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 5);
 		loadDetails.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 6);
@@ -985,7 +986,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final long expectedCooldownCost = 1000;
 
-		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.getOptions().setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageDetails.setCooldownPerformed(true);
 
 		// Expect the non-load slot branch - time 3 == time of next Port
@@ -1046,7 +1047,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final long expectedCooldownCost = 1000;
 
-		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.getOptions().setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageDetails.setCooldownPerformed(true);
 
 		// Expect the load slot branch - time 3 == time of next Port
@@ -1106,7 +1107,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final long expectedCooldownCost = 1000;
 
-		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.getOptions().setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageDetails.setCooldownPerformed(false);
 
 		// Expect the load slot branch - time 3 == time of next Port

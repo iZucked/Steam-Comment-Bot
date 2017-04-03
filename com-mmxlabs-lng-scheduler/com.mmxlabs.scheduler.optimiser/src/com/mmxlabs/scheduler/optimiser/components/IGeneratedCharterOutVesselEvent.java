@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
@@ -12,7 +14,8 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
  * @author achurchill
  * 
  */
-public interface IGeneratedCharterOutVesselEvent extends IVesselEvent {
+@NonNullByDefault
+public interface IGeneratedCharterOutVesselEvent extends ICharterOutVesselEvent {
 	/**
 	 * Set time window in which the vessel must arrive at the start port
 	 * 
@@ -41,13 +44,14 @@ public interface IGeneratedCharterOutVesselEvent extends IVesselEvent {
 	 */
 	public void setEndPort(IPort port);
 
-
 	/**
 	 * Set the total hire cost for charter out events.
 	 * 
 	 */
 	@Override
 	void setHireOutRevenue(long hireCost);
-	
-	void setHeelOptions(int pricePerMBTU, int cv, long volumeInM3);
+
+	void setHeelConsumer(IHeelOptionConsumer heelConsumer);
+
+	void setHeelSupplier(IHeelOptionSupplier heelSupplier);
 }

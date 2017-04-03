@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 /**
  * Default implementation of {@link IVessel}.
@@ -42,6 +43,8 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	private int spotIndex;
 	
 	private boolean optional;
+	
+	private IBallastBonusContract ballastBonusContract;
 
 	public DefaultVesselAvailability(@NonNull final IVessel vessel, @NonNull final VesselInstanceType vesselInstanceType) {
 		this.vessel = vessel;
@@ -126,16 +129,18 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 		return this.repositioningFee;
 	}
 
-	@Override
-	public ILongCurve getBallastBonus() {
-		return this.ballastBonus;
-	}
-
 	public void setRepositioningFee(ILongCurve repositioningFee) {
 		this.repositioningFee = repositioningFee;
 	}
 
-	public void setBallastBonus(ILongCurve ballastBonus) {
-		this.ballastBonus = ballastBonus;
+	@Override
+	public void setBallastBonusContract(IBallastBonusContract contract) {
+		ballastBonusContract = contract;
+	}
+
+	@Override
+	@Nullable
+	public IBallastBonusContract getBallastBonusContract() {
+		return ballastBonusContract;
 	}
 }

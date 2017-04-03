@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -41,12 +42,6 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	private @NonNull PricingEventType pricingEvent = PricingEventType.START_OF_DISCHARGE;
 
-	// public DischargeOption() {
-	// setPortType(PortType.Discharge);
-	// }
-
-	/**
-	 */
 	public DischargeOption(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, boolean volumeInM3, final long minDischargeVolume, final long maxDischargeVolume,
 			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
 		super(id, PortType.Discharge, port, timeWindow);
@@ -82,7 +77,10 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean doEquals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof DischargeOption) {
 			final DischargeOption slot = (DischargeOption) obj;
 
@@ -95,7 +93,25 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 			if (minDischargeVolume != slot.minDischargeVolume) {
 				return false;
 			}
-			if (priceCalculator != slot.priceCalculator) {
+			if (maxDischargeVolumeMMBTU != slot.maxDischargeVolumeMMBTU) {
+				return false;
+			}
+			if (minDischargeVolumeMMBTU != slot.minDischargeVolumeMMBTU) {
+				return false;
+			}
+			if (pricingDate != slot.pricingDate) {
+				return false;
+			}
+			if (minDischargeVolumeMMBTU != slot.minDischargeVolumeMMBTU) {
+				return false;
+			}
+			if (minCvValue != slot.minCvValue) {
+				return false;
+			}
+			if (maxCvValue != slot.maxCvValue) {
+				return false;
+			}
+			if (!Objects.equal(priceCalculator, slot.priceCalculator)) {
 				return false;
 			}
 
@@ -187,6 +203,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		}
 	}
 
+	@Override
 	public void setVolumeLimits(boolean m3, long minVolume, long maxVolume) {
 		this.volumeSetInM3 = m3;
 		if (volumeSetInM3) {

@@ -45,8 +45,10 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 
 		this.cache = new LHMCache<>("CargoPNLCache", key -> {
 			try {
-				return new Pair<>(key, delegate.evaluate(EvaluationMode.FullPNL, key.getRecord().plan, key.getRecord().currentAllocation, key.getRecord().vesselAvailability,
-						key.getRecord().vesselStartTime, key.getRecord().volumeAllocatedSequences, null));
+				Pair<@NonNull CargoValueAnnotation, @NonNull Long> result = delegate.evaluate(EvaluationMode.FullPNL, key.getRecord().plan, key.getRecord().currentAllocation, key.getRecord().vesselAvailability,
+						key.getRecord().vesselStartTime, key.getRecord().volumeAllocatedSequences, null);
+				result.getFirst().setCacheLocked(true);
+				return new Pair<>(key,result);
 			} finally {
 				// Null out after calculation
 				key.getRecord().volumeAllocatedSequences = null;
@@ -69,9 +71,9 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 	}
 
 	@Override
-	public long evaluate(final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
+	public long evaluateNonCargoPlan(final EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVesselAvailability vesselAvailability,
 			final int planStartTime, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-		return delegate.evaluate(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		return delegate.evaluateNonCargoPlan(evaluationMode, plan, portTimesRecord, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 	}
 
 	@Override

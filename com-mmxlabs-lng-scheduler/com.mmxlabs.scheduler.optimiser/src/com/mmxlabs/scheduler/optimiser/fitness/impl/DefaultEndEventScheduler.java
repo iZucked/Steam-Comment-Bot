@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
@@ -19,8 +20,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -29,6 +31,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -168,7 +172,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			long maxLoadInM3 = vesselClass.getCargoCapacity();
 			long minDischargeInM3 = 0;
 			final int bunkerPricePerMT = 0;
-			int lngPricePerMMBtu = 0;
+			IHeelPriceCalculator lngPricePerMMBtu = null;
 			// TODO: Grab from input data
 			final long hireRatePerDay = 0L;// .currentPlan.getCharterInRatePerDay();
 			// TODO: Split into travel & idle time
@@ -188,22 +192,22 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				// LDD!
 				assert partialPortTimesRecord.getSlots().size() == 2;
 				minDischargeInM3 = ((IDischargeSlot) partialPortTimesRecord.getSlots().get(1)).getMinDischargeVolume(cargoCV);
-			} else if (firstSlot instanceof IHeelOptionsPortSlot) {
-				final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) firstSlot;
-				IHeelOptions heelOptions = heelOptionsPortSlot.getHeelOptions();
+			} else if (firstSlot instanceof IHeelOptionSupplierPortSlot) {
+				final IHeelOptionSupplierPortSlot heelOptionsPortSlot = (IHeelOptionSupplierPortSlot) firstSlot;
+				IHeelOptionSupplier heelOptions = heelOptionsPortSlot.getHeelOptionsSupplier();
 				if (heelOptions != null) {
 					cargoCV = heelOptions.getHeelCVValue();
-					lngPricePerMMBtu = heelOptions.getHeelUnitPrice();
-					maxLoadInM3 = heelOptions.getHeelLimit();
+					lngPricePerMMBtu = heelOptions.getHeelPriceCalculator();
+					maxLoadInM3 = heelOptions.getMaximumHeelAvailableInM3();
 				} else {
 					cargoCV = 0;
-					lngPricePerMMBtu = 0;
+					lngPricePerMMBtu = new ConstantHeelPriceCalculator(0);
 					maxLoadInM3 = 0;
 				}
 				ladenEstimateInM3 = 0;
 			} else {
 				cargoCV = 0;
-				lngPricePerMMBtu = 0;
+				lngPricePerMMBtu = new ConstantHeelPriceCalculator(0);
 				minDischargeInM3 = 0;
 				maxLoadInM3 = 0;
 				ladenEstimateInM3 = 0;
@@ -231,7 +235,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				// We are not considering idle time here
 				finalOptions.setUseNBOForIdle(false);
 
-				finalOptions.setShouldBeCold(endRequirement.isEndCold());
+				finalOptions.setShouldBeCold(endRequirement.getHeelOptions().getExpectedTankState());
 				finalOptions.setAllowCooldown(false);
 			}
 
@@ -241,12 +245,13 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			final IPort from = prevPortSlot.getPort();
 			final IPort to = endEventSlot.getPort();
 
-			final long endHeelInM3 = endRequirement.isEndCold() ? endRequirement.getTargetHeelInM3() : 0;
+			// TODO: This check may not be correct.
+			final long endHeelInM3 = endRequirement.getHeelOptions().getExpectedTankState() != VesselTankState.MUST_BE_WARM ? endRequirement.getHeelOptions().getMinimumHeelAcceptedInM3() : 0;
 			final long startHeelInM3 = (finalOptions.isWarm()) ? 0 : vesselClass.getSafetyHeel();
 
 			final long estimatedBOGAvailableInM3 = startHeelInM3 + maxLoadInM3 - minDischargeInM3 - endHeelInM3 - ladenEstimateInM3;
 
-			// Our speeds will give us a time interval, not all of these will be valid. The min/max speed gives a time window to intersect with the end requirment window.
+			// Our speeds will give us a time interval, not all of these will be valid. The min/max speed gives a time window to intersect with the end requirement window.
 			final int validMinTime;
 			final int validMaxTime;
 
@@ -271,7 +276,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 						continue;
 					}
 					// If we need to end cold and have found a valid plan, do not evaluate options to end warm
-					if (bestCost != Long.MAX_VALUE && !useNBO && endRequirement.isEndCold()) {
+					if (bestCost != Long.MAX_VALUE && !useNBO && endRequirement.getHeelOptions().getExpectedTankState() == VesselTankState.MUST_BE_COLD) {
 						continue;
 					}
 
@@ -331,7 +336,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 									+ voyageDetails.getRouteAdditionalConsumption(FuelComponent.NBO, FuelUnit.M3) + voyageDetails.getRouteAdditionalConsumption(FuelComponent.FBO, FuelUnit.M3);
 							// LNG Cost Estimate.
 							final long lngInMMBTu = Calculator.convertM3ToMMBTu(lngInM3, cargoCV);
-							cost += Calculator.costFromConsumption(lngInMMBTu, lngPricePerMMBtu);
+							cost += Calculator.costFromConsumption(lngInMMBTu,
+									lngPricePerMMBtu.getHeelPrice(lngInM3, partialPortTimesRecord.getFirstSlotTime(), partialPortTimesRecord.getFirstSlot().getPort()));
 
 							// violation estimate.
 							boolean violation = false;

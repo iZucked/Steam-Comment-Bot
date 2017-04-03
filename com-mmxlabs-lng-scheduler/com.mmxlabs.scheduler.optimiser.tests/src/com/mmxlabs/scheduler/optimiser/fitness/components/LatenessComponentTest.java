@@ -24,10 +24,14 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
@@ -155,7 +159,8 @@ public class LatenessComponentTest {
 		final StartPortSlot startSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
 		final PortDetails startDetails = new PortDetails(new PortOptions(startSlot));
 
-		final IEndPortSlot endSlot = new NotionalEndPortSlot(null, null, null, false, 0L);
+		IHeelOptionConsumer heelOptions = new HeelOptionConsumer(0L, 0L, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
+		final IEndPortSlot endSlot = new NotionalEndPortSlot("end", null, null, heelOptions);
 		final PortDetails endDetails = new PortDetails(new PortOptions(endSlot));
 
 		final LoadSlot loadSlot = new LoadSlot("l1", Mockito.mock(IPort.class), window1, true, 0L, 140_000_000L, Mockito.mock(ILoadPriceCalculator.class), 22400, false, true);
@@ -177,7 +182,7 @@ public class LatenessComponentTest {
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime - 1 + loadLateTime);
 		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime - 1 + dischargeLateTime);
-		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime,
+		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, vesselAvailability, mockedSequence, voyageStartTime,
 				new LinkedList<Pair<VoyagePlan, IPortTimesRecord>>(Arrays.asList(new Pair<VoyagePlan, IPortTimesRecord>(voyagePlan, portTimesRecord))));
 
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();

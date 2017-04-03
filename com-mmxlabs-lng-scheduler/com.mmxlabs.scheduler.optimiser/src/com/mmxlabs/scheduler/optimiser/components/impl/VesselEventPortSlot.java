@@ -4,57 +4,35 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class VesselEventPortSlot extends PortSlot implements IVesselEventPortSlot {
-	protected IVesselEvent charterOut;
-	private @NonNull List<@NonNull ISequenceElement> eventSequenceElements = Collections.emptyList();
-	private @NonNull List<@NonNull IPortSlot> eventPortSlots = Collections.emptyList();
+@NonNullByDefault
+public class VesselEventPortSlot extends AbstractVesselEventPortSlot implements IHeelOptionConsumerPortSlot {
+	private final IHeelOptionConsumer heelConsumer;
 
-	public VesselEventPortSlot(@NonNull final String id, @NonNull final PortType portType, @NonNull final IPort port, final ITimeWindow timeWindow, @NonNull final IVesselEvent charterOut) {
-		super(id, portType, port, timeWindow);
-		this.charterOut = charterOut;
+	public VesselEventPortSlot(final String id, final PortType portType, final IPort port, final @Nullable ITimeWindow timeWindow, final IVesselEvent vesselEvent) {
+		super(id, portType, port, timeWindow, vesselEvent);
+		heelConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
+	}
+
+	public VesselEventPortSlot(final String id, final PortType portType, final IPort port, final @Nullable ITimeWindow timeWindow, final IVesselEvent vesselEvent,
+			final IHeelOptionConsumer heelConsumer) {
+		super(id, portType, port, timeWindow, vesselEvent);
+		this.heelConsumer = heelConsumer;
 	}
 
 	@Override
-	public IVesselEvent getVesselEvent() {
-		return charterOut;
-	}
-
-	@Override
-	public IHeelOptions getHeelOptions() {
-		return getVesselEvent();
-	}
-
-	public void setEventPortSlots(final @NonNull List<@NonNull IPortSlot> eventPortSlots) {
-		this.eventPortSlots = eventPortSlots;
-
-	}
-
-	public void setEventSequenceElements(final @NonNull List<@NonNull ISequenceElement> eventSequenceElements) {
-		this.eventSequenceElements = eventSequenceElements;
-
-	}
-
-	@Override
-	public @NonNull List<@NonNull ISequenceElement> getEventSequenceElements() {
-		return eventSequenceElements;
-	}
-
-	@Override
-	public @NonNull List<@NonNull IPortSlot> getEventPortSlots() {
-		return eventPortSlots;
+	public @NonNull IHeelOptionConsumer getHeelOptionsConsumer() {
+		return heelConsumer;
 	}
 }

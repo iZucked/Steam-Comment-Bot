@@ -38,8 +38,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintChecker;
@@ -356,7 +356,7 @@ public class MoveHelper implements IMoveHelper {
 	@Override
 	public boolean isVesselEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-		return portSlot instanceof VesselEventPortSlot;
+		return portSlot instanceof IVesselEventPortSlot ;
 	}
 
 	@Override

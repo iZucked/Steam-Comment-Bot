@@ -8,35 +8,30 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
+@NonNullByDefault
 public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharterOutVesselEventPortSlot {
 
-	@NonNull
 	private final String id;
 
-	@NonNull
 	private GeneratedCharterOutVesselEvent event;
 
-	// public GeneratedCharterOutVesselEventPortSlot(@NonNull final String id, @NonNull final IPort fromPort) {
-	// this.id = id;
-	// this.event = new GeneratedCharterOutVesselEvent();
-	// this.event.setStartPort(fromPort);
-	// }
-
-	public GeneratedCharterOutVesselEventPortSlot(@NonNull String id, IPort port, long maxCharteringRevenue, long repositioningFee, int durationInHours) {
+	public GeneratedCharterOutVesselEventPortSlot(String id, @Nullable ITimeWindow timeWindow, IPort port, long maxCharteringRevenue, long repositioningFee, int durationInHours,
+			IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier) {
 		this.id = id;
-		this.event = new GeneratedCharterOutVesselEvent();
-		this.event.setStartPort(port);
-		this.event.setEndPort(port);
+		this.event = new GeneratedCharterOutVesselEvent(timeWindow, port, port, heelConsumer, heelSupplier);
 		this.event.setHireOutRevenue(maxCharteringRevenue);
 		this.event.setRepositioning(repositioningFee);
 		this.event.setDurationHours(durationInHours);
@@ -48,8 +43,13 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	}
 
 	@Override
-	public IHeelOptions getHeelOptions() {
-		return getVesselEvent();
+	public @NonNull IHeelOptionConsumer getHeelOptionsConsumer() {
+		return getVesselEvent().getHeelOptionsConsumer();
+	}
+
+	@Override
+	public IHeelOptionSupplier getHeelOptionsSupplier() {
+		return getVesselEvent().getHeelOptionsSupplier();
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	}
 
 	@Override
-	public ITimeWindow getTimeWindow() {
+	public @Nullable ITimeWindow getTimeWindow() {
 		return getVesselEvent().getTimeWindow();
 	}
 
@@ -80,34 +80,36 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	@Override
 	public void setPort(IPort port) {
 		throw new UnsupportedOperationException();
-		}
+	}
 
 	@Override
 	public void setTimeWindow(ITimeWindow timeWindow) {
- 		throw new UnsupportedOperationException();
-//		getVesselEvent().setTimeWindow(timeWindow);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return id.hashCode();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final @Nullable Object obj) {
+		if (obj == this) {
+			return true;
+		}
 		if (obj instanceof GeneratedCharterOutVesselEventPortSlot) {
 			return Objects.equals(event, ((GeneratedCharterOutVesselEventPortSlot) obj).getVesselEvent());
 		}
-		return obj == this;
+		return false;
 	}
 
 	@Override
-	public @NonNull List<@NonNull ISequenceElement> getEventSequenceElements() {
+	public List<ISequenceElement> getEventSequenceElements() {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
-	public @NonNull List<@NonNull IPortSlot> getEventPortSlots() {
+	public List<IPortSlot> getEventPortSlots() {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }

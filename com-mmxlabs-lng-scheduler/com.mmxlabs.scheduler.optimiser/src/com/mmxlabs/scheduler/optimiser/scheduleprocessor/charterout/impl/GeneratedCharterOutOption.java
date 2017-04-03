@@ -8,7 +8,10 @@ package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
  * All rights reserved.
  */
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -36,7 +39,7 @@ public class GeneratedCharterOutOption {
 	private long gcoEventHireOutRevenue = 0;
 	private int gcoEventDurationHours = 0;
 
-	private int gcoEventHeelPrice = 0;
+	private IHeelPriceCalculator gcoEventHeelPrice = null;
 	private int gcoEventHeelCV = 0;
 	private long gcoEventHeelVolume = 0;
 
@@ -160,11 +163,11 @@ public class GeneratedCharterOutOption {
 		this.gcoEventDurationHours = gcoEventDurationHours;
 	}
 
-	public int getGCOEventHeelPrice() {
+	public @Nullable IHeelPriceCalculator getGCOEventHeelPrice() {
 		return gcoEventHeelPrice;
 	}
 
-	public void setGCOEventHeelPrice(int gcoEventHeelPrice) {
+	public void setGCOEventHeelPrice(IHeelPriceCalculator gcoEventHeelPrice) {
 		this.gcoEventHeelPrice = gcoEventHeelPrice;
 	}
 
@@ -191,5 +194,4 @@ public class GeneratedCharterOutOption {
 	public void setPortOptions(PortOptions portOptions) {
 		this.portOptions = portOptions;
 	}
-
 }

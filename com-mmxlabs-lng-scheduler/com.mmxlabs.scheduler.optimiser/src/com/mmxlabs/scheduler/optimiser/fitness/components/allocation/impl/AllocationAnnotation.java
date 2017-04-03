@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * 
  */
 public final class AllocationAnnotation implements IAllocationAnnotation {
+	private boolean locked;
 
 	public class SlotAllocationAnnotation {
 		public long commercialVolumeInM3;
@@ -88,6 +89,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setFuelVolumeInM3(final long fuelVolume) {
+		assert !locked;
 		this.fuelVolumeInM3 = fuelVolume;
 	}
 
@@ -121,6 +123,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setRemainingHeelVolumeInM3(final long remainingHeelVolumeInM3) {
+		assert !locked;
 		this.remainingHeelVolumeInM3 = remainingHeelVolumeInM3;
 	}
 
@@ -132,6 +135,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	private SlotAllocationAnnotation getOrCreateSlotAllocation(final @NonNull IPortSlot slot) {
 		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation == null) {
+			assert !locked;
 			allocation = new SlotAllocationAnnotation();
 			slotAllocations.put(slot, allocation);
 		}
@@ -149,6 +153,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 
 	@Override
 	public void setSlotTime(final @NonNull IPortSlot slot, final int time) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).startTime = time;
 		// Set or update the first port slot and time
 		if (firstPortSlot == null || slot == firstPortSlot) {
@@ -158,6 +163,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setReturnSlotTime(final @NonNull IPortSlot slot, final int time) {
+		assert !locked;
 		setSlotTime(slot, time);
 		slots.remove(returnPortSlot);
 		returnPortSlot = slot;
@@ -174,6 +180,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 
 	@Override
 	public void setSlotDuration(final @NonNull IPortSlot slot, final int duration) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).duration = duration;
 	}
 
@@ -189,6 +196,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setCommercialSlotVolumeInM3(final @NonNull IPortSlot slot, final long volumeInM3) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).commercialVolumeInM3 = volumeInM3;
 	}
 
@@ -204,10 +212,11 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setPhysicalSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).physicalVolumeInMMBTu = volumeInMMBTu;
 	}
-	
-//	@Override
+
+	@Override
 	public long getPhysicalSlotVolumeInM3(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
@@ -219,10 +228,11 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setPhysicalSlotVolumeInM3(final @NonNull IPortSlot slot, final long volumeInM3) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).physicalVolumeInM3 = volumeInM3;
 	}
 
-//	@Override
+	@Override
 	public long getPhysicalSlotVolumeInMMBTu(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
@@ -234,6 +244,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setCommercialSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).commercialVolumeInMMBTu = volumeInMMBTu;
 	}
 
@@ -249,6 +260,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	public void setSlotCargoCV(final @NonNull IPortSlot slot, final int cargoCV) {
+		assert !locked;
 		getOrCreateSlotAllocation(slot).cargoCV = cargoCV;
 	}
 
@@ -298,5 +310,16 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean isCacheLocked() {
+		return locked;
+	}
+
+	@Override
+	public void setCacheLocked(boolean locked) {
+		assert !this.locked;
+		this.locked = locked;
 	}
 }

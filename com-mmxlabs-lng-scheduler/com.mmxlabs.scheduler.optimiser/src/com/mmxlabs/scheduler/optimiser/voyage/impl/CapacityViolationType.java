@@ -36,14 +36,17 @@ public enum CapacityViolationType {
 	 */
 	FORCED_COOLDOWN("Cooldown forced"),
 	/**
-	 * The voyage consumption exceeds available heel volume
+	 * Heel level is above the maximum
 	 */
-	MAX_HEEL("Heel Breach"),
+	MAX_HEEL("Maximum heel breach"),
+	/**
+	 * Heel level is below the minuum
+	 */
+	MIN_HEEL("Minimum heel breach"),
 	/**
 	 * Heel lost at the end of the {@link VoyagePlan}. Typically the safety heel. This is the heel which cannot be rolled over to the next voyage plan (once heel tracking is merged in)
 	 */
 	LOST_HEEL("Lost Heel");
-
 
 	private final String displayName;
 

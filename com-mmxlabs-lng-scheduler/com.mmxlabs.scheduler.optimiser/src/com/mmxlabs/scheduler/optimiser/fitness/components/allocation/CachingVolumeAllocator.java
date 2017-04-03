@@ -33,7 +33,11 @@ public final class CachingVolumeAllocator implements IVolumeAllocator {
 		this.delegate = delegate;
 
 		this.cache = new LHMCache<>("VolumeAllocatorCache", new FunctionalCacheKeyEvaluator<>(record -> {
-			return delegate.allocate(record.vesselAvailability, record.vesselStartTime, record.plan, record.portTimesRecord);
+			final IAllocationAnnotation result = delegate.allocate(record.vesselAvailability, record.vesselStartTime, record.plan, record.portTimesRecord);
+			if (result != null) {
+				result.setCacheLocked(true);
+			}
+			return result;
 		}), cacheSize);
 	}
 

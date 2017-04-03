@@ -61,7 +61,8 @@ public class AllocationRecord {
 	public long requiredFuelVolumeInM3;
 
 	/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
-	public long minEndVolumeInM3;
+	public long minimumEndVolumeInM3;
+	public long maximumEndVolumeInM3;
 
 	// public final List<Integer> slotTimes;
 	// public final List<Integer> slotDurations;
@@ -97,7 +98,7 @@ public class AllocationRecord {
 	public @NonNull IPortTimesRecord portTimesRecord;
 
 	public AllocationRecord(final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3,
-			final long requiredFuelVolumeInM3, final long minEndVolumeInM3, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IPortTimesRecord portTimesRecord, final IPortSlot returnSlot,
+			final long requiredFuelVolumeInM3, final long minEndVolumeInM3,final long maxEndVolumeInM3, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IPortTimesRecord portTimesRecord, final IPortSlot returnSlot,
 			final @NonNull List<@NonNull Long> minVolumesInM3, final @NonNull List<@NonNull Long> maxVolumesInM3, @NonNull final List<@NonNull Long> minVolumesInMMBtu,
 			@NonNull final List<@NonNull Long> maxVolumesInMMBtu, final @NonNull List<@NonNull Integer> slotCV) {
 		this.vesselAvailability = vesselAvailability;
@@ -105,7 +106,8 @@ public class AllocationRecord {
 		this.vesselStartTime = vesselStartTime;
 		this.startVolumeInM3 = startVolumeInM3;
 		this.requiredFuelVolumeInM3 = requiredFuelVolumeInM3;
-		this.minEndVolumeInM3 = minEndVolumeInM3;
+		this.minimumEndVolumeInM3 = minEndVolumeInM3;
+		this.maximumEndVolumeInM3 = maxEndVolumeInM3;
 		this.slots = slots;
 		this.portTimesRecord = portTimesRecord;
 		this.returnSlot = returnSlot;

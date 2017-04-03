@@ -23,17 +23,6 @@ public abstract class PortSlot implements IPortSlot {
 
 	private @NonNull PortType portType;
 
-	// public PortSlot() {
-	//
-	// }
-
-	// public PortSlot(@NonNull final String id, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow) {
-	// this.id = id;
-	// this.port = port;
-	// this.timeWindow = timeWindow;
-	// this.portType = PortType.Unknown;
-	// }
-
 	public PortSlot(@NonNull final String id, PortType portType, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow) {
 		this.id = id;
 		this.port = port;
@@ -70,8 +59,7 @@ public abstract class PortSlot implements IPortSlot {
 		this.timeWindow = timeWindow;
 	}
 
-	@Override
-	public boolean equals(final Object obj) {
+	public boolean doEquals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}

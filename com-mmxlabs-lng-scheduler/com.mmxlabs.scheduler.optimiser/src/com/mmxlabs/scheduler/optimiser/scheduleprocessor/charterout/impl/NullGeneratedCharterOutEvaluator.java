@@ -21,7 +21,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class NullGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 
 	@Override
-	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long startHeelVolumeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
+	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long[] startHeelVolumeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+			final IPortTimesRecord portTimesRecord) {
 		return null;
 	}
 

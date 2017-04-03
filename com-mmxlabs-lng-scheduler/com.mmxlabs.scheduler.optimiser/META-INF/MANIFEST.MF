@@ -11,6 +11,7 @@ Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.1.7.qualifier
 Import-Package: com.mmxlabs.scheduler.optimiser.voyage.impl,
  javax.inject;version="[1.0,2)",
+ org.eclipse.jdt.annotation,
  org.slf4j;version="[1.5,2)"
 Require-Bundle: com.google.inject;bundle-version="3.0.0",
  org.ops4j.peaberry;bundle-version="1.3.0",
@@ -36,6 +37,8 @@ Export-Package: com.mmxlabs.scheduler.optimiser,
  com.mmxlabs.scheduler.optimiser.components.util,
  com.mmxlabs.scheduler.optimiser.constraints.impl,
  com.mmxlabs.scheduler.optimiser.contracts,
+ com.mmxlabs.scheduler.optimiser.contracts.ballastbonus,
+ com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl,
  com.mmxlabs.scheduler.optimiser.contracts.impl,
  com.mmxlabs.scheduler.optimiser.curves,
  com.mmxlabs.scheduler.optimiser.entities,

@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -44,7 +45,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	/**
 	 * If true, the vessel should be cold at the end of the voyage + idle. If false, it doesn't matter.
 	 */
-	private boolean shouldBeCold;
+	private VesselTankState shouldBeCold;
 
 	/**
 	 * If true, the vessel is warm at the start of this voyage, because it is coming out of a drydock or something similar.
@@ -185,11 +186,11 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	 * 
 	 * @return
 	 */
-	public final boolean shouldBeCold() {
+	public final VesselTankState shouldBeCold() {
 		return shouldBeCold;
 	}
 
-	public final void setShouldBeCold(final boolean shouldBeCold) {
+	public final void setShouldBeCold(final VesselTankState shouldBeCold) {
 		this.shouldBeCold = shouldBeCold;
 	}
 
