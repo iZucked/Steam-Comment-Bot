@@ -1,12 +1,12 @@
-timeCharterRate,startAfter,startBy,endAfter,endBy,vessel,startAt,endAt,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,kind,entity
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Kano,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Lagos,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Lokoja,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Ogun,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Ondo,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Oyo,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Port Harcourt,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG River Niger,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG River Orashi,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Rivers,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
-,2010-11-01 00:00,,2010-11-02 00:00,,LNG Sokoto,,,,0.0,0.0,HeelOptions,VesselAvailability,Shipping
+timeCharterRate,startAfter,startBy,endAfter,endBy,vessel,startAt,endAt,startHeel.maxVolumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,kind,entity,endHeel.tankState
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Kano,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Lagos,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Lokoja,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Ogun,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Ondo,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Oyo,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Port Harcourt,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG River Niger,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG River Orashi,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Rivers,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Sokoto,,,,0.0,0.0,StartHeelOptions,VesselAvailability,Shipping,MUST_BE_WARM

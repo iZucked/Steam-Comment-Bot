@@ -1,0 +1,5 @@
+type,availability.constant,availability.curve.name,availability.kind,markets,kind
+DES Purchase,,,SpotAvailability,,SpotMarketGroup
+DES Sale,,,SpotAvailability,,SpotMarketGroup
+FOB Purchase,,,SpotAvailability,,SpotMarketGroup
+FOB Sale,,,SpotAvailability,,SpotMarketGroup

@@ -421,7 +421,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			Assert.assertEquals(0, opt_cargo2.getSortedSlots().get(1).getAllowedVessels().size());
 
 			// Ensure heel value matches
-			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getVolumeAvailable(), 0.0);
+			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
@@ -521,7 +521,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			Assert.assertFalse(opt_cargo2.isAllowRewiring());
 
 			// Ensure heel value matches
-			Assert.assertEquals(0.0, optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getVolumeAvailable(), 0.0);
+			Assert.assertEquals(0.0, optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
