@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.schedule.provider;
 
 
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -48,7 +50,6 @@ public class BallastBonusFeeDetailsItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addFeePropertyDescriptor(object);
-			addMatchingBallastBonusContractDetailsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -76,25 +77,33 @@ public class BallastBonusFeeDetailsItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Matching Ballast Bonus Contract Details feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMatchingBallastBonusContractDetailsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BallastBonusFeeDetails_matchingBallastBonusContractDetails_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BallastBonusFeeDetails_matchingBallastBonusContractDetails_feature", "_UI_BallastBonusFeeDetails_type"),
-				 SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -138,6 +147,9 @@ public class BallastBonusFeeDetailsItemProvider extends UUIDObjectItemProvider {
 			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS__FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -152,6 +164,16 @@ public class BallastBonusFeeDetailsItemProvider extends UUIDObjectItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS,
+				 ScheduleFactory.eINSTANCE.createLumpSumContractDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS,
+				 ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails()));
 	}
 
 }

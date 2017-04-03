@@ -4417,7 +4417,7 @@ public interface SchedulePackage extends EPackage {
 	int BALLAST_BONUS_FEE_DETAILS__FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Matching Ballast Bonus Contract Details</b></em>' reference.
+	 * The feature id for the '<em><b>Matching Ballast Bonus Contract Details</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -6571,10 +6571,10 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBallastBonusFeeDetails_Fee();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails <em>Matching Ballast Bonus Contract Details</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails <em>Matching Ballast Bonus Contract Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Matching Ballast Bonus Contract Details</em>'.
+	 * @return the meta object for the containment reference '<em>Matching Ballast Bonus Contract Details</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails()
 	 * @see #getBallastBonusFeeDetails()
 	 * @generated
@@ -8167,7 +8167,7 @@ public interface SchedulePackage extends EPackage {
 		EAttribute BALLAST_BONUS_FEE_DETAILS__FEE = eINSTANCE.getBallastBonusFeeDetails_Fee();
 
 		/**
-		 * The meta object literal for the '<em><b>Matching Ballast Bonus Contract Details</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Matching Ballast Bonus Contract Details</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

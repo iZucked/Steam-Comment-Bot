@@ -12,6 +12,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -53,7 +54,7 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	protected int fee = FEE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getMatchingBallastBonusContractDetails() <em>Matching Ballast Bonus Contract Details</em>}' reference.
+	 * The cached value of the '{@link #getMatchingBallastBonusContractDetails() <em>Matching Ballast Bonus Contract Details</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getMatchingBallastBonusContractDetails()
@@ -108,14 +109,6 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * @generated
 	 */
 	public MatchingContractDetails getMatchingBallastBonusContractDetails() {
-		if (matchingBallastBonusContractDetails != null && matchingBallastBonusContractDetails.eIsProxy()) {
-			InternalEObject oldMatchingBallastBonusContractDetails = (InternalEObject)matchingBallastBonusContractDetails;
-			matchingBallastBonusContractDetails = (MatchingContractDetails)eResolveProxy(oldMatchingBallastBonusContractDetails);
-			if (matchingBallastBonusContractDetails != oldMatchingBallastBonusContractDetails) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS, oldMatchingBallastBonusContractDetails, matchingBallastBonusContractDetails));
-			}
-		}
 		return matchingBallastBonusContractDetails;
 	}
 
@@ -124,8 +117,14 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MatchingContractDetails basicGetMatchingBallastBonusContractDetails() {
-		return matchingBallastBonusContractDetails;
+	public NotificationChain basicSetMatchingBallastBonusContractDetails(MatchingContractDetails newMatchingBallastBonusContractDetails, NotificationChain msgs) {
+		MatchingContractDetails oldMatchingBallastBonusContractDetails = matchingBallastBonusContractDetails;
+		matchingBallastBonusContractDetails = newMatchingBallastBonusContractDetails;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS, oldMatchingBallastBonusContractDetails, newMatchingBallastBonusContractDetails);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -134,10 +133,31 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 	 * @generated
 	 */
 	public void setMatchingBallastBonusContractDetails(MatchingContractDetails newMatchingBallastBonusContractDetails) {
-		MatchingContractDetails oldMatchingBallastBonusContractDetails = matchingBallastBonusContractDetails;
-		matchingBallastBonusContractDetails = newMatchingBallastBonusContractDetails;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS, oldMatchingBallastBonusContractDetails, matchingBallastBonusContractDetails));
+		if (newMatchingBallastBonusContractDetails != matchingBallastBonusContractDetails) {
+			NotificationChain msgs = null;
+			if (matchingBallastBonusContractDetails != null)
+				msgs = ((InternalEObject)matchingBallastBonusContractDetails).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS, null, msgs);
+			if (newMatchingBallastBonusContractDetails != null)
+				msgs = ((InternalEObject)newMatchingBallastBonusContractDetails).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS, null, msgs);
+			msgs = basicSetMatchingBallastBonusContractDetails(newMatchingBallastBonusContractDetails, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS, newMatchingBallastBonusContractDetails, newMatchingBallastBonusContractDetails));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS:
+				return basicSetMatchingBallastBonusContractDetails(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -151,8 +171,7 @@ public class BallastBonusFeeDetailsImpl extends UUIDObjectImpl implements Ballas
 			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS__FEE:
 				return getFee();
 			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS__MATCHING_BALLAST_BONUS_CONTRACT_DETAILS:
-				if (resolve) return getMatchingBallastBonusContractDetails();
-				return basicGetMatchingBallastBonusContractDetails();
+				return getMatchingBallastBonusContractDetails();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

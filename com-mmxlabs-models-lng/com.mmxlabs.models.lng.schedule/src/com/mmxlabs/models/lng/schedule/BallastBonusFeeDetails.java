@@ -53,26 +53,26 @@ public interface BallastBonusFeeDetails extends UUIDObject, GeneralPNLDetails {
 	void setFee(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Matching Ballast Bonus Contract Details</b></em>' reference.
+	 * Returns the value of the '<em><b>Matching Ballast Bonus Contract Details</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Matching Ballast Bonus Contract Details</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Matching Ballast Bonus Contract Details</em>' reference.
+	 * @return the value of the '<em>Matching Ballast Bonus Contract Details</em>' containment reference.
 	 * @see #setMatchingBallastBonusContractDetails(MatchingContractDetails)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBallastBonusFeeDetails_MatchingBallastBonusContractDetails()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	MatchingContractDetails getMatchingBallastBonusContractDetails();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails <em>Matching Ballast Bonus Contract Details</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails#getMatchingBallastBonusContractDetails <em>Matching Ballast Bonus Contract Details</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Matching Ballast Bonus Contract Details</em>' reference.
+	 * @param value the new value of the '<em>Matching Ballast Bonus Contract Details</em>' containment reference.
 	 * @see #getMatchingBallastBonusContractDetails()
 	 * @generated
 	 */
