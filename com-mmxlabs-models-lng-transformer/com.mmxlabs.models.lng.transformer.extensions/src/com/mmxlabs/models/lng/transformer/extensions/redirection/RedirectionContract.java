@@ -169,7 +169,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					return Integer.MAX_VALUE;
 				}
 				final IDetailTree details[] = annotation == null ? null : new IDetailTree[2];
-				final long costs = shippingCostHelper.getShippingCosts(plan, vesselAvailability, false, true);
+				final long costs = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true);
 				if (baseRouteAnnotation != null && details != null) {
 					baseRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
@@ -204,7 +204,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					return Integer.MAX_VALUE;
 				}
 				final IDetailTree details[] = annotation == null ? null : new IDetailTree[2];
-				final long costs = shippingCostHelper.getShippingCosts(plan, vesselAvailability, false, true);
+				final long costs = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true);
 				if (currentRouteAnnotation != null && details != null) {
 					currentRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
@@ -290,7 +290,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					return Integer.MAX_VALUE;
 				}
 				final IDetailTree details[] = annotations == null ? null : new IDetailTree[2];
-				final long costs = shippingCostHelper.getShippingCosts(plan, notionalVesselAvailability, false, true);
+				final long costs = shippingCostHelper.getShippingCosts(plan, notionalVesselAvailability, true);
 				if (baseRouteAnnotation != null && details != null) {
 					baseRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
@@ -325,7 +325,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					return Integer.MAX_VALUE;
 				}
 				final IDetailTree details[] = annotations == null ? null : new IDetailTree[2];
-				final long costs = shippingCostHelper.getShippingCosts(plan, notionalVesselAvailability, false, true);
+				final long costs = shippingCostHelper.getShippingCosts(plan, notionalVesselAvailability, true);
 				if (currentRouteAnnotation != null && details != null) {
 					currentRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}

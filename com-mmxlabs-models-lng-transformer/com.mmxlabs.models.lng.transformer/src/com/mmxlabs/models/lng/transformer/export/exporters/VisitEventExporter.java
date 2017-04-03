@@ -254,6 +254,9 @@ public class VisitEventExporter {
 				case MIN_LOAD:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_LOAD;
 					break;
+				case MIN_HEEL:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_HEEL;
+					break;
 				case MAX_HEEL:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_HEEL;
 					break;

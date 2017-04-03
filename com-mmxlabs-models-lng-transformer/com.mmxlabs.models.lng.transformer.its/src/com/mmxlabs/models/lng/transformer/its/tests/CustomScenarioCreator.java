@@ -9,15 +9,14 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,14 +24,13 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -42,7 +40,6 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -67,12 +64,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
  * Class to create a scenario. Call methods to customise the scenario. When finished get the final scenario using {@link #buildScenario()}. <br>
@@ -274,7 +271,8 @@ public class CustomScenarioCreator {
 			vessel.setVesselClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
 
-			final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
+			final StartHeelOptions heelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+			final EndHeelOptions endHeelOptions = CargoFactory.eINSTANCE.createEndHeelOptions();
 
 			fleetModel.getVessels().add(vessel);
 			final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -283,6 +281,7 @@ public class CustomScenarioCreator {
 			}
 			availability.setVessel(vessel);
 			availability.setStartHeel(heelOptions);
+			availability.setEndHeel(endHeelOptions);
 			availability.setEntity(shippingEntity);
 			cargoModel.getVesselAvailabilities().add(availability);
 			created[i] = vessel;
@@ -358,6 +357,20 @@ public class CustomScenarioCreator {
 			portB.setTimeZone(timeZone);
 		}
 
+		if (!portA.getCapabilities().contains(PortCapability.LOAD)) {
+			portA.getCapabilities().add(PortCapability.LOAD);
+		}
+		if (!portA.getCapabilities().contains(PortCapability.DISCHARGE)) {
+			portA.getCapabilities().add(PortCapability.DISCHARGE);
+		}
+		
+		if (!portB.getCapabilities().contains(PortCapability.LOAD)) {
+			portB.getCapabilities().add(PortCapability.LOAD);
+		}
+		if (!portB.getCapabilities().contains(PortCapability.DISCHARGE)) {
+			portB.getCapabilities().add(PortCapability.DISCHARGE);
+		}
+		
 		// Assuming we've created the default rout
 		final Route r = portModel.getRoutes().get(0);
 
@@ -382,7 +395,7 @@ public class CustomScenarioCreator {
 	 * Add a cargo to the scenario. <br>
 	 * Both the load and discharge ports must be added using {@link #addPorts(Port, Port, int[], int[])} to correctly set up distances.
 	 */
-	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final String loadPrice, final String dischargePrice, final float cvValue,
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final String loadPrice, final String dischargePrice, final double cvValue,
 			final LocalDateTime loadWindowStart, final int travelTime) {
 
 		if (!portModel.getPorts().contains(loadPort)) {
@@ -394,49 +407,35 @@ public class CustomScenarioCreator {
 			portModel.getPorts().add(dischargePort);
 		}
 
-		// final int loadPrice = 1000;
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
 
-		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
-		final DischargeSlot dis = CargoFactory.eINSTANCE.createDischargeSlot();
-
-		cargo.getSlots().add(load);
-		cargo.getSlots().add(dis);
-
-		load.setPort(loadPort);
-		dis.setPort(dischargePort);
-		load.setContract(pc);
-		dis.setContract(sc);
-		load.setName("load" + cargoID);
-		dis.setName("discharge" + cargoID);
-
-		dis.setPriceExpression(dischargePrice);
-		load.setPriceExpression(loadPrice);
-
-		load.setMaxQuantity(loadMaxQuantity);
-		dis.setMaxQuantity(dischargeMaxQuantity);
-
-		load.setCargoCV(cvValue);
-
-		load.setWindowSize(0);
-
 		final ZoneId dischargeZone = ZoneId.of(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
 
-		load.setWindowStart(loadWindowStart.toLocalDate());
-		load.setWindowStartTime(loadWindowStart.getHour());
+		// Use load window for discharge as we will update it later once we have a fully built up load window start datetime
+		final Cargo cargo = scenarioModelBuilder.getCargoModelBuilder().makeCargo() //
+				.makeFOBPurchase("load" + cargoID, loadWindowStart.toLocalDate(), loadPort, pc, null, loadPrice, cvValue) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withWindowStartTime(loadWindowStart.getHour()) //
+				.withVolumeLimits(0, loadMaxQuantity, VolumeUnits.M3) //
+				.build()//
+				//
+				.makeDESSale("discharge" + cargoID, loadWindowStart.toLocalDate(), dischargePort, sc, null, dischargePrice) //
+				.withVolumeLimits(0, dischargeMaxQuantity, VolumeUnits.M3) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withWindowStartTime(loadWindowStart.getHour()) //
+				.withPricingEvent(PricingEvent.START_DISCHARGE, null) //
+				.build()//
+				//
+				.build();
 
+		// Now calculate the correct discharge window start
+		Slot load = cargo.getSlots().get(0);
 		final ZonedDateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZoneSameInstant(dischargeZone).plusHours(travelTime);
-		dis.setWindowStartTime(dischargeDate.getHour());
-		dis.setWindowStart(dischargeDate.toLocalDate());
-		dis.setWindowSize(0);
 
-		dis.setPricingEvent(PricingEvent.START_DISCHARGE);
-
-		cargoModel.getLoadSlots().add(load);
-		cargoModel.getDischargeSlots().add(dis);
-		cargoModel.getCargoes().add(cargo);
+		Slot discharge = cargo.getSlots().get(1);
+		discharge.setWindowStart(dischargeDate.toLocalDate());
+		discharge.setWindowStartTime(dischargeDate.getHour());
 
 		return cargo;
 	}
@@ -453,51 +452,30 @@ public class CustomScenarioCreator {
 			portModel.getPorts().add(startPort);
 		}
 
-		// Set up dry dock.
-		final DryDockEvent dryDock = CargoFactory.eINSTANCE.createDryDockEvent();
-		dryDock.setName("Drydock");
-		dryDock.setDurationInDays(durationDays);
-		dryDock.setPort(startPort);
-		// add to scenario's fleet model
-		cargoModel.getVesselEvents().add(dryDock);
+		final DryDockEvent event = scenarioModelBuilder.getCargoModelBuilder()//
+				.makeDryDockEvent("Drydock", start, start, startPort) //
+				.withDurationInDays(durationDays) //
+				.build();
 
-		// define the start and end time
-		dryDock.setStartAfter(start);
-		dryDock.setStartBy(start);
-
-		return dryDock;
+		return event;
 	}
 
-	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final LocalDateTime startCharterOut, final int heelLimit, final int charterOutDurationDays,
-			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
+	public CharterOutEvent addCharterOut(final String id, final @NonNull Port startPort, final @Nullable Port endPort, final @NonNull LocalDateTime startCharterOut, final int heelLimit,
+			final int charterOutDurationDays, final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
-		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent event = scenarioModelBuilder.getCargoModelBuilder()//
+				.makeCharterOutEvent(id, startCharterOut, startCharterOut, startPort) //
+				.withDurationInDays(charterOutDurationDays) //
+				.withAvailableHeelOptions(heelLimit, heelLimit, cvValue, Double.toString(dischargePrice)) //
+				.withRepositioningFee(repositioningFee) //
+				.withHireRate(dailyCharterOutPrice) //
+				.build();
 
-		// the start and end of the charter out starting-window is 0, for simplicity.
-		charterOut.setStartAfter(startCharterOut);
-		charterOut.setStartBy(startCharterOut);
-
-		charterOut.setPort(startPort);
-		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
-		if (!startPort.equals(endPort)) {
-			charterOut.setRelocateTo(endPort);
+		// // don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
+		if (endPort != null && !startPort.equals(endPort)) {
+			event.setRelocateTo(endPort);
 		}
-
-		charterOut.setName(id);
-		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		heelOptions.setVolumeAvailable(heelLimit);
-		heelOptions.setCvValue(cvValue);
-		heelOptions.setPricePerMMBTU(dischargePrice);
-		charterOut.setHeelOptions(heelOptions);
-
-		charterOut.setDurationInDays(charterOutDurationDays);
-
-		charterOut.setHireRate(dailyCharterOutPrice);
-		charterOut.setRepositioningFee(repositioningFee);
-		// add to the scenario's fleet model
-		cargoModel.getVesselEvents().add(charterOut);
-
-		return charterOut;
+		return event;
 	}
 
 	/**
@@ -507,34 +485,7 @@ public class CustomScenarioCreator {
 	 */
 	public LNGScenarioModel buildScenario() {
 
-		// Add every canal to every vessel class.
-		// for (final VesselClassCost canalCost : this.canalCostsForAllVesselClasses) {
-		// for (final VesselClass vc : fleetModel.getVesselClasses()) {
-		// addCanal(vc, canalCost);
-		// }
-		// }
-
-		fixUUIDMisMatches(scenario);
-
 		return scenario;
-	}
-
-	/**
-	 * When copying a scenario the UUIDs are not copied correctly unless the getter method is called. The method checks whether there is a value and makes a new one if there isn't
-	 * 
-	 * @param scenario
-	 *            The scenario to fix.
-	 */
-	private static void fixUUIDMisMatches(final MMXRootObject scenario) {
-
-		final TreeIterator<EObject> iterator = scenario.eAllContents();
-		while (iterator.hasNext()) {
-			final EObject obj = iterator.next();
-
-			if (obj instanceof UUIDObject) {
-				((UUIDObject) obj).getUuid();
-			}
-		}
 	}
 
 	/**

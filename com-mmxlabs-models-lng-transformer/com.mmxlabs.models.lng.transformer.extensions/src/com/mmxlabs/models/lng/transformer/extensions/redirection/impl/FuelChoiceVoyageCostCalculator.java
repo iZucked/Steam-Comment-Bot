@@ -17,17 +17,19 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
@@ -131,7 +133,10 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
-		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getVesselClass().getSafetyHeel(), vessel.getVesselClass().getSafetyHeel(), VesselTankState.MUST_BE_COLD,
+				ConstantHeelPriceCalculator.ZERO);
+
+		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
 		final PortTimesRecord portTimesRecord = getPortTimesRecord(loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, notionalLoadSlot, notionalDischargeSlot,
 				notionalReturnSlot);
@@ -157,7 +162,10 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPricePerMMBTu);
 
-		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getVesselClass().getSafetyHeel(), vessel.getVesselClass().getSafetyHeel(), VesselTankState.MUST_BE_COLD,
+				new ConstantHeelPriceCalculator(0));
+
+		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
 		final PortTimesRecord portTimesRecord = getPortTimesRecord(loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, notionalLoadSlot, notionalDischargeSlot,
 				notionalReturnSlot);
@@ -241,19 +249,23 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			final PortOptions loadOptions = new PortOptions(notionalLoadSlot);
 			loadOptions.setVisitDuration(loadDuration);
 			loadOptions.setVessel(vessel);
-
+			loadOptions.setCargoCVValue(cargoCVValue);
+			
 			final PortOptions dischargeOptions = new PortOptions(notionalDischargeSlot);
 			dischargeOptions.setVisitDuration(dischargeDuration);
 			dischargeOptions.setVessel(vessel);
-
+			dischargeOptions.setCargoCVValue(cargoCVValue);
+			
 			final PortOptions returnOptions = new PortOptions(notionalReturnSlot);
 			returnOptions.setVisitDuration(0);
 			returnOptions.setVessel(vessel);
+			returnOptions.setCargoCVValue(cargoCVValue);
 
 			final List<@NonNull IOptionsSequenceElement> basicSequence = Lists.<@NonNull IOptionsSequenceElement> newArrayList(loadOptions, ladenOptions, dischargeOptions, ballastOptions,
 					returnOptions);
 
-			final VoyagePlan notionalPlan = vpo.optimise(null, vessel, startHeelInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, vpoChoices);
+			final VoyagePlan notionalPlan = vpo.optimise(null, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence,
+					vpoChoices);
 
 			// Set to null to trigger assert at start of method if API is not being correctly used.
 			fuelChoice = null;

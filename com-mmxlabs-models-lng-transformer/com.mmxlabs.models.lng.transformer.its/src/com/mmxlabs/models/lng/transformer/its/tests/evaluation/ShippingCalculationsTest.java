@@ -1403,13 +1403,13 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
+		CharterOutEvent event = msc.makeCharterOut(msc.loadPort, msc.originPort);
 
 		event.setVesselAssignmentType(msc.vesselAvailability);
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
-		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
-				VesselEventVisit.class, Idle.class, EndEvent.class };
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,
+				EndEvent.class };
 		SequenceTester checker = getDefaultTester(classes);
 
 		// expected durations of journeys

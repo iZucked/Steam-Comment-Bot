@@ -58,19 +58,18 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -135,6 +134,7 @@ public class AnnotatedSolutionExporter {
 	public Schedule exportAnnotatedSolution(final @NonNull ModelEntityMap modelEntityMap, final @NonNull IAnnotatedSolution annotatedSolution) {
 		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 		final Schedule output = factory.createSchedule();
+		assert output != null;
 		// get domain level sequences
 		final VolumeAllocatedSequences scheduledSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
 
@@ -239,9 +239,9 @@ public class AnnotatedSolutionExporter {
 			}
 
 			final boolean pIsRoundTripSequence = isRoundTripSequence;
-			boolean pIsFOBSequence = isFOBSequence;
-			boolean pIsDESSequence = isDESSequence;
-			exportEvents(scheduledSequence, annotatedSolution, output, events -> {
+			final boolean pIsFOBSequence = isFOBSequence;
+			final boolean pIsDESSequence = isDESSequence;
+			exportEvents(scheduledSequence, annotatedSolution, modelEntityMap, output, events -> {
 
 				if (!events.isEmpty()) {
 
@@ -471,85 +471,73 @@ public class AnnotatedSolutionExporter {
 		}
 	}
 
-	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, IAnnotatedSolution annotatedSolution, Schedule output, final Consumer<List<Event>> eventsAction) {
+	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, final IAnnotatedSolution annotatedSolution, ModelEntityMap modelEntityMap, final Schedule output,
+			final Consumer<List<Event>> eventsAction) {
 
 		final List<Event> events = new LinkedList<>();
 
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(scheduledSequence);
-		long currentHeelInM3 = 0;
-		boolean firstObject = true;
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(scheduledSequence.getResource());
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
-		final boolean recordHeel = !(vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
+
+		boolean exportingRedirectedCharterOut = false;
+		PortDetails redirectedCharterOutStart = null;
+
 		while (vpi.hasNextObject()) {
-			final boolean resetCurrentHeel = firstObject || vpi.nextObjectIsStartOfPlan();
-			firstObject = false;
 
 			final Object e = vpi.nextObject();
-			//
 			final int currentTime = vpi.getCurrentTime();
 			final VoyagePlan currentPlan = vpi.getCurrentPlan();
 
-			assert currentPlan.getLNGFuelVolume() >= 0;
-			assert currentPlan.getStartingHeelInM3() >= 0;
-			assert currentPlan.getRemainingHeelInM3() >= 0;
-
 			final long charterRatePerDay = currentPlan.getCharterInRatePerDay();
-			if (resetCurrentHeel) {
-				currentHeelInM3 = currentPlan.getStartingHeelInM3();
-			}
 
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
 
+				if (currentPortSlot instanceof SplitCharterOutVesselEventStartPortSlot) {
+					redirectedCharterOutStart = details;
+					exportingRedirectedCharterOut = true;
+					continue;
+				}
+				boolean patchupRedirectCharterEvent = false;
+				if (currentPortSlot instanceof SplitCharterOutVesselEventEndPortSlot) {
+					assert exportingRedirectedCharterOut;
+					exportingRedirectedCharterOut = false;
+					// Found the end of the charter out. Export the event and then patch up start info
+					patchupRedirectCharterEvent = true;
+				}
+				if (exportingRedirectedCharterOut) {
+					// Not found the end yet, continue.
+					continue;
+				}
 				final PortVisit event = portDetailsExporter.export(details, scheduledSequence, annotatedSolution, output);
 				if (event != null) {
 					// Heel tracking
-					if (recordHeel) {
-						final long startHeelInM3 = currentHeelInM3;
-						if (currentPortSlot.getPortType() != PortType.End) {
-
-							if (currentPortSlot.getPortType() == PortType.Load) {
-								final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(currentPortSlot);
-
-								assert allocationAnnotation.getStartHeelVolumeInM3() >= 0;
-								assert allocationAnnotation.getFuelVolumeInM3() >= 0;
-								assert allocationAnnotation.getRemainingHeelVolumeInM3() >= 0;
-
-								assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
-								assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
-
-								// TODO: Probably should be physical here and then ignore the port BOG.
-								currentHeelInM3 += allocationAnnotation.getPhysicalSlotVolumeInM3(currentPortSlot);
-							} else if (currentPortSlot.getPortType() == PortType.Discharge) {
-								final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(currentPortSlot);
-
-								assert allocationAnnotation.getStartHeelVolumeInM3() >= 0;
-								assert allocationAnnotation.getFuelVolumeInM3() >= 0;
-								assert allocationAnnotation.getRemainingHeelVolumeInM3() >= 0;
-
-								assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
-								assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
-
-								currentHeelInM3 -= allocationAnnotation.getPhysicalSlotVolumeInM3(currentPortSlot);
-								currentHeelInM3 -= details.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
-							}
-							assert currentHeelInM3 + VoyagePlanner.ROUNDING_EPSILON >= 0;
-						} else {
-							if (currentPortSlot instanceof IEndPortSlot) {
-								final IEndPortSlot endPortSlot = (IEndPortSlot) currentPortSlot;
-								// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
-								// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
-							}
+					{
+						final HeelValueRecord heelRecord = scheduledSequence.getPortHeelRecord(currentPortSlot);
+						if (heelRecord != null) {
+							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
+							event.setHeelCost(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelCost()));
+							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
 						}
-
-						final long endHeelInM3 = currentHeelInM3;
-
-						event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(startHeelInM3));
-						event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(endHeelInM3));
 					}
 					event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getOptions().getVisitDuration()) / 24L));
+
+					if (patchupRedirectCharterEvent) {
+						IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
+						final HeelValueRecord heelRecord = scheduledSequence.getPortHeelRecord(startSlot);
+						if (heelRecord != null) {
+							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+							event.setHeelRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(heelRecord.getHeelRevenue()));
+						}
+
+						((VesselEventVisit) event).setRedeliveryPort(event.getPort());
+						event.setPort(modelEntityMap.getModelObject(startSlot.getPort(), Port.class));
+						redirectedCharterOutStart = null;
+						patchupRedirectCharterEvent = false;
+					}
 
 					events.add(event);
 
@@ -562,25 +550,26 @@ public class AnnotatedSolutionExporter {
 			} else if (e instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) e;
 
+				if (exportingRedirectedCharterOut) {
+					continue;
+				}
+
 				int voyage_currentTime = currentTime;
 				final Journey journey = journeyDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				voyage_currentTime += details.getTravelTime();
+
+				Event lastEvent = null;
 				if (journey != null) {
 					events.add(journey);
-					if (recordHeel) {
-						assert currentHeelInM3 >= 0;
 
-						journey.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
-						for (final FuelComponent fuel : FuelComponent.getTravelFuelComponents()) {
-							final long consumption = details.getFuelConsumption(fuel, FuelUnit.M3) + details.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
-							if (FuelComponent.isLNGFuelComponent(fuel)) {
-								currentHeelInM3 -= consumption;
-							}
-						}
-
-						journey.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
+					// Heel tracking
+					final HeelRecord heelRecord = scheduledSequence.getNextTravelHeelRecord(details.getOptions().getFromPortSlot());
+					if (heelRecord != null) {
+						journey.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+						journey.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 					}
 					journey.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getTravelTime()) / 24L));
+					lastEvent = journey;
 				}
 
 				if (!details.getOptions().isCharterOutIdleTime()) {
@@ -588,32 +577,31 @@ public class AnnotatedSolutionExporter {
 					final Idle idle = idleDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (idle != null) {
 						events.add(idle);
-						if (recordHeel) {
-							assert currentHeelInM3 >= 0;
 
-							idle.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
-							final long consumption = details.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3) + details.getRouteAdditionalConsumption(FuelComponent.IdleNBO, FuelUnit.M3);
-							currentHeelInM3 -= consumption;
-
-							idle.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
+						// Heel tracking
+						final HeelRecord heelRecord = scheduledSequence.getNextIdleHeelRecord(details.getOptions().getFromPortSlot());
+						if (heelRecord != null) {
+							idle.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+							idle.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 						}
 						idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
-
+						lastEvent = idle;
 					}
+
 				} else {
 					final GeneratedCharterOut event = gcoDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (event != null) {
 						events.add(event);
-						if (recordHeel) {
-							assert currentHeelInM3 >= 0;
-
-							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
-							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
+						// Heel tracking
+						final HeelRecord heelRecord = scheduledSequence.getNextIdleHeelRecord(details.getOptions().getFromPortSlot());
+						if (heelRecord != null) {
+							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
+							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
 						}
 						event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getIdleTime()) / 24L));
 						event.setRevenue(
 								OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), details.getIdleTime()) / 24L));
-
+						lastEvent = event;
 					}
 				}
 				voyage_currentTime += details.getIdleTime();
@@ -621,10 +609,10 @@ public class AnnotatedSolutionExporter {
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (cooldown != null) {
 					events.add(cooldown);
-					if (recordHeel) {
-						assert currentHeelInM3 >= 0;
-						cooldown.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
-						cooldown.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(currentHeelInM3));
+					if (lastEvent != null) {
+						// Is this really needed - if we have a cooldown, then by definition heel should be zero.
+						cooldown.setHeelAtStart(lastEvent.getHeelAtStart());
+						cooldown.setHeelAtEnd(lastEvent.getHeelAtEnd());
 					}
 				}
 			}

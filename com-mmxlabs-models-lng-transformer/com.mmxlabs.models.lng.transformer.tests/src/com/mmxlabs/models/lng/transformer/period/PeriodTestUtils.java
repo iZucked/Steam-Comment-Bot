@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -187,8 +186,8 @@ public class PeriodTestUtils {
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel);
 
-		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		vesselAvailability.setStartHeel(heelOptions);
+		vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
+		vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 		scenarioModel.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
 		return vesselAvailability;

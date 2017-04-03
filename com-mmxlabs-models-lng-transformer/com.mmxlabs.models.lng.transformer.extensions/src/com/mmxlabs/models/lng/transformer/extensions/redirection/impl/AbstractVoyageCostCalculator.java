@@ -16,8 +16,11 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalLoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
@@ -89,7 +92,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
 		voyageOptions.setRoute(route, distance, routeCost);
-		voyageOptions.setShouldBeCold(true);
+		voyageOptions.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageOptions.setUseFBOForSupplement(true);
 		voyageOptions.setUseNBOForIdle(true);
 		voyageOptions.setUseNBOForTravel(true);
@@ -120,7 +123,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 	}
 
 	protected @NonNull DischargeSlot makeNotionalDischarge(@NonNull IPort dischargePort, int dischargeTime, @NonNull ISalesPriceCalculator salesPriceCalculator) {
-		DischargeSlot dischargeSlot = new DischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), true, 0L, Long.MAX_VALUE, salesPriceCalculator, 0, 0);
+		DischargeSlot dischargeSlot = new NotionalDischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), true, 0L, Long.MAX_VALUE, salesPriceCalculator, 0, 0);
 
 		return dischargeSlot;
 	}
@@ -130,7 +133,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 	}
 
 	protected @NonNull LoadSlot makeNotionalLoad(final @NonNull IPort loadPort, final int loadTime, final IVessel vessel, final int cargoCVValue) {
-		return new LoadSlot("notional-load", loadPort, new TimeWindow(loadTime, loadTime), true, vessel.getCargoCapacity(), vessel.getCargoCapacity(), new FixedPriceContract(0), cargoCVValue, false,
+		return new NotionalLoadSlot("notional-load", loadPort, new TimeWindow(loadTime, loadTime), true, vessel.getCargoCapacity(), vessel.getCargoCapacity(), new FixedPriceContract(0), cargoCVValue, false,
 				true);
 	}
 }

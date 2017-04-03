@@ -9,6 +9,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -27,7 +29,6 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public final VesselClass vc;
@@ -273,17 +274,19 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		costModel.getCooldownCosts().add(price);
 	}
 
-	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
-		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
-		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
-		int charterOutRate = 24;
-		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
-		event.getHeelOptions().setVolumeAvailable(0);
-		event.getHeelOptions().setCvValue(21);
-		event.getHeelOptions().setPricePerMMBTU(1);
+	public CharterOutEvent makeCharterOut(@NonNull Port startPort, @Nullable Port endPort) {
 
-		return event;
+		// change to default: add a charter out event 2-3 hrs after discharge window ends
+		final ZonedDateTime endLoad = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
+
+		return scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, startPort) //
+				.withRelocatePort(endPort) //
+				.withDurationInDays(1) //
+				.withAvailableHeelOptions(0, 0, 21.0, "1") //
+				.withHireRate(24) //
+				.build();
+
 	}
 }
