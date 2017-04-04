@@ -15,6 +15,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
@@ -53,6 +54,21 @@ public class EndHeelOptionsConstraint extends AbstractModelConstraint {
 					dcsd.addEObjectAndFeature(heelOptions, CargoPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION);
 					failures.add(dcsd);
 				}
+			}
+
+			if (heelOptions.getTankState() == EVesselTankState.MUST_BE_WARM) {
+				if (heelOptions.getMinimumEndHeel() > 0 || heelOptions.getMaximumEndHeel() > 0) {
+					String message = String.format("Heel range must be 0 when tanks should be warm");
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					if (heelOptions.getMinimumEndHeel() > 0) {
+						dcsd.addEObjectAndFeature(heelOptions, CargoPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL);
+					}
+					if (heelOptions.getMaximumEndHeel() > 0) {
+						dcsd.addEObjectAndFeature(heelOptions, CargoPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL);
+					}
+					failures.add(dcsd);
+				}
+
 			}
 		}
 		if (failures.isEmpty())
