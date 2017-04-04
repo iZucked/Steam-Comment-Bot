@@ -35,11 +35,19 @@ public class LngUIActivator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 
-		final ImageDescriptor duplicateImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/fastview_restore.gif");
+		ImageDescriptor duplicateImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/fastview_restore.gif");
+		if (duplicateImageDescriptor == null) {
+			duplicateImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/fastview_restore.png");
+		}
+		assert duplicateImageDescriptor != null;
 		getImageRegistry().put(ImageConstants.IMAGE_DUPLICATE, duplicateImageDescriptor);
 		getImageRegistry().put(ImageConstants.IMAGE_DUPLICATE_DISABLED, ImageDescriptor.createWithFlags(duplicateImageDescriptor, SWT.IMAGE_DISABLE));
 
-		final ImageDescriptor importImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif");
+		ImageDescriptor importImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/import_wiz.gif");
+		if (importImageDescriptor == null) {
+			importImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/import_wiz.png");
+		}
+		assert importImageDescriptor != null;
 		getImageRegistry().put(ImageConstants.IMAGE_IMPORT, importImageDescriptor);
 		getImageRegistry().put(ImageConstants.IMAGE_IMPORT_DISABLED, ImageDescriptor.createWithFlags(importImageDescriptor, SWT.IMAGE_DISABLE));
 

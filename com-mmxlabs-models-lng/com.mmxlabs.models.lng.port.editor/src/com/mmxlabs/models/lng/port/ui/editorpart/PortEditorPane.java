@@ -165,7 +165,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		importPorts.setText("Import ports...");
 		final AbstractMenuAction importMenu = new AbstractMenuAction("Import Ports and Distances") {
 			{
-				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
+				ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/import_wiz.gif");
+				if (desc == null) {
+					desc = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "/icons/full/etool16/import_wiz.png");
+				}
+				assert desc != null;
+				setImageDescriptor(desc);
 			}
 
 			@Override

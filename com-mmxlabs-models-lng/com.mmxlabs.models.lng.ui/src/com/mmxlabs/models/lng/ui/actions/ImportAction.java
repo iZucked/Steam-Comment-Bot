@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -78,9 +79,19 @@ public abstract class ImportAction extends LockableAction {
 	/**
 	 */
 	public ImportAction(final ImportHooksProvider ihp) {
-		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
+		super("Import", getImageDesriptor());
 		importHooksProvider = ihp;
 
+	}
+
+	private static ImageDescriptor getImageDesriptor() {
+		ImageDescriptor desc = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif");
+		if (desc == null) {
+			desc = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.png");
+
+		}
+		assert desc != null;
+		return desc;
 	}
 
 	public ImportAction(final IScenarioEditingLocation part) {
