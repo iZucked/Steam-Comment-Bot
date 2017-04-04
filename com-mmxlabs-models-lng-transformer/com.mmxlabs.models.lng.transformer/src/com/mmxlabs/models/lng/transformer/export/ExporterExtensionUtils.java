@@ -189,7 +189,7 @@ public class ExporterExtensionUtils {
 		entityDetails.getGeneralPNLDetails().add(details);
 	}
 
-	private EndEvent findEndEvent(final @NonNull ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
+	public EndEvent findEndEvent(final @NonNull ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
 			@NonNull final IAnnotatedSolution annotatedSolution) {
 		EndEvent endEvent = null;
 		//
