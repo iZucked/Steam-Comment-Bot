@@ -293,6 +293,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private void declareWorkbenchImage(final Bundle ideBundle, final String symbolicName, final String path, final boolean shared) {
 		final URL url = FileLocator.find(ideBundle, new Path(path), null);
 		final ImageDescriptor desc = ImageDescriptor.createFromURL(url);
+		assert desc != null;
 		getWorkbenchConfigurer().declareImage(symbolicName, desc, shared);
 	}
 
