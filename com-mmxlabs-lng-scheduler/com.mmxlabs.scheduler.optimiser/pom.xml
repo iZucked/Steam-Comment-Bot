@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-	<version>4.1.7-SNAPSHOT</version>
+	<version>4.2.0.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 	<name>LNG Scheduler Optimiser</name>
 	<parent>
 		<groupId>com.mmxlabs.scheduler</groupId>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-		<version>4.1.7-SNAPSHOT</version>
+		<version>4.2.0.RELEASE</version>
 	</parent>
 
 
