@@ -392,6 +392,15 @@ public class AnnotatedSolutionExporter {
 						final Journey journey = (Journey) event;
 						final ZoneId eZone = ZoneId.of(journey.getDestination().getTimeZone());
 						journey.setEnd(journey.getEnd().withZoneSameInstant(eZone));
+					} else if (event instanceof VesselEventVisit) {
+						final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+						final Port redeliveryPort = vesselEventVisit.getRedeliveryPort();
+						if (redeliveryPort != null) {
+							final ZoneId eZone = ZoneId.of(redeliveryPort.getTimeZone());
+							vesselEventVisit.setEnd(vesselEventVisit.getEnd().withZoneSameInstant(eZone));
+						} else {
+							event.setEnd(event.getEnd().withZoneSameInstant(zone));
+						}
 					} else {
 						event.setEnd(event.getEnd().withZoneSameInstant(zone));
 					}
@@ -471,7 +480,7 @@ public class AnnotatedSolutionExporter {
 		}
 	}
 
-	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, final IAnnotatedSolution annotatedSolution, ModelEntityMap modelEntityMap, final Schedule output,
+	public void exportEvents(final VolumeAllocatedSequence scheduledSequence, final IAnnotatedSolution annotatedSolution, final ModelEntityMap modelEntityMap, final Schedule output,
 			final Consumer<List<Event>> eventsAction) {
 
 		final List<Event> events = new LinkedList<>();
@@ -526,7 +535,7 @@ public class AnnotatedSolutionExporter {
 					event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(charterRatePerDay, details.getOptions().getVisitDuration()) / 24L));
 
 					if (patchupRedirectCharterEvent) {
-						IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
+						final IPortSlot startSlot = redirectedCharterOutStart.getOptions().getPortSlot();
 						final HeelValueRecord heelRecord = scheduledSequence.getPortHeelRecord(startSlot);
 						if (heelRecord != null) {
 							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
