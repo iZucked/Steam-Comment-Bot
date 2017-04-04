@@ -72,9 +72,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 
 	@Inject
-	Injector injector;
-
-	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Inject
