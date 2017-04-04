@@ -9,6 +9,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -793,6 +794,24 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		return "Unknown Event";
 	}
 	
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getTimeZone(final EAttribute attribute) {
+		
+		if (attribute == SchedulePackage.Literals.VESSEL_EVENT_VISIT__REDELIVERY_PORT) {
+			Port p = getRedeliveryPort();
+			if (p != null) {
+				if (p.getTimeZone() == null) return "UTC";
+				if (p.getTimeZone().isEmpty()) return "UTC";
+				return p.getTimeZone();
+			}
+		}
+		return super.getTimeZone(attribute);
+	}
 } // end of VesselEventVisitImpl
 
 // finish type fixing
