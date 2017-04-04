@@ -3,12 +3,12 @@
   <parent>
     <artifactId>com.mmxlabs.jobmanager.parent</artifactId>
     <groupId>com.mmxlabs.jobmanager</groupId>
-    <version>4.2.0.RELEASE</version>
+    <version>4.2.1-SNAPSHOT</version>
   </parent>
   <artifactId>com.mmxlabs.jobmanager.tests</artifactId>
   <packaging>eclipse-test-plugin</packaging>
   <name>Jobmanager Tests</name>
-  <version>4.2.0.RELEASE</version>
+  <version>4.2.1-SNAPSHOT</version>
   
   
   	<build>
