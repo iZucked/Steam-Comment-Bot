@@ -89,6 +89,7 @@ public class AnnotatedSolutionExporter {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
 	@Inject
 	@NonNull
 	private IPortSlotProvider portSlotProvider;
@@ -380,9 +381,8 @@ public class AnnotatedSolutionExporter {
 		return output;
 	}
 
-	protected void fixUpEventTimezones(final Schedule output) {
+	protected void fixUpEventTimezones(final @NonNull Schedule output) {
 		for (final Sequence eSequence : output.getSequences()) {
-			// Idle firstIdle = null;
 			for (final Event event : eSequence.getEvents()) {
 				final Port port = event.getPort();
 				if (port != null) {
