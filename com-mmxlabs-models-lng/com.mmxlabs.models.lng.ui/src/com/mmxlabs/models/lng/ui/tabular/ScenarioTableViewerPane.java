@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
@@ -123,27 +124,36 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	private final ISelectionListener selectionListener = new ISelectionListener() {
 
+		private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
+
 		@Override
 		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-
-			if (part == ScenarioTableViewerPane.this.part) {
-				return;
-			}
-			if (part instanceof PropertySheet) {
-				return;
-			}
-			// Avoid cyclic selection changes
-			if (ScenarioTableViewerPane.this.page.getActivePart() == ScenarioTableViewerPane.this.part) {
-				return;
-			}
-			if (scenarioViewer != null) {
+			// Avoid re-entrant selection changes.
+			if (inSelectionChanged.compareAndSet(false, true)) {
 				try {
-					scenarioViewer.setSelection(selection, true);
-				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
+					if (part == ScenarioTableViewerPane.this.part) {
+						return;
+					}
+					if (part instanceof PropertySheet) {
+						return;
+					}
+					// Avoid cyclic selection changes
+					if (ScenarioTableViewerPane.this.page.getActivePart() == ScenarioTableViewerPane.this.part) {
+						return;
+					}
+					if (scenarioViewer != null) {
+						try {
+							scenarioViewer.setSelection(selection, true);
+						} catch (final Exception e) {
+							log.error(e.getMessage(), e);
+						}
+					}
+				} finally {
+					inSelectionChanged.set(false);
 				}
 			}
 		}
+
 	};
 
 	public ScenarioTableViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
