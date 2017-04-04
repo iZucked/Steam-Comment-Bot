@@ -25,12 +25,14 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -75,13 +77,19 @@ public class CargoModelRowTransformer {
 
 		final Map<Slot, RowData> rowDataMap = new HashMap<Slot, CargoModelRowTransformer.RowData>();
 
-		final Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
-		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
-		final Map<Slot, MarketAllocation> marketAllocationMap = new HashMap<Slot, MarketAllocation>();
+		final Map<Slot, CargoAllocation> cargoAllocationMap = new HashMap<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+		final Map<Slot, MarketAllocation> marketAllocationMap = new HashMap<>();
 		final Map<Slot, OpenSlotAllocation> openAllocationMap = new HashMap<>();
 		if (schedule != null) {
-			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-//				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
+			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) 
+			{
+				// Map to first load slot
+				for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+					Slot slot = slotAllocation.getSlot();
+					cargoAllocationMap.put(slot, cargoAllocation);
+					break;
+				}
 			}
 			for (final OpenSlotAllocation openAllocation : schedule.getOpenSlotAllocations()) {
 				openAllocationMap.put(openAllocation.getSlot(), openAllocation);
@@ -328,7 +336,7 @@ public class CargoModelRowTransformer {
 			root.getDischargeSlots().add(rd.getDischargeSlot());
 
 			// Hook up allocation objects
-			rd.cargoAllocation = cargoAllocationMap.get(rd.cargo);
+			rd.cargoAllocation = cargoAllocationMap.get(rd.loadSlot);
 			rd.marketAllocation = marketAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
 			rd.openSlotAllocation = openAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
 			rd.loadAllocation = slotAllocationMap.get(rd.loadSlot);
