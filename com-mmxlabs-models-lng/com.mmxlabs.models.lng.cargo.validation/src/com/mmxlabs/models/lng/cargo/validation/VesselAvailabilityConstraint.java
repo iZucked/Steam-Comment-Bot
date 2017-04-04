@@ -6,8 +6,11 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.time.YearMonth;
 import java.time.format.TextStyle;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
@@ -40,6 +43,8 @@ import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -165,10 +170,52 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			if (va.getBallastBonusContract() != null) {
 				if (va.getBallastBonusContract() instanceof RuleBasedBallastBonusContract) {
 					ruleBasedballastBonusValidation(ctx, extraContext, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
+					ruleBasedballastBonusCheckPortGroups(ctx, extraContext, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
 				}
 			}
 		}
 	}
+	
+	private void ruleBasedballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
+			VesselAvailability va, RuleBasedBallastBonusContract ballastBonusContract) {
+		Set<APortSet<Port>> coveredPorts = new HashSet<APortSet<Port>>();
+		List<APortSet<Port>> endAtPorts = new LinkedList<>(va.getEndAt());
+		boolean anywhere = false;
+		if (endAtPorts.isEmpty()) {
+			// could end anywhere - add all ports
+			anywhere = true;
+			endAtPorts.addAll(((LNGScenarioModel) extraContext.getRootObject()).getReferenceModel().getPortModel().getPorts());
+		}
+		if (!ballastBonusContract.getRules().isEmpty()) {
+			for (BallastBonusContractLine ballastBonusContractLine : ballastBonusContract.getRules()) {
+					EList<APortSet<Port>> redeliveryPorts = ballastBonusContractLine.getRedeliveryPorts();
+					if (redeliveryPorts.isEmpty()) {
+						return;
+					} else {
+						coveredPorts.addAll(SetUtils.getObjects(redeliveryPorts));
+					}
+			}
+			for (APortSet<Port> endAtPort : endAtPorts) {
+				if (!coveredPorts.contains(endAtPort)) {
+					final DetailConstraintStatusDecorator dcsd;
+					if (anywhere) {
+						dcsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Port %s is not covered by the ballast bonus rules (note the vessel can end anywhere)",
+										va.getVessel().getName(), endAtPort.getName())));
+					} else {
+						dcsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Port %s is not covered by the ballast bonus rules",
+										va.getVessel().getName(), endAtPort.getName())));
+					}
+					
+					dcsd.addEObjectAndFeature(va, CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
+					failures.add(dcsd);
+					return;
+				}
+			}
+		}
+	}
+
 
 	private void ruleBasedballastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final VesselAvailability va,
 			final RuleBasedBallastBonusContract ballastBonusContract) {

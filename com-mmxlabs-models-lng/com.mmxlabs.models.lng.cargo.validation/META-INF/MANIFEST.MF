@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.license.features,
  com.mmxlabs.rcp.common,
  org.eclipse.emf.ecore,
- com.mmxlabs.models.lng.port
+ com.mmxlabs.models.lng.port,
+ com.mmxlabs.models.lng.types
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0"
