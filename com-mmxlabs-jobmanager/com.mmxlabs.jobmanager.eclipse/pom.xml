@@ -3,9 +3,9 @@
   <parent>
     <artifactId>com.mmxlabs.jobmanager.parent</artifactId>
     <groupId>com.mmxlabs.jobmanager</groupId>
-    <version>4.1.7-SNAPSHOT</version>
+    <version>4.2.0.RELEASE</version>
   </parent>
   <artifactId>com.mmxlabs.jobmanager.eclipse</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>4.1.7-SNAPSHOT</version>
+  <version>4.2.0.RELEASE</version>
 </project>
