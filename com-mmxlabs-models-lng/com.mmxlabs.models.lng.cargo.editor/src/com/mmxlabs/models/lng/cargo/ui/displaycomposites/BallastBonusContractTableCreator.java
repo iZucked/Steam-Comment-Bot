@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import org.eclipse.emf.edit.command.AddCommand;
