@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.port.editor;singleton:=true
-Bundle-Version: 4.2.0.RELEASE
+Bundle-Version: 4.2.1.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.port.presentation.PortEditorPlugin$Implementation
 Bundle-Vendor: %providerName
