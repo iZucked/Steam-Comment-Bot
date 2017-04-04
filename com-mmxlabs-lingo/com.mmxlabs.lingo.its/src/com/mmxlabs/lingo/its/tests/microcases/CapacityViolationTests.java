@@ -1255,12 +1255,6 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 		});
 	}
 
-	@Test
-	@Category({ MicroTest.class })
-	public void testCargoToCargo_OK() throws Exception {
-		// Make sure cargo to cargo heel flows are ok
-		Assert.fail("Not yet implemented");
-	}
 
 	@Test
 	@Category({ MicroTest.class })
@@ -1572,6 +1566,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 
 	}
 
+	@Ignore
 	@Test
 	@Category({ MicroTest.class })
 	public void testShortLoad_OK() throws Exception {
@@ -1579,10 +1574,20 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 		Assert.fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	@Category({ MicroTest.class })
 	public void testMinVolume_OK() throws Exception {
 		// Test min volume allocator works ok
 		Assert.fail("Not yet implemented");
 	}
+
+	@Ignore
+	@Test
+	@Category({ MicroTest.class })
+	public void testCargoToCargo_OK() throws Exception {
+		// Make sure cargo to cargo heel flows are ok
+		Assert.fail("Not yet implemented");
+	}
+
 }

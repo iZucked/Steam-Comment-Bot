@@ -82,11 +82,11 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 			Assert.assertEquals(charterOuts.size(), 1);
 
 			GeneratedCharterOut gco = charterOuts.get(0);
-			Assert.assertEquals(gco.getPort().getName(), "Barcelona");
-			Assert.assertEquals(gco.getDuration(), 1293);
-			Assert.assertEquals(gco.getGroupProfitAndLoss().getProfitAndLoss(), 4371850);
-			Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
-			Assert.assertEquals(ballastBeforeOrAfter(gco, false), true); // ballast after
+			Assert.assertEquals("Barcelona", gco.getPort().getName());
+			Assert.assertEquals(1293, gco.getDuration());
+			Assert.assertEquals(4848750, gco.getGroupProfitAndLoss().getProfitAndLoss());
+			Assert.assertEquals(true, ballastBeforeOrAfter(gco, true)); // ballast before
+			Assert.assertEquals(true, ballastBeforeOrAfter(gco, false)); // ballast after
 		});
 	}
 
