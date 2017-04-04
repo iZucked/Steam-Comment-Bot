@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Scenario Migration Tests
 Bundle-SymbolicName: com.mmxlabs.models.migration.scenario.tests
-Bundle-Version: 4.1.7.qualifier
+Bundle-Version: 4.2.0.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Fragment-Host: com.mmxlabs.models.migration.scenario
