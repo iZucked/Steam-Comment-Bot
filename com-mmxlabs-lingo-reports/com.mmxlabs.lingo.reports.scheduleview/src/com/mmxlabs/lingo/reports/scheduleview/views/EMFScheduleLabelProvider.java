@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -90,7 +91,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = memento.getBoolean(Show_Canals);
 
-		ImageDescriptor imageDescriptor = Activator.getImageDescriptor("icons/PinnedRow.gif");
+		final ImageDescriptor imageDescriptor = Activator.getImageDescriptor("icons/PinnedRow.gif");
 		pinImage = imageDescriptor.createImage();
 	}
 
@@ -107,13 +108,28 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	@Override
 	public Image getImage(final Object element) {
 		if (element instanceof Sequence) {
-			Sequence sequence = (Sequence) element;
+			final Sequence sequence = (Sequence) element;
 			@Nullable
-			ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+			final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 			if (currentSelectedDataProvider != null) {
 				if (currentSelectedDataProvider.isPinnedObject(sequence)) {
 					return pinImage;
 				}
+			}
+		} else if (element instanceof CombinedSequence) {
+			if (element instanceof CombinedSequence) {
+				final CombinedSequence combinedSequence = (CombinedSequence) element;
+				if (combinedSequence.getSequences().size() > 0) {
+					final Sequence sequence = combinedSequence.getSequences().get(0);
+					@Nullable
+					final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+					if (currentSelectedDataProvider != null) {
+						if (currentSelectedDataProvider.isPinnedObject(sequence)) {
+							return pinImage;
+						}
+					}
+				}
+
 			}
 		}
 		return null;
@@ -323,7 +339,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 				}
 			} else if (element instanceof Idle) {
-				Idle idle = (Idle) element;
+				final Idle idle = (Idle) element;
 				eventText.append("Idle time: " + durationTime);
 				for (final FuelQuantity fq : idle.getFuels()) {
 					eventText.append(String.format("\n%s\n", fq.getFuel().toString()));
@@ -370,17 +386,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof VesselEventVisit) {
-			VesselEventVisit vesselEventVisit = (VesselEventVisit) element;
-			VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) element;
+			final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 			if (vesselEvent instanceof CharterOutEvent) {
-				CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
 				if (charterOutEvent.getRelocateTo() != null) {
 					final Port fromPort = charterOutEvent.getPort();
 					final Port toPort = charterOutEvent.getRelocateTo();
 
 					if (fromPort != null && toPort != null) {
-						String fromPortName = fromPort.getName();
-						String toPortName = toPort.getName();
+						final String fromPortName = fromPort.getName();
+						final String toPortName = toPort.getName();
 						if (fromPortName != null && toPortName != null) {
 
 							return String.format("Charter %s to %s", fromPortName, toPortName);

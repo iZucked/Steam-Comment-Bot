@@ -13,7 +13,9 @@ import org.eclipse.jface.viewers.ViewerComparator;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 
 /**
  * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of
@@ -60,7 +62,14 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	}
 
 	@Override
-	public int category(final Object element) {
+	public int category(Object element) {
+
+		if (element instanceof CombinedSequence) {
+			final CombinedSequence combinedSequence = (CombinedSequence) element;
+			if (combinedSequence.getSequences().size() > 0) {
+				element = combinedSequence.getSequences().get(0);
+			}
+		}
 
 		// Use hashcode of resource as sort key
 		if (element instanceof EObject) {
@@ -70,15 +79,41 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		return super.category(element);
 	}
 
-	private Type getSequenceType(final Sequence s) {
-		if (s.isFleetVessel()) {
+	private @NonNull String getSequenceName(final Object obj) {
+		if (obj instanceof CombinedSequence) {
+			final CombinedSequence combinedSequence = (CombinedSequence) obj;
+			final Vessel vessel = combinedSequence.getVessel();
+			if (vessel != null) {
+				final String name = vessel.getName();
+				if (name != null) {
+					return name;
+				}
+			}
+		} else if (obj instanceof Sequence) {
+			final Sequence s = (Sequence) obj;
+			final String name = s.getVesselAvailability() == null ? s.getName() : s.getVesselAvailability().getVessel().getName();
+
+			if (name != null) {
+				return name;
+			}
+		}
+		return "";
+	}
+
+	private Type getSequenceType(final Object obj) {
+		if (obj instanceof CombinedSequence) {
 			return Type.FLEET;
-		} else if (s.isSetCharterInMarket()) {
-			return Type.CHARTER;
-		} else if (s.getName().contains("DES")) {
-			return Type.DES;
-		} else if (s.getName().contains("FOB")) {
-			return Type.FOB;
+		} else if (obj instanceof Sequence) {
+			final Sequence s = (Sequence) obj;
+			if (s.isFleetVessel()) {
+				return Type.FLEET;
+			} else if (s.isSetCharterInMarket()) {
+				return Type.CHARTER;
+			} else if (s.getName().contains("DES")) {
+				return Type.DES;
+			} else if (s.getName().contains("FOB")) {
+				return Type.FOB;
+			}
 		}
 		return Type.FLEET;
 	}
@@ -95,22 +130,19 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				return cat1 - cat2;
 			}
 
-			final Sequence s1 = (Sequence) e1;
-			final Sequence s2 = (Sequence) e2;
-
 			// Group by fleet/spot
-			final Type s1Type = getSequenceType(s1);
-			final Type s2Type = getSequenceType(s2);
+			final Type s1Type = getSequenceType(e1);
+			final Type s2Type = getSequenceType(e2);
 
 			if (s1Type != s2Type) {
 				return s1Type.ordinal() - s2Type.ordinal();
 			}
 
 			// Sort by name
-			final String str1 = s1.getVesselAvailability() == null ? s1.getName() : s1.getVesselAvailability().getVessel().getName();
-			final String str2 = s2.getVesselAvailability() == null ? s2.getName() : s2.getVesselAvailability().getVessel().getName();
+			final String s1Name = getSequenceName(e1);
+			final String s2Name = getSequenceName(e2);
 
-			final int c = str1.compareTo(str2);
+			final int c = s1Name.compareTo(s2Name);
 			if (c != 0) {
 				return c;
 			}
@@ -125,8 +157,38 @@ public class ScenarioViewerComparator extends ViewerComparator {
 							final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 							if (selectedDataProvider != null) {
 
-								final boolean s1Pinned = selectedDataProvider.isPinnedObject(s1);
-								final boolean s2Pinned = selectedDataProvider.isPinnedObject(s2);
+								final EObject e1Obj;
+								if (e1 instanceof CombinedSequence) {
+									final CombinedSequence combinedSequence = (CombinedSequence) e1;
+									if (combinedSequence.getSequences().size() > 0) {
+										e1Obj = combinedSequence.getSequences().get(0);
+									} else {
+										e1Obj = null;
+									}
+								} else if (e1 instanceof EObject) {
+									e1Obj = (EObject) e1;
+								} else {
+									e1Obj = null;
+								}
+
+								final EObject e2Obj;
+
+								if (e2 instanceof CombinedSequence) {
+									final CombinedSequence combinedSequence = (CombinedSequence) e2;
+									if (combinedSequence.getSequences().size() > 0) {
+										e2Obj = combinedSequence.getSequences().get(0);
+									} else {
+										e2Obj = null;
+									}
+								} else if (e2 instanceof EObject) {
+									e2Obj = (EObject) e2;
+								} else {
+									e2Obj = null;
+								}
+
+								final boolean s1Pinned = e1Obj != null ? selectedDataProvider.isPinnedObject(e1Obj) : false;
+								final boolean s2Pinned = e2Obj != null ? selectedDataProvider.isPinnedObject(e2Obj) : false;
+
 								if (s1Pinned != s2Pinned) {
 									if (s1Pinned) {
 										return -1;
@@ -143,23 +205,22 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		} else if (mode == Mode.INTERLEAVE) {
 
 			// Then order by element order
-			if ((e1 instanceof Sequence) && (e2 instanceof Sequence)) {
-				final Sequence s1 = (Sequence) e1;
-				final Sequence s2 = (Sequence) e2;
+			if ((e1 instanceof Sequence || e1 instanceof CombinedSequence) && (e2 instanceof Sequence || e2 instanceof CombinedSequence)) {
 
 				// Group by fleet/spot
-				final Type s1Type = getSequenceType(s1);
-				final Type s2Type = getSequenceType(s2);
+				final Type s1Type = getSequenceType(e1);
+				final Type s2Type = getSequenceType(e2);
 
 				if (s1Type != s2Type) {
 					return s1Type.ordinal() - s2Type.ordinal();
 				}
 
 				// Sort by name
-				final String str1 = s1.getVesselAvailability() == null ? s1.getName() : s1.getVesselAvailability().getVessel().getName();
-				final String str2 = s2.getVesselAvailability() == null ? s2.getName() : s2.getVesselAvailability().getVessel().getName();
+				// Sort by name
+				final String s1Name = getSequenceName(e1);
+				final String s2Name = getSequenceName(e2);
 
-				final int c = str1.compareTo(str2);
+				final int c = s1Name.compareTo(s2Name);
 				if (c != 0) {
 					return c;
 				}
@@ -173,8 +234,38 @@ public class ScenarioViewerComparator extends ViewerComparator {
 							if (selectedScenariosService.getPinnedScenario() != null) {
 								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 								if (selectedDataProvider != null) {
-									final boolean s1Pinned = selectedDataProvider.isPinnedObject(s1);
-									final boolean s2Pinned = selectedDataProvider.isPinnedObject(s2);
+
+									final EObject e1Obj;
+									if (e1 instanceof CombinedSequence) {
+										final CombinedSequence combinedSequence = (CombinedSequence) e1;
+										if (combinedSequence.getSequences().size() > 0) {
+											e1Obj = combinedSequence.getSequences().get(0);
+										} else {
+											e1Obj = null;
+										}
+									} else if (e1 instanceof EObject) {
+										e1Obj = (EObject) e1;
+									} else {
+										e1Obj = null;
+									}
+
+									final EObject e2Obj;
+
+									if (e2 instanceof CombinedSequence) {
+										final CombinedSequence combinedSequence = (CombinedSequence) e2;
+										if (combinedSequence.getSequences().size() > 0) {
+											e2Obj = combinedSequence.getSequences().get(0);
+										} else {
+											e2Obj = null;
+										}
+									} else if (e2 instanceof EObject) {
+										e2Obj = (EObject) e2;
+									} else {
+										e2Obj = null;
+									}
+
+									final boolean s1Pinned = e1Obj != null ? selectedDataProvider.isPinnedObject(e1Obj) : false;
+									final boolean s2Pinned = e2Obj != null ? selectedDataProvider.isPinnedObject(e2Obj) : false;
 
 									if (s1Pinned != s2Pinned) {
 										if (s1Pinned) {
