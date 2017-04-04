@@ -84,9 +84,6 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 	@Inject
 	private ModelEntityMap modelEntityMap;
 
-	private final Map<String, ILongCurve> longExpressionCache = new HashMap<>();
-	private final Map<String, ICurve> expressionCache = new HashMap<>();
-
 	/**
 	 */
 	@Override
@@ -150,20 +147,12 @@ public class BallastBonusContractTransformer implements IBallastBonusContractTra
 	}
 
 	private final ICurve getBaseFuelPriceCurveFromExpression(final String expression, SeriesParser indices) {
-		if (expressionCache.containsKey(expression)) {
-			return (ICurve) expressionCache.get(expression);
-		}
 		ICurve result = dateHelper.generateExpressionCurve(expression, indices);
-		expressionCache.put(expression, result);
 		return result;
 	}
 
 	private final ILongCurve getPriceCurveFromExpression(final String expression, SeriesParser indices) {
-		if (expressionCache.containsKey(expression)) {
-			return (ILongCurve) expressionCache.get(expression);
-		}
 		ILongCurve result = dateHelper.generateLongExpressionCurve(expression, indices);
-		longExpressionCache.put(expression, result);
 		return result;
 	}
 
