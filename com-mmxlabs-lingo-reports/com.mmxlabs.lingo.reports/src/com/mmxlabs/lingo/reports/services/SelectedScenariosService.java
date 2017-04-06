@@ -19,10 +19,10 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -444,9 +444,23 @@ public class SelectedScenariosService {
 				}
 
 				final Collection<EObject> children = new HashSet<>();
-				final Iterator<EObject> itr = scenarioModel.eAllContents();
-				while (itr.hasNext()) {
-					children.add(itr.next());
+				{
+					final TreeIterator<EObject> itr = scenarioModel.eAllContents();
+					while (itr.hasNext()) {
+						EObject next = itr.next();
+						if (next instanceof ScheduleModel) {
+							itr.prune();
+						} else {
+							children.add(next);
+						}
+					}
+				}
+				{
+					final TreeIterator<EObject> itr = scheduleModel.eAllContents();
+					while (itr.hasNext()) {
+						EObject next = itr.next();
+						children.add(next);
+					}
 				}
 				children.add(scenarioModel);
 				return new KeyValueRecord(scenarioResult, scenarioModel, schedule, children);
