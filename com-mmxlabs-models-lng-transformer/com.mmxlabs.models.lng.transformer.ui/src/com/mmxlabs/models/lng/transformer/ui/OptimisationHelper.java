@@ -623,20 +623,20 @@ public final class OptimisationHelper {
 
 			// Check period optimisation is permitted
 			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
-			{
-				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
-				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
-					optStart.enabled = false;
-					optEnd.enabled = false;
-				} else {
-					enabledOptionAdded = true;
-				}
-				optionAdded = true;
-			}
+//			{
+//				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
+//				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
+//						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
+//				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
+//						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+//				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
+//					optStart.enabled = false;
+//					optEnd.enabled = false;
+//				} else {
+//					enabledOptionAdded = true;
+//				}
+//				optionAdded = true;
+//			}
 
 			// if (LicenseFeatures.isPermitted("features:optimisation-clean-state")) {
 			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
