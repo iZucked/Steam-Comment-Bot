@@ -1136,11 +1136,13 @@ public class PeriodTransformer {
 				vesselAvailability.getStartHeel().setMaxVolumeAvailable(0);
 				vesselAvailability.getStartHeel().setCvValue(0.0);
 				vesselAvailability.getStartHeel().setPriceExpression("");
+				vesselAvailability.setRepositioningFee("");
 			} else {
 				vesselAvailability.getStartHeel().setMinVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setMaxVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setCvValue(22.8);
-				vesselAvailability.getStartHeel().setPriceExpression("0.01");
+				vesselAvailability.getStartHeel().setPriceExpression("");
+				vesselAvailability.setRepositioningFee("");
 			}
 		}
 	}
@@ -1179,17 +1181,21 @@ public class PeriodTransformer {
 			if (vesselAvailability.getEndHeel() == null) {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 			}
+
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
 			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
 				vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
+				vesselAvailability.getEndHeel().setPriceExpression("");
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 			} else {
 				vesselAvailability.getEndHeel().setMinimumEndHeel(0);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(0);
+				vesselAvailability.getEndHeel().setPriceExpression("");
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 			}
+			vesselAvailability.setBallastBonusContract(null);
 		}
 	}
 
