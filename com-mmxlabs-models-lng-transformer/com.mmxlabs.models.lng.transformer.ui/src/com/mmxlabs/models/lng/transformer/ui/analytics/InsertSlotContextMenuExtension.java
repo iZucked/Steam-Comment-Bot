@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
+import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -78,7 +80,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		}
 
 		if (slot.getCargo() == null) {
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, Collections.singletonList(slot));
+			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(slot));
 			menuManager.add(action);
 			return;
 		}
@@ -110,7 +112,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		}
 
 		if (slots.size() > 0) {
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
+			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
 			menuManager.add(action);
 			return;
 		}
@@ -118,128 +120,149 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 	private static class InsertSlotAction extends Action {
 
-		private final List<Slot> targetSlots;
-		private final IScenarioEditingLocation scenarioEditingLocation;
+		private final List<Slot> originalTargetSlots;
+		private final ScenarioInstance original;
 
-		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
+		public InsertSlotAction(final ScenarioInstance scenarioInstance, final List<Slot> targetSlots) {
 			super(generateActionName(targetSlots));
-			this.scenarioEditingLocation = scenarioEditingLocation;
-			this.targetSlots = targetSlots;
+			this.original = scenarioInstance;
+			this.originalTargetSlots = targetSlots;
 		}
 
 		@Override
 		public void run() {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
-			final ScenarioInstance instance = scenarioEditingLocation.getScenarioInstance();
-			// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-			try (final ModelReference modelRefence = instance.getReference("InsertSlotContextMenuExtension")) {
-				final EObject object = modelRefence.getInstance();
+			ScenarioInstance duplicate;
+			try {
+				duplicate = original.getScenarioService().duplicate(original, original);
 
-				if (object instanceof LNGScenarioModel) {
-					final LNGScenarioModel root = (LNGScenarioModel) object;
+				duplicate.setName(this.getText());
+				duplicate.setReadonly(true);
 
-					final String uuid = instance.getUuid();
-					// Check for existing job and return if there is one.
-					{
-						final IJobDescriptor job = jobManager.findJobForResource(uuid);
-						if (job != null) {
-							return;
-						}
-					}
+				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
+				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
+					final EObject object = modelRefence.getInstance();
 
-					UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-					userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false);
+					if (object instanceof LNGScenarioModel) {
+						final LNGScenarioModel root = (LNGScenarioModel) object;
 
-					// Period is not valid yet
-					userSettings.unsetPeriodStart();
-					userSettings.unsetPeriodEnd();
-
-					final ScenarioLock scenarioLock = instance.getLock(ScenarioLock.OPTIMISER);
-					if (scenarioLock.awaitClaim()) {
-						IJobControl control = null;
-						IJobDescriptor job = null;
-						try {
-							// create a new job
-							job = new LNGSlotInsertionJobDescriptor(generateName(targetSlots), instance, userSettings, targetSlots);
-
-							// New optimisation, so check there are no validation errors.
-							if (!validateScenario(root, false)) {
-								scenarioLock.release();
+						final String uuid = duplicate.getUuid();
+						// Check for existing job and return if there is one.
+						{
+							final IJobDescriptor job = jobManager.findJobForResource(uuid);
+							if (job != null) {
 								return;
 							}
+						}
 
-							// Automatically clean up job when removed from manager
-							jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-							control = jobManager.submitJob(job, uuid);
-							// Add listener to clean up job when it finishes or has an exception.
-							final IJobDescriptor finalJob = job;
-							control.addListener(new IJobControlListener() {
+						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
-								@Override
-								public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
+						// Period is not valid yet
+						userSettings.unsetPeriodStart();
+						userSettings.unsetPeriodEnd();
 
-									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-										scenarioLock.release();
-										jobManager.removeJob(finalJob);
+						final ScenarioLock scenarioLock = duplicate.getLock(ScenarioLock.OPTIMISER);
+						if (scenarioLock.awaitClaim()) {
+							IJobControl control = null;
+							IJobDescriptor job = null;
+							try {
 
-										if (newState == EJobState.COMPLETED) {
-											SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
-											if (plan != null) {
-												final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-												eventBroker.post(ChangeSetViewCreatorService_Topic, new AnalyticsSolution(instance, plan, generateName(plan)));
-											}
-										}
-
-										return false;
+								// Map between original and fork
+								List<Slot> targetSlots = new LinkedList<Slot>();
+								CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
+								for (Slot original : originalTargetSlots) {
+									if (original instanceof LoadSlot) {
+										targetSlots.add(finder.findLoadSlot(original.getName()));
+									} else if (original instanceof DischargeSlot) {
+										targetSlots.add(finder.findDischargeSlot(original.getName()));
 									}
-									return true;
 								}
 
-								@Override
-								public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-									return true;
-								}
-							});
-							// Start the job!
-							control.prepare();
-							control.start();
-						} catch (final Throwable ex) {
-							log.error(ex.getMessage(), ex);
-							if (control != null) {
-								control.cancel();
-							}
-							// Manual clean up incase the control listener doesn't fire
-							if (job != null) {
-								jobManager.removeJob(job);
-							}
-							// instance.setLocked(false);
-							scenarioLock.release();
+								// create a new job
+								job = new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, userSettings, targetSlots);
 
-							final Display display = Display.getDefault();
-							if (display != null) {
-								display.asyncExec(() -> {
-									final String message = StringEscaper.escapeUIString(ex.getMessage());
-									MessageDialog.openError(display.getActiveShell(), "Error inserting slot", "An error occured. See Error Log for more details.\n" + message);
+								// New optimisation, so check there are no validation errors.
+								if (!validateScenario(root, false)) {
+									scenarioLock.release();
+									return;
+								}
+
+								// Automatically clean up job when removed from manager
+								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+								control = jobManager.submitJob(job, uuid);
+								// Add listener to clean up job when it finishes or has an exception.
+								final IJobDescriptor finalJob = job;
+								control.addListener(new IJobControlListener() {
+
+									@Override
+									public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
+
+										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+											scenarioLock.release();
+											jobManager.removeJob(finalJob);
+
+											if (newState == EJobState.COMPLETED) {
+												SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
+												if (plan != null) {
+													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+													eventBroker.post(ChangeSetViewCreatorService_Topic, new AnalyticsSolution(duplicate, plan, generateName(plan)));
+												}
+											}
+
+											return false;
+										}
+										return true;
+									}
+
+									@Override
+									public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
+										return true;
+									}
 								});
+								// Start the job!
+								control.prepare();
+								control.start();
+							} catch (final Throwable ex) {
+								log.error(ex.getMessage(), ex);
+								if (control != null) {
+									control.cancel();
+								}
+								// Manual clean up incase the control listener doesn't fire
+								if (job != null) {
+									jobManager.removeJob(job);
+								}
+								// instance.setLocked(false);
+								scenarioLock.release();
+
+								final Display display = Display.getDefault();
+								if (display != null) {
+									display.asyncExec(() -> {
+										final String message = StringEscaper.escapeUIString(ex.getMessage());
+										MessageDialog.openError(display.getActiveShell(), "Error inserting slot", "An error occured. See Error Log for more details.\n" + message);
+									});
+								}
 							}
 						}
 					}
 				}
+
+				// final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
+				// final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+				// try {
+				// editorLock.claim();
+				// scenarioEditingLocation.setDisableUpdates(true);
+				// dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(redirectionSlotHistory), scenarioEditingLocation.isLocked());
+				// } finally {
+				// scenarioEditingLocation.setDisableUpdates(false);
+				// editorLock.release();
+				// }
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
-			// final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-			// final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-			// try {
-			// editorLock.claim();
-			// scenarioEditingLocation.setDisableUpdates(true);
-			// dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(redirectionSlotHistory), scenarioEditingLocation.isLocked());
-			// } finally {
-			// scenarioEditingLocation.setDisableUpdates(false);
-			// editorLock.release();
-			// }
 		}
-
 	}
 
 	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {

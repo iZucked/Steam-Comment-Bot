@@ -555,6 +555,244 @@ public final class OptimisationHelper {
 		return copy;
 	}
 
+	public static UserSettings promptForInsertionUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
+		UserSettings previousSettings = null;
+		if (scenario != null) {
+			previousSettings = scenario.getUserSettings();
+		}
+
+		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		if (previousSettings == null) {
+			previousSettings = userSettings;
+		}
+
+		// Permit the user to override the settings object. Use the previous settings as the initial value
+		if (promptUser) {
+			previousSettings = openInsertionPlanUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
+		}
+
+		if (previousSettings == null) {
+			return null;
+		}
+
+		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		mergeFields(previousSettings, userSettings);
+
+		if (!checkUserSettings(userSettings, false)) {
+			return null;
+		}
+		return userSettings;
+	}
+
+	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
+			final boolean displayOnlyIfOptionsEnabled) {
+		return openInsertionPlanUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
+				displayOnlyIfOptionsEnabled);
+	}
+
+	public static UserSettings openInsertionPlanUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
+		boolean optionAdded = false;
+		boolean enabledOptionAdded = false;
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+		//
+		// Fire up a dialog
+		final ParameterModesDialog dialog = new ParameterModesDialog(shell) {
+			@Override
+			protected void configureShell(final org.eclipse.swt.widgets.Shell newShell) {
+
+				super.configureShell(newShell);
+				newShell.setText("Insertion Settings");
+			}
+		};
+
+		// final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
+		final UserSettings copy = EcoreUtil.copy(previousSettings);
+
+		// Reset disabled features
+		resetDisabledFeatures(copy);
+
+		if (!forEvaluation) {
+			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+			// optionAdded = true;
+
+			// Check period optimisation is permitted
+			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+			{
+				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
+				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
+					optStart.enabled = false;
+					optEnd.enabled = false;
+				} else {
+					enabledOptionAdded = true;
+				}
+				optionAdded = true;
+			}
+
+			// if (LicenseFeatures.isPermitted("features:optimisation-clean-state")) {
+			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			// choiceData.addChoice("Off", Boolean.FALSE);
+			// choiceData.addChoice("On", Boolean.TRUE);
+			// final Option option = dialog.addOption(DataSection.Toggles, null, editingDomain, "Clean State: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_STATE_PREFIX,
+			// ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
+			// optionAdded = true;
+			// enabledOptionAdded = true;
+			// dialog.addValidation(option, new IValidator() {
+			//
+			// @Override
+			// public IStatus validate(final Object value) {
+			// if (value instanceof UserSettings) {
+			// final UserSettings userSettings = (UserSettings) value;
+			// if (userSettings.isCleanStateOptimisation()) {
+			// if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
+			// return ValidationStatus.error("Similarity must be disabled with clean state optimisation");
+			// }
+			// }
+			// }
+			// return Status.OK_STATUS;
+			// }
+			// });
+			// }
+			//
+			// {
+			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			// choiceData.addChoice("Off", Boolean.FALSE);
+			// choiceData.addChoice("On", Boolean.TRUE);
+			// dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
+			// ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
+			// optionAdded = true;
+			// enabledOptionAdded = true;
+			// }
+			 {
+			 final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			 choiceData.addChoice("Off", Boolean.FALSE);
+			 choiceData.addChoice("On", Boolean.TRUE);
+			 dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
+			 ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
+			 optionAdded = true;
+			 enabledOptionAdded = true;
+			 }
+		}
+		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+		{
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+
+			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			choiceData.addChoice("Off", Boolean.FALSE);
+			choiceData.addChoice("On", Boolean.TRUE);
+
+			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
+			if (choiceData.enabled == false) {
+				// if not enabled make sure to set setting to false
+				copy.setGenerateCharterOuts(false);
+			}
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
+			optionAdded = true;
+			enabledOptionAdded = choiceData.enabled;
+		}
+		if (!forEvaluation) {
+			{
+				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
+					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
+							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
+				}
+			}
+			// // if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+			// {
+			//
+			// final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
+			//
+			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			// choiceData.addChoice("Off", SimilarityMode.OFF);
+			// choiceData.addChoice("Low", SimilarityMode.LOW);
+			// choiceData.addChoice("Med", SimilarityMode.MEDIUM);
+			// choiceData.addChoice("High", SimilarityMode.HIGH);
+			// // choiceData.addChoice("All", SimilarityMode.ALL);
+			//
+			// choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
+			//
+			// final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
+			// ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
+			// optionAdded = true;
+			// enabledOptionAdded = choiceData.enabled;
+			//
+			// }
+			// {
+			//
+			// final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
+			//
+			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			// choiceData.addChoice("Off", Boolean.FALSE);
+			// choiceData.addChoice("On", Boolean.TRUE);
+			//
+			// choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-actionset");
+			//
+			// final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_ACTION_SET_PREFIX,
+			// ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
+			// optionAdded = true;
+			// dialog.addValidation(option, new IValidator() {
+			//
+			// @Override
+			// public IStatus validate(final Object value) {
+			// if (value instanceof UserSettings) {
+			// final UserSettings userSettings = (UserSettings) value;
+			// if (userSettings.isBuildActionSets()) {
+			// if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
+			// return ValidationStatus.error("Similarity must be enabled to use action sets");
+			// }
+			// final YearMonth periodStart = userSettings.getPeriodStart();
+			// final YearMonth periodEnd = userSettings.getPeriodEnd();
+			// if (periodStart != null && periodEnd != null) {
+			// // 3 month window?
+			// if (Months.between(periodStart, periodEnd) > 6) {
+			// return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
+			// } else if (Months.between(periodStart, periodEnd) > 3 && userSettings.getSimilarityMode() == SimilarityMode.LOW) {
+			// return ValidationStatus
+			// .error("Unable to run with Action Sets as the period range is too long for the low similarity setting (max 3 Months). Please try medium or high");
+			// }
+			// } else {
+			// return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
+			// }
+			// }
+			// }
+			// return Status.OK_STATUS;
+			// }
+			// });
+			// optionAdded = true;
+			// enabledOptionAdded = choiceData.enabled;
+			// }
+		}
+
+		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
+			final int[] ret = new int[1];
+			display.syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					ret[0] = dialog.open();
+				}
+			});
+
+			if (ret[0] != Window.OK) {
+				return null;
+			}
+		}
+		return copy;
+	}
+
 	public static @NonNull OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
