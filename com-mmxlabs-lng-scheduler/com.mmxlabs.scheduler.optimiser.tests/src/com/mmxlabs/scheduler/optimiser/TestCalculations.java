@@ -232,7 +232,7 @@ public class TestCalculations {
 			Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 			// Load enough to cover boil-off
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot)).thenReturn(5200L);
-			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInMMBTu(loadSlot)).thenReturn(3200L);
+			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(loadSlot)).thenReturn(3200L);
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 
@@ -550,7 +550,7 @@ public class TestCalculations {
 			// Load enough to cover boil-off
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot)).thenReturn(6300L);
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
-			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(loadSlot)).thenReturn(3300L);
+			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(loadSlot)).thenReturn(4300L);
 			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(Matchers.<IPortSlot> any())).thenReturn(cargoCVValue);
 			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(6300L);
@@ -870,7 +870,7 @@ public class TestCalculations {
 			// Load enough to cover boil-off
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot)).thenReturn(4150L);
 			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
-			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(loadSlot)).thenReturn(1150L);
+			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(loadSlot)).thenReturn(2150L);
 			Mockito.when(allocationAnnotation.getPhysicalSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(4150L);
 

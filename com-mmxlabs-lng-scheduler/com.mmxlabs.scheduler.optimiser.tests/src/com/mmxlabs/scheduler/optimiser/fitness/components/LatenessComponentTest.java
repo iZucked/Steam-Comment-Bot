@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -177,7 +178,7 @@ public class LatenessComponentTest {
 		voyagePlan.setSequence(routeSequence);
 		ISequence mockedSequence = Mockito.mock(ISequence.class);
 		Mockito.when(mockedSequence.size()).thenReturn(4);
-		IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		IPortTimesRecord portTimesRecord = Mockito.mock(IAllocationAnnotation.class);
 		Mockito.when(portTimesRecord.getSlotTime(startSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime - 1 + loadLateTime);
