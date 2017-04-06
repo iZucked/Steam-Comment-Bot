@@ -431,6 +431,9 @@
     <eLiterals name="RANGE" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ActionableSetPlan">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUniqueChildren" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actionSets" upperBound="-1"
         eType="#//ActionableSet" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extraSlots" upperBound="-1"
@@ -442,6 +445,9 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotInsertionOptions">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUniqueChildren" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotsInserted" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="insertionOptions" upperBound="-1"

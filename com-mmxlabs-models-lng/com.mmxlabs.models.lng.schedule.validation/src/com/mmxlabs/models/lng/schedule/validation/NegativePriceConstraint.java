@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.validation;
 
 import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -24,7 +25,9 @@ public class NegativePriceConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-
+		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)){
+			return Activator.PLUGIN_ID;
+		}
 		if (target instanceof SlotVisit) {
 			EObject obj = null;
 			EStructuralFeature feature = null;

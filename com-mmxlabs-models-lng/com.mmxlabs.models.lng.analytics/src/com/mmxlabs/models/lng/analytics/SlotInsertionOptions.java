@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSlotInsertionOptions()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
  * @generated
  */
 public interface SlotInsertionOptions extends EObject {

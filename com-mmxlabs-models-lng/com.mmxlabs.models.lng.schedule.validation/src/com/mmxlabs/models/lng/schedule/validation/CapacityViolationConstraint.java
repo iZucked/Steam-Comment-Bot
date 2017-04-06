@@ -29,6 +29,10 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 	private IStatus createCapacityViolationStatus(final IValidationContext ctx, final CapacityViolationType type, final Long amount) {
 		EObject target = ctx.getTarget();
 
+		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)){
+			return Status.OK_STATUS;
+		}
+		
 		// delegate attention to the "real target"
 		if (target instanceof SlotVisit) {
 			if (((SlotVisit) target).getSlotAllocation() != null) {

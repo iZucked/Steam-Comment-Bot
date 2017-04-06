@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.schedule.validation;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
@@ -31,7 +32,9 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-
+		if (!ScheduleModelValidationHelper.isMainScheduleModel(target)) {
+			return Activator.PLUGIN_ID;
+		}
 		if (target instanceof Event && target.eContainer() instanceof Sequence) {
 			if (LatenessUtils.isLateExcludingFlex((Event) target)) {
 				EObject obj = null;
@@ -61,7 +64,8 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				}
 
 				if (message != null) {
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message), multipleAvailabilityError ? IStatus.ERROR : IStatus.WARNING);
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message),
+							multipleAvailabilityError ? IStatus.ERROR : IStatus.WARNING);
 					if (obj != null) {
 						failure.addEObjectAndFeature(obj, feature);
 					}

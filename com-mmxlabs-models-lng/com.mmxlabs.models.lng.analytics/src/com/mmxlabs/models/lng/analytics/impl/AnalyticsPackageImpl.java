@@ -2865,6 +2865,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
+		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
+		createNamedObjectAnnotations();
 	}
 
 	/**
@@ -3040,6 +3042,28 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source, 
 		   new String[] {
 			 "type", "charter"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/mmxcore/validation/NamedObject</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNamedObjectAnnotations() {
+		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
+		addAnnotation
+		  (actionableSetPlanEClass, 
+		   source, 
+		   new String[] {
+			 "nonUniqueChildren", "true"
+		   });	
+		addAnnotation
+		  (slotInsertionOptionsEClass, 
+		   source, 
+		   new String[] {
+			 "nonUniqueChildren", "true"
 		   });
 	}
 

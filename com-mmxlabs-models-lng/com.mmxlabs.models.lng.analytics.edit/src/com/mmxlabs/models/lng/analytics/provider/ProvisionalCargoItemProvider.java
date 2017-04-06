@@ -494,6 +494,21 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createLumpSumBallastBonusContractLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 FleetFactory.eINSTANCE.createFleetModel()));
 
 		newChildDescriptors.add
@@ -880,6 +895,21 @@ public class ProvisionalCargoItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 ScheduleFactory.eINSTANCE.createExposureDetail()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 ScheduleFactory.eINSTANCE.createLumpSumContractDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails()));
 
 		newChildDescriptors.add
 			(createChildParameter
