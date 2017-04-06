@@ -118,7 +118,7 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(Integer.MAX_VALUE, violationCount);
+		Assert.assertEquals(100, violationCount);
 
 //		Assert.assertEquals(0L, voyagePlan.getLNGFuelVolume());
 //		Assert.assertEquals(0L, voyagePlan.getStartingHeelInM3());
@@ -154,7 +154,7 @@ public class LNGVoyageCalculatorNonCargoEndStateTests {
 
 		// No violations
 		final int violationCount = calc.calculateNonCargoEndState(voyagePlan, ballastDetails, voyageDuration, startHeelRange, lngCommitmentInM3, -1, -1);
-		Assert.assertEquals(100, violationCount);
+		Assert.assertEquals(300, violationCount);
 
 		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getLNGFuelVolume());
 		Assert.assertEquals(lngCommitmentInM3, voyagePlan.getStartingHeelInM3());
