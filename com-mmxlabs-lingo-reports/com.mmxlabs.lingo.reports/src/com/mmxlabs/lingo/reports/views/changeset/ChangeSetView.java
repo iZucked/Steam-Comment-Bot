@@ -101,8 +101,8 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -2320,7 +2320,14 @@ public class ChangeSetView implements IAdaptable {
 							mgr.add(new RunnableAction("Export change", () -> {
 
 								try {
-									ExportScheduleHelper.export(changeSet.getCurrentScenario());
+									
+									final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
+									int idx = 0;
+									if (root != null) {
+										idx = root.getChangeSets().indexOf(changeSet);
+									}
+									String name = String.format("Set %d",idx);
+									ExportScheduleHelper.export(changeSet.getCurrentScenario(), name);
 								} catch (IOException e1) {
 										e1.printStackTrace();
 								}
