@@ -43,7 +43,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, // start to load
+		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, // start to load
 				SlotVisit.class, Journey.class, Idle.class, // load to discharge
 				SlotVisit.class, Journey.class, Idle.class, // discharge to end
 				EndEvent.class };
@@ -79,9 +79,9 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		{
 			// Forced BF use
 			final int expectedDuration = 1;
-			final int expectedNBO = expectedDuration * 10;
-			final int expectedFBO = expectedDuration * 5;
-			final int expectedBF = expectedDuration * 0;
+			final int expectedNBO = expectedDuration * 0;
+			final int expectedFBO = expectedDuration * 0;
+			final int expectedBF = expectedDuration * 15;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 0);
@@ -156,10 +156,12 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		checker.setupOrdinaryFuelCosts();
 
-		checker.setExpectedValue(1 * 21 * 15, Expectations.HEEL_COST, StartEvent.class, 0);
+		checker.setExpectedValue(0, Expectations.HEEL_COST, StartEvent.class, 0);
 		// 14 extra units of gas loaded
-		checker.setExpectedValue(14, Expectations.MAX_HEEL_VIOLATIONS, StartEvent.class, 0);
+		checker.setExpectedValue(1, Expectations.MIN_HEEL_VIOLATIONS, StartEvent.class, 0);
+		checker.setExpectedValue(1, Expectations.COOLDOWN_VIOLATION, SlotVisit.class, 0);
 
+		
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
