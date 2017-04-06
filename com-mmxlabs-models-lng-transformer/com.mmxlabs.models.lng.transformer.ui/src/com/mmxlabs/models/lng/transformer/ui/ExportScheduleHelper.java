@@ -47,13 +47,17 @@ public class ExportScheduleHelper {
 	private static final Logger LOG = LoggerFactory.getLogger(ExportScheduleHelper.class);
 
 	public static void export(final ScenarioResult scenarioResult) throws IOException {
+		export(scenarioResult, null);
+	}
+
+	public static void export(final ScenarioResult scenarioResult, @Nullable String nameSuggestion) throws IOException {
 		// Original data
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
 		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 
 		@Nullable
-		final String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioInstance, false);
+		final String newForkName = nameSuggestion != null ? nameSuggestion : ScenarioServiceModelUtils.getNewForkName(scenarioInstance, false);
 		if (newForkName == null) {
 			return;
 		}
