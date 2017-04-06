@@ -138,7 +138,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				duplicate = original.getScenarioService().duplicate(original, original);
 
 				duplicate.setName(this.getText());
-				duplicate.setReadonly(true);
 
 				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
@@ -159,7 +158,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
-						// Period is not valid yet
+//						 Period is not valid yet
 						userSettings.unsetPeriodStart();
 						userSettings.unsetPeriodEnd();
 
@@ -200,12 +199,27 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 									public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
 										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+											
+											try {
+												duplicate.save();
+											} catch (IOException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+											
 											scenarioLock.release();
+
 											jobManager.removeJob(finalJob);
 
 											if (newState == EJobState.COMPLETED) {
 												SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
 												if (plan != null) {
+													// Forces editor lock to disallow users from editing the scenario.
+													// TODO: This is not a very clean way to do it!
+													final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
+													lock.claim();
+													duplicate.setReadonly(true);
+
 													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 													eventBroker.post(ChangeSetViewCreatorService_Topic, new AnalyticsSolution(duplicate, plan, generateName(plan)));
 												}
