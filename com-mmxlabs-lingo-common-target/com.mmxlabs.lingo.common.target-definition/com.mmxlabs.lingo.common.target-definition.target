@@ -80,6 +80,10 @@
 <unit id="ch.qos.logback.slf4j.source" version="0.0.0"/>
 <unit id="org.apache.poi" version="3.9.0.v201405241750"/>
 <unit id="org.apache.poi.source" version="3.9.0.v201405241750"/>
+<unit id="org.apache.poi.ooxml" version="3.9.0.v201405241905"/>
+<unit id="org.apache.poi.ooxml.source" version="3.9.0.v201405241905"/>
+<unit id="org.apache.poi.ooxml.schemas" version="3.9.0.v201405241750"/>
+<unit id="org.apache.poi.ooxml.schemas.source" version="3.9.0.v201405241750"/>
 <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.codec" version="1.6.0.v201305230611"/>
