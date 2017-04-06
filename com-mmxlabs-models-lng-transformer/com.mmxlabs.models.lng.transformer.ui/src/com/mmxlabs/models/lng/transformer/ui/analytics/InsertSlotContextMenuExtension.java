@@ -200,6 +200,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 											
+											scenarioLock.release();
 											try {
 												duplicate.save();
 											} catch (IOException e) {
@@ -207,7 +208,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 												e.printStackTrace();
 											}
 											
-											scenarioLock.release();
 
 											jobManager.removeJob(finalJob);
 
