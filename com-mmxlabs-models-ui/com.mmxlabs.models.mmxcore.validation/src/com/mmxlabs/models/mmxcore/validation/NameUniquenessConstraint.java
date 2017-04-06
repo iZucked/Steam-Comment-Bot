@@ -51,11 +51,20 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 		}
 		final EStructuralFeature feature = containerAndFeature.getSecond();
 		if (feature != null && feature.isMany() && feature instanceof EReference && ((EReference) feature).getEReferenceType().getEAllAttributes().contains(nameAttribute)) {
-
-			final EAnnotation eAnnotation = target.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
-			if (eAnnotation != null) {
-				if (Boolean.valueOf(eAnnotation.getDetails().get("nonUnique"))) {
-					return;
+			{
+				final EAnnotation eAnnotation = target.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
+				if (eAnnotation != null) {
+					if (Boolean.valueOf(eAnnotation.getDetails().get("nonUnique"))) {
+						return;
+					}
+				}
+			}
+			{
+				final EAnnotation eAnnotation = container.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
+				if (eAnnotation != null) {
+					if (Boolean.valueOf(eAnnotation.getDetails().get("nonUniqueChildren"))) {
+						return;
+					}
 				}
 			}
 
@@ -95,7 +104,8 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 
 			final String name = (String) target.eGet(nameAttribute);
 			if (bad.contains(name)) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name " + name));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name " + name));
 				dsd.addEObjectAndFeature(target, nameAttribute);
 				statuses.add(dsd);
 				return;
@@ -107,8 +117,8 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 						continue;
 					}
 					if (bad.contains(ns)) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name
-								+ " has non-unique other name " + ns));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name + " has non-unique other name " + ns));
 						dsd.addEObjectAndFeature(target, nameAttribute);
 						statuses.add(dsd);
 						return;
