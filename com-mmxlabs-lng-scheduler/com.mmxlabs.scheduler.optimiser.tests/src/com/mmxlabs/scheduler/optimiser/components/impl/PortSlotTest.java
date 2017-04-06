@@ -64,7 +64,6 @@ public class PortSlotTest {
 		final IHeelPriceCalculator heelPriceCalculator2 = Mockito.mock(IHeelPriceCalculator.class, "price2");
 
 		HeelOptionSupplier heelOptions1 = new HeelOptionSupplier(1, 2, 3, heelPriceCalculator1);
-		HeelOptionSupplier heelOptions2 = new HeelOptionSupplier(1, 2, 3, heelPriceCalculator2);
 
 		final StartPortSlot slot1 = new StartPortSlot(id1, port1, tw1, heelOptions1);
 		final StartPortSlot slot2 = new StartPortSlot(id1, port1, tw1, heelOptions1);
@@ -72,17 +71,16 @@ public class PortSlotTest {
 		final StartPortSlot slot3 = new StartPortSlot(id2, port1, tw1, heelOptions1);
 		final StartPortSlot slot4 = new StartPortSlot(id1, port2, tw1, heelOptions1);
 		final StartPortSlot slot5 = new StartPortSlot(id1, port1, tw2, heelOptions1);
-		final StartPortSlot slot6 = new StartPortSlot(id1, port1, tw1, heelOptions2);
 
-		Assert.assertTrue(slot1.equals(slot1));
-		Assert.assertTrue(slot1.equals(slot2));
-		Assert.assertTrue(slot2.equals(slot1));
+		// This falls back to the PortSlot doEquals.
+		Assert.assertTrue(slot1.doEquals(slot1));
+		Assert.assertTrue(slot1.doEquals(slot2));
+		Assert.assertTrue(slot2.doEquals(slot1));
 
-		Assert.assertFalse(slot1.equals(slot3));
-		Assert.assertFalse(slot1.equals(slot4));
-		Assert.assertFalse(slot1.equals(slot5));
-		Assert.assertFalse(slot1.equals(slot6));
+		Assert.assertFalse(slot1.doEquals(slot3));
+		Assert.assertFalse(slot1.doEquals(slot4));
+		Assert.assertFalse(slot1.doEquals(slot5));
 
-		Assert.assertFalse(slot1.equals(new Object()));
+		Assert.assertFalse(slot1.doEquals(new Object()));
 	}
 }

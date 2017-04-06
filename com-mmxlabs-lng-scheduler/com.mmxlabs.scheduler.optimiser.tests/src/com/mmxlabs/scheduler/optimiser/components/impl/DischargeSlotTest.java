@@ -88,16 +88,16 @@ public class DischargeSlotTest {
 		final ISalesPriceCalculator curve1 = Mockito.mock(ISalesPriceCalculator.class, "curve1");
 		final ISalesPriceCalculator curve2 = Mockito.mock(ISalesPriceCalculator.class, "curve2");
 
-		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot1 = new NotionalDischargeSlot(id1, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot2 = new NotionalDischargeSlot(id1, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
 
-		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, true, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, true, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, true, 210L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, true, 10L, 220L, curve1, 30L, 40L);
-		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, true, 10L, 20L, curve2, 30L, 40L);
-		final DischargeSlot slot9 = new DischargeSlot(id1, port1, tw1, false, 10L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot3 = new NotionalDischargeSlot(id2, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot4 = new NotionalDischargeSlot(id1, port2, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot5 = new NotionalDischargeSlot(id1, port1, tw2, true, 10L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot6 = new NotionalDischargeSlot(id1, port1, tw1, true, 210L, 20L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot7 = new NotionalDischargeSlot(id1, port1, tw1, true, 10L, 220L, curve1, 30L, 40L);
+		final NotionalDischargeSlot slot8 = new NotionalDischargeSlot(id1, port1, tw1, true, 10L, 20L, curve2, 30L, 40L);
+		final NotionalDischargeSlot slot9 = new NotionalDischargeSlot(id1, port1, tw1, false, 10L, 20L, curve1, 30L, 40L);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));
