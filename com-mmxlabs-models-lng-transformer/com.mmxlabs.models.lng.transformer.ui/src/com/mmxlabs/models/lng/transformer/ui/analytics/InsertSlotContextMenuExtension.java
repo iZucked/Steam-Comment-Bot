@@ -99,15 +99,17 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				final LoadSlot load = rowData.getLoadSlot();
 				if (load != null && load.getCargo() == null) {
 					slots.add(load);
+					break;
 				}
 				final DischargeSlot discharge = rowData.getDischargeSlot();
 				if (discharge != null && discharge.getCargo() == null) {
 					slots.add(discharge);
+					break;
 				}
 			}
 		}
 
-		{
+		if (slots.size() > 0) {
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 			menuManager.add(action);
 			return;
@@ -120,7 +122,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
-			super("Suggest insertion options");
+			super(generateActionName(targetSlots));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.targetSlots = targetSlots;
 		}
@@ -131,7 +133,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			final ScenarioInstance instance = scenarioEditingLocation.getScenarioInstance();
 			// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-			try (final ModelReference modelRefence = instance.getReference("OptimisationHelper")) {
+			try (final ModelReference modelRefence = instance.getReference("InsertSlotContextMenuExtension")) {
 				final EObject object = modelRefence.getInstance();
 
 				if (object instanceof LNGScenarioModel) {
@@ -313,5 +315,15 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
+	}
+
+	private static String generateActionName(Collection<Slot> slots) {
+
+		List<String> names = new LinkedList<String>();
+		for (Slot s : slots) {
+			names.add(s.getName());
+		}
+
+		return "Insert " + Joiner.on(", ").join(names);
 	}
 }
