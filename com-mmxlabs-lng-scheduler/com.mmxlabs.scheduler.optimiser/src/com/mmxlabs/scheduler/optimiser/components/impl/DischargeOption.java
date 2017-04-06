@@ -115,7 +115,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 				return false;
 			}
 
-			return super.equals(obj);
+			return super.doEquals(obj);
 		}
 		return false;
 	}
