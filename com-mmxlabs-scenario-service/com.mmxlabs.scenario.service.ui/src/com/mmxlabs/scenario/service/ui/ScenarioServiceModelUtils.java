@@ -116,12 +116,6 @@ public final class ScenarioServiceModelUtils {
 	public static String openNewNameForForkPrompt(@NonNull final String oldName, @NonNull final String suggestedName, @NonNull final Set<String> existingNames) {
 
 		try {
-			
-//			IMenuService s;
-//			IMenuManager m;
-//			m.set
-////			IWorkbenchPart activePart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getM;
-//			activePart.getSite().
 			final IInputValidator validator = createExistingNamesValidator(existingNames);
 
 			final Display display = PlatformUI.getWorkbench().getDisplay();
