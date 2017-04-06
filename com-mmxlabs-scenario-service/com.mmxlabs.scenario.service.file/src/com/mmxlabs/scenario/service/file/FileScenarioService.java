@@ -59,6 +59,7 @@ import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
@@ -474,7 +475,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			}
 		}
 
-		protected void addAdapter(Notifier notifier) {
+		protected void addAdapter(final Notifier notifier) {
 			if (!(notifier instanceof ModelReference)) {
 				notifier.eAdapters().add(this);
 			}
@@ -500,7 +501,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			mainFileExists = true;
 		}
 		boolean resourceExisted = false;
-		URI backupURI = URI.createURI(storeURI.toString() + ".backup");
+		final URI backupURI = URI.createURI(storeURI.toString() + ".backup");
 		try {
 			resource.load(options);
 			resourceExisted = true;
@@ -691,5 +692,23 @@ public class FileScenarioService extends AbstractScenarioService {
 		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
 		f.setName(name);
 		parent.getElements().add(f);
+	}
+
+	@Override
+	public EObject load(final ScenarioInstance instance) throws IOException {
+		if (instance.getInstance() != null) {
+			// log.debug("Instance " + instance.getUuid() + " already loaded");
+			return instance.getInstance();
+		}
+		final EObject result = super.load(instance);
+		if (instance.isReadonly()) {
+			if (result != null) {
+				// Forces editor lock to disallow users from editing the scenario.
+				// TODO: This is not a very clean way to do it!
+				final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+				lock.claim();
+			}
+		}
+		return result;
 	}
 }
