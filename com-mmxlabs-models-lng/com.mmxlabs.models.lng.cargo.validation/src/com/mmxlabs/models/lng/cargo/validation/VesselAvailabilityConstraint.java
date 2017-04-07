@@ -221,8 +221,10 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			final RuleBasedBallastBonusContract ballastBonusContract) {
 		if (ballastBonusContract.getRules().isEmpty()) {
 			// need rules
+			Vessel vessel = va.getVessel();
+			String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] A ballast bonus contract requires at least one rule", va.getVessel().getName())));
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] A ballast bonus contract requires at least one rule", vesselName)));
 			dcsd.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 			dcsd.addEObjectAndFeature(ballastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
 			failures.add(dcsd);
