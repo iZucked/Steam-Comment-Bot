@@ -96,7 +96,6 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		if (pEvaluatorThead != null) {
 			pEvaluatorThead.interrupt();
 		} else {
-			System.out.println("Live Evaluator [" + instance.getName() + "] " + System.nanoTime());
 			pEvaluatorThead = new Thread(evaluator, "Live Evaluator [" + instance.getName() + "]");
 			pEvaluatorThead.start();
 			evaluatorThread = pEvaluatorThead;
