@@ -72,8 +72,13 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		}
 	}
 
-	private void queueEvaluate() {
+	private synchronized void queueEvaluate() {
 		if (!enabled) {
+			return;
+		}
+
+		// If read-only, cannot change data
+		if (instance.isReadonly()) {
 			return;
 		}
 
@@ -82,11 +87,19 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			return;
 		}
 
-		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
-			evaluatorThread = new Thread(evaluator, "Live Evaluator [" + instance.getName() + "]");
-			evaluatorThread.start();
+		Thread pEvaluatorThead = evaluatorThread;
+		if (pEvaluatorThead != null && !pEvaluatorThead.isAlive()) {
+			pEvaluatorThead = null;
+			evaluatorThread = null;
+		}
+
+		if (pEvaluatorThead != null) {
+			pEvaluatorThead.interrupt();
 		} else {
-			evaluatorThread.interrupt();
+			System.out.println("Live Evaluator [" + instance.getName() + "] " + System.nanoTime());
+			pEvaluatorThead = new Thread(evaluator, "Live Evaluator [" + instance.getName() + "]");
+			pEvaluatorThead.start();
+			evaluatorThread = pEvaluatorThead;
 		}
 	}
 
@@ -125,14 +138,20 @@ public class LiveEvaluator extends MMXAdapterImpl {
 							return;
 						}
 
+						if (instance.getInstance() == null) {
+							return;
+						}
 						final ScenarioLock evaluatorLock = instance.getLock(ScenarioLock.EVALUATOR);
-						try (final ModelReference modelReference = instance.getReference("LiveEvaluator")) {
-							final LNGScenarioModel root = (LNGScenarioModel) modelReference.getInstance();
-							if (root == null) {
-								// No data model, skip
+						if (evaluatorLock.claim()) {
+							if (instance.getInstance() == null) {
 								return;
 							}
-							if (evaluatorLock.claim()) {
+							try (final ModelReference modelReference = instance.getReference("LiveEvaluator")) {
+								final LNGScenarioModel root = (LNGScenarioModel) modelReference.getInstance();
+								if (root == null) {
+									// No data model, skip
+									return;
+								}
 								// Submit request to queue
 								executor.submit(new Callable<Object>() {
 									@Override
@@ -156,15 +175,16 @@ public class LiveEvaluator extends MMXAdapterImpl {
 										return null;
 									}
 								});
-							} else {
-								// log.debug("Didn't get lock, spinning");
-								spinLock = true;
-							}
-						} catch (final Throwable th) {
+							} catch (final Throwable th) {
 
-						} finally {
-							evaluatorLock.release();
+							} finally {
+								evaluatorLock.release();
+							}
+						} else {
+							// log.debug("Didn't get lock, spinning");
+							spinLock = true;
 						}
+
 					} else {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
 					}
@@ -177,6 +197,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				}
 			}
 		}
+
 	}
 
 	public boolean isEnabled() {
