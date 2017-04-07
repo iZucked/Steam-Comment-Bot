@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.feature"
       label="Models: LNG Feature"
-      version="4.2.1.RELEASE"
+      version="4.2.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
