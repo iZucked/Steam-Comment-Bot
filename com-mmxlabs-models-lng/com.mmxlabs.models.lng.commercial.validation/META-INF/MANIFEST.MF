@@ -7,14 +7,14 @@ Bundle-Activator: com.mmxlabs.models.lng.commercial.validation.internal.Activato
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.cargo;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.models.lng.port;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.models.lng.fleet;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.models.lng.commercial;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.models.lng.pricing;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.2.1,5.0.0)",
- com.mmxlabs.models.lng.pricing.validation;bundle-version="[4.2.1,5.0.0)",
+ com.mmxlabs.models.lng.cargo;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.models.lng.port;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.models.lng.commercial;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.models.lng.pricing;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.2.2,5.0.0)",
+ com.mmxlabs.models.lng.pricing.validation;bundle-version="[4.2.2,5.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
