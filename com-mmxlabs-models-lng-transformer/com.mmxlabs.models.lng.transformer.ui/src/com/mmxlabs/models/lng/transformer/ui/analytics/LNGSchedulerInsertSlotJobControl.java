@@ -34,6 +34,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -51,6 +52,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -291,8 +293,19 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 					}
 
 					cmd.append(AddCommand.create(originalEditingDomain, analyticsModel, AnalyticsPackage.Literals.ANALYTICS_MODEL__INSERTION_OPTIONS, plan));
+					// We are going to make scenario read-only, make sure it is not marked as dirty
+					cmd.append(SetCommand.create(originalEditingDomain, originalScenario.getScheduleModel(), SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
 
-					originalEditingDomain.getCommandStack().execute(cmd);
+					try {
+						if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
+							((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
+						}
+						originalEditingDomain.getCommandStack().execute(cmd);
+					} finally {
+						if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
+							((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(false);
+						}
+					}
 
 					slotInsertionPlan = plan;
 
