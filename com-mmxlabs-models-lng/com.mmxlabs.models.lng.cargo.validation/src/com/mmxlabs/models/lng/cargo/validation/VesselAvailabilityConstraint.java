@@ -179,12 +179,14 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 	private void ruleBasedballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
 			VesselAvailability va, RuleBasedBallastBonusContract ballastBonusContract) {
 		Set<APortSet<Port>> coveredPorts = new HashSet<APortSet<Port>>();
-		List<APortSet<Port>> endAtPorts = new LinkedList<>(va.getEndAt());
+		List<APortSet<Port>> endAtPorts = new LinkedList<>();
 		boolean anywhere = false;
-		if (endAtPorts.isEmpty()) {
+		if (va.getEndAt().isEmpty()) {
 			// could end anywhere - add all ports
 			anywhere = true;
 			endAtPorts.addAll(((LNGScenarioModel) extraContext.getRootObject()).getReferenceModel().getPortModel().getPorts());
+		} else {
+			endAtPorts.addAll(SetUtils.getObjects(va.getEndAt()));
 		}
 		if (!ballastBonusContract.getRules().isEmpty()) {
 			for (BallastBonusContractLine ballastBonusContractLine : ballastBonusContract.getRules()) {
@@ -215,7 +217,6 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 	}
-
 
 	private void ruleBasedballastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final VesselAvailability va,
 			final RuleBasedBallastBonusContract ballastBonusContract) {
