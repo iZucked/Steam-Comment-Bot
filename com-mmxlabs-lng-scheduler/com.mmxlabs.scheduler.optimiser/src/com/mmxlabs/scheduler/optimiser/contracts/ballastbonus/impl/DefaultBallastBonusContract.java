@@ -42,6 +42,7 @@ public class DefaultBallastBonusContract implements IBallastBonusContract {
 				ballastBonusAnnotation.ballastBonusFee = rule.calculateBallastBonus(lastSlot, vesselAvailability, time);
 				ballastBonusAnnotation.matchedPort = lastSlot.getPort();
 				ballastBonusAnnotation.ballastBonusRuleAnnotation = rule.annotate(lastSlot, vesselAvailability, time);
+				break;
 			}
 		}
 		return ballastBonusAnnotation;
