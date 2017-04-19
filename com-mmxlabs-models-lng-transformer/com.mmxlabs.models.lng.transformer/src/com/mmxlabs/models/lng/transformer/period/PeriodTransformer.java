@@ -258,28 +258,30 @@ public class PeriodTransformer {
 		// Set initial end conditions - if open, use the evaluated end date to keep long ballast leg P&L the same
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
-			if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
-
-				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
-					vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
-					vesselAvailability.setEndBy(output.getPromptPeriodEnd().atStartOfDay());
-				} else {
-
-					vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
-					vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
-				}
-
-				vesselAvailability.setForceHireCostOnlyEndRule(true);
-			} else if (vesselAvailability.isSetEndAfter()) {
-				if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
-					if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
+			if (endEvent != null) {
+				if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
+	
+					if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
 						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
-						vesselAvailability.setForceHireCostOnlyEndRule(true);
+						vesselAvailability.setEndBy(output.getPromptPeriodEnd().atStartOfDay());
+					} else {
+	
+						vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+						vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+					}
+	
+					vesselAvailability.setForceHireCostOnlyEndRule(true);
+				} else if (vesselAvailability.isSetEndAfter()) {
+					if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
+						if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
+							vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
+							vesselAvailability.setForceHireCostOnlyEndRule(true);
+						}
 					}
 				}
-			}
-			if (!vesselAvailability.getEndAt().isEmpty()) {
-				vesselAvailability.getEndAt().add(endEvent.getPort());
+				if (!vesselAvailability.getEndAt().isEmpty()) {
+					vesselAvailability.getEndAt().add(endEvent.getPort());
+				}
 			}
 		}
 
