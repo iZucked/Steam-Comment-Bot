@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>com.mmxlabs.models.migration.feature</artifactId>
-	<version>4.2.2-SNAPSHOT</version>
+	<version>4.2.2.RELEASE</version>
 	<packaging>eclipse-feature</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.models.migration</groupId>
 		<artifactId>com.mmxlabs.models.migration.parent</artifactId>
-		<version>4.2.2-SNAPSHOT</version>
+		<version>4.2.2.RELEASE</version>
 	</parent>
 
 	<build>
