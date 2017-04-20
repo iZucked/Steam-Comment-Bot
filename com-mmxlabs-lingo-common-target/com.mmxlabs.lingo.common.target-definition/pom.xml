@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.common.target.parent</artifactId>
 		<groupId>com.mmxlabs.lingo.common.target</groupId>
-		<version>4.2.2.RELEASE</version>
+		<version>4.2.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<version>4.2.2.RELEASE</version>
+	<version>4.2.3-SNAPSHOT</version>
 	<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 </project>
