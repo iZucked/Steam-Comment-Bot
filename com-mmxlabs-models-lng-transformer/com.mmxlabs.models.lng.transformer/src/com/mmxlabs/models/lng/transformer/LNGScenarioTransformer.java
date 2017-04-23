@@ -3219,7 +3219,7 @@ public class LNGScenarioTransformer {
 			window = new MutableTimeWindow();
 		}
 
-		final Set<IPort> portSet = new HashSet<IPort>();
+		final Set<IPort> portSet = new LinkedHashSet<IPort>();
 		for (final Port p : ports) {
 			portSet.add(portAssociation.lookup(p));
 		}
