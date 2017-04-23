@@ -248,6 +248,23 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.CHARTER_CONTRACT: {
+				CharterContract charterContract = (CharterContract)theEObject;
+				T result = caseCharterContract(charterContract);
+				if (result == null) result = caseUUIDObject(charterContract);
+				if (result == null) result = caseMMXObject(charterContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: {
+				SimpleCharterContract simpleCharterContract = (SimpleCharterContract)theEObject;
+				T result = caseSimpleCharterContract(simpleCharterContract);
+				if (result == null) result = caseCharterContract(simpleCharterContract);
+				if (result == null) result = caseUUIDObject(simpleCharterContract);
+				if (result == null) result = caseMMXObject(simpleCharterContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -549,6 +566,36 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNotionalJourneyBallastBonusContractLine(NotionalJourneyBallastBonusContractLine object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterContract(CharterContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Charter Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleCharterContract(SimpleCharterContract object) {
 		return null;
 	}
 

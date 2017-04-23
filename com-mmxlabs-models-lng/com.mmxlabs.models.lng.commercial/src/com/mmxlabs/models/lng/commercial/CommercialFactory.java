@@ -141,6 +141,15 @@ public interface CommercialFactory extends EFactory {
 	NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine();
 
 	/**
+	 * Returns a new object of class '<em>Simple Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple Charter Contract</em>'.
+	 * @generated
+	 */
+	SimpleCharterContract createSimpleCharterContract();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

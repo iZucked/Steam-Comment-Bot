@@ -167,6 +167,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createNotionalJourneyBallastBonusContractLineAdapter();
 			}
 			@Override
+			public Adapter caseCharterContract(CharterContract object) {
+				return createCharterContractAdapter();
+			}
+			@Override
+			public Adapter caseSimpleCharterContract(SimpleCharterContract object) {
+				return createSimpleCharterContractAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -475,6 +483,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNotionalJourneyBallastBonusContractLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.CharterContract
+	 * @generated
+	 */
+	public Adapter createCharterContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleCharterContract <em>Simple Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleCharterContract
+	 * @generated
+	 */
+	public Adapter createSimpleCharterContractAdapter() {
 		return null;
 	}
 

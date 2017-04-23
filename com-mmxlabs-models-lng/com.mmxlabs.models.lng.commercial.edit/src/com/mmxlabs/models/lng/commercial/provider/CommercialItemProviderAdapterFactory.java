@@ -387,6 +387,29 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleCharterContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimpleCharterContractItemProvider simpleCharterContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleCharterContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimpleCharterContractAdapter() {
+		if (simpleCharterContractItemProvider == null) {
+			simpleCharterContractItemProvider = new SimpleCharterContractItemProvider(this);
+		}
+
+		return simpleCharterContractItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -525,6 +548,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (ruleBasedBallastBonusContractItemProvider != null) ruleBasedBallastBonusContractItemProvider.dispose();
 		if (lumpSumBallastBonusContractLineItemProvider != null) lumpSumBallastBonusContractLineItemProvider.dispose();
 		if (notionalJourneyBallastBonusContractLineItemProvider != null) notionalJourneyBallastBonusContractLineItemProvider.dispose();
+		if (simpleCharterContractItemProvider != null) simpleCharterContractItemProvider.dispose();
 	}
 
 }
