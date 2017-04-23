@@ -5,6 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -22,7 +24,7 @@ public abstract class StartEndRequirement implements IStartEndRequirement {
 	protected StartEndRequirement(final IPort port, Collection<IPort> portSet, final boolean portIsSpecified, final boolean hasTimeRequirement, final @Nullable ITimeWindow timeWindow) {
 		super();
 		this.port = port;
-		this.portSet = portSet;
+		this.portSet = portSet == null ? null : portSet.stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toCollection(LinkedHashSet<IPort>::new)); // note: guarantee order!
 		this.portIsSpecified = portIsSpecified;
 		this.hasTimeRequirement = hasTimeRequirement;
 		this.timeWindow = timeWindow;
