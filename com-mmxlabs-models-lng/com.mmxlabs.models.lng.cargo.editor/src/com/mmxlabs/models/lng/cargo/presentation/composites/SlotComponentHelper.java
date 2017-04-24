@@ -338,10 +338,13 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the contract feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT));
+		// Do not show contract editor for market slots.
+		if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT));
+		}
 	}
 
 	/**
