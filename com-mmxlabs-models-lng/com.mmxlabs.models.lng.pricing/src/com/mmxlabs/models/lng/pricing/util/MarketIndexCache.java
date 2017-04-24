@@ -150,7 +150,7 @@ public class MarketIndexCache extends EContentAdapter {
 
 	}
 
-	public @NonNull Collection<NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
+	public @NonNull Collection<@NonNull NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
 		if (priceExpression == null || priceExpression.trim().isEmpty()) {
 			return Collections.emptySet();
 		}
@@ -162,13 +162,13 @@ public class MarketIndexCache extends EContentAdapter {
 		}
 
 		final LookupData pLookupData = lookupData;
-		final @Nullable Collection<NamedIndexContainer<?>> r = lookupData.expressionCache2.computeIfAbsent(priceExpression, key -> {
+		final @Nullable Collection<@NonNull NamedIndexContainer<?>> r = lookupData.expressionCache2.computeIfAbsent(priceExpression, key -> {
 			try {
 				// Parse the expression
 				final IExpression<Node> parse = new RawTreeParser().parse(key);
 				final Node p = parse.evaluate();
 				final Node node = expandNode(p, pLookupData);
-				final Collection<NamedIndexContainer<?>> result = collectIndicies(node, pLookupData);
+				final Collection<@NonNull NamedIndexContainer<?>> result = collectIndicies(node, pLookupData);
 				if (result != null) {
 					return result;
 				}
@@ -274,8 +274,8 @@ public class MarketIndexCache extends EContentAdapter {
 		}
 	}
 
-	public static Set<NamedIndexContainer<?>> collectIndicies(@NonNull final Node parentNode, final LookupData lookupData) {
-		final Set<NamedIndexContainer<?>> s = new HashSet<NamedIndexContainer<?>>();
+	public static Set<@NonNull NamedIndexContainer<?>> collectIndicies(@NonNull final Node parentNode, final LookupData lookupData) {
+		final Set<@NonNull NamedIndexContainer<?>> s = new HashSet<>();
 		// FIXME: Date shift!
 		if (parentNode.token.equalsIgnoreCase("SHIFT")) {
 			s.addAll(collectIndicies(parentNode.children[0], lookupData));

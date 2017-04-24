@@ -328,7 +328,7 @@ public class PriceExpressionUtils {
 		return true;
 	}
 
-	public static Collection<NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
+	public static Collection<@NonNull NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
 		final PricingModel pricingModel = getPricingModel();
 		if (pricingModel == null) {
 			return null;
