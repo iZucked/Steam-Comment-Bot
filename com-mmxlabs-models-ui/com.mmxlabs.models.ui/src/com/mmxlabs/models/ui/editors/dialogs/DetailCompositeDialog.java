@@ -532,7 +532,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					.create();
 			form.getBody().setLayout(layout);
 		}
-		
+
 		final Composite c = managedForm.getForm().getBody();
 
 		if (displaySidebarList) {
@@ -767,6 +767,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		if (!displaySidebarList) {
 			backButton.setEnabled(selectedObjectIndex > 0);
 			nextButton.setEnabled(selectedObjectIndex < (inputs.size() - 1));
+			backButton.setVisible(inputs.size() > 1);
+			nextButton.setVisible(inputs.size() > 1);
 		}
 	}
 
