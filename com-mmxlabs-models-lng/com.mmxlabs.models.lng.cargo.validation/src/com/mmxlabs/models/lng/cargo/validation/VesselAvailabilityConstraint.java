@@ -42,12 +42,14 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
@@ -58,35 +60,37 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability availability = (VesselAvailability) target;
-
 			final Vessel vessel = availability.getVessel();
+			final String vesselName = ScenarioElementNameHelper.getName(vessel, "<Unknown>");
 
-			final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
+			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withTypedName(ScenarioElementNameHelper.getTypeName(availability), vesselName);
 
 			if (vessel == null) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Vessel must be specified.", vesselName)));
-				dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
-				statuses.add(dcsd);
+				statuses.add(baseFactory.copyName() //
+						.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+						.withMessage("Vessel must be specified.") //
+						.make(ctx));
 			}
 
 			if (availability.isSetStartAfter() && availability.isSetStartBy()) {
 				if (availability.getStartAfter().isAfter(availability.getStartBy())) {
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-							.createFailureStatus(String.format("[Availability|%s] has inconsistent start and end dates set (the start date is after the end date).", vesselName, "start")));
-					dcsd.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());
-					dcsd.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartBy());
-					statuses.add(dcsd);
+
+					statuses.add(baseFactory.copyName() //
+							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY) //
+							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) //
+							.withMessage("Inconsistent start date range (the start date is after the end date)") //
+							.make(ctx));
+
 				}
 			}
 
 			if (availability.isSetEndAfter() && availability.isSetEndBy()) {
 				if (availability.getEndAfter().isAfter(availability.getEndBy())) {
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-							.createFailureStatus(String.format("[Availability|%s] has inconsistent start and end dates set (the start date is after the end date).", vesselName, "end")));
-					dcsd.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
-					dcsd.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_EndBy());
-					statuses.add(dcsd);
+					statuses.add(baseFactory.copyName() //
+							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY) //
+							.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER) //
+							.withMessage("Inconsistent end date range (the start date is after the end date)") //
+							.make(ctx));
 				}
 			}
 			YearMonth earliestDate = null;
@@ -106,11 +110,12 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(earliestDate)) {
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] There is no charter cost pricing data before %s %04d for curve %s", vesselName,
-											date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
-							dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE);
-							statuses.add(dcsd);
+
+							statuses.add(baseFactory.copyName() //
+									.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE) //
+									.withMessage(String.format("There is no charter cost pricing data before %s %04d for curve %s", date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()),
+											date.getYear(), index.getName())) //
+									.make(ctx));
 						}
 					}
 				}
@@ -121,11 +126,12 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						@Nullable
 						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 						if (date == null || date.isAfter(earliestDate)) {
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] There is no charter cost pricing data before %s %04d for curve %s", vesselName,
-											date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
-							dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE);
-							statuses.add(dcsd);
+
+							statuses.add(baseFactory.copyName() //
+									.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE) //
+									.withMessage(String.format("There is no charter cost pricing data before %s %04d for curve %s", date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()),
+											date.getYear(), index.getName())) //
+									.make(ctx));
 						}
 					}
 				}
@@ -146,11 +152,12 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 									@Nullable
 									final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 									if (date == null || date.isAfter(earliestDate)) {
-										final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-												(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] There is no base fuel pricing data before %s %04d for curve %s",
-														vesselName, date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
-										dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
-										statuses.add(dcsd);
+
+										statuses.add(baseFactory.copyName() //
+												.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+												.withMessage(String.format("There is no base fuel pricing data before %s %04d for curve %s",
+														date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())) //
+												.make(ctx));
 									}
 								}
 							}
@@ -158,28 +165,28 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			ballastBonusValidation(ctx, extraContext, statuses);
+			ballastBonusValidation(ctx, extraContext, baseFactory, statuses);
 		}
 		return Activator.PLUGIN_ID;
 	}
 
-	private void ballastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	private void ballastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
 			if (va.getBallastBonusContract() != null) {
 				if (va.getBallastBonusContract() instanceof RuleBasedBallastBonusContract) {
-					ruleBasedballastBonusValidation(ctx, extraContext, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
-					ruleBasedballastBonusCheckPortGroups(ctx, extraContext, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
+					ruleBasedballastBonusValidation(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
+					ruleBasedballastBonusCheckPortGroups(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
 				}
 			}
 		}
 	}
-	
-	private void ruleBasedballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
-			VesselAvailability va, RuleBasedBallastBonusContract ballastBonusContract) {
-		Set<APortSet<Port>> coveredPorts = new HashSet<APortSet<Port>>();
-		List<APortSet<Port>> endAtPorts = new LinkedList<>();
+
+	private void ruleBasedballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
+			final List<IStatus> failures, final VesselAvailability va, final RuleBasedBallastBonusContract ballastBonusContract) {
+		final Set<APortSet<Port>> coveredPorts = new HashSet<APortSet<Port>>();
+		final List<APortSet<Port>> endAtPorts = new LinkedList<>();
 		boolean anywhere = false;
 		if (va.getEndAt().isEmpty()) {
 			// could end anywhere - add all ports
@@ -189,58 +196,51 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			endAtPorts.addAll(SetUtils.getObjects(va.getEndAt()));
 		}
 		if (!ballastBonusContract.getRules().isEmpty()) {
-			for (BallastBonusContractLine ballastBonusContractLine : ballastBonusContract.getRules()) {
-					EList<APortSet<Port>> redeliveryPorts = ballastBonusContractLine.getRedeliveryPorts();
-					if (redeliveryPorts.isEmpty()) {
-						return;
-					} else {
-						coveredPorts.addAll(SetUtils.getObjects(redeliveryPorts));
-					}
+			for (final BallastBonusContractLine ballastBonusContractLine : ballastBonusContract.getRules()) {
+				final EList<APortSet<Port>> redeliveryPorts = ballastBonusContractLine.getRedeliveryPorts();
+				if (redeliveryPorts.isEmpty()) {
+					return;
+				} else {
+					coveredPorts.addAll(SetUtils.getObjects(redeliveryPorts));
+				}
 			}
-			for (APortSet<Port> endAtPort : endAtPorts) {
+			for (final APortSet<Port> endAtPort : endAtPorts) {
 				if (!coveredPorts.contains(endAtPort)) {
-					final DetailConstraintStatusDecorator dcsd;
+					final DetailConstraintStatusFactory f = baseFactory.copyName();
 					if (anywhere) {
-						dcsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Port %s is not covered by the ballast bonus rules (note the vessel can end anywhere)",
-										va.getVessel().getName(), endAtPort.getName())));
+						f.withMessage(String.format("Port %s is not covered by the ballast bonus rules (note the vessel can end anywhere)", ScenarioElementNameHelper.getName(endAtPort)));
 					} else {
-						dcsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Port %s is not covered by the ballast bonus rules",
-										va.getVessel().getName(), endAtPort.getName())));
+						f.withMessage(String.format("Port %s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)));
 					}
-					
-					dcsd.addEObjectAndFeature(va, CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
-					failures.add(dcsd);
+					f.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+					failures.add(f.make(ctx));
 					return;
 				}
 			}
 		}
 	}
 
-	private void ruleBasedballastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final VesselAvailability va,
-			final RuleBasedBallastBonusContract ballastBonusContract) {
+	private void ruleBasedballastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
+			final List<IStatus> failures, final VesselAvailability va, final RuleBasedBallastBonusContract ballastBonusContract) {
 		if (ballastBonusContract.getRules().isEmpty()) {
 			// need rules
-			Vessel vessel = va.getVessel();
-			String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] A ballast bonus contract requires at least one rule", vesselName)));
-			dcsd.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
-			dcsd.addEObjectAndFeature(ballastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
-			failures.add(dcsd);
+			failures.add(baseFactory.copyName() //
+					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+					.withObjectAndFeature(ballastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withMessage("A ballast bonus contract requires at least one rule") //
+					.make(ctx));
 		}
 		for (final BallastBonusContractLine ballastBonusContractLine : ballastBonusContract.getRules()) {
 			if (ballastBonusContractLine instanceof LumpSumBallastBonusContractLine) {
-				lumpSumBallastBonusValidation(ctx, extraContext, failures, va, (LumpSumBallastBonusContractLine) ballastBonusContractLine);
+				lumpSumBallastBonusValidation(ctx, extraContext, baseFactory, failures, va, (LumpSumBallastBonusContractLine) ballastBonusContractLine);
 			} else if (ballastBonusContractLine instanceof NotionalJourneyBallastBonusContractLine) {
-				notionalJourneyBallastBonusValidation(ctx, extraContext, failures, va, (NotionalJourneyBallastBonusContractLine) ballastBonusContractLine);
+				notionalJourneyBallastBonusValidation(ctx, extraContext, baseFactory, failures, va, (NotionalJourneyBallastBonusContractLine) ballastBonusContractLine);
 			}
 		}
 	}
 
-	private boolean lumpSumBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final VesselAvailability va,
-			final LumpSumBallastBonusContractLine line) {
+	private boolean lumpSumBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
+			final List<IStatus> failures, final VesselAvailability va, final LumpSumBallastBonusContractLine line) {
 		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, line, CommercialPackage.Literals.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION,
 				line.getPriceExpression(), PriceIndexType.COMMODITY);
 		if (!result.isOk()) {
@@ -254,33 +254,40 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		return true;
 	}
 
-	private boolean notionalJourneyBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final VesselAvailability va,
-			final NotionalJourneyBallastBonusContractLine line) {
+	private boolean notionalJourneyBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
+			final List<IStatus> failures, final VesselAvailability va, final NotionalJourneyBallastBonusContractLine line) {
 		boolean valid = true;
 		final ValidationResult fuelResult = PriceExpressionUtils.validatePriceExpression(ctx, line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION,
 				line.getFuelPriceExpression(), PriceIndexType.BUNKERS);
 		if (!fuelResult.isOk()) {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Ballast bonus: fuel price is invalid", va.getVessel().getName())));
-			dcsd.addEObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION);
-			failures.add(dcsd);
+			failures.add(baseFactory.copyName() //
+					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION) //
+					.withMessage(String.format("Ballast bonus: fuel price is invalid - %s", fuelResult.getErrorDetails())) //
+					.make(ctx));
 			valid = false;
 		}
 		final ValidationResult hireResult = PriceExpressionUtils.validatePriceExpression(ctx, line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION,
 				line.getHirePriceExpression(), PriceIndexType.CHARTER);
 		if (!hireResult.isOk()) {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Ballast bonus: hire price is invalid", va.getVessel().getName())));
-			dcsd.addEObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION);
-			failures.add(dcsd);
+
+			failures.add(baseFactory.copyName() //
+					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION) //
+					.withMessage(String.format("Ballast bonus: hire price is invalid - %s", hireResult.getErrorDetails())) //
+					.make(ctx));
 			valid = false;
 		}
 		if (line.getReturnPorts().isEmpty()) {
 			// need ports
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Availability|%s] Ballast bonus: return ports are needed on a notional journey", va.getVessel().getName())));
-			dcsd.addEObjectAndFeature(line, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
-			failures.add(dcsd);
+			failures.add(baseFactory.copyName() //
+					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS) //
+					.withMessage(String.format("Ballast bonus: return ports are needed on a notional journey")) //
+					.make(ctx));
 			valid = false;
 		}
 		// Determine real vessel ballast speed range. Note as notional, we are not limited to the min/max speed defined on the class.
@@ -316,14 +323,16 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 		if (line.getSpeed() < minSpeed || line.getSpeed() > maxSpeed) {
 			// need valid speed
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-					String.format("[Availability|%s] Ballast bonus: speed must be between %.01f and %.01f knots on a notional journey", va.getVessel().getName(), minSpeed, maxSpeed)));
-			dcsd.addEObjectAndFeature(line, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
-			failures.add(dcsd);
+
+			failures.add(baseFactory.copyName() //
+					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED) //
+					.withMessage(String.format("Ballast bonus: speed must be between %.01f and %.01f knots on a notional journey", minSpeed, maxSpeed)) //
+					.make(ctx));
 			valid = false;
 		}
 
 		return valid;
 	}
-
 }
