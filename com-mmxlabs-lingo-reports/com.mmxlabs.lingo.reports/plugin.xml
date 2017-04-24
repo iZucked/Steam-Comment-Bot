@@ -38,6 +38,10 @@
             name="Reports"
             id="com.mmxlabs.shiplingo.platform.reports">
       </category>
+      <category
+            id="com.mmxlabs.scheduleview"
+            name="Schedule Views">
+      </category>
       <view
             name="Volume Tracking"
             icon="icons/cview16/exec_statistic_view.gif"
@@ -718,7 +722,7 @@
             viewId="com.mmxlabs.lingo.reports.verticalreport"
             name="Vertical Schedule"
             icon="icons/cview16/VerticalReport.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
+            category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView">
       </ReplaceableView>
    </extension>

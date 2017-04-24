@@ -11,10 +11,6 @@
 
    <extension
          point="org.eclipse.ui.views">
-      <category
-            name="Schedule Views"
-            id="com.mmxlabs.scheduleview">
-      </category>
       <view
             name="Schedule Chart"
             icon="icons/schedule_view.gif"
