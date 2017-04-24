@@ -8,14 +8,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.emf.validation.model.IModelConstraint;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * Implementation of {@link IDetailConstraintStatus} wrapping a {@link IConstraintStatus} instance and adding in the extra methods for the {@link IDetailConstraintStatus} interface
@@ -28,6 +34,8 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	private final IConstraintStatus status;
 	private final int severity;
 	private final Map<EObject, Collection<EStructuralFeature>> objectMap = new HashMap<EObject, Collection<EStructuralFeature>>();
+	private @Nullable String name;
+	private @Nullable String baseMessage;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
 		this(status, status.getSeverity());
@@ -120,5 +128,24 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 			objectMap.put(obj, features);
 		}
 		features.add(feature);
+	}
+
+	public void setBaseMessage(@NonNull String message) {
+		this.baseMessage = message;
+	}
+
+	public void setName(@Nullable String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getBaseMessage() {
+		if (baseMessage == null) {
+			return getMessage();
+		}
+		return baseMessage;
 	}
 }

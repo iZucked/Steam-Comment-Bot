@@ -20,6 +20,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
@@ -63,13 +64,20 @@ public class DialogValidationSupport {
 
 	}
 
-	private static void processMessages(final StringBuilder sb, final IStatus status) {
+	private static void processMessages(final @NonNull StringBuilder sb, final @NonNull IStatus status) {
 		if (status.isMultiStatus()) {
 			for (final IStatus s : status.getChildren()) {
-				processMessages(sb, s);
+				if (s != null) {
+					processMessages(sb, s);
+				}
 			}
 		} else {
-			sb.append(status.getMessage());
+			if (status instanceof DetailConstraintStatusDecorator) {
+				DetailConstraintStatusDecorator decorator = (DetailConstraintStatusDecorator) status;
+				sb.append(decorator.getBaseMessage());
+			} else {
+				sb.append(status.getMessage());
+			}
 			sb.append("\n");
 		}
 	}

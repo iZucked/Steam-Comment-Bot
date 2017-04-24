@@ -79,6 +79,7 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.StringEscaper;
 
@@ -1028,7 +1029,12 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				processMessages(sb, s);
 			}
 		} else {
-			sb.append(status.getMessage());
+			if (status instanceof DetailConstraintStatusDecorator) {
+				DetailConstraintStatusDecorator decorator = (DetailConstraintStatusDecorator) status;
+				sb.append(decorator.getBaseMessage());
+			} else {
+				sb.append(status.getMessage());
+			}
 			sb.append("\n");
 		}
 	}
