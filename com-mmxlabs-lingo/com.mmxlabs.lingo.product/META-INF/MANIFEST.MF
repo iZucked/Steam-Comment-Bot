@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.mmxlabs.lingo.product;singleton:=true
-Bundle-Version: 4.2.4.RELEASE
+Bundle-Version: 4.2.5.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
