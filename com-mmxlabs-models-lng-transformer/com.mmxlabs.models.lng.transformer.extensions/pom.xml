@@ -4,9 +4,9 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>4.2.4.RELEASE</version>
+		<version>4.2.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.extensions</artifactId>
-	<version>4.2.4.RELEASE</version>
+	<version>4.2.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
