@@ -51,6 +51,7 @@ public class VesselClassItemProvider
 			super.getPropertyDescriptors(object);
 
 			addInaccessiblePortsPropertyDescriptor(object);
+			addInaccessibleRoutesPropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
@@ -63,7 +64,6 @@ public class VesselClassItemProvider
 			addPilotLightRatePropertyDescriptor(object);
 			addMinBaseFuelConsumptionPropertyDescriptor(object);
 			addHasReliqCapabilityPropertyDescriptor(object);
-			addInaccessibleRoutesPropertyDescriptor(object);
 			addScntPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -468,6 +468,7 @@ public class VesselClassItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselClass.class)) {
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
@@ -478,7 +479,6 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
-			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
 			case FleetPackage.VESSEL_CLASS__SCNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

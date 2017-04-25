@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getFillCapacity <em>Fill Capacity</em>}</li>
@@ -54,7 +55,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getScnt <em>Scnt</em>}</li>
  * </ul>
  *
@@ -70,6 +70,16 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> inaccessiblePorts;
+
+	/**
+	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
@@ -310,16 +320,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected boolean hasReliqCapability = HAS_RELIQ_CAPABILITY_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInaccessibleRoutes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * The default value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
@@ -801,6 +801,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		switch (featureID) {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				return getInaccessibleRoutes();
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				if (resolve) return getBaseFuel();
 				return basicGetBaseFuel();
@@ -830,8 +832,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return getMinBaseFuelConsumption();
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				return isHasReliqCapability();
-			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
-				return getInaccessibleRoutes();
 			case FleetPackage.VESSEL_CLASS__SCNT:
 				return getScnt();
 		}
@@ -850,6 +850,10 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				setBaseFuel((BaseFuel)newValue);
@@ -894,10 +898,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				setHasReliqCapability((Boolean)newValue);
 				return;
-			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
-				getInaccessibleRoutes().clear();
-				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
-				return;
 			case FleetPackage.VESSEL_CLASS__SCNT:
 				setScnt((Integer)newValue);
 				return;
@@ -915,6 +915,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		switch (featureID) {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
+				return;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				setBaseFuel((BaseFuel)null);
@@ -958,9 +961,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				setHasReliqCapability(HAS_RELIQ_CAPABILITY_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
-				getInaccessibleRoutes().clear();
-				return;
 			case FleetPackage.VESSEL_CLASS__SCNT:
 				setScnt(SCNT_EDEFAULT);
 				return;
@@ -978,6 +978,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		switch (featureID) {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				return baseFuel != null;
 			case FleetPackage.VESSEL_CLASS__CAPACITY:
@@ -1006,8 +1008,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return minBaseFuelConsumption != MIN_BASE_FUEL_CONSUMPTION_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				return hasReliqCapability != HAS_RELIQ_CAPABILITY_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
-				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case FleetPackage.VESSEL_CLASS__SCNT:
 				return scnt != SCNT_EDEFAULT;
 		}
@@ -1024,7 +1024,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (capacity: ");
+		result.append(" (inaccessibleRoutes: ");
+		result.append(inaccessibleRoutes);
+		result.append(", capacity: ");
 		result.append(capacity);
 		result.append(", fillCapacity: ");
 		result.append(fillCapacity);
@@ -1044,8 +1046,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		result.append(minBaseFuelConsumption);
 		result.append(", hasReliqCapability: ");
 		result.append(hasReliqCapability);
-		result.append(", inaccessibleRoutes: ");
-		result.append(inaccessibleRoutes);
 		result.append(", scnt: ");
 		result.append(scnt);
 		result.append(')');

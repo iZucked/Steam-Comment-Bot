@@ -35,11 +35,11 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getShortName <em>Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getScnt <em>Scnt</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @generated
@@ -82,6 +82,36 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> inaccessiblePorts;
+
+	/**
+	 * The default value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean overrideInaccessibleRoutes = OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
@@ -169,36 +199,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean scntESet;
-
-	/**
-	 * The default value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOverrideInaccessibleRoutes()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOverrideInaccessibleRoutes()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean overrideInaccessibleRoutes = OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInaccessibleRoutes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -517,16 +517,16 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return basicGetVesselClass();
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				return isOverrideInaccessibleRoutes();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				return getInaccessibleRoutes();
 			case FleetPackage.VESSEL__CAPACITY:
 				return getCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				return getFillCapacity();
 			case FleetPackage.VESSEL__SCNT:
 				return getScnt();
-			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
-				return isOverrideInaccessibleRoutes();
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				return getInaccessibleRoutes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -549,6 +549,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				setOverrideInaccessibleRoutes((Boolean)newValue);
+				return;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
+				return;
 			case FleetPackage.VESSEL__CAPACITY:
 				setCapacity((Integer)newValue);
 				return;
@@ -557,13 +564,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__SCNT:
 				setScnt((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
-				setOverrideInaccessibleRoutes((Boolean)newValue);
-				return;
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				getInaccessibleRoutes().clear();
-				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -585,6 +585,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				setOverrideInaccessibleRoutes(OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				return;
 			case FleetPackage.VESSEL__CAPACITY:
 				unsetCapacity();
 				return;
@@ -593,12 +599,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__SCNT:
 				unsetScnt();
-				return;
-			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
-				setOverrideInaccessibleRoutes(OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT);
-				return;
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				getInaccessibleRoutes().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -617,16 +617,16 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return vesselClass != null;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				return overrideInaccessibleRoutes != OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case FleetPackage.VESSEL__CAPACITY:
 				return isSetCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				return isSetFillCapacity();
 			case FleetPackage.VESSEL__SCNT:
 				return isSetScnt();
-			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
-				return overrideInaccessibleRoutes != OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
-				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -642,16 +642,16 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (shortName: ");
 		result.append(shortName);
+		result.append(", overrideInaccessibleRoutes: ");
+		result.append(overrideInaccessibleRoutes);
+		result.append(", inaccessibleRoutes: ");
+		result.append(inaccessibleRoutes);
 		result.append(", capacity: ");
 		if (capacityESet) result.append(capacity); else result.append("<unset>");
 		result.append(", fillCapacity: ");
 		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
 		result.append(", scnt: ");
 		if (scntESet) result.append(scnt); else result.append("<unset>");
-		result.append(", overrideInaccessibleRoutes: ");
-		result.append(overrideInaccessibleRoutes);
-		result.append(", inaccessibleRoutes: ");
-		result.append(inaccessibleRoutes);
 		result.append(')');
 		return result.toString();
 	}

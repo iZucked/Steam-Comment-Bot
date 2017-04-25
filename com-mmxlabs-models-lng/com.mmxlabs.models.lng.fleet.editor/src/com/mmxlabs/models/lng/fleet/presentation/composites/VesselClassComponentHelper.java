@@ -69,6 +69,7 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
+		add_inaccessibleRoutesEditor(detailComposite, topClass);
 		add_baseFuelEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
@@ -83,7 +84,6 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_pilotLightRateEditor(detailComposite, topClass);
 		add_minBaseFuelConsumptionEditor(detailComposite, topClass);
 		add_hasReliqCapabilityEditor(detailComposite, topClass);
-		add_inaccessibleRoutesEditor(detailComposite, topClass);
 		add_scntEditor(detailComposite, topClass);
 	}
 	/**

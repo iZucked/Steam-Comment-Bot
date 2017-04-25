@@ -69,11 +69,11 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_shortNameEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
+		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
+		add_inaccessibleRoutesEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
 		add_scntEditor(detailComposite, topClass);
-		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
-		add_inaccessibleRoutesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the shortName feature on Vessel

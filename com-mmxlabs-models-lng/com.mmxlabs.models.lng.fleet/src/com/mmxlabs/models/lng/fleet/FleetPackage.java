@@ -263,40 +263,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
-
-	/**
 	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
+	int VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -305,7 +278,34 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
+	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -353,13 +353,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+	int VESSEL_CLASS__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -368,7 +377,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
+	int VESSEL_CLASS__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -377,7 +386,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
+	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
@@ -386,7 +395,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -395,7 +404,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -404,7 +413,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
+	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -413,7 +422,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
+	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
@@ -422,7 +431,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
+	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -431,7 +440,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -440,7 +449,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
@@ -449,7 +458,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -458,7 +467,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
@@ -467,7 +476,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+	int VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Has Reliq Capability</b></em>' attribute.
@@ -476,16 +485,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
-
-	/**
-	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+	int VESSEL_CLASS__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Scnt</b></em>' attribute.

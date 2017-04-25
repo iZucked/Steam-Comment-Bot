@@ -51,11 +51,11 @@ public class VesselItemProvider
 			addShortNamePropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
+			addOverrideInaccessibleRoutesPropertyDescriptor(object);
+			addInaccessibleRoutesPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
 			addScntPropertyDescriptor(object);
-			addOverrideInaccessibleRoutesPropertyDescriptor(object);
-			addInaccessibleRoutesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -274,11 +274,11 @@ public class VesselItemProvider
 
 		switch (notification.getFeatureID(Vessel.class)) {
 			case FleetPackage.VESSEL__SHORT_NAME:
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
 			case FleetPackage.VESSEL__CAPACITY:
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 			case FleetPackage.VESSEL__SCNT:
-			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
-			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
