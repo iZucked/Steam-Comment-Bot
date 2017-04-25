@@ -223,6 +223,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private final TradesFilter tradesFilter = new TradesFilter();
 
+	private final TradesCargoFilter tradesCargoFilter = new TradesCargoFilter();
+	
 	private Action resetSortOrder;
 
 	private PromptToolbarEditor promptToolbarEditor;
@@ -421,6 +423,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				});
 
 				addFilter(tradesFilter);
+				addFilter(tradesCargoFilter);
 			}
 
 			protected EObjectTableViewerValidationSupport createValidationSupport() {
@@ -1634,7 +1637,47 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			filterValues.clear();
 		}
 	}
+	
+	private enum CargoFilterOption {
+		NONE, CARGO, LONG, SHORT
+	}
 
+	private class TradesCargoFilter extends ViewerFilter {
+		private CargoFilterOption option = CargoFilterOption.NONE;
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			RowData c = null;
+			Cargo cargo = null;
+			if (element instanceof RowData) {
+				c = (RowData) element;
+				cargo = c.getCargo();
+			}
+			switch (option) {
+			case NONE:
+				return true;
+			case CARGO:
+				if (cargo != null) {
+					return true;
+				} else {
+					return false;
+				}
+			case LONG:
+				if (c != null && cargo == null && c.getLoadSlot() != null) {
+					return true;
+				} else {
+					return false;
+				}
+			case SHORT:
+				if (c != null && cargo == null && c.getDischargeSlot() != null) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			return false;
+		}
+
+	}
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		/**
 		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
@@ -1665,6 +1708,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				@Override
 				public void run() {
 					tradesFilter.clear();
+					tradesCargoFilter.option = CargoFilterOption.NONE;
 					scenarioViewer.refresh(false);
 				}
 			};
@@ -1673,7 +1717,38 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
 			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
 			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, new EMFMultiPath(true, vesselPath1, vesselPath2)), menu);
+			
+			DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction("General") {
 
+				@Override
+				protected void populate(Menu menu) {
+					final Action cargoesAction = new Action("Cargoes Only") {
+						@Override
+						public void run() {
+							tradesCargoFilter.option = CargoFilterOption.CARGO;
+							scenarioViewer.refresh(false);
+						}
+					};
+					final Action longsAction = new Action("Longs Only") {
+						@Override
+						public void run() {
+							tradesCargoFilter.option = CargoFilterOption.LONG;
+							scenarioViewer.refresh(false);
+						}
+					};
+					final Action shortsAction = new Action("Shorts Only") {
+						@Override
+						public void run() {
+							tradesCargoFilter.option = CargoFilterOption.SHORT;
+							scenarioViewer.refresh(false);
+						}
+					};
+					addActionToMenu(cargoesAction, menu);
+					addActionToMenu(longsAction, menu);
+					addActionToMenu(shortsAction, menu);
+				}
+			};
+			addActionToMenu(dmca, menu);
 		}
 	}
 
