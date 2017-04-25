@@ -6,7 +6,7 @@
 	<artifactId>optimiser-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Optimiser - Parent</name>
-	<version>4.2.4.RELEASE</version>
+	<version>4.2.5-SNAPSHOT</version>
 	<description>Parent maven project for core optimisation projects</description>
 
 	<parent>
