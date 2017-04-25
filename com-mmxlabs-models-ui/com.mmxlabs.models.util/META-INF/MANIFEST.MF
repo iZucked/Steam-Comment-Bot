@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model Utils
 Bundle-SymbolicName: com.mmxlabs.models.util;singleton:=true
-Bundle-Version: 4.2.4.RELEASE
+Bundle-Version: 4.2.5.qualifier
 Bundle-Activator: com.mmxlabs.models.util.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
