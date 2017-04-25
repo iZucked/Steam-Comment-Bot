@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.edit;singleton:=true
-Bundle-Version: 4.2.4.RELEASE
+Bundle-Version: 4.2.5.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin$Implementation
 Bundle-Vendor: %providerName
