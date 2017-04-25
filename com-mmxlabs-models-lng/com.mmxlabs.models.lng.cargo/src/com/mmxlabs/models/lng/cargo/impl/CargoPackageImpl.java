@@ -2075,10 +2075,34 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createResource(eNS_URI);
 
 		// Create annotations
+		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
+		createNamedObjectAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/pricing/expressionType
 		createExpressionTypeAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/mmxcore/validation/NamedObject</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNamedObjectAnnotations() {
+		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
+		addAnnotation
+		  (getCargoModel_LoadSlots(), 
+		   source, 
+		   new String[] {
+			 "nonUniqueChildren", "true"
+		   });	
+		addAnnotation
+		  (getCargoModel_DischargeSlots(), 
+		   source, 
+		   new String[] {
+			 "nonUniqueChildren", "true"
+		   });
 	}
 
 	/**

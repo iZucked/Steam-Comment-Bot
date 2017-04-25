@@ -42,6 +42,7 @@ public interface CargoModel extends UUIDObject {
 	 * @return the value of the '<em>Load Slots</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_LoadSlots()
 	 * @model containment="true" resolveProxies="true"
+	 *        annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
 	 * @generated
 	 */
 	EList<LoadSlot> getLoadSlots();
@@ -58,6 +59,7 @@ public interface CargoModel extends UUIDObject {
 	 * @return the value of the '<em>Discharge Slots</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_DischargeSlots()
 	 * @model containment="true" resolveProxies="true"
+	 *        annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
 	 * @generated
 	 */
 	EList<DischargeSlot> getDischargeSlots();

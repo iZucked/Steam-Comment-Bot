@@ -3,9 +3,17 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargo" nsURI="http://www.mmxlabs.com/models/lng/cargo/1/" nsPrefix="lng.cargo">
   <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlots" upperBound="-1"
-        eType="#//LoadSlot" containment="true"/>
+        eType="#//LoadSlot" containment="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+        <details key="nonUniqueChildren" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlots" upperBound="-1"
-        eType="#//DischargeSlot" containment="true"/>
+        eType="#//DischargeSlot" containment="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+        <details key="nonUniqueChildren" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
         eType="#//Cargo" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoGroups" upperBound="-1"
