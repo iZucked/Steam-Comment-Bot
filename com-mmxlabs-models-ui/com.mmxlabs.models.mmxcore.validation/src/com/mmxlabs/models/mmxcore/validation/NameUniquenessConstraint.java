@@ -67,6 +67,14 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
+			{
+				final EAnnotation eAnnotation = feature.getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
+				if (eAnnotation != null) {
+					if (Boolean.valueOf(eAnnotation.getDetails().get("nonUniqueChildren"))) {
+						return;
+					}
+				}
+			}
 
 			Map<Pair<EObject, EReference>, Set<String>> badNames = (Map<Pair<EObject, EReference>, Set<String>>) ctx.getCurrentConstraintData();
 			if (badNames == null) {
