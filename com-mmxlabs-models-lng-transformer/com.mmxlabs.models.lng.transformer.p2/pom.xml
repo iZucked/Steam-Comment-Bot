@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>4.2.4-SNAPSHOT</version>
+		<version>4.2.4.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.transformer.p2</artifactId>
-	<version>4.2.4-SNAPSHOT</version>
+	<version>4.2.4.RELEASE</version>
 	<packaging>eclipse-repository</packaging>
 	<name>Models: LNG Types - Transformer: p2 Repository</name>
 
