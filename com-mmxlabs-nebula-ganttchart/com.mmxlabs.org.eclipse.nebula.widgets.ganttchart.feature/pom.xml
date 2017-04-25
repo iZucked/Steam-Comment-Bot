@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.nebula.widgets</groupId>
 	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature</artifactId>
-	<version>4.2.4.RELEASE</version>
+	<version>4.2.5-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<parent>
 		<groupId>org.eclipse.nebula.widgets</groupId>
 		<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.parent</artifactId>
-		<version>4.2.4.RELEASE</version>
+		<version>4.2.5-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
