@@ -1284,7 +1284,7 @@ public class CargoEditorMenuHelper {
 			if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
 				manager.add(new RunnableAction("Convert to DES Purchase", () -> helper.convertToDESPurchase("Convert to DES Purchase", loadSlot)));
 			} else if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
-				manager.add(new RunnableAction("Convert to FOB Purchase", () -> helper.convertToDESPurchase("Convert to FOB Purchase", loadSlot)));
+				manager.add(new RunnableAction("Convert to FOB Purchase", () -> helper.convertToFOBPurchase("Convert to FOB Purchase", loadSlot)));
 			}
 		} else if (slot instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
