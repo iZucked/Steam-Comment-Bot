@@ -372,14 +372,14 @@ public class EquivalanceGroupBuilder {
 			}
 		} else if (element instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) element;
-			final String base = "start-" + startEvent.getSequence().getName();
+			final String base = "start-" + startEvent.getSequence().getName() + "-"+(startEvent.getSequence().getVesselAvailability() != null ? ""+startEvent.getSequence().getVesselAvailability().getStartAfter(): "null") + "-"+(startEvent.getSequence().getVesselAvailability() != null ? "" + startEvent.getSequence().getVesselAvailability().getEndAfter(): "null");
 			if (startEvent.getSequence().isSetSpotIndex()) {
 				return base + "-" + startEvent.getSequence().getSpotIndex();
 			}
 			return base;
 		} else if (element instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) element;
-			final String base = "end-" + endEvent.getSequence().getName();
+			final String base = "end-" + endEvent.getSequence().getName() + "-"+(endEvent.getSequence().getVesselAvailability() != null ? ""+endEvent.getSequence().getVesselAvailability().getStartAfter() : "null") + "-"+ (endEvent.getSequence().getVesselAvailability() != null ? ""+endEvent.getSequence().getVesselAvailability().getEndAfter() : "null");
 			if (endEvent.getSequence().isSetSpotIndex()) {
 				return base + "-" + endEvent.getSequence().getSpotIndex();
 			}
