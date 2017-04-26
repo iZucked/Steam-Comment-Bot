@@ -5,8 +5,8 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.lingo.reports.views.standard.CargoEconsReportComponentFactory">
-   <implementation class="com.mmxlabs.lingo.reports.views.standard.CargoEconsReportComponentFactory"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponentFactory">
+   <implementation class="com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReportComponentFactory"/>
    <service>
       <provide interface="com.mmxlabs.rcp.common.application.IInjectableE4ComponentFactory"/>
    </service>
