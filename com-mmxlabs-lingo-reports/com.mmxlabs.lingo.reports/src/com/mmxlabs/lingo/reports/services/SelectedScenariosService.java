@@ -473,14 +473,16 @@ public class SelectedScenariosService {
 	private SelectedDataProviderImpl createSelectedDataProvider() {
 
 		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
-		for (final ScenarioResult scenarioInstance : selectionProvider.getSelection()) {
-			assert scenarioInstance != null;
+		for (final ScenarioResult scenarioResult : selectionProvider.getSelection()) {
+			assert scenarioResult != null;
 			final KeyValueRecord record;
-			if (scenarioRecords.containsKey(scenarioInstance)) {
-				record = scenarioRecords.get(scenarioInstance);
+			// Cannot reuse existing record as we do not know if it has changed or not.
+			// If we re-evaluate, the ScenarioResult is the same, the ScenarioInstance is the same and the ScheduleModel is the same!
+			if (false && scenarioRecords.containsKey(scenarioResult)) {
+				record = scenarioRecords.get(scenarioResult);
 			} else {
-				record = createKeyValueRecord(scenarioInstance);
-				final KeyValueRecord oldRecord = scenarioRecords.put(scenarioInstance, record);
+				record = createKeyValueRecord(scenarioResult);
+				final KeyValueRecord oldRecord = scenarioRecords.put(scenarioResult, record);
 				if (oldRecord != null) {
 					oldRecord.dispose();
 				}
