@@ -260,16 +260,16 @@ public class PeriodTransformer {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
 			if (endEvent != null) {
 				if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
-	
+
 					if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
 						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
 						vesselAvailability.setEndBy(output.getPromptPeriodEnd().atStartOfDay());
 					} else {
-	
+
 						vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
 						vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
 					}
-	
+
 					vesselAvailability.setForceHireCostOnlyEndRule(true);
 				} else if (vesselAvailability.isSetEndAfter()) {
 					if (output.isSetSchedulingEndDate() && output.isSetPromptPeriodEnd() && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
@@ -1112,11 +1112,11 @@ public class PeriodTransformer {
 
 			mapping.setLastTrimmedBefore(vesselAvailability, 0, assignedObject);
 
-			vesselAvailability.getStartAt().clear();
+			vesselAvailability.setStartAt(null);
 			if (portVisit instanceof VesselEventVisit && ((VesselEventVisit) portVisit).getVesselEvent() instanceof CharterOutEvent) {
-				vesselAvailability.getStartAt().add(((VesselEventVisit) portVisit).getVesselEvent().getPort());
+				vesselAvailability.setStartAt(((VesselEventVisit) portVisit).getVesselEvent().getPort());
 			} else {
-				vesselAvailability.getStartAt().add(portVisit.getPort());
+				vesselAvailability.setStartAt(portVisit.getPort());
 			}
 
 			vesselAvailability.setStartAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
@@ -1225,8 +1225,7 @@ public class PeriodTransformer {
 		// TODO: Refactor the other conditions methods to avoid code duplication.
 		{
 			final PortVisit portVisit = endConditionMap.get(assignedObject);
-			vesselAvailability.getStartAt().clear();
-			vesselAvailability.getStartAt().add(portVisit.getPort());
+			vesselAvailability.setStartAt(portVisit.getPort());
 
 			vesselAvailability.setStartAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			vesselAvailability.setStartBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());

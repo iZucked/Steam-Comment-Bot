@@ -37,6 +37,8 @@ import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
+import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporter;
+import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter;
@@ -145,6 +147,7 @@ public class CSVImporter {
 		dataMap.put(CargoModelImporter.EVENTS_KEY, createURL(urlRoot, "Events.csv"));
 		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, createURL(urlRoot, "Vessel Availability.csv"));
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURL(urlRoot, "Assignments.csv"));
+		dataMap.put(VesselAvailabilityBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURL(urlRoot, "Vessel Availability--Ballast Bonus.csv"));
 	}
 
 	public void importStandardComponents(@NonNull final String urlRoot) throws MalformedURLException {
@@ -286,6 +289,7 @@ public class CSVImporter {
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 					extraModelImporters.add(new ActualsModelExtraImporter());
+					extraModelImporters.add(new VesselAvailabilityBallastBonusImporterExtraImporter());
 
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
 					final DefaultAttributeImporter defaultAttributeImporter = new DefaultAttributeImporter();

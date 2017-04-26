@@ -688,7 +688,7 @@ public class LNGScenarioTransformer {
 			modelEntityMap.addModelObject(ePort, port);
 
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
-			
+
 			final int minCv = ePort.isSetMinCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMinCvValue()) : 0;
 			final int maxCv = ePort.isSetMaxCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMaxCvValue()) : Integer.MAX_VALUE;
 			builder.setPortMinCV(port, minCv);
@@ -2971,8 +2971,7 @@ public class LNGScenarioTransformer {
 		for (final VesselAvailability eVesselAvailability : sortedAvailabilities) {
 			final Vessel eVessel = eVesselAvailability.getVessel();
 
-			final Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
-			final Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
+			final Port startingPort = eVesselAvailability.getStartAt();
 
 			final IHeelOptionSupplier heelSupplier = createHeelSupplier(eVesselAvailability.getStartHeel());
 			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfterAsDateTime() : null,

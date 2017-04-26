@@ -366,7 +366,7 @@ public class DefaultScenarioCreator {
 				final LocalDateTime endDate) {
 			for (final VesselAvailability availability : cargoModel.getVesselAvailabilities()) {
 				if (availability.getVessel() == vessel) {
-					availability.getStartAt().add(startPort);
+					availability.setStartAt(startPort);
 					availability.getEndAt().add(endPort);
 					availability.setStartAfter(startDate);
 					availability.setEndBy(endDate);

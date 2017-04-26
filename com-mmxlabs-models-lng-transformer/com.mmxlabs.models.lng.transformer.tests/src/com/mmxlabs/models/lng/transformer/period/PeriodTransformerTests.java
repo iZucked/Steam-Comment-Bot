@@ -188,7 +188,7 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability1
-		Assert.assertTrue(vesselAvailability1.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability1.getStartAt());
 		Assert.assertTrue(vesselAvailability1.getEndAt().isEmpty());
 		Assert.assertNull(vesselAvailability1.getStartAfter());
 		Assert.assertNull(vesselAvailability1.getStartBy());
@@ -225,7 +225,7 @@ public class PeriodTransformerTests {
 		// Vessel across lower bounds
 		final Vessel vessel2 = PeriodTestUtils.createVessel(scenarioModel, "Vessel2");
 		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel2);
-		vesselAvailability2.getStartAt().add(port1);
+		vesselAvailability2.setStartAt(port1);
 		vesselAvailability2.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
 		vesselAvailability2.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
 		vesselAvailability2.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
@@ -313,7 +313,7 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
-		Assert.assertTrue(vesselAvailability3.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability3.getStartAt());
 		Assert.assertTrue(vesselAvailability3.getEndAt().isEmpty());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartBy());
@@ -543,7 +543,7 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
-		Assert.assertTrue(vesselAvailability6.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability6.getStartAt() );
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartBy());
 
@@ -593,7 +593,7 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected - vesselAvailability7
-		Assert.assertTrue(vesselAvailability7.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability7.getStartAt());
 		Assert.assertTrue(vesselAvailability7.getEndAt().isEmpty());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0), vesselAvailability7.getStartAfter());
 		Assert.assertNull(vesselAvailability7.getStartBy());
@@ -649,7 +649,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability.getStartAt());
 		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
 		Assert.assertNull(vesselAvailability.getStartAfter());
 		Assert.assertNull(vesselAvailability.getStartBy());
@@ -762,7 +762,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability.getStartAt());
 		Assert.assertNull(vesselAvailability.getStartAfter());
 		Assert.assertNull(vesselAvailability.getStartBy());
 

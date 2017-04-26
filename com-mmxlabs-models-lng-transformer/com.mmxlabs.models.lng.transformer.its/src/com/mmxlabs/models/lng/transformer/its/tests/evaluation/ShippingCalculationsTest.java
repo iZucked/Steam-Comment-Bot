@@ -1016,7 +1016,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.vesselAvailability.getStartAt().clear();
+		msc.vesselAvailability.setStartAt(null);
 
 		// change from default scenario: vessel makes only two journeys
 		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
