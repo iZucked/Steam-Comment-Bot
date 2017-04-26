@@ -136,9 +136,9 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
 			{
-				final List<APortSet<Port>> startAt = vesselAvailability.getStartAt();
-				Assert.assertEquals(1, startAt.size());
-				Assert.assertEquals("Ras Laffan", startAt.get(0).getName());
+				final Port startAt = vesselAvailability.getStartAt();
+				Assert.assertNotNull(startAt);
+				Assert.assertEquals("Ras Laffan", startAt.getName());
 				final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
@@ -235,9 +235,9 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
 			{
-				final List<APortSet<Port>> startAt = vesselAvailability.getStartAt();
-				Assert.assertEquals(1, startAt.size());
-				Assert.assertEquals("Ras Laffan", startAt.get(0).getName());
+				final Port startAt = vesselAvailability.getStartAt();
+				Assert.assertNotNull(startAt);
+				Assert.assertEquals("Ras Laffan", startAt.getName());
 				final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
@@ -335,9 +335,9 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
 
 			{
-				final List<APortSet<Port>> startAt = vesselAvailability.getStartAt();
-				Assert.assertEquals(1, startAt.size());
-				Assert.assertEquals("Ras Laffan", startAt.get(0).getName());
+				final Port startAt = vesselAvailability.getStartAt();
+				Assert.assertNotNull(startAt);
+				Assert.assertEquals("Ras Laffan", startAt.getName());
 				final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
@@ -460,9 +460,9 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			Assert.assertEquals("L2", optimiserScenario.getCargoModel().getCargoes().get(0).getLoadName());
 			{
 				final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-				final List<APortSet<Port>> startAt = vesselAvailability.getStartAt();
-				Assert.assertEquals(1, startAt.size());
-				Assert.assertEquals("Ras Laffan", startAt.get(0).getName());
+				final Port startAt = vesselAvailability.getStartAt();
+				Assert.assertNotNull(startAt);
+				Assert.assertEquals("Ras Laffan", startAt.getName());
 				final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
 				final ZoneId utcTimeZone = ZoneId.of("UTC");
 				// Vessel availabilities always in UTC
