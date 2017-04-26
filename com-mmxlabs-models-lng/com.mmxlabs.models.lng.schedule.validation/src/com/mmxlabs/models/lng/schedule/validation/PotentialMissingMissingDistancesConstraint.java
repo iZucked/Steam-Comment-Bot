@@ -107,7 +107,10 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				caches.put(route.getRouteOption(), (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName()));
 			}
 			final RouteDistanceLineCache fCache = caches.get(RouteOption.DIRECT);
-			assert fCache != null;
+			if (fCache == null) {
+				// No direct matrix?
+				return Activator.PLUGIN_ID;
+			}
 
 			// Lambda function to check two sets of distances
 			final BiFunction<Set<Port>, Set<Port>, Set<Pair<Port, Port>>> distanceChecker = (froms, tos) -> {
