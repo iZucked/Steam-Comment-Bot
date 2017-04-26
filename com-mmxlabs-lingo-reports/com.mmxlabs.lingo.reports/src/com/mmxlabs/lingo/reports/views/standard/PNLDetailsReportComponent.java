@@ -46,6 +46,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 
+	
 	@PostConstruct
 	public void addHelpContext() {
 
