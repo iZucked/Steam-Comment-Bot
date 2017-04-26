@@ -37,6 +37,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
+import com.mmxlabs.rcp.common.application.TogglePinSelection;
 
 public abstract class DetailPropertiesViewComponent {
 
@@ -47,6 +48,14 @@ public abstract class DetailPropertiesViewComponent {
 
 	public GridTreeViewer getViewer() {
 		return viewer;
+	}
+
+	private boolean pinSelection = false;
+
+	@TogglePinSelection
+	public boolean togglePinState() {
+		pinSelection = !pinSelection;
+		return pinSelection;
 	}
 
 	private Options options;
@@ -147,6 +156,11 @@ public abstract class DetailPropertiesViewComponent {
 
 			@Override
 			public void selectionChanged(final MPart part, final Object selectedObject) {
+
+				if (pinSelection) {
+					return;
+				}
+
 				if (part != null) {
 					final IWorkbenchPart view = SelectionHelper.getE3Part(part);
 
@@ -159,23 +173,19 @@ public abstract class DetailPropertiesViewComponent {
 				}
 				final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
 				removeAdapters();
-				
+
 				// This is very slow with many selected items. Run async to avoid blocking other actions.
 				ViewerHelper.runIfViewerValid(viewer, false, v -> {
 					removeAdapters();
 					final Collection<?> adaptSelection = adaptSelection(selection);
 					viewer.setInput(adaptSelection);
 					hookAdapters(adaptSelection);
-					
+
 				});
 			}
 
 		};
 	}
-
-	// protected void refresh() {
-	// selectionListener.selectionChanged(null, getSite().getPage().getSelection());
-	// }
 
 	protected CellLabelProvider createLabelProvider(final @NonNull DetailPropertyColumnType columnType, final @NonNull GridViewerColumn gvc) {
 		return new DetailPropertyLabelProvider(columnType);
@@ -202,5 +212,4 @@ public abstract class DetailPropertiesViewComponent {
 	protected void removeAdapters() {
 
 	}
-
 }
