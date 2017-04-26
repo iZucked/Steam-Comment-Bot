@@ -251,7 +251,7 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// Changed
-		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
+		Assert.assertEquals(port3, vesselAvailability2.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartBy());
 		// Unchanged
@@ -399,7 +399,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getStartAt());
+		Assert.assertEquals(port3, vesselAvailability4.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartBy());
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getEndAt());
@@ -481,7 +481,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getStartAt());
+		Assert.assertEquals(port3, vesselAvailability5.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartBy());
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getEndAt());
@@ -543,7 +543,7 @@ public class PeriodTransformerTests {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
 		// No change expected
-		Assert.assertNull(vesselAvailability6.getStartAt() );
+		Assert.assertNull(vesselAvailability6.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartBy());
 
@@ -705,7 +705,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, new HashSet<Cargo>(), new HashSet<Event>(), objectToPortVisitMap, mapping);
 
-		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getStartAt());
+		Assert.assertEquals(port2, vesselAvailability.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartAfter());
 		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartBy());
 
@@ -818,7 +818,7 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability1, assignedObject2, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap, mapping);
 
-			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability1.getStartAt());
+			Assert.assertEquals(port3, vesselAvailability1.getStartAt());
 			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMinVolumeAvailable(), 0.0);
 			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getMaxVolumeAvailable(), 0.0);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
@@ -834,7 +834,7 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability2, assignedObject2, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability2, assignedObject1, startConditionMap, mapping);
 
-			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
+			Assert.assertEquals(port3, vesselAvailability2.getStartAt());
 			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMinVolumeAvailable(), 0.0);
 			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getMaxVolumeAvailable(), 0.0);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartBy());
