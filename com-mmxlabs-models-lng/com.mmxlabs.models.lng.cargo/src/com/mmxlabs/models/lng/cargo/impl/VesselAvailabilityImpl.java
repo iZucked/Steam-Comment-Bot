@@ -119,7 +119,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CHARTER_NUMBER_EDEFAULT = 0;
+	protected static final int CHARTER_NUMBER_EDEFAULT = 1;
 
 	/**
 	 * The cached value of the '{@link #getCharterNumber() <em>Charter Number</em>}' attribute.

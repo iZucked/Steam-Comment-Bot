@@ -573,6 +573,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 
 	/**
 	 * Returns the value of the '<em><b>Charter Number</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Charter Number</em>' attribute isn't clear,
@@ -582,7 +583,8 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return the value of the '<em>Charter Number</em>' attribute.
 	 * @see #setCharterNumber(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterNumber()
-	 * @model
+	 * @model default="1"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0'"
 	 * @generated
 	 */
 	int getCharterNumber();
