@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -74,6 +75,9 @@ public class VoyagePlanner {
 
 	@Inject
 	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private IPortCooldownDataProvider portCooldownDataProvider;
 
 	@Inject
 	private Provider<@NonNull IVoyagePlanOptimiser> voyagePlanOptimiserProvider;
@@ -205,7 +209,7 @@ public class VoyagePlanner {
 					options.setAllowCooldown(true);
 				}
 			} else {
-				if (thisPort.shouldVesselsArriveCold()) {
+				if (portCooldownDataProvider.shouldVesselsArriveCold(thisPort)) {
 					// we don't want to use cooldown ever
 					options.setAllowCooldown(false);
 				} else {

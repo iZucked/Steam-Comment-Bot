@@ -29,15 +29,6 @@ public class Port extends IndexedObject implements IPort {
 	 */
 	private String timeZoneId = "";
 
-	/**
-	 * True if no cooldown is provided
-	 */
-	private boolean arriveCold;
-	/**
-	 * A calculator used to determine the price of cooldown LNG here.
-	 */
-	private ICooldownCalculator cooldownCalculator;
-
 	public Port(final IIndexingContext context) {
 		super(context);
 	}
@@ -74,31 +65,10 @@ public class Port extends IndexedObject implements IPort {
 				return false;
 			}
 
-			if (!Equality.isEqual(cooldownCalculator, p.getCooldownCalculator())) {
-				return false;
-			}
 			return true;
 		}
 
 		return false;
-	}
-
-	@Override
-	public boolean shouldVesselsArriveCold() {
-		return arriveCold;
-	}
-
-	public void setShouldVesselsArriveCold(final boolean arriveCold) {
-		this.arriveCold = arriveCold;
-	}
-
-	@Override
-	public ICooldownCalculator getCooldownCalculator() {
-		return cooldownCalculator;
-	}
-
-	public void setCooldownCalculator(final ICooldownCalculator cooldownCalculator) {
-		this.cooldownCalculator = cooldownCalculator;
 	}
 
 	@Override

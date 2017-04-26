@@ -23,5 +23,6 @@ public interface IPortCVRangeProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getPortMinCV(@NonNull IPort port);
+
 	int getPortMaxCV(@NonNull IPort port);
 }

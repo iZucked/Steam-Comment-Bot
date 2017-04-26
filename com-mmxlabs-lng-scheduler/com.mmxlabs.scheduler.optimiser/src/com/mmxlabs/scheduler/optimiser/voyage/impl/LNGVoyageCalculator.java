@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -62,6 +63,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	@Inject
 	private IPortCostProvider portCostProvider;
+
+	@Inject
+	private IPortCooldownDataProvider portCooldownDataProvider;
 
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
@@ -498,7 +502,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						cooldownPort = port;
 					}
 
-					final ICooldownCalculator cooldownCalculator = port.getCooldownCalculator();
+					final ICooldownCalculator cooldownCalculator = portCooldownDataProvider.getCooldownCalculator(port);
 					if (cooldownCalculator != null) {
 						cooldownCost = cooldownCalculator.calculateCooldownCost(vesselClass, cooldownPort, cooldownCV, cooldownTime);
 					} else {
@@ -1282,11 +1286,22 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	}
 
+	/**
+	 * API for unit testing
+	 */
+	public void setPortCooldownProvider(IPortCooldownDataProvider portCooldownDataProvider) {
+		this.portCooldownDataProvider = portCooldownDataProvider;
+	}
+
+	/**
+	 * API for unit testing
+	 */
 	public void setRouteCostDataComponentProvider(final IRouteCostProvider provider) {
 		this.routeCostProvider = provider;
 	}
 
 	/**
+	 * API for unit testing
 	 */
 	public void setPortCVProvider(final IPortCVProvider portCVProvider) {
 		this.portCVProvider = portCVProvider;

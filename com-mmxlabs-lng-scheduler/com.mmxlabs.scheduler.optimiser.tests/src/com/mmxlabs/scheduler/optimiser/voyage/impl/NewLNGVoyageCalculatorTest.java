@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -964,6 +965,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
+		final IPortCooldownDataProvider portCooldownDataProvider = Mockito.mock(IPortCooldownDataProvider.class);
+		calc.setPortCooldownProvider(portCooldownDataProvider);
+
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
 		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
@@ -980,7 +984,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
 
-		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
+		Mockito.when(portCooldownDataProvider.getCooldownCalculator(toPort)).thenReturn(cooldownCalculator);
 
 		Mockito.when(mockPortCVProvider.getPortCV(toPort)).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 
@@ -1025,6 +1029,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
+		final IPortCooldownDataProvider portCooldownDataProvider = Mockito.mock(IPortCooldownDataProvider.class);
+		calc.setPortCooldownProvider(portCooldownDataProvider);
+
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
 		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
@@ -1041,7 +1048,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
 
-		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
+		Mockito.when(portCooldownDataProvider.getCooldownCalculator(toPort)).thenReturn(cooldownCalculator);
 
 		Mockito.when(toPortSlot.getCargoCVValue()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 
@@ -1085,6 +1092,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
+		final IPortCooldownDataProvider portCooldownDataProvider = Mockito.mock(IPortCooldownDataProvider.class);
+		calc.setPortCooldownProvider(portCooldownDataProvider);
+
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
 		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
@@ -1101,7 +1111,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
 
-		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
+		Mockito.when(portCooldownDataProvider.getCooldownCalculator(toPort)).thenReturn(cooldownCalculator);
 
 		Mockito.when(toPortSlot.getCargoCVValue()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 

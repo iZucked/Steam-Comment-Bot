@@ -77,6 +77,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
@@ -140,6 +142,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCooldownDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
@@ -331,6 +334,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapPortCVProviderEditor portCVProviderEditor = new HashMapPortCVProviderEditor();
 		bind(IPortCVProvider.class).toInstance(portCVProviderEditor);
 		bind(IPortCVProviderEditor.class).toInstance(portCVProviderEditor);
+		
+		final HashMapPortCooldownDataProviderEditor portCooldownDataProviderEditor = new HashMapPortCooldownDataProviderEditor();
+		bind(IPortCooldownDataProvider.class).toInstance(portCooldownDataProviderEditor);
+		bind(IPortCooldownDataProviderEditor.class).toInstance(portCooldownDataProviderEditor);
 
 		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor();
 		bind(IAlternativeElementProvider.class).toInstance(alternativeElementProviderEditor);

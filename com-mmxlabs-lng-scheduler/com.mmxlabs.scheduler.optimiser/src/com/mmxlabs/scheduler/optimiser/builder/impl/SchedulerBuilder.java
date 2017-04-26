@@ -119,6 +119,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
@@ -318,6 +320,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private ICalculatorProviderEditor calculatorProvider;
+
+	@Inject
+	@NonNull
+	private IPortCooldownDataProviderEditor cooldownDataProvider;
 
 	@Inject
 	@NonNull
@@ -750,8 +756,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId) {
 
 		port.setName(name);
-		port.setShouldVesselsArriveCold(arriveCold);
-		port.setCooldownCalculator(cooldownCalculator);
 		port.setTimeZoneId(timezoneId);
 		ports.add(port);
 
@@ -765,6 +769,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// travel time from A to A should be zero, right?
 		this.setPortToPortDistance(port, port, ERouteOption.DIRECT, 0);
 
+		cooldownDataProvider.setShouldVesselsArriveCold(port, arriveCold);
+		cooldownDataProvider.setCooldownCalculator(port, cooldownCalculator);
 		calculatorProvider.addCooldownCalculator(cooldownCalculator);
 	}
 

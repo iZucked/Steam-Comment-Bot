@@ -32,19 +32,4 @@ public interface IPort extends IIndexedObject {
 	 */
 	@NonNull
 	String getTimeZoneId();
-	
-	/**
-	 * Some ports do not typically provide cooldown facilities to inbound vessels. These ports will return true here, indicating that vessels should arrive cold. If a vessel <em>cannot</em> arrive
-	 * cold, because its earlier journey does not allow any LNG to load, cooldown may still be performed.
-	 * 
-	 * @return true if cooldown is not routinely provided at this port.
-	 */
-	boolean shouldVesselsArriveCold();
-
-	/**
-	 * A {@link ICooldownCalculator} used for pricing cooldown gas.
-	 * 
-	 * @return
-	 */
-	ICooldownCalculator getCooldownCalculator();
 }
