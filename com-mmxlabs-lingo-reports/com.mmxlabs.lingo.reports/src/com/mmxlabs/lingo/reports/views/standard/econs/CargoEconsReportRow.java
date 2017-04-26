@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.standard.econs;
 
 import java.util.function.Supplier;
 

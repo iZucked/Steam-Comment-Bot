@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.standard.econs;
 
 import javax.annotation.PreDestroy;
 
@@ -17,8 +17,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.IElementCollector;
 
-import com.mmxlabs.common.options.Options;
-import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions.MarginBy;
+import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.standard;
+package com.mmxlabs.lingo.reports.views.standard.econs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +46,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions;
-import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions.MarginBy;
+import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions;
+import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;

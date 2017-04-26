@@ -11,8 +11,8 @@ import org.eclipse.ui.IViewLayout;
 
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
-import com.mmxlabs.lingo.reports.views.standard.CargoEconsReport;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
+import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReport;
 
 public class DiffPerspective implements IPerspectiveFactory {
 
