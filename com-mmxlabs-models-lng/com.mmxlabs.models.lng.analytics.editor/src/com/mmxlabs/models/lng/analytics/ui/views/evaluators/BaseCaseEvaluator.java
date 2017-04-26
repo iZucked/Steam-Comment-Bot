@@ -465,7 +465,7 @@ public class BaseCaseEvaluator {
 				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
-//					vesselAvailability.getStartHeel().setPriceExpression(PerMMBTU(0.1);
+					// vesselAvailability.getStartHeel().setPriceExpression(PerMMBTU(0.1);
 
 					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
@@ -480,9 +480,7 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setFleet(false);
 				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
-					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
-					startAt.clear();
-					startAt.add(optionalAvailabilityShippingOption.getStartPort());
+					vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 				}
 				if (optionalAvailabilityShippingOption.getEndPort() != null) {
 					EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
@@ -510,7 +508,7 @@ public class BaseCaseEvaluator {
 				if (fleetShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
-//					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
 					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
@@ -549,7 +547,7 @@ public class BaseCaseEvaluator {
 				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
-//					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
 					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
@@ -564,9 +562,7 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setFleet(false);
 				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
-					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
-					startAt.clear();
-					startAt.add(optionalAvailabilityShippingOption.getStartPort());
+					vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 				}
 				if (optionalAvailabilityShippingOption.getEndPort() != null) {
 					EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
@@ -594,7 +590,7 @@ public class BaseCaseEvaluator {
 				if (fleetShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
-//					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
 					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
 					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());

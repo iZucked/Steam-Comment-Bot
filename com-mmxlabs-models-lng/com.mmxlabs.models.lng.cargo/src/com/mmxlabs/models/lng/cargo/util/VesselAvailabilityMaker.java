@@ -13,7 +13,6 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 
@@ -34,10 +33,7 @@ public class VesselAvailabilityMaker {
 	}
 
 	public VesselAvailabilityMaker withStartPort(@Nullable final Port port) {
-		vesselAvailability.getStartAt().clear();
-		if (port != null) {
-			vesselAvailability.getStartAt().add(port);
-		}
+		vesselAvailability.setStartAt(port);
 
 		return this;
 	}

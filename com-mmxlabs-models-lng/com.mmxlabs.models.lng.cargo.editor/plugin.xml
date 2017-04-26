@@ -230,6 +230,12 @@
            ownerEClass="com.mmxlabs.models.lng.cargo.VesselEvent"
            referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
      </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityStartPortValueProviderFactory"
+           id="VesselAvailabilityStartPortValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+           referenceEClass="com.mmxlabs.models.lng.port.Port">
+     </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -270,6 +276,9 @@
          point="com.mmxlabs.models.util.import.extramodelimporters">
       <extramodelimporter
             class="com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter">
+      </extramodelimporter>
+      <extramodelimporter
+            class="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter">
       </extramodelimporter>
    </extension>
  <extension

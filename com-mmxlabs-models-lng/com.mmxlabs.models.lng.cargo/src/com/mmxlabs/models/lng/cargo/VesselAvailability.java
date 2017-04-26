@@ -31,6 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet <em>Fleet</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAt <em>Start At</em>}</li>
@@ -159,20 +160,30 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	boolean isSetTimeCharterRate();
 
 	/**
-	 * Returns the value of the '<em><b>Start At</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * Returns the value of the '<em><b>Start At</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Start At</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start At</em>' reference list.
+	 * @return the value of the '<em>Start At</em>' reference.
+	 * @see #setStartAt(Port)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_StartAt()
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet<Port>> getStartAt();
+	Port getStartAt();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAt <em>Start At</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start At</em>' reference.
+	 * @see #getStartAt()
+	 * @generated
+	 */
+	void setStartAt(Port value);
 
 	/**
 	 * Returns the value of the '<em><b>Start After</b></em>' attribute.
@@ -559,6 +570,32 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	void setBallastBonusContract(BallastBonusContract value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Number</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Number</em>' attribute.
+	 * @see #setCharterNumber(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterNumber()
+	 * @model
+	 * @generated
+	 */
+	int getCharterNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Number</em>' attribute.
+	 * @see #getCharterNumber()
+	 * @generated
+	 */
+	void setCharterNumber(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

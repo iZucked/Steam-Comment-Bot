@@ -48,8 +48,8 @@ public class VesselAvailabilityPortConstraintTest {
 		// Mock a vessel for it to belong to.
 		final Vessel vessel = mock(Vessel.class);
 		// Mock a port to think about
-		@SuppressWarnings("unchecked")
-		final EList<APortSet<Port>> startPortSet = mock(EList.class,  "Port Set A");
+//		@SuppressWarnings("unchecked")
+//		final EList<APortSet<Port>> startPortSet = mock(EList.class,  "Port Set A");
 		@SuppressWarnings("unchecked")
 		final EList<APortSet<Port>> endPortSet = mock(EList.class,  "Port Set B");
 		
@@ -81,8 +81,8 @@ public class VesselAvailabilityPortConstraintTest {
 		// the inaccessible port list will be queried whether it
 		// contains port A
 		when(inaccessiblePorts.contains(portA)).thenReturn(true);
-		// Then it will want to get the port
-		when(availability.getStartAt()).thenReturn(startPortSet);
+//		 Then it will want to get the port
+//		when(availability.getStartAt()).thenReturn(startPortSet);
 		// Then it will want to get the port
 		when(availability.getEndAt()).thenReturn(endPortSet);
 		// It will ask for the port's name

@@ -148,13 +148,19 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoGroup/cargoes"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselAvailability">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/fleet"/>
+      <genFeatures createChild="false" propertyDescription="Flag indicates vessel is owned or on a long term charter"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/fleet"/>
       <genFeatures createChild="false" propertyDescription="Is this availability optional?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/optional"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/vessel"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/entity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/timeCharterRate"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="The vessel must start at one of these ports"
+      <genFeatures notify="false" createChild="false" propertyDescription="The vessel"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/vessel"/>
+      <genFeatures createChild="false" propertyDescription="The vessel charter number. Only needed if there are multiple charters of the same vessel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/charterNumber"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The legal entity who is the owner or charterer"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/entity"/>
+      <genFeatures createChild="false" propertyDescription="Cost per day for using the vessel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/timeCharterRate"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The port the vessel starts at. May be blank and starts at the first event."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startAt"/>
       <genFeatures createChild="false" propertyDescription="The vessel is not available before this date (UTC)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/startAfter"/>
@@ -169,7 +175,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startHeel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endHeel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/forceHireCostOnlyEndRule"/>
-      <genFeatures createChild="false" propertyDescription="A fleet (owned) vessel"
+      <genFeatures createChild="false" propertyDescription="The cost to reposition the vessel before use"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/repositioningFee"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/ballastBonusContract"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartByAsDateTime"/>

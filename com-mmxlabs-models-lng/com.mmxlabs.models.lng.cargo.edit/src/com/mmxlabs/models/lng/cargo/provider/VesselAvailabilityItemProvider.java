@@ -60,6 +60,7 @@ public class VesselAvailabilityItemProvider
 			addFleetPropertyDescriptor(object);
 			addOptionalPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
+			addCharterNumberPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
 			addStartAtPropertyDescriptor(object);
@@ -86,7 +87,7 @@ public class VesselAvailabilityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselAvailability_fleet_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_fleet_feature", "_UI_VesselAvailability_type"),
+				 getString("_UI_VesselAvailability_fleet_description"),
 				 CargoPackage.Literals.VESSEL_AVAILABILITY__FLEET,
 				 true,
 				 false,
@@ -108,7 +109,7 @@ public class VesselAvailabilityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselAvailability_vessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_vessel_feature", "_UI_VesselAvailability_type"),
+				 getString("_UI_VesselAvailability_vessel_description"),
 				 CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL,
 				 true,
 				 false,
@@ -130,7 +131,7 @@ public class VesselAvailabilityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselAvailability_timeCharterRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_timeCharterRate_feature", "_UI_VesselAvailability_type"),
+				 getString("_UI_VesselAvailability_timeCharterRate_description"),
 				 CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE,
 				 true,
 				 false,
@@ -339,6 +340,28 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Charter Number feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterNumberPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_charterNumber_feature"),
+				 getString("_UI_VesselAvailability_charterNumber_description"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_NUMBER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -350,7 +373,7 @@ public class VesselAvailabilityItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_VesselAvailability_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_entity_feature", "_UI_VesselAvailability_type"),
+				 getString("_UI_VesselAvailability_entity_description"),
 				 CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY,
 				 true,
 				 false,
@@ -443,6 +466,7 @@ public class VesselAvailabilityItemProvider
 		switch (notification.getFeatureID(VesselAvailability.class)) {
 			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER:
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__START_BY:

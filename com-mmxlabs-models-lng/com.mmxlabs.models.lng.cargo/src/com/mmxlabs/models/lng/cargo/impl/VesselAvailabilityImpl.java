@@ -42,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isFleet <em>Fleet</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getCharterNumber <em>Charter Number</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartAt <em>Start At</em>}</li>
@@ -111,6 +112,26 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	protected Vessel vessel;
 
 	/**
+	 * The default value of the '{@link #getCharterNumber() <em>Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CHARTER_NUMBER_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCharterNumber() <em>Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected int charterNumber = CHARTER_NUMBER_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -150,14 +171,14 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	protected boolean timeCharterRateESet;
 
 	/**
-	 * The cached value of the '{@link #getStartAt() <em>Start At</em>}' reference list.
+	 * The cached value of the '{@link #getStartAt() <em>Start At</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getStartAt()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet<Port>> startAt;
+	protected Port startAt;
 
 	/**
 	 * The default value of the '{@link #getStartAfter() <em>Start After</em>}' attribute.
@@ -484,11 +505,37 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet<Port>> getStartAt() {
-		if (startAt == null) {
-			startAt = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CargoPackage.VESSEL_AVAILABILITY__START_AT);
+	public Port getStartAt() {
+		if (startAt != null && startAt.eIsProxy()) {
+			InternalEObject oldStartAt = (InternalEObject)startAt;
+			startAt = (Port)eResolveProxy(oldStartAt);
+			if (startAt != oldStartAt) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__START_AT, oldStartAt, startAt));
+			}
 		}
 		return startAt;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetStartAt() {
+		return startAt;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setStartAt(Port newStartAt) {
+		Port oldStartAt = startAt;
+		startAt = newStartAt;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__START_AT, oldStartAt, startAt));
 	}
 
 	/**
@@ -951,6 +998,27 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCharterNumber() {
+		return charterNumber;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterNumber(int newCharterNumber) {
+		int oldCharterNumber = charterNumber;
+		charterNumber = newCharterNumber;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER, oldCharterNumber, charterNumber));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZonedDateTime getStartByAsDateTime() {
@@ -1080,13 +1148,16 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER:
+				return getCharterNumber();
 			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
-				return getStartAt();
+				if (resolve) return getStartAt();
+				return basicGetStartAt();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 				return getStartAfter();
 			case CargoPackage.VESSEL_AVAILABILITY__START_BY:
@@ -1132,6 +1203,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)newValue);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER:
+				setCharterNumber((Integer)newValue);
+				return;
 			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
 				return;
@@ -1139,8 +1213,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				setTimeCharterRate((String)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
-				getStartAt().clear();
-				getStartAt().addAll((Collection<? extends APortSet<Port>>)newValue);
+				setStartAt((Port)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 				setStartAfter((LocalDateTime)newValue);
@@ -1194,6 +1267,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)null);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER:
+				setCharterNumber(CHARTER_NUMBER_EDEFAULT);
+				return;
 			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
@@ -1201,7 +1277,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				unsetTimeCharterRate();
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
-				getStartAt().clear();
+				setStartAt((Port)null);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 				unsetStartAfter();
@@ -1251,12 +1327,14 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				return vessel != null;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER:
+				return charterNumber != CHARTER_NUMBER_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
 				return entity != null;
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
-				return startAt != null && !startAt.isEmpty();
+				return startAt != null;
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 				return isSetStartAfter();
 			case CargoPackage.VESSEL_AVAILABILITY__START_BY:
@@ -1315,6 +1393,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		result.append(fleet);
 		result.append(", optional: ");
 		result.append(optional);
+		result.append(", charterNumber: ");
+		result.append(charterNumber);
 		result.append(", timeCharterRate: ");
 		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
 		result.append(", startAfter: ");

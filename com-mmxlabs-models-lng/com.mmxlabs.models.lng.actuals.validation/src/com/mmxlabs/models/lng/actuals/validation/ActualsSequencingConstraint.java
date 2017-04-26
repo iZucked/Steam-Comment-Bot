@@ -137,24 +137,17 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 						final Port actualPort = loadActuals.getTitleTransferPoint();
 						final ZonedDateTime actualOperationsStart = loadActuals.getOperationsStartAsDateTime();
 						if (actualOperationsStart != null) {
-							final Set<Port> startPorts = SetUtils.getObjects(va.getStartAt());
-							if (startPorts.isEmpty()) {
-								// Will match first port, no problem
-							} else if (startPorts.size() == 1) {
-								// Check ports match
-								if (startPorts.contains(actualPort)) {
-									// Fine...
-								} else {
-									// Error
-									final String msg = String.format("Actualised Cargo %s and vessel %s starting port do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
-											getPortName(actualPort), getPortName(startPorts.iterator().next()));
+							final Port startPort = va.getStartAt();
+							if (startPort != null && !startPort.equals(actualPort)) {
+								// Error
+								final String msg = String.format("Actualised Cargo %s and vessel %s starting port do not match (%s - %s)", getID(assignment), getVesselName(va.getVessel()),
+										getPortName(actualPort), getPortName(startPort));
 
-									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
-									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT);
-									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+								failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT);
+								failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
 
-									statuses.add(failure);
-								}
+								statuses.add(failure);
 							} else {
 								// Too many ports, should be picked up by a different constraint.
 							}
@@ -279,6 +272,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 		}
 		return Activator.PLUGIN_ID;
+
 	}
 
 	private String getDateString(final LocalDateTime date) {

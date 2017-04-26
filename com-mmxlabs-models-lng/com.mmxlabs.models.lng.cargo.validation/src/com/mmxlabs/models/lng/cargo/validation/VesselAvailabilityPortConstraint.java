@@ -52,22 +52,12 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 			if (vesselClass == null) {
 				return Activator.PLUGIN_ID;
 			}
-			final Set<Port> inaccessiblePortSet = vessel.getInaccessiblePorts().isEmpty() ? SetUtils.getObjects(vesselClass.getInaccessiblePorts()) : SetUtils
-					.getObjects(vessel.getInaccessiblePorts());
-			if (!availablility.getStartAt().isEmpty()) {
+			final Set<Port> inaccessiblePortSet = vessel.getInaccessiblePorts().isEmpty() ? SetUtils.getObjects(vesselClass.getInaccessiblePorts())
+					: SetUtils.getObjects(vessel.getInaccessiblePorts());
+			if (availablility.getStartAt() != null) {
 
-				final Set<Port> availabilityPortSet = SetUtils.getObjects(availablility.getStartAt());
-
-				if (availabilityPortSet.size() > 1) {
-					final String message = String.format("Vessel %s's start requirement has multiple ports. Only one can be specified.", vessel.getName());
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-
-					dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_StartAt());
-					statuses.add(dcsd);
-				}
-
-				for (final Port p : availabilityPortSet) {
-
+				final Port p = availablility.getStartAt();
+				{
 					if (inaccessiblePortSet.contains(p)) {
 						final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "start",
 								p.getName(), vessel.getVesselClass().getName(), p.getName());

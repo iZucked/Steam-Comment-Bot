@@ -72,6 +72,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_fleetEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
+		add_charterNumberEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
@@ -219,6 +220,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_ballastBonusContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT));
+	}
+
+	/**
+	 * Create the editor for the charterNumber feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_charterNumberEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_NUMBER));
 	}
 
 	/**

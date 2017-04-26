@@ -52,7 +52,9 @@ public class SetUtils {
 	 */
 	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final T objectSet) {
 		final HashSet<U> result = new HashSet<U>();
-		addObjects(objectSet, result);
+		if (objectSet != null) {
+			addObjects(objectSet, result);
+		}
 		return result;
 	}
 
