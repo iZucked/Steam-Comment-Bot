@@ -57,7 +57,6 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite  {
 				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL || feature == CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_NUMBER) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					// gd.widthHint = 80;
 
 					// FIXME: Hack pending proper APi to manipulate labels
 					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) {
@@ -67,6 +66,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite  {
 						}
 						editor.setLabel(null);
 					} else {
+						gd.widthHint = 16;
 						editor.setLabel(null);
 //						gd.horizontalSpan = 2;
 					}
