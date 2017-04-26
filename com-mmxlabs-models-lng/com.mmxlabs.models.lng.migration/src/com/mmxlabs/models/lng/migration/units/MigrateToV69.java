@@ -68,7 +68,6 @@ public class MigrateToV69 extends AbstractMigrationUnit {
 				vesselAvailability.setRef("startHeelTmp", newStartHeel);
 				vesselAvailability.unsetFeature("startHeel");
 
-				// DEBUG: Why does the "CHarter Ship" end warm?
 				final EObjectWrapper endHeel = vesselAvailability.getRef("endHeel");
 				if (endHeel != null) {
 					if (endHeel.isSetFeature("targetEndHeel")) {
