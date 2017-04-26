@@ -266,7 +266,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IPort createPort(@NonNull String name, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, @NonNull final String timezoneId, final int minCvValue, final int maxCvValue);
+	IPort createPort(@NonNull String name, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, @NonNull final String timezoneId);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -277,8 +277,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IXYPort createPort(@NonNull String name, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, float x, float y, @NonNull final String timezoneId, final int minCvValue,
-			final int maxCvValue);
+	IXYPort createPort(@NonNull String name, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, float x, float y, @NonNull final String timezoneId);
 
 	/**
 	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
@@ -26,7 +28,7 @@ public class Port extends IndexedObject implements IPort {
 	 * The time zone id of the port
 	 */
 	private String timeZoneId = "";
-	
+
 	/**
 	 * True if no cooldown is provided
 	 */
@@ -36,15 +38,11 @@ public class Port extends IndexedObject implements IPort {
 	 */
 	private ICooldownCalculator cooldownCalculator;
 
-	private long minCvValue;
-
-	private long maxCvValue;
-
 	public Port(final IIndexingContext context) {
 		super(context);
 	}
 
-	public Port(final IIndexingContext context, final String name) {
+	public Port(final IIndexingContext context, final @NonNull String name) {
 		super(context);
 		setName(name);
 	}
@@ -54,16 +52,16 @@ public class Port extends IndexedObject implements IPort {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(final @NonNull String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String getTimeZoneId() {
-		return timeZoneId;		
+		return timeZoneId;
 	}
-	
-	public void setTimeZoneId(String id) {
+
+	public void setTimeZoneId(final @NonNull String id) {
 		this.timeZoneId = id;
 	}
 
@@ -102,27 +100,9 @@ public class Port extends IndexedObject implements IPort {
 	public void setCooldownCalculator(final ICooldownCalculator cooldownCalculator) {
 		this.cooldownCalculator = cooldownCalculator;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getName();
-	}
-
-	@Override
-	public long getMinCvValue() {
-		return minCvValue;
-	}
-
-	@Override
-	public long getMaxCvValue() {
-		return maxCvValue;
-	}
-	
-	public void setMinCvValue(long minCvValue) {
-		this.minCvValue = minCvValue;
-	}
-
-	public void setMaxCvValue(long maxCvValue) {
-		this.maxCvValue = maxCvValue;
 	}
 }
