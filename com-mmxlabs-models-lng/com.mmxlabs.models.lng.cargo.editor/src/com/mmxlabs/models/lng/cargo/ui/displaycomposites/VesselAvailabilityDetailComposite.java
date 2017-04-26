@@ -29,20 +29,20 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
  * @author alex
  * 
  */
-public class VesselAvailabilityDetailComposite extends DefaultDetailComposite  {
+public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit) {
 		super(parent, style, toolkit);
 	}
-	
+
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
-//				//return new FillLayout();
-//				return super.createDetailLayout(root, value);
-				
+				// //return new FillLayout();
+				// return super.createDetailLayout(root, value);
+
 				// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a label,
 				// we want the editor to take up two cells rather than one.
 				return new GridLayout(4, false);
@@ -51,14 +51,10 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite  {
 			@Override
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 
-				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
-				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
 				final EStructuralFeature feature = editor.getFeature();
 				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL || feature == CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_NUMBER) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					// 64 - magic constant from MultiDetailDialog
 
-					// FIXME: Hack pending proper APi to manipulate labels
 					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) {
 						final Label label = editor.getLabel();
 						if (label != null) {
@@ -68,13 +64,13 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite  {
 					} else {
 						gd.widthHint = 16;
 						editor.setLabel(null);
-//						gd.horizontalSpan = 2;
 					}
 
 					return gd;
 				}
-			   
-				GridData gd =  (GridData) super.createEditorLayoutData(root, value, editor, control);
+
+				// Anything else needs to fill the space.
+				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 				gd.horizontalSpan = 3;
 				return gd;
 			}
