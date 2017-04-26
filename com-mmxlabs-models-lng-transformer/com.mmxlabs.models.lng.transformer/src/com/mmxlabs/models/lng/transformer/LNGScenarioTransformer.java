@@ -675,8 +675,6 @@ public class LNGScenarioTransformer {
 
 		for (final Port ePort : portModel.getPorts()) {
 			final IPort port;
-			final int minCv = ePort.isSetMinCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMinCvValue()) : 0;
-			final int maxCv = ePort.isSetMaxCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMaxCvValue()) : Integer.MAX_VALUE;
 			if (ePort.getLocation() != null) {
 				final Location loc = ePort.getLocation();
 				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
@@ -690,6 +688,9 @@ public class LNGScenarioTransformer {
 			modelEntityMap.addModelObject(ePort, port);
 
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
+			
+			final int minCv = ePort.isSetMinCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMinCvValue()) : 0;
+			final int maxCv = ePort.isSetMaxCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMaxCvValue()) : Integer.MAX_VALUE;
 			builder.setPortMinCV(port, minCv);
 			builder.setPortMaxCV(port, maxCv);
 
