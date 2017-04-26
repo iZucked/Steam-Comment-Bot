@@ -22,11 +22,9 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 
 /**
- * A basic reference value provider implementation, which extends {@link EContentAdapter} in order to keep up-to-date
- * on changes to the reference values which it is displaying. The idea here is that typically reference values come from
- * a containment reference on an EObject, so this can be added as an adapter to the containing object (or objects). Subclasses
- * then need to override {@link #isRelevantTarget(Object, Object)} to figure out whether a notification should trigger a re-caching
- * of any cached values.
+ * A basic reference value provider implementation, which extends {@link EContentAdapter} in order to keep up-to-date on changes to the reference values which it is displaying. The idea here is that
+ * typically reference values come from a containment reference on an EObject, so this can be added as an adapter to the containing object (or objects). Subclasses then need to override
+ * {@link #isRelevantTarget(Object, Object)} to figure out whether a notification should trigger a re-caching of any cached values.
  * 
  * @author hinton
  *
@@ -36,7 +34,7 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 	 * An attribute used to get the name for objects being rendered. Almost always going to be namedObject name.
 	 */
 	protected final EAttribute nameAttribute;
-	
+
 	/**
 	 * A comparator used to sort on the string in a pair of strings and ?s
 	 */
@@ -50,42 +48,41 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 			}
 		};
 	}
-	
+
 	/**
 	 * Equivalent to {@link #BaseReferenceValueProvider(EAttribute)} with <code>MMXCorePackage.eINSTANCE.getNamedObject_Name()</code>
 	 */
 	protected BaseReferenceValueProvider() {
 		this(MMXCorePackage.eINSTANCE.getNamedObject_Name());
 	}
-	
+
 	/**
 	 * Creates an instance which will use the given attribute to get the display name for referenced objects.
+	 * 
 	 * @param nameAttribute
 	 */
 	protected BaseReferenceValueProvider(EAttribute nameAttribute) {
 		this.nameAttribute = nameAttribute;
 	}
-	
+
 	/**
 	 * Subclasses should use this method to update any caches they may have.
 	 */
 	protected abstract void cacheValues();
-	
+
 	/**
-	 * A utility method for subclasses; given a list of possible reference values and a name attribute, returns a of
-	 * Pair<String, EObject> where the String is the name and the EObject the value, sorted by name.
+	 * A utility method for subclasses; given a list of possible reference values and a name attribute, returns a of Pair<String, EObject> where the String is the name and the EObject the value,
+	 * sorted by name.
+	 * 
 	 * @param objects
 	 * @param nameAttribute
 	 * @return
 	 */
-	protected ArrayList<Pair<String, EObject>> getSortedNames(
-			final EList<? extends EObject> objects,
-			final EAttribute nameAttribute) {
-		final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
+	protected List<Pair<String, EObject>> getSortedNames(final List<? extends EObject> objects, final EAttribute nameAttribute) {
+		final List<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
 
 		for (final EObject object : objects) {
-			result.add(new Pair<String, EObject>(getName(null, null, object)
-					 + "", object));
+			result.add(new Pair<String, EObject>(getName(null, null, object) + "", object));
 		}
 
 		Collections.sort(result, comparator);
@@ -95,19 +92,15 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 
 	@Override
 	public void reallyNotifyChanged(final Notification notification) {
-		if (!notification.isTouch()
-				&& isRelevantTarget(notification.getNotifier(),
-						notification.getFeature())) {
+		if (!notification.isTouch() && isRelevantTarget(notification.getNotifier(), notification.getFeature())) {
 			cacheValues();
 		}
 	}
-	
+
 	@Override
 	protected void missedNotifications(final List<Notification> missed) {
 		for (final Notification notification : missed) {
-			if (!notification.isTouch()
-					&& isRelevantTarget(notification.getNotifier(),
-							notification.getFeature())) {
+			if (!notification.isTouch() && isRelevantTarget(notification.getNotifier(), notification.getFeature())) {
 				cacheValues();
 				return;
 			}
@@ -115,35 +108,28 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 	}
 
 	/**
-	 * A method which subclasses can override to decide whether the values need re-caching
-	 * when a notification says this feature has changed.
+	 * A method which subclasses can override to decide whether the values need re-caching when a notification says this feature has changed.
 	 * 
 	 * @param target
 	 * @param feature
 	 * @return
 	 */
-	protected boolean isRelevantTarget(final Object target,
-			final Object feature) {
+	protected boolean isRelevantTarget(final Object target, final Object feature) {
 		return feature.equals(nameAttribute);
 	}
 
 	/**
-	 * Return a list of notifiers and features on those notifiers which should be watched
-	 * for updating the given reference value's display name.
+	 * Return a list of notifiers and features on those notifiers which should be watched for updating the given reference value's display name.
 	 */
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
-			EObject referer, EReference feature, EObject referenceValue) {
+	public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
 		if (referenceValue == null)
 			return Collections.emptySet();
-		return Collections.singleton(new Pair<Notifier, List<Object>>(
-				referenceValue, Collections
-						.singletonList((Object) nameAttribute)));
+		return Collections.singleton(new Pair<Notifier, List<Object>>(referenceValue, Collections.singletonList((Object) nameAttribute)));
 	}
 
 	@Override
-	public String getName(EObject referer, EReference feature,
-			EObject referenceValue) {
+	public String getName(EObject referer, EReference feature, EObject referenceValue) {
 		if (referenceValue != null) {
 			return (String) referenceValue.eGet(nameAttribute);
 		}
@@ -151,8 +137,8 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 	}
 
 	/**
-	 * If this reference value's name depends on another feature on the object, this method will be called with that feature
-	 * at some point and upon returning true the displayed name will be recomputed.
+	 * If this reference value's name depends on another feature on the object, this method will be called with that feature at some point and upon returning true the displayed name will be
+	 * recomputed.
 	 */
 	@Override
 	public boolean updateOnChangeToFeature(Object changedFeature) {
