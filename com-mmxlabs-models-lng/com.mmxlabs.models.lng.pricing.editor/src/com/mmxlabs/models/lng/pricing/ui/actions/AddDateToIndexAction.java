@@ -6,7 +6,10 @@ package com.mmxlabs.models.lng.pricing.ui.actions;
 
 import java.text.ParseException;
 import java.time.YearMonth;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -39,21 +42,23 @@ public class AddDateToIndexAction extends Action {
 	public void run() {
 		final YearMonthAttributeImporter format = new YearMonthAttributeImporter();
 
+		@NonNull
+		Pattern pattern = Pattern.compile("(?<month>[01]?[0-9])-(?<year>[12][0-9]{3})");
 		final IInputValidator validator = new IInputValidator() {
 			@Override
 			public String isValid(final String newText) {
-				try {
-					final YearMonth date = format.parseYearMonth(newText);
-					if (date != null) {
-
-						final int year = date.getYear();
-
-						if (year < earliestYear || year > latestYear) {
-							return String.format("Year should be in range %d to %d", earliestYear, latestYear);
-						}
-						return null;
+				final Matcher m = pattern.matcher(newText);
+				if (m.matches()) {
+					final int year = Integer.parseInt(m.group("year"));
+					final int month = Integer.parseInt(m.group("month"));
+					//
+					if (year < earliestYear || year > latestYear) {
+						return String.format("Year should be in range %d to %d", earliestYear, latestYear);
 					}
-				} catch (final ParseException e) {
+					if (month < 1 || year > 12) {
+						return "Please use the form MM-yyyy";
+					}
+					return null;
 				}
 
 				return "Please use the form MM-yyyy";
@@ -61,7 +66,7 @@ public class AddDateToIndexAction extends Action {
 
 		};
 
-		final InputDialog dialog = new InputDialog(null, "Extend date range", "Enter a new start or end date.", "yyyy-MM", validator);
+		final InputDialog dialog = new InputDialog(null, "Extend date range", "Enter a new start or end date.", "MM-yyyy", validator);
 
 		if (dialog.open() == Window.OK) {
 			try {
