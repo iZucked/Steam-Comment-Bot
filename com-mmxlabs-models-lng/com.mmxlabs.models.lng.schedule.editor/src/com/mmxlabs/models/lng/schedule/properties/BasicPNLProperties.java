@@ -16,16 +16,22 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.properties.DetailProperty;
 import com.mmxlabs.models.ui.properties.PropertiesFactory;
 import com.mmxlabs.models.ui.properties.factory.DetailPropertyFactoryRegistry;
+import com.mmxlabs.models.ui.properties.factory.DetailPropertyFactoryUtil;
 import com.mmxlabs.models.ui.properties.factory.IDetailPropertyFactory;
 import com.mmxlabs.models.ui.properties.ui.StringFormatLabelProvider;
 
@@ -38,7 +44,16 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 	public DetailProperty createProperties(@NonNull final EObject eObject) {
 		if (eObject instanceof ProfitAndLossContainer) {
 			final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) eObject;
-			return createTree(profitAndLossContainer, null);
+			final DetailProperty parent = createTree(profitAndLossContainer, null);
+			if (eObject instanceof EventGrouping) {
+				final BasicShippingDetailsProperties p = new BasicShippingDetailsProperties();
+				final DetailProperty pp = p.createProperties(eObject);
+				if (pp != null) {
+					parent.getChildren().add(pp);
+				}
+			}
+
+			return parent;
 		}
 
 		return null;
@@ -50,10 +65,10 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		final GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
 		final DetailProperty dp = PropertiesFactory.eINSTANCE.createDetailProperty();
 
-		if (groupPnL == null ){
+		if (groupPnL == null) {
 			return null;
 		}
-		
+
 		// Create standard details
 		createPnLDetailProperty(groupPnL, dp, "Group P&L", "Taxed Group profit and loss", false);
 
@@ -143,17 +158,47 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 					if (slot != null) {
 						slotProperty.setName(slot.getName());
 					}
+
+					BasicSlotPNLDetails basicSlotPNLDetails = null;
+					for (final GeneralPNLDetails generalPNLDetails2 : slotPNLDetails.getGeneralPNLDetails()) {
+						if (generalPNLDetails2 instanceof BasicSlotPNLDetails) {
+							basicSlotPNLDetails = (BasicSlotPNLDetails) generalPNLDetails2;
+							break;
+						}
+					}
+
+					SlotAllocation slotAllocation = null;
+					OpenSlotAllocation openSlotAllocation = null;
+
+					if (profitAndLossContainer instanceof CargoAllocation) {
+						final CargoAllocation cargoAllocation = (CargoAllocation) profitAndLossContainer;
+						for (final SlotAllocation slotAllocation2 : cargoAllocation.getSlotAllocations()) {
+							if (slotAllocation2.getSlot() == slot) {
+								slotAllocation = slotAllocation2;
+							}
+						}
+					} else if (profitAndLossContainer instanceof OpenSlotAllocation) {
+						openSlotAllocation = (OpenSlotAllocation) profitAndLossContainer;
+					}
+					final DetailProperty basicProps = PropertiesFactory.eINSTANCE.createDetailProperty();
+					basicProps.setName("General");
+					slotProperty.getChildren().add(basicProps);
+					BasicSlotPNLDetailsProperties.populateTree(basicProps, slot, slotAllocation, openSlotAllocation, basicSlotPNLDetails, rootObject);
 				}
 
 				for (final GeneralPNLDetails generalPNLDetails2 : slotPNLDetails.getGeneralPNLDetails()) {
-
-					final EClass eClass = generalPNLDetails2.eClass();
-					assert eClass != null;
-					final IDetailPropertyFactory factory = registry.getFactory(CATEGORY_PNL, eClass);
-					if (factory != null) {
-						final DetailProperty p = factory.createProperties(generalPNLDetails2, rootObject);
-						if (p != null) {
-							slotProperty.getChildren().add(p);
+					if (generalPNLDetails2 instanceof BasicSlotPNLDetails) {
+						// Already handled
+						continue;
+					} else {
+						final EClass eClass = generalPNLDetails2.eClass();
+						assert eClass != null;
+						final IDetailPropertyFactory factory = registry.getFactory(CATEGORY_PNL, eClass);
+						if (factory != null) {
+							final DetailProperty p = factory.createProperties(generalPNLDetails2, rootObject);
+							if (p != null) {
+								slotProperty.getChildren().add(p);
+							}
 						}
 					}
 				}
@@ -173,7 +218,9 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		}
 
 		// Query the registry for generic extensions
-		for (final EObject eObj : profitAndLossContainer.getExtensions()) {
+		for (
+
+		final EObject eObj : profitAndLossContainer.getExtensions()) {
 			final EClass eClass = eObj.eClass();
 			assert eClass != null;
 			final IDetailPropertyFactory factory = registry.getFactory(CATEGORY_PNL, eClass);
@@ -184,6 +231,7 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 				}
 			}
 		}
+
 		return dp;
 
 	}
