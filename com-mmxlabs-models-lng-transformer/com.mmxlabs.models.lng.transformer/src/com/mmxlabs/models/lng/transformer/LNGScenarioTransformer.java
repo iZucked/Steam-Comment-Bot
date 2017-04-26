@@ -679,9 +679,9 @@ public class LNGScenarioTransformer {
 			final int maxCv = ePort.isSetMaxCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMaxCvValue()) : Integer.MAX_VALUE;
 			if (ePort.getLocation() != null) {
 				final Location loc = ePort.getLocation();
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone(), minCv, maxCv);
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
 			} else {
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone(), minCv, maxCv);
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone());
 			}
 
 			portAssociation.add(ePort, port);
@@ -739,7 +739,8 @@ public class LNGScenarioTransformer {
 				if (eVesselAvailability != null) {
 					BallastBonusContract eBallastBonusContract = eVesselAvailability.getBallastBonusContract();
 					if (eBallastBonusContract != null) {
-						@Nullable IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
+						@Nullable
+						IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
 						vesselAvailability.setBallastBonusContract(ballastBonusContract);
 					}
 				}
@@ -3013,7 +3014,8 @@ public class LNGScenarioTransformer {
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, repositioningFeeCurve, eVesselAvailability.isOptional());
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, repositioningFeeCurve,
+					eVesselAvailability.isOptional());
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
