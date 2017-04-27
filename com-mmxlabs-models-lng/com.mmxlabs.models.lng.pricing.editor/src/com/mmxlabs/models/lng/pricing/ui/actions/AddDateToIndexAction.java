@@ -55,7 +55,7 @@ public class AddDateToIndexAction extends Action {
 					if (year < earliestYear || year > latestYear) {
 						return String.format("Year should be in range %d to %d", earliestYear, latestYear);
 					}
-					if (month < 1 || year > 12) {
+					if (month < 1 || month > 12) {
 						return "Please use the form MM-yyyy";
 					}
 					return null;
