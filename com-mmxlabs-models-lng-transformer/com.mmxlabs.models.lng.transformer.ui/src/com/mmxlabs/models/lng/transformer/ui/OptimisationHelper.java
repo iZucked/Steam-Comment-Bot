@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -622,21 +623,20 @@ public final class OptimisationHelper {
 			// optionAdded = true;
 
 			// Check period optimisation is permitted
-			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
-//			{
-//				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-//				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
-//						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
-//				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
-//						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-//				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
-//					optStart.enabled = false;
-//					optEnd.enabled = false;
-//				} else {
-//					enabledOptionAdded = true;
-//				}
-//				optionAdded = true;
-//			}
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
+				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
+					optStart.enabled = false;
+					optEnd.enabled = false;
+				} else {
+					enabledOptionAdded = true;
+				}
+				optionAdded = true;
+			}
 
 			// if (LicenseFeatures.isPermitted("features:optimisation-clean-state")) {
 			// final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
@@ -672,15 +672,15 @@ public final class OptimisationHelper {
 			// optionAdded = true;
 			// enabledOptionAdded = true;
 			// }
-			 {
-			 final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-			 choiceData.addChoice("Off", Boolean.FALSE);
-			 choiceData.addChoice("On", Boolean.TRUE);
-			 dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
-			 ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
-			 optionAdded = true;
-			 enabledOptionAdded = true;
-			 }
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
 		}
 		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
 		{

@@ -159,8 +159,8 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
 //						 Period is not valid yet
-						userSettings.unsetPeriodStart();
-						userSettings.unsetPeriodEnd();
+//						userSettings.unsetPeriodStart();
+//						userSettings.unsetPeriodEnd();
 
 						final ScenarioLock scenarioLock = duplicate.getLock(ScenarioLock.OPTIMISER);
 						if (scenarioLock.awaitClaim()) {

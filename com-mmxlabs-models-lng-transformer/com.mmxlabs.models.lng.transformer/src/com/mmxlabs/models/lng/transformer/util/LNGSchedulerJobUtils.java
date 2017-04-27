@@ -207,7 +207,7 @@ public class LNGSchedulerJobUtils {
 	 * @param solutionCurrentProgress
 	 * @return
 	 */
-	public static boolean undoPreviousOptimsationStep(@NonNull final EditingDomain editingDomain, final int solutionCurrentProgress, boolean force) {
+	public static boolean undoPreviousOptimsationStep(@NonNull final EditingDomain editingDomain, final int solutionCurrentProgress, final boolean force) {
 		// Undo previous optimisation step if possible
 		try {
 
@@ -298,7 +298,7 @@ public class LNGSchedulerJobUtils {
 		// Maintain a list of used cargo objects.
 		final Set<Cargo> usedCargoes = new HashSet<Cargo>();
 		// Maintain a list of potentially unused cargoes - once this next step is complete, we need to remove the used cargoes to get the real list
-		final Set<Cargo> possibleUnusedCargoes = new HashSet<Cargo>();
+		final Set<Cargo> possibleUnusedCargoes = new HashSet<Cargo>(cargoModel.getCargoes());
 
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
 
@@ -428,6 +428,8 @@ public class LNGSchedulerJobUtils {
 		// Make sure there is no null reference
 		possibleUnusedCargoes.remove(null);
 
+		final Set<Slot> slotsToRemove = new HashSet<>();
+
 		// For slots which are no longer used, remove the cargo
 		for (final EObject eObj : schedule.getUnusedElements()) {
 			if (eObj instanceof LoadSlot) {
@@ -448,7 +450,7 @@ public class LNGSchedulerJobUtils {
 					// cmd.append(DeleteCommand.create(domain, c));
 					// This *should* be okay, but note will skip our command handler framework.
 					cmd.append(new DeleteCommand(domain, Collections.singleton(c)) {
-						protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(Collection<EObject> eObjects) {
+						protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
 							return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
 						}
 					});
@@ -460,7 +462,8 @@ public class LNGSchedulerJobUtils {
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
 					// Remove rather than full delete as we may wish to re-use the object later
 					// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
-					cmd.append(RemoveCommand.create(domain, eObj));
+					// cmd.append(RemoveCommand.create(domain, eObj));
+					slotsToRemove.add((Slot) spotSlot);
 
 				}
 			}
@@ -468,12 +471,45 @@ public class LNGSchedulerJobUtils {
 			cmd.append(RemoveCommand.create(domain, schedule, SchedulePackage.eINSTANCE.getSchedule_UnusedElements(), eObj));
 
 		}
+		{
+			// For slots which are no longer used, remove the cargo
+			for (final Cargo c : possibleUnusedCargoes) {
+				for (final Slot slot : c.getSlots()) {
 
-		assert possibleUnusedCargoes.isEmpty();
+					if (slot instanceof SpotSlot) {
+						final SpotSlot spotSlot = (SpotSlot) slot;
+						// Market slot, we can remove it.
+						if (spotSlot.getMarket() != null && slot.eContainer() != null) {
+							// Remove rather than full delete as we may wish to re-use the object later
+							// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
+							if (!setCargoSlots.contains(slot)) {
+								slotsToRemove.add(slot);
+								;
+							}
+
+						}
+					}
+				}
+				cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
+				cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
+				cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+				// Delete command does not work when exporting to a child scenario
+				// cmd.append(DeleteCommand.create(domain, c));
+				// This *should* be okay, but note will skip our command handler framework.
+				cmd.append(new DeleteCommand(domain, Collections.singleton(c)) {
+					protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
+						return EcoreUtil.UsageCrossReferencer.findAll(eObjects, scenario);
+					}
+				});
+			}
+		}
+		for (final Slot slot : slotsToRemove) {
+			cmd.append(RemoveCommand.create(domain, slot));
+		}
 
 		// Create all the new vessel assignment objects.
 		for (final Sequence sequence : schedule.getSequences()) {
-			boolean isRoundTrip = sequence.isSetCharterInMarket() && sequence.getSpotIndex() == -1;
+			final boolean isRoundTrip = sequence.isSetCharterInMarket() && sequence.getSpotIndex() == -1;
 
 			// final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 1;
@@ -555,7 +591,7 @@ public class LNGSchedulerJobUtils {
 	public static EditingDomain createLocalEditingDomain() {
 		final BasicCommandStack commandStack = new BasicCommandStack() {
 			@Override
-			protected void handleError(Exception exception) {
+			protected void handleError(final Exception exception) {
 				throw new RuntimeException(exception);
 			}
 		};
@@ -580,24 +616,4 @@ public class LNGSchedulerJobUtils {
 		}
 		return extraAnnotations;
 	}
-
-	// public static void evaluateFitness(ISequences rawSequenes) {
-	//
-	//
-	// IFitnessHelper helper = injector.getInstance(IFitnessHelper.class);
-	//
-	// fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
-	//
-	// final Map<String, Long> currentFitnesses = new HashMap<>();
-	// for (final IFitnessComponent fitnessComponent : fitnessComponents) {
-	// currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
-	// }
-	//
-	// final Map<String, Object> extraAnnotations = new HashMap<>();
-	// extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
-	//
-	// return new NonNullPair<ISequences, Map<String, Object>>(rawSequences, extraAnnotations);
-	// }
-	//
-	// }
 }

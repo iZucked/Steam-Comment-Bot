@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
@@ -50,7 +51,7 @@ public class ExportScheduleHelper {
 		export(scenarioResult, null);
 	}
 
-	public static void export(final ScenarioResult scenarioResult, @Nullable String nameSuggestion) throws IOException {
+	public static void export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion) throws IOException {
 		// Original data
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
@@ -69,6 +70,8 @@ public class ExportScheduleHelper {
 		copier.copyReferences();
 
 		final ScheduleModel source_scheduleModel = (ScheduleModel) copier.get(o_scheduleModel);
+		// Null mean original schedule model was not contained by the original scenario model
+		assert source_scheduleModel != null;
 
 		@NonNull
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -86,9 +89,9 @@ public class ExportScheduleHelper {
 		for (final SlotAllocation a : schedule.getSlotAllocations()) {
 			final Slot slot = a.getSlot();
 			if (slot != null && slot.eContainer() != cargoModel) {
-				EReference ref = slot.eContainmentFeature();
+				final EReference ref = slot.eContainmentFeature();
 				if (ref.isMany()) {
-					List<EObject> l = (List<EObject>) slot.eContainer().eGet(ref);
+					final List<EObject> l = (List<EObject>) slot.eContainer().eGet(ref);
 					l.remove(slot);
 				} else {
 					slot.eContainer().eUnset(ref);
@@ -97,13 +100,15 @@ public class ExportScheduleHelper {
 		}
 
 		// Clear any insertion plans - assume no longer relevant
-		AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		analyticsModel.getActionableSetPlans().clear();
 		analyticsModel.getInsertionOptions().clear();
 
 		// TODO: Need injector for correct post export processors
-		Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);
-		command.execute();
+		final Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);
+		editingDomain.getCommandStack().execute(command);
+
+		assert EMFUtils.checkValidContainment(scenarioModel);
 
 		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
 		final ScenarioInstance fork = scenarioService.insert(scenarioInstance, scenarioModel);
