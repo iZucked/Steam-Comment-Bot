@@ -11,7 +11,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
@@ -24,9 +28,11 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.mmxlabs.common.Pair;
@@ -38,28 +44,27 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class EMFUtils {
-	public static int getMinimumGenerations(final EClass child,
-			final EClass parent) {
-		if (parent == null) return Integer.MAX_VALUE;
-		if (parent == child) return 0;
+	public static int getMinimumGenerations(final EClass child, final EClass parent) {
+		if (parent == null)
+			return Integer.MAX_VALUE;
+		if (parent == child)
+			return 0;
 		if (child.getESuperTypes().isEmpty()) {
-			if (parent == EcorePackage.eINSTANCE.getEObject()) return 1;
+			if (parent == EcorePackage.eINSTANCE.getEObject())
+				return 1;
 		}
 		int result = Integer.MAX_VALUE;
 		for (final EClass superClass : child.getESuperTypes()) {
-			final int d = getMinimumGenerations(superClass,
-					parent);
+			final int d = getMinimumGenerations(superClass, parent);
 			if (d - 1 < result - 1) {
 				result = d + 1;
 			}
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Serialize an EObject into a byte array; currently EMF generated models do
-	 * not serialize properly, particularly models with complicated containment
-	 * going on.
+	 * Serialize an EObject into a byte array; currently EMF generated models do not serialize properly, particularly models with complicated containment going on.
 	 * 
 	 * @see #deserialiseEObject(byte[], EClass) - the inverse of this method
 	 * @param object
@@ -69,29 +74,25 @@ public class EMFUtils {
 	public static byte[] serializeEObject(final EObject object) {
 		final ResourceSet set = new ResourceSetImpl();
 		final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-		set.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("*", rf);
+		set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
 
-		set.getPackageRegistry().put(object.eClass().getEPackage().getNsURI(),
-				object.eClass().getEPackage());
+		set.getPackageRegistry().put(object.eClass().getEPackage().getNsURI(), object.eClass().getEPackage());
 
-		final Resource resource = set.createResource(URI.createGenericURI(
-				"invalid", "invalid", "invalid"));
+		final Resource resource = set.createResource(URI.createGenericURI("invalid", "invalid", "invalid"));
 
 		resource.getContents().add(object);
 
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			resource.save(baos, Collections.emptyMap());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		} // byte array cannot produce IO exception
 
 		return baos.toByteArray();
 	}
 
 	/**
-	 * Deserialize a byte array produced by {@link #serializeEObject(EObject)}.
-	 * See the doc for that on why this is necessary.
+	 * Deserialize a byte array produced by {@link #serializeEObject(EObject)}. See the doc for that on why this is necessary.
 	 * 
 	 * @param <T>
 	 * @param byteArray
@@ -101,34 +102,28 @@ public class EMFUtils {
 	 * @return the deserialized object
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialiseEObject(final byte[] byteArray,
-			final EClass clazz) {
+	public static <T> T deserialiseEObject(final byte[] byteArray, final EClass clazz) {
 		final ResourceSet set = new ResourceSetImpl();
 		final XMIResourceFactoryImpl rf = new XMIResourceFactoryImpl();
-		set.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("*", rf);
+		set.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", rf);
 
-		set.getPackageRegistry().put(clazz.getEPackage().getNsURI(),
-				clazz.getEPackage());
+		set.getPackageRegistry().put(clazz.getEPackage().getNsURI(), clazz.getEPackage());
 
-		final Resource resource = set.createResource(URI.createGenericURI(
-				"invalid", "invalid", "invalid"));
+		final Resource resource = set.createResource(URI.createGenericURI("invalid", "invalid", "invalid"));
 
 		final ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
 		try {
 			resource.load(bais, Collections.emptyMap());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 		return (T) clazz.getInstanceClass().cast(resource.getContents().get(0));
 	}
 
 	/**
-	 * Iterate through all the attributes of the given EObject and find the
-	 * earliest and latest dates
+	 * Iterate through all the attributes of the given EObject and find the earliest and latest dates
 	 * 
 	 * @param object
-	 * @return a pair, first element containing the earliest date and second the
-	 *         latest
+	 * @return a pair, first element containing the earliest date and second the latest
 	 */
 	public static Pair<Date, Date> findMinMaxDateAttributes(final EObject object) {
 		final Pair<Date, Date> result = new Pair<Date, Date>();
@@ -139,7 +134,7 @@ public class EMFUtils {
 
 	}
 
-	private static void updateMinMax(Pair<Date, Date> pair, Date date) {
+	private static void updateMinMax(final Pair<Date, Date> pair, final Date date) {
 		if (date == null)
 			return;
 		if (pair.getFirst() == null || date.before(pair.getFirst()))
@@ -155,8 +150,7 @@ public class EMFUtils {
 	 * @param object
 	 * @param result
 	 */
-	private static void findMinMaxDateAttributes(final EObject object,
-			final Pair<Date, Date> mm) {
+	private static void findMinMaxDateAttributes(final EObject object, final Pair<Date, Date> mm) {
 
 		final TreeIterator<EObject> iter = object.eAllContents();
 		while (iter.hasNext()) {
@@ -165,8 +159,7 @@ public class EMFUtils {
 
 			for (final EAttribute attribute : eClass.getEAllAttributes()) {
 				if (sub.eIsSet(attribute)) {
-					if (Date.class.isAssignableFrom(attribute
-							.getEAttributeType().getInstanceClass())) {
+					if (Date.class.isAssignableFrom(attribute.getEAttributeType().getInstanceClass())) {
 						final Date dt = (Date) sub.eGet(attribute);
 
 						if (mm.getFirst() == null || dt.before(mm.getFirst()))
@@ -182,11 +175,9 @@ public class EMFUtils {
 
 	public static EClass findConcreteSubclass(final EClass eClass) {
 		if (eClass.isAbstract()) {
-			for (final EClassifier otherClass : eClass.getEPackage()
-					.getEClassifiers()) {
+			for (final EClassifier otherClass : eClass.getEPackage().getEClassifiers()) {
 				if (otherClass instanceof EClass) {
-					if (!(((EClass) otherClass).isAbstract())
-							&& eClass.isSuperTypeOf((EClass) otherClass)) {
+					if (!(((EClass) otherClass).isAbstract()) && eClass.isSuperTypeOf((EClass) otherClass)) {
 						return (EClass) otherClass;
 					}
 				}
@@ -207,8 +198,7 @@ public class EMFUtils {
 		final EClass concrete = findConcreteSubclass(eClass);
 		if (concrete == null)
 			return null;
-		final EObject result = concrete.getEPackage().getEFactoryInstance()
-				.create(concrete);
+		final EObject result = concrete.getEPackage().getEFactoryInstance().create(concrete);
 
 		for (final EReference ref : eClass.getEAllContainments()) {
 			if (ref.isMany())
@@ -221,10 +211,10 @@ public class EMFUtils {
 
 		return result;
 	}
-	
+
 	/**
-	 * For this object and all its contained objects, find all singular attributes with the given data type, and if they are null at the moment
-	 * either (a) unset them if they are unsettable attributes, or (b) set them to the given value if they are not unsettable.
+	 * For this object and all its contained objects, find all singular attributes with the given data type, and if they are null at the moment either (a) unset them if they are unsettable attributes,
+	 * or (b) set them to the given value if they are not unsettable.
 	 * 
 	 * 
 	 * @param object
@@ -237,7 +227,8 @@ public class EMFUtils {
 		final TreeIterator<EObject> iterator = object.eAllContents();
 		while (object != null) {
 			for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
-				if (attribute.isMany()) continue;
+				if (attribute.isMany())
+					continue;
 				if (attribute.getEAttributeType().equals(dataType)) {
 					final Object value = object.eGet(attribute);
 					if (value == null) {
@@ -249,7 +240,7 @@ public class EMFUtils {
 					}
 				}
 			}
-			
+
 			if (iterator.hasNext()) {
 				object = iterator.next();
 			} else {
@@ -272,14 +263,12 @@ public class EMFUtils {
 		calendar.clear(Calendar.SECOND);
 		calendar.clear(Calendar.MILLISECOND);
 		final Date date = calendar.getTime();
-		
+
 		return unsetOrSetNullValues(input, EcorePackage.eINSTANCE.getEDate(), date);
 	}
 
-	
 	/**
-	 * Find an EClass which is a common superclass of the given objects NOTE
-	 * this does not work with multiple supertypes
+	 * Find an EClass which is a common superclass of the given objects NOTE this does not work with multiple supertypes
 	 * 
 	 * @param objects
 	 * @return
@@ -308,14 +297,12 @@ public class EMFUtils {
 	}
 
 	/**
-	 * Returns true if all the {@link EObject}s in the given collection have the
-	 * same {@link EClass}.
+	 * Returns true if all the {@link EObject}s in the given collection have the same {@link EClass}.
 	 * 
 	 * @param objects
 	 * @return true if all objects have same {@link EClass}
 	 */
-	public static boolean allSameEClass(
-			final Collection<? extends EObject> objects) {
+	public static boolean allSameEClass(final Collection<? extends EObject> objects) {
 		final Iterator<? extends EObject> it = objects.iterator();
 		if (it.hasNext() == false)
 			return true;
@@ -325,5 +312,55 @@ public class EMFUtils {
 				return false;
 		}
 		return true;
+	}
+
+	// Examine models for references to elements not contained in the root tree. Returns true if all elements are contained. Mainly useful for debugging.
+	public static boolean checkValidContainment(final EObject root) {
+		final Set<EObject> containedElements = new HashSet<>();
+		final Set<EObject> referredToElements = new HashSet<>();
+
+		containedElements.add(root);
+		final TreeIterator<EObject> itr = root.eAllContents();
+		while (itr.hasNext()) {
+			final EObject element = itr.next();
+			containedElements.add(element);
+
+			for (final EReference ref : element.eClass().getEAllReferences()) {
+				// Tree iterator will decend here
+				if (ref.isContainment()) {
+					continue;
+				}
+
+				if (ref.isMany()) {
+					final List<EObject> children = (List<EObject>) element.eGet(ref);
+					if (children != null) {
+						referredToElements.addAll(children);
+					}
+				} else {
+					referredToElements.add((EObject) element.eGet(ref));
+				}
+
+			}
+		}
+		// Remove any nulls
+		referredToElements.remove(null);
+		// Remove contained elements;
+		referredToElements.removeAll(containedElements);
+
+		final int uncontainedElementCount = referredToElements.size();
+
+		if (false && uncontainedElementCount > 0) {
+			// For debugging.
+			final Map<EObject, Collection<Setting>> findAll = EcoreUtil.UsageCrossReferencer.findAll(referredToElements, root);
+			for (final EObject obj : referredToElements) {
+				final Collection<Setting> settomgs = findAll.get(obj);
+				for (final Setting s : settomgs) {
+					final int ii = 0;
+				}
+			}
+
+		}
+		return uncontainedElementCount == 0;
+
 	}
 }
