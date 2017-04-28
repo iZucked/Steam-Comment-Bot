@@ -244,6 +244,8 @@ public class ChangeSetView implements IAdaptable {
 
 	private boolean canExportChangeSet;
 
+	private InsertionPlanFilter insertionPlanFilter;
+
 	// private MPart part;
 
 	private final class ViewUpdateRunnable implements Runnable {
@@ -470,7 +472,7 @@ public class ChangeSetView implements IAdaptable {
 				return (T) new IActionPlanHandler() {
 
 					@Override
-					public void displayActionPlan(List<ScenarioResult> scenarios) {
+					public void displayActionPlan(final List<ScenarioResult> scenarios) {
 						cleanUpVesselColumns();
 
 						final ActionSetTransformer transformer = new ActionSetTransformer();
@@ -1075,7 +1077,7 @@ public class ChangeSetView implements IAdaptable {
 		// }
 		// });
 
-		final ViewerFilter[] filters = new ViewerFilter[1];
+		final ViewerFilter[] filters = new ViewerFilter[2];
 		filters[0] = new ViewerFilter() {
 
 			@Override
@@ -1104,6 +1106,9 @@ public class ChangeSetView implements IAdaptable {
 				return true;
 			}
 		};
+		insertionPlanFilter = new InsertionPlanFilter();
+		filters[1] = insertionPlanFilter;
+
 		viewer.setFilters(filters);
 
 		scenarioComparisonService.addListener(listener);
@@ -1399,8 +1404,8 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long f = ChangeSetKPIUtil.getPNL(change, ResultType.ORIGINAL);
-					long t = ChangeSetKPIUtil.getPNL(change, ResultType.NEW);
+					final long f = ChangeSetKPIUtil.getPNL(change, ResultType.ORIGINAL);
+					final long t = ChangeSetKPIUtil.getPNL(change, ResultType.NEW);
 
 					double delta = t - f;
 					delta = delta / 1000000.0;
@@ -1432,8 +1437,8 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
-					long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
+					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
+					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
 
 					// No lateness
 					if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0 && newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
@@ -1504,8 +1509,8 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
-					long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
+					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.ORIGINAL);
+					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.NEW);
 
 					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
 					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
@@ -1571,10 +1576,10 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					long f = ChangeSetKPIUtil.getViolations(change, ResultType.ORIGINAL);
-					long t = ChangeSetKPIUtil.getViolations(change, ResultType.NEW);
+					final long f = ChangeSetKPIUtil.getViolations(change, ResultType.ORIGINAL);
+					final long t = ChangeSetKPIUtil.getViolations(change, ResultType.NEW);
 
-					long delta = t - f;
+					final long delta = t - f;
 					if (delta != 0) {
 						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
@@ -1620,32 +1625,38 @@ public class ChangeSetView implements IAdaptable {
 					cell.setFont(boldFont);
 
 					final ChangeSet changeSet = (ChangeSet) element;
-					final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
-					int idx = 0;
-					if (root != null) {
-						idx = root.getChangeSets().indexOf(changeSet);
-					}
-					// int changeCount = 0;
-					// final List<ChangeSetRow> rows;
-					// if (diffToBase) {
-					// rows = changeSet.getChangeSetRowsToBase();
-					// } else {
-					// rows = changeSet.getChangeSetRowsToPrevious();
-					// }
-					// for (ChangeSetRow r : rows) {
-					// if (r.isVesselChange()) {
-					//// changeCount++;
-					// }
-					// if (r.isWiringChange() && r.getNewLoadAllocation() != null) {
-					//// changeCount++;
-					// }
-					// if (r.getRhsWiringLink() != null ) {
-					// changeCount++;
-					// }
-					// }
 
-					// cell.setText(String.format("Set %d (%d)", idx + 1, changeCount));
-					cell.setText(String.format("Set %d", idx + 1));
+					if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
+						cell.setText(changeSet.getDescription());
+					} else {
+						final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
+						int idx = 0;
+						if (root != null) {
+							idx = root.getChangeSets().indexOf(changeSet);
+						}
+						// int changeCount = 0;
+						// final List<ChangeSetRow> rows;
+						// if (diffToBase) {
+						// rows = changeSet.getChangeSetRowsToBase();
+						// } else {
+						// rows = changeSet.getChangeSetRowsToPrevious();
+						// }
+						// for (ChangeSetRow r : rows) {
+						// if (r.isVesselChange()) {
+						//// changeCount++;
+						// }
+						// if (r.isWiringChange() && r.getNewLoadAllocation() != null) {
+						//// changeCount++;
+						// }
+						// if (r.getRhsWiringLink() != null ) {
+						// changeCount++;
+						// }
+						// }
+
+						// cell.setText(String.format("Set %d (%d)", idx + 1, changeCount));
+						cell.setText(String.format("Set %d", idx + 1));
+
+					}
 				}
 			}
 		};
@@ -1684,7 +1695,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 	}
-	
+
 	public void setActionableSetData(final ScenarioInstance target, final ActionableSetPlan plan) {
 
 		cleanUpVesselColumns();
@@ -1712,7 +1723,6 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 	}
-	
 
 	public void setInsertionPlanData(final ScenarioInstance target, final SlotInsertionOptions plan) {
 
@@ -1731,6 +1741,12 @@ public class ChangeSetView implements IAdaptable {
 
 						final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
 						final ChangeSetRoot newRoot = transformer.createDataModel(target, plan, monitor);
+						// Returns a new sort order -- based on the assumption input data is sorted by best value first
+						final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, plan.getSlotsInserted().get(0));
+						newRoot.getChangeSets().clear();
+						newRoot.getChangeSets().addAll(processChangeSetRoot);
+						insertionPlanFilter.setFilterActive(true);
+
 						display.asyncExec(new ViewUpdateRunnable(newRoot));
 					}
 				});
@@ -2062,6 +2078,15 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
+	private void handleToggleInsertionPlanDuplicates(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES) final MPart activePart) {
+		if (activePart.getObject() == this) {
+			insertionPlanFilter.toggleFilter();
+			ViewerHelper.refresh(viewer, true);
+		}
+	}
+
+	@Inject
+	@Optional
 	private void handleAnalyseScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS) final ScenarioInstance target) {
 		if (!handleEvents) {
 			return;
@@ -2320,16 +2345,21 @@ public class ChangeSetView implements IAdaptable {
 							mgr.add(new RunnableAction("Export change", () -> {
 
 								try {
-									
+
 									final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
-									int idx = 0;
-									if (root != null) {
-										idx = root.getChangeSets().indexOf(changeSet);
+									String name;
+									if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
+										name = changeSet.getDescription();
+									} else {
+										int idx = 0;
+										if (root != null) {
+											idx = root.getChangeSets().indexOf(changeSet);
+										}
+										name = String.format("Set %d", idx);
 									}
-									String name = String.format("Set %d",idx);
 									ExportScheduleHelper.export(changeSet.getCurrentScenario(), name);
-								} catch (IOException e1) {
-										e1.printStackTrace();
+								} catch (final IOException e1) {
+									e1.printStackTrace();
 								}
 							}));
 							showMenu = true;

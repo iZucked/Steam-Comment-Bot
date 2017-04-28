@@ -52,7 +52,7 @@ public class InsertionPlanTransformer {
 			ScenarioResult base = null;
 			for (final ScenarioResult current : stages) {
 				if (base != null) {
-					root.getChangeSets().add(transformer.buildChangeSet(stages.get(0), base, current));
+					root.getChangeSets().add(transformer.buildChangeSet(stages.get(0), base, current, plan.getSlotsInserted().get(0)));
 				}
 				if (base == null) {
 					base = current;

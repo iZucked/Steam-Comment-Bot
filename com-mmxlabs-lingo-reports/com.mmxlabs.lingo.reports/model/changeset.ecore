@@ -23,6 +23,7 @@
         upperBound="-1" eType="#//ChangeSetRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentMetrics" eType="#//Metrics"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metrics">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

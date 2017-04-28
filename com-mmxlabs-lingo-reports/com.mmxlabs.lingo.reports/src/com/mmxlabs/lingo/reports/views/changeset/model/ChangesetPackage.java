@@ -208,13 +208,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__CURRENT_METRICS = 10;
 
 	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET__DESCRIPTION = 11;
+
+	/**
 	 * The number of structural features of the '<em>Change Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_FEATURE_COUNT = 11;
+	int CHANGE_SET_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Change Set</em>' class.
@@ -744,6 +753,17 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSet_CurrentMetrics();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Description</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getDescription()
+	 * @see #getChangeSet()
+	 * @generated
+	 */
+	EAttribute getChangeSet_Description();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics <em>Metrics</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1252,6 +1272,14 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET__CURRENT_METRICS = eINSTANCE.getChangeSet_CurrentMetrics();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET__DESCRIPTION = eINSTANCE.getChangeSet_Description();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl <em>Metrics</em>}' class.

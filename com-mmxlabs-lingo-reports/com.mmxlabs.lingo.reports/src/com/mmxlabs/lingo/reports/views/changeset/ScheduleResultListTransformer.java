@@ -13,12 +13,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -31,6 +33,10 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class ScheduleResultListTransformer {
 
 	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {
+		return buildChangeSet(base, prev, current, null);
+	}
+
+	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable Slot targetToSortFirst) {
 		final ModelReference baseReference = base.getScenarioInstance().getReference("ScheduleResultListTransformer:1");
 		final ModelReference prevReference = prev.getScenarioInstance().getReference("ScheduleResultListTransformer:2");
 		final ModelReference currentReference = current.getScenarioInstance().getReference("ScheduleResultListTransformer:3");
@@ -48,13 +54,13 @@ public class ScheduleResultListTransformer {
 		changeSet.setCurrentScenario(current);
 		changeSet.setCurrentScenarioRef(currentReference);
 
-		generateDifferences(base, current, changeSet, true);
-		generateDifferences(prev, current, changeSet, false);
+		generateDifferences(base, current, changeSet, true, targetToSortFirst);
+		generateDifferences(prev, current, changeSet, false, targetToSortFirst);
 
 		return changeSet;
 	}
 
-	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase) {
+	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase, @Nullable Slot targetToSortFirst) {
 		final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
 
 		final Set<EObject> fromInterestingElements = new LinkedHashSet<>();
@@ -118,7 +124,7 @@ public class ScheduleResultListTransformer {
 		ChangeSetTransformerUtil.mergeSpots(rows);
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		ChangeSetTransformerUtil.filterRows(rows);
-		ChangeSetTransformerUtil.sortRows(rows);
+		ChangeSetTransformerUtil.sortRows(rows, targetToSortFirst);
 
 		// Add to data model
 		if (isBase) {

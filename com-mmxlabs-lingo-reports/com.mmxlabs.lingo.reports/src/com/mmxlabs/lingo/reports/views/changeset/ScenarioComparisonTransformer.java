@@ -180,7 +180,7 @@ public class ScenarioComparisonTransformer {
 		ChangeSetTransformerUtil.mergeSpots(rows);
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		// ChangeSetTransformerUtil.filterRows(rows);
-		ChangeSetTransformerUtil.sortRows(rows);
+		ChangeSetTransformerUtil.sortRows(rows, null);
 		changeSet.getChangeSetRowsToPrevious().addAll(rows);
 		calculateMetrics(changeSet, fromSchedule, toSchedule);
 	}
@@ -238,8 +238,8 @@ public class ScenarioComparisonTransformer {
 								if (cargoAllocation.getSlotAllocations().size() != 2) {
 									throw new RuntimeException("Complex cargoes are not supported");
 								}
-								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
-										slotVisit2.getSlotAllocation(), false, false);
+								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2, slotVisit2.getSlotAllocation(), false,
+										false);
 							}
 						}
 					}

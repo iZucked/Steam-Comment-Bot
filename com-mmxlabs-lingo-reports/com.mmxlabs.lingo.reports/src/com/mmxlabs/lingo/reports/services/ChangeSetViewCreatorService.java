@@ -164,6 +164,19 @@ public class ChangeSetViewCreatorService {
 					item.setVisible(true);
 					toolbar.getChildren().add(item);
 				}
+				{
+					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
+					item.setType(ItemType.CHECK);
+					item.setTooltip("Toggle Insertion Plan Filter");
+					item.setLabel("Toggle Insertion Plan Filter");
+					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
+					item.setEnabled(true);
+					item.setToBeRendered(true);
+					item.setVisible(true);
+					toolbar.getChildren().add(item);
+				}
 
 				stack.getChildren().add(part); // Add part to stack
 				viewPart = partService.showPart(part, PartState.ACTIVATE); // Show part

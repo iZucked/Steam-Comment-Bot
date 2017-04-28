@@ -91,7 +91,7 @@ public final class ChangeSetTransformerUtil {
 
 		final ChangeSetRow row;
 		{
-			LoadSlot loadSlot = (LoadSlot) loadAllocation.getSlot();
+			final LoadSlot loadSlot = (LoadSlot) loadAllocation.getSlot();
 			final String rowKey = getKeyName(loadAllocation);
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
@@ -553,7 +553,7 @@ public final class ChangeSetTransformerUtil {
 		if (slotAllocation == null) {
 			return null;
 		}
-		Slot slot = slotAllocation.getSlot();
+		final Slot slot = slotAllocation.getSlot();
 		if (slot == null) {
 			return null;
 		}
@@ -563,7 +563,7 @@ public final class ChangeSetTransformerUtil {
 			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 			if (cargoAllocation != null) {
 				for (final SlotAllocation slotAllocation2 : cargoAllocation.getSlotAllocations()) {
-					Slot slot2 = slotAllocation2.getSlot();
+					final Slot slot2 = slotAllocation2.getSlot();
 					if (slotAllocation == slotAllocation2) {
 						sb.append(key);
 					} else {
@@ -586,7 +586,7 @@ public final class ChangeSetTransformerUtil {
 		if (slotAllocation == null) {
 			return null;
 		}
-		Slot slot = slotAllocation.getSlot();
+		final Slot slot = slotAllocation.getSlot();
 		if (slot == null) {
 			return null;
 		}
@@ -701,7 +701,7 @@ public final class ChangeSetTransformerUtil {
 		return sum;
 	}
 
-	public static void sortRows(@NonNull final List<ChangeSetRow> rows) {
+	public static void sortRows(@NonNull final List<ChangeSetRow> rows, @Nullable final Slot targetToSortFirst) {
 		// Sort into wiring groups.
 		final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToRowGroup = new HashMap<>();
 		for (final ChangeSetRow row : rows) {
@@ -717,6 +717,7 @@ public final class ChangeSetTransformerUtil {
 
 			@Override
 			public int compare(final ChangeSetRow o1, final ChangeSetRow o2) {
+
 				// Sort wiring changes first
 				if (o1.isWiringChange() != o2.isWiringChange()) {
 					if (o1.isWiringChange()) {
@@ -764,6 +765,28 @@ public final class ChangeSetTransformerUtil {
 				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
 			}
 		});
+		if (targetToSortFirst != null) {
+			ChangeSetRow targetRow = null;
+			for (final ChangeSetRow row : rows) {
+				if (row.getLoadSlot() == targetToSortFirst || row.getDischargeSlot() == targetToSortFirst) {
+					targetRow = row;
+					break;
+				}
+			}
+			
+			if (targetRow != null) {
+				final Collection<ChangeSetRow> collection = rowToRowGroup.get(targetRow);
+				final List<ChangeSetRow> l = new LinkedList<>(collection);
+				Collections.rotate(l, -l.indexOf(targetRow));
+				
+				rows.removeAll(l);
+				l.addAll(rows);
+				
+				rows.clear();
+				rows.addAll(l);
+			}
+		}
+
 	}
 
 	public static void calculateMetrics(@NonNull final ChangeSet changeSet, @NonNull final Schedule fromSchedule, @NonNull final Schedule toSchedule, final boolean isBase) {

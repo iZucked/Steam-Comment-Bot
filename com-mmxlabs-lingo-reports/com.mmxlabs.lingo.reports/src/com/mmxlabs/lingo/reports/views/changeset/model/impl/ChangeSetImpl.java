@@ -45,6 +45,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToPrevious <em>Change Set Rows To Previous</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentMetrics <em>Current Metrics</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getDescription <em>Description</em>}</li>
  * </ul>
  *
  * @generated
@@ -189,6 +190,26 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @ordered
 	 */
 	protected Metrics currentMetrics;
+
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -544,6 +565,27 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__DESCRIPTION, oldDescription, description));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -594,6 +636,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return getChangeSetRowsToPrevious();
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				return getCurrentMetrics();
+			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
+				return getDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -642,6 +686,9 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				setCurrentMetrics((Metrics)newValue);
 				return;
+			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
+				setDescription((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -687,6 +734,9 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				setCurrentMetrics((Metrics)null);
 				return;
+			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -721,6 +771,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return changeSetRowsToPrevious != null && !changeSetRowsToPrevious.isEmpty();
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				return currentMetrics != null;
+			case ChangesetPackage.CHANGE_SET__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -741,6 +793,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 		result.append(prevScenario);
 		result.append(", currentScenario: ");
 		result.append(currentScenario);
+		result.append(", description: ");
+		result.append(description);
 		result.append(')');
 		return result.toString();
 	}
