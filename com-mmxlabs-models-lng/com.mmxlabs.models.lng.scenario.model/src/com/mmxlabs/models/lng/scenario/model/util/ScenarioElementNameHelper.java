@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.scenario.model.util;
 
 import org.eclipse.emf.ecore.EObject;
