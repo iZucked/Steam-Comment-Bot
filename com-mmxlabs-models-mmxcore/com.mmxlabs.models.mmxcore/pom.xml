@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
 		<groupId>com.mmxlabs.models.mmxcore</groupId>
-		<version>4.2.5.RELEASE</version>
+		<version>4.2.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.mmxcore</artifactId>
-	<version>4.2.5.RELEASE</version>
+	<version>4.2.6-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<properties>
