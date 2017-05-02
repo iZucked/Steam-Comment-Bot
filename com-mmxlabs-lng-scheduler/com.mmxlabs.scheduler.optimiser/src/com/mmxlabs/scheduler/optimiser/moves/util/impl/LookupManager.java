@@ -35,6 +35,14 @@ public class LookupManager implements ILookupManager {
 
 	private ISequences sequences;
 
+	public LookupManager() {
+
+	}
+
+	public LookupManager(final @NonNull ISequences sequences) {
+		createLookup(sequences);
+	}
+
 	@Override
 	public void createLookup(final @NonNull ISequences sequences) {
 
