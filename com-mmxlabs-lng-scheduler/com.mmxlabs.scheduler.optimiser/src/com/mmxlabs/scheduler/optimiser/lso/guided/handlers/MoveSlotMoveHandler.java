@@ -83,7 +83,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 
 		final List<ISequenceElement> candidates = generateCandidates(lookupManager, element, options, forbiddenElements);
 
-		if (candidates.isEmpty()) {
+		if (candidates == null || candidates.isEmpty()) {
 			return null;
 		}
 		Collections.shuffle(candidates, random);
@@ -133,6 +133,7 @@ public class MoveSlotMoveHandler implements IGuidedMoveHandler {
 
 	}
 
+	@Nullable
 	private List<ISequenceElement> generateCandidates(final ILookupManager lookupManager, final ISequenceElement element, final GuideMoveGeneratorOptions options,
 			final Collection<ISequenceElement> forbiddenElements) {
 
