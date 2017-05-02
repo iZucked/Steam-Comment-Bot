@@ -57,6 +57,9 @@ public class SlotInsertionOptimiser {
 	private EvaluationHelper evaluationHelper;
 
 	@Inject
+	private SequencesHelper sequencesHelper;
+
+	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
 		for (final IConstraintChecker checker : injectedConstraintCheckers) {
@@ -146,7 +149,26 @@ public class SlotInsertionOptimiser {
 			currentPNL = metrics[MetricType.PNL.ordinal()];
 			currentSequences = new Sequences(mSequences);
 		}
-		return new Pair<>(currentSequences, currentPNL);
+
+		if (true) {
+
+			@NonNull
+			ISequences simpleSeq = sequencesHelper.undoUnrelatedChanges(initialRawSequences, currentSequences, slots);
+
+			@NonNull
+			final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
+
+			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, null, null);
+
+			// Set to max value as this is not a concern for us
+			// initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = Integer.MAX_VALUE;
+
+			return new Pair<>(simpleSeq, metrics[MetricType.PNL.ordinal()]);
+
+		} else {
+
+			return new Pair<>(currentSequences, currentPNL);
+		}
 	}
 
 	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final int seed) {
