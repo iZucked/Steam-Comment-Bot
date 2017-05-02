@@ -12,7 +12,7 @@
 		<menuContribution allPopups="false"
 			locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
 			<command commandId="com.mmxlabs.lingo.reports.changeset.insertionplans"
-				icon="icons/cview16/actionsets_view.gif" label="Open insertion plans"
+				icon="icons/cview16/actionsets_view.gif" label="Open insertion plans (Beta)"
 				style="push">
 				<visibleWhen checkEnabled="false">
 					<and>
