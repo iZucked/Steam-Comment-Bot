@@ -5,9 +5,9 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory">
-   <implementation class="com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory">
+   <implementation class="com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory"/>
    <service>
-      <provide interface="com.mmxlabs.lingo.reports.views.standard.IEconsRowFactory"/>
-   </service> 
+      <provide interface="com.mmxlabs.lingo.reports.views.standard.econs.IEconsRowFactory"/>
+   </service>
 </scr:component>
