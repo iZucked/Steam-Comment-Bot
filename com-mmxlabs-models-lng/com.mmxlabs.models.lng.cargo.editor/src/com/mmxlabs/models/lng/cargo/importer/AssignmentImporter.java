@@ -50,6 +50,7 @@ public class AssignmentImporter {
 				final String vesselName = row.get("vessels");
 				final String assignedObjects = row.get("assignedobjects");
 				final String spotIndexStr = row.get("spotindex");
+				final String charterIndexStr = row.get("charterindex");
 
 				Integer spotIndexTmp = null;
 				if (spotIndexStr != null && !spotIndexStr.isEmpty()) {
@@ -60,6 +61,16 @@ public class AssignmentImporter {
 					}
 				}
 				final Integer spotIndex = spotIndexTmp;
+
+				Integer charterIndexTmp = null;
+				if (charterIndexStr != null && !charterIndexStr.isEmpty()) {
+					try {
+						charterIndexTmp = Integer.parseInt(charterIndexStr);
+					} catch (final NumberFormatException nfe) {
+						context.createProblem("Error parsing charter index", true, true, true);
+					}
+				}
+				final Integer charterIndex = charterIndexTmp;
 				final String[] assignedObjectNames = assignedObjects.split(",");
 				int index = 1;
 				for (final String aon : assignedObjectNames) {
@@ -101,7 +112,8 @@ public class AssignmentImporter {
 											final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
 											if (v != null) {
 												final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
+														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), charterIndex);
+
 												assignableElement.setVesselAssignmentType(availability);
 											}
 											assignableElement.setSequenceHint(seq);
@@ -168,7 +180,7 @@ public class AssignmentImporter {
 											final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
 											if (v != null) {
 												final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
+														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), charterIndex);
 												assignableElement.setVesselAssignmentType(availability);
 											}
 										} else {
@@ -212,13 +224,12 @@ public class AssignmentImporter {
 			if (collectAssignment.getVesselAvailability() != null) {
 				result.add(row);
 				row.put("vesselassignment", collectAssignment.getVesselAvailability().getVessel().getName());
-
+				row.put("charterindex", Integer.toString(collectAssignment.getVesselAvailability().getCharterNumber()));
 			} else if (collectAssignment.getCharterInMarket() != null) {
 				result.add(row);
 
 				row.put("vesselassignment", collectAssignment.getCharterInMarket().getName());
 				row.put("spotindex", Integer.toString(collectAssignment.getSpotIndex()));
-
 			}
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
