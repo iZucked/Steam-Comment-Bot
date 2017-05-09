@@ -16,14 +16,25 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -39,7 +50,45 @@ public class ReportTester {
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
 	// Never commit as true
-	private static final boolean storeReports = false;
+	private static final boolean storeReports = true;
+
+	public static void testReportsWithElement(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, String elementID,
+			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {
+		testReports(instance, scenarioURL, reportID, shortName, extension, (t) -> {
+
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance.getInstance();
+			Object target = null;
+			ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+			Schedule schedule = scheduleModel.getSchedule();
+			if (schedule != null) {
+				for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+					if (elementID.equals(cargoAllocation.getName())) {
+						target = cargoAllocation;
+						break;
+					}
+				}
+			}
+
+			Assert.assertNotNull("Target element not found", elementID);
+			final Object pTarget = target;
+
+			// Step 1 open the view, release UI thread
+			Display.getDefault().syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					final ESelectionService selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
+					Assert.assertNotNull(selectionService);
+					selectionService.setPostSelection(pTarget);
+				}
+			});
+
+			if (preAction != null) {
+				preAction.accept(t);
+			}
+
+		});
+	}
 
 	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension,
 			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {

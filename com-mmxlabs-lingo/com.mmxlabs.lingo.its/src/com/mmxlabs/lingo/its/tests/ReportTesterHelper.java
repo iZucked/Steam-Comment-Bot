@@ -79,6 +79,11 @@ public class ReportTesterHelper {
 
 	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";
 	public static final String EXPOSURES_REPORT_SHORTNAME = "ExposuresReport";
+	
+	
+	
+	public static final String CARGO_ECONS_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
+	public static final String CARGO_ECONS_REPORT_SHORTNAME = "CargoEcons";
 
 	@FunctionalInterface
 	interface IScenarioSelection {
