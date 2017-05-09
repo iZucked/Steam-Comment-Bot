@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>optimiser-parent</artifactId>
 		<groupId>com.mmxlabs.optimiser</groupId>
-		<version>4.2.6.RELEASE</version>
+		<version>4.2.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.optimiser.feature</artifactId>
-	<version>4.2.6.RELEASE</version>
+	<version>4.2.7-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 
