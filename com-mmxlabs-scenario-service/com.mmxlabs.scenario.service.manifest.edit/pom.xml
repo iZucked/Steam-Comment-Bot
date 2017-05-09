@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
 		<groupId>com.mmxlabs.scenario.service</groupId>
-		<version>4.2.6-SNAPSHOT</version>
+		<version>4.2.6.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.scenario.service.manifest.edit</artifactId>
-	<version>4.2.6-SNAPSHOT</version>
+	<version>4.2.6.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<properties>
