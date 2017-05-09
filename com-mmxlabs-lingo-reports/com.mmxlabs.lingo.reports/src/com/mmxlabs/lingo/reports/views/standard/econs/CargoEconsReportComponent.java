@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -32,6 +33,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -43,6 +45,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
@@ -65,6 +68,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -76,7 +80,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @author Simon Goodall
  * 
  */
-public class CargoEconsReportComponent /* extends ViewPart */ {
+public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart */ {
 
 	@Inject
 	private ESelectionService selectionService;
@@ -454,4 +458,29 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		ViewerHelper.refresh(getViewer(), false);
 	}
 
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (GridTableViewer.class.isAssignableFrom(adapter)) {
+			return (T) viewer;
+		}
+		if (Grid.class.isAssignableFrom(adapter)) {
+			return (T) viewer.getGrid();
+		}
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return (T) new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+
+		}
+		return null;
+	}
 }

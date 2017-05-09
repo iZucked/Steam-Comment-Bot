@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.standard.econs;
 
 import javax.annotation.PreDestroy;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -15,7 +16,6 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.IElementCollector;
 
 import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -95,6 +95,19 @@ public class CargoEconsReport extends ViewPart {
 	@Focus
 	public void setFocus() {
 		ContextInjectionFactory.invoke(component, Focus.class, componentContext);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (component instanceof IAdaptable) {
+			T result = ((IAdaptable) component).getAdapter(adapter);
+			if (result != null) {
+				return result;
+			}
+		}
+
+		return super.getAdapter(adapter);
 	}
 
 }
