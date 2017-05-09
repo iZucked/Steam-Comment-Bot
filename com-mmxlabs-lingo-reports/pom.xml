@@ -97,7 +97,7 @@
 	<repositories>
 		<repository>
 			<id>com-mmxlabs-models-datetime.hg</id>
-			<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.1.RELEASE/com.mmxlabs.models.datetime.p2-2.1.1.RELEASE.zip-unzip/</url>
+			<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.2.RELEASE/com.mmxlabs.models.datetime.p2-2.1.2.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
