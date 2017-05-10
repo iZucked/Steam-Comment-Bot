@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -81,6 +82,12 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 		if (slot.getCargo() == null) {
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(slot));
+
+			if (slot.isLocked()) {
+				action.setEnabled(false);
+				action.setText(action.getText() + " (Kept open)");
+			}
+
 			menuManager.add(action);
 			return;
 		}
@@ -113,7 +120,16 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 		if (slots.size() > 0) {
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+			for (Slot slot : slots) {
+				if (slot.isLocked()) {
+					action.setEnabled(false);
+					action.setText(action.getText() + " (Kept open)");
+					break;
+				}
+			}
 			menuManager.add(action);
+
 			return;
 		}
 	}
@@ -137,7 +153,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			try {
 				duplicate = original.getScenarioService().duplicate(original, original);
 
-				duplicate.setName(this.getText());
+				duplicate.setName(generateActionName(originalTargetSlots));
 
 				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
@@ -158,9 +174,15 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
-//						 Period is not valid yet
-//						userSettings.unsetPeriodStart();
-//						userSettings.unsetPeriodEnd();
+						// Reset settings not supplied to the user
+						userSettings.setShippingOnly(false);
+						userSettings.setBuildActionSets(false);
+						userSettings.setCleanStateOptimisation(false);
+						userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+						// Period is not valid yet
+						// userSettings.unsetPeriodStart();
+						// userSettings.unsetPeriodEnd();
 
 						final ScenarioLock scenarioLock = duplicate.getLock(ScenarioLock.OPTIMISER);
 						if (scenarioLock.awaitClaim()) {
@@ -199,7 +221,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 									public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
 										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-											
+
 											scenarioLock.release();
 											try {
 												duplicate.save();
@@ -207,7 +229,6 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
-											
 
 											jobManager.removeJob(finalJob);
 
