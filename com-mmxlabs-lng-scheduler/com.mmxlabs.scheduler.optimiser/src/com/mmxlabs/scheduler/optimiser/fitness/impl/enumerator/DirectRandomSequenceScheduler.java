@@ -21,18 +21,16 @@ import com.mmxlabs.optimiser.core.ISequences;
  */
 public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler {
 	private final int seed = 0;
-	private Random random;
 
 	@Override
 	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
-		random = new Random(seed);
 
 		setSequences(sequences);
 
 		prepare();
 
 		for (int index = 0; index < sequences.size(); ++index) {
-			random.setSeed(seed);
+			// random.setSeed(seed);
 			randomise(index);
 		}
 		synchroniseShipToShipBindings();
@@ -59,20 +57,26 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		if (arrivalTimes[seq] == null) {
 			return;
 		}
+		Random random = new Random(seed);
 
 		if (sizes[seq] > 0) {
 			final int lastIndex = sizes[seq] - 1;
 			for (int pos = 0; pos < lastIndex; pos++) {
 				final int min = getMinArrivalTime(seq, pos);
-				final int max = getMaxArrivalTime(seq, pos) ;
+				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
+
+				// If this was a round trip end, then reset the seed.
+				if (isRoundTripEnd[seq][pos]) {
+					random = new Random(seed);
+				}
 				// TODO force sync this with any ship-to-ship bindings
 			}
 
 			// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
 			arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
-
 			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
+
 		}
 	}
 }
