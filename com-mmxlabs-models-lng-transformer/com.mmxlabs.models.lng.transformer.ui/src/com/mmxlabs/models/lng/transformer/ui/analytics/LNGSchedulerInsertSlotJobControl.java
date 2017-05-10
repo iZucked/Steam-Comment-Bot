@@ -163,6 +163,8 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		};
 
+		// TODO: Only disable caches if we do a break-even
+		
 		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, //
 				LNGTransformerHelper.HINT_OPTIMISE_LSO, //
 				LNGTransformerHelper.HINT_DISABLE_CACHES, //
