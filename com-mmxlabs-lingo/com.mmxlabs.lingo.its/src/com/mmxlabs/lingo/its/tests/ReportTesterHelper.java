@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -98,8 +99,8 @@ public class ReportTesterHelper {
 
 			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
 			if (handler == null) {
-				EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
-				MPart part = partService.findPart(reportID);
+				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
+				final MPart part = partService.findPart(reportID);
 				handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
 			}
 			if (handler != null) {
@@ -150,6 +151,13 @@ public class ReportTesterHelper {
 					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 					Assert.assertNotNull(activePage);
 					try {
+						// Close the existing view reference. E.g. because we have changed the license features.
+						final IViewReference ref = activePage.findViewReference(reportID);
+						if (ref != null) {
+							// This will dispose the view
+							activePage.hideView(ref);
+						}
+						
 						view[0] = activePage.showView(reportID);
 						Assert.assertNotNull(view[0]);
 						activePage.activate(view[0]);
@@ -178,14 +186,14 @@ public class ReportTesterHelper {
 					contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
 					if (contents[0] == null) {
 						if (view[0] instanceof E4PartWrapper) {
-							E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
-							IViewSite viewSite = view[0].getViewSite();
-							EPartService service = (EPartService) viewSite.getService(EPartService.class);
-							MPart p = service.findPart(reportID);
+							final E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
+							final IViewSite viewSite = view[0].getViewSite();
+							final EPartService service = (EPartService) viewSite.getService(EPartService.class);
+							final MPart p = service.findPart(reportID);
 							if (p != null) {
-								Object o = p.getObject();
+								final Object o = p.getObject();
 								if (o instanceof IAdaptable) {
-									IAdaptable adaptable = (IAdaptable) o;
+									final IAdaptable adaptable = (IAdaptable) o;
 									contents[0] = (IReportContents) adaptable.getAdapter(IReportContents.class);
 								}
 							}
