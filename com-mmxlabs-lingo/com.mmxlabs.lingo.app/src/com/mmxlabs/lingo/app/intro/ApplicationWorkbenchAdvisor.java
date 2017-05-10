@@ -45,7 +45,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private final DelayedOpenFileProcessor delayedOpenFileProcessor;
 
-	private static final String PERSPECTIVE_ID = "com.mmxlabs.lingo.app.perspective.editing";
+	private static final String PERSPECTIVE_ID = "com.mmxlabs.lingo.app.perspective.analysis";
 
 	/**
 	 */
