@@ -19,17 +19,12 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -50,7 +45,7 @@ public class ReportTester {
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
 	// Never commit as true
-	private static final boolean storeReports = true;
+	private static final boolean storeReports = false;
 
 	public static void testReportsWithElement(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, String elementID,
 			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {
