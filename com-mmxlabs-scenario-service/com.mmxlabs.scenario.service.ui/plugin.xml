@@ -160,6 +160,23 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
+            class="com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.open">
+         <enabledWhen>
+            <iterate
+                  ifEmpty="false">
+               <or>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioFragment">
+                  </instanceof>
+               </or>
+            </iterate>
+         </enabledWhen>
+      </handler>
+      <handler
             class="com.mmxlabs.scenario.service.ui.commands.LockScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.lock">
          <enabledWhen>
