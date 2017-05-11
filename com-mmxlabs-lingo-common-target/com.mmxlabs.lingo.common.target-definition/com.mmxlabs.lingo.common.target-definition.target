@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="6">
+<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="9">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jdt.annotation" version="2.0.100.v20150311-1658"/>
-<unit id="org.eclipse.jdt.annotation.source" version="2.0.100.v20150311-1658"/>
+<unit id="org.eclipse.jdt.annotation" version="2.1.0.v20160418-1457"/>
+<unit id="org.eclipse.jdt.annotation.source" version="2.1.0.v20160418-1457"/>
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.5/R-4.5.1-201509040015/"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
@@ -38,7 +38,7 @@
 <unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0"/>
-<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.mars/201602261000/org.eclipse.mars-201602261000.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="http://download.eclipse.org/releases/neon/201703231000/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
