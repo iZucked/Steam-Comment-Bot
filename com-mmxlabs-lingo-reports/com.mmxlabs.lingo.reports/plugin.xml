@@ -831,5 +831,45 @@
             class="com.mmxlabs.lingo.reports.views.changeset.CompareModuleProcessor">
       </processor>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.mmxlabs.lingo.reports.views.changeset.handlers.CompareScenariosHandler"
+            id="com.mmxlabs.lingo.reports.comparescenarios"
+            name="Compare Scenarios">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
+         <command
+               commandId="com.mmxlabs.lingo.reports.comparescenarios"
+               icon="icons/cview16/changes_view.gif"
+               id="com.mmxlabs.lingo.reports.comparescenarios.menu.navigator"
+               label="Compare"
+               style="push"
+               tooltip="Compare the selected scenarios">
+                <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                           </iterate>
+                        </with>
+                        <count
+                              value="2">
+                        </count>
+                     </and>
+                  </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
 
 </plugin>
