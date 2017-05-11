@@ -141,6 +141,10 @@
             id="com.mmxlabs.scenario.service.ui.pin"
             name="Pin">
       </command>
+      <command
+            id="com.mmxlabs.scenario.service.ui.deselectall"
+            name="Deselect all">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
@@ -155,23 +159,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
-      <handler
-            class="com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler"
-            commandId="com.mmxlabs.scenario.service.ui.open">
-         <enabledWhen>
-            <iterate
-                  ifEmpty="false">
-               <or>
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                  </instanceof>
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioFragment">
-                  </instanceof>
-               </or>
-            </iterate>
-         </enabledWhen>
-      </handler>
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.LockScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.lock">
@@ -435,6 +422,10 @@
             </iterate>
          </enabledWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.DeselectAllCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.deselectall">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -629,6 +620,12 @@
          <separator
                name="exporters">
          </separator>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.deselectall"
+               label="Deselect all"
+               style="push"
+               tooltip="Deselect and unpin all scenarios.">
+         </command>
       </menuContribution>
    </extension>
    <extension
