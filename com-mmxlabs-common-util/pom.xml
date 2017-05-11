@@ -63,8 +63,8 @@
 
 					<target>
 						<artifact>
-							<groupId>com.mmxlabs.common</groupId>
-							<artifactId>com.mmxlabs.common.util.target-definition</artifactId>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
