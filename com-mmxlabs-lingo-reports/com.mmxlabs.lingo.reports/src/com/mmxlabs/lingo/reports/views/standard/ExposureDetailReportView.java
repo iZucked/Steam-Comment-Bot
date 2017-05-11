@@ -231,26 +231,29 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 				final Object element = cell.getElement();
 				if (element instanceof EObject) {
-					try {
-						final Object o = ((EObject) element).eGet(reference);
-						if (o instanceof Slot) {
-							final Slot slot = (Slot) o;
-							cell.setText(slot.getName());
-						} else if (o instanceof NamedIndexContainer<?>) {
-							final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) o;
-							cell.setText(idx.getName());
-						} else if (element instanceof ExposureDetail) {
-							final ExposureDetail detail = (ExposureDetail) element;
-							if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
-								cell.setText(String.format("%,.3f", (Double) o));
-							} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-								cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
-							} else {
-								cell.setText(o.toString());
+					final EObject eObject = (EObject) element;
+					if (eObject.eClass().getEAllReferences().contains(reference)) {
+						try {
+							final Object o = ((EObject) element).eGet(reference);
+							if (o instanceof Slot) {
+								final Slot slot = (Slot) o;
+								cell.setText(slot.getName());
+							} else if (o instanceof NamedIndexContainer<?>) {
+								final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) o;
+								cell.setText(idx.getName());
+							} else if (element instanceof ExposureDetail) {
+								final ExposureDetail detail = (ExposureDetail) element;
+								if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+									cell.setText(String.format("%,.3f", (Double) o));
+								} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+									cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
+								} else {
+									cell.setText(o.toString());
+								}
 							}
+						} catch (final Throwable e) {
+							cell.setText("");
 						}
-					} catch (final Throwable e) {
-						cell.setText("");
 					}
 				}
 			}
