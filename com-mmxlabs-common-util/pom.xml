@@ -28,8 +28,6 @@
 	</ciManagement>
 
 	<modules>
-		<module>com.mmxlabs.common.util.target-definition</module>
-
 		<module>com.mmxlabs.common.common-util</module>
 		<module>com.mmxlabs.common.common-util.tests</module>
 
