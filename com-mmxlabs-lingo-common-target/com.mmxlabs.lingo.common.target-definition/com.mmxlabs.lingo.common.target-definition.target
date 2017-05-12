@@ -11,7 +11,7 @@
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.neon/R-4.6.3-201703010400/org.eclipse.updates.neon-R-4.6.3-201703010400.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
@@ -38,7 +38,7 @@
 <unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/releases/neon/201703231000/" id="mmxlabs-releases"/>
+<repository location="http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.neon/201703231000/org.eclipse.neon-201703231000.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
