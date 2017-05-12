@@ -26,7 +26,7 @@
 						<repository>
 							<id>juno</id>
 							<layout>p2</layout>
-							<url>http://download.eclipse.org/releases/juno</url>
+							<url>http://kubera.mmxlabs.lan/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.juno/201303010900/org.eclipse.juno-201303010900.zip-unzip/</url>
 						</repository>
 					</repositories>
 					<!-- this is to fix some lucene 3.x compatibility issue -->
