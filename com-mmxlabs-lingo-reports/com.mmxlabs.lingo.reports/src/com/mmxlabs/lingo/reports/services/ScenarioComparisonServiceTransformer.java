@@ -18,6 +18,7 @@ import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.ui.views.framelist.GoIntoAction;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -349,6 +350,14 @@ public class ScenarioComparisonServiceTransformer {
 								if (row != null) {
 									row.setVisible(true);
 									CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+
+									RowGroup rowGroup = row.getRowGroup();
+									if (rowGroup != null) {
+										for (Row r : rowGroup.getRows()) {
+											r.setVisible(true);
+											CycleGroupUtils.addToOrMergeCycleGroup(table, r, cycleGroup);
+										}
+									}
 								}
 							}
 							{
@@ -356,7 +365,19 @@ public class ScenarioComparisonServiceTransformer {
 								if (row != null) {
 									row.setVisible(true);
 									CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+
+									RowGroup rowGroup = row.getRowGroup();
+									if (rowGroup != null) {
+										for (Row r : rowGroup.getRows()) {
+											r.setVisible(true);
+											CycleGroupUtils.addToOrMergeCycleGroup(table, r, cycleGroup);
+										}
+									}
 								}
+							}
+							// Bind all rows in group
+							{
+
 							}
 						}
 					}
