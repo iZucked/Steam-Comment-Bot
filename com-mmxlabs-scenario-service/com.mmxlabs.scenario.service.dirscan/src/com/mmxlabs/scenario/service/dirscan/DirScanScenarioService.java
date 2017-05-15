@@ -710,7 +710,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
 					if (domain instanceof AdapterFactoryEditingDomain) {
 						final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
-						final Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+						Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+						if (resourceToReadOnlyMap == null) {
+							resourceToReadOnlyMap = new HashMap<>();
+							adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
+						}
 						for (final Resource r : domain.getResourceSet().getResources()) {
 							resourceToReadOnlyMap.put(r, Boolean.TRUE);
 						}

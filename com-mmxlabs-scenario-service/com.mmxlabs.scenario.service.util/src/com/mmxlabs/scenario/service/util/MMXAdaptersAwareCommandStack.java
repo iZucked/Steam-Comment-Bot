@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -29,13 +30,17 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	 * Used to determine when we are executing changes.
 	 */
 	private final AtomicInteger stackDepth = new AtomicInteger(0);
+	// Used only for Read-only checks. Do not rely on it
+	private @Nullable ScenarioInstance instance;
 
 	public MMXAdaptersAwareCommandStack(final ScenarioInstance instance) {
 		this(null, instance, instance.getLock(ScenarioLock.EDITORS));
+		this.instance = instance;
 	}
 
 	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final ScenarioInstance instance) {
 		this(editingDomain, instance, instance.getLock(ScenarioLock.EDITORS));
+		this.instance = instance;
 	}
 
 	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final Object lockObject, ScenarioLock lock) {
@@ -47,6 +52,11 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	@Override
 	public void execute(final Command command) {
+
+		if (instance != null) {
+			assert !instance.isReadonly();
+		}
+
 		stackDepth.incrementAndGet();
 		try {
 			// Check command can execute, if not try and report something useful
@@ -97,6 +107,11 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	 * @param lockKey
 	 */
 	public void undo(boolean useLock) {
+
+		if (instance != null) {
+			assert !instance.isReadonly();
+		}
+
 		if (!useLock) {
 			reallyUndo();
 		} else {
@@ -135,6 +150,11 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	@Override
 	public void redo() {
+
+		if (instance != null) {
+			assert !instance.isReadonly();
+		}
+
 		if (lock.awaitClaim()) {
 			stackDepth.incrementAndGet();
 			try {

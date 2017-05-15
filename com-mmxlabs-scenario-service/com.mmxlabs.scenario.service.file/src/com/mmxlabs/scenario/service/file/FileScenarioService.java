@@ -703,24 +703,19 @@ public class FileScenarioService extends AbstractScenarioService {
 			return instance.getInstance();
 		}
 		final EObject result = super.load(instance);
+		// TODO: This should be linked to a listener...
 		if (instance.isReadonly()) {
-			if (result != null) {
-				// Forces editor lock to disallow users from editing the scenario.
-				// TODO: This is not a very clean way to do it!
-				final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
-				lock.claim();
-			}
-
-			// TODO: This should be linked to a listener...
-			if (instance.isReadonly()) {
-				// Mark resources as read-only
-				final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
-				if (domain instanceof AdapterFactoryEditingDomain) {
-					final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
-					final Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
-					for (final Resource r : domain.getResourceSet().getResources()) {
-						resourceToReadOnlyMap.put(r, Boolean.TRUE);
-					}
+			// Mark resources as read-only
+			final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+			if (domain instanceof AdapterFactoryEditingDomain) {
+				final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
+				Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+				if (resourceToReadOnlyMap == null) {
+					resourceToReadOnlyMap = new HashMap<>();
+					adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
+				}
+				for (final Resource r : domain.getResourceSet().getResources()) {
+					resourceToReadOnlyMap.put(r, Boolean.TRUE);
 				}
 			}
 		}
