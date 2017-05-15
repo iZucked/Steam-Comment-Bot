@@ -355,6 +355,10 @@ public class PromptToolbarEditor extends ControlContribution {
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 				mgr2.removeAll();
+				if (isLocked()) {
+					return;
+				}
+				
 				if (menu == null) {
 					menu = mgr2.createContextMenu(control);
 					control.setMenu(menu);
