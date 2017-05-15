@@ -482,7 +482,11 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		// handle enablement
 		validate();
 
-		if (lockedForEditing) {
+		if (location.getScenarioInstance().isReadonly()) {
+			final String text2 = getShell().getText();
+			getShell().setText(text2 + " (Read-only)");
+			disableControls(displayComposite.getComposite());
+		} else if (lockedForEditing) {
 			final String text2 = getShell().getText();
 			getShell().setText(text2 + " (Editor Locked - reopen to edit)");
 			disableControls(displayComposite.getComposite());
@@ -827,7 +831,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final IScenarioEditingLocation sel = location;
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
 		this.rootObject = rootObject;
-		lockedForEditing = false;
+		lockedForEditing = false | location.getScenarioInstance().isReadonly();
 		this.inputs.clear();
 		this.originalToDuplicate.clear();
 		this.duplicateToOriginal.clear();
@@ -911,7 +915,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
 		sel.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
 		this.rootObject = rootObject;
-		lockedForEditing = locked;
+		lockedForEditing = locked | location.getScenarioInstance().isReadonly();
 		this.inputs.clear();
 		this.inputs.addAll(objects);
 		this.originalToDuplicate.clear();

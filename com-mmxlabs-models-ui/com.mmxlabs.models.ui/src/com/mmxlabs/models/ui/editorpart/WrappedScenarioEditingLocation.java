@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.editorpart;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
@@ -18,20 +19,15 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class WrappedScenarioEditingLocation implements IScenarioEditingLocation {
-	private final IScenarioEditingLocation original;
+	private final @NonNull IScenarioEditingLocation original;
 
-	public WrappedScenarioEditingLocation(final IScenarioEditingLocation original) {
+	public WrappedScenarioEditingLocation(final @NonNull IScenarioEditingLocation original) {
 		this.original = original;
 	}
 
 	@Override
 	public boolean isLocked() {
 		return original.isLocked();
-	}
-
-	@Override
-	public void setLocked(final boolean locked) {
-		original.setLocked(locked);
 	}
 
 	@Override

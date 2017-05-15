@@ -22,8 +22,6 @@ public interface IScenarioEditingLocation extends IEditingDomainProvider {
 
 	boolean isLocked();
 
-	void setLocked(final boolean locked);
-
 	IExtraValidationContext getExtraValidationContext();
 
 	void pushExtraValidationContext(final IExtraValidationContext context);

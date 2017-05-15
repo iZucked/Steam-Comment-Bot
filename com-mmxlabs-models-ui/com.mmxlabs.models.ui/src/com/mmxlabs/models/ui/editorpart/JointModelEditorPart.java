@@ -93,7 +93,6 @@ import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
@@ -181,6 +180,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private ISelectionChangedListener selectionChangedListener;
 
 	private boolean locked;
+
 	private PropertySheetPage propertySheetPage;
 
 	private ScenarioInstance scenarioInstance;
@@ -194,11 +194,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private ScenarioLock editorLock;
 
-	private ScenarioInstance referenceInstance;
-
 	private ScenarioLock referenceLock;
-
-	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
 
 	public JointModelEditorPart() {
 	}
@@ -213,13 +209,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		return locked;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setLocked(boolean)
-	 */
-	@Override
-	public void setLocked(final boolean locked) {
+	private void updateLocked() {
 		RunnerHelper.asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -229,13 +219,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				}
 				boolean validationLock = false;
 				String title = getEditorInput().getName();
-				for (final ScenarioLock lock : scenarioInstance2.getLocks()) {
-					if (lock.isClaimed()) {
-						if (lock.getKey() == ScenarioLock.VALIDATION) {
-							// Validation locks should not really stop editing, so track that here
-							validationLock = true;
-						} else {
-							title += " (locked for " + lock.getKey() + ")";
+
+				if (scenarioInstance2.isReadonly()) {
+					title += " (read-only)";
+				} else {
+					for (final ScenarioLock lock : scenarioInstance2.getLocks()) {
+						if (lock.isClaimed()) {
+							if (lock.getKey() == ScenarioLock.VALIDATION) {
+								// Validation locks should not really stop editing, so track that here
+								validationLock = true;
+							} else {
+								title += " (locked for " + lock.getKey() + ")";
+							}
 						}
 					}
 				}
@@ -243,14 +238,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				updateTitleImage(getEditorInput());
 				// It is possible (due to asyncExec) that the lock has since been cleared, so see whether it is still live now
 				// Use the detected lock status, rather than provided to get the new lock status - ignore validation locks
-				final boolean newLock = !validationLock && scenarioInstance2.isLocked();
+				final boolean newLock = scenarioInstance2.isReadonly() | (!validationLock && scenarioInstance2.isLocked());
 				// Only update state if it has changed.
 				if (JointModelEditorPart.this.locked == newLock) {
 					return;
 				}
 				JointModelEditorPart.this.locked = newLock;
 				for (final IJointModelEditorContribution contribution : contributions) {
-					contribution.setLocked(locked);
+					contribution.setLocked(newLock);
 				}
 
 			}
@@ -376,7 +371,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				@Override
 				public void notifyChanged(final Notification msg) {
 					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
-						setLocked(!msg.getNewBooleanValue());
+						updateLocked();
+					}
+					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
+						updateLocked();
 					}
 				}
 			};
@@ -438,7 +436,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			validationContextStack.clear();
 			validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
 
-			setLocked(!editorLock.isAvailable());
+			updateLocked();
 		} catch (final Throwable t) {
 			// Clean up internal data structures etc
 			cleanup();
@@ -448,7 +446,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				removePage(i);
 			}
 			initException = t;
-
 		}
 	}
 

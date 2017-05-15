@@ -66,7 +66,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						setLocked(!notification.getNewBooleanValue());
+						setLocked(!notification.getNewBooleanValue() || (scenarioInstance != null && scenarioInstance.isReadonly()));
 					}
 				});
 			}
@@ -174,7 +174,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 					final ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
 					editorLock = instance.getLock(ScenarioLock.EDITORS);
 					editorLock.eAdapters().add(lockedAdapter);
-					setLocked(!editorLock.isAvailable());
+					setLocked(!editorLock.isAvailable() || instance.isReadonly());
 					displayScenarioInstance(instance);
 					return;
 				}
@@ -226,7 +226,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		return locked;
 	}
 
-	@Override
 	public void setLocked(final boolean locked) {
 		this.locked = locked;
 	}
