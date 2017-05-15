@@ -40,6 +40,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.progress.IProgressConstants2;
@@ -707,6 +709,19 @@ public class FileScenarioService extends AbstractScenarioService {
 				// TODO: This is not a very clean way to do it!
 				final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
 				lock.claim();
+			}
+
+			// TODO: This should be linked to a listener...
+			if (instance.isReadonly()) {
+				// Mark resources as read-only
+				final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+				if (domain instanceof AdapterFactoryEditingDomain) {
+					final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
+					final Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+					for (final Resource r : domain.getResourceSet().getResources()) {
+						resourceToReadOnlyMap.put(r, Boolean.TRUE);
+					}
+				}
 			}
 		}
 		return result;

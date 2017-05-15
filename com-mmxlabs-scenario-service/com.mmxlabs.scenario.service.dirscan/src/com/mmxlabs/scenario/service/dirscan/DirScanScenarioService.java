@@ -30,6 +30,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
@@ -700,6 +702,19 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					// TODO: This is not a very clean way to do it!
 					final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
 					lock.claim();
+				}
+
+				// TODO: This should be linked to a listener...
+				{
+					// Mark resources as read-only
+					final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+					if (domain instanceof AdapterFactoryEditingDomain) {
+						final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
+						final Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+						for (final Resource r : domain.getResourceSet().getResources()) {
+							resourceToReadOnlyMap.put(r, Boolean.TRUE);
+						}
+					}
 				}
 
 				return eObj;
