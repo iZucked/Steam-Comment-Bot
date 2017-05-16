@@ -129,8 +129,7 @@ public class HeadlessApplication implements IApplication {
 		// overrideSettings.setIdleTimeHigh(headlessParameters.getParameterValue("idle-time-high", Integer.class));
 		// overrideSettings.setIdleTimeEnd(headlessParameters.getParameterValue("idle-time-end", Integer.class));
 		// set scenario file
-		overrideSettings
-				.setScenario(headlessParameters.getParameterValue("scenario-path", String.class) + "/" + headlessParameters.getParameterValue("scenario", String.class));
+		overrideSettings.setScenario(headlessParameters.getParameterValue("scenario-path", String.class) + "/" + headlessParameters.getParameterValue("scenario", String.class));
 		// Set verbose Logging
 		// overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
 		// overrideSettings.setUseRouletteWheel(headlessParameters.getParameterValue("use-roulette-wheel", Boolean.class));
@@ -486,6 +485,10 @@ public class HeadlessApplication implements IApplication {
 		options.addOption(OptionBuilder.withLongOpt("vmargs").withDescription("(OSGi) Java VM arguments").hasArgs().create());
 		options.addOption("ws", true, "(OSGi) Set window system");
 
+		// Memory command line args (Not used by headless, but added to maintain compat with main laucher arg set.
+		options.addOption("auto-mem", false, "(LiNGO) Automatically determine upper bound for heap size");
+		options.addOption("no-auto-mem", false, "(LiNGO) Do not automatically determine upper bound for heap size");
+
 		// Enable Fitness Exporter
 		options.addOption(OptionBuilder.withLongOpt(FITNESS_TRACE).isRequired(false).withDescription("Export fitness trace to a file").hasArg().create());
 
@@ -523,8 +526,7 @@ public class HeadlessApplication implements IApplication {
 		final Integer seed = headlessParameters.getParameterValue("seed", Integer.class);
 
 		@NonNull
-		final
-		JMap lsoSettings = headlessParameters.getParameterValue("simulated-annealing", JMap.class);
+		final JMap lsoSettings = headlessParameters.getParameterValue("simulated-annealing", JMap.class);
 		final Double coolingFactor = lsoSettings.getValue("cooling-factor", Double.class);
 		final Integer initialTemperature = lsoSettings.getValue("initial-temperature", Integer.class);
 		final Integer epochLength = lsoSettings.getValue("epoch-length", Integer.class);
@@ -666,13 +668,13 @@ public class HeadlessApplication implements IApplication {
 	private void createObjectives(final ConstraintAndFitnessSettings settings, final JMap jMap) {
 		settings.getObjectives().clear();
 		for (final String objectiveName : jMap.getJMap().keySet()) {
-			if(jMap.getClass(objectiveName) == Double.class){
-			settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
+			if (jMap.getClass(objectiveName) == Double.class) {
+				settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
 			} else {
 				settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Integer.class)));
 
 			}
-			}
+		}
 	}
 
 	private String getFolderNameFromSettings(final OptimisationPlan settings) {
