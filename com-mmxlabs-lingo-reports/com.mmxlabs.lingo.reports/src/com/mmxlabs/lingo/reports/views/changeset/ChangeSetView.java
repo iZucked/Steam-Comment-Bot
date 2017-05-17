@@ -70,6 +70,8 @@ import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Font;
@@ -134,6 +136,11 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetView implements IAdaptable {
+
+	/**
+	 * Data key to store selected vessel column
+	 */
+	private static final String DATA_SELECTED_COLUMN = "selected-vessel-column";
 
 	@Inject
 	private EPartService partService;
@@ -301,6 +308,22 @@ public class ChangeSetView implements IAdaptable {
 				gvc.getColumn().setCellRenderer(createCellRenderer());
 				gvc.getColumn().setDetail(true);
 				gvc.getColumn().setSummary(false);
+				gvc.getColumn().addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						if (viewer.getData(DATA_SELECTED_COLUMN) == gc) {
+							viewer.setData(DATA_SELECTED_COLUMN, null);
+						} else {
+							viewer.setData(DATA_SELECTED_COLUMN, gc);
+						}
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
 			}
 
 			{
@@ -1108,6 +1131,15 @@ public class ChangeSetView implements IAdaptable {
 
 	protected DefaultCellRenderer createCellRenderer() {
 		return new DefaultCellRenderer() {
+
+			@Override
+			public boolean isSelected() {
+				if (viewer.getData(DATA_SELECTED_COLUMN) == viewer.getGrid().getColumn(getColumn())) {
+					return true;
+				}
+
+				return super.isSelected();
+			}
 
 			@Override
 			public void paint(final GC gc, final Object value) {
