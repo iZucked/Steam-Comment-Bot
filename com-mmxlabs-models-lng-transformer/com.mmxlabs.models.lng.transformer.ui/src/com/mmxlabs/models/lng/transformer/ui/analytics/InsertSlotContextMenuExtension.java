@@ -230,23 +230,25 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 												e.printStackTrace();
 											}
 
-											jobManager.removeJob(finalJob);
-
 											if (newState == EJobState.COMPLETED) {
-												SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
-												if (plan != null) {
-													// Forces editor lock to disallow users from editing the scenario.
-													// TODO: This is not a very clean way to do it!
-//													final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
-//													lock.claim();
-													duplicate.setReadonly(true);
+												try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension:2")) {
+													SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
+													if (plan != null) {
+														// Forces editor lock to disallow users from editing the scenario.
+														// TODO: This is not a very clean way to do it!
+														// final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
+														// lock.claim();
+														duplicate.setReadonly(true);
 
-													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-													AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
-													data.setCreateInsertionOptions(true);
-													eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+														final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+														AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+														data.setCreateInsertionOptions(true);
+														eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+													}
 												}
 											}
+
+											jobManager.removeJob(finalJob);
 
 											return false;
 										}
