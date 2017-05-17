@@ -17,7 +17,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToIntBiFunction;
@@ -564,6 +566,9 @@ public class ChangeSetView implements IAdaptable {
 		}
 		return (T) null;
 	}
+
+	private final Queue<Runnable> postCreateActions = new ConcurrentLinkedQueue<>();
+	private boolean viewCreated = false;
 
 	@PostConstruct
 	public void createPartControl(@Optional final MPart part, final Composite parent) {
@@ -1125,7 +1130,17 @@ public class ChangeSetView implements IAdaptable {
 			final ContextMenuManager listener = new ContextMenuManager(mgr);
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
+		synchronized (postCreateActions) {
+			viewCreated = true;
+			while (!postCreateActions.isEmpty()) {
+				final Runnable r = postCreateActions.poll();
+				if (r != null) {
+					r.run();
+				}
 
+			}
+
+		}
 	}
 
 	protected void createSpacerColumn() {
@@ -2004,9 +2019,9 @@ public class ChangeSetView implements IAdaptable {
 	private void handleSwitchGroupByModel(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE) final SwitchGroupModeEvent event) {
 		if (event.activePart.getObject() == this) {
 			insertionPlanFilter.setGroupMode(event.mode);
-			openAnalyticsSolution( lastSolution) ;
-//				this.solution = solution;
-//			ViewerHelper.refresh(viewer, true);
+			openAnalyticsSolution(lastSolution);
+			// this.solution = solution;
+			// ViewerHelper.refresh(viewer, true);
 		}
 	}
 
@@ -2377,8 +2392,21 @@ public class ChangeSetView implements IAdaptable {
 									}
 								}
 								if (solution != null) {
-									final AnalyticsSolution analyticsSolution = new AnalyticsSolution(instance[0], solution, part.getLabel());
-									openAnalyticsSolution(analyticsSolution);
+
+									final UUIDObject pSolution = solution;
+									synchronized (postCreateActions) {
+										final ModelReference ref2 = instance[0].getReference("ChangeSetView:delayedLoad");
+										final Runnable r = () -> {
+											final AnalyticsSolution analyticsSolution = new AnalyticsSolution(instance[0], pSolution, part.getLabel());
+											openAnalyticsSolution(analyticsSolution);
+											ref2.close();
+										};
+										if (viewCreated) {
+											r.run();
+										} else {
+											postCreateActions.add(r);
+										}
+									}
 								}
 							}
 						}
