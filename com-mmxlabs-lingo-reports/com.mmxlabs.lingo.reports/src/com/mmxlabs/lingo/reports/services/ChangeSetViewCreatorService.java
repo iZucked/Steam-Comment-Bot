@@ -15,8 +15,13 @@ import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
+import org.eclipse.e4.ui.model.application.ui.menu.MDirectMenuItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MHandledMenuItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
+import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
@@ -127,32 +132,8 @@ public class ChangeSetViewCreatorService {
 				final MToolBar toolbar = modelService.createModelElement(MToolBar.class);
 				part.setToolbar(toolbar);
 
-				{
-					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-					item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
-					item.setType(ItemType.CHECK);
-					item.setLabel("Filter Non Structural Changes");
-					item.setTooltip("Toggling filtering of non structural changes");
-					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
-					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler");
-					item.setEnabled(true);
-					item.setToBeRendered(true);
-					item.setVisible(true);
-					toolbar.getChildren().add(item);
-				}
-				if (solution.isCreateDiffToBaseAction()) {
-					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
-					item.setType(ItemType.CHECK);
-					item.setLabel("Compare to Base");
-					item.setTooltip("Toggle compare to base");
-					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
-					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
-					item.setEnabled(true);
-					item.setToBeRendered(true);
-					item.setVisible(true);
-					toolbar.getChildren().add(item);
-				}
+				
+
 				{
 					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.copy");
@@ -166,22 +147,164 @@ public class ChangeSetViewCreatorService {
 					item.setVisible(true);
 					toolbar.getChildren().add(item);
 				}
-				{
+				if (solution.isCreateInsertionOptions()) {
+
+					final MMenu menu = modelService.createModelElement(MMenu.class);
+					menu.setEnabled(true);
+					menu.setToBeRendered(true);
+					menu.setVisible(true);
+
+					{
+						final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.filter_menu");
+						item.setType(ItemType.PUSH);
+						item.setTooltip("Change filters");
+						item.setLabel("Filter...");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setSelected(true);
+						item.setMenu(menu);
+
+						toolbar.getChildren().add(item);
+					}
+
+					{
+						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
+						item.setType(ItemType.CHECK);
+						item.setTooltip("Toggle Insertion Plan Filter");
+						item.setLabel("Toggle Insertion Plan Filter");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setSelected(true);
+						menu.getChildren().add(item);
+					}
+					{
+						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
+						item.setType(ItemType.CHECK);
+						item.setLabel("Filter Non Structural Changes");
+						item.setTooltip("Toggling filtering of non structural changes");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setSelected(true);
+						menu.getChildren().add(item);
+					}
+				} else {
+					{
+						final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
+						item.setType(ItemType.CHECK);
+						item.setLabel("Filter Non Structural Changes");
+						item.setTooltip("Toggling filtering of non structural changes");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						toolbar.getChildren().add(item);
+					}
+				}
+				if (solution.isCreateDiffToBaseAction()) {
 					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-					item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
+					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
 					item.setType(ItemType.CHECK);
-					item.setTooltip("Toggle Insertion Plan Filter");
-					item.setLabel("Toggle Insertion Plan Filter");
-					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
-					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
+					item.setLabel("Compare to Base");
+					item.setTooltip("Toggle compare to base");
+					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
 					item.setEnabled(true);
 					item.setToBeRendered(true);
 					item.setVisible(true);
+					item.setSelected(true);
 					toolbar.getChildren().add(item);
 				}
 
-				part.getTags().add("ScenarioUUID-" + solution.getScenarioInstance().getUuid());
-				part.getTags().add("SolutionUUID-" + solution.getSolution().getUuid());
+				if (solution.isCreateInsertionOptions()) {
+					final MMenu menu = modelService.createModelElement(MMenu.class);
+					menu.setEnabled(true);
+					menu.setToBeRendered(true);
+					menu.setVisible(true);
+
+					{
+						final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.groupby_menu");
+						item.setType(ItemType.PUSH);
+						item.setTooltip("Change the grouping choice");
+						item.setLabel("Group by");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/group.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+						item.setMenu(menu);
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						toolbar.getChildren().add(item);
+					}
+					{
+						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.group_menu.groupby.target_and_complexity");
+						item.setType(ItemType.PUSH);
+						item.setTooltip("Groups first by source or destination, then the the change complexity");
+						item.setLabel("Target and complexity");
+						// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+						item.getTags().add("groupby_target_and_complexity");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setType(ItemType.RADIO);
+
+						menu.getChildren().add(item);
+						// This is the default state
+						item.setSelected(true);
+					}
+					{
+						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.group_menu.groupby.target");
+						item.setType(ItemType.PUSH);
+						item.setTooltip("Group by source or destination");
+						item.setLabel("Target");
+						// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+						item.getTags().add("groupby_target");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setType(ItemType.RADIO);
+
+						menu.getChildren().add(item);
+
+					}
+					{
+						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.group_menu.groupby.complexity");
+						item.setType(ItemType.PUSH);
+						item.setTooltip("Group by change complexity");
+						item.setLabel("Complexity");
+						// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupByModeHandler");
+						item.getTags().add("groupby_complexity");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setType(ItemType.RADIO);
+
+						menu.getChildren().add(item);
+
+					}
+
+					part.getTags().add("ScenarioUUID-" + solution.getScenarioInstance().getUuid());
+					part.getTags().add("SolutionUUID-" + solution.getSolution().getUuid());
+				}
 
 				stack.getChildren().add(part); // Add part to stack
 				viewPart = partService.showPart(part, PartState.ACTIVATE); // Show part

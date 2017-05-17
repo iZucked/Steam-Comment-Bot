@@ -15,6 +15,7 @@ public final class ChangeSetViewEventConstants {
 	public static final String EVENT_ANALYSE_INSERTION_PLANS = "analyse-insertion-plans";
 	
 	public static final String EVENT_TOGGLE_FILTER_INSERTION_CHANGES = EVENT_PREFIX + "toggle-filter-insertion-plan-duplicates";
+	public static final String EVENT_SWITCH_GROUP_BY_MODE = EVENT_PREFIX + "switch-group-by-mode";
 
 
 	public static final String EVENT_SET_VIEW_MODE = EVENT_PREFIX + "set-view-mode";

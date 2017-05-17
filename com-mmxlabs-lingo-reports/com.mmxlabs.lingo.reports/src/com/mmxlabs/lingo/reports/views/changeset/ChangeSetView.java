@@ -99,6 +99,7 @@ import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
+import com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupModeEvent;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
@@ -248,7 +249,9 @@ public class ChangeSetView implements IAdaptable {
 
 	private boolean canExportChangeSet;
 
-	private InsertionPlanFilter insertionPlanFilter;
+	private InsertionPlanGrouperAndFilter insertionPlanFilter;
+
+	private @Nullable AnalyticsSolution lastSolution;
 
 	// private MPart part;
 
@@ -1070,7 +1073,7 @@ public class ChangeSetView implements IAdaptable {
 				return true;
 			}
 		};
-		insertionPlanFilter = new InsertionPlanFilter();
+		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
 		filters[1] = insertionPlanFilter;
 
 		viewer.setFilters(filters);
@@ -1998,6 +2001,17 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
+	private void handleSwitchGroupByModel(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE) final SwitchGroupModeEvent event) {
+		if (event.activePart.getObject() == this) {
+			insertionPlanFilter.setGroupMode(event.mode);
+			openAnalyticsSolution( lastSolution) ;
+//				this.solution = solution;
+//			ViewerHelper.refresh(viewer, true);
+		}
+	}
+
+	@Inject
+	@Optional
 	private void handleAnalyseScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS) final ScenarioInstance target) {
 		if (!handleEvents) {
 			return;
@@ -2272,6 +2286,7 @@ public class ChangeSetView implements IAdaptable {
 
 	@OpenChangeSetHandler
 	public void openAnalyticsSolution(final AnalyticsSolution solution) {
+		this.lastSolution = solution;
 		this.viewMode = ViewMode.ACTION_SET;
 
 		persistAnalyticsSolution = true;
@@ -2293,7 +2308,7 @@ public class ChangeSetView implements IAdaptable {
 			setNewDataData(target, monitor -> {
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
 
-				ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor);
+				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor);
 				// Returns a new sort order -- based on the assumption input data is sorted by best value first
 				final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, slotInsertionOptions.getSlotsInserted().get(0));
 				newRoot.getChangeSets().clear();

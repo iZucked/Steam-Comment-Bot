@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.nio.channels.IllegalSelectorException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,10 +32,20 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
-public class InsertionPlanFilter extends ViewerFilter {
+/**
+ * Class to organise insertion plans and optionally filter out related but "poorer" choices
+ *
+ */
+public class InsertionPlanGrouperAndFilter extends ViewerFilter {
+	public static enum GroupMode {
+		TargetAndComplexity, // Group by target and then by complexity count
+		Target, // Group by Target
+		Complexity, // Group by complexity
+	}
 
 	private final Set<ChangeSet> setsToInclude = new HashSet<>();
 	private boolean filterActive = false;
+	private GroupMode groupMode = GroupMode.TargetAndComplexity;
 
 	@Override
 	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
@@ -66,10 +77,22 @@ public class InsertionPlanFilter extends ViewerFilter {
 	public class ChangeSetMetadata {
 		public int changeCount;
 		public Object sendTo;
+		private final GroupMode mode;
+
+		public ChangeSetMetadata(GroupMode mode) {
+			this.mode = mode;
+		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hashCode(changeCount, sendTo);
+			if (mode == GroupMode.Complexity) {
+				return changeCount;
+			} else if (mode == GroupMode.Target) {
+				return sendTo.hashCode();
+			} else if (mode == GroupMode.TargetAndComplexity) {
+				return Objects.hashCode(changeCount, sendTo);
+			}
+			throw new IllegalStateException();
 		}
 
 		@Override
@@ -79,7 +102,14 @@ public class InsertionPlanFilter extends ViewerFilter {
 			}
 			if (obj instanceof ChangeSetMetadata) {
 				final ChangeSetMetadata other = (ChangeSetMetadata) obj;
-				return this.changeCount == other.changeCount && this.sendTo == other.sendTo;
+				if (mode == GroupMode.Complexity) {
+					return changeCount == other.changeCount;
+				} else if (mode == GroupMode.Target) {
+					return sendTo == other.sendTo;
+				} else if (mode == GroupMode.TargetAndComplexity) {
+					return this.changeCount == other.changeCount && this.sendTo == other.sendTo;
+				}
+				throw new IllegalStateException();
 			}
 			return false;
 		}
@@ -87,6 +117,7 @@ public class InsertionPlanFilter extends ViewerFilter {
 
 	public List<ChangeSet> processChangeSetRoot(final ChangeSetRoot root, final Slot target) {
 		setsToInclude.clear();
+
 		// Group by change count and target
 		final Map<ChangeSetMetadata, List<ChangeSet>> grouper = new LinkedHashMap<>();
 		for (final ChangeSet changeSet : root.getChangeSets()) {
@@ -109,7 +140,7 @@ public class InsertionPlanFilter extends ViewerFilter {
 					}
 				}
 			}
-			final ChangeSetMetadata key = new ChangeSetMetadata();
+			final ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
 			key.changeCount = structuralChanges;
 			Object sendTo = null;
 			if (targetRow != null) {
@@ -189,21 +220,36 @@ public class InsertionPlanFilter extends ViewerFilter {
 					}
 				}
 			}
+
 			int idx = 0;
 			for (final ChangeSet changeSet : e.getValue()) {
-				if (idx == 0) {
-					// if (e.getValue().size() == 1) {
-					// // changeSet.setDescription(String.format("%s (%d changes, 1 option)", dest, m.changeCount));
-					// changeSet.setDescription(String.format("%s, ∆%d (1/1)", dest, 1+idx,m.changeCount));
-					// // changeSet.setDescription(String.format("%s (∆%d, │1│)", dest, m.changeCount));
-					// } else {
-					// changeSet.setDescription(String.format("%s (%d changes, %d options)", dest, m.changeCount, e.getValue().size()));
-					changeSet.setDescription(String.format("%s, ∆%d (%d/%d)", dest, m.changeCount, 1 + idx, e.getValue().size()));
-					// changeSet.setDescription(String.format("%s (∆%d, │%d│)", dest, m.changeCount, e.getValue().size()));
-					// }
-				} else {
-					// changeSet.setDescription(String.format("%s, ∆%d (%d/%d)", dest, m.changeCount,1+idx, e.getValue().size()));
-					changeSet.setDescription(String.format("%s, ∆%d (%d)", dest, m.changeCount, 1 + idx));
+				switch (groupMode) {
+				case TargetAndComplexity: {
+					if (idx == 0) {
+						changeSet.setDescription(String.format("%s, ∆%d (%d/%d)", dest, m.changeCount, 1 + idx, e.getValue().size()));
+					} else {
+						changeSet.setDescription(String.format("%s, ∆%d (%d)", dest, m.changeCount, 1 + idx));
+					}
+					break;
+				}
+				case Target: {
+					if (idx == 0) {
+						changeSet.setDescription(String.format("%s, (%d/%d)", dest, 1 + idx, e.getValue().size()));
+					} else {
+						changeSet.setDescription(String.format("%s, (%d)", dest, 1 + idx));
+					}
+					break;
+				}
+				case Complexity: {
+					if (idx == 0) {
+						changeSet.setDescription(String.format("∆%d (%d/%d)", m.changeCount, 1 + idx, e.getValue().size()));
+					} else {
+						changeSet.setDescription(String.format("∆%d (%d)", m.changeCount, 1 + idx));
+					}
+					break;
+				}
+				default:
+					throw new IllegalStateException();
 				}
 				final double delta = changeSet.getMetricsToBase().getPnlDelta();
 				if (delta > bestDelta) {
@@ -231,5 +277,9 @@ public class InsertionPlanFilter extends ViewerFilter {
 
 	public void setFilterActive(final boolean b) {
 		this.filterActive = b;
+	}
+
+	public void setGroupMode(GroupMode mode) {
+		this.groupMode = mode;
 	}
 }

@@ -141,6 +141,8 @@ public class OpenInsertionPlansHandler extends AbstractHandler {
 	private void openPlan(final ScenarioInstance scenarioInstance, final SlotInsertionOptions plan) {
 
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, new AnalyticsSolution(scenarioInstance, plan, generateName(plan)));
+		AnalyticsSolution data = new AnalyticsSolution(scenarioInstance, plan, generateName(plan));
+		data.setCreateInsertionOptions(true);
+		eventBroker.post(ChangeSetViewCreatorService.ChangeSetViewCreatorService_Topic, data);
 	}
 }
