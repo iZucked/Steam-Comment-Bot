@@ -31,11 +31,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -109,6 +111,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -118,12 +121,14 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
@@ -142,6 +147,8 @@ public class ChangeSetView implements IAdaptable {
 	 */
 	private static final String DATA_SELECTED_COLUMN = "selected-vessel-column";
 
+	private static final String KEY_RESTORE_ANALYTICS_SOLUTION = "restore-analytics-solution-from-tags";
+
 	@Inject
 	private EPartService partService;
 
@@ -158,6 +165,8 @@ public class ChangeSetView implements IAdaptable {
 	private GridViewerColumn vesselColumnStub;
 
 	private ChangeSetWiringDiagram diagram;
+
+	private boolean persistAnalyticsSolution = false;
 
 	/**
 	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
@@ -195,7 +204,7 @@ public class ChangeSetView implements IAdaptable {
 				return;
 			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-				ScenarioResult target = pin == null ? other : pin;
+				final ScenarioResult target = pin == null ? other : pin;
 				setNewDataData(target, monitor -> {
 					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
 					scheduleDiffUtils.setCheckAssignmentDifferences(true);
@@ -311,7 +320,7 @@ public class ChangeSetView implements IAdaptable {
 				gvc.getColumn().addSelectionListener(new SelectionListener() {
 
 					@Override
-					public void widgetSelected(SelectionEvent e) {
+					public void widgetSelected(final SelectionEvent e) {
 						if (viewer.getData(DATA_SELECTED_COLUMN) == gc) {
 							viewer.setData(DATA_SELECTED_COLUMN, null);
 						} else {
@@ -320,7 +329,7 @@ public class ChangeSetView implements IAdaptable {
 					}
 
 					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
+					public void widgetDefaultSelected(final SelectionEvent e) {
 
 					}
 				});
@@ -351,7 +360,7 @@ public class ChangeSetView implements IAdaptable {
 					createListener(cs.getPrevScenario());
 				}
 			}
-			ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
+			final ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
 
 			diagram.setChangeSetRoot(newTable);
 			viewer.setInput(newTable);
@@ -1319,7 +1328,7 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
+	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
 
 		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
 		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER;
@@ -1791,7 +1800,7 @@ public class ChangeSetView implements IAdaptable {
 							}
 
 							if (left.isEmpty() && right.isEmpty()) {
-								int ii = 0;
+								final int ii = 0;
 							} else
 
 								cell.setText(String.format("%s      %s", left, right));
@@ -2265,6 +2274,8 @@ public class ChangeSetView implements IAdaptable {
 	public void openAnalyticsSolution(final AnalyticsSolution solution) {
 		this.viewMode = ViewMode.ACTION_SET;
 
+		persistAnalyticsSolution = true;
+
 		final ScenarioInstance target = solution.getScenarioInstance();
 		final EObject plan = solution.getSolution();
 		// Do something?
@@ -2276,7 +2287,7 @@ public class ChangeSetView implements IAdaptable {
 				return transformer.createDataModel(target, (ActionableSetPlan) plan, monitor);
 			}, null);
 		} else if (plan instanceof SlotInsertionOptions) {
-			SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
+			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			this.viewMode = ViewMode.ACTION_SET;
 			this.canExportChangeSet = true;
 			setNewDataData(target, monitor -> {
@@ -2293,4 +2304,80 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
+	@PostConstruct
+	public void restoreState(final MPart part) {
+		final Map<String, String> state = part.getPersistedState();
+		final String value = state.get(KEY_RESTORE_ANALYTICS_SOLUTION);
+		if (value != null) {
+			if (value.equalsIgnoreCase("true")) {
+
+				String scenarioUUID = null;
+				String solutionUUID = null;
+				for (final String tag : part.getTags()) {
+					if (tag.startsWith("ScenarioUUID-")) {
+						scenarioUUID = tag.replaceFirst("ScenarioUUID-", "");
+					}
+					if (tag.startsWith("SolutionUUID-")) {
+						solutionUUID = tag.replaceFirst("SolutionUUID-", "");
+					}
+				}
+
+				if (scenarioUUID != null && solutionUUID != null) {
+
+					final String pScenarioUUID = scenarioUUID;
+					final String pSolutionUUID = solutionUUID;
+
+					final ScenarioInstance[] instance = new ScenarioInstance[1];
+					ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
+
+						if (ss.exists(pScenarioUUID)) {
+							final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
+							while (itr.hasNext()) {
+								final EObject obj = itr.next();
+								if (obj instanceof ScenarioInstance) {
+									final ScenarioInstance scenarioInstance = (ScenarioInstance) obj;
+									if (pScenarioUUID.equals(scenarioInstance.getUuid())) {
+										instance[0] = scenarioInstance;
+										return false;
+									}
+								}
+							}
+						}
+						return true;
+					});
+					if (instance[0] != null) {
+						UUIDObject solution = null;
+						try (ModelReference ref = instance[0].getReference("ChangeSetView:restore")) {
+							final EObject modelInstance = ref.getInstance();
+							if (modelInstance instanceof LNGScenarioModel) {
+								final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelInstance;
+								final AnalyticsModel analyticsModel = scenarioModel.getAnalyticsModel();
+								for (final EObject obj : analyticsModel.eContents()) {
+									if (obj instanceof UUIDObject) {
+										final UUIDObject uuidObject = (UUIDObject) obj;
+										if (pSolutionUUID.contentEquals(uuidObject.getUuid())) {
+											solution = uuidObject;
+											break;
+										}
+									}
+								}
+								if (solution != null) {
+									final AnalyticsSolution analyticsSolution = new AnalyticsSolution(instance[0], solution, part.getLabel());
+									openAnalyticsSolution(analyticsSolution);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@PersistState
+	public void persistState(final MPart part) {
+		if (persistAnalyticsSolution) {
+			final Map<String, String> state = part.getPersistedState();
+			state.put(KEY_RESTORE_ANALYTICS_SOLUTION, "true");
+		}
+	}
 }

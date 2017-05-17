@@ -180,6 +180,9 @@ public class ChangeSetViewCreatorService {
 					toolbar.getChildren().add(item);
 				}
 
+				part.getTags().add("ScenarioUUID-" + solution.getScenarioInstance().getUuid());
+				part.getTags().add("SolutionUUID-" + solution.getSolution().getUuid());
+
 				stack.getChildren().add(part); // Add part to stack
 				viewPart = partService.showPart(part, PartState.ACTIVATE); // Show part
 			}
