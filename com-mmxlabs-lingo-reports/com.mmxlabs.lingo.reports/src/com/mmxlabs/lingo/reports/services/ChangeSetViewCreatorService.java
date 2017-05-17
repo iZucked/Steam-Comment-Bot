@@ -130,6 +130,7 @@ public class ChangeSetViewCreatorService {
 				part.setLabel(solution.getTitle());
 
 				final MToolBar toolbar = modelService.createModelElement(MToolBar.class);
+				toolbar.setElementId(viewPartId + ".toolbar");
 				part.setToolbar(toolbar);
 
 				{
