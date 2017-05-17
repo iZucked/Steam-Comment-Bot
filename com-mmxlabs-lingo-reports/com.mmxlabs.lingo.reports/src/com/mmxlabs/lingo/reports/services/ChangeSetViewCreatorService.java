@@ -132,6 +132,7 @@ public class ChangeSetViewCreatorService {
 					item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
 					item.setType(ItemType.CHECK);
 					item.setLabel("Filter Non Structural Changes");
+					item.setTooltip("Toggling filtering of non structural changes");
 					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
 					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler");
 					item.setEnabled(true);
@@ -144,6 +145,7 @@ public class ChangeSetViewCreatorService {
 					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
 					item.setType(ItemType.CHECK);
 					item.setLabel("Compare to Base");
+					item.setTooltip("Toggle compare to base");
 					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
 					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
 					item.setEnabled(true);
