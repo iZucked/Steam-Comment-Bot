@@ -132,8 +132,6 @@ public class ChangeSetViewCreatorService {
 				final MToolBar toolbar = modelService.createModelElement(MToolBar.class);
 				part.setToolbar(toolbar);
 
-				
-
 				{
 					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.copy");
