@@ -55,7 +55,7 @@ public class Application implements IApplication {
 	@Override
 	public Object start(final IApplicationContext context) {
 		final String[] appLineArgs = Platform.getApplicationArgs();
-		System.out.println(Arrays.toString(appLineArgs));
+
 		if (appLineArgs != null && appLineArgs.length > 0) {
 			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g. could get here through a relaunch)
 			boolean skipAutoMemory = false;
