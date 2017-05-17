@@ -15,6 +15,15 @@ public class AnalyticsSolution {
 	private ScenarioInstance scenarioInstance;
 	private UUIDObject solution;
 	private boolean createDiffToBaseAction;
+	private boolean createInsertionOptions;
+
+	public boolean isCreateInsertionOptions() {
+		return createInsertionOptions;
+	}
+
+	public void setCreateInsertionOptions(boolean createInsertionOptions) {
+		this.createInsertionOptions = createInsertionOptions;
+	}
 
 	public boolean isCreateDiffToBaseAction() {
 		return createDiffToBaseAction;
