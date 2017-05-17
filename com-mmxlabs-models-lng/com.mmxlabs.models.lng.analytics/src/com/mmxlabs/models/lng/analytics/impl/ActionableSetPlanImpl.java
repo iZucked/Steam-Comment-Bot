@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -40,7 +41,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class ActionableSetPlanImpl extends EObjectImpl implements ActionableSetPlan {
+public class ActionableSetPlanImpl extends UUIDObjectImpl implements ActionableSetPlan {
 	/**
 	 * The cached value of the '{@link #getActionSets() <em>Action Sets</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

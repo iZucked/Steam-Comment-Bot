@@ -2600,6 +2600,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		profitAndLossResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		breakEvenResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		optionAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		actionableSetPlanEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		slotInsertionOptionsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

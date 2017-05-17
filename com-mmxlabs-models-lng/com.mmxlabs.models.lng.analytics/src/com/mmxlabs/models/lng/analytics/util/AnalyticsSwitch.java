@@ -336,6 +336,8 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.ACTIONABLE_SET_PLAN: {
 				ActionableSetPlan actionableSetPlan = (ActionableSetPlan)theEObject;
 				T result = caseActionableSetPlan(actionableSetPlan);
+				if (result == null) result = caseUUIDObject(actionableSetPlan);
+				if (result == null) result = caseMMXObject(actionableSetPlan);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -348,6 +350,8 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: {
 				SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions)theEObject;
 				T result = caseSlotInsertionOptions(slotInsertionOptions);
+				if (result == null) result = caseUUIDObject(slotInsertionOptions);
+				if (result == null) result = caseMMXObject(slotInsertionOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

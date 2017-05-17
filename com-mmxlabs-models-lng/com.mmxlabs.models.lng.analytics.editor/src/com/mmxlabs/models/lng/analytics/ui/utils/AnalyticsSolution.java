@@ -6,13 +6,14 @@ package com.mmxlabs.models.lng.analytics.ui.utils;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyticsSolution {
 	private String title;
 	private final String id;
 	private ScenarioInstance scenarioInstance;
-	private EObject solution;
+	private UUIDObject solution;
 	private boolean createDiffToBaseAction;
 
 	public boolean isCreateDiffToBaseAction() {
@@ -23,7 +24,7 @@ public class AnalyticsSolution {
 		this.createDiffToBaseAction = createDiffToBaseAction;
 	}
 
-	public AnalyticsSolution(final ScenarioInstance instance, final EObject solution, final String title) {
+	public AnalyticsSolution(final ScenarioInstance instance, final UUIDObject solution, final String title) {
 		scenarioInstance = instance;
 		this.solution = solution;
 		id = instance.getUuid() + title;
@@ -46,11 +47,11 @@ public class AnalyticsSolution {
 		this.scenarioInstance = scenarioInstance;
 	}
 
-	public EObject getSolution() {
+	public UUIDObject getSolution() {
 		return solution;
 	}
 
-	public void setSolution(final EObject solution) {
+	public void setSolution(final UUIDObject solution) {
 		this.solution = solution;
 	}
 
