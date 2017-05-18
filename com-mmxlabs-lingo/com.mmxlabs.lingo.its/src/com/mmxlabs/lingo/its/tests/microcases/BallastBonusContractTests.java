@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -56,6 +57,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -283,6 +285,43 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 62_499);
 		});
 	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void testSpotMarketsLumpSumBallastBonusOn_Matching() throws Exception {
+
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+
+		
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+//		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+//				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+//				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+//				.build();
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
+//		vesselAvailability.getEndAt().add(allDischarge);
+		@NonNull
+		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo.setVesselAssignmentType(charterInMarket_1);
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "1000000");
+		SimpleCharterContract s = CommercialFactory.eINSTANCE.createSimpleCharterContract();
+		s.setBallastBonusContract(ballastBonusContract);
+		charterInMarket_1.setCharterContract(s);
+		evaluateTest(null, null, scenarioRunner -> {
+			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			EList<Sequence> sequences = lngScenarioModel.getScheduleModel().getSchedule().getSequences();
+			int z = 0;
+//			final EndEvent end = getEndEvent(charterInMarket_1);
+//			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), -1_000_000);
+//			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 1_000_000);
+		});
+	}
+
 
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
 		final Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
