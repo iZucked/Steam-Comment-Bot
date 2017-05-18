@@ -81,9 +81,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl {
 
-	// private static final int REPORT_PERCENTAGE = 1;
-	// private int currentProgress = 0;
-
 	private final LNGSlotInsertionJobDescriptor jobDescriptor;
 
 	private final ScenarioInstance scenarioInstance;
@@ -91,9 +88,6 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	private final ModelReference modelReference;
 
 	private final LNGScenarioModel originalScenario;
-
-	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	private final LNGScenarioRunner scenarioRunner;
 
@@ -137,7 +131,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		}
 
 		// TODO: This should be static / central service?
-		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
+		executorService = LNGScenarioChainBuilder.createExecutorService();
 
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 		targetSlots = jobDescriptor.getTargetSlots();
@@ -199,7 +193,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 					}
 				} catch (IllegalArgumentException e) {
 					// Slot not found - probably outside of period.
-					throw new RuntimeException(String.format("Slot %d not included within period", original.getName()));
+					throw new RuntimeException(String.format("Slot %s not included within period", original.getName()));
 				}
 			}
 		} else {
@@ -361,18 +355,8 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
-		// if (scenarioRunner.isFinished()) {
-		// return false;
-		// } else {
-		// return true;
-		// }
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#kill()
-	 */
 	@Override
 	protected void kill() {
 	}
@@ -385,9 +369,6 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 			modelReference.close();
 		}
 
-		// if (scenarioRunner != null) {
-		// scenarioRunner.dispose();
-		// }
 		super.dispose();
 	}
 

@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -41,6 +43,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -90,6 +93,21 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			menuManager.add(action);
 			return;
+		} else {
+			List<Slot> slots = slot.getCargo().getSortedSlots();
+			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+			for (Slot slot2 : slots) {
+				if (slot2.isLocked()) {
+					action.setEnabled(false);
+					action.setText(action.getText() + " (Kept open)");
+				}
+			}
+			if (slot.getCargo().isLocked()) {
+				action.setEnabled(false);
+				action.setText(action.getText() + " (Locked)");
+			}
+			menuManager.add(action);
 		}
 	}
 
@@ -99,38 +117,83 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
-		final List<Slot> slots = new LinkedList<Slot>();
-		final Iterator<?> itr = selection.iterator();
-		while (itr.hasNext()) {
-			final Object obj = itr.next();
-			if (obj instanceof RowData) {
-				final RowData rowData = (RowData) obj;
-				final LoadSlot load = rowData.getLoadSlot();
-				if (load != null && load.getCargo() == null) {
-					slots.add(load);
-					break;
+		{
+			final List<Slot> slots = new LinkedList<>();
+			final Iterator<?> itr = selection.iterator();
+			while (itr.hasNext()) {
+				final Object obj = itr.next();
+				if (obj instanceof RowData) {
+					final RowData rowData = (RowData) obj;
+					final LoadSlot load = rowData.getLoadSlot();
+					if (load != null && load.getCargo() == null) {
+						slots.add(load);
+						break;
+					}
+					final DischargeSlot discharge = rowData.getDischargeSlot();
+					if (discharge != null && discharge.getCargo() == null) {
+						slots.add(discharge);
+						break;
+					}
 				}
-				final DischargeSlot discharge = rowData.getDischargeSlot();
-				if (discharge != null && discharge.getCargo() == null) {
-					slots.add(discharge);
-					break;
+			}
+
+			if (slots.size() > 0) {
+				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+				for (Slot slot : slots) {
+					if (slot.isLocked()) {
+						action.setEnabled(false);
+						action.setText(action.getText() + " (Kept open)");
+						break;
+					}
 				}
+				menuManager.add(action);
+
+				return;
 			}
 		}
-
-		if (slots.size() > 0) {
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
-
-			for (Slot slot : slots) {
-				if (slot.isLocked()) {
-					action.setEnabled(false);
-					action.setText(action.getText() + " (Kept open)");
-					break;
+		{
+			final Set<Cargo> cargoes = new LinkedHashSet<>();
+			final Iterator<?> itr = selection.iterator();
+			while (itr.hasNext()) {
+				final Object obj = itr.next();
+				if (obj instanceof RowData) {
+					final RowData rowData = (RowData) obj;
+					final LoadSlot load = rowData.getLoadSlot();
+					if (load != null && load.getCargo() != null) {
+						cargoes.add(load.getCargo());
+						break;
+					}
+					final DischargeSlot discharge = rowData.getDischargeSlot();
+					if (discharge != null && discharge.getCargo() != null) {
+						cargoes.add(discharge.getCargo());
+						break;
+					}
 				}
 			}
-			menuManager.add(action);
 
-			return;
+			if (cargoes.size() == 1) {
+				List<Slot> slots = cargoes.iterator().next().getSortedSlots();
+				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+				for (Slot slot : slots) {
+					if (slot.isLocked()) {
+						action.setEnabled(false);
+						action.setText(action.getText() + " (Kept open)");
+						break;
+					}
+				}
+				for (Cargo cargo : cargoes) {
+					if (cargo.isLocked()) {
+						action.setEnabled(false);
+						action.setText(action.getText() + " (Locked)");
+						break;
+					}
+				}
+				menuManager.add(action);
+
+				return;
+			}
 		}
 	}
 

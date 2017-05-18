@@ -18,12 +18,15 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -41,17 +44,31 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
+import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 public class SlotInsertionOptimiserUnit {
 
@@ -136,6 +153,58 @@ public class SlotInsertionOptimiserUnit {
 
 			monitor.beginTask("Generate solutions", tries);
 
+			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
+			{
+				final IOptionalElementsProvider optionalElementsProvider = injector.getInstance(IOptionalElementsProvider.class);
+				final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
+				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+
+				{
+					// Calculate the initial metrics
+					try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+						scope.enter();
+						final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
+						final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
+						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, null, null, null);
+						state.originalRawSequences = initialRawSequences;
+					}
+				}
+				{
+					final IModifiableSequences tmp = new ModifiableSequences(state.originalRawSequences);
+
+					for (ISequenceElement e : tmp.getUnusedElements()) {
+						if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
+							state.initiallyUnused.add(e);
+						}
+
+					}
+
+					// Makes sure target slots are not contained in the solution.
+					for (final IPortSlot portSlot : elements) {
+						final ISequenceElement element = portSlotProvider.getElement(portSlot);
+
+						final LookupManager lookupManager = new LookupManager(tmp);
+						final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(element);
+						if (lookup != null && lookup.getFirst() != null) {
+							@NonNull
+							final IModifiableSequence modifiableSequence = tmp.getModifiableSequence(lookup.getFirst());
+							@NonNull
+							final List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, element);
+							for (final ISequenceElement e : segment) {
+								modifiableSequence.remove(e);
+								tmp.getModifiableUnusedElements().add(e);
+							}
+
+							// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots at once.
+							if (optionalElementsProvider.isElementRequired(element)) {
+								++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
+							}
+						}
+					}
+					state.startingPointRawSequences = tmp;
+				}
+			}
+
 			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
 			try {
 				for (int tryNo = 0; tryNo < tries; ++tryNo) {
@@ -149,7 +218,7 @@ public class SlotInsertionOptimiserUnit {
 							// Bit nasty, but we are still in PoC stages
 
 							final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
-							return calculator.generate(elements, pTryNo);
+							return calculator.generate(elements, state, pTryNo);
 						} finally {
 							monitor.worked(1);
 						}
