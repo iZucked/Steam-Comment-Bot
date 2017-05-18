@@ -35,10 +35,12 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.IRestrictedElementsProvider;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGSharedDataTransformerModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.shared.impl.SharedDataTransformerService;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
@@ -83,6 +85,7 @@ public class SlotOverridesTest {
 
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new PerChainUnitScopeModule());
+			modules.add(new LNGSharedDataTransformerModule(scenario, new SharedDataTransformerService()));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, settings, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule,
 					hints));

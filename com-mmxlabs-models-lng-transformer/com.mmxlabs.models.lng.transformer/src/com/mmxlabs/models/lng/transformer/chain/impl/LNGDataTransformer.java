@@ -26,7 +26,9 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGSharedDataTransformerModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.shared.impl.SharedDataTransformerService;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -36,6 +38,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 
 /**
  * The {@link LNGDataTransformer} is the main entry point for the {@link ILNGStateTransformerUnit} and {@link IChainRunner} APIs.
@@ -76,6 +79,7 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
+		modules.add(new LNGSharedDataTransformerModule(scenarioModel, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, userSettings, hints), services,
 				IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));

@@ -37,7 +37,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
@@ -51,7 +50,6 @@ import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -86,11 +84,9 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
@@ -146,7 +142,6 @@ import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
@@ -204,6 +199,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
@@ -271,7 +267,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	@NonNull
-	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	private IPortProvider portProvider;
 
 	@Inject
 	@NonNull
@@ -674,13 +670,10 @@ public class LNGScenarioTransformer {
 		}
 
 		for (final Port ePort : portModel.getPorts()) {
-			final IPort port;
-			if (ePort.getLocation() != null) {
-				final Location loc = ePort.getLocation();
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
-			} else {
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone());
-			}
+			final IPort port = portProvider.getPortForName(ePort.getName());
+			assert port != null;
+
+			builder.setPortCooldownData(port, !ePort.isAllowCooldown(), cooldownCalculators.get(ePort));
 
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
@@ -851,7 +844,8 @@ public class LNGScenarioTransformer {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void registerIndex(@NonNull final String name, @NonNull final Index<? extends Number> index, @NonNull final SeriesParser indices) {
+	private void registerIndex(final String name, @NonNull final Index<? extends Number> index, @NonNull final SeriesParser indices) {
+		assert name != null;
 		if (index instanceof DataIndex) {
 			final DataIndex<? extends Number> di = (DataIndex<? extends Number>) index;
 			final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<Pair<YearMonth, Number>>(new Comparator<Pair<YearMonth, ?>>() {
@@ -2607,14 +2601,6 @@ public class LNGScenarioTransformer {
 			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
 			@NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 
-		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
-
-		orderedKeys.add(RouteOption.DIRECT);
-		orderedKeys.add(RouteOption.SUEZ);
-		if (LicenseFeatures.isPermitted("features:panama-canal")) {
-			orderedKeys.add(RouteOption.PANAMA);
-		}
-
 		// set canal route consumptions and toll info
 		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
 		final CostModel costModel = ScenarioModelUtil.getCostModel(rootObject);
@@ -2648,15 +2634,6 @@ public class LNGScenarioTransformer {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
 			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
-			for (final RouteLine dl : r.getLines()) {
-				IPort from, to;
-				from = portAssociation.lookupNullChecked(dl.getFrom());
-				to = portAssociation.lookupNullChecked(dl.getTo());
-
-				final int distance = dl.getFullDistance();
-
-				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
-			}
 
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
 					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
@@ -2701,16 +2678,6 @@ public class LNGScenarioTransformer {
 				}
 			}
 		}
-		// Filter out unused routes
-		orderedKeys.retainAll(seenRoutes);
-
-		// Fix sort order for distance iteration
-		final String[] preSortedKeys = orderedKeys.stream() //
-				.map(RouteOption::getName)//
-				.collect(Collectors.toList()) //
-				.toArray(new String[orderedKeys.size()]);
-		portDistanceProvider.setPreSortedKeys(preSortedKeys);
-
 	}
 
 	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
