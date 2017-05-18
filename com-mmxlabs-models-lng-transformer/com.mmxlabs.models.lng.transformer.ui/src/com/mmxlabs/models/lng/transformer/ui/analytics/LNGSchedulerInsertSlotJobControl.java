@@ -106,6 +106,14 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 	private SlotInsertionOptions slotInsertionPlan;
 
+	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
+			LNGTransformerHelper.HINT_DISABLE_CACHES, //
+			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT, //
+			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
+
+	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
+			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT };
+
 	public LNGSchedulerInsertSlotJobControl(final LNGSlotInsertionJobDescriptor jobDescriptor) {
 		super(jobDescriptor.getJobName());
 
@@ -163,12 +171,20 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		};
 
+		boolean isBreakEven = false;
+		for (Slot slot : targetSlots) {
+			if (slot.isSetPriceExpression()) {
+				if (slot.getPriceExpression().contains("?")) {
+					isBreakEven = true;
+					break;
+				}
+			}
+		}
+
+		String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
+
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, //
-				LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-				LNGTransformerHelper.HINT_DISABLE_CACHES, //
-				LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT, //
-				LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN);
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
 
 		if (userSettings.isSetPeriodStart() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario
@@ -278,7 +294,9 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 						@NonNull
 						final Collection<@NonNull String> hints = new LinkedList<>(dataTransformer.getHints());
 						// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
-						hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+						if (performBreakEven) {
+							hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+						}
 						try {
 							if (performBreakEven) {
 								final BreakEvenOptimisationStage stageSettings = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
