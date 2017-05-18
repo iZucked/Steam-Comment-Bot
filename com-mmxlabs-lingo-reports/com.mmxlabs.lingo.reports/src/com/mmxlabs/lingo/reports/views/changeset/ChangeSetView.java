@@ -102,6 +102,7 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
 import com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupModeEvent;
+import com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchSlotEvent;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
@@ -145,6 +146,10 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetView implements IAdaptable {
 
+	public static enum ViewMode {
+		COMPARE, ACTION_SET
+	}
+
 	/**
 	 * Data key to store selected vessel column
 	 */
@@ -155,21 +160,16 @@ public class ChangeSetView implements IAdaptable {
 	@Inject
 	private EPartService partService;
 
-	public static enum ViewMode {
-		COMPARE, ACTION_SET
-	}
-
 	private GridTreeViewer viewer;
-
-	private boolean diffToBase = false;
-	private boolean showNonStructuralChanges = false;
 
 	private GridColumnGroup vesselColumnGroup;
 	private GridViewerColumn vesselColumnStub;
 
-	private ChangeSetWiringDiagram diagram;
+	private GridViewerColumn violationColumn;
 
-	private boolean persistAnalyticsSolution = false;
+	private GridViewerColumn latenessColumn;
+
+	private ChangeSetWiringDiagram diagram;
 
 	/**
 	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
@@ -178,8 +178,6 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
-
-	private ChangeSetRoot root;
 
 	@Inject
 	private ESelectionService eSelectionService;
@@ -236,12 +234,9 @@ public class ChangeSetView implements IAdaptable {
 	private Image imageOpenCircle;
 
 	private ViewMode viewMode = ViewMode.COMPARE;
-
 	private IAdditionalAttributeProvider additionalAttributeProvider;
 
-	private GridViewerColumn violationColumn;
-
-	private GridViewerColumn latenessColumn;
+	private ChangeSetRoot root;
 
 	public ChangeSetTableRoot tableRootToBase;
 	public ChangeSetTableRoot tableRootToPrevious;
@@ -254,8 +249,12 @@ public class ChangeSetView implements IAdaptable {
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
 	private @Nullable AnalyticsSolution lastSolution;
+	private @Nullable Slot lastTargetSlot;
 
-	// private MPart part;
+	private boolean diffToBase = false;
+	private boolean showNonStructuralChanges = false;
+
+	private boolean persistAnalyticsSolution = false;
 
 	private final class ViewUpdateRunnable implements Runnable {
 		private final ChangeSetRoot newRoot;
@@ -2019,7 +2018,19 @@ public class ChangeSetView implements IAdaptable {
 	private void handleSwitchGroupByModel(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE) final SwitchGroupModeEvent event) {
 		if (event.activePart.getObject() == this) {
 			insertionPlanFilter.setGroupMode(event.mode);
-			openAnalyticsSolution(lastSolution);
+			String id = lastTargetSlot == null ? null : lastTargetSlot.getName();
+
+			openAnalyticsSolution(lastSolution, id);
+			// this.solution = solution;
+			// ViewerHelper.refresh(viewer, true);
+		}
+	}
+
+	@Inject
+	@Optional
+	private void handleSwitchSlot(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_TARGET_SLOT) final SwitchSlotEvent event) {
+		if (event.activePart.getObject() == this) {
+			openAnalyticsSolution(lastSolution, event.slotId);
 			// this.solution = solution;
 			// ViewerHelper.refresh(viewer, true);
 		}
@@ -2301,6 +2312,10 @@ public class ChangeSetView implements IAdaptable {
 
 	@OpenChangeSetHandler
 	public void openAnalyticsSolution(final AnalyticsSolution solution) {
+		openAnalyticsSolution(solution, null);
+	}
+
+	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable String slotId) {
 		this.lastSolution = solution;
 		this.viewMode = ViewMode.ACTION_SET;
 
@@ -2320,17 +2335,31 @@ public class ChangeSetView implements IAdaptable {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			this.viewMode = ViewMode.ACTION_SET;
 			this.canExportChangeSet = true;
+
+			Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
+			if (slotId != null) {
+				for (Slot s : slotInsertionOptions.getSlotsInserted()) {
+					if (slotId.equals(s.getName())) {
+						targetSlot = s;
+						break;
+					}
+				}
+			}
+			Slot pTargetSlot = targetSlot;
+			lastTargetSlot = pTargetSlot;
+
 			setNewDataData(target, monitor -> {
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
 
-				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor);
 				// Returns a new sort order -- based on the assumption input data is sorted by best value first
-				final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, slotInsertionOptions.getSlotsInserted().get(0));
+
+				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor, pTargetSlot);
+				final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 				newRoot.getChangeSets().clear();
 				newRoot.getChangeSets().addAll(processChangeSetRoot);
 				insertionPlanFilter.setFilterActive(true);
 				return newRoot;
-			}, slotInsertionOptions.getSlotsInserted().get(0));
+			}, pTargetSlot);
 		}
 	}
 
@@ -2353,6 +2382,7 @@ public class ChangeSetView implements IAdaptable {
 				}
 
 				if (scenarioUUID != null && solutionUUID != null) {
+					persistAnalyticsSolution = true;
 
 					final String pScenarioUUID = scenarioUUID;
 					final String pSolutionUUID = solutionUUID;
@@ -2398,7 +2428,7 @@ public class ChangeSetView implements IAdaptable {
 										final ModelReference ref2 = instance[0].getReference("ChangeSetView:delayedLoad");
 										final Runnable r = () -> {
 											final AnalyticsSolution analyticsSolution = new AnalyticsSolution(instance[0], pSolution, part.getLabel());
-											openAnalyticsSolution(analyticsSolution);
+											openAnalyticsSolution(analyticsSolution, null);
 											ref2.close();
 										};
 										if (viewCreated) {
@@ -2422,5 +2452,15 @@ public class ChangeSetView implements IAdaptable {
 			final Map<String, String> state = part.getPersistedState();
 			state.put(KEY_RESTORE_ANALYTICS_SOLUTION, "true");
 		}
+	}
+
+	@GetCurrentAnalyticsSolution
+	public AnalyticsSolution getLastSolution() {
+		return lastSolution;
+	}
+
+	@GetCurrentTargetSlot
+	public Slot getLastSlot() {
+		return lastTargetSlot;
 	}
 }

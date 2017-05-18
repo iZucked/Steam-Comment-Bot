@@ -17,6 +17,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectMenuItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MDynamicMenuContribution;
 import org.eclipse.e4.ui.model.application.ui.menu.MHandledMenuItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
@@ -27,6 +28,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
+import org.eclipse.ui.internal.menus.DynamicMenuContributionItem;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
@@ -146,6 +148,22 @@ public class ChangeSetViewCreatorService {
 					item.setVisible(true);
 					toolbar.getChildren().add(item);
 				}
+				
+				
+				if (solution.isCreateDiffToBaseAction()) {
+					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
+					item.setType(ItemType.CHECK);
+					item.setLabel("Compare to Base");
+					item.setTooltip("Toggle compare to base");
+					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
+					item.setEnabled(true);
+					item.setToBeRendered(true);
+					item.setVisible(true);
+					item.setSelected(true);
+					toolbar.getChildren().add(item);
+				}
 				if (solution.isCreateInsertionOptions()) {
 
 					final MMenu menu = modelService.createModelElement(MMenu.class);
@@ -174,8 +192,8 @@ public class ChangeSetViewCreatorService {
 						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
 						item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
 						item.setType(ItemType.CHECK);
-						item.setTooltip("Toggle Insertion Plan Filter");
-						item.setLabel("Toggle Insertion Plan Filter");
+						item.setTooltip("Toggle  related changes filter");
+						item.setLabel("Toggle related changes filter");
 						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
 						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
 						item.setEnabled(true);
@@ -183,7 +201,9 @@ public class ChangeSetViewCreatorService {
 						item.setVisible(true);
 						item.setSelected(true);
 						menu.getChildren().add(item);
+
 					}
+
 					{
 						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
 						item.setElementId(viewPartId + ".directtoolitem.filternonstructuralchanges");
@@ -197,6 +217,27 @@ public class ChangeSetViewCreatorService {
 						item.setVisible(true);
 						item.setSelected(true);
 						menu.getChildren().add(item);
+					}
+					{
+						final MDynamicMenuContribution item = modelService.createModelElement(MDynamicMenuContribution.class);
+						item.setElementId(viewPartId + ".directtoolitem.select_target");
+						item.setType(ItemType.PUSH);
+						item.setTooltip("Select target element");
+						item.setLabel("Target...");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.InsertionSelectedSlotHandler");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						// item.setSelected(true);
+						menu.getChildren().add(item);
+
+						// final MMenu menu2 = modelService.createModelElement(MMenu.class);
+						// menu2.setEnabled(true);
+						// menu2.setToBeRendered(true);
+						//// menu2.setVisible(true);
+						//
+						// item.setMenu(menu2);
 					}
 				} else {
 					{
@@ -213,20 +254,7 @@ public class ChangeSetViewCreatorService {
 						toolbar.getChildren().add(item);
 					}
 				}
-				if (solution.isCreateDiffToBaseAction()) {
-					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
-					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
-					item.setType(ItemType.CHECK);
-					item.setLabel("Compare to Base");
-					item.setTooltip("Toggle compare to base");
-					item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif");
-					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler");
-					item.setEnabled(true);
-					item.setToBeRendered(true);
-					item.setVisible(true);
-					item.setSelected(true);
-					toolbar.getChildren().add(item);
-				}
+			
 
 				if (solution.isCreateInsertionOptions()) {
 					final MMenu menu = modelService.createModelElement(MMenu.class);

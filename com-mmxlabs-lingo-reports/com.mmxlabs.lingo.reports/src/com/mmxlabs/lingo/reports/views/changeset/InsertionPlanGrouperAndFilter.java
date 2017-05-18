@@ -46,6 +46,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	private final Set<ChangeSet> setsToInclude = new HashSet<>();
 	private boolean filterActive = false;
 	private GroupMode groupMode = GroupMode.TargetAndComplexity;
+	private String slotId;
 
 	@Override
 	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
@@ -146,7 +147,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			if (targetRow != null) {
 				if (targetRowData.getLoadSlot() == target) {
 					final DischargeSlot dischargeSlot = targetRowData.getDischargeSlot();
-					if (dischargeSlot instanceof SpotSlot) {
+					if (dischargeSlot == null) {
+						sendTo = "Open";
+					} else if (dischargeSlot instanceof SpotSlot) {
 						sendTo = ((SpotSlot) dischargeSlot).getMarket().eClass();
 					} else if (dischargeSlot.getContract() != null) {
 						sendTo = dischargeSlot.getContract();
@@ -156,7 +159,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 				} else if (targetRowData.getDischargeSlot() == target) {
 					final LoadSlot loadSlot = targetRowData.getLoadSlot();
-					if (loadSlot instanceof SpotSlot) {
+					if (loadSlot == null) {
+						sendTo = "Open";
+					} else if (loadSlot instanceof SpotSlot) {
 						sendTo = ((SpotSlot) loadSlot).getMarket().eClass();
 					} else if (loadSlot.getContract() != null) {
 						sendTo = loadSlot.getContract();
@@ -281,5 +286,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public void setGroupMode(GroupMode mode) {
 		this.groupMode = mode;
+	}
+
+	public void setTargetSlot(String slotId) {
+		this.slotId = slotId;
 	}
 }
