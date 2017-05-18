@@ -23,7 +23,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.types;bundle-version="[4.2.9,5.0.0)",
  com.mmxlabs.scenario.service.model,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.license.features
+ com.mmxlabs.license.features,
+ com.mmxlabs.models.lng.commercial,
+ com.mmxlabs.models.lng.spotmarkets
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.chain,
  com.mmxlabs.models.lng.transformer.chain.impl,

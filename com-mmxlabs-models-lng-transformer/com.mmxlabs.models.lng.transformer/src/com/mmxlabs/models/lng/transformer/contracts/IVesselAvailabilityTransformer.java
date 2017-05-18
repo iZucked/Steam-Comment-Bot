@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.contracts;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
@@ -19,5 +20,13 @@ public interface IVesselAvailabilityTransformer extends ITransformerExtension {
 	 * @param optimiserSlot
 	 */
 	public void vesselAvailabilityTransformed(@NonNull VesselAvailability modelEvent, @NonNull IVesselAvailability optimiserEventSlot);
+
+	/**
+	 * Called when a vessel availability has been transformed.
+	 *  
+	 * @param modelSlot
+	 * @param optimiserSlot
+	 */
+	public void charterInVesselAvailabilityTransformed(@NonNull CharterInMarket modelEvent, @NonNull IVesselAvailability optimiserEventSlot);
 
 }
