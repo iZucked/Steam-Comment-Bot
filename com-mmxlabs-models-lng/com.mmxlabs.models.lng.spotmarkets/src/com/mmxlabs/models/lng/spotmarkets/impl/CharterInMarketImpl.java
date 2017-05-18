@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
 
@@ -42,6 +43,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterContract <em>Charter Contract</em>}</li>
  * </ul>
  *
  * @generated
@@ -146,6 +148,16 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected EList<RouteOption> inaccessibleRoutes;
+
+	/**
+	 * The cached value of the '{@link #getCharterContract() <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected CharterContract charterContract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -258,6 +270,44 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CharterContract getCharterContract() {
+		if (charterContract != null && charterContract.eIsProxy()) {
+			InternalEObject oldCharterContract = (InternalEObject)charterContract;
+			charterContract = (CharterContract)eResolveProxy(oldCharterContract);
+			if (charterContract != oldCharterContract) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT, oldCharterContract, charterContract));
+			}
+		}
+		return charterContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterContract basicGetCharterContract() {
+		return charterContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterContract(CharterContract newCharterContract) {
+		CharterContract oldCharterContract = charterContract;
+		charterContract = newCharterContract;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT, oldCharterContract, charterContract));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getCharterInRate() {
 		return charterInRate;
 	}
@@ -346,6 +396,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return isOverrideInaccessibleRoutes();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
 				return getInaccessibleRoutes();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
+				if (resolve) return getCharterContract();
+				return basicGetCharterContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -379,6 +432,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				getInaccessibleRoutes().clear();
 				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
+				setCharterContract((CharterContract)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -409,6 +465,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
 				getInaccessibleRoutes().clear();
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
+				setCharterContract((CharterContract)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -433,6 +492,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return overrideInaccessibleRoutes != OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
 				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
+				return charterContract != null;
 		}
 		return super.eIsSet(featureID);
 	}

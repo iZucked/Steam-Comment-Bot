@@ -1270,13 +1270,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
@@ -1807,6 +1816,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getCharterInMarket_InaccessibleRoutes();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EReference getCharterInMarket_CharterContract();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2286,6 +2306,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = eINSTANCE.getCharterInMarket_InaccessibleRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET__CHARTER_CONTRACT = eINSTANCE.getCharterInMarket_CharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Rate</b></em>' attribute feature.

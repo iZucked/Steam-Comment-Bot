@@ -325,6 +325,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCommercialModel_CharteringContracts() {
+		return (EReference)commercialModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getBaseLegalEntity() {
 		return baseLegalEntityEClass;
 	}
@@ -856,8 +865,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getSimpleCharterContract() {
-		return simpleCharterContractEClass;
+	public EReference getCharterContract_BallastBonusContract() {
+		return (EReference)charterContractEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -865,8 +874,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSimpleCharterContract_BallastBonusContract() {
-		return (EReference)simpleCharterContractEClass.getEStructuralFeatures().get(0);
+	public EClass getSimpleCharterContract() {
+		return simpleCharterContractEClass;
 	}
 
 	/**
@@ -919,6 +928,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__ENTITIES);
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__SALES_CONTRACTS);
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
+		createEReference(commercialModelEClass, COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
 
 		baseLegalEntityEClass = createEClass(BASE_LEGAL_ENTITY);
 		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__SHIPPING_BOOK);
@@ -998,9 +1008,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL);
 
 		charterContractEClass = createEClass(CHARTER_CONTRACT);
+		createEReference(charterContractEClass, CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 
 		simpleCharterContractEClass = createEClass(SIMPLE_CHARTER_CONTRACT);
-		createEReference(simpleCharterContractEClass, SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -1067,6 +1077,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getCommercialModel_Entities(), this.getBaseLegalEntity(), null, "entities", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCommercialModel_SalesContracts(), this.getSalesContract(), null, "salesContracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCommercialModel_PurchaseContracts(), this.getPurchaseContract(), null, "purchaseContracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommercialModel_CharteringContracts(), this.getCharterContract(), null, "charteringContracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseLegalEntityEClass, BaseLegalEntity.class, "BaseLegalEntity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseLegalEntity_ShippingBook(), this.getBaseEntityBook(), null, "shippingBook", null, 0, 1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1158,9 +1169,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getNotionalJourneyBallastBonusContractLine_IncludeCanal(), ecorePackage.getEBoolean(), "includeCanal", null, 0, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterContractEClass, CharterContract.class, "CharterContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterContract_BallastBonusContract(), this.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, CharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(simpleCharterContractEClass, SimpleCharterContract.class, "SimpleCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSimpleCharterContract_BallastBonusContract(), this.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, SimpleCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");

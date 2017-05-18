@@ -116,13 +116,22 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Chartering Contracts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMERCIAL_MODEL__CHARTERING_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl <em>Base Legal Entity</em>}' class.
@@ -1450,13 +1459,22 @@ public interface CommercialPackage extends EPackage {
 	int CHARTER_CONTRACT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
+	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Charter Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl <em>Simple Charter Contract</em>}' class.
@@ -1493,7 +1511,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = CHARTER_CONTRACT_FEATURE_COUNT + 0;
+	int SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT;
 
 	/**
 	 * The number of structural features of the '<em>Simple Charter Contract</em>' class.
@@ -1502,7 +1520,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_CHARTER_CONTRACT_FEATURE_COUNT = CHARTER_CONTRACT_FEATURE_COUNT + 1;
+	int SIMPLE_CHARTER_CONTRACT_FEATURE_COUNT = CHARTER_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
@@ -1566,6 +1584,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCommercialModel_PurchaseContracts();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getCharteringContracts <em>Chartering Contracts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Chartering Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getCharteringContracts()
+	 * @see #getCommercialModel()
+	 * @generated
+	 */
+	EReference getCommercialModel_CharteringContracts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity <em>Base Legal Entity</em>}'.
@@ -2197,6 +2226,17 @@ public interface CommercialPackage extends EPackage {
 	EClass getCharterContract();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.CharterContract#getBallastBonusContract <em>Ballast Bonus Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Ballast Bonus Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CharterContract#getBallastBonusContract()
+	 * @see #getCharterContract()
+	 * @generated
+	 */
+	EReference getCharterContract_BallastBonusContract();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleCharterContract <em>Simple Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2205,17 +2245,6 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSimpleCharterContract();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.SimpleCharterContract#getBallastBonusContract <em>Ballast Bonus Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.SimpleCharterContract#getBallastBonusContract()
-	 * @see #getSimpleCharterContract()
-	 * @generated
-	 */
-	EReference getSimpleCharterContract_BallastBonusContract();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
@@ -2292,6 +2321,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
+
+		/**
+		 * The meta object literal for the '<em><b>Chartering Contracts</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMERCIAL_MODEL__CHARTERING_CONTRACTS = eINSTANCE.getCommercialModel_CharteringContracts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl <em>Base Legal Entity</em>}' class.
@@ -2806,6 +2843,14 @@ public interface CommercialPackage extends EPackage {
 		EClass CHARTER_CONTRACT = eINSTANCE.getCharterContract();
 
 		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Contract</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = eINSTANCE.getCharterContract_BallastBonusContract();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl <em>Simple Charter Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2814,14 +2859,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SIMPLE_CHARTER_CONTRACT = eINSTANCE.getSimpleCharterContract();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus Contract</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = eINSTANCE.getSimpleCharterContract_BallastBonusContract();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

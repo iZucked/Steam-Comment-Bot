@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -56,6 +57,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getCharterContract <em>Charter Contract</em>}</li>
  * </ul>
  *
  * @generated
@@ -375,6 +377,25 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected BallastBonusContract ballastBonusContract;
+
+	/**
+	 * The cached value of the '{@link #getCharterContract() <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected CharterContract charterContract;
+
+	/**
+	 * This is true if the Charter Contract reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterContractESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1009,6 +1030,22 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CharterContract getCharterContract() {
+		if (charterContract != null && charterContract.eIsProxy()) {
+			InternalEObject oldCharterContract = (InternalEObject)charterContract;
+			charterContract = (CharterContract)eResolveProxy(oldCharterContract);
+			if (charterContract != oldCharterContract) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT, oldCharterContract, charterContract));
+			}
+		}
+		return charterContract;
+	}
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public void setCharterNumber(int newCharterNumber) {
 		int oldCharterNumber = charterNumber;
 		charterNumber = newCharterNumber;
@@ -1016,6 +1053,52 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER, oldCharterNumber, charterNumber));
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterContract basicGetCharterContract() {
+		return charterContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterContract(CharterContract newCharterContract) {
+		CharterContract oldCharterContract = charterContract;
+		charterContract = newCharterContract;
+		boolean oldCharterContractESet = charterContractESet;
+		charterContractESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT, oldCharterContract, charterContract, !oldCharterContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCharterContract() {
+		CharterContract oldCharterContract = charterContract;
+		boolean oldCharterContractESet = charterContractESet;
+		charterContract = null;
+		charterContractESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT, oldCharterContract, null, oldCharterContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCharterContract() {
+		return charterContractESet;
+	}
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1076,6 +1159,24 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		}
 		return null;
 	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public BallastBonusContract getAvailabilityOrCharterContractBallastBonusContract() {
+		if (this.isSetCharterContract()) {
+			if (this.getCharterContract() != null) {
+				return this.getBallastBonusContract();
+			} else {
+				return null;
+			}
+		} else {
+			return this.getBallastBonusContract();
+		}
+	}
+
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1181,6 +1282,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
 				if (resolve) return getBallastBonusContract();
 				return basicGetBallastBonusContract();
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
+				if (resolve) return getCharterContract();
+				return basicGetCharterContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1246,6 +1350,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
 				setBallastBonusContract((BallastBonusContract)newValue);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
+				setCharterContract((CharterContract)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1309,6 +1416,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
 				setBallastBonusContract((BallastBonusContract)null);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
+				unsetCharterContract();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1355,6 +1465,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
 				return ballastBonusContract != null;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
+				return isSetCharterContract();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1375,6 +1487,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return getEndByAsDateTime();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME:
 				return getEndAfterAsDateTime();
+			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT:
+				return getAvailabilityOrCharterContractBallastBonusContract();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

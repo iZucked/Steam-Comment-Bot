@@ -71,6 +71,7 @@ public class VesselAvailabilityItemProvider
 			addEndByPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
+			addCharterContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -339,6 +340,27 @@ public class VesselAvailabilityItemProvider
 				 null));
 	}
 
+	/**
+	 * This adds a property descriptor for the Charter Contract feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterContractPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_charterContract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_charterContract_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
 	/**
 	 * This adds a property descriptor for the Charter Number feature.
 	 * <!-- begin-user-doc -->

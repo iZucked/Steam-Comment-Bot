@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getEntities <em>Entities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getPurchaseContracts <em>Purchase Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getCharteringContracts <em>Chartering Contracts</em>}</li>
  * </ul>
  *
  * @generated
@@ -64,6 +66,16 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @ordered
 	 */
 	protected EList<PurchaseContract> purchaseContracts;
+
+	/**
+	 * The cached value of the '{@link #getCharteringContracts() <em>Chartering Contracts</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharteringContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CharterContract> charteringContracts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -125,6 +137,18 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<CharterContract> getCharteringContracts() {
+		if (charteringContracts == null) {
+			charteringContracts = new EObjectContainmentEList<CharterContract>(CharterContract.class, this, CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
+		}
+		return charteringContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -134,6 +158,8 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return ((InternalEList<?>)getSalesContracts()).basicRemove(otherEnd, msgs);
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				return ((InternalEList<?>)getPurchaseContracts()).basicRemove(otherEnd, msgs);
+			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+				return ((InternalEList<?>)getCharteringContracts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -152,6 +178,8 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return getSalesContracts();
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				return getPurchaseContracts();
+			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+				return getCharteringContracts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -177,6 +205,10 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				getPurchaseContracts().clear();
 				getPurchaseContracts().addAll((Collection<? extends PurchaseContract>)newValue);
 				return;
+			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+				getCharteringContracts().clear();
+				getCharteringContracts().addAll((Collection<? extends CharterContract>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -198,6 +230,9 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				getPurchaseContracts().clear();
 				return;
+			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+				getCharteringContracts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -216,6 +251,8 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return salesContracts != null && !salesContracts.isEmpty();
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				return purchaseContracts != null && !purchaseContracts.isEmpty();
+			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+				return charteringContracts != null && !charteringContracts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

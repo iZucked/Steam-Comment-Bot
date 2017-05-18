@@ -70,5 +70,15 @@ public class CharterContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_ballastBonusContractEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the ballastBonusContract feature on CharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_ballastBonusContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT));
 	}
 }

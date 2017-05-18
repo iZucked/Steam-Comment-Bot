@@ -3683,13 +3683,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
+	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3755,13 +3764,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
+	 * The operation id for the '<em>Get Availability Or Charter Contract Ballast Bonus Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
+
+	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -6077,6 +6095,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_CharterNumber();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_CharterContract();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6115,6 +6144,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselAvailability__GetEndAfterAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrCharterContractBallastBonusContract() <em>Get Availability Or Charter Contract Ballast Bonus Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Availability Or Charter Contract Ballast Bonus Contract</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrCharterContractBallastBonusContract()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
@@ -7414,6 +7453,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__CHARTER_NUMBER = eINSTANCE.getVesselAvailability_CharterNumber();
 
 		/**
+		 * The meta object literal for the '<em><b>Charter Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_CharterContract();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7444,6 +7491,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetEndAfterAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Availability Or Charter Contract Ballast Bonus Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.

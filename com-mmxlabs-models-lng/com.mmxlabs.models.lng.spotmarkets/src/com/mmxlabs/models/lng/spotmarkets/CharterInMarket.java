@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -24,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -116,6 +118,32 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	EList<RouteOption> getInaccessibleRoutes();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Contract</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Contract</em>' reference.
+	 * @see #setCharterContract(CharterContract)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_CharterContract()
+	 * @model
+	 * @generated
+	 */
+	CharterContract getCharterContract();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Contract</em>' reference.
+	 * @see #getCharterContract()
+	 * @generated
+	 */
+	void setCharterContract(CharterContract value);
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.

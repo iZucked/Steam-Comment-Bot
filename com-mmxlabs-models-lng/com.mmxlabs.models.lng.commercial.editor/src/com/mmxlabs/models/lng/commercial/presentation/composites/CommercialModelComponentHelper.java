@@ -67,6 +67,7 @@ public class CommercialModelComponentHelper extends BaseComponentHelper {
 		add_entitiesEditor(detailComposite, topClass);
 		add_salesContractsEditor(detailComposite, topClass);
 		add_purchaseContractsEditor(detailComposite, topClass);
+		add_charteringContractsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entities feature on CommercialModel
@@ -92,5 +93,14 @@ public class CommercialModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_purchaseContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS));
+	}
+
+	/**
+	 * Create the editor for the charteringContracts feature on CommercialModel
+	 *
+	 * @generated
+	 */
+	protected void add_charteringContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS));
 	}
 }

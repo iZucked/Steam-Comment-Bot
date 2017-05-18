@@ -64,7 +64,7 @@ public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
+			childrenFeatures.add(CommercialPackage.Literals.CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 		}
 		return childrenFeatures;
 	}
@@ -140,7 +140,7 @@ public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT,
+				(CommercialPackage.Literals.CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT,
 				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
 	}
 

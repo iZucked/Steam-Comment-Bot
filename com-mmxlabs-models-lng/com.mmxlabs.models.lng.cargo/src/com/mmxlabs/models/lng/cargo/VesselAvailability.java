@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
@@ -572,6 +574,24 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	void setBallastBonusContract(BallastBonusContract value);
 
 	/**
+	 * Returns the value of the '<em><b>Charter Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Contract</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Contract</em>' reference.
+	 * @see #isSetCharterContract()
+	 * @see #unsetCharterContract()
+	 * @see #setCharterContract(CharterContract)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterContract()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	CharterContract getCharterContract();
+
+	/**
 	 * Returns the value of the '<em><b>Charter Number</b></em>' attribute.
 	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
@@ -588,6 +608,41 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	int getCharterNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Contract</em>' reference.
+	 * @see #isSetCharterContract()
+	 * @see #unsetCharterContract()
+	 * @see #getCharterContract()
+	 * @generated
+	 */
+	void setCharterContract(CharterContract value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCharterContract()
+	 * @see #getCharterContract()
+	 * @see #setCharterContract(CharterContract)
+	 * @generated
+	 */
+	void unsetCharterContract();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
+	 * @see #unsetCharterContract()
+	 * @see #getCharterContract()
+	 * @see #setCharterContract(CharterContract)
+	 * @generated
+	 */
+	boolean isSetCharterContract();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}' attribute.
@@ -630,6 +685,14 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	ZonedDateTime getEndAfterAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	BallastBonusContract getAvailabilityOrCharterContractBallastBonusContract();
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.

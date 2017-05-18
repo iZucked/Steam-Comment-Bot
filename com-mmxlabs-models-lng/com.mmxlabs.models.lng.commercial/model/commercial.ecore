@@ -208,9 +208,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeCanal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterContract" abstract="true" interface="true"
-      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleCharterContract" eSuperTypes="#//CharterContract">
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ballastBonusContract" eType="#//BallastBonusContract"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleCharterContract" eSuperTypes="#//CharterContract"/>
 </ecore:EPackage>

@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getEntities <em>Entities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getCharteringContracts <em>Chartering Contracts</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel()
@@ -73,6 +74,22 @@ public interface CommercialModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<PurchaseContract> getPurchaseContracts();
+
+	/**
+	 * Returns the value of the '<em><b>Chartering Contracts</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.CharterContract}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Chartering Contracts</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Chartering Contracts</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_CharteringContracts()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CharterContract> getCharteringContracts();
 
 } // end of  CommercialModel
 
