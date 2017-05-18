@@ -100,7 +100,7 @@ public class SequencesHelper {
 					// Nominal cargo, just remove the cargo if it has moved from the nominal.
 					// Note: We assume nominal cargoes are fixed pairing (on the nominal) and can only be assigned to one nominal vessel instance
 					final Pair<@Nullable IResource, Integer> b = targetLookup.lookup(e);
-					if (b.getFirst() != null) {
+					if (b != null && b.getFirst() != null) {
 						final IResource rb = b.getFirst();
 						if (rb != r) {
 							evictedElements.addAll(seg);
