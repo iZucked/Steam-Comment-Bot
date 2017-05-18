@@ -73,7 +73,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
@@ -104,7 +104,7 @@ public class ScheduleCalculatorTest {
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final INominatedVesselProvider nominatedVesselProvider = mock(INominatedVesselProvider.class);
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = mock(IMultiMatrixProvider.class);
-		final IPortProvider portProvider = mock(IPortProvider.class);
+		final IElementPortProvider portProvider = mock(IElementPortProvider.class);
 		final IPortTypeProvider portTypeProvider = mock(IPortTypeProvider.class);
 		final IRouteCostProvider routeCostProvider = mock(IRouteCostProvider.class);
 		final IVoyagePlanOptimiser voyagePlanOptimiser = mock(IVoyagePlanOptimiser.class);
@@ -164,7 +164,7 @@ public class ScheduleCalculatorTest {
 				bind(IPortCostProvider.class).toInstance(portCostProvider);
 				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
 				bind(IElementDurationProvider.class).toInstance(elementDurationProvider);
-				bind(IPortProvider.class).toInstance(portProvider);
+				bind(IElementPortProvider.class).toInstance(portProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);

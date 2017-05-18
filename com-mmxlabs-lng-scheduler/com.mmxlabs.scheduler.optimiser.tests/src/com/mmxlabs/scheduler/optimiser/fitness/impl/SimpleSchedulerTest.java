@@ -10,11 +10,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.management.modelmbean.ModelMBeanAttributeInfo;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Triple;
@@ -66,6 +69,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
+import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 
 /**
  * Test class to run a "system" test of the LSO to optimise a sequence of elements based upon distance. I.e. find minimum travel distance for each resource.
@@ -79,6 +84,7 @@ public class SimpleSchedulerTest {
 
 	IOptimisationData createProblem(final Injector injector) {
 
+		final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 		final IBaseFuelCurveProviderEditor baseFuelCurveProvider = injector.getInstance(IBaseFuelCurveProviderEditor.class);
 
@@ -86,14 +92,14 @@ public class SimpleSchedulerTest {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
-		final IPort port1 = builder.createPortForTest("port-1", false, null, 0, 0, "UTC");
-		final IPort port2 = builder.createPortForTest("port-2", false, null, 0, 5, "UTC");
-		final IPort port3 = builder.createPortForTest("port-3", false, null, 5, 0, "UTC");
-		final IPort port4 = builder.createPortForTest("port-4", false, null, 5, 5, "UTC");
-		final IPort port5 = builder.createPortForTest("port-5", false, null, 0, 10, "UTC");
-		final IPort port6 = builder.createPortForTest("port-6", false, null, 5, 10, "UTC");
+		final IPort port1 = portBuilder.createPort("port-1", 0, 0, "UTC");
+		final IPort port2 = portBuilder.createPort("port-2", 0, 5, "UTC");
+		final IPort port3 = portBuilder.createPort("port-3", 5, 0, "UTC");
+		final IPort port4 = portBuilder.createPort("port-4", 5, 5, "UTC");
+		final IPort port5 = portBuilder.createPort("port-5", 0, 10, "UTC");
+		final IPort port6 = portBuilder.createPort("port-6", 5, 10, "UTC");
 
-		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
+		final TreeMap<Integer, Long> keypoints = new TreeMap<>();
 		keypoints.put(12000, 12000L);
 		keypoints.put(13000, 13000L);
 		keypoints.put(14000, 14000L);
@@ -129,14 +135,11 @@ public class SimpleSchedulerTest {
 		IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
 
 		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
-				false);
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0), false);
 		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
-				false);
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0), false);
 		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0),
-				false);
+				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), new ConstantValueLongCurve(0), false);
 
 		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
 		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);
@@ -205,7 +208,7 @@ public class SimpleSchedulerTest {
 						final float diffY = xyFrom.getY() - xyTo.getY();
 
 						final double distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
-						builder.setPortToPortDistance(from, to, ERouteOption.DIRECT, (int) distance);
+						portBuilder.setPortToPortDistance(from, to, ERouteOption.DIRECT, (int) distance);
 					}
 				}
 			}
@@ -223,7 +226,7 @@ public class SimpleSchedulerTest {
 	public void testLSO() {
 
 		final long seed = 1;
-		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule());
+		final Injector parentInjector = createInjector();
 
 		final IOptimisationData data = createProblem(parentInjector);
 		// Build opt data
@@ -307,6 +310,10 @@ public class SimpleSchedulerTest {
 
 			// TODO: How to verify result?
 		}
+	}
+
+	private @NonNull Injector createInjector() {
+		return Guice.createInjector(new DataComponentProviderModule(), new SharedDataModule());
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {

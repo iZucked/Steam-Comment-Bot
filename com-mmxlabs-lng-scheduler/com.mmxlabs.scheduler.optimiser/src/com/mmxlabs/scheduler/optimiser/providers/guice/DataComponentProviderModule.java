@@ -83,8 +83,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -143,7 +143,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMiscCostsProviderEd
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCooldownDataProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
@@ -164,7 +164,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.LazyDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.HashMapPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCVRangeEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
 
@@ -201,43 +201,29 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IVesselProvider.class).toInstance(vesselProvider);
 		bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 
-		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>();
-		bind(new TypeLiteral<IMultiMatrixEditor<IPort, Integer>>() {
-		}).toInstance(portDistanceProvider);
-		bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
-		}).toInstance(portDistanceProvider);
-		bind(new TypeLiteral<IndexedMultiMatrixProvider<IPort, Integer>>() {
-		}).toInstance(portDistanceProvider);
-
-		final IPortProviderEditor portProvider;
+		final IElementPortProviderEditor portProvider;
 		final IPortSlotProviderEditor portSlotsProvider;
 		final IPortTypeProviderEditor portTypeProvider;
 		final IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
 		final IElementDurationProviderEditor elementDurationsProvider;
 		if (USE_INDEXED_DCPS) {
-			portProvider = new IndexedPortEditor();
+			portProvider = new IndexedElementPortEditor();
 			portSlotsProvider = new IndexedPortSlotEditor();
 			portTypeProvider = new IndexedPortTypeEditor();
 
 			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor();
 
 			elementDurationsProvider = new IndexedElementDurationEditor();
-
-			// Create a default matrix entry
-			portDistanceProvider.set(ERouteOption.DIRECT.name(), new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
 		} else {
-			portProvider = new HashMapPortEditor();
+			portProvider = new HashMapElementPortEditor();
 			portSlotsProvider = new HashMapPortSlotEditor();
 			portTypeProvider = new HashMapPortTypeEditor();
 
 			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider();
 			elementDurationsProvider = new HashMapElementDurationEditor();
-
-			// Create a default matrix entry
-			portDistanceProvider.set(ERouteOption.DIRECT.name(), new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
 		}
-		bind(IPortProvider.class).toInstance(portProvider);
-		bind(IPortProviderEditor.class).toInstance(portProvider);
+		bind(IElementPortProvider.class).toInstance(portProvider);
+		bind(IElementPortProviderEditor.class).toInstance(portProvider);
 
 		bind(IPortSlotProvider.class).toInstance(portSlotsProvider);
 		bind(IPortSlotProviderEditor.class).toInstance(portSlotsProvider);
@@ -416,19 +402,5 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultAllowedVesselProvider.class).in(Singleton.class);
 		bind(IAllowedVesselProvider.class).to(DefaultAllowedVesselProvider.class);
 		bind(IAllowedVesselProviderEditor.class).to(DefaultAllowedVesselProvider.class);
-	}
-
-	/**
-	 * A provider for new {@link IMatrixEditor} instances.
-	 * 
-	 * @return
-	 */
-	@Provides
-	public IMatrixEditor<IPort, Integer> getIMatrixEditor() {
-		if (USE_INDEXED_DCPS) {
-			return new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE);
-		} else {
-			return new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE);
-		}
 	}
 }

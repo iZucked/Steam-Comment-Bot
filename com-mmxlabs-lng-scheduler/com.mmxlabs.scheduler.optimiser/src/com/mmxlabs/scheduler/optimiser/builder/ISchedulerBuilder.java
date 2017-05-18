@@ -47,7 +47,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -260,24 +259,12 @@ public interface ISchedulerBuilder {
 			boolean isOpenEnded);
 
 	/**
-	 * Create a port with the given name and cooldown requirement
+	 * Set a port's cooldown cooldown requirement
 	 * 
 	 * @param name
 	 * @return
 	 */
-	@NonNull
-	IPort createPort(@NonNull String name, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, @NonNull final String timezoneId);
-
-	/**
-	 * Create a port with an x/y co-ordinate.
-	 * 
-	 * @param name
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	@NonNull
-	IXYPort createPort(@NonNull String name, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, float x, float y, @NonNull final String timezoneId);
+	void setPortCooldownData(@NonNull IPort port, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator);
 
 	/**
 	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.
@@ -293,55 +280,6 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	ICargo createCargo(final boolean allowRewiring, @NonNull final IPortSlot... slots);
-
-	// /**
-	// * Restrict the set of vessels which can carry this slot to those in the second argument.
-	// *
-	// * If this method is never called, the slot can be carried by any vessel.
-	// *
-	// * @param slot
-	// * a {@link ILoadOption} or {@link IDischargeOption}
-	// * @param vessels
-	// * a set of vessels on which this cargo may be carried
-	// */
-	// void setSlotVesselAvailabilityRestriction(@NonNull IPortSlot slot, @NonNull Set<IVesselAvailability> vessels);
-
-	// /**
-	// * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
-	// * the scenario.
-	// *
-	// * @param start
-	// * Time window start
-	// * @param end
-	// * Time window end
-	// * @return
-	// */
-	// @NonNull
-	// ITimeWindow createTimeWindow(int start, int end);
-	//
-	// /**
-	// * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
-	// * the scenario.
-	// *
-	// * @param start
-	// * Time window start
-	// * @param end
-	// * Time window end
-	// * @param endFlex
-	// * Time window endFlex
-	// * @return
-	// */
-	// @NonNull
-	// ITimeWindow createTimeWindow(int start, int end, int endFlex);
-
-	/**
-	 * Specify a one-way distance between two ports
-	 * 
-	 * @param from
-	 * @param to
-	 * @param distance
-	 */
-	void setPortToPortDistance(@NonNull IPort from, @NonNull IPort to, @NonNull ERouteOption route, int distance);
 
 	/**
 	 * Set a toll for sending a given vessel + state via a given route

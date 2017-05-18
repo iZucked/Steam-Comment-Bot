@@ -9,7 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public interface IPortProviderEditor extends IPortProvider {
+public interface IElementPortProviderEditor extends IElementPortProvider {
 
 	void setPortForElement(@NonNull IPort port, @NonNull ISequenceElement element);
 }

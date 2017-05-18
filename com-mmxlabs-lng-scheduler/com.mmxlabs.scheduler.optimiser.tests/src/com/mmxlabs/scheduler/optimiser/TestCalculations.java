@@ -84,6 +84,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
+import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -122,12 +124,14 @@ public class TestCalculations {
 
 			final IVesselBaseFuelCalculator v = injector.getInstance(IVesselBaseFuelCalculator.class);
 
+			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
+
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
-			final IPort port1 = builder.createPortForTest("port-1", false, null, "UTC");
-			final IPort port2 = builder.createPortForTest("port-2", false, null, "UTC");
-			final IPort port3 = builder.createPortForTest("port-3", false, null, "UTC");
-			final IPort port4 = builder.createPortForTest("port-4", false, null, "UTC");
+			final IPort port1 = portBuilder.createPort("port-1", "UTC");
+			final IPort port2 = portBuilder.createPort("port-2", "UTC");
+			final IPort port3 = portBuilder.createPort("port-3", "UTC");
+			final IPort port4 = portBuilder.createPort("port-4", "UTC");
 
 			final int minSpeed = 12000;
 			final int maxSpeed = 20000;
@@ -181,9 +185,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 24);
-			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 24);
-			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 24);
+			portBuilder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 24);
+			portBuilder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 24);
+			portBuilder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 24);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -434,12 +438,14 @@ public class TestCalculations {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);) {
 			scope.enter();
 
+			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
+
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
-			final IPort port1 = builder.createPortForTest("port-1", false, null, "UTC");
-			final IPort port2 = builder.createPortForTest("port-2", false, null, "UTC");
-			final IPort port3 = builder.createPortForTest("port-3", false, null, "UTC");
-			final IPort port4 = builder.createPortForTest("port-4", false, null, "UTC");
+			final IPort port1 = portBuilder.createPort("port-1", "UTC");
+			final IPort port2 = portBuilder.createPort("port-2", "UTC");
+			final IPort port3 = portBuilder.createPort("port-3", "UTC");
+			final IPort port4 = portBuilder.createPort("port-4", "UTC");
 
 			final int minSpeed = 16000;
 			final int maxSpeed = 20000;
@@ -501,9 +507,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
-			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
-			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
+			portBuilder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
+			portBuilder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
+			portBuilder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -758,12 +764,14 @@ public class TestCalculations {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);) {
 			scope.enter();
 
+			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
+
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
-			final IPort port1 = builder.createPortForTest("port-1", false, null, "UTC");
-			final IPort port2 = builder.createPortForTest("port-2", false, null, "UTC");
-			final IPort port3 = builder.createPortForTest("port-3", false, null, "UTC");
-			final IPort port4 = builder.createPortForTest("port-4", false, null, "UTC");
+			final IPort port1 = portBuilder.createPort("port-1", "UTC");
+			final IPort port2 = portBuilder.createPort("port-2", "UTC");
+			final IPort port3 = portBuilder.createPort("port-3", "UTC");
+			final IPort port4 = portBuilder.createPort("port-4", "UTC");
 
 			final int minSpeed = 16000;
 			final int maxSpeed = 20000;
@@ -822,9 +830,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
-			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
-			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
+			portBuilder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
+			portBuilder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
+			portBuilder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -1107,6 +1115,8 @@ public class TestCalculations {
 
 			@Override
 			protected void configure() {
+
+				install(new SharedDataModule());
 
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);

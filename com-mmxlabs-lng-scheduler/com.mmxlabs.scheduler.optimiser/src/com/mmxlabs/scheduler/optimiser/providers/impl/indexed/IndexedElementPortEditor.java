@@ -10,9 +10,9 @@ import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 
-public class IndexedPortEditor implements IPortProviderEditor {
+public class IndexedElementPortEditor implements IElementPortProviderEditor {
 	final IIndexMap<@NonNull ISequenceElement, @NonNull IPort> ports = new ArrayIndexMap<>();
 
 	@Override

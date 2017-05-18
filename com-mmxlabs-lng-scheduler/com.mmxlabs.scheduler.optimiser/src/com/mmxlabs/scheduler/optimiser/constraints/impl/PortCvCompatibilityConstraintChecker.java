@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -37,7 +37,7 @@ public class PortCvCompatibilityConstraintChecker extends AbstractPairwiseConstr
 
 	@Inject
 	@NonNull
-	private IPortProvider portProvider;
+	private IElementPortProvider portProvider;
 
 	@Inject
 	@NonNull

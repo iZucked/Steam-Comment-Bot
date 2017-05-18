@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -47,7 +47,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 	@Inject
 	@NonNull
-	private IPortProvider portProvider;
+	private IElementPortProvider portProvider;
 
 	@Inject
 	@NonNull

@@ -11,15 +11,15 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 
 /**
- * Implementation of {@link IPortProviderEditor} using a {@link HashMap} as the backing implementation.
+ * Implementation of {@link IElementPortProviderEditor} using a {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
  * 
  */
-public final class HashMapPortEditor implements IPortProviderEditor {
+public final class HashMapElementPortEditor implements IElementPortProviderEditor {
 
 	private final Map<@NonNull ISequenceElement, @NonNull IPort> map = new HashMap<>();
 
