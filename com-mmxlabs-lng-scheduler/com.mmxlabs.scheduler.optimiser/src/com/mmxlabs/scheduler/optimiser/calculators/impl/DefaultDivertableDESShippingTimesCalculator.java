@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 
 public class DefaultDivertableDESShippingTimesCalculator implements IDivertableDESShippingTimesCalculator {
 
@@ -106,11 +107,11 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 		final Collection<ERouteOption> allowedRoutes = shippingHoursRestrictionProvider.getDivertableDESAllowedRoutes(loadOption);
-		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(to, from, voyageStartTime, vessel);
-		for (final Pair<ERouteOption, Integer> d : distances) {
-			final ERouteOption routeOption = d.getFirst();
+		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(to, from, voyageStartTime, vessel);
+		for (final DistanceMatrixEntry d : distances) {
+			final ERouteOption routeOption = d.getRoute();
 			if (allowedRoutes == null || allowedRoutes.isEmpty() || allowedRoutes.contains(routeOption)) {
-				final int thisDistance = d.getSecond();
+				final int thisDistance = d.getDistance();
 				if (thisDistance == Integer.MAX_VALUE) {
 					continue;
 				}

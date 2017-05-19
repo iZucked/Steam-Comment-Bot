@@ -38,7 +38,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
@@ -135,6 +134,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEdi
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
@@ -255,7 +255,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	@NonNull
-	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	private IDistanceMatrixProvider portDistanceProvider;
 
 	@Inject
 	@NonNull

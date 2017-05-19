@@ -15,8 +15,6 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
 import com.mmxlabs.optimiser.ga.Individual;
 import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
@@ -29,6 +27,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 
 /**
  * The {@link IndividualEvaluator} evaluates a GA {@link Individual} using the {@link ICargoSchedulerFitnessComponent} implementation to evaluate the fitness of a scheduled {@link ISequence}. This
@@ -57,7 +57,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 
 	private IElementPortProvider portProvider;
 
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceMatrixProvider distanceProvider;
 
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
@@ -290,10 +290,10 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 				final IPort to = portProvider.getPortForElement(element);
 
 				// Find the quickest route between the ports
-				final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider.getValues(from, to);
+				final Collection<DistanceMatrixEntry> distances = distanceProvider.getValues(from, to);
 				int distance = Integer.MAX_VALUE;
-				for (final MatrixEntry<IPort, Integer> d : distances) {
-					distance = Math.min(distance, d.getValue());
+				for (final DistanceMatrixEntry d : distances) {
+					distance = Math.min(distance, d.getDistance());
 				}
 
 				// Determine minimum travel time between ports
@@ -533,13 +533,13 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		this.portProvider = portProvider;
 	}
 
-	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
-		return distanceProvider;
-	}
-
-	public void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
-		this.distanceProvider = distanceProvider;
-	}
+//	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
+//		return distanceProvider;
+//	}
+//
+//	public void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+//		this.distanceProvider = distanceProvider;
+//	}
 
 	public IElementDurationProvider getDurationsProvider() {
 		return durationsProvider;

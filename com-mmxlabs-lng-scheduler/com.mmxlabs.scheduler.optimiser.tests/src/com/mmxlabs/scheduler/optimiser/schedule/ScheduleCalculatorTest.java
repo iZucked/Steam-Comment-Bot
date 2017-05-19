@@ -26,7 +26,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -36,14 +35,12 @@ import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
@@ -70,10 +67,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
@@ -87,6 +84,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImp
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -103,7 +101,7 @@ public class ScheduleCalculatorTest {
 		final ICalculatorProvider calculatorProvider = mock(ICalculatorProvider.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final INominatedVesselProvider nominatedVesselProvider = mock(INominatedVesselProvider.class);
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider distanceProvider = mock(IDistanceMatrixProvider.class);
 		final IElementPortProvider portProvider = mock(IElementPortProvider.class);
 		final IPortTypeProvider portTypeProvider = mock(IPortTypeProvider.class);
 		final IRouteCostProvider routeCostProvider = mock(IRouteCostProvider.class);
@@ -183,8 +181,7 @@ public class ScheduleCalculatorTest {
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
-				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
-				}).toInstance(distanceProvider);
+				bind(IDistanceMatrixProvider.class).toInstance(distanceProvider);
 
 				bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class).in(Singleton.class);
 				bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);

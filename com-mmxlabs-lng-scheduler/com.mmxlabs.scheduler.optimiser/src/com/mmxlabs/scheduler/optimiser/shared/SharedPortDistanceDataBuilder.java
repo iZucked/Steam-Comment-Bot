@@ -11,14 +11,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixEditor;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProviderEditor;
 
 /**
@@ -42,7 +40,7 @@ public final class SharedPortDistanceDataBuilder {
 
 	@Inject
 	@NonNull
-	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	private IDistanceMatrixEditor portDistanceProvider;
 
 	public SharedPortDistanceDataBuilder() {
 		indexingContext.registerType(Port.class);
@@ -51,10 +49,7 @@ public final class SharedPortDistanceDataBuilder {
 	// @Inject to trigger call after constructor
 	@Inject
 	public void init() {
-		// Initialise routes and matrix editors
-		for (final ERouteOption route : ERouteOption.values()) {
-			portDistanceProvider.set(route.name(), new IndexedMatrixEditor<>(Integer.MAX_VALUE));
-		}
+
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE", "UTC"/* no timezone */);
 		portProvider.setAnywherePort(ANYWHERE);
@@ -116,22 +111,14 @@ public final class SharedPortDistanceDataBuilder {
 
 	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final ERouteOption route, final int distance) {
 
-		assert (portDistanceProvider.containsKey(route.name()));
-
-		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route.name());
-		matrix.set(from, to, distance);
+		portDistanceProvider.set(route, from, to, distance);
 	}
 
-	/**
-	 * Set the deterministic order of route keys for use in iterators.
-	 * 
-	 * @param preSortedKeys
-	 */
-	public void setPreSortedKeys(final String[] preSortedKeys) {
-		portDistanceProvider.setPreSortedKeys(preSortedKeys);
+	public void setPreSortedRoutes(ERouteOption[] preSortedKeys) {
+		portDistanceProvider.setPreSortedRoutes(preSortedKeys);
 	}
 
-	public void done() {
-		portDistanceProvider.cacheExtremalValues(portProvider.getAllPorts());
+	public void setExpectPortCount(int size) {
+		portDistanceProvider.ensureCapacity(1 + size);
 	}
 }

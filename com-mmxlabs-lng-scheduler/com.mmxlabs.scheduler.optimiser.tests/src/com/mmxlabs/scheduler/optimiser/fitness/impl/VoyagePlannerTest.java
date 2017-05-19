@@ -18,7 +18,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
@@ -33,11 +32,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
@@ -66,6 +61,8 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.shared.port.impl.DefaultDistanceMatrixEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
@@ -115,15 +112,11 @@ public final class VoyagePlannerTest {
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 		final ISequenceElement element4 = new SequenceElement(index, "element4");
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
+		final DefaultDistanceMatrixEditor distanceProvider = new DefaultDistanceMatrixEditor();
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
-		distanceProvider.set(ERouteOption.DIRECT.name(), defaultDistanceProvider);
-
-		// Only need sparse matrix for testing
-		defaultDistanceProvider.set(port1, port2, 400);
-		defaultDistanceProvider.set(port2, port3, 400);
-		defaultDistanceProvider.set(port3, port4, 400);
+		distanceProvider.set(ERouteOption.DIRECT, port1, port2, 400);
+		distanceProvider.set(ERouteOption.DIRECT, port2, port3, 400);
+		distanceProvider.set(ERouteOption.DIRECT, port3, port4, 400);
 
 		final int duration = 1;
 		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor();
@@ -174,8 +167,7 @@ public final class VoyagePlannerTest {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			public void configure() {
-				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
-				}).toInstance(distanceProvider);
+				bind(IDistanceMatrixProvider.class).toInstance(distanceProvider);
 				bind(IElementDurationProvider.class).toInstance(durationsProvider);
 				bind(IElementPortProvider.class).toInstance(portProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);

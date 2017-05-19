@@ -12,7 +12,6 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -30,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
@@ -41,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
@@ -539,7 +538,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
-			
+
 			isRoundTripEnd[index] = false;
 			if (breakSequence[index]) {
 				// last slot in plan, set return
@@ -576,11 +575,11 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 				int minTravelTime = Integer.MAX_VALUE;
 				int maxTravelTime = 0;
-				for (final Pair<@NonNull ERouteOption, @NonNull Integer> entry : distanceProvider.getDistanceValues(prevPort, port,
-						windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource), vesselAvailability.getVessel())) {
-					final int distance = entry.getSecond();
+				for (final DistanceMatrixEntry entry : distanceProvider.getDistanceValues(prevPort, port, windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource),
+						vesselAvailability.getVessel())) {
+					final int distance = entry.getDistance();
 					if (distance != Integer.MAX_VALUE) {
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel());
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getRoute(), vesselAvailability.getVessel());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
 						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);
