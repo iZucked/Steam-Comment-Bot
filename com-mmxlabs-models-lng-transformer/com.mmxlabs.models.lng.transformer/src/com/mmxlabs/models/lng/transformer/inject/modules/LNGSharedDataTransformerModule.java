@@ -36,11 +36,7 @@ public class LNGSharedDataTransformerModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-//		install(new SharedDataModule());
-
 		bind(PortModel.class).toInstance(ScenarioModelUtil.getPortModel(scenario));
-
-//		bind(LNGSharedDataTransformer.class);
 	}
 
 	@Provides
