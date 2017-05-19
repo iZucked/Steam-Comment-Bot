@@ -20,14 +20,20 @@ public interface IDistanceMatrixEditor extends IDistanceMatrixProvider {
 
 	/**
 	 * Set the route distance.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param v
 	 */
 	void set(ERouteOption route, IPort from, IPort to, int distance);
 
+	/**
+	 * Optionally set a pre-defined ordered list of usable routes.
+	 * 
+	 * @param preSortedKeys
+	 */
 	void setPreSortedRoutes(@Nullable ERouteOption[] preSortedKeys);
 
+	/**
+	 * Allow pre-allocation of memory for this number of ports
+	 * 
+	 * @param minSize
+	 */
 	void ensureCapacity(int minSize);
 }
