@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -29,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
@@ -41,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.NullGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 
 /**
  * The {@link EndLocationSequenceManipulator} replaces the end location with another location in two possible ways; either the vessel's end location is adjust to be the same as its first load port, or
@@ -287,11 +286,10 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				break;
 			}
 
-			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime,
-					vesselProvider.getVesselAvailability(resource).getVessel());
+			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime, vesselProvider.getVesselAvailability(resource).getVessel());
 			int distance = Integer.MAX_VALUE;
-			for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
-				final int routeDistance = distanceOption.getSecond();
+			for (final DistanceMatrixEntry distanceOption : distanceValues) {
+				final int routeDistance = distanceOption.getDistance();
 				if (routeDistance < distance) {
 					distance = routeDistance;
 				}

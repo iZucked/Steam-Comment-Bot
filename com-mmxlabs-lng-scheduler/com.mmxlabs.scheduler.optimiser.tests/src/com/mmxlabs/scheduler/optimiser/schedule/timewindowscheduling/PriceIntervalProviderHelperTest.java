@@ -28,7 +28,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -54,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
@@ -65,36 +65,39 @@ public class PriceIntervalProviderHelperTest {
 	@Test
 	@Ignore
 	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
-		List<int[]> purchaseIntervals = new ArrayList<>();
+		final List<int[]> purchaseIntervals = new ArrayList<>();
 		purchaseIntervals.add(new int[] { 0, 20 });
 		purchaseIntervals.add(new int[] { 5, 25 });
 		purchaseIntervals.add(new int[] { 15, 18 });
 		purchaseIntervals.add(new int[] { 20, Integer.MIN_VALUE });
 
-		List<int[]> salesIntervals = new ArrayList<>();
+		final List<int[]> salesIntervals = new ArrayList<>();
 		salesIntervals.add(new int[] { 40, 25 });
 		salesIntervals.add(new int[] { 45, 20 });
 		salesIntervals.add(new int[] { 50, 22 });
 		salesIntervals.add(new int[] { 51, Integer.MIN_VALUE });
 
-		List<Pair<ERouteOption, Integer>> distances = new LinkedList<>();
-		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.DIRECT, 400));
-		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.SUEZ, 300));
-		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
+		final IPort from = Mockito.mock(IPort.class, "from");
+		final IPort to = Mockito.mock(IPort.class, "to");
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final List<DistanceMatrixEntry> distances = new LinkedList<>();
+		distances.add(new DistanceMatrixEntry(ERouteOption.DIRECT, from, to, 400));
+		distances.add(new DistanceMatrixEntry(ERouteOption.SUEZ, from, to, 300));
+		final TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
+
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000 * 22.4));
-		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
+		final ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
 		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
-		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		final IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 
-		IVessel vessel = getIVessel(null);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals,
+		final IVessel vessel = getIVessel(null);
+		final int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals,
 				salesIntervals, false);
 		Assert.assertArrayEquals(new int[] { 0, 0, 40, 40 }, times);
 	}
@@ -102,16 +105,16 @@ public class PriceIntervalProviderHelperTest {
 	@SuppressWarnings("null")
 	@Test
 	public void testGetTotalEstimatedJourneyCost() {
-		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
-		IntervalData purchase = new IntervalData(0, 10, 5);
-		IntervalData sales = new IntervalData(50, 70, 10);
-		int loadDuration = 0;
-		int salesPrice = 10;
-		LadenRouteData[] lrd = new LadenRouteData[2];
+		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
+		final IntervalData purchase = new IntervalData(0, 10, 5);
+		final IntervalData sales = new IntervalData(50, 70, 10);
+		final int loadDuration = 0;
+		final int salesPrice = 10;
+		final LadenRouteData[] lrd = new LadenRouteData[2];
 		lrd[0] = new LadenRouteData(20, 30, 0, 300, 0);
 		lrd[1] = new LadenRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
-		IVessel iVessel = getIVessel();
-		NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300,
+		final IVessel iVessel = getIVessel();
+		final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300,
 				iVessel.getVesselClass(), OptimiserUnitConvertor.convertToInternalDailyRate(22), true);
 
 	}
@@ -120,35 +123,35 @@ public class PriceIntervalProviderHelperTest {
 		return getIVessel(null);
 	}
 
-	static IVessel getIVessel(@Nullable IConsumptionRateCalculator optionalConsumptionRateCalculator) {
-		IVessel vessel = Mockito.mock(IVessel.class);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		int maxSpeed = 10 * 1000;
+	static IVessel getIVessel(@Nullable final IConsumptionRateCalculator optionalConsumptionRateCalculator) {
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		final int maxSpeed = 10 * 1000;
 		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(maxSpeed);
-		IConsumptionRateCalculator consumptionRateCalculator = getMockedFixedConsumptionRateCalculator(maxSpeed);
+		final IConsumptionRateCalculator consumptionRateCalculator = getMockedFixedConsumptionRateCalculator(maxSpeed);
 		Mockito.when(vesselClass.getConsumptionRate(Mockito.any())).thenReturn(consumptionRateCalculator);
-		IBaseFuel baseFuel = Mockito.mock(IBaseFuel.class);
+		final IBaseFuel baseFuel = Mockito.mock(IBaseFuel.class);
 		Mockito.when(baseFuel.getEquivalenceFactor()).thenReturn(44100);
 		Mockito.when(vesselClass.getBaseFuel()).thenReturn(baseFuel);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		return vessel;
 	}
 
-	static IConsumptionRateCalculator getMockedFixedConsumptionRateCalculator(int fixedSpeedValue) {
-		IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
+	static IConsumptionRateCalculator getMockedFixedConsumptionRateCalculator(final int fixedSpeedValue) {
+		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
 		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyLong())).thenReturn(fixedSpeedValue);
 		return consumptionRateCalculator;
 	}
 
 	private List<Pair<ERouteOption, Integer>> getDefaultCanalOpenings() {
-		List<Pair<ERouteOption, Integer>> openings = new LinkedList<>();
+		final List<Pair<ERouteOption, Integer>> openings = new LinkedList<>();
 		openings.add(new Pair<>(ERouteOption.DIRECT, 0));
 		openings.add(new Pair<>(ERouteOption.SUEZ, 0));
 		return openings;
 	}
 
-	private List<Pair<ERouteOption, Integer>> getCanalOpenings(int suezOpens) {
-		List<Pair<ERouteOption, Integer>> openings = new LinkedList<>();
+	private List<Pair<ERouteOption, Integer>> getCanalOpenings(final int suezOpens) {
+		final List<Pair<ERouteOption, Integer>> openings = new LinkedList<>();
 		openings.add(new Pair<>(ERouteOption.DIRECT, 0));
 		openings.add(new Pair<>(ERouteOption.SUEZ, suezOpens));
 		openings.add(new Pair<>(ERouteOption.PANAMA, 0));
@@ -169,15 +172,15 @@ public class PriceIntervalProviderHelperTest {
 		c.setValueAfter(40, 30);
 		c.setValueAfter(41, 31);
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		when(loadSlot.getPricingEvent()).thenReturn(PricingEventType.END_OF_LOAD);
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setSlot(loadSlot, null, 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
-		ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -187,17 +190,17 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
-		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
+		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
 
-		IIntegerIntervalCurve curve = new IntegerIntervalCurve();
+		final IIntegerIntervalCurve curve = new IntegerIntervalCurve();
 		curve.add(0);
 		curve.add(20);
 		curve.add(30);
 		curve.add(40);
 
-		List<int[]> priceIntervals = new LinkedList<>();
+		final List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		List<int[]> expected = new LinkedList<>();
+		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 15 });
 		expected.add(new int[] { 6, 20 });
 		expected.add(new int[] { 16, 30 });
@@ -227,15 +230,15 @@ public class PriceIntervalProviderHelperTest {
 		c.setValueAfter(41, 31);
 		c.setValueAfter(41, 32);
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		when(loadSlot.getPricingEvent()).thenReturn(PricingEventType.END_OF_LOAD);
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setSlot(loadSlot, null, 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
-		ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -245,17 +248,17 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
-		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(1);
+		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(1);
 
-		IIntegerIntervalCurve curve = new IntegerIntervalCurve();
+		final IIntegerIntervalCurve curve = new IntegerIntervalCurve();
 		curve.add(0);
 		curve.add(20);
 		curve.add(30);
 		curve.add(40);
 
-		List<int[]> priceIntervals = new LinkedList<>();
+		final List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		List<int[]> expected = new LinkedList<>();
+		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 20 });
 		expected.add(new int[] { 5, 25 });
 		expected.add(new int[] { 15, 30 });
@@ -285,15 +288,15 @@ public class PriceIntervalProviderHelperTest {
 		c.setValueAfter(40, 30);
 		c.setValueAfter(41, 31);
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		when(loadSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD_WINDOW);
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
-		ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -303,17 +306,17 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
-		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(2);
+		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(2);
 
-		IIntegerIntervalCurve curve = new IntegerIntervalCurve();
+		final IIntegerIntervalCurve curve = new IntegerIntervalCurve();
 		curve.add(0);
 		curve.add(20);
 		curve.add(30);
 		curve.add(40);
 
-		List<int[]> priceIntervals = new LinkedList<>();
+		final List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		List<int[]> expected = new LinkedList<>();
+		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 8 });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
@@ -337,15 +340,15 @@ public class PriceIntervalProviderHelperTest {
 		c.setValueAfter(40, 30);
 		c.setValueAfter(41, 31);
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		when(loadSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD_WINDOW);
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
-		ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -355,17 +358,17 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
-		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
+		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
 
-		IIntegerIntervalCurve curve = new IntegerIntervalCurve();
+		final IIntegerIntervalCurve curve = new IntegerIntervalCurve();
 		curve.add(0);
 		curve.add(20);
 		curve.add(30);
 		curve.add(40);
 
-		List<int[]> priceIntervals = new LinkedList<>();
+		final List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		List<int[]> expected = new LinkedList<>();
+		final List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] { 0, 5 });
 		expected.add(new int[] { 50, Integer.MIN_VALUE });
 
@@ -401,18 +404,18 @@ public class PriceIntervalProviderHelperTest {
 		sp.setValueAfter(40, 30 - 5);
 		sp.setValueAfter(41, 31 - 5);
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		when(loadSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		when(dischargeSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
 		when(dischargeSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
-		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, new TimeWindow(20, 30), 24, 0);
 
-		ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -423,7 +426,7 @@ public class PriceIntervalProviderHelperTest {
 		});
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
 
-		ISalesPriceCalculator salesPriceCalculator = Mockito.mock(ISalesPriceCalculator.class);
+		final ISalesPriceCalculator salesPriceCalculator = Mockito.mock(ISalesPriceCalculator.class);
 		when(salesPriceCalculator.getEstimatedSalesPrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -434,27 +437,27 @@ public class PriceIntervalProviderHelperTest {
 		});
 		when(dischargeSlot.getDischargePriceCalculator()).thenReturn(salesPriceCalculator);
 
-		IPriceIntervalProvider loadPriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
+		final IPriceIntervalProvider loadPriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
 		when(loadPriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
 				.thenReturn(Arrays.asList(0, 10, 20, 30, 40, 50));
-		IPriceIntervalProvider dischargePriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
+		final IPriceIntervalProvider dischargePriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
 		when(dischargePriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
 				.thenReturn(Arrays.asList(0 + 5, 10 + 5, 20 + 5, 30 + 5, 40 + 5, 50 + 5));
 
-		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
+		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
 
-		int[][] overlappingIntervals = priceIntervalProviderHelper.getOverlappingWindows(loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, 0, 50,
+		final int[][] overlappingIntervals = priceIntervalProviderHelper.getOverlappingWindows(loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, 0, 50,
 				portTimeWindowsRecord);
-		int[][] expected = new int[][] { { 0, 5 }, { 5, 10 }, { 10, 15 }, { 15, 20 }, { 20, 25 }, { 25, 30 }, { 30, 35 }, { 35, 40 }, { 40, 45 }, { 45, 50 }, };
+		final int[][] expected = new int[][] { { 0, 5 }, { 5, 10 }, { 10, 15 }, { 15, 20 }, { 20, 25 }, { 25, 30 }, { 30, 35 }, { 35, 40 }, { 40, 45 }, { 45, 50 }, };
 		for (int i = 0; i < expected.length; i++) {
 			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected[i]), Arrays.toString(overlappingIntervals[i])),
 					expected[i][0] == overlappingIntervals[i][0] && expected[i][1] == overlappingIntervals[i][1]);
 		}
 
-		List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider,
+		final List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider,
 				portTimeWindowsRecord);
 		for (int i = 0; i < priceDiffs.size() - 1; i++) {
-			int[] d = priceDiffs.get(i);
+			final int[] d = priceDiffs.get(i);
 			Assert.assertTrue(d[1] == -5);
 		}
 		Assert.assertTrue(priceDiffs.get(priceDiffs.size() - 1)[0] == 50 && priceDiffs.get(priceDiffs.size() - 1)[1] == Integer.MIN_VALUE);
@@ -493,24 +496,24 @@ public class PriceIntervalProviderHelperTest {
 		sp.setValueAfter(45, 60 - 5);
 		sp.setValueAfter(46, 65);
 
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		when(loadSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		when(dischargeSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
 		when(dischargeSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, new TimeWindow(20, 30), 24, 0);
 
-		IPort portL = Mockito.mock(IPort.class);
-		IPort portD = Mockito.mock(IPort.class);
+		final IPort portL = Mockito.mock(IPort.class);
+		final IPort portD = Mockito.mock(IPort.class);
 		when(portL.getName()).thenReturn("A");
 		when(portD.getName()).thenReturn("B");
 		when(loadSlot.getPort()).thenReturn(portL);
 		when(dischargeSlot.getPort()).thenReturn(portD);
 
-		ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -522,7 +525,7 @@ public class PriceIntervalProviderHelperTest {
 		});
 		when(loadSlot.getLoadPriceCalculator()).thenReturn(loadPriceCalculator);
 
-		ISalesPriceCalculator salesPriceCalculator = Mockito.mock(ISalesPriceCalculator.class);
+		final ISalesPriceCalculator salesPriceCalculator = Mockito.mock(ISalesPriceCalculator.class);
 		when(salesPriceCalculator.getEstimatedSalesPrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -535,7 +538,7 @@ public class PriceIntervalProviderHelperTest {
 
 		final PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(2, 0);
 
-		IPriceIntervalProvider loadPriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
+		final IPriceIntervalProvider loadPriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
 		when(loadPriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
 				.thenAnswer(new Answer<List<Integer>>() {
 					@Override
@@ -546,7 +549,7 @@ public class PriceIntervalProviderHelperTest {
 					}
 				});
 
-		IPriceIntervalProvider dischargePriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
+		final IPriceIntervalProvider dischargePriceIntervalProvider = Mockito.mock(IPriceIntervalProvider.class);
 		when(dischargePriceIntervalProvider.getPriceHourIntervals(Matchers.<IPortSlot> any(), Mockito.anyInt(), Mockito.anyInt(), Matchers.<IPortTimeWindowsRecord> any()))
 				.thenAnswer(new Answer<List<Integer>>() {
 					@Override
@@ -557,25 +560,25 @@ public class PriceIntervalProviderHelperTest {
 					}
 				});
 
-		int[][] overlappingIntervals = priceIntervalProviderHelper.getOverlappingWindows(loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, 0, 50,
+		final int[][] overlappingIntervals = priceIntervalProviderHelper.getOverlappingWindows(loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, 0, 50,
 				portTimeWindowsRecord);
-		int[][] expected = new int[][] { { 0, 8 }, { 8, 13 }, { 13, 18 }, { 18, 23 }, { 23, 28 }, { 28, 33 }, { 33, 38 }, { 38, 43 }, { 43, 48 }, };
+		final int[][] expected = new int[][] { { 0, 8 }, { 8, 13 }, { 13, 18 }, { 18, 23 }, { 23, 28 }, { 28, 33 }, { 33, 38 }, { 38, 43 }, { 43, 48 }, };
 		for (int i = 0; i < expected.length; i++) {
 			Assert.assertTrue(String.format("Expected %s got %s", Arrays.toString(expected[i]), Arrays.toString(overlappingIntervals[i])),
 					expected[i][0] == overlappingIntervals[i][0] && expected[i][1] == overlappingIntervals[i][1]);
 		}
 
-		List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider,
+		final List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider,
 				portTimeWindowsRecord);
 		for (int i = 0; i < priceDiffs.size() - 1; i++) {
-			int[] d = priceDiffs.get(i);
+			final int[] d = priceDiffs.get(i);
 			Assert.assertTrue(d[1] == -5);
 		}
 		Assert.assertTrue(priceDiffs.get(priceDiffs.size() - 1)[0] == 50 && priceDiffs.get(priceDiffs.size() - 1)[1] == Integer.MIN_VALUE);
 	}
 
 	static PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff) {
-		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
+		final PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
 		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
@@ -603,7 +606,7 @@ public class PriceIntervalProviderHelperTest {
 		});
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
 		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVesselClass> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
@@ -619,7 +622,7 @@ public class PriceIntervalProviderHelperTest {
 	}
 
 	private static PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiffA, final int timeDiffB) {
-		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
+		final PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
 		final IVesselBaseFuelCalculator vbfc = Mockito.mock(IVesselBaseFuelCalculator.class);
 		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
@@ -641,7 +644,7 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
@@ -656,11 +659,11 @@ public class PriceIntervalProviderHelperTest {
 		return ppih;
 	}
 
-	private static TimeWindowSchedulingCanalDistanceProvider getTimeWindowSchedulingCanalDistanceProvider(List<Pair<ERouteOption, Integer>> distances,
-			List<Pair<ERouteOption, Integer>> canalOpenings) {
-		TimeWindowSchedulingCanalDistanceProvider timeWindowSchedulingCanalDistanceProvider = new TimeWindowSchedulingCanalDistanceProvider();
+	private static TimeWindowSchedulingCanalDistanceProvider getTimeWindowSchedulingCanalDistanceProvider(final List<DistanceMatrixEntry> distances,
+			final List<Pair<ERouteOption, Integer>> canalOpenings) {
+		final TimeWindowSchedulingCanalDistanceProvider timeWindowSchedulingCanalDistanceProvider = new TimeWindowSchedulingCanalDistanceProvider();
 
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
@@ -674,8 +677,8 @@ public class PriceIntervalProviderHelperTest {
 		return timeWindowSchedulingCanalDistanceProvider;
 	}
 
-	private static TimeWindowsTrimming getTimeWindowsTrimming(List<Pair<ERouteOption, Integer>> distances, List<Pair<ERouteOption, Integer>> canalOpenings) {
-		TimeWindowsTrimming timeWindowsTrimming = new TimeWindowsTrimming();
+	private static TimeWindowsTrimming getTimeWindowsTrimming(final List<DistanceMatrixEntry> distances, final List<Pair<ERouteOption, Integer>> canalOpenings) {
+		final TimeWindowsTrimming timeWindowsTrimming = new TimeWindowsTrimming();
 
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
 		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
@@ -706,7 +709,7 @@ public class PriceIntervalProviderHelperTest {
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
 		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVesselClass> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
 
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
@@ -730,10 +733,10 @@ public class PriceIntervalProviderHelperTest {
 
 	}
 
-	private static IDistanceProvider getDistanceProvider(List<Pair<ERouteOption, Integer>> distances, List<Pair<ERouteOption, Integer>> canalOpenings) {
-		IDistanceProvider distanceProvider = Mockito.mock(IDistanceProvider.class);
+	private static IDistanceProvider getDistanceProvider(final List<DistanceMatrixEntry> distances, final List<Pair<ERouteOption, Integer>> canalOpenings) {
+		final IDistanceProvider distanceProvider = Mockito.mock(IDistanceProvider.class);
 		Mockito.when(distanceProvider.getAllDistanceValues(Mockito.any(IPort.class), Mockito.any(IPort.class))).thenReturn(distances);
-		for (Pair<ERouteOption, Integer> openings : canalOpenings) {
+		for (final Pair<ERouteOption, Integer> openings : canalOpenings) {
 			when(distanceProvider.isRouteAvailable(Matchers.eq(openings.getFirst()), Matchers.any(), Matchers.anyInt())).thenAnswer(new Answer<Boolean>() {
 				@Override
 				public Boolean answer(final InvocationOnMock invocation) throws Throwable {
@@ -751,7 +754,7 @@ public class PriceIntervalProviderHelperTest {
 	}
 
 	private static IRouteCostProvider getIRouteCostProvider() {
-		IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
+		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
 		Mockito.when(routeCostProvider.getRouteTransitTime(Mockito.any(), Mockito.any())).thenReturn(0);
 		Mockito.when(routeCostProvider.getRouteCost(Mockito.eq(ERouteOption.DIRECT), Mockito.any(), Mockito.anyInt(), Mockito.any())).thenReturn(0L);
 		Mockito.when(routeCostProvider.getRouteCost(Mockito.eq(ERouteOption.SUEZ), Mockito.any(), Mockito.anyInt(), Mockito.any()))

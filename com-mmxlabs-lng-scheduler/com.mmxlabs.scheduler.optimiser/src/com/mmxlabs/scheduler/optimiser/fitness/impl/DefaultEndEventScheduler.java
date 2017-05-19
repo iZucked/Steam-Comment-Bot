@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -261,10 +262,10 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			boolean bestNBO = false;
 			boolean bestFBO = true;
 
-			Pair<@NonNull ERouteOption, @NonNull Integer> bestRoute = null;
-			LOOP_ROUTE: for (final Pair<@NonNull ERouteOption, @NonNull Integer> distanceOption : distanceProvider.getAllDistanceValues(from, to)) {
-				final ERouteOption route = distanceOption.getFirst();
-				final int distance = distanceOption.getSecond();
+			DistanceMatrixEntry bestRoute = null;
+			LOOP_ROUTE: for (final DistanceMatrixEntry distanceOption : distanceProvider.getAllDistanceValues(from, to)) {
+				final ERouteOption route = distanceOption.getRoute();
+				final int distance = distanceOption.getDistance();
 
 				// Here we cannot determine whether or not we are round trip (it *may* be possible to determine this in some cases based on travel time).
 				final long routeCost = routeCostProvider.getRouteCost(route, vessel, departureTime, CostType.Ballast);
@@ -368,7 +369,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				return Collections.emptyList();
 			} else {
 				assert bestRoute != null;
-				final int availableTime = Calculator.getTimeFromSpeedDistance(bestSpeed, bestRoute.getSecond()) + routeCostProvider.getRouteTransitTime(bestRoute.getFirst(), vessel);
+				final int availableTime = Calculator.getTimeFromSpeedDistance(bestSpeed, bestRoute.getDistance()) + routeCostProvider.getRouteTransitTime(bestRoute.getRoute(), vessel);
 				partialPortTimesRecord.setReturnSlotTime(endEventSlot, prevArrivalTime + prevVisitDuration + availableTime);
 				partialPortTimesRecord.setSlotDuration(endEventSlot, 0);
 				return Collections.emptyList();

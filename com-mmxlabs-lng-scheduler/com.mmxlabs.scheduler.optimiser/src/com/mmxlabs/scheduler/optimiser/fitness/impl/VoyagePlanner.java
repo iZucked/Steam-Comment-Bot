@@ -19,7 +19,6 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
@@ -40,7 +39,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -53,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -257,7 +256,7 @@ public class VoyagePlanner {
 			}
 		}
 
-		final List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> distances = distanceProvider.getDistanceValues(prevPort, thisPort, voyageStartTime, vessel);
+		final List<@NonNull DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(prevPort, thisPort, voyageStartTime, vessel);
 		if (distances.isEmpty()) {
 			throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
 		}
@@ -267,17 +266,17 @@ public class VoyagePlanner {
 
 		if (distances.size() == 1) {
 			// TODO: Make part of if instead?
-			final Pair<@NonNull ERouteOption, @NonNull Integer> d = distances.get(0);
+			final DistanceMatrixEntry d = distances.get(0);
 			final CostType costType;
 			if (vesselState == VesselState.Laden) {
 				costType = CostType.Laden;
-			} else if (previousOptions != null && previousOptions.getRoute() == d.getFirst()) {
+			} else if (previousOptions != null && previousOptions.getRoute() == d.getRoute()) {
 				costType = CostType.RoundTripBallast;
 			} else {
 				costType = CostType.Ballast;
 			}
 
-			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vessel, voyageStartTime, costType));
+			options.setRoute(d.getRoute(), d.getDistance(), routeCostProvider.getRouteCost(d.getRoute(), vessel, voyageStartTime, costType));
 		} else {
 			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, voyageStartTime, routeCostProvider));
 		}

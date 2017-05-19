@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.shared.port;
+package com.mmxlabs.scheduler.optimiser.shared.port.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.shared.port.IPortProviderEditor;
 
 @NonNullByDefault
 public final class DefaultPortProviderEditor implements IPortProviderEditor {

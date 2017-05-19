@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,30 +15,21 @@ import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 
 public class DefaultDistanceProviderImplTest {
 	@Test
 	public void testGetRouteAvailable() {
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
-
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
@@ -57,15 +47,8 @@ public class DefaultDistanceProviderImplTest {
 	@Test
 	public void testIsRouteAvailable() {
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
-
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
@@ -88,19 +71,12 @@ public class DefaultDistanceProviderImplTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
 		final IPort port2 = Mockito.mock(IPort.class, "port2");
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
 
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
-
-		Mockito.when(directMatrix.get(port1, port2)).thenReturn(10);
-		Mockito.when(suezMatrix.get(port1, port2)).thenReturn(20);
-		Mockito.when(panamaMatrix.get(port1, port2)).thenReturn(30);
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
@@ -118,19 +94,12 @@ public class DefaultDistanceProviderImplTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
 		final IPort port2 = Mockito.mock(IPort.class, "port2");
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
 
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
-
-		Mockito.when(directMatrix.get(port1, port2)).thenReturn(10);
-		Mockito.when(suezMatrix.get(port1, port2)).thenReturn(20);
-		Mockito.when(panamaMatrix.get(port1, port2)).thenReturn(30);
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
@@ -161,24 +130,17 @@ public class DefaultDistanceProviderImplTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
 		final IPort port2 = Mockito.mock(IPort.class, "port2");
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
 
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
 
-		Mockito.when(directMatrix.get(port1, port2)).thenReturn(10);
-		Mockito.when(suezMatrix.get(port1, port2)).thenReturn(20);
-		Mockito.when(panamaMatrix.get(port1, port2)).thenReturn(30);
-
-		final Collection<MatrixEntry<IPort, Integer>> matrixDistanceValues = new LinkedList<>();
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.DIRECT.name(), port1, port2, 10));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.SUEZ.name(), port1, port2, 20));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.PANAMA.name(), port1, port2, 30));
+		final List<DistanceMatrixEntry> matrixDistanceValues = new LinkedList<>();
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.DIRECT, port1, port2, 10));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.SUEZ, port1, port2, 20));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.PANAMA, port1, port2, 30));
 
 		Mockito.when(matrixProvider.getValues(port1, port2)).thenReturn(matrixDistanceValues);
 
@@ -214,24 +176,17 @@ public class DefaultDistanceProviderImplTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
 		final IPort port2 = Mockito.mock(IPort.class, "port2");
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
 
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
 
-		Mockito.when(directMatrix.get(port1, port2)).thenReturn(10);
-		Mockito.when(suezMatrix.get(port1, port2)).thenReturn(20);
-		Mockito.when(panamaMatrix.get(port1, port2)).thenReturn(30);
-
-		final Collection<MatrixEntry<IPort, Integer>> matrixDistanceValues = new LinkedList<>();
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.DIRECT.name(), port1, port2, 10));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.SUEZ.name(), port1, port2, 20));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.PANAMA.name(), port1, port2, 30));
+		final List<DistanceMatrixEntry> matrixDistanceValues = new LinkedList<>();
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.DIRECT, port1, port2, 10));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.SUEZ, port1, port2, 20));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.PANAMA, port1, port2, 30));
 
 		Mockito.when(matrixProvider.getValues(port1, port2)).thenReturn(matrixDistanceValues);
 
@@ -281,28 +236,21 @@ public class DefaultDistanceProviderImplTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
 		final IPort port2 = Mockito.mock(IPort.class, "port2");
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
 
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(40);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
 
-		Mockito.when(directMatrix.get(port1, port2)).thenReturn(40);
-		Mockito.when(suezMatrix.get(port1, port2)).thenReturn(20);
-		Mockito.when(panamaMatrix.get(port1, port2)).thenReturn(30);
-
-		final Collection<MatrixEntry<IPort, Integer>> matrixDistanceValues = new LinkedList<>();
+		final List<DistanceMatrixEntry> matrixDistanceValues = new LinkedList<>();
 		// Make direct longest!
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.DIRECT.name(), port1, port2, 40));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.SUEZ.name(), port1, port2, 20));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.PANAMA.name(), port1, port2, 30));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.DIRECT, port1, port2, 40));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.SUEZ, port1, port2, 20));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.PANAMA, port1, port2, 30));
 
 		Mockito.when(matrixProvider.getValues(port1, port2)).thenReturn(matrixDistanceValues);
-		Mockito.when(matrixProvider.getKeys()).thenReturn(new String[] { ERouteOption.DIRECT.name(), ERouteOption.SUEZ.name(), ERouteOption.PANAMA.name() });
+		Mockito.when(matrixProvider.getRoutes()).thenReturn(new ERouteOption[] { ERouteOption.DIRECT, ERouteOption.SUEZ, ERouteOption.PANAMA });
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
@@ -336,36 +284,28 @@ public class DefaultDistanceProviderImplTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
 		final IPort port2 = Mockito.mock(IPort.class, "port2");
 
-		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
-		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
 
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(40);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
 
-		Mockito.when(directMatrix.get(port1, port2)).thenReturn(40);
-		Mockito.when(suezMatrix.get(port1, port2)).thenReturn(20);
-		Mockito.when(panamaMatrix.get(port1, port2)).thenReturn(30);
-
-		final Collection<MatrixEntry<IPort, Integer>> matrixDistanceValues = new LinkedList<>();
+		final List<DistanceMatrixEntry> matrixDistanceValues = new LinkedList<>();
 		// Make direct longest!
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.DIRECT.name(), port1, port2, 40));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.SUEZ.name(), port1, port2, 20));
-		matrixDistanceValues.add(new MatrixEntry<>(ERouteOption.PANAMA.name(), port1, port2, 30));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.DIRECT, port1, port2, 40));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.SUEZ, port1, port2, 20));
+		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.PANAMA, port1, port2, 30));
 
 		Mockito.when(matrixProvider.getValues(port1, port2)).thenReturn(matrixDistanceValues);
-		Mockito.when(matrixProvider.getKeys()).thenReturn(new String[] { ERouteOption.DIRECT.name(), ERouteOption.SUEZ.name(), ERouteOption.PANAMA.name() });
+		Mockito.when(matrixProvider.getRoutes()).thenReturn(new ERouteOption[] { ERouteOption.DIRECT, ERouteOption.SUEZ, ERouteOption.PANAMA });
 
 		IVessel vessel = Mockito.mock(IVessel.class);
 		IVessel vessel2 = Mockito.mock(IVessel.class);
-		
+
 		HashMapRouteExclusionProvider routeExclusionProvider = new HashMapRouteExclusionProvider();
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.PANAMA));
 		DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider, routeExclusionProvider);
-
 
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vessel)).thenReturn(0);
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(12);
@@ -395,8 +335,8 @@ public class DefaultDistanceProviderImplTest {
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ, ERouteOption.PANAMA));
 		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
 	}
-	
-	private void verifyListResult(final Integer directDistance, final Integer suezDistance, final Integer panamaDistance, final List<Pair<ERouteOption, Integer>> results) {
+
+	private void verifyListResult(final Integer directDistance, final Integer suezDistance, final Integer panamaDistance, final List<DistanceMatrixEntry> results) {
 
 		Assert.assertNotNull(results);
 
@@ -404,13 +344,13 @@ public class DefaultDistanceProviderImplTest {
 		boolean foundSuez = false;
 		boolean foundPanama = false;
 
-		for (final Pair<ERouteOption, Integer> result : results) {
-			final ERouteOption option = result.getFirst();
+		for (final DistanceMatrixEntry result : results) {
+			final ERouteOption option = result.getRoute();
 			if (option == ERouteOption.DIRECT) {
 				if (directDistance == null) {
 					Assert.fail("Unexpected direct distance");
 				} else {
-					final int distance = result.getSecond();
+					final int distance = result.getDistance();
 					Assert.assertEquals(directDistance.intValue(), distance);
 				}
 				if (foundDirect) {
@@ -423,7 +363,7 @@ public class DefaultDistanceProviderImplTest {
 				if (suezDistance == null) {
 					Assert.fail("Unexpected Suez distance");
 				} else {
-					final int distance = result.getSecond();
+					final int distance = result.getDistance();
 					Assert.assertEquals(suezDistance.intValue(), distance);
 				}
 				if (foundSuez) {
@@ -434,7 +374,7 @@ public class DefaultDistanceProviderImplTest {
 				if (panamaDistance == null) {
 					Assert.fail("Unexpected Panama distance");
 				} else {
-					final int distance = result.getSecond();
+					final int distance = result.getDistance();
 					Assert.assertEquals(panamaDistance.intValue(), distance);
 				}
 				if (foundPanama) {
@@ -457,17 +397,17 @@ public class DefaultDistanceProviderImplTest {
 		}
 	}
 
-	private DefaultDistanceProviderImpl createDistanceProvider(final IMultiMatrixProvider<IPort, Integer> matrixProvider, final IRouteCostProvider routeCostProvider) {
+	private DefaultDistanceProviderImpl createDistanceProvider(final IDistanceMatrixProvider matrixProvider, final IRouteCostProvider routeCostProvider) {
 		return createDistanceProvider(matrixProvider, routeCostProvider, new HashMapRouteExclusionProvider());
 	}
-	
-	private DefaultDistanceProviderImpl createDistanceProvider(final IMultiMatrixProvider<IPort, Integer> matrixProvider, final IRouteCostProvider routeCostProvider, final IRouteExclusionProvider routeExclusionProvider) {
+
+	private DefaultDistanceProviderImpl createDistanceProvider(final IDistanceMatrixProvider matrixProvider, final IRouteCostProvider routeCostProvider,
+			final IRouteExclusionProvider routeExclusionProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
-				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
-				}).toInstance(matrixProvider);
+				bind(IDistanceMatrixProvider.class).toInstance(matrixProvider);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(IRouteExclusionProvider.class).toInstance(routeExclusionProvider);
 			}

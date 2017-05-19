@@ -4,23 +4,17 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -28,6 +22,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 
 /**
  * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
@@ -40,29 +36,29 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceMatrixProvider distanceProvider;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-	
+
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
-	
+
 	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
 
 	@Override
-	public List<Pair<ERouteOption, Integer>> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime, final IVessel vessel) {
+	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime, final IVessel vessel) {
 
-		List<Pair<ERouteOption, Integer>> distances = getAllDistanceValues(from, to);
+		List<DistanceMatrixEntry> distances = getAllDistanceValues(from, to);
 
 		// Filter out bad route choices
-		final Iterator<Pair<ERouteOption, Integer>> itr = distances.iterator();
+		final Iterator<DistanceMatrixEntry> itr = distances.iterator();
 		while (itr.hasNext()) {
-			final Pair<ERouteOption, Integer> e = itr.next();
+			final DistanceMatrixEntry e = itr.next();
 			// No distance?
-			if (e.getSecond() == Integer.MAX_VALUE) {
+			if (e.getDistance() == Integer.MAX_VALUE) {
 				itr.remove();
-			} else if (!isRouteAvailable(e.getFirst(), vessel, voyageStartTime)) {
+			} else if (!isRouteAvailable(e.getRoute(), vessel, voyageStartTime)) {
 				// Distance available, but route is closed at this time
 				itr.remove();
 			}
@@ -72,10 +68,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public List<Pair<ERouteOption, Integer>> getAllDistanceValues(final IPort from, final IPort to) {
+	public List<DistanceMatrixEntry> getAllDistanceValues(final IPort from, final IPort to) {
 
-		final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider.getValues(from, to);
-		return distances.stream().map(e -> new Pair<ERouteOption, Integer>(ERouteOption.valueOf(e.getKey()), e.getValue())).collect(Collectors.toList());
+		return distanceProvider.getValues(from, to);
 	}
 
 	@Override
@@ -107,16 +102,8 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Override
 	public int getOpenDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to) {
-		final IMatrixProvider<IPort, Integer> matrix = distanceProvider.get(route.name());
-		if (matrix == null) {
-			return Integer.MAX_VALUE;
-		}
 
-		final Integer distance = matrix.get(from, to);
-		if (distance == null) {
-			return Integer.MAX_VALUE;
-		}
-		return distance;
+		return distanceProvider.get(route, from, to);
 	}
 
 	@Override
@@ -158,8 +145,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public List<ERouteOption> getRoutes() {
-		// TODO: Pre-calculate?
-		return Lists.newArrayList(distanceProvider.getKeys()).stream().map(e -> ERouteOption.valueOf(e)).collect(Collectors.toList());
+	public ERouteOption[] getRoutes() {
+		return distanceProvider.getRoutes();
 	}
 }

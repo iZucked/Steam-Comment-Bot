@@ -10,12 +10,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -32,7 +31,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final @NonNull VoyageOptions options;
 
-	private final @NonNull List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions;
+	private final @NonNull List<@NonNull DistanceMatrixEntry> routeOptions;
 
 	private final @NonNull IRouteCostProvider routeCostProvider;
 
@@ -40,9 +39,8 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int voyageStartTime;
 
-	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options,
-			@NonNull final List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions, @NonNull final IVessel vessel, int voyageStartTime,
-			@NonNull final IRouteCostProvider routeCostProvider) {
+	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options, @NonNull final List<@NonNull DistanceMatrixEntry> routeOptions,
+			@NonNull final IVessel vessel, int voyageStartTime, @NonNull final IRouteCostProvider routeCostProvider) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 		this.routeOptions = routeOptions;
@@ -82,7 +80,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final Pair<@NonNull ERouteOption, @NonNull Integer> entry = routeOptions.get(choice);
+		final DistanceMatrixEntry entry = routeOptions.get(choice);
 		final CostType costType;
 
 		VoyageOptions pPreviousOption = previousOptions;
@@ -94,7 +92,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 			// Is it round trip?
 			if (pPreviousOption != null) {
 				// Needs same route and load and next load port
-				if (pPreviousOption.getRoute() == entry.getFirst()) {
+				if (pPreviousOption.getRoute() == entry.getRoute()) {
 					costType = CostType.RoundTripBallast;
 				} else {
 					costType = CostType.Ballast;
@@ -104,9 +102,9 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 			}
 		}
 
-		final long routeCost = routeCostProvider.getRouteCost(entry.getFirst(), vessel, voyageStartTime, costType);
+		final long routeCost = routeCostProvider.getRouteCost(entry.getRoute(), vessel, voyageStartTime, costType);
 
-		options.setRoute(entry.getFirst(), entry.getSecond(), routeCost);
+		options.setRoute(entry.getRoute(), entry.getDistance(), routeCost);
 
 		return true;
 

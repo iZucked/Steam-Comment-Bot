@@ -5,14 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.shared.port;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
+import com.mmxlabs.scheduler.optimiser.shared.port.impl.DefaultDistanceMatrixEditor;
+import com.mmxlabs.scheduler.optimiser.shared.port.impl.DefaultPortProviderEditor;
 
 /**
  * 
@@ -23,24 +18,12 @@ public class PortDataProviderModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>();
-		bind(new TypeLiteral<IMultiMatrixEditor<IPort, Integer>>() {
-		}).toInstance(portDistanceProvider);
+		bind(DefaultDistanceMatrixEditor.class).in(Singleton.class);
+		bind(IDistanceMatrixProvider.class).to(DefaultDistanceMatrixEditor.class);
+		bind(IDistanceMatrixEditor.class).to(DefaultDistanceMatrixEditor.class);
 
-		bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
-		}).toInstance(portDistanceProvider);
-
-		bind(new TypeLiteral<IndexedMultiMatrixProvider<IPort, Integer>>() {
-		}).toInstance(portDistanceProvider);
-
-		// final IPortProviderEditor portProvider = new DefaultPortProviderEditor();
+		bind(DefaultPortProviderEditor.class).in(Singleton.class);
 		bind(IPortProvider.class).to(DefaultPortProviderEditor.class);
 		bind(IPortProviderEditor.class).to(DefaultPortProviderEditor.class);
-	}
-
-	@Provides
-	@Singleton
-	private DefaultPortProviderEditor provideDefaultPortProvider() {
-		return new DefaultPortProviderEditor();
 	}
 }

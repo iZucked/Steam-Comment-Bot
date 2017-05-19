@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -292,16 +293,16 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 
-		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(slotPort, charterPort, voyageStartTime, vessel);
+		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(slotPort, charterPort, voyageStartTime, vessel);
 		int directTime = Integer.MAX_VALUE;
-		Pair<ERouteOption, Integer> directEntry = null;
-		for (final Pair<ERouteOption, Integer> d : distances) {
-			final ERouteOption routeOption = d.getFirst();
-			final int thisDistance = d.getSecond();
+		DistanceMatrixEntry directEntry = null;
+		for (final DistanceMatrixEntry d : distances) {
+			final ERouteOption routeOption = d.getRoute();
+			final int thisDistance = d.getDistance();
 			if (thisDistance == Integer.MAX_VALUE) {
 				continue;
 			}
-			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), d.getSecond()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
+			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
 			if (routeOption == ERouteOption.DIRECT) {
 				directTime = travelTime;
 				directEntry = d;
@@ -321,7 +322,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		if (route != ERouteOption.DIRECT && directEntry != null) {
 			final double improvement = ((double) directTime - (double) shortestTime) / (double) directTime;
 			if (directTime == 0 || improvement < canalChoiceThreshold) {
-				distance = directEntry.getSecond();
+				distance = directEntry.getDistance();
 				route = ERouteOption.DIRECT;
 				shortestTime = directTime;
 			}

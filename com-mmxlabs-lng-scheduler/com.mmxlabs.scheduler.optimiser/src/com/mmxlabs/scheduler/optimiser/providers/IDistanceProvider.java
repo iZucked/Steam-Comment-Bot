@@ -12,6 +12,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 
 public interface IDistanceProvider extends IDataComponentProvider {
 
@@ -39,16 +40,16 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	@NonNull
-	List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime, IVessel vessel);
+	List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime, IVessel vessel);
 
 	@Deprecated
 	@NonNull
-	default List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
+	default List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
 		return getDistanceValues(from, to, Integer.MAX_VALUE, null);
 	}
 
 	@NonNull
-	List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getAllDistanceValues(@NonNull IPort from, @NonNull IPort to);
+	List<@NonNull DistanceMatrixEntry> getAllDistanceValues(@NonNull IPort from, @NonNull IPort to);
 
 	/**
 	 * Returns the distance if route is open for the given time. May return {@link Integer#MAX_VALUE} if the route is closed or there is no distance.
@@ -91,6 +92,8 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	@NonNull
 	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
 
-	@NonNull
-	List<@NonNull ERouteOption> getRoutes();
+	ERouteOption[] getRoutes();
+
+//	@NonNull
+//	List<@NonNull ERouteOption> getRoutes();
 }
