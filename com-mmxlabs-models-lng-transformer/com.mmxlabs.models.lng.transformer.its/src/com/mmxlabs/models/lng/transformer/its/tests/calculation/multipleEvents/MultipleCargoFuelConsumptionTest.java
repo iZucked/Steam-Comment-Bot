@@ -14,6 +14,7 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -49,8 +50,11 @@ public class MultipleCargoFuelConsumptionTest {
 		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
 		final int legDuration = 10;
 
-		final Port portA = PortFactory.eINSTANCE.createPort();
-		final Port portB = PortFactory.eINSTANCE.createPort();
+		final PortModelBuilder portModelBuilder = csc.getScenarioModelBuilder().getPortModelBuilder();
+
+		final Port portA = portModelBuilder.createPort("portA", "UTC", 0, 0);
+		final Port portB = portModelBuilder.createPort("portB", "UTC", 0, 0);
+
 		final int distanceBetweenPorts = 90;
 		csc.addPorts(portA, portB, distanceBetweenPorts);
 
@@ -86,6 +90,8 @@ public class MultipleCargoFuelConsumptionTest {
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
+		Assert.assertNotNull(result);
+
 		// print the legs to console
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 			ScenarioTools.printCargoAllocation(ca.getName(), ca);
@@ -98,9 +104,10 @@ public class MultipleCargoFuelConsumptionTest {
 
 		// add assertions on results
 		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
+			Assert.assertNotNull(cargoAllocation);
 			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
-			// expect only NBO to be used always
 
+			// expect only NBO to be used always
 			// check the laden journey
 			for (final FuelQuantity fq : ca.getLadenLeg().getFuels()) {
 				if (fq.getFuel() == Fuel.FBO) {
@@ -208,12 +215,11 @@ public class MultipleCargoFuelConsumptionTest {
 		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
 		final int legDuration = 10;
 
-		final Port portA = PortFactory.eINSTANCE.createPort();
-		final Port portB = PortFactory.eINSTANCE.createPort();
+		final PortModelBuilder portModelBuilder = csc.getScenarioModelBuilder().getPortModelBuilder();
 
-		
-		
-		
+		final Port portA = portModelBuilder.createPort("portA", "UTC", 0, 0);
+		final Port portB = portModelBuilder.createPort("portB", "UTC", 0, 0);
+
 		// add the ports
 		final int distanceBetweenPorts = 110;
 		csc.addPorts(portA, portB, distanceBetweenPorts);

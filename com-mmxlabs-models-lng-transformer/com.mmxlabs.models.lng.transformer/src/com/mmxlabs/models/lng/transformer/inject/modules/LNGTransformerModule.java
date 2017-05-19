@@ -224,7 +224,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap)
+			throws IncompleteScenarioException {
 		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
 
 		return optimisationData;

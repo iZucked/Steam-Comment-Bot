@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
@@ -56,7 +57,10 @@ public class JourneyEventExporter {
 		journey.setDestination(eToPort);
 
 		journey.setDistance(options.getDistance());
-		journey.setRoute(modelEntityMap.getModelObject(options.getRoute().name(), Route.class));
+		String name = options.getRoute().name();
+		@Nullable
+		Route modelObject = modelEntityMap.getModelObject(name, Route.class);
+		journey.setRoute(modelObject);
 		journey.setToll(OptimiserUnitConvertor.convertToExternalFixedCost(options.getRouteCost()));
 
 		journey.setLaden(VesselState.Laden.equals(options.getVesselState()));

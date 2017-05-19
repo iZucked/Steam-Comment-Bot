@@ -81,9 +81,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl {
 
-	// private static final int REPORT_PERCENTAGE = 1;
-	// private int currentProgress = 0;
-
 	private final LNGSlotInsertionJobDescriptor jobDescriptor;
 
 	private final ScenarioInstance scenarioInstance;
@@ -91,9 +88,6 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	private final ModelReference modelReference;
 
 	private final LNGScenarioModel originalScenario;
-
-	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	private final LNGScenarioRunner scenarioRunner;
 
@@ -105,6 +99,14 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	private final EditingDomain originalEditingDomain;
 
 	private SlotInsertionOptions slotInsertionPlan;
+
+	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
+			LNGTransformerHelper.HINT_DISABLE_CACHES, //
+			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT, //
+			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
+
+	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
+			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT };
 
 	public LNGSchedulerInsertSlotJobControl(final LNGSlotInsertionJobDescriptor jobDescriptor) {
 		super(jobDescriptor.getJobName());
@@ -129,7 +131,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		}
 
 		// TODO: This should be static / central service?
-		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
+		executorService = LNGScenarioChainBuilder.createExecutorService();
 
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 		targetSlots = jobDescriptor.getTargetSlots();
@@ -163,11 +165,20 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		};
 
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, //
-				LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-				LNGTransformerHelper.HINT_DISABLE_CACHES, //
-				LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT, //
-				LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN);
+		boolean isBreakEven = false;
+		for (Slot slot : targetSlots) {
+			if (slot.isSetPriceExpression()) {
+				if (slot.getPriceExpression().contains("?")) {
+					isBreakEven = true;
+					break;
+				}
+			}
+		}
+
+		String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
+
+		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
 
 		if (userSettings.isSetPeriodStart() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario
@@ -182,7 +193,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 					}
 				} catch (IllegalArgumentException e) {
 					// Slot not found - probably outside of period.
-					throw new RuntimeException(String.format("Slot %d not included within period", original.getName()));
+					throw new RuntimeException(String.format("Slot %s not included within period", original.getName()));
 				}
 			}
 		} else {
@@ -276,7 +287,10 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 						@NonNull
 						final Collection<@NonNull String> hints = new LinkedList<>(dataTransformer.getHints());
-						hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+						// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
+						if (performBreakEven) {
+							hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+						}
 						try {
 							if (performBreakEven) {
 								final BreakEvenOptimisationStage stageSettings = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
@@ -341,18 +355,8 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
-		// if (scenarioRunner.isFinished()) {
-		// return false;
-		// } else {
-		// return true;
-		// }
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#kill()
-	 */
 	@Override
 	protected void kill() {
 	}
@@ -365,9 +369,6 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 			modelReference.close();
 		}
 
-		// if (scenarioRunner != null) {
-		// scenarioRunner.dispose();
-		// }
 		super.dispose();
 	}
 

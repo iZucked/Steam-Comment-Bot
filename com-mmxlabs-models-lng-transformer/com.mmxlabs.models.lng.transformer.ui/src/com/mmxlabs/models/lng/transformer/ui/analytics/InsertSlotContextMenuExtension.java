@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -41,12 +43,14 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -81,8 +85,29 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 		if (slot.getCargo() == null) {
 			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(slot));
+
+			if (slot.isLocked()) {
+				action.setEnabled(false);
+				action.setText(action.getText() + " (Kept open)");
+			}
+
 			menuManager.add(action);
 			return;
+		} else {
+			List<Slot> slots = slot.getCargo().getSortedSlots();
+			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+			for (Slot slot2 : slots) {
+				if (slot2.isLocked()) {
+					action.setEnabled(false);
+					action.setText(action.getText() + " (Kept open)");
+				}
+			}
+			if (slot.getCargo().isLocked()) {
+				action.setEnabled(false);
+				action.setText(action.getText() + " (Locked)");
+			}
+			menuManager.add(action);
 		}
 	}
 
@@ -92,29 +117,83 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
-		final List<Slot> slots = new LinkedList<Slot>();
-		final Iterator<?> itr = selection.iterator();
-		while (itr.hasNext()) {
-			final Object obj = itr.next();
-			if (obj instanceof RowData) {
-				final RowData rowData = (RowData) obj;
-				final LoadSlot load = rowData.getLoadSlot();
-				if (load != null && load.getCargo() == null) {
-					slots.add(load);
-					break;
-				}
-				final DischargeSlot discharge = rowData.getDischargeSlot();
-				if (discharge != null && discharge.getCargo() == null) {
-					slots.add(discharge);
-					break;
+		{
+			final List<Slot> slots = new LinkedList<>();
+			final Iterator<?> itr = selection.iterator();
+			while (itr.hasNext()) {
+				final Object obj = itr.next();
+				if (obj instanceof RowData) {
+					final RowData rowData = (RowData) obj;
+					final LoadSlot load = rowData.getLoadSlot();
+					if (load != null && load.getCargo() == null) {
+						slots.add(load);
+						break;
+					}
+					final DischargeSlot discharge = rowData.getDischargeSlot();
+					if (discharge != null && discharge.getCargo() == null) {
+						slots.add(discharge);
+						break;
+					}
 				}
 			}
-		}
 
-		if (slots.size() > 0) {
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
-			menuManager.add(action);
-			return;
+			if (slots.size() > 0) {
+				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+				for (Slot slot : slots) {
+					if (slot.isLocked()) {
+						action.setEnabled(false);
+						action.setText(action.getText() + " (Kept open)");
+						break;
+					}
+				}
+				menuManager.add(action);
+
+				return;
+			}
+		}
+		{
+			final Set<Cargo> cargoes = new LinkedHashSet<>();
+			final Iterator<?> itr = selection.iterator();
+			while (itr.hasNext()) {
+				final Object obj = itr.next();
+				if (obj instanceof RowData) {
+					final RowData rowData = (RowData) obj;
+					final LoadSlot load = rowData.getLoadSlot();
+					if (load != null && load.getCargo() != null) {
+						cargoes.add(load.getCargo());
+						break;
+					}
+					final DischargeSlot discharge = rowData.getDischargeSlot();
+					if (discharge != null && discharge.getCargo() != null) {
+						cargoes.add(discharge.getCargo());
+						break;
+					}
+				}
+			}
+
+			if (cargoes.size() == 1) {
+				List<Slot> slots = cargoes.iterator().next().getSortedSlots();
+				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+
+				for (Slot slot : slots) {
+					if (slot.isLocked()) {
+						action.setEnabled(false);
+						action.setText(action.getText() + " (Kept open)");
+						break;
+					}
+				}
+				for (Cargo cargo : cargoes) {
+					if (cargo.isLocked()) {
+						action.setEnabled(false);
+						action.setText(action.getText() + " (Locked)");
+						break;
+					}
+				}
+				menuManager.add(action);
+
+				return;
+			}
 		}
 	}
 
@@ -137,7 +216,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			try {
 				duplicate = original.getScenarioService().duplicate(original, original);
 
-				duplicate.setName(this.getText());
+				duplicate.setName(generateActionName(originalTargetSlots));
 
 				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
@@ -158,9 +237,15 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
-//						 Period is not valid yet
-//						userSettings.unsetPeriodStart();
-//						userSettings.unsetPeriodEnd();
+						// Reset settings not supplied to the user
+						userSettings.setShippingOnly(false);
+						userSettings.setBuildActionSets(false);
+						userSettings.setCleanStateOptimisation(false);
+						userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+						// Period is not valid yet
+						// userSettings.unsetPeriodStart();
+						// userSettings.unsetPeriodEnd();
 
 						final ScenarioLock scenarioLock = duplicate.getLock(ScenarioLock.OPTIMISER);
 						if (scenarioLock.awaitClaim()) {
@@ -199,7 +284,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 									public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
 										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-											
+
 											scenarioLock.release();
 											try {
 												duplicate.save();
@@ -207,23 +292,26 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
-											
-
-											jobManager.removeJob(finalJob);
 
 											if (newState == EJobState.COMPLETED) {
-												SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
-												if (plan != null) {
-													// Forces editor lock to disallow users from editing the scenario.
-													// TODO: This is not a very clean way to do it!
-													final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
-													lock.claim();
-													duplicate.setReadonly(true);
+												try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension:2")) {
+													SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
+													if (plan != null) {
+														// Forces editor lock to disallow users from editing the scenario.
+														// TODO: This is not a very clean way to do it!
+														// final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
+														// lock.claim();
+														duplicate.setReadonly(true);
 
-													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-													eventBroker.post(ChangeSetViewCreatorService_Topic, new AnalyticsSolution(duplicate, plan, generateName(plan)));
+														final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+														AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+														data.setCreateInsertionOptions(true);
+														eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+													}
 												}
 											}
+
+											jobManager.removeJob(finalJob);
 
 											return false;
 										}

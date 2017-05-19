@@ -93,6 +93,10 @@ public class CustomScenarioCreator {
 
 	private final ScenarioModelBuilder scenarioModelBuilder;
 
+	public ScenarioModelBuilder getScenarioModelBuilder() {
+		return scenarioModelBuilder;
+	}
+
 	final SalesContract sc;
 	final PurchaseContract pc;
 	final LegalEntity contractEntity;
