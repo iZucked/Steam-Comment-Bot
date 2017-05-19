@@ -55,6 +55,7 @@ public class RouteItemProvider
 			addRouteOptionPropertyDescriptor(object);
 			addCanalPropertyDescriptor(object);
 			addRoutingOptionsPropertyDescriptor(object);
+			addEntryPointsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -143,6 +144,28 @@ public class RouteItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entry Points feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntryPointsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Route_entryPoints_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Route_entryPoints_feature", "_UI_Route_type"),
+				 PortPackage.Literals.ROUTE__ENTRY_POINTS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

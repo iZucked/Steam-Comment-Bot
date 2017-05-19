@@ -74,6 +74,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 			case PortPackage.CAPABILITY_GROUP: return createCapabilityGroup();
 			case PortPackage.LOCATION: return createLocation();
 			case PortPackage.PORT_COUNTRY_GROUP: return createPortCountryGroup();
+			case PortPackage.ENTRY_POINT: return createEntryPoint();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -187,6 +188,16 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	public PortCountryGroup createPortCountryGroup() {
 		PortCountryGroupImpl portCountryGroup = new PortCountryGroupImpl();
 		return portCountryGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntryPoint createEntryPoint() {
+		EntryPointImpl entryPoint = new EntryPointImpl();
+		return entryPoint;
 	}
 
 	/**

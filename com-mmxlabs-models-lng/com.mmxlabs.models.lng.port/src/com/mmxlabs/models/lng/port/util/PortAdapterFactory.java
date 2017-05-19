@@ -115,6 +115,10 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createPortCountryGroupAdapter();
 			}
 			@Override
+			public Adapter caseEntryPoint(EntryPoint object) {
+				return createEntryPointAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -267,6 +271,20 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortCountryGroupAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.port.EntryPoint <em>Entry Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.port.EntryPoint
+	 * @generated
+	 */
+	public Adapter createEntryPointAdapter() {
 		return null;
 	}
 

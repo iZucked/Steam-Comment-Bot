@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
@@ -88,6 +89,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass portCountryGroupEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass entryPointEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -390,6 +398,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getRoute_EntryPoints() {
+		return (EReference)routeEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortGroup() {
 		return portGroupEClass;
 	}
@@ -570,6 +587,24 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getEntryPoint() {
+		return entryPointEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEntryPoint_Port() {
+		return (EReference)entryPointEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getRouteOption() {
 		return routeOptionEEnum;
 	}
@@ -628,6 +663,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(routeEClass, ROUTE__ROUTE_OPTION);
 		createEAttribute(routeEClass, ROUTE__CANAL);
 		createEAttribute(routeEClass, ROUTE__ROUTING_OPTIONS);
+		createEReference(routeEClass, ROUTE__ENTRY_POINTS);
 
 		portGroupEClass = createEClass(PORT_GROUP);
 		createEReference(portGroupEClass, PORT_GROUP__CONTENTS);
@@ -654,6 +690,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(locationEClass, LOCATION__LON);
 
 		portCountryGroupEClass = createEClass(PORT_COUNTRY_GROUP);
+
+		entryPointEClass = createEClass(ENTRY_POINT);
+		createEReference(entryPointEClass, ENTRY_POINT__PORT);
 
 		// Create enums
 		routeOptionEEnum = createEEnum(ROUTE_OPTION);
@@ -715,6 +754,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		portCountryGroupEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(theMMXCorePackage.getNamedObject());
 		portCountryGroupEClass.getEGenericSuperTypes().add(g1);
+		entryPointEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -743,6 +783,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getRoute_RouteOption(), this.getRouteOption(), "routeOption", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_Canal(), ecorePackage.getEBoolean(), "canal", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_RoutingOptions(), ecorePackage.getEString(), "routingOptions", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRoute_EntryPoints(), this.getEntryPoint(), null, "entryPoints", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portGroupEClass, PortGroup.class, "PortGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -774,6 +815,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getLocation_Lon(), ecorePackage.getEDouble(), "lon", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portCountryGroupEClass, PortCountryGroup.class, "PortCountryGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(entryPointEClass, EntryPoint.class, "EntryPoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEntryPoint_Port(), this.getPort(), null, "port", null, 0, 1, EntryPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(routeOptionEEnum, RouteOption.class, "RouteOption");
@@ -899,6 +943,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source, 
 		   new String[] {
 			 "namePrefix", "CapGroup"
+		   });	
+		addAnnotation
+		  (portCountryGroupEClass, 
+		   source, 
+		   new String[] {
+			 "namePrefix", "CountryGroup"
 		   });
 	}
 

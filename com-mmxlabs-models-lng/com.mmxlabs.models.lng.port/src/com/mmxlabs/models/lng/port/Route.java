@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRoutingOptions <em>Routing Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getEntryPoints <em>Entry Points</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getRoute()
@@ -115,5 +116,21 @@ public interface Route extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	EList<String> getRoutingOptions();
+
+	/**
+	 * Returns the value of the '<em><b>Entry Points</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.EntryPoint}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entry Points</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entry Points</em>' reference list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_EntryPoints()
+	 * @model
+	 * @generated
+	 */
+	EList<EntryPoint> getEntryPoints();
 
 } // Route

@@ -272,6 +272,29 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.EntryPoint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntryPointItemProvider entryPointItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.EntryPoint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntryPointAdapter() {
+		if (entryPointItemProvider == null) {
+			entryPointItemProvider = new EntryPointItemProvider(this);
+		}
+
+		return entryPointItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -405,6 +428,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (capabilityGroupItemProvider != null) capabilityGroupItemProvider.dispose();
 		if (locationItemProvider != null) locationItemProvider.dispose();
 		if (portCountryGroupItemProvider != null) portCountryGroupItemProvider.dispose();
+		if (entryPointItemProvider != null) entryPointItemProvider.dispose();
 	}
 
 }

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
+import com.mmxlabs.models.lng.port.EntryPoint;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getEntryPoints <em>Entry Points</em>}</li>
  * </ul>
  *
  * @generated
@@ -121,6 +124,16 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * @ordered
 	 */
 	protected EList<String> routingOptions;
+
+	/**
+	 * The cached value of the '{@link #getEntryPoints() <em>Entry Points</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntryPoints()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<EntryPoint> entryPoints;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -233,6 +246,18 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<EntryPoint> getEntryPoints() {
+		if (entryPoints == null) {
+			entryPoints = new EObjectResolvingEList<EntryPoint>(EntryPoint.class, this, PortPackage.ROUTE__ENTRY_POINTS);
+		}
+		return entryPoints;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -260,6 +285,8 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return isCanal();
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				return getRoutingOptions();
+			case PortPackage.ROUTE__ENTRY_POINTS:
+				return getEntryPoints();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -290,6 +317,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				getRoutingOptions().clear();
 				getRoutingOptions().addAll((Collection<? extends String>)newValue);
 				return;
+			case PortPackage.ROUTE__ENTRY_POINTS:
+				getEntryPoints().clear();
+				getEntryPoints().addAll((Collection<? extends EntryPoint>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -317,6 +348,9 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				getRoutingOptions().clear();
 				return;
+			case PortPackage.ROUTE__ENTRY_POINTS:
+				getEntryPoints().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -339,6 +373,8 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return canal != CANAL_EDEFAULT;
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				return routingOptions != null && !routingOptions.isEmpty();
+			case PortPackage.ROUTE__ENTRY_POINTS:
+				return entryPoints != null && !entryPoints.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
