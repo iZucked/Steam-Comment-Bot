@@ -53,8 +53,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -62,7 +62,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
@@ -129,7 +129,7 @@ public final class VoyagePlannerTest {
 		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor();
 		durationsProvider.setDefaultValue(duration);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor();
+		final IElementPortProviderEditor portProvider = new HashMapElementPortEditor();
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
 		portProvider.setPortForElement(port3, element3);
@@ -177,7 +177,7 @@ public final class VoyagePlannerTest {
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
 				bind(IElementDurationProvider.class).toInstance(durationsProvider);
-				bind(IPortProvider.class).toInstance(portProvider);
+				bind(IElementPortProvider.class).toInstance(portProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);

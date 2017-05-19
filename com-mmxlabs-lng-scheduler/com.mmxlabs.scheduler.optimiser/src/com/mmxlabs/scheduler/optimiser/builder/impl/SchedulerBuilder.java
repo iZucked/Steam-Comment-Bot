@@ -18,7 +18,6 @@ import java.util.OptionalInt;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,10 +36,8 @@ import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComp
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -69,7 +66,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -102,7 +98,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -114,16 +109,15 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
@@ -141,6 +135,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEdi
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
  * Implementation of {@link ISchedulerBuilder}
@@ -197,8 +192,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	private IPort ANYWHERE;
 
-	@NonNull
-	private final List<IPort> ports = new LinkedList<IPort>();
+	// @NonNull
+	// private final List<IPort> ports = new LinkedList<IPort>();
 
 	/**
 	 * A field for tracking the time at which the last time window closes
@@ -248,7 +243,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	@NonNull
-	private IPortProviderEditor portProvider;
+	private IPortProvider portProvider;
+
+	@Inject
+	@NonNull
+	private IElementPortProviderEditor elementPortProvider;
 
 	@Inject
 	@NonNull
@@ -256,11 +255,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	@NonNull
-	private IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
+	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
 
 	@Inject
 	@NonNull
-	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	private IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
 
 	@Inject
 	@NonNull
@@ -343,10 +342,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	@NonNull
-	private Provider<IMatrixEditor<IPort, Integer>> matrixEditorProvider;
-
-	@Inject
-	@NonNull
 	private ISlotGroupCountProviderEditor slotGroupCountProvider;
 
 	@Inject
@@ -423,7 +418,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
-		indexingContext.registerType(Port.class);
 		indexingContext.registerType(Resource.class);
 	}
 
@@ -431,16 +425,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	public void init() {
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", false, new ICooldownCalculator() {
-			@Override
-			public void prepareEvaluation(final ISequences sequences) {
-			}
-
-			@Override
-			public long calculateCooldownCost(final IVesselClass vesselClass, final IPort port, final int cv, final int time) {
-				return 0;
-			}
-		}, "UTC"/* no timezone */);
+		ANYWHERE = portProvider.getAnywherePort();
 
 		// setup fake vessels for virtual elements.
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), 0, 0, 0, 0, false);
@@ -453,10 +438,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public ILoadSlot createLoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
 			final ILoadPriceCalculator loadContract, final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final int pricingDate,
 			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
-
-		if (!ports.contains(port)) {
-			throw new IllegalArgumentException("IPort was not created by this builder");
-		}
 
 		final LoadSlot slot = new LoadSlot(id, port, window, isVolumeLimitInM3, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, cooldownSet, cooldownForbidden);
 
@@ -517,7 +498,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		sequenceElements.add(element);
 
 		// Register the port with the element
-		portProvider.setPortForElement(slot.getPort(), element);
+		elementPortProvider.setPortForElement(slot.getPort(), element);
 
 		portTypeProvider.setPortType(element, PortType.Load);
 
@@ -585,7 +566,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		sequenceElements.add(element);
 
 		// Register the port with the element
-		portProvider.setPortForElement(slot.getPort(), element);
+		elementPortProvider.setPortForElement(slot.getPort(), element);
 
 		portSlotsProvider.setPortSlot(element, slot);
 
@@ -605,9 +586,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IDischargeSlot createDischargeSlot(final String id, @NonNull final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final long minCvValue,
 			final long maxCvValue, final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final int pricingDate, final PricingEventType pricingEvent, final boolean optional,
 			final boolean isLockedSlot, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
-		if (!ports.contains(port)) {
-			throw new IllegalArgumentException("IPort was not created by this builder");
-		}
 
 		final DischargeSlot slot = new DischargeSlot(id, port, window, isVolumeLimitInM3, minVolumeInM3, maxVolumeInM3, pricePerMMBTu, minCvValue, maxCvValue);
 		slot.setPricingDate(pricingDate);
@@ -653,23 +631,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return cargo;
 	}
 
-	@Override
-	@NonNull
-	public IPort createPort(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId) {
-
-		final Port port = new Port(indexingContext);
-		buildPort(port, name, arriveCold, cooldownCalculator, timezoneId);
-		return port;
-	}
-
-	/**
-	 * Convenience function only used for testing
-	 */
-	public IPort createPortForTest(@NonNull final String string, final boolean b, @Nullable final ICooldownCalculator object, @NonNull final String string2) {
-
-		return createPort(string, b, object, string2);
-	}
-
 	/**
 	 * Create the return elements for each port/resource combination
 	 */
@@ -678,7 +639,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			assert resource != null;
 			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 			assert endRequirement != null;
-			for (final IPort port : ports) {
+			for (final IPort port : portProvider.getAllPorts()) {
 				assert port != null;
 				returnElementProvider.setReturnElement(resource, port, createReturnElement(resource, port, endRequirement));
 			}
@@ -693,7 +654,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		elementDurationsProvider.setElementDuration(element, 0);
 
-		portProvider.setPortForElement(port, element);
+		elementPortProvider.setPortForElement(port, element);
 		portSlotsProvider.setPortSlot(element, endPortSlot);
 		// Return elements are always end elements?
 		portTypeProvider.setPortType(element, PortType.End);
@@ -722,52 +683,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return element;
 	}
 
-	@Override
-	@NonNull
-	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final float x, final float y, final String timezoneId) {
-
-		final XYPort port = new XYPort(indexingContext);
-		buildPort(port, name, arriveCold, cooldownCalculator, timezoneId);
-		port.setX(x);
-		port.setY(y);
-
-		return port;
-	}
-
-	/**
-	 * Convenience function only used for testing
-	 */
-	@NonNull
-	public IXYPort createPortForTest(@NonNull final String name, final boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator, final float x, final float y,
-			@NonNull final String timezoneId) {
-
-		return createPort(name, arriveCold, cooldownCalculator, x, y, timezoneId);
-	}
-
 	/**
 	 * Method to set common properties etc for {@link Port} implementations.
 	 * 
 	 * @param port
-	 * @param name
 	 * @param arriveCold
 	 * @param cooldownCalculator
-	 * @param timezoneId
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId) {
-
-		port.setName(name);
-		port.setTimeZoneId(timezoneId);
-		ports.add(port);
-
-		// Pin variable for null analysis...
-		final IPort localANYWHERE = ANYWHERE;
-		if (localANYWHERE != null) {
-			setPortToPortDistance(port, localANYWHERE, ERouteOption.DIRECT, 0);
-			setPortToPortDistance(localANYWHERE, port, ERouteOption.DIRECT, 0);
-		}
-
-		// travel time from A to A should be zero, right?
-		this.setPortToPortDistance(port, port, ERouteOption.DIRECT, 0);
+	@Override
+	public void setPortCooldownData(@NonNull final IPort port, final boolean arriveCold, final ICooldownCalculator cooldownCalculator) {
 
 		cooldownDataProvider.setShouldVesselsArriveCold(port, arriveCold);
 		cooldownDataProvider.setCooldownCalculator(port, cooldownCalculator);
@@ -924,8 +848,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
 		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
 
-		portProvider.setPortForElement(startSlot.getPort(), startElement);
-		portProvider.setPortForElement(endSlot.getPort(), endElement);
+		elementPortProvider.setPortForElement(startSlot.getPort(), startElement);
+		elementPortProvider.setPortForElement(endSlot.getPort(), endElement);
 
 		portTypeProvider.setPortType(startElement, PortType.Start);
 		portTypeProvider.setPortType(endElement, PortType.End);
@@ -980,28 +904,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
-	@Override
-	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final ERouteOption route, final int distance) {
-
-		if (!ports.contains(from)) {
-			throw new IllegalArgumentException("From IPort was not created using this builder");
-		}
-		if (!ports.contains(to)) {
-			throw new IllegalArgumentException("To IPort was not created using this builder");
-		}
-
-		if (portDistanceProvider.containsKey(route.name()) == false) {
-			/*
-			 * This route has not previously been added to the PDP; initialise a blank matrix here?
-			 */
-			portDistanceProvider.set(route.name(), matrixEditorProvider.get());
-		}
-
-		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route.name());
-
-		matrix.set(from, to, distance);
-	}
-
 	/**
 	 */
 	@Override
@@ -1039,8 +941,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		createReturnElements();
 
 		createRoundtripCargoReturnElements();
-
-		portDistanceProvider.cacheExtremalValues(ports);
 
 		// Patch up end time windows
 		// The return time should be the soonest we can get back to the previous load,
@@ -1226,7 +1126,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 				elementDurationsProvider.setElementDuration(returnElement, 0);
 
-				portProvider.setPortForElement(port, returnElement);
+				elementPortProvider.setPortForElement(port, returnElement);
 				portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
 				portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
 
@@ -1261,7 +1161,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		realVesselAvailabilities.clear();
 		vesselAvailabilities.clear();
 		cargoes.clear();
-		ports.clear();
 
 		for (final IBuilderExtension extension : extensions) {
 			extension.dispose();
@@ -1417,9 +1316,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portTypeProvider.setPortType(redirectElement, redirectSlot.getPortType());
 			portTypeProvider.setPortType(endElement, endSlot.getPortType());
 
-			portProvider.setPortForElement(startSlot.getPort(), startElement);
-			portProvider.setPortForElement(redirectSlot.getPort(), redirectElement);
-			portProvider.setPortForElement(endSlot.getPort(), endElement);
+			elementPortProvider.setPortForElement(startSlot.getPort(), startElement);
+			elementPortProvider.setPortForElement(redirectSlot.getPort(), redirectElement);
+			elementPortProvider.setPortForElement(endSlot.getPort(), endElement);
 
 			sequenceElements.add(startElement);
 			sequenceElements.add(redirectElement);
@@ -1455,7 +1354,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			portTypeProvider.setPortType(endElement, slot.getPortType());
 			elementDurationsProvider.setElementDuration(endElement, durationHours);
 			portSlotsProvider.setPortSlot(endElement, slot);
-			portProvider.setPortForElement(slot.getPort(), endElement);
+			elementPortProvider.setPortForElement(slot.getPort(), endElement);
 			return slot;
 		}
 	}
@@ -1520,7 +1419,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		portSlotsProvider.setPortSlot(endElement, slot);
 
-		portProvider.setPortForElement(slot.getPort(), endElement);
+		elementPortProvider.setPortForElement(slot.getPort(), endElement);
 	}
 
 	@Override

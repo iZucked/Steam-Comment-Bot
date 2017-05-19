@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public interface IPortProvider extends IDataComponentProvider {
+public interface IElementPortProvider extends IDataComponentProvider {
 
 	@NonNull IPort getPortForElement(@NonNull ISequenceElement element);
 }

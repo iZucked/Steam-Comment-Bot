@@ -18,10 +18,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.name.Named;
-import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -37,12 +36,14 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator.MoveResult;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 @NonNullByDefault
 public class SlotInsertionOptimiser {
+
 	protected static final Logger LOG = LoggerFactory.getLogger(SlotInsertionOptimiser.class);
 
 	private List<IPairwiseConstraintChecker> constraintCheckers = new LinkedList<>();
@@ -60,6 +61,11 @@ public class SlotInsertionOptimiser {
 	private SequencesHelper sequencesHelper;
 
 	@Inject
+	private IMoveHandlerHelper moveHandlerHelper;
+	@Inject
+	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
 		for (final IConstraintChecker checker : injectedConstraintCheckers) {
@@ -73,25 +79,48 @@ public class SlotInsertionOptimiser {
 		}
 	}
 
-	private @Nullable Pair<ISequences, Long> insert(final ISequences initialRawSequences, final int seed, final List<ISequenceElement> slots) {
+	private @Nullable Pair<ISequences, Long> insert(SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> slots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 
-		// TODO: Calculate this once!, not each search step
-
-		final long[] initialMetrics;
-		{
-			@NonNull
-			final IModifiableSequences initialfullSequences = manipulator.createManipulatedSequences(initialRawSequences);
-
-			initialMetrics = evaluationHelper.evaluateState(initialRawSequences, initialfullSequences, null, null, null);
-
-			// Set to max value as this is not a concern for us
-			// initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = Integer.MAX_VALUE;
-		}
 		final GuidedMoveGenerator mg = injector.getInstance(GuidedMoveGenerator.class);
 
-		ISequences currentSequences = initialRawSequences;
+		ISequences currentSequences = state.startingPointRawSequences;
+
+		// // Makes sure target slots are not contained in the solution.
+		// {
+		// final IModifiableSequences tmp = new ModifiableSequences(currentSequences);
+		//
+		// for (final ISequenceElement e : tmp.getUnusedElements()) {
+		// if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
+		// initiallyUnused.add(e);
+		// }
+		//
+		// }
+		//
+		// for (final ISequenceElement slot : slots) {
+		// final LookupManager lookupManager = new LookupManager(tmp);
+		// final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(slot);
+		// if (lookup != null && lookup.getFirst() != null) {
+		// @NonNull
+		// final IModifiableSequence modifiableSequence = tmp.getModifiableSequence(lookup.getFirst());
+		// @NonNull
+		// final List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, slot);
+		// for (final ISequenceElement e : segment) {
+		// modifiableSequence.remove(e);
+		// tmp.getModifiableUnusedElements().add(e);
+		// }
+		// }
+		// }
+		// currentSequences = tmp;
+		// }
+
+		final long[] initialMetrics = state.initialMetrics;
+		{
+			// Prepare the initial constraint state.
+			evaluationHelper.checkConstraints(manipulator.createManipulatedSequences(currentSequences), null);
+		}
+
 		long currentPNL = 0L;
 		for (final ISequenceElement slot : slots) {
 			if (!currentSequences.getUnusedElements().contains(slot)) {
@@ -152,32 +181,51 @@ public class SlotInsertionOptimiser {
 
 		if (true) {
 
+			// Try and remove any hitch-hikers that may have arisen during the search.
 			@NonNull
-			ISequences simpleSeq = sequencesHelper.undoUnrelatedChanges(initialRawSequences, currentSequences, slots);
+			final ISequences simpleSeq = sequencesHelper.undoUnrelatedChanges(state.originalRawSequences, currentSequences, slots);
+
+			{
+				// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
+				for (final ISequenceElement slot : slots) {
+					if (optionalElementsProvider.isElementRequired(slot) || optionalElementsProvider.getSoftRequiredElements().contains(slot)) {
+						if (simpleSeq.getUnusedElements().contains(slot)) {
+							System.out.println("Generated move does not include target element");
+							return null;
+						}
+					}
+				}
+			}
+			{
+				// Make sure we have not swapped unused, compulsory elements
+				for (final ISequenceElement e : simpleSeq.getUnusedElements()) {
+					if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
+						if (!state.initiallyUnused.contains(e)) {
+							System.out.println("New required element is in  unused list");
+							return null;
+						}
+					}
+
+				}
+			}
 
 			@NonNull
 			final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
 
 			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, null, null);
 
-			// Set to max value as this is not a concern for us
-			// initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = Integer.MAX_VALUE;
-
 			return new Pair<>(simpleSeq, metrics[MetricType.PNL.ordinal()]);
 
 		} else {
-
 			return new Pair<>(currentSequences, currentPNL);
 		}
 	}
 
-	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final int seed) {
-
-		final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
+	public @Nullable Pair<ISequences, Long> generate(final List<IPortSlot> portSlots, final SlotInsertionOptimiserInitialState state, final int seed) {
 
 		final List<ISequenceElement> elements = portSlots.stream() //
 				.map(s -> portSlotProvider.getElement(s)) //
 				.collect(Collectors.toList());
-		return insert(initialRawSequences, seed, elements);
+		return insert(state, seed, elements);
 	}
 }

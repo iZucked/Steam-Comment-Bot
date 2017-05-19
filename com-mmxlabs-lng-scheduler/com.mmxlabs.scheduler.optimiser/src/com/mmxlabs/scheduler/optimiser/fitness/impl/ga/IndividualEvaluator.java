@@ -26,7 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -55,7 +55,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
-	private IPortProvider portProvider;
+	private IElementPortProvider portProvider;
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
@@ -525,11 +525,11 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		this.vesselProvider = vesselProvider;
 	}
 
-	public IPortProvider getPortProvider() {
+	public IElementPortProvider getPortProvider() {
 		return portProvider;
 	}
 
-	public void setPortProvider(final IPortProvider portProvider) {
+	public void setPortProvider(final IElementPortProvider portProvider) {
 		this.portProvider = portProvider;
 	}
 

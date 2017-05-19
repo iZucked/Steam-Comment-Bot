@@ -32,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
@@ -90,7 +90,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	private IPortProvider portProvider;
+	private IElementPortProvider portProvider;
 
 	private final Map<IResource, EndLocationRule> ruleMap = new HashMap<IResource, EndLocationSequenceManipulator.EndLocationRule>();
 

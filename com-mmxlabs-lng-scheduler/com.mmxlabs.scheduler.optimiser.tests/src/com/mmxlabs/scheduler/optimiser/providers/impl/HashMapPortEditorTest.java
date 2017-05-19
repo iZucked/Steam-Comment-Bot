@@ -16,7 +16,7 @@ public class HashMapPortEditorTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetSetPortForElement1() {
 
-		final HashMapPortEditor editor = new HashMapPortEditor();
+		final HashMapElementPortEditor editor = new HashMapElementPortEditor();
 
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 
@@ -27,7 +27,7 @@ public class HashMapPortEditorTest {
 	@Test
 	public void testGetSetPortForElement2() {
 
-		final HashMapPortEditor editor = new HashMapPortEditor();
+		final HashMapElementPortEditor editor = new HashMapElementPortEditor();
 
 		final IPort port = Mockito.mock(IPort.class);
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);

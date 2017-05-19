@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 @NonNullByDefault
@@ -38,6 +39,9 @@ public class SequencesHelper {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private ISpotMarketSlotsProvider spotMarketSlotsProvider;
 
 	public ISequences undoUnrelatedChanges(final ISequences source, final ISequences target, final Collection<ISequenceElement> initialElements) {
 
@@ -65,22 +69,38 @@ public class SequencesHelper {
 			final ISequenceElement e = queue.remove(0);
 			seen.add(e);
 
+			// Skip spot slots to avoid unnecessary link ups. It will be included by dependent changes if need be.
+			if (spotMarketSlotsProvider.isSpotMarketSlot(e)) {
+				continue;
+			}
+
+			// Find original position of element
 			@Nullable
 			final Pair<@Nullable IResource, Integer> a = sourceLookup.lookup(e);
 
+			// Is the element in the sequence?
 			if (a != null && a.getFirst() != null) {
 				final IResource r = a.getFirst();
 				assert r != null;
+
+				// Pull out the whole cargo
 				final List<ISequenceElement> seg = moveHandlerHelper.extractSegment(source.getSequence(r), e);
+
+				// Add all the elements of the cargo to the queue.
 				queue.addAll(seg);
+
 				if (isSequencedResource(r)) {
+					// Add every element in this resource to the queue. We cannot determine whether or not they really are linked, so assume linked change.
 					Iterables.addAll(queue, source.getSequence(r));
+					// Mark resource as one to replace
 					seenResource.add(r);
 				} else {
 					assert isNominalResource(r);
 
+					// Nominal cargo, just remove the cargo if it has moved from the nominal.
+					// Note: We assume nominal cargoes are fixed pairing (on the nominal) and can only be assigned to one nominal vessel instance
 					final Pair<@Nullable IResource, Integer> b = targetLookup.lookup(e);
-					if (b.getFirst() != null) {
+					if (b != null && b.getFirst() != null) {
 						final IResource rb = b.getFirst();
 						if (rb != r) {
 							evictedElements.addAll(seg);
@@ -94,17 +114,21 @@ public class SequencesHelper {
 				}
 			}
 
+			// Is the element in the target sequence?
 			final Pair<@Nullable IResource, Integer> b = targetLookup.lookup(e);
 			if (b != null && b.getFirst() != null) {
 				final IResource r = b.getFirst();
 				assert r != null;
+				// Extract the new cargo paring
 				final List<ISequenceElement> seg = moveHandlerHelper.extractSegment(target.getSequence(r), e);
 				queue.addAll(seg);
 				if (isSequencedResource(r)) {
+					// Add in the new resource.
 					Iterables.addAll(queue, target.getSequence(r));
 					seenResource.add(r);
 				} else {
 					assert isNominalResource(r);
+					// If it is nominal in the target, then it must have been so in the source and thus no change.
 				}
 			}
 

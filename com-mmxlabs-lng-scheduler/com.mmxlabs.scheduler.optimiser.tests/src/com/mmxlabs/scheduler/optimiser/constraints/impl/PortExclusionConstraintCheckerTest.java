@@ -26,12 +26,12 @@ import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
@@ -50,7 +50,7 @@ public class PortExclusionConstraintCheckerTest {
 	public void testConstraint() {
 		//
 		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider();
-		final IPortProviderEditor portProvider = new HashMapPortEditor();
+		final IElementPortProviderEditor portProvider = new HashMapElementPortEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final INominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor();
 
@@ -106,7 +106,7 @@ public class PortExclusionConstraintCheckerTest {
 	public void testConstraintNominatedVessel() {
 		//
 		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider();
-		final IPortProviderEditor portProvider = new HashMapPortEditor();
+		final IElementPortProviderEditor portProvider = new HashMapElementPortEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final INominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor();
 
@@ -164,13 +164,13 @@ public class PortExclusionConstraintCheckerTest {
 	@SuppressWarnings("null")
 	@NonNull
 	private PortExclusionConstraintChecker createChecker(@NonNull final String name, @NonNull final IVesselProvider vesselProvider, @NonNull final INominatedVesselProvider nominatedVesselProvider,
-			@NonNull final IPortProvider portProvider, final IPortExclusionProvider portExclusionProvider) {
+			@NonNull final IElementPortProvider portProvider, final IPortExclusionProvider portExclusionProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(IVesselProvider.class).toInstance(vesselProvider);
-				bind(IPortProvider.class).toInstance(portProvider);
+				bind(IElementPortProvider.class).toInstance(portProvider);
 				bind(IPortExclusionProvider.class).toInstance(portExclusionProvider);
 				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
 			}

@@ -33,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -68,6 +68,11 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	 * 
 	 */
 	protected int[][] arrivalTimes;
+
+	/**
+	 * Flag indicating a round trip end element. The next element should be considered to be the start of a sequence. (E.g. for the DirectRandomSequenceScheduler it should reset the seed).
+	 */
+	protected boolean[][] isRoundTripEnd;
 	/**
 	 * The start times of each window, appropriately `clipped' to deal with infeasible choices or null time windows.
 	 */
@@ -142,7 +147,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	private IPortProvider portProvider;
+	private IElementPortProvider portProvider;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -181,6 +186,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		// if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 		arrivalTimes = new int[size][];
 		windowStartTime = new int[size][];
+		isRoundTripEnd = new boolean[size][];
 		windowEndTime = new int[size][];
 		minTimeToNextElement = new int[size][];
 		maxTimeToNextElement = new int[size][];
@@ -443,6 +449,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 		final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
 		final boolean[] actualisedTimeWindow = this.actualisedTimeWindow[sequenceIndex];
+		final boolean[] isRoundTripEnd = this.isRoundTripEnd[sequenceIndex];
 
 		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
 
@@ -532,7 +539,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
-
+			
+			isRoundTripEnd[index] = false;
 			if (breakSequence[index]) {
 				// last slot in plan, set return
 				portTimeWindowsRecord.setReturnSlot(thisPortSlot, null, visitDuration, index);
@@ -543,6 +551,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 					portTimeWindowsRecord = new PortTimeWindowsRecord();
 					portTimeWindowsRecord.setResource(resource);
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+				} else {
+					isRoundTripEnd[index] = true;
 				}
 			} else {
 				if (!(prevPortSlot instanceof RoundTripCargoEnd)) {
@@ -551,6 +561,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 					portTimeWindowsRecord = new PortTimeWindowsRecord();
 					portTimeWindowsRecord.setResource(resource);
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+					isRoundTripEnd[index] = true;
 				}
 			}
 
@@ -779,6 +790,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		resize(isVirtual, sequenceIndex, size);
 		resize(useTimeWindow, sequenceIndex, size);
 		resize(actualisedTimeWindow, sequenceIndex, size);
+		resize(isRoundTripEnd, sequenceIndex, size);
 
 		sizes[sequenceIndex] = size;
 	}

@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -36,7 +36,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public final class SimpleSequenceScheduler implements ISequenceScheduler {
 
 	@Inject
-	private IPortProvider portProvider;
+	private IElementPortProvider portProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
