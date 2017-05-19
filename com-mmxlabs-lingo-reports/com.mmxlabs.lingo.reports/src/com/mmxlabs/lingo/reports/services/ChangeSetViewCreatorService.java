@@ -148,8 +148,7 @@ public class ChangeSetViewCreatorService {
 					item.setVisible(true);
 					toolbar.getChildren().add(item);
 				}
-				
-				
+
 				if (solution.isCreateDiffToBaseAction()) {
 					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.comparetobase");
@@ -167,6 +166,7 @@ public class ChangeSetViewCreatorService {
 				if (solution.isCreateInsertionOptions()) {
 
 					final MMenu menu = modelService.createModelElement(MMenu.class);
+					menu.setElementId(viewPartId + ".directtoolitem.filter_menu.menu");
 					menu.setEnabled(true);
 					menu.setToBeRendered(true);
 					menu.setVisible(true);
@@ -229,15 +229,7 @@ public class ChangeSetViewCreatorService {
 						item.setEnabled(true);
 						item.setToBeRendered(true);
 						item.setVisible(true);
-						// item.setSelected(true);
 						menu.getChildren().add(item);
-
-						// final MMenu menu2 = modelService.createModelElement(MMenu.class);
-						// menu2.setEnabled(true);
-						// menu2.setToBeRendered(true);
-						//// menu2.setVisible(true);
-						//
-						// item.setMenu(menu2);
 					}
 				} else {
 					{
@@ -254,10 +246,10 @@ public class ChangeSetViewCreatorService {
 						toolbar.getChildren().add(item);
 					}
 				}
-			
 
 				if (solution.isCreateInsertionOptions()) {
 					final MMenu menu = modelService.createModelElement(MMenu.class);
+					menu.setElementId(viewPartId + ".directtoolitem.groupby_menu.menu");
 					menu.setEnabled(true);
 					menu.setToBeRendered(true);
 					menu.setVisible(true);

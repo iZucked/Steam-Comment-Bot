@@ -47,12 +47,14 @@ public class InsertionSelectedSlotHandler {
 				MMenu parent;
 				{
 					final MMenu dynamicItem = modelService.createModelElement(MMenu.class);
+					dynamicItem.setElementId("focus.on");
 					dynamicItem.setLabel("Focus on...");
 					items.add(dynamicItem);
 					parent = dynamicItem;
 				}
 				for (final Slot slot : slotInsertionOptions.getSlotsInserted()) {
 					final MDirectMenuItem dynamicItem = modelService.createModelElement(MDirectMenuItem.class);
+					dynamicItem.setElementId("focus.on." + slot.getName());
 					dynamicItem.setLabel(slot.getName());
 					dynamicItem.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.SelectSlotHandler");
 					dynamicItem.getTags().add("slot-" + slot.getName());
