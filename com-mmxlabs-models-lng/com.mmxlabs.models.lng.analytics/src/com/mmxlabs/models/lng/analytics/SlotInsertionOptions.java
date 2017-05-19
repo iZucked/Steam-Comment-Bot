@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -30,7 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUniqueChildren='true'"
  * @generated
  */
-public interface SlotInsertionOptions extends EObject {
+public interface SlotInsertionOptions extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Slots Inserted</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Slot}.

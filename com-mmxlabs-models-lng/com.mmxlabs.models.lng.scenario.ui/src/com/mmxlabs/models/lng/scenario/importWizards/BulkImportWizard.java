@@ -140,6 +140,11 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		try {
 
 			for (final ScenarioInstance instance : instances) {
+				if (instance.isReadonly()) {
+					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
+					continue;
+				}
+
 				if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
 					doImportAction(importTarget, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, false);
 				} else {
@@ -153,6 +158,9 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 					break;
 				}
 			}
+		} catch (Throwable t) {
+			log.error(t.getMessage(), t);
+			allProblems.add(String.format("Uncaught exception during import. Import aborted. See error log"));
 		} finally {
 			monitor.done();
 		}

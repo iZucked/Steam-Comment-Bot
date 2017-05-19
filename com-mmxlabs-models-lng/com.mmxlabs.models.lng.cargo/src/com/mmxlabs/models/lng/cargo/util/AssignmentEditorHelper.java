@@ -231,26 +231,33 @@ public class AssignmentEditorHelper {
 	}
 
 	public static VesselAvailability findVesselAvailability(@NonNull final Vessel vessel, @NonNull final AssignableElement assignableElement,
-			@NonNull final List<VesselAvailability> vesselAvailabilities) {
+			@NonNull final List<VesselAvailability> vesselAvailabilities, @Nullable Integer charterIndex) {
 
-		int mightMatchCount = 0;
-		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-			if (vesselAvailability.getVessel() == vessel) {
-				mightMatchCount++;
-				if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
-					return vesselAvailability;
-				}
-			}
-		}
-		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple,
-		// give up.
-		if (mightMatchCount == 1) {
+//		int mightMatchCount = 0;
+//		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
+//			if (vesselAvailability.getVessel() == vessel) {
+//				mightMatchCount++;
+//				if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
+//					return vesselAvailability;
+//				}
+//			}
+//		}
+//		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple,
+//		// give up.
+//		if (mightMatchCount == 1) {
+//			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
+//				if (vesselAvailability.getVessel() == vessel) {
+//					return vesselAvailability;
+//				}
+//			}
+//		} else {
+			int idx = charterIndex == null ? 1 : charterIndex.intValue();
 			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-				if (vesselAvailability.getVessel() == vessel) {
+				if (vesselAvailability.getVessel() == vessel && vesselAvailability.getCharterNumber() == idx) {
 					return vesselAvailability;
 				}
 			}
-		}
+//		}
 
 		return null;
 	}

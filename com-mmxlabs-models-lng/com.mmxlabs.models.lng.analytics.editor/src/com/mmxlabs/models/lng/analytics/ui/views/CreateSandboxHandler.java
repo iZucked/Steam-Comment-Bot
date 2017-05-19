@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -66,7 +65,7 @@ public class CreateSandboxHandler extends AbstractHandler {
 						if (!(rootObject instanceof LNGScenarioModel)) {
 							continue;
 						}
-						
+
 						final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel((LNGScenarioModel) rootObject);
 
 						final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);

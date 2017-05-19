@@ -2299,13 +2299,31 @@ s	 * <!-- end-user-doc -->
 	int ACTIONABLE_SET_PLAN = 36;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIONABLE_SET_PLAN__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Action Sets</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__ACTION_SETS = 0;
+	int ACTIONABLE_SET_PLAN__ACTION_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -2314,7 +2332,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN__EXTRA_SLOTS = 1;
+	int ACTIONABLE_SET_PLAN__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Actionable Set Plan</em>' class.
@@ -2323,7 +2341,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIONABLE_SET_PLAN_FEATURE_COUNT = 2;
+	int ACTIONABLE_SET_PLAN_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetImpl <em>Actionable Set</em>}' class.
@@ -2364,13 +2382,31 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS = 38;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Slots Inserted</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = 0;
+	int SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Insertion Options</b></em>' containment reference list.
@@ -2379,7 +2415,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = 1;
+	int SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -2388,7 +2424,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = 2;
+	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Slot Insertion Options</em>' class.
@@ -2397,7 +2433,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = 3;
+	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl <em>Slot Insertion Option</em>}' class.

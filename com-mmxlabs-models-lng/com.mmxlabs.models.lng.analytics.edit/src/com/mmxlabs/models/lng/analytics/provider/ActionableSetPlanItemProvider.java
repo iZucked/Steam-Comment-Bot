@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,13 +41,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class ActionableSetPlanItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -122,7 +117,10 @@ public class ActionableSetPlanItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ActionableSetPlan_type");
+		String label = ((ActionableSetPlan)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_ActionableSetPlan_type") :
+			getString("_UI_ActionableSetPlan_type") + " " + label;
 	}
 	
 
@@ -181,17 +179,6 @@ public class ActionableSetPlanItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ACTIONABLE_SET_PLAN__EXTRA_SLOTS,
 				 CargoFactory.eINSTANCE.createSpotDischargeSlot()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

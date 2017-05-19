@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -42,7 +43,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class SlotInsertionOptionsImpl extends EObjectImpl implements SlotInsertionOptions {
+public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInsertionOptions {
 	/**
 	 * The cached value of the '{@link #getSlotsInserted() <em>Slots Inserted</em>}' reference list.
 	 * <!-- begin-user-doc -->

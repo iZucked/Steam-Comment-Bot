@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notifier;
@@ -97,6 +98,10 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	}
 
 	public void doSetValue(final Object object, final Object value) {
+		if (Objects.equals(getValue(object), value)) {
+			return;
+		}
+		
 		if (value instanceof SpotMarket) {
 			runSetCommand(object, (SpotMarket) value);
 			runSetCommand(object, (Contract) null);
@@ -223,7 +228,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public final void setValue(final Object object, final Object value) {
 		if (value == SetCommand.UNSET_VALUE && CargoPackage.eINSTANCE.getSlot_Contract().isUnsettable()) {

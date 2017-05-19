@@ -819,11 +819,6 @@ public class CreateStripDialog extends FormDialog {
 		return new IScenarioEditingLocation() {
 
 			@Override
-			public void setLocked(final boolean locked) {
-
-			}
-
-			@Override
 			public void setDisableUpdates(final boolean disable) {
 
 			}

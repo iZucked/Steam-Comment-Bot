@@ -308,6 +308,12 @@
           eClassName="com.mmxlabs.models.lng.cargo.VesselEvent"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          inheritable="true">
+    </classImporter>
     
  </extension>
  <extension
