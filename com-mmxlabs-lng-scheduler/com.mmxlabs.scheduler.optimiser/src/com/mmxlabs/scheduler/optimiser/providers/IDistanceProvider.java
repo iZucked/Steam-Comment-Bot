@@ -93,4 +93,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 
 	@NonNull
 	List<@NonNull ERouteOption> getRoutes();
+	
+	@NonNull
+	IPort getRouteOptionEntry(IPort port, ERouteOption routeOption);
 }

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Key;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
@@ -26,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 
@@ -45,10 +49,18 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 	
+	@Inject 
+	IPortProvider portProvider;
+	
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
 	
 	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
+	
+	private final Map<ERouteOption, Set<IPort>> routeOptionEntryPoints = new HashMap<>();
+	
+	// cache
+	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntry = new ConcurrentHashMap();
 
 	@Override
 	public List<Pair<ERouteOption, Integer>> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime, final IVessel vessel) {
@@ -68,7 +80,6 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			}
 		}
 		return distances;
-
 	}
 
 	@Override
@@ -161,5 +172,20 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	public List<ERouteOption> getRoutes() {
 		// TODO: Pre-calculate?
 		return Lists.newArrayList(distanceProvider.getKeys()).stream().map(e -> ERouteOption.valueOf(e)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public void setEntryPointsForRouteOption(ERouteOption route, Set<IPort> entryPoints) {
+		routeOptionEntryPoints.put(route, entryPoints);
+	}
+	
+	@Override
+	public IPort getRouteOptionEntry(IPort port, ERouteOption routeOption) {
+		return nearestRouteOptionEntry.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
+			return routeOptionEntryPoints.get(pair.getSecond()).stream().min((p1, p2) ->  {
+				return Integer.compare(getDistance(ERouteOption.DIRECT, port, p1, Integer.MAX_VALUE, null), getDistance(ERouteOption.DIRECT, port, p2, Integer.MAX_VALUE, null));
+			}).get();
+		});
+		
 	}
 }

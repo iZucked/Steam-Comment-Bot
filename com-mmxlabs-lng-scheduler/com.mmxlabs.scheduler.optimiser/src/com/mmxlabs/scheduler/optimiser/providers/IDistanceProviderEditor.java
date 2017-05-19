@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public interface IDistanceProviderEditor extends IDistanceProvider {
 
@@ -15,4 +19,8 @@ public interface IDistanceProviderEditor extends IDistanceProvider {
 	 * @return
 	 */
 	void setRouteAvailableFrom(@NonNull ERouteOption route, int availableFrom);
+	
+	void setEntryPointsForRouteOption(ERouteOption route, Set<IPort> entryPoints);
+	
+	
 }
