@@ -3,8 +3,7 @@ package com.mmxlabs.models.lng.transformer.shared.impl;
 import javax.inject.Inject;
 
 import com.mmxlabs.models.lng.transformer.shared.IPortAndDistanceData;
-import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 public class PortAndDistanceData implements IPortAndDistanceData {
@@ -12,9 +11,9 @@ public class PortAndDistanceData implements IPortAndDistanceData {
 	private IPortProvider portProvider;
 
 	@Inject
-	private IndexedMultiMatrixProvider<IPort, Integer> distanceMatrixProvider;
+	private IDistanceMatrixProvider distanceMatrixProvider;
 
-	public IndexedMultiMatrixProvider<IPort, Integer> getDistanceMatrixProvider() {
+	public IDistanceMatrixProvider getDistanceMatrixProvider() {
 		return distanceMatrixProvider;
 	}
 

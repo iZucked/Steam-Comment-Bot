@@ -15,8 +15,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.shared.ISharedDataTransformerService;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
@@ -48,7 +47,7 @@ public class LNGSharedDataTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IMultiMatrixProvider<IPort, Integer> provideDistanceMatrix(PortModel portModel) {
+	private IDistanceMatrixProvider provideDistanceMatrix(PortModel portModel) {
 
 		return sharedDataTransformerService.getPortAndDistanceProvider(portModel).getDistanceMatrixProvider();
 	}

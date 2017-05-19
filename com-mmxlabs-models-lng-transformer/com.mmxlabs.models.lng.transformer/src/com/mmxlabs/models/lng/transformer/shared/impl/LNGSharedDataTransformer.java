@@ -42,6 +42,9 @@ public class LNGSharedDataTransformer {
 		 */
 		final Association<Port, IPort> portAssociation = new Association<Port, IPort>();
 
+		// Hint to pre-allocate ram
+		portDistanceBuilder.setExpectPortCount(portModel.getPorts().size());
+
 		for (final Port ePort : portModel.getPorts()) {
 			final IPort port;
 			if (ePort.getLocation() != null) {
@@ -81,19 +84,30 @@ public class LNGSharedDataTransformer {
 		orderedKeys.retainAll(seenRoutes);
 
 		// Fix sort order for distance iteration
-		final String[] preSortedKeys = orderedKeys.stream() //
-				.map(RouteOption::getName)//
+		final ERouteOption[] preSortedKeys = orderedKeys.stream() //
+				.map(r -> mapRouteOption(r))//
 				.collect(Collectors.toList()) //
-				.toArray(new String[orderedKeys.size()]);
+				.toArray(new ERouteOption[orderedKeys.size()]);
 
-		portDistanceBuilder.setPreSortedKeys(preSortedKeys);
-
-		portDistanceBuilder.done();
+		portDistanceBuilder.setPreSortedRoutes(preSortedKeys);
 	}
 
 	@NonNull
 	private static ERouteOption mapRouteOption(@NonNull final Route route) {
 		final RouteOption routeOption = route.getRouteOption();
+		switch (routeOption) {
+		case DIRECT:
+			return ERouteOption.DIRECT;
+		case PANAMA:
+			return ERouteOption.PANAMA;
+		case SUEZ:
+			return ERouteOption.SUEZ;
+		}
+		throw new IllegalStateException();
+	}
+
+	@NonNull
+	private static ERouteOption mapRouteOption(@NonNull final RouteOption routeOption) {
 		switch (routeOption) {
 		case DIRECT:
 			return ERouteOption.DIRECT;
