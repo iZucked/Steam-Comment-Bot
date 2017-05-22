@@ -67,7 +67,7 @@ public class Application implements IApplication {
 			}
 			if (!skipAutoMemory) {
 				for (final String arg : appLineArgs) {
-					if (arg.equals("-auto-mem")) {
+					if (arg.equals(CMD_AUTO_MEM)) {
 
 						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
 						try {
