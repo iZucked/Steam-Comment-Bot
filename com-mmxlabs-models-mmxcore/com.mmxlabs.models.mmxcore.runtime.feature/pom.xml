@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
 		<groupId>com.mmxlabs.models.mmxcore</groupId>
-		<version>4.2.8.RELEASE</version>
+		<version>4.2.9-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.mmxcore.runtime.feature</artifactId>
-	<version>4.2.8.RELEASE</version>
+	<version>4.2.9-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 
