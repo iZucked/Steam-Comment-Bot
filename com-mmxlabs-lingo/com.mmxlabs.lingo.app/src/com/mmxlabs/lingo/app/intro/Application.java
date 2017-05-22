@@ -237,8 +237,8 @@ public class Application implements IApplication {
 
 	private static final String CMD_VMARGS = "-vmargs";
 
-	private static final String CMD_AUTO_MEM = "-auto-mem";
-	private static final String CMD_NO_AUTO_MEM = "-no-auto-mem";
+	private static final String CMD_AUTO_MEM = "-automem";
+	private static final String CMD_NO_AUTO_MEM = "-noautomem";
 
 	private static final String NEW_LINE = "\n";
 

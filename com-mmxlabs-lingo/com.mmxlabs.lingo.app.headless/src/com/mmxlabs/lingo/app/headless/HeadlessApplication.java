@@ -486,8 +486,8 @@ public class HeadlessApplication implements IApplication {
 		options.addOption("ws", true, "(OSGi) Set window system");
 
 		// Memory command line args (Not used by headless, but added to maintain compat with main laucher arg set.
-		options.addOption("auto-mem", false, "(LiNGO) Automatically determine upper bound for heap size");
-		options.addOption("no-auto-mem", false, "(LiNGO) Do not automatically determine upper bound for heap size");
+		options.addOption("automem", false, "(LiNGO) Automatically determine upper bound for heap size");
+		options.addOption("noautomem", false, "(LiNGO) Do not automatically determine upper bound for heap size");
 
 		// Enable Fitness Exporter
 		options.addOption(OptionBuilder.withLongOpt(FITNESS_TRACE).isRequired(false).withDescription("Export fitness trace to a file").hasArg().create());
