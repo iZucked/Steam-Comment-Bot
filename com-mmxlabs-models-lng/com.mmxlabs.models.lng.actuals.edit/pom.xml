@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>4.2.8.RELEASE</version>
+		<version>4.2.9-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.actuals.edit</artifactId>
-	<version>4.2.8.RELEASE</version>
+	<version>4.2.9-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
