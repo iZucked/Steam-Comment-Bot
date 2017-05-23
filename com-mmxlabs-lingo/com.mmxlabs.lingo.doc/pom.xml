@@ -30,7 +30,7 @@
 						</repository>
 					</repositories>
 					<!-- this is to fix some lucene 3.x compatibility issue -->
-					<argLine>-Dhelp.lucene.tokenizer=standard</argLine>
+					<argLine>-Declipse.p2.mirrors=false -Dhelp.lucene.tokenizer=standard</argLine>
 					<!-- actual indexer call - - do not wrap -->
 					<appArgLine>-application org.eclipse.ant.core.antRunner -buildfile customBuildCallbacks.xml post.build.jars</appArgLine>
 					<dependencies>
