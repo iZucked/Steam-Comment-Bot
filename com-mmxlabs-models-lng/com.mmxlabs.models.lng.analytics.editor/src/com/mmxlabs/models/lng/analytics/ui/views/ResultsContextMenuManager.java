@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -73,8 +74,13 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		if (menu == null) {
 			menu = mgr.createContextMenu(grid);
 		}
-		mgr.removeAll();
-
+		{
+			IContributionItem[] items = mgr.getItems();
+			mgr.removeAll();
+			for (IContributionItem item : items) {
+				item.dispose();
+			}
+		}
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
@@ -196,13 +202,13 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					return buyOpportunity;
 				}
 			} else if (buyOption instanceof BuyReference) {
-//				if (((BuyReference) buyOption).getSlot().getPriceExpression() != null && ((BuyReference) buyOption).getSlot().getPriceExpression().contains("?")) {
-					// LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
-					// BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
-					// slotCopy.setPriceExpression(""+result.getPrice());
-					// copy.setSlot(slotCopy);
-					// return copy;
-//				}
+				// if (((BuyReference) buyOption).getSlot().getPriceExpression() != null && ((BuyReference) buyOption).getSlot().getPriceExpression().contains("?")) {
+				// LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
+				// BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
+				// slotCopy.setPriceExpression(""+result.getPrice());
+				// copy.setSlot(slotCopy);
+				// return copy;
+				// }
 			}
 		}
 		if (createCopy) {
@@ -228,13 +234,13 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					return opportunity;
 				}
 			} else if (sellOption instanceof SellReference) {
-//				if (((SellReference) sellOption).getSlot().getPriceExpression().contains("?")) {
-//					// DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
-//					// SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
-//					// slotCopy.setPriceExpression(""+result.getPrice());
-//					// copy.setSlot(slotCopy);
-//					// return copy;
-//				}
+				// if (((SellReference) sellOption).getSlot().getPriceExpression().contains("?")) {
+				// // DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
+				// // SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
+				// // slotCopy.setPriceExpression(""+result.getPrice());
+				// // copy.setSlot(slotCopy);
+				// // return copy;
+				// }
 			}
 		}
 		if (createCopy) {

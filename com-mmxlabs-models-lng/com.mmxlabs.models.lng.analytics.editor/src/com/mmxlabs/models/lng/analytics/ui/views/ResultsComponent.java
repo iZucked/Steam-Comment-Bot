@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -82,6 +83,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 	// column sorting
 	final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
 	boolean sortDescending = false;
+	private MenuManager mgr;
 
 	protected ResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
@@ -101,19 +103,19 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
 
 			clientArea = new Composite(expandableCompo, SWT.NONE) {
-//				public Point computeSize(final int wHint, final int hHint) {
-//					final Point p = super.computeSize(wHint, hHint);
-//					// p.x = Math.max(200, p.x);
-//					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
-//					return p;
-//				}
-//
-//				public Point computeSize(final int wHint, final int hHint, final boolean changed) {
-//					final Point p = super.computeSize(wHint, hHint, changed);
-//					// p.x = Math.max(200, p.x);
-//					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
-//					return p;
-//				}
+				// public Point computeSize(final int wHint, final int hHint) {
+				// final Point p = super.computeSize(wHint, hHint);
+				// // p.x = Math.max(200, p.x);
+				// p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
+				// return p;
+				// }
+				//
+				// public Point computeSize(final int wHint, final int hHint, final boolean changed) {
+				// final Point p = super.computeSize(wHint, hHint, changed);
+				// // p.x = Math.max(200, p.x);
+				// p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
+				// return p;
+				// }
 			};
 			// clientArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 			final GridLayout layout = new GridLayout(2, false);
@@ -124,29 +126,28 @@ public class ResultsComponent extends AbstractSandboxComponent {
 			layout.marginTop = 0;
 			clientArea.setLayout(layout);
 
-
 			clientArea.setLayoutData(GridDataFactory.fillDefaults().hint(200, 0).grab(true, true).create());
-//			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(false, false).create());
-//
-//			final Label c = new Label(clientArea, SWT.NONE);
-//			c.setToolTipText("Toggle show only B/E cargoes");
-//			if (filterConstantRows) {
-//				c.setImage(image_filter);
-//			} else {
-//				c.setImage(image_grey_filter);
-//			}
-//			c.addMouseListener(new MouseAdapter() {
-//				public void mouseDown(final MouseEvent e) {
-//					filterConstantRows = !filterConstantRows;
-//					if (filterConstantRows) {
-//						c.setImage(image_filter);
-//					} else {
-//						c.setImage(image_grey_filter);
-//					}
-//					refresh();
-//				}
-//
-//			});
+			// c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(false, false).create());
+			//
+			// final Label c = new Label(clientArea, SWT.NONE);
+			// c.setToolTipText("Toggle show only B/E cargoes");
+			// if (filterConstantRows) {
+			// c.setImage(image_filter);
+			// } else {
+			// c.setImage(image_grey_filter);
+			// }
+			// c.addMouseListener(new MouseAdapter() {
+			// public void mouseDown(final MouseEvent e) {
+			// filterConstantRows = !filterConstantRows;
+			// if (filterConstantRows) {
+			// c.setImage(image_filter);
+			// } else {
+			// c.setImage(image_grey_filter);
+			// }
+			// refresh();
+			// }
+			//
+			// });
 			expandableCompo.setTextClient(clientArea);
 		}, false);
 		expandable.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 300).grab(false, true).create());
@@ -226,7 +227,14 @@ public class ResultsComponent extends AbstractSandboxComponent {
 			bePrice.getColumn().setWidth(100);
 		}
 
-		final MenuManager mgr = new MenuManager();
+		mgr = new MenuManager();
+		inputWants.add(model -> {
+			IContributionItem[] items = mgr.getItems();
+			mgr.removeAll();
+			for (IContributionItem item : items) {
+				item.dispose();
+			}
+		});
 
 		final ResultsContextMenuManager listener = new ResultsContextMenuManager(resultsViewer, scenarioEditingLocation, optionModellerView, mgr);
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));
@@ -268,11 +276,11 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		});
 		inputWants.add(model -> resultsViewer.setInput(model));
 		inputWants.add(model -> resultsDiagram.setRoot(model));
-		
+
 		// sort order
 		addSortableColumn(resultsViewer, bePrice, bePrice.getColumn());
 		addSortableColumn(resultsViewer, pAndL, pAndL.getColumn());
-		
+
 		resultsViewer.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
@@ -315,12 +323,12 @@ public class ResultsComponent extends AbstractSandboxComponent {
 				} else if (e2 instanceof ResultSet) {
 					return 1;
 				}
-				return comparable * (isSortDescending()?-1 : 1);
+				return comparable * (isSortDescending() ? -1 : 1);
 			}
 		});
 		return resultsViewer.getControl();
 	}
-	
+
 	private Double findBreakEvenResult(ResultSet rs) {
 		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
 			if (analysisResultRow.getResultDetail() instanceof BreakEvenResult) {
@@ -329,18 +337,18 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		}
 		return null;
 	}
-	
+
 	private Double findLargestProfit(ResultSet rs) {
 		@NonNull
 		List<ProfitAndLossResult> results = rs.getRows().stream().filter(r -> r.getResultDetail() instanceof ProfitAndLossResult) //
-		.map(r -> (ProfitAndLossResult) r.getResultDetail()) //
-		.sorted((a,b) -> Double.compare(a.getValue(), b.getValue())) //
-		.collect(Collectors.toList());
-		
+				.map(r -> (ProfitAndLossResult) r.getResultDetail()) //
+				.sorted((a, b) -> Double.compare(a.getValue(), b.getValue())) //
+				.collect(Collectors.toList());
+
 		if (results.size() == 0) {
 			return null;
 		} else {
-			return results.get(results.size() -1).getValue();
+			return results.get(results.size() - 1).getValue();
 		}
 	}
 
@@ -348,7 +356,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		if (getColumnSortOrder().contains(tColumn)) {
 			return;
 		}
-		
+
 		getColumnSortOrder().add(tColumn);
 
 		column.getColumn().addSelectionListener(new SelectionListener() {
@@ -398,6 +406,10 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		if (image_grey_filter != null) {
 			image_grey_filter.dispose();
+		}
+
+		if (mgr != null) {
+			mgr.dispose();
 		}
 		super.dispose();
 	}
