@@ -63,7 +63,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 		}
 
 		final EObject target = ctx.getTarget();
-		
+
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof PortModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
@@ -184,11 +184,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 					}
 				}
 			}
-
 		}
-		// DO NOT COMMIT
-		statuses.clear();
-		// DO NOT COMMIT
+
 		return Activator.PLUGIN_ID;
 	}
 
