@@ -58,7 +58,7 @@ public class SlotInsertionOptimiser {
 	private EvaluationHelper evaluationHelper;
 
 	@Inject
-	private SequencesHelper sequencesHelper;
+	private SequencesHitchHikerHelper sequencesHelper;
 
 	@Inject
 	private IMoveHandlerHelper moveHandlerHelper;

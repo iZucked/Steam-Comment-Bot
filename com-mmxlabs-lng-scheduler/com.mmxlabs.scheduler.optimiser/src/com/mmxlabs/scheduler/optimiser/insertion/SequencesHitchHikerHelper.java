@@ -33,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 @NonNullByDefault
-public class SequencesHelper {
+public class SequencesHitchHikerHelper {
 	@Inject
 	private IMoveHandlerHelper moveHandlerHelper;
 
@@ -90,10 +90,19 @@ public class SequencesHelper {
 				queue.addAll(seg);
 
 				if (isSequencedResource(r)) {
-					// Add every element in this resource to the queue. We cannot determine whether or not they really are linked, so assume linked change.
-					Iterables.addAll(queue, source.getSequence(r));
-					// Mark resource as one to replace
-					seenResource.add(r);
+					// For spot charter's just pull the cargo off and ignore the rest. If a related cargo goes back on then we consider it.
+					// This stops hitch-hikers which make use of the shipping length, but are otherwise unrelated.
+					// Note, if we have a sequence a->b->c and remove cargo b, we may introduce a violation that is fixed by using this shipping length.
+					// Potentially we should see if this is the first or last cargo otherwise fallback to general method.
+					if (true || isSpotCharterResource(r)) {
+						evictedElements.addAll(seg);
+						Iterables.addAll(queue, seg);
+					} else {
+						// Add every element in this resource to the queue. We cannot determine whether or not they really are linked, so assume linked change.
+						Iterables.addAll(queue, source.getSequence(r));
+						// Mark resource as one to replace
+						seenResource.add(r);
+					}
 				} else {
 					assert isNominalResource(r);
 
@@ -208,6 +217,14 @@ public class SequencesHelper {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		return vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+	}
+
+	private boolean isSpotCharterResource(final IResource resource) {
+
+		@NonNull
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+
+		return vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
 	}
 
 	private boolean isSequencedResource(final IResource resource) {
