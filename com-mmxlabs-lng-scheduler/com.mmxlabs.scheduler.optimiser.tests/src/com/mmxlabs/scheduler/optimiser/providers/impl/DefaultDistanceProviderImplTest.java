@@ -9,7 +9,10 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
@@ -74,6 +77,7 @@ public class DefaultDistanceProviderImplTest {
 		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
 
+		Mockito.when(matrixProvider.get(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Integer.MAX_VALUE);
 		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
 		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
 		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
@@ -97,6 +101,7 @@ public class DefaultDistanceProviderImplTest {
 		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
 
+		Mockito.when(matrixProvider.get(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Integer.MAX_VALUE);
 		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
 		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
 		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
@@ -133,6 +138,7 @@ public class DefaultDistanceProviderImplTest {
 		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
 
+		Mockito.when(matrixProvider.get(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Integer.MAX_VALUE);
 		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(10);
 		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
 		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
@@ -142,7 +148,15 @@ public class DefaultDistanceProviderImplTest {
 		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.SUEZ, port1, port2, 20));
 		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.PANAMA, port1, port2, 30));
 
-		Mockito.when(matrixProvider.getValues(port1, port2)).thenReturn(matrixDistanceValues);
+		// Create mutable copy
+		Mockito.when(matrixProvider.getValues(port1, port2)).then(new Answer<List<DistanceMatrixEntry>>() {
+
+			@Override
+			public List<DistanceMatrixEntry> answer(InvocationOnMock invocation) throws Throwable {
+				return new LinkedList<>(matrixDistanceValues);
+			}
+
+		});
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
