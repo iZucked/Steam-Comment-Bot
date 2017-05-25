@@ -23,12 +23,13 @@ public class SelectSlotHandler {
 
 		final SwitchSlotEvent event = new SwitchSlotEvent();
 		event.activePart = activePart;
-
-		for (final String tag : activeMenu.getTags()) {
-			if (tag.startsWith("slot-")) {
-				event.slotId = tag.replaceFirst("slot-", "");
-				eventBroker.post(ChangeSetViewEventConstants.EVENT_SWITCH_TARGET_SLOT, event);
-				break;
+		if (activeMenu.isSelected()) {
+			for (final String tag : activeMenu.getTags()) {
+				if (tag.startsWith("slot-")) {
+					event.slotId = tag.replaceFirst("slot-", "");
+					eventBroker.post(ChangeSetViewEventConstants.EVENT_SWITCH_TARGET_SLOT, event);
+					break;
+				}
 			}
 		}
 	}

@@ -21,27 +21,28 @@ public class SwitchGroupByModeHandler {
 	private IEventBroker eventBroker;
 
 	@Execute
-	public void execute(MPart activePart, MItem  activeMenu) {
+	public void execute(MPart activePart, MItem activeMenu) {
 
 		SwitchGroupModeEvent event = new SwitchGroupModeEvent();
 		event.activePart = activePart;
-
-		for (String tag : activeMenu.getTags()) {
-			if ("groupby_target".contentEquals(tag)) {
-				event.mode = GroupMode.Target;
-				break;
+		if (activeMenu.isSelected()) {
+			for (String tag : activeMenu.getTags()) {
+				if ("groupby_target".contentEquals(tag)) {
+					event.mode = GroupMode.Target;
+					break;
+				}
+				if ("groupby_target_and_complexity".contentEquals(tag)) {
+					event.mode = GroupMode.TargetAndComplexity;
+					break;
+				}
+				if ("groupby_complexity".contentEquals(tag)) {
+					event.mode = GroupMode.Complexity;
+					break;
+				}
 			}
-			if ("groupby_target_and_complexity".contentEquals(tag)) {
-				event.mode = GroupMode.TargetAndComplexity;
-				break;
+			if (event.mode != null) {
+				eventBroker.post(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE, event);
 			}
-			if ("groupby_complexity".contentEquals(tag)) {
-				event.mode = GroupMode.Complexity;
-				break;
-			}
-		}
-		if (event.mode != null) {
-			eventBroker.post(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE, event);
 		}
 	}
 

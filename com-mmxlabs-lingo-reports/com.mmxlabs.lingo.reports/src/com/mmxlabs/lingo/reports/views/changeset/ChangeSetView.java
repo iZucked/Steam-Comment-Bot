@@ -830,6 +830,12 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
+	private void handleExpandAll(@UIEventTopic(ChangeSetViewEventConstants.EVENT_EXPAND_ALL) final Object o) {
+		ViewerHelper.runIfViewerValid(viewer, true, v -> v.expandAll());
+	}
+
+	@Inject
+	@Optional
 	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
 		diffToBase = !diffToBase;
 		final ViewState viewState = currentViewState;
@@ -974,6 +980,10 @@ public class ChangeSetView implements IAdaptable {
 
 				if (directSelectedRows.size() == 1) {
 				}
+			}
+			// Experimental user filters hook.
+			if (false) {
+				showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows);
 			}
 
 			if (showMenu) {

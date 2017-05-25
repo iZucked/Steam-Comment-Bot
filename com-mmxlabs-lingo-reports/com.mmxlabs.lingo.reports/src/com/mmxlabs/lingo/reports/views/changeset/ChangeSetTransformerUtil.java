@@ -198,6 +198,8 @@ public final class ChangeSetTransformerUtil {
 
 					if (i < loadAllocations.size()) {
 						final SlotAllocation loadAllocation = loadAllocations.get(i);
+						// We sometimes get class cast exceptions here. The SlotAllocation has the wrong SlotAllocationType?
+						// It would appear the generation code is incorrect, but that works on instanceof....
 						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
 
 						final String key = ChangeSetTransformerUtil.getKeyName(loadAllocation);

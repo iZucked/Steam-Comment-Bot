@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -16,21 +17,34 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.views.changeset.filter.UserFilter;
+import com.mmxlabs.lingo.reports.views.changeset.filter.UserFilter.FilterSlotType;
+import com.mmxlabs.lingo.reports.views.changeset.filter.UserFilter.FilterVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
+import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 
 /**
  * Class to organise insertion plans and optionally filter out related but "poorer" choices
@@ -46,24 +60,49 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	private final Set<ChangeSet> setsToInclude = new HashSet<>();
 	private boolean filterActive = false;
 	private GroupMode groupMode = GroupMode.TargetAndComplexity;
-	private String slotId;
+
+	private final List<UserFilter> userFilters = new LinkedList<>();
+
+	public Map<Pair<String, UserFilter.FilterSlotType>, Set<UserFilter>> exploreSlotOptions = new HashMap<>();
 
 	@Override
 	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+
+		if (element instanceof ChangeSetTableGroup) {
+
+			final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+			for (final UserFilter filter : userFilters) {
+				if (!filter.include(group)) {
+					return false;
+				}
+			}
+		}
+		if (parentElement instanceof ChangeSetTableRow) {
+			final ChangeSetTableGroup group = (ChangeSetTableGroup) ((ChangeSetTableRow) parentElement).eContainer();
+			for (final UserFilter filter : userFilters) {
+				if (!filter.include(group)) {
+					return false;
+				}
+			}
+		}
+
 		if (!filterActive) {
 			return true;
 		}
-		if (element instanceof ChangeSet) {
-			return setsToInclude.contains(element);
-		}
-		if (parentElement instanceof ChangeSet) {
-			return setsToInclude.contains(parentElement);
-		}
-		if (element instanceof ChangeSetTableGroup) {
-			return setsToInclude.contains(((ChangeSetTableGroup) element).getChangeSet());
-		}
-		if (parentElement instanceof ChangeSetTableGroup) {
-			return setsToInclude.contains(((ChangeSetTableGroup) parentElement).getChangeSet());
+		if (userFilters.isEmpty()) {
+
+			if (element instanceof ChangeSet) {
+				return setsToInclude.contains(element);
+			}
+			if (parentElement instanceof ChangeSet) {
+				return setsToInclude.contains(parentElement);
+			}
+			if (element instanceof ChangeSetTableGroup) {
+				return setsToInclude.contains(((ChangeSetTableGroup) element).getChangeSet());
+			}
+			if (parentElement instanceof ChangeSetTableGroup) {
+				return setsToInclude.contains(((ChangeSetTableGroup) parentElement).getChangeSet());
+			}
 		}
 		return true;
 	}
@@ -80,7 +119,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		public Object sendTo;
 		private final GroupMode mode;
 
-		public ChangeSetMetadata(GroupMode mode) {
+		public ChangeSetMetadata(final GroupMode mode) {
 			this.mode = mode;
 		}
 
@@ -118,6 +157,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public List<ChangeSet> processChangeSetRoot(final ChangeSetRoot root, final NamedObject target) {
 		setsToInclude.clear();
+		userFilters.clear();
+		exploreSlotOptions.clear();
 
 		// Group by change count and target
 		final Map<ChangeSetMetadata, List<ChangeSet>> grouper = new LinkedHashMap<>();
@@ -127,11 +168,104 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			ChangeSetRow targetRow = null;
 			ChangeSetRowData targetRowData = null;
 			for (final ChangeSetRow row : changeSetRows) {
-				if (row.getAfterData() != null) {
-					if (!row.getAfterData().getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
+				final ChangeSetRowDataGroup afterData = row.getAfterData();
+				if (afterData != null) {
+					// Create Export records
+
+					// TODO: Checks/filters on spot slots!
+
+					{
+						for (final ChangeSetRowData d : afterData.getMembers()) {
+							if (d.getLoadAllocation() != null) {
+								if (d.getDischargeAllocation() != null) {
+									final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getLhsName(), UserFilter.FilterSlotType.BY_ID);
+									if (d.getDischargeAllocation().isSetSpotMarket()) {
+										{
+											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getSpotMarket().getName());
+											f.lhsKey = d.getLhsName();
+											f.lhsType = UserFilter.FilterSlotType.BY_ID;
+											f.rhsKey = d.getDischargeAllocation().getSpotMarket().getName();
+											f.rhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+									} else {
+										{
+											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getRhsName());
+											f.lhsKey = d.getLhsName();
+											f.lhsType = UserFilter.FilterSlotType.BY_ID;
+											f.rhsKey = d.getRhsName();
+											f.rhsType = UserFilter.FilterSlotType.BY_ID;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+										if (d.getDischargeAllocation().getContract() != null) {
+											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getContract().getName());
+											f.lhsKey = d.getLhsName();
+											f.lhsType = UserFilter.FilterSlotType.BY_ID;
+											f.rhsKey = d.getDischargeAllocation().getContract().getName();
+											f.rhsType = UserFilter.FilterSlotType.BY_CONTRACT;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+									}
+									if (d.getVesselName() != null) {
+										final UserFilter f = new UserFilter(d.getLhsName() + " on " + d.getVesselName());
+										f.lhsKey = d.getLhsName();
+										f.lhsType = UserFilter.FilterSlotType.BY_ID;
+										f.vesselKey = d.getVesselName();
+										f.vesselType = UserFilter.FilterVesselType.BY_NAME;
+										exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+									}
+								}
+							}
+
+							// Discharge side
+							if (d.getDischargeAllocation() != null) {
+								if (d.getLoadAllocation() != null) {
+									final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getRhsName(), UserFilter.FilterSlotType.BY_ID);
+									if (d.getLoadAllocation().isSetSpotMarket()) {
+										{
+											final UserFilter f = new UserFilter(d.getLoadAllocation().getSpotMarket().getName() + " to " + d.getRhsName());
+											f.rhsKey = d.getRhsName();
+											f.rhsType = UserFilter.FilterSlotType.BY_ID;
+											f.lhsKey = d.getLoadAllocation().getSpotMarket().getName();
+											f.lhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+									} else {
+										{
+											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getRhsName());
+											f.lhsKey = d.getLhsName();
+											f.lhsType = UserFilter.FilterSlotType.BY_ID;
+											f.rhsKey = d.getRhsName();
+											f.rhsType = UserFilter.FilterSlotType.BY_ID;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+										if (d.getLoadAllocation().getContract() != null) {
+											final UserFilter f = new UserFilter(d.getLoadAllocation().getContract().getName() + " to " + d.getRhsName());
+											f.lhsKey = d.getLoadAllocation().getContract().getName();
+											f.lhsType = UserFilter.FilterSlotType.BY_CONTRACT;
+											f.rhsKey = d.getRhsName();
+											f.rhsType = UserFilter.FilterSlotType.BY_ID;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+									}
+									if (d.getVesselName() != null) {
+										final UserFilter f = new UserFilter(d.getRhsName() + " on " + d.getVesselName());
+										f.rhsKey = d.getRhsName();
+										f.rhsType = UserFilter.FilterSlotType.BY_ID;
+										f.vesselKey = d.getVesselName();
+										f.vesselType = UserFilter.FilterVesselType.BY_NAME;
+										exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+									}
+								}
+							}
+
+						}
+					}
+
+					if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
 						++structuralChanges;
 					}
-					for (ChangeSetRowData d : row.getAfterData().getMembers()) {
+					for (final ChangeSetRowData d : afterData.getMembers()) {
 						if (d.getLoadSlot() == target || d.getDischargeSlot() == target) {
 							assert targetRow == null;
 							targetRow = row;
@@ -226,7 +360,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					final ChangeSet cs = itr.next();
 					final double delta = cs.getMetricsToBase().getPnlDelta();
 					if (Math.abs(delta - lastDelta) < 10_000.0) {
-						itr.remove();
+						// itr.remove();
 						// lastDelta = delta;
 					} else {
 						lastDelta = delta;
@@ -292,11 +426,349 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		this.filterActive = b;
 	}
 
-	public void setGroupMode(GroupMode mode) {
+	public void setGroupMode(final GroupMode mode) {
 		this.groupMode = mode;
 	}
 
-	public void setTargetSlot(String slotId) {
-		this.slotId = slotId;
+	public void mergeFilter(final UserFilter filter) {
+		userFilters.add(filter);
+	}
+
+	public void clearFilter() {
+		userFilters.clear();
+	}
+
+	public List<UserFilter> getUserFilters() {
+		return userFilters;
+	}
+
+	public boolean generateMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows) {
+		if (filterActive) {
+			if (directSelectedRows.size() == 1) {
+				generateInsertionSubMenus_Explore(helper, viewer, directSelectedRows);
+				generateInsertionSubMenus(helper, viewer, directSelectedRows);
+			}
+			if (getUserFilters().size() > 0) {
+				final SubLocalMenuHelper remove = new SubLocalMenuHelper("Remove filter...");
+				if (getUserFilters().size() > 1) {
+					remove.addAction(new RunnableAction("All filters", () -> {
+						clearFilter();
+						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+					}));
+				}
+				for (final UserFilter f : getUserFilters()) {
+					remove.addAction(new RunnableAction(f.label, () -> {
+						getUserFilters().remove(f);
+						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+					}));
+				}
+				helper.addSubMenu(remove);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private void generateInsertionSubMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows) {
+
+		final boolean showLHSActions = true;
+		final boolean showRHSActions = true;
+
+		// SAME AGAIN, BUT "EXPOLORE"
+
+		final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Filter on...");
+		helper.addSubMenu(showFromMenu);
+		{
+			final ChangeSetTableRow row = directSelectedRows.iterator().next();
+			if (showLHSActions && row.isLhsSlot()) {
+				final LoadSlot slot = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
+				if (slot != null) {
+					if (row.isRhsSlot()) {
+						final Slot discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+						{
+							final String label = row.getLhsName() + " to " + discharge.getName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+							}));
+						}
+						final Contract contract = discharge.getContract();
+						if (contract != null) {
+							final String label = row.getLhsName() + " to " + contract.getName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = contract.getName();
+								f.rhsType = FilterSlotType.BY_CONTRACT;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+							}));
+						}
+						if (discharge instanceof SpotSlot) {
+							final SpotSlot spotSlot = (SpotSlot) discharge;
+							final SpotMarket market = spotSlot.getMarket();
+							if (market != null) {
+								final String label1 = row.getLhsName() + " to spot";
+								showFromMenu.addAction(new RunnableAction(label1, () -> {
+									final UserFilter f = new UserFilter(label1);
+									f.lhsKey = row.getLhsName();
+									f.lhsType = FilterSlotType.BY_ID;
+									f.rhsKey = null;
+									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+								}));
+								final String label2 = row.getLhsName() + " to " + market.getName();
+								showFromMenu.addAction(new RunnableAction(label2, () -> {
+									final UserFilter f = new UserFilter(label2);
+									f.lhsKey = row.getLhsName();
+									f.lhsType = FilterSlotType.BY_ID;
+									f.rhsKey = market.getName();
+									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+								}));
+							}
+						}
+
+					} else {
+						final String label = row.getLhsName() + " to open";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsKey = row.getLhsName();
+							f.lhsType = FilterSlotType.BY_ID;
+							f.rhsType = FilterSlotType.BY_OPEN;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						}));
+					}
+				}
+				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
+					final String label = row.getLhsName() + " on " + row.getAfterVesselName();
+					showFromMenu.addAction(new RunnableAction(label, () -> {
+						final UserFilter f = new UserFilter(label);
+						f.lhsKey = row.getLhsName();
+						f.lhsType = FilterSlotType.BY_ID;
+						f.vesselType = FilterVesselType.BY_NAME;
+						f.vesselKey = row.getAfterVesselName();
+						mergeFilter(f);
+						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+					}));
+				}
+			}
+			if (showRHSActions && row.isRhsSlot()) {
+				final Slot slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+				if (slot != null) {
+
+					if (showFromMenu.hasActions()) {
+						showFromMenu.addSeparator();
+					}
+
+					if (row.isLhsSlot()) {
+						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
+						if (!showLHSActions) {
+							final String label = load.getName() + " to " + row.getRhsName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
+						}
+						final Contract contract = load.getContract();
+						if (contract != null) {
+							final String label = contract.getName() + " to " + row.getRhsName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = contract.getName();
+								f.lhsType = FilterSlotType.BY_CONTRACT;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
+						}
+						if (load instanceof SpotSlot) {
+							final SpotSlot spotSlot = (SpotSlot) load;
+							final SpotMarket market = spotSlot.getMarket();
+							if (market != null) {
+								final String label1 = "Spot to " + row.getRhsName();
+								showFromMenu.addAction(new RunnableAction(label1, () -> {
+									final UserFilter f = new UserFilter(label1);
+									f.lhsKey = null;
+									f.lhsType = FilterSlotType.BY_SPOT_MARKET;
+									f.rhsKey = row.getRhsName();
+									f.rhsType = FilterSlotType.BY_ID;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								}));
+								final String label2 = market.getName() + " to " + row.getRhsName();
+								showFromMenu.addAction(new RunnableAction(label2, () -> {
+									final UserFilter f = new UserFilter(label2);
+									f.lhsKey = market.getName();
+									f.lhsType = FilterSlotType.BY_SPOT_MARKET;
+									f.rhsKey = row.getRhsName();
+									f.rhsType = FilterSlotType.BY_ID;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+								}));
+							}
+						}
+
+					} else {
+						final String label = "Open to " + row.getRhsName();
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsType = FilterSlotType.BY_OPEN;
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						}));
+					}
+				}
+				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
+
+					if (showFromMenu.hasActions()) {
+						showFromMenu.addSeparator();
+					}
+
+					{
+
+						final String label = row.getRhsName() + " on " + row.getAfterVesselName();
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_NAME;
+							f.vesselKey = row.getAfterVesselName();
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						}));
+					}
+
+				}
+			}
+		}
+	}
+
+	private void generateInsertionSubMenus_Explore(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows) {
+
+		final boolean showLHSActions = true;
+		final boolean showRHSActions = true;
+
+		{
+			// TODO: Make this delayed?
+			final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Explore...");
+			helper.addSubMenu(showFromMenu);
+			{
+				final ChangeSetTableRow row = directSelectedRows.iterator().next();
+				if (showLHSActions && row.isLhsSlot()) {
+
+					final SubLocalMenuHelper loadMenuContract = new SubLocalMenuHelper(row.getLhsName() + " by contract");
+					final SubLocalMenuHelper loadMenuSlot = new SubLocalMenuHelper(row.getLhsName() + " by slot");
+					final SubLocalMenuHelper loadMenuMarket = new SubLocalMenuHelper(row.getLhsName() + " by spot market");
+					final SubLocalMenuHelper loadMenuVessel = new SubLocalMenuHelper(row.getLhsName() + " by vessel");
+
+					final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(row.getLhsName(), UserFilter.FilterSlotType.BY_ID);
+					final Collection<UserFilter> filters = exploreSlotOptions.get(key);
+					if (filters != null) {
+						for (final UserFilter f : filters) {
+
+							SubLocalMenuHelper menu = null;
+							if (f.vesselType == FilterVesselType.BY_NAME) {
+								menu = loadMenuVessel;
+							} else if (f.rhsType == FilterSlotType.BY_ID) {
+								menu = loadMenuSlot;
+							} else if (f.rhsType == FilterSlotType.BY_CONTRACT) {
+								menu = loadMenuContract;
+							} else if (f.rhsType == FilterSlotType.BY_SPOT_MARKET) {
+								menu = loadMenuMarket;
+							}
+							if (menu != null) {
+								menu.addAction(new RunnableAction(f.label, () -> {
+									clearFilter();
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								}));
+							}
+						}
+					}
+					if (loadMenuContract.hasActions()) {
+						showFromMenu.addSubMenu(loadMenuContract);
+					}
+					if (loadMenuSlot.hasActions()) {
+						showFromMenu.addSubMenu(loadMenuSlot);
+					}
+					if (loadMenuMarket.hasActions()) {
+						showFromMenu.addSubMenu(loadMenuMarket);
+					}
+					if (loadMenuVessel.hasActions()) {
+						showFromMenu.addSubMenu(loadMenuVessel);
+					}
+				}
+				if (showRHSActions && row.isRhsSlot()) {
+					if (showFromMenu.hasActions()) {
+						showFromMenu.addSeparator();
+					}
+
+					final SubLocalMenuHelper dischargeMenuContract = new SubLocalMenuHelper(row.getRhsName() + " by contract");
+					final SubLocalMenuHelper dischargeMenuSlot = new SubLocalMenuHelper(row.getRhsName() + " by slot");
+					final SubLocalMenuHelper dischargeMenuMarket = new SubLocalMenuHelper(row.getRhsName() + " by spot market");
+					final SubLocalMenuHelper dischargeMenuVessel = new SubLocalMenuHelper(row.getRhsName() + " by vessel");
+					final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(row.getRhsName(), UserFilter.FilterSlotType.BY_ID);
+					final Collection<UserFilter> filters = exploreSlotOptions.get(key);
+					if (filters != null) {
+						for (final UserFilter f : filters) {
+
+							SubLocalMenuHelper menu = null;
+							if (f.vesselType == FilterVesselType.BY_NAME) {
+								menu = dischargeMenuVessel;
+							} else if (f.lhsType == FilterSlotType.BY_ID) {
+								menu = dischargeMenuSlot;
+							} else if (f.lhsType == FilterSlotType.BY_CONTRACT) {
+								menu = dischargeMenuContract;
+							} else if (f.lhsType == FilterSlotType.BY_SPOT_MARKET) {
+								menu = dischargeMenuMarket;
+							}
+							if (menu != null) {
+								menu.addAction(new RunnableAction(f.label, () -> {
+									clearFilter();
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								}));
+							}
+						}
+					}
+
+					if (dischargeMenuContract.hasActions()) {
+						showFromMenu.addSubMenu(dischargeMenuContract);
+					}
+					if (dischargeMenuSlot.hasActions()) {
+						showFromMenu.addSubMenu(dischargeMenuSlot);
+					}
+					if (dischargeMenuMarket.hasActions()) {
+						showFromMenu.addSubMenu(dischargeMenuMarket);
+					}
+					if (dischargeMenuVessel.hasActions()) {
+						showFromMenu.addSubMenu(dischargeMenuVessel);
+					}
+				}
+			}
+		}
 	}
 }

@@ -176,6 +176,21 @@ public class ChangeSetViewCreatorService {
 					item.setSelected(true);
 					toolbar.getChildren().add(item);
 				}
+
+				if (false && solution.isCreateInsertionOptions()) {
+					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
+					item.setElementId(viewPartId + ".directtoolitem.expandAll");
+					item.setType(ItemType.PUSH);
+					item.setTooltip("Expand all");
+					item.setLabel("Expand all");
+					// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/group.gif");
+					item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ExpandAllHandler");
+					// item.setMenu(menu);
+					item.setEnabled(true);
+					item.setToBeRendered(true);
+					item.setVisible(true);
+					toolbar.getChildren().add(item);
+				}
 				if (solution.isCreateInsertionOptions()) {
 
 					final MMenu menu = modelService.createModelElement(MMenu.class);
