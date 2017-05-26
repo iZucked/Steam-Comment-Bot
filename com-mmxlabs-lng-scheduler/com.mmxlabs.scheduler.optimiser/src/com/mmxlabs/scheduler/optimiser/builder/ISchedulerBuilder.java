@@ -55,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -223,6 +224,7 @@ public interface ISchedulerBuilder {
 	 * @param vesselInstanceType
 	 * @param start
 	 * @param end
+	 * @param ballastBonusContract TODO
 	 * @param repositioningFee
 	 *            TODO
 	 * @param isOptional
@@ -231,7 +233,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
-			@NonNull IEndRequirement end, ILongCurve repositioningFee, boolean isOptional);
+			@NonNull IEndRequirement end, IBallastBonusContract ballastBonusContract, ILongCurve repositioningFee, boolean isOptional);
 
 	/**
 	 * Boolean flag to indicate hard start time window. If false, provider timeWindow is a notional start date.
@@ -672,7 +674,7 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ILongCurve charterInCurve, int charterCount);
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt, IBallastBonusContract ballastBonusContract);
 
 	/***
 	 * Create a sequence element

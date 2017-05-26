@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 public interface ISpotCharterInMarket {
 
@@ -20,5 +21,9 @@ public interface ISpotCharterInMarket {
 	ILongCurve getDailyCharterInRateCurve();
 
 	int getAvailabilityCount();
+	
+	IEndRequirement getEndRequirement();
+	
+	IBallastBonusContract getBallastBonusContract();
 
 }

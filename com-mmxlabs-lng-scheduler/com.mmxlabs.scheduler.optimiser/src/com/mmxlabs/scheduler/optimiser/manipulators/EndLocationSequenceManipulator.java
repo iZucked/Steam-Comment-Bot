@@ -132,7 +132,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				setEndLocationRule(resource, EndLocationRule.NONE);
 			} else if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				setEndLocationRule(resource, EndLocationRule.REMOVE);
-			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
+			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && vesselProvider.getVesselAvailability(resource).getBallastBonusContract() == null) {
 				setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
 			} else {
 				// Some fleet vessels will have an existing end location
