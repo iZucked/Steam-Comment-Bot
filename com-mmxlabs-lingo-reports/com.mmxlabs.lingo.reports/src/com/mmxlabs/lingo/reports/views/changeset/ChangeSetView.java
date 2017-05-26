@@ -1302,14 +1302,7 @@ public class ChangeSetView implements IAdaptable {
 
 					} else {
 						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
-						// final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
-						// DO NOT COMMIT - UNIT TEST COMPATIBILITY
-						SlotAllocation originalDischargeAllocation = null;
-						if (tableRow.getPreviousRHS() != null) {
-							if (tableRow.getPreviousRHS().getLhsBefore() != null) {
-								originalDischargeAllocation = tableRow.getPreviousRHS().getLhsBefore().getDischargeAllocation();
-							}
-						}
+						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 
 						if (newDischargeAllocation != null) {
@@ -1327,7 +1320,6 @@ public class ChangeSetView implements IAdaptable {
 						if (newDischargeAllocation != null && originalDischargeAllocation != null) {
 							deltaHours = Hours.between(originalDischargeAllocation.getSlotVisit().getStart(), newDischargeAllocation.getSlotVisit().getStart());
 							if (deltaHours != 0) {
-								// DO NOT COMMIT - TO COMPARE WITH EXISTING UNIT TESTS
 								isDelta = true;
 							}
 						}
