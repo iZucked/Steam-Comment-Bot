@@ -16,6 +16,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -30,6 +31,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 	private ContractEditorPane salesContractEditorPane;
 	private ContractEditorPane purchaseContractEditorPane;
 	private EntityEditorPane entityEditorPane;
+	private CharterMarketEditorPane charterMarketEditorPane;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -38,21 +40,27 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		purchaseContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		entityEditorPane = new EntityEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-
+		charterMarketEditorPane = new CharterMarketEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		
 		purchaseContractEditorPane.createControl(sash);
 		salesContractEditorPane.createControl(sash);
 		entityEditorPane.createControl(sash);
-
+		charterMarketEditorPane.createControl(sash);
+		
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
 				.getCommandStack());
 		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
 				.getCommandStack());
+		charterMarketEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_CharteringContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
+				.getCommandStack());
 
+		
 		entityEditorPane.getViewer().setInput(modelObject);
 		purchaseContractEditorPane.getViewer().setInput(modelObject);
 		salesContractEditorPane.getViewer().setInput(modelObject);
-
+		charterMarketEditorPane.getViewer().setInput(modelObject);
+		
 		purchaseContractEditorPane.defaultSetTitle("Purchase Contracts");
 		salesContractEditorPane.defaultSetTitle("Sales Contracts");
 
@@ -62,6 +70,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(purchaseContractEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(salesContractEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(entityEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterMarketEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
 
 	}
 
@@ -70,6 +79,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		entityEditorPane.setLocked(locked);
 		salesContractEditorPane.setLocked(locked);
 		purchaseContractEditorPane.setLocked(locked);
+		charterMarketEditorPane.setLocked(locked);
 	}
 
 	@Override
@@ -84,6 +94,8 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 			} else if (dcsd.getTarget() instanceof PurchaseContract) {
 				return true;
 			} else if (dcsd.getTarget() instanceof SalesContract) {
+				return true;
+			} else if (dcsd.getTarget() instanceof CharterContract) {
 				return true;
 			} else if (dcsd.getTarget() instanceof LNGPriceCalculatorParameters) {
 				final LNGPriceCalculatorParameters expressionPriceParameters = (LNGPriceCalculatorParameters) dcsd.getTarget();
@@ -118,6 +130,8 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 			} else if (target instanceof PurchaseContract) {
 				purchaseContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 			} else if (target instanceof SalesContract) {
+				salesContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+			} else if (target instanceof CharterContract) {
 				salesContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 			}
 		}

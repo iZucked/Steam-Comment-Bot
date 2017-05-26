@@ -1,39 +1,41 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
+
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
+
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.CommercialModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CommercialModelItemProvider
-	extends UUIDObjectItemProvider {
+public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommercialModelItemProvider(AdapterFactory adapterFactory) {
+	public SimpleBallastBonusCharterContractItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -48,8 +50,31 @@ public class CommercialModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BallastBonusCharterContract_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BallastBonusCharterContract_entity_feature", "_UI_BallastBonusCharterContract_type"),
+				 CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -64,10 +89,7 @@ public class CommercialModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 		}
 		return childrenFeatures;
 	}
@@ -86,14 +108,14 @@ public class CommercialModelItemProvider
 	}
 
 	/**
-	 * This returns CommercialModel.gif.
+	 * This returns SimpleBallastBonusCharterContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CommercialModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleBallastBonusCharterContract"));
 	}
 
 	/**
@@ -104,11 +126,12 @@ public class CommercialModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CommercialModel)object).getUuid();
+		String label = ((SimpleBallastBonusCharterContract)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CommercialModel_type") :
-			getString("_UI_CommercialModel_type") + " " + label;
+			getString("_UI_SimpleBallastBonusCharterContract_type") :
+			getString("_UI_SimpleBallastBonusCharterContract_type") + " " + label;
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -121,11 +144,8 @@ public class CommercialModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CommercialModel.class)) {
-			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
-			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
-			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
-			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+		switch (notification.getFeatureID(SimpleBallastBonusCharterContract.class)) {
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -145,28 +165,8 @@ public class CommercialModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES,
-				 CommercialFactory.eINSTANCE.createLegalEntity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSalesContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSimpleCharterContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract()));
+				(CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT,
+				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
 	}
 
 }

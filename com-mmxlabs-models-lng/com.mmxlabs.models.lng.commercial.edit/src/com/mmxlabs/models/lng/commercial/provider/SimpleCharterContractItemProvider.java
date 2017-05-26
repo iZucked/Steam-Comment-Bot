@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
 
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
@@ -26,7 +27,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
+public class SimpleCharterContractItemProvider extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -53,36 +54,6 @@ public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
 	 * This returns SimpleCharterContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,7 +72,7 @@ public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SimpleCharterContract)object).getUuid();
+		String label = ((SimpleCharterContract)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_SimpleCharterContract_type") :
 			getString("_UI_SimpleCharterContract_type") + " " + label;
@@ -118,12 +89,6 @@ public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(SimpleCharterContract.class)) {
-			case CommercialPackage.SIMPLE_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 
@@ -137,11 +102,6 @@ public class SimpleCharterContractItemProvider extends UUIDObjectItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT,
-				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
 	}
 
 }

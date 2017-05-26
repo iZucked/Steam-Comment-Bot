@@ -152,6 +152,22 @@
                      class="DateShiftExpressionPriceParameters">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.BallastBonusCharterContractConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.BallastBonusCharterContractConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="BallastBonusCharterContractConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CharterContract">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

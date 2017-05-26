@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
@@ -204,6 +206,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass simpleCharterContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ballastBonusCharterContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass simpleBallastBonusCharterContractEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -865,8 +881,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterContract_BallastBonusContract() {
-		return (EReference)charterContractEClass.getEStructuralFeatures().get(0);
+	public EClass getSimpleCharterContract() {
+		return simpleCharterContractEClass;
 	}
 
 	/**
@@ -874,8 +890,35 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getSimpleCharterContract() {
-		return simpleCharterContractEClass;
+	public EClass getBallastBonusCharterContract() {
+		return ballastBonusCharterContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBallastBonusCharterContract_BallastBonusContract() {
+		return (EReference)ballastBonusCharterContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBallastBonusCharterContract_Entity() {
+		return (EReference)ballastBonusCharterContractEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSimpleBallastBonusCharterContract() {
+		return simpleBallastBonusCharterContractEClass;
 	}
 
 	/**
@@ -1008,9 +1051,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL);
 
 		charterContractEClass = createEClass(CHARTER_CONTRACT);
-		createEReference(charterContractEClass, CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 
 		simpleCharterContractEClass = createEClass(SIMPLE_CHARTER_CONTRACT);
+
+		ballastBonusCharterContractEClass = createEClass(BALLAST_BONUS_CHARTER_CONTRACT);
+		createEReference(ballastBonusCharterContractEClass, BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
+		createEReference(ballastBonusCharterContractEClass, BALLAST_BONUS_CHARTER_CONTRACT__ENTITY);
+
+		simpleBallastBonusCharterContractEClass = createEClass(SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -1069,8 +1117,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		ruleBasedBallastBonusContractEClass.getESuperTypes().add(this.getBallastBonusContract());
 		lumpSumBallastBonusContractLineEClass.getESuperTypes().add(this.getBallastBonusContractLine());
 		notionalJourneyBallastBonusContractLineEClass.getESuperTypes().add(this.getBallastBonusContractLine());
-		charterContractEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		charterContractEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		simpleCharterContractEClass.getESuperTypes().add(this.getCharterContract());
+		ballastBonusCharterContractEClass.getESuperTypes().add(this.getCharterContract());
+		simpleBallastBonusCharterContractEClass.getESuperTypes().add(this.getBallastBonusCharterContract());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1169,9 +1219,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getNotionalJourneyBallastBonusContractLine_IncludeCanal(), ecorePackage.getEBoolean(), "includeCanal", null, 0, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterContractEClass, CharterContract.class, "CharterContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCharterContract_BallastBonusContract(), this.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, CharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(simpleCharterContractEClass, SimpleCharterContract.class, "SimpleCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(ballastBonusCharterContractEClass, BallastBonusCharterContract.class, "BallastBonusCharterContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBallastBonusCharterContract_BallastBonusContract(), this.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, BallastBonusCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBallastBonusCharterContract_Entity(), this.getBaseLegalEntity(), null, "entity", null, 0, 1, BallastBonusCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(simpleBallastBonusCharterContractEClass, SimpleBallastBonusCharterContract.class, "SimpleBallastBonusCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");

@@ -23,10 +23,12 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/entities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/salesContracts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/purchaseContracts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/charteringContracts"/>
     </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//BaseLegalEntity">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/shippingBook"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/tradingBook"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/upstreamBook"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LegalEntity"/>
     <genClasses ecoreClass="commercial.ecore#//Contract">
@@ -49,7 +51,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/notes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/contractType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/pricingEvent"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationExpression"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>
@@ -78,5 +80,34 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseEntityBook/taxRates"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SimpleEntityBook"/>
+    <genClasses ecoreClass="commercial.ecore#//DateShiftExpressionPriceParameters">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//DateShiftExpressionPriceParameters/priceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//DateShiftExpressionPriceParameters/specificDay"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//DateShiftExpressionPriceParameters/value"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusContract"/>
+    <genClasses ecoreClass="commercial.ecore#//RuleBasedBallastBonusContract">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//RuleBasedBallastBonusContract/rules"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusContractLine">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusContractLine/redeliveryPorts"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//LumpSumBallastBonusContractLine">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//LumpSumBallastBonusContractLine/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//NotionalJourneyBallastBonusContractLine">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/speed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/fuelPriceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/hirePriceExpression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusContractLine/returnPorts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/includeCanal"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="commercial.ecore#//CharterContract"/>
+    <genClasses ecoreClass="commercial.ecore#//SimpleCharterContract"/>
+    <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusCharterContract">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusCharterContract/ballastBonusContract"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusCharterContract/entity"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusCharterContract"/>
   </genPackages>
 </genmodel:GenModel>

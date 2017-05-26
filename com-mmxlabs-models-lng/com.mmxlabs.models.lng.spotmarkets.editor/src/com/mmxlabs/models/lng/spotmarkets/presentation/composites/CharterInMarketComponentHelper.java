@@ -76,7 +76,17 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
 		add_inaccessibleRoutesEditor(detailComposite, topClass);
 		add_charterContractEditor(detailComposite, topClass);
+		add_nominalEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the nominal feature on CharterInMarket
+	 *
+	 * @generated
+	 */
+	protected void add_nominalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__NOMINAL));
+	}
+
 	/**
 	 * Create the editor for the spotCharterCount feature on CharterInMarket
 	 *

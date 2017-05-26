@@ -1279,13 +1279,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Nominal</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
@@ -1781,6 +1790,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCharterInMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nominal</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_Nominal();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}'.
@@ -2282,6 +2302,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHARTER_IN_MARKET = eINSTANCE.getCharterInMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominal</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__NOMINAL = eINSTANCE.getCharterInMarket_Nominal();
 
 		/**
 		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.

@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -48,6 +49,33 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 //	CharterIndex getCharterInPrice();
+
+	/**
+	 * Returns the value of the '<em><b>Nominal</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Nominal</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominal</em>' attribute.
+	 * @see #setNominal(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_Nominal()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isNominal();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominal</em>' attribute.
+	 * @see #isNominal()
+	 * @generated
+	 */
+	void setNominal(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -128,9 +156,11 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Contract</em>' reference.
+	 * @see #isSetCharterContract()
+	 * @see #unsetCharterContract()
 	 * @see #setCharterContract(CharterContract)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_CharterContract()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	CharterContract getCharterContract();
@@ -140,10 +170,35 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter Contract</em>' reference.
+	 * @see #isSetCharterContract()
+	 * @see #unsetCharterContract()
 	 * @see #getCharterContract()
 	 * @generated
 	 */
 	void setCharterContract(CharterContract value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCharterContract()
+	 * @see #getCharterContract()
+	 * @see #setCharterContract(CharterContract)
+	 * @generated
+	 */
+	void unsetCharterContract();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
+	 * @see #unsetCharterContract()
+	 * @see #getCharterContract()
+	 * @see #setCharterContract(CharterContract)
+	 * @generated
+	 */
+	boolean isSetCharterContract();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.

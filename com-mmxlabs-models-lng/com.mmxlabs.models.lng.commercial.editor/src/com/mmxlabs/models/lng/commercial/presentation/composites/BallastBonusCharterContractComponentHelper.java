@@ -8,8 +8,6 @@ package com.mmxlabs.models.lng.commercial.presentation.composites;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -26,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for CharterContract instances
+ * A component helper for BallastBonusCharterContract instances
  *
  * @generated
  */
-public class CharterContractComponentHelper extends BaseComponentHelper {
+public class BallastBonusCharterContractComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -38,7 +36,7 @@ public class CharterContractComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CharterContractComponentHelper() {
+	public BallastBonusCharterContractComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -47,19 +45,19 @@ public class CharterContractComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CharterContractComponentHelper(IAdapterManager adapterManager) {
+	public BallastBonusCharterContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.CHARTER_CONTRACT));
 	}
 	
 	/**
-	 * add editors to a composite, using CharterContract as the supertype
+	 * add editors to a composite, using BallastBonusCharterContract as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.CHARTER_CONTRACT);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT);	
 	}
 	
 	/**
@@ -70,5 +68,23 @@ public class CharterContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_ballastBonusContractEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
+	}
+	/**
+	 * Create the editor for the ballastBonusContract feature on BallastBonusCharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_ballastBonusContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT));
+	}
+	/**
+	 * Create the editor for the entity feature on BallastBonusCharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__ENTITY));
 	}
 }

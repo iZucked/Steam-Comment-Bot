@@ -23,7 +23,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
@@ -174,10 +177,17 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
-			if (va.getBallastBonusContract() != null) {
-				if (va.getBallastBonusContract() instanceof RuleBasedBallastBonusContract) {
-					ruleBasedballastBonusValidation(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
-					ruleBasedballastBonusCheckPortGroups(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) va.getBallastBonusContract());
+			BallastBonusContract vaBallastBonusContract = va.getBallastBonusContract();
+			CharterContract charterContract = va.getCharterContract();
+			BallastBonusContract charterBallastBonusContract = null;
+			if (charterContract != null && charterContract instanceof BallastBonusCharterContract) {
+				charterBallastBonusContract = ((BallastBonusCharterContract) charterContract).getBallastBonusContract();
+			}
+			BallastBonusContract ballastBonusContract = vaBallastBonusContract != null ? vaBallastBonusContract : charterBallastBonusContract;
+			if (ballastBonusContract != null) {
+				if (ballastBonusContract instanceof RuleBasedBallastBonusContract) {
+					ruleBasedballastBonusValidation(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) ballastBonusContract);
+					ruleBasedballastBonusCheckPortGroups(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) ballastBonusContract);
 				}
 			}
 		}

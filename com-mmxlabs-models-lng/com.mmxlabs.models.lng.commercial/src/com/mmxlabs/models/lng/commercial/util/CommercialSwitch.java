@@ -251,7 +251,7 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 			case CommercialPackage.CHARTER_CONTRACT: {
 				CharterContract charterContract = (CharterContract)theEObject;
 				T result = caseCharterContract(charterContract);
-				if (result == null) result = caseUUIDObject(charterContract);
+				if (result == null) result = caseNamedObject(charterContract);
 				if (result == null) result = caseMMXObject(charterContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -260,8 +260,27 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				SimpleCharterContract simpleCharterContract = (SimpleCharterContract)theEObject;
 				T result = caseSimpleCharterContract(simpleCharterContract);
 				if (result == null) result = caseCharterContract(simpleCharterContract);
-				if (result == null) result = caseUUIDObject(simpleCharterContract);
+				if (result == null) result = caseNamedObject(simpleCharterContract);
 				if (result == null) result = caseMMXObject(simpleCharterContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.BALLAST_BONUS_CHARTER_CONTRACT: {
+				BallastBonusCharterContract ballastBonusCharterContract = (BallastBonusCharterContract)theEObject;
+				T result = caseBallastBonusCharterContract(ballastBonusCharterContract);
+				if (result == null) result = caseCharterContract(ballastBonusCharterContract);
+				if (result == null) result = caseNamedObject(ballastBonusCharterContract);
+				if (result == null) result = caseMMXObject(ballastBonusCharterContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: {
+				SimpleBallastBonusCharterContract simpleBallastBonusCharterContract = (SimpleBallastBonusCharterContract)theEObject;
+				T result = caseSimpleBallastBonusCharterContract(simpleBallastBonusCharterContract);
+				if (result == null) result = caseBallastBonusCharterContract(simpleBallastBonusCharterContract);
+				if (result == null) result = caseCharterContract(simpleBallastBonusCharterContract);
+				if (result == null) result = caseNamedObject(simpleBallastBonusCharterContract);
+				if (result == null) result = caseMMXObject(simpleBallastBonusCharterContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -596,6 +615,36 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSimpleCharterContract(SimpleCharterContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Charter Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBallastBonusCharterContract(BallastBonusCharterContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleBallastBonusCharterContract(SimpleBallastBonusCharterContract object) {
 		return null;
 	}
 

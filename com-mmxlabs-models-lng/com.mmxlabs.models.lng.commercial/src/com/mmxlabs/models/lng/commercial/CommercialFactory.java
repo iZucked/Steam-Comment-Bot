@@ -150,6 +150,15 @@ public interface CommercialFactory extends EFactory {
 	SimpleCharterContract createSimpleCharterContract();
 
 	/**
+	 * Returns a new object of class '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * @generated
+	 */
+	SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

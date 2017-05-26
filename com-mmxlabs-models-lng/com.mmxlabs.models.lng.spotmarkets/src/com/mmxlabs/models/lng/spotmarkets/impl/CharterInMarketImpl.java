@@ -44,6 +44,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isNominal <em>Nominal</em>}</li>
  * </ul>
  *
  * @generated
@@ -160,6 +161,35 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	protected CharterContract charterContract;
 
 	/**
+	 * This is true if the Charter Contract reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterContractESet;
+
+	/**
+	 * The default value of the '{@link #isNominal() <em>Nominal</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isNominal()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean NOMINAL_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isNominal() <em>Nominal</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isNominal()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean nominal = NOMINAL_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -209,6 +239,27 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isNominal() {
+		return nominal;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNominal(boolean newNominal) {
+		boolean oldNominal = nominal;
+		nominal = newNominal;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL, oldNominal, nominal));
 	}
 
 	/**
@@ -299,8 +350,33 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	public void setCharterContract(CharterContract newCharterContract) {
 		CharterContract oldCharterContract = charterContract;
 		charterContract = newCharterContract;
+		boolean oldCharterContractESet = charterContractESet;
+		charterContractESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT, oldCharterContract, charterContract));
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT, oldCharterContract, charterContract, !oldCharterContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCharterContract() {
+		CharterContract oldCharterContract = charterContract;
+		boolean oldCharterContractESet = charterContractESet;
+		charterContract = null;
+		charterContractESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT, oldCharterContract, null, oldCharterContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCharterContract() {
+		return charterContractESet;
 	}
 
 	/**
@@ -399,6 +475,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
 				if (resolve) return getCharterContract();
 				return basicGetCharterContract();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
+				return isNominal();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -435,6 +513,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
 				setCharterContract((CharterContract)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
+				setNominal((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -466,7 +547,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				getInaccessibleRoutes().clear();
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
-				setCharterContract((CharterContract)null);
+				unsetCharterContract();
+				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
+				setNominal(NOMINAL_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -493,7 +577,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
 				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
-				return charterContract != null;
+				return isSetCharterContract();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
+				return nominal != NOMINAL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -572,6 +658,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		result.append(overrideInaccessibleRoutes);
 		result.append(", inaccessibleRoutes: ");
 		result.append(inaccessibleRoutes);
+		result.append(", nominal: ");
+		result.append(nominal);
 		result.append(')');
 		return result.toString();
 	}

@@ -84,6 +84,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE: return createLumpSumBallastBonusContractLine();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: return createNotionalJourneyBallastBonusContractLine();
 			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: return createSimpleCharterContract();
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: return createSimpleBallastBonusCharterContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -261,6 +262,16 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public SimpleCharterContract createSimpleCharterContract() {
 		SimpleCharterContractImpl simpleCharterContract = new SimpleCharterContractImpl();
 		return simpleCharterContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract() {
+		SimpleBallastBonusCharterContractImpl simpleBallastBonusCharterContract = new SimpleBallastBonusCharterContractImpl();
+		return simpleBallastBonusCharterContract;
 	}
 
 	/**

@@ -148,7 +148,10 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutes" upperBound="-1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//CharterContract"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//CharterContract"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nominal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotCharterMarket" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"

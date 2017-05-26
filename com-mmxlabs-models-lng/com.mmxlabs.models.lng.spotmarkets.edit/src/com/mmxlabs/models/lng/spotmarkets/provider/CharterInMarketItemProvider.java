@@ -58,6 +58,7 @@ public class CharterInMarketItemProvider
 			addOverrideInaccessibleRoutesPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
 			addCharterContractPropertyDescriptor(object);
+			addNominalPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -102,6 +103,28 @@ public class CharterInMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Nominal feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNominalPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_nominal_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_nominal_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__NOMINAL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -288,6 +311,7 @@ public class CharterInMarketItemProvider
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__EXTENSIONS:

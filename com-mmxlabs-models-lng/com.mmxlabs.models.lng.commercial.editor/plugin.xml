@@ -80,6 +80,25 @@
        inheritable="true"
        modelClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters">
  </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BallastBonusCharterContractComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.BallastBonusCharterContractComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.BallastBonusCharterContract">
+ </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.CharterContractComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.CharterContractComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.CharterContract">
+ </componentHelper>
+ 
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleBallastBonusCharterContractComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleBallastBonusCharterContractComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract">
+ </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -98,6 +117,11 @@
           factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
           id="com.mmxlabs.models.lng.commercial.editor.entityProvider"
           referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CharterContractValueProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.CharterContractValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.commercial.CharterContract">
     </valueProvider>
  </extension>
  <extension
@@ -142,8 +166,15 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Entity"
           targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+          
     </factory>
-
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.simpleBallastBonusCharterContractFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Ballast Bonus Contract"
+          targetEClass="com.mmxlabs.models.lng.commercial.CharterContract"
+          outputEClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -159,6 +190,13 @@
           id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityBookDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.SimpleBallastBonusContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.SimpleBallastBonusContractCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+
  </extension>
 
  <extension
