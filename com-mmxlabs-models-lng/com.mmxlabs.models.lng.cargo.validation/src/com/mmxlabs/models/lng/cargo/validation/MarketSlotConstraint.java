@@ -239,9 +239,6 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 			}
 
 		}
-		// DO NOT COMMIT
-		failures.clear();
-		// DO NOT COMMIT
 		
 		if (failures.isEmpty()) {
 			return ctx.createSuccessStatus();
