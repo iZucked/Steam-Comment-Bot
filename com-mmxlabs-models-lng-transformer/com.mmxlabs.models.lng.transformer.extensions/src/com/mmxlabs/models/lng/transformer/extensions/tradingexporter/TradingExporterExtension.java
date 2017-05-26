@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -30,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
@@ -45,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
@@ -213,15 +217,35 @@ public class TradingExporterExtension implements IExporterExtension {
 			}
 			if (seq.get(seq.size() - 1) == element) {
 				for (final Sequence sequence : outputSchedule.getSequences()) {
+					CharterInMarket charterInMarket = sequence.getCharterInMarket();
 					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (vesselAvailability == null) {
+					if (charterInMarket == null && vesselAvailability == null) {
 						continue;
 					}
-					// Find the matching
-					final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
+					
+					boolean correctVessel = false;
+					if (charterInMarket != null) {
+						@Nullable
+						ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
+						if (iSpotCharterInMarket == null) {
+							continue;
+						}
+						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
+						@Nullable
+						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
+						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
+							correctVessel = true;
+						}
+					} else {
+						// non-spot case
+						// Find the matching
+						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
+						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
+							correctVessel = true;
+						}
+					}
 
-					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-					if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
+					if (correctVessel) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
 							if (evt instanceof EndEvent) {
@@ -230,7 +254,6 @@ public class TradingExporterExtension implements IExporterExtension {
 							}
 						}
 					}
-
 				}
 			}
 		}

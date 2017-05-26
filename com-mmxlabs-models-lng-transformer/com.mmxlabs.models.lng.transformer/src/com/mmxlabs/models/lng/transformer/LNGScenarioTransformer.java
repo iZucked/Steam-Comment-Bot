@@ -172,6 +172,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -3039,6 +3040,9 @@ public class LNGScenarioTransformer {
 			} else {
 				builder.setGeneratedCharterOutStartTime(0);
 			}
+			
+//			final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
+//					createHeelConsumer(vesselClass.getSafetyHeel(), vesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 
 			for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
 

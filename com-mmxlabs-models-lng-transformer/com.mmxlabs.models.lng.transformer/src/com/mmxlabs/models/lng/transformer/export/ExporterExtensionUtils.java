@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.SlotContractHelper;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -41,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossSlotDetailsAnno
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -123,7 +125,7 @@ public class ExporterExtensionUtils {
 			final StartEvent startEvent = findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution);
 			return startEvent;
 		} else if (slot.getPortType() == PortType.End) {
-			final EndEvent endEvent = findEndEvent(element, modelEntityMap, outputSchedule, annotatedSolution);
+			final EndEvent endEvent = findEndEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 			return endEvent;
 		}
 		return profitAndLossContainer;
@@ -189,8 +191,7 @@ public class ExporterExtensionUtils {
 		entityDetails.getGeneralPNLDetails().add(details);
 	}
 
-	public EndEvent findEndEvent(final @NonNull ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
-			@NonNull final IAnnotatedSolution annotatedSolution) {
+	public static EndEvent findEndEvent(final ISequenceElement element, @NonNull ModelEntityMap modelEntityMap, @NonNull Schedule outputSchedule, @NonNull IAnnotatedSolution annotatedSolution, IVesselProvider vesselProvider) {
 		EndEvent endEvent = null;
 		//
 		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
@@ -200,17 +201,37 @@ public class ExporterExtensionUtils {
 			if (seq.size() == 0) {
 				continue;
 			}
-			if (seq.get(0) == element) {
+			if (seq.get(seq.size() - 1) == element) {
 				for (final Sequence sequence : outputSchedule.getSequences()) {
+					CharterInMarket charterInMarket = sequence.getCharterInMarket();
 					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (vesselAvailability == null) {
+					if (charterInMarket == null && vesselAvailability == null) {
 						continue;
 					}
+					
+					boolean correctVessel = false;
+					if (charterInMarket != null) {
+						@Nullable
+						ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
+						if (iSpotCharterInMarket == null) {
+							continue;
+						}
+						IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
+						@Nullable
+						ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
+						if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
+							correctVessel = true;
+						}
+					} else {
+						// non-spot case
+						// Find the matching
+						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
+						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
+							correctVessel = true;
+						}
+					}
 
-					// Find the matching
-					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-
-					if (iVesselAvailability == vesselProvider.getVesselAvailability(res)) {
+					if (correctVessel) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
 							if (evt instanceof EndEvent) {
@@ -224,7 +245,6 @@ public class ExporterExtensionUtils {
 		}
 		return endEvent;
 	}
-
 	private StartEvent findStartEvent(final ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
 			@NonNull final IAnnotatedSolution annotatedSolution) {
 		StartEvent startEvent = null;
