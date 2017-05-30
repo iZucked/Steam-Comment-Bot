@@ -57,7 +57,6 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
-		// Disable for now
 		if (true) {
 			// return Activator.PLUGIN_ID;
 		}
