@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 
 public class SubLocalMenuHelper {
 
@@ -44,6 +45,8 @@ public class SubLocalMenuHelper {
 			} else if (menu instanceof SubMenuType) {
 				SubMenuType subMenu = (SubMenuType) menu;
 				mgr.add(subMenu.getSubMenu().createSubMenu());
+			} else if (menu instanceof SeparatorMenuType) {
+				mgr.add(new Separator());
 			}
 		}
 
@@ -52,5 +55,13 @@ public class SubLocalMenuHelper {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public boolean hasActions() {
+		return !menuActions.isEmpty();
+	}
+
+	public void addSeparator() {
+		menuActions.add(new SeparatorMenuType());
 	}
 }

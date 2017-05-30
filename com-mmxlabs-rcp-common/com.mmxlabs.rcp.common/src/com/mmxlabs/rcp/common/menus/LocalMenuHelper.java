@@ -10,10 +10,12 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuListener2;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 
@@ -26,7 +28,7 @@ public class LocalMenuHelper {
 	private final Composite control;
 	private Menu menu;
 
-	private IMenuListener listener;
+	private final IMenuListener listener;
 
 	private String title;
 
@@ -41,7 +43,11 @@ public class LocalMenuHelper {
 				if (menu == null) {
 					menu = mgr.createContextMenu(control);
 				}
+				final IContributionItem[] l = mgr.getItems();
 				mgr.removeAll();
+				for (final IContributionItem itm : l) {
+					itm.dispose();
+				}
 
 				if (title != null) {
 					mgr.add(new GroupMarker(title));
@@ -52,8 +58,10 @@ public class LocalMenuHelper {
 						final ActionMenuType actionMenuType = (ActionMenuType) menu;
 						mgr.add(actionMenuType.getAction());
 					} else if (menu instanceof SubMenuType) {
-						SubMenuType subMenu = (SubMenuType) menu;
+						final SubMenuType subMenu = (SubMenuType) menu;
 						mgr.add(subMenu.getSubMenu().createSubMenu());
+					} else if (menu instanceof SeparatorMenuType) {
+						mgr.add(new Separator());
 					}
 				}
 
@@ -83,6 +91,10 @@ public class LocalMenuHelper {
 		this.menuActions.add(new SubMenuType(subMenuType));
 	}
 
+	public void addSeparator() {
+		menuActions.add(new SeparatorMenuType());
+	}
+
 	public void open() {
 		mgr.fill(control);
 		mgr.setVisible(true);
@@ -94,7 +106,7 @@ public class LocalMenuHelper {
 		mgr.dispose();
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 }
