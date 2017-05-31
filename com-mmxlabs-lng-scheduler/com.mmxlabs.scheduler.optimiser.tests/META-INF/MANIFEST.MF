@@ -10,5 +10,5 @@ Bundle-Version: 4.2.9.qualifier
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.mockito.mockito-all;bundle-version="1.9.5",
  org.junit;bundle-version="4.8.2",
- com.mmxlabs.scheduler.optimiser
-Import-Package: com.mmxlabs.optimiser.core.scenario.common
+ com.mmxlabs.scheduler.optimiser,
+ com.mmxlabs.optimiser.optimiser-core
