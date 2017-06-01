@@ -1,16 +1,13 @@
 Manifest-Version: 1.0
 Bundle-Description: LNG Scheduler
-Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
-Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserService
- Module
+Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserServiceModule
 Bundle-Name: Scheduler - Optimiser
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.2.9.qualifier
-Import-Package: com.mmxlabs.scheduler.optimiser.voyage.impl,
- javax.inject;version="[1.0,2)",
+Import-Package: javax.inject;version="[1.0,2)",
  org.slf4j;version="[1.5,2)"
 Require-Bundle: com.google.inject;bundle-version="3.0.0",
  org.ops4j.peaberry;bundle-version="1.3.0",
@@ -18,7 +15,6 @@ Require-Bundle: com.google.inject;bundle-version="3.0.0",
  com.google.guava;bundle-version="13.0.1",
  com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.2.9,5.0.0)",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.2.9,5.0.0)",
- com.mmxlabs.optimiser.optimiser-ga;bundle-version="[4.2.9,5.0.0)",
  com.mmxlabs.optimiser.optimiser-lso;bundle-version="[4.2.9,5.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[4.2.9,5.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
@@ -54,7 +50,6 @@ Export-Package: com.mmxlabs.scheduler.optimiser,
  com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl,
  com.mmxlabs.scheduler.optimiser.fitness.impl,
  com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator,
- com.mmxlabs.scheduler.optimiser.fitness.impl.ga,
  com.mmxlabs.scheduler.optimiser.fitness.util,
  com.mmxlabs.scheduler.optimiser.initialsequencebuilder,
  com.mmxlabs.scheduler.optimiser.insertion,
