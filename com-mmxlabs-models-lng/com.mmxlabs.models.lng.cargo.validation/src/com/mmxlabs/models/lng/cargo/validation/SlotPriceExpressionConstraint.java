@@ -65,10 +65,15 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 						if (priceExpression != null && !priceExpression.trim().isEmpty()) {
 							for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(priceExpression)) {
 								final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-								if (date == null || date.isAfter(key)) {
+								if (date == null) {
 									final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-											(IConstraintStatus) ctx.createFailureStatus(String.format("[Slot|%s] There is no commodity pricing data before %s %04d for curve %s", slot.getName(),
-													date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())));
+											(IConstraintStatus) ctx.createFailureStatus(String.format("[Slot|%s] There is no commodity pricing data for curve %s", slot.getName(), index.getName())));
+									dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+									failures.add(dcsd);
+								} else if (date.isAfter(key)) {
+									final String monthDisplayname = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+									final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String
+											.format("[Slot|%s] There is no commodity pricing data before %s %04d for curve %s", slot.getName(), monthDisplayname, date.getYear(), index.getName())));
 									dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 									failures.add(dcsd);
 								}
