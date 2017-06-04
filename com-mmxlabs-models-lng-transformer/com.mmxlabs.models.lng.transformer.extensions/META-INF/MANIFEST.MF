@@ -39,7 +39,9 @@ Export-Package: com.mmxlabs.models.lng.transformer.extensions,
  com.mmxlabs.models.lng.transformer.extensions.shippingtype,
  com.mmxlabs.models.lng.transformer.extensions.simplecontracts,
  com.mmxlabs.models.lng.transformer.extensions.tradingexporter
-Import-Package: javax.inject;version="1.0.0",
+Import-Package: com.mmxlabs.models.lng.transformer,
+ com.mmxlabs.models.lng.transformer.contracts,
+ javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.transformer.extensions.modules.TransformerExtensionsActivatorModule
