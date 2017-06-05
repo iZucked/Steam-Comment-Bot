@@ -43,6 +43,7 @@ public class LocalMenuHelper {
 				if (menu == null) {
 					menu = mgr.createContextMenu(control);
 				}
+				// Clean up existing menu items
 				final IContributionItem[] l = mgr.getItems();
 				mgr.removeAll();
 				for (final IContributionItem itm : l) {
@@ -79,6 +80,12 @@ public class LocalMenuHelper {
 		mgr.addMenuListener(listener);
 	}
 
+	@Override
+	public void finalize() {
+		// Ensure we eventually dispose if we forget to call explicitly.
+		dispose();
+	}
+
 	public void clearActions() {
 		this.menuActions.clear();
 	}
@@ -103,7 +110,18 @@ public class LocalMenuHelper {
 
 	public void dispose() {
 		menuActions.clear();
+		{
+			IContributionItem[] items = mgr.getItems();
+			mgr.removeAll();
+			for (IContributionItem item : items) {
+				item.dispose();
+			}
+		}
 		mgr.dispose();
+		if (menu != null) {
+			menu.dispose();
+			menu = null;
+		}
 	}
 
 	public void setTitle(final String title) {
