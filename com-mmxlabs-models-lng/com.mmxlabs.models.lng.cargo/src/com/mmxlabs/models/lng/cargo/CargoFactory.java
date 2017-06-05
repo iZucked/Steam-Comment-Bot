@@ -150,6 +150,33 @@ public interface CargoFactory extends EFactory {
 	StartHeelOptions createStartHeelOptions();
 
 	/**
+	 * Returns a new object of class '<em>Inventory Event Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory Event Row</em>'.
+	 * @generated
+	 */
+	InventoryEventRow createInventoryEventRow();
+
+	/**
+	 * Returns a new object of class '<em>Inventory Capacity Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory Capacity Row</em>'.
+	 * @generated
+	 */
+	InventoryCapacityRow createInventoryCapacityRow();
+
+	/**
+	 * Returns a new object of class '<em>Inventory</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Inventory</em>'.
+	 * @generated
+	 */
+	Inventory createInventory();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -410,6 +410,75 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.InventoryEventRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryEventRowItemProvider inventoryEventRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.InventoryEventRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryEventRowAdapter() {
+		if (inventoryEventRowItemProvider == null) {
+			inventoryEventRowItemProvider = new InventoryEventRowItemProvider(this);
+		}
+
+		return inventoryEventRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryCapacityRowItemProvider inventoryCapacityRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryCapacityRowAdapter() {
+		if (inventoryCapacityRowItemProvider == null) {
+			inventoryCapacityRowItemProvider = new InventoryCapacityRowItemProvider(this);
+		}
+
+		return inventoryCapacityRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.Inventory} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InventoryItemProvider inventoryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.Inventory}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInventoryAdapter() {
+		if (inventoryItemProvider == null) {
+			inventoryItemProvider = new InventoryItemProvider(this);
+		}
+
+		return inventoryItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -549,6 +618,9 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
 		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
 		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
+		if (inventoryEventRowItemProvider != null) inventoryEventRowItemProvider.dispose();
+		if (inventoryCapacityRowItemProvider != null) inventoryCapacityRowItemProvider.dispose();
+		if (inventoryItemProvider != null) inventoryItemProvider.dispose();
 	}
 
 }

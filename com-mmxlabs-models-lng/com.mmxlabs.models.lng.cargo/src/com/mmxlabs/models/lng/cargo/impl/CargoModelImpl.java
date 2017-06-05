@@ -5,11 +5,14 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -17,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -38,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getInventoryModels <em>Inventory Models</em>}</li>
  * </ul>
  *
  * @generated
@@ -112,6 +117,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<VesselTypeGroup> vesselTypeGroups;
+
+	/**
+	 * The cached value of the '{@link #getInventoryModels() <em>Inventory Models</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInventoryModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Inventory> inventoryModels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -221,6 +236,18 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Inventory> getInventoryModels() {
+		if (inventoryModels == null) {
+			inventoryModels = new EObjectResolvingEList<Inventory>(Inventory.class, this, CargoPackage.CARGO_MODEL__INVENTORY_MODELS);
+		}
+		return inventoryModels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -264,6 +291,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getVesselEvents();
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 				return getVesselTypeGroups();
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
+				return getInventoryModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -305,6 +334,10 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getVesselTypeGroups().clear();
 				getVesselTypeGroups().addAll((Collection<? extends VesselTypeGroup>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
+				getInventoryModels().clear();
+				getInventoryModels().addAll((Collection<? extends Inventory>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -338,6 +371,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 				getVesselTypeGroups().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
+				getInventoryModels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -364,6 +400,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return vesselEvents != null && !vesselEvents.isEmpty();
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 				return vesselTypeGroups != null && !vesselTypeGroups.isEmpty();
+			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
+				return inventoryModels != null && !inventoryModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

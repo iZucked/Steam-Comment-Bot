@@ -26,6 +26,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -182,6 +186,27 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass inventoryEventRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass inventoryCapacityRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass inventoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum cargoTypeEEnum = null;
 
 	/**
@@ -197,6 +222,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EEnum eVesselTankStateEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum inventoryFrequencyEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1005,6 +1037,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCargoModel_InventoryModels() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSpotSlot() {
 		return spotSlotEClass;
 	}
@@ -1590,6 +1631,159 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getInventoryEventRow() {
+		return inventoryEventRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryEventRow_StartDate() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryEventRow_EndDate() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryEventRow_Period() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryEventRow_CounterParty() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryEventRow_Volume() {
+		return (EAttribute)inventoryEventRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getInventoryCapacityRow() {
+		return inventoryCapacityRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryCapacityRow_Date() {
+		return (EAttribute)inventoryCapacityRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryCapacityRow_MinVolume() {
+		return (EAttribute)inventoryCapacityRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventoryCapacityRow_MaxVolume() {
+		return (EAttribute)inventoryCapacityRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getInventory() {
+		return inventoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventory_StartDate() {
+		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventory_StartVolume() {
+		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getInventory_Feeds() {
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getInventory_Offtakes() {
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getInventory_Capacities() {
+		return (EReference)inventoryEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getInventory_Name() {
+		return (EAttribute)inventoryEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -1610,6 +1804,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EEnum getEVesselTankState() {
 		return eVesselTankStateEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getInventoryFrequency() {
+		return inventoryFrequencyEEnum;
 	}
 
 	/**
@@ -1648,6 +1851,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_AVAILABILITIES);
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_EVENTS);
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_TYPE_GROUPS);
+		createEReference(cargoModelEClass, CARGO_MODEL__INVENTORY_MODELS);
 
 		cargoEClass = createEClass(CARGO);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
@@ -1805,10 +2009,31 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__PRICE_EXPRESSION);
 
+		inventoryEventRowEClass = createEClass(INVENTORY_EVENT_ROW);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__START_DATE);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__END_DATE);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__PERIOD);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__COUNTER_PARTY);
+		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__VOLUME);
+
+		inventoryCapacityRowEClass = createEClass(INVENTORY_CAPACITY_ROW);
+		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__DATE);
+		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MIN_VOLUME);
+		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MAX_VOLUME);
+
+		inventoryEClass = createEClass(INVENTORY);
+		createEAttribute(inventoryEClass, INVENTORY__START_DATE);
+		createEAttribute(inventoryEClass, INVENTORY__START_VOLUME);
+		createEReference(inventoryEClass, INVENTORY__FEEDS);
+		createEReference(inventoryEClass, INVENTORY__OFFTAKES);
+		createEReference(inventoryEClass, INVENTORY__CAPACITIES);
+		createEAttribute(inventoryEClass, INVENTORY__NAME);
+
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
 		eVesselTankStateEEnum = createEEnum(EVESSEL_TANK_STATE);
+		inventoryFrequencyEEnum = createEEnum(INVENTORY_FREQUENCY);
 	}
 
 	/**
@@ -1886,6 +2111,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_VesselAvailabilities(), this.getVesselAvailability(), null, "vesselAvailabilities", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_VesselEvents(), this.getVesselEvent(), null, "vesselEvents", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_VesselTypeGroups(), this.getVesselTypeGroup(), null, "vesselTypeGroups", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_InventoryModels(), this.getInventory(), null, "inventoryModels", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", "false", 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2087,6 +2313,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getStartHeelOptions_MaxVolumeAvailable(), ecorePackage.getEDouble(), "maxVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStartHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(inventoryEventRowEClass, InventoryEventRow.class, "InventoryEventRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInventoryEventRow_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryEventRow_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryEventRow_Period(), this.getInventoryFrequency(), "period", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryEventRow_CounterParty(), ecorePackage.getEString(), "counterParty", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryEventRow_Volume(), ecorePackage.getEInt(), "volume", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(inventoryCapacityRowEClass, InventoryCapacityRow.class, "InventoryCapacityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInventoryCapacityRow_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryCapacityRow_MinVolume(), ecorePackage.getEInt(), "minVolume", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryCapacityRow_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(inventoryEClass, Inventory.class, "Inventory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInventory_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventory_StartVolume(), ecorePackage.getEInt(), "startVolume", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Feeds(), this.getInventoryEventRow(), null, "feeds", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Offtakes(), this.getInventoryEventRow(), null, "offtakes", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Capacities(), this.getInventoryCapacityRow(), null, "capacities", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventory_Name(), ecorePackage.getEString(), "name", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
 		addEEnumLiteral(cargoTypeEEnum, CargoType.FLEET);
@@ -2101,6 +2347,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.EITHER);
 		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_COLD);
 		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_WARM);
+
+		initEEnum(inventoryFrequencyEEnum, InventoryFrequency.class, "InventoryFrequency");
+		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.CARGO);
+		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.HOURLY);
+		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.DAILY);
+		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.MONTHLY);
+		addEEnumLiteral(inventoryFrequencyEEnum, InventoryFrequency.LEVEL);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -71,6 +71,7 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 		add_vesselAvailabilitiesEditor(detailComposite, topClass);
 		add_vesselEventsEditor(detailComposite, topClass);
 		add_vesselTypeGroupsEditor(detailComposite, topClass);
+		add_inventoryModelsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadSlots feature on CargoModel
@@ -131,5 +132,14 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselTypeGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS));
+	}
+
+	/**
+	 * Create the editor for the inventoryModels feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_inventoryModelsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS));
 	}
 }

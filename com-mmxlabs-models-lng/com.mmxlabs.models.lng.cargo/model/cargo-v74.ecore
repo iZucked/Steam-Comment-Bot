@@ -24,6 +24,8 @@
         eType="#//VesselEvent" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselTypeGroups" upperBound="-1"
         eType="#//VesselTypeGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryModels" upperBound="-1"
+        eType="#//Inventory"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
@@ -404,5 +406,35 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryEventRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="#//InventoryFrequency"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="counterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryCapacityRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inventory">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feeds" upperBound="-1"
+        eType="#//InventoryEventRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offtakes" upperBound="-1"
+        eType="#//InventoryEventRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="capacities" upperBound="-1"
+        eType="#//InventoryCapacityRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InventoryFrequency">
+    <eLiterals name="Cargo"/>
+    <eLiterals name="Hourly" value="1"/>
+    <eLiterals name="Daily" value="2"/>
+    <eLiterals name="Monthly" value="3"/>
+    <eLiterals name="Level" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

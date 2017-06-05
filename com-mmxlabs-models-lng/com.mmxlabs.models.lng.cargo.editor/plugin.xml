@@ -127,6 +127,18 @@
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.StartHeelOptions">
          </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryCapacityRowComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryCapacityRowComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.InventoryCapacityRow">
+         </componentHelper>
         
 	</extension>
  <extension
@@ -389,6 +401,19 @@
           outputEClass="com.mmxlabs.models.lng.cargo.MaintenanceEvent"
           targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.InventoryEventRow.Factory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Offtake"
+          outputEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow"
+          targetEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.InventoryCapacityRow.factory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Capacity"
+          targetEClass="com.mmxlabs.models.lng.cargo.InventoryCapacityRow">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
@@ -423,15 +448,15 @@
        </FeatureAnyOf>
     </editorFactory>
     <editorFactory
-          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory">
+          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.InventoryPeriodInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.editors.InventoryPeriodInlineEditorFactory">
        <FeatureAnyOf>
           <EDataTypeIs
-                EDataTypeName="EVesselTankState"
+                EDataTypeName="InventoryFrequency"
                 EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
           </EDataTypeIs>
        </FeatureAnyOf>
-    </editorFactory>    
+    </editorFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">

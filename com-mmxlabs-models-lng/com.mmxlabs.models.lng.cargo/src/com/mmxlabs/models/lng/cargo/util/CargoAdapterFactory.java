@@ -166,6 +166,18 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createStartHeelOptionsAdapter();
 			}
 			@Override
+			public Adapter caseInventoryEventRow(InventoryEventRow object) {
+				return createInventoryEventRowAdapter();
+			}
+			@Override
+			public Adapter caseInventoryCapacityRow(InventoryCapacityRow object) {
+				return createInventoryCapacityRowAdapter();
+			}
+			@Override
+			public Adapter caseInventory(Inventory object) {
+				return createInventoryAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -504,6 +516,48 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStartHeelOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow <em>Inventory Event Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow
+	 * @generated
+	 */
+	public Adapter createInventoryEventRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow <em>Inventory Capacity Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow
+	 * @generated
+	 */
+	public Adapter createInventoryCapacityRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.Inventory <em>Inventory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory
+	 * @generated
+	 */
+	public Adapter createInventoryAdapter() {
 		return null;
 	}
 

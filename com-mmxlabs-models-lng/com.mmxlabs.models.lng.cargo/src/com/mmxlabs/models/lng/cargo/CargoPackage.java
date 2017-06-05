@@ -194,13 +194,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__VESSEL_TYPE_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Inventory Models</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__INVENTORY_MODELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4933,6 +4942,216 @@ public interface CargoPackage extends EPackage {
 	int START_HEEL_OPTIONS_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl <em>Inventory Event Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryEventRow()
+	 * @generated
+	 */
+	int INVENTORY_EVENT_ROW = 18;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__START_DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__END_DATE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__PERIOD = 2;
+
+	/**
+	 * The feature id for the '<em><b>Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__COUNTER_PARTY = 3;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW__VOLUME = 4;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Event Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW_FEATURE_COUNT = 5;
+
+	/**
+	 * The number of operations of the '<em>Inventory Event Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_EVENT_ROW_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl <em>Inventory Capacity Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryCapacityRow()
+	 * @generated
+	 */
+	int INVENTORY_CAPACITY_ROW = 19;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW__MIN_VOLUME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW__MAX_VOLUME = 2;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Capacity Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Inventory Capacity Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl <em>Inventory</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.InventoryImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventory()
+	 * @generated
+	 */
+	int INVENTORY = 20;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__START_DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Start Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__START_VOLUME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Feeds</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__FEEDS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Offtakes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__OFFTAKES = 3;
+
+	/**
+	 * The feature id for the '<em><b>Capacities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__CAPACITIES = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY__NAME = 5;
+
+	/**
+	 * The number of structural features of the '<em>Inventory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEATURE_COUNT = 6;
+
+	/**
+	 * The number of operations of the '<em>Inventory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4940,7 +5159,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 18;
+	int CARGO_TYPE = 21;
 
 
 	/**
@@ -4951,7 +5170,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 19;
+	int VESSEL_TYPE = 22;
 
 
 	/**
@@ -4962,7 +5181,18 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEVesselTankState()
 	 * @generated
 	 */
-	int EVESSEL_TANK_STATE = 20;
+	int EVESSEL_TANK_STATE = 23;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFrequency
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
+	 * @generated
+	 */
+	int INVENTORY_FREQUENCY = 24;
 
 
 	/**
@@ -5847,6 +6077,17 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_VesselTypeGroups();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Inventory Models</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_InventoryModels();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6541,6 +6782,190 @@ public interface CargoPackage extends EPackage {
 	EAttribute getStartHeelOptions_PriceExpression();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow <em>Inventory Event Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Event Row</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow
+	 * @generated
+	 */
+	EClass getInventoryEventRow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getStartDate()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_StartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getEndDate <em>End Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getEndDate()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_EndDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getPeriod <em>Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getPeriod()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_Period();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getCounterParty <em>Counter Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Counter Party</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getCounterParty()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_CounterParty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolume <em>Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryEventRow#getVolume()
+	 * @see #getInventoryEventRow()
+	 * @generated
+	 */
+	EAttribute getInventoryEventRow_Volume();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow <em>Inventory Capacity Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Capacity Row</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow
+	 * @generated
+	 */
+	EClass getInventoryCapacityRow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getDate()
+	 * @see #getInventoryCapacityRow()
+	 * @generated
+	 */
+	EAttribute getInventoryCapacityRow_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinVolume <em>Min Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Volume</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinVolume()
+	 * @see #getInventoryCapacityRow()
+	 * @generated
+	 */
+	EAttribute getInventoryCapacityRow_MinVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxVolume <em>Max Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Volume</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxVolume()
+	 * @see #getInventoryCapacityRow()
+	 * @generated
+	 */
+	EAttribute getInventoryCapacityRow_MaxVolume();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Inventory <em>Inventory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory
+	 * @generated
+	 */
+	EClass getInventory();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getStartDate <em>Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getStartDate()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EAttribute getInventory_StartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getStartVolume <em>Start Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Volume</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getStartVolume()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EAttribute getInventory_StartVolume();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Inventory#getFeeds <em>Feeds</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Feeds</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getFeeds()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EReference getInventory_Feeds();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Inventory#getOfftakes <em>Offtakes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Offtakes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getOfftakes()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EReference getInventory_Offtakes();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Inventory#getCapacities <em>Capacities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Capacities</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getCapacities()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EReference getInventory_Capacities();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Inventory#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getName()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EAttribute getInventory_Name();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6569,6 +6994,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getEVesselTankState();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Inventory Frequency</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFrequency
+	 * @generated
+	 */
+	EEnum getInventoryFrequency();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -7259,6 +7694,14 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
 
 		/**
+		 * The meta object literal for the '<em><b>Inventory Models</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__INVENTORY_MODELS = eINSTANCE.getCargoModel_InventoryModels();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7805,6 +8248,148 @@ public interface CargoPackage extends EPackage {
 		EAttribute START_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getStartHeelOptions_PriceExpression();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl <em>Inventory Event Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryEventRow()
+		 * @generated
+		 */
+		EClass INVENTORY_EVENT_ROW = eINSTANCE.getInventoryEventRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__START_DATE = eINSTANCE.getInventoryEventRow_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__END_DATE = eINSTANCE.getInventoryEventRow_EndDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Period</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__PERIOD = eINSTANCE.getInventoryEventRow_Period();
+
+		/**
+		 * The meta object literal for the '<em><b>Counter Party</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__COUNTER_PARTY = eINSTANCE.getInventoryEventRow_CounterParty();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_EVENT_ROW__VOLUME = eINSTANCE.getInventoryEventRow_Volume();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl <em>Inventory Capacity Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryCapacityRow()
+		 * @generated
+		 */
+		EClass INVENTORY_CAPACITY_ROW = eINSTANCE.getInventoryCapacityRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CAPACITY_ROW__DATE = eINSTANCE.getInventoryCapacityRow_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CAPACITY_ROW__MIN_VOLUME = eINSTANCE.getInventoryCapacityRow_MinVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CAPACITY_ROW__MAX_VOLUME = eINSTANCE.getInventoryCapacityRow_MaxVolume();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl <em>Inventory</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.InventoryImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventory()
+		 * @generated
+		 */
+		EClass INVENTORY = eINSTANCE.getInventory();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY__START_DATE = eINSTANCE.getInventory_StartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY__START_VOLUME = eINSTANCE.getInventory_StartVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Feeds</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY__FEEDS = eINSTANCE.getInventory_Feeds();
+
+		/**
+		 * The meta object literal for the '<em><b>Offtakes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY__OFFTAKES = eINSTANCE.getInventory_Offtakes();
+
+		/**
+		 * The meta object literal for the '<em><b>Capacities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY__CAPACITIES = eINSTANCE.getInventory_Capacities();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY__NAME = eINSTANCE.getInventory_Name();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7833,6 +8418,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum EVESSEL_TANK_STATE = eINSTANCE.getEVesselTankState();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.InventoryFrequency
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
+		 * @generated
+		 */
+		EEnum INVENTORY_FREQUENCY = eINSTANCE.getInventoryFrequency();
 
 	}
 
