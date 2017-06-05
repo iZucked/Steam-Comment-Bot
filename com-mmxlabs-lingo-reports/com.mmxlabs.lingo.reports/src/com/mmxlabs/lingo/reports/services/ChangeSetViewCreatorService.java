@@ -31,10 +31,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.views.changeset.OpenChangeSetHandler;
+import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class ChangeSetViewCreatorService {
+
+	public static final String TAG_PREFIX_SOLUTION_UUID = "SolutionUUID-";
+
+	public static final String TAG_PREFIX_SCENARIO_UUID = "ScenarioUUID-";
+
+	public static final String TAG_TYPE_OLD_ACTION_SET = "action-set";
+	public static final String TAG_TYPE_NEW_ACTION_SET = "new-action-set";
+	public static final String TAG_TYPE_INSERTIONS = "insertions";
 
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
 
@@ -117,13 +127,20 @@ public class ChangeSetViewCreatorService {
 				viewPart = partService.showPart(viewPart, PartState.ACTIVATE); // Show part
 			} else {
 
+				String viewTypeTag = TAG_TYPE_OLD_ACTION_SET;
+				if (solution.getSolution() instanceof ActionableSetPlan) {
+					viewTypeTag = TAG_TYPE_NEW_ACTION_SET;
+				} else if (solution.getSolution() instanceof SlotInsertionOptions) {
+					viewTypeTag = TAG_TYPE_INSERTIONS;
+				}
+
 				final MPartStack stack = (MPartStack) modelService.find("reportsArea", application);
 				final MPart part = modelService.createModelElement(MPart.class);
 				part.setElementId(viewPartId);
 				part.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
 				part.setCloseable(true);
 				part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
-				part.getTags().add("action-set");
+				part.getTags().add(viewTypeTag);
 				part.getTags().add("disable-event-handlers");
 				part.setLabel(solution.getTitle());
 
@@ -134,7 +151,7 @@ public class ChangeSetViewCreatorService {
 				{
 					final MDirectToolItem item = modelService.createModelElement(MDirectToolItem.class);
 					item.setElementId(viewPartId + ".directtoolitem.copy");
-					item.setType(ItemType.CHECK);
+					item.setType(ItemType.PUSH);
 					item.setTooltip("Copy to clipboard");
 					item.setLabel("Filter Non Structural Changes");
 					item.setIconURI("platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif");
@@ -188,7 +205,7 @@ public class ChangeSetViewCreatorService {
 						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
 						item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
 						item.setType(ItemType.CHECK);
-						item.setTooltip("Toggle  related changes filter");
+						item.setTooltip("Toggle related changes filter");
 						item.setLabel("Toggle related changes filter");
 						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
 						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
@@ -317,8 +334,8 @@ public class ChangeSetViewCreatorService {
 
 					}
 
-					part.getTags().add("ScenarioUUID-" + solution.getScenarioInstance().getUuid());
-					part.getTags().add("SolutionUUID-" + solution.getSolution().getUuid());
+					part.getTags().add(TAG_PREFIX_SCENARIO_UUID + solution.getScenarioInstance().getUuid());
+					part.getTags().add(TAG_PREFIX_SOLUTION_UUID + solution.getSolution().getUuid());
 				}
 
 				stack.getChildren().add(part); // Add part to stack

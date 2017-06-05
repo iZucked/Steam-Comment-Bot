@@ -5,9 +5,6 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,13 +14,11 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.ToDoubleBiFunction;
-import java.util.function.ToIntBiFunction;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -42,15 +37,11 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -65,35 +56,22 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TreeEvent;
-import org.eclipse.swt.events.TreeListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.services.ChangeSetViewCreatorService;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -112,9 +90,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -125,16 +100,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -142,7 +111,6 @@ import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -154,13 +122,47 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class ChangeSetView implements IAdaptable {
 
 	public static enum ViewMode {
-		COMPARE, ACTION_SET
+		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS
 	}
 
-	/**
-	 * Data key to store selected vessel column
-	 */
-	private static final String DATA_SELECTED_COLUMN = "selected-vessel-column";
+	public static class ViewState {
+
+		public ChangeSetRoot root;
+
+		public ChangeSetTableRoot tableRootToBase;
+		public ChangeSetTableRoot tableRootToPrevious;
+
+		public @Nullable AnalyticsSolution lastSolution;
+		public @Nullable NamedObject lastTargetSlot;
+		public final Collection<Slot> allTargetSlots = new HashSet<>();
+
+		public ViewState() {
+
+		}
+
+		public ViewState(final ChangeSetRoot root) {
+			this.root = root;
+		}
+
+		public @Nullable String getTargetSlotID() {
+			if (lastTargetSlot != null) {
+				return lastTargetSlot.getName();
+			}
+			return null;
+		}
+
+		public void dispose() {
+			this.allTargetSlots.clear();
+			this.lastSolution = null;
+			this.lastTargetSlot = null;
+			this.root = null;
+			this.tableRootToBase = null;
+			this.tableRootToPrevious = null;
+		}
+
+	}
+
+	private ViewState currentViewState = null;
 
 	private static final String KEY_RESTORE_ANALYTICS_SOLUTION = "restore-analytics-solution-from-tags";
 
@@ -168,20 +170,6 @@ public class ChangeSetView implements IAdaptable {
 	private EPartService partService;
 
 	private GridTreeViewer viewer;
-
-	private GridColumnGroup vesselColumnGroup;
-	private GridViewerColumn vesselColumnStub;
-
-	private GridViewerColumn violationColumn;
-
-	private GridViewerColumn latenessColumn;
-
-	private ChangeSetWiringDiagram diagram;
-
-	/**
-	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
-	 */
-	private boolean textualVesselMarkers = false;
 
 	@Inject
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
@@ -192,6 +180,8 @@ public class ChangeSetView implements IAdaptable {
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
 
+	private ChangeSetViewColumnHelper columnHelper;
+
 	private final IScenarioComparisonServiceListener listener = new IScenarioComparisonServiceListener() {
 
 		@Override
@@ -200,7 +190,7 @@ public class ChangeSetView implements IAdaptable {
 				return;
 			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-				cleanUpVesselColumns();
+				columnHelper.cleanUpVesselColumns();
 				setEmptyData();
 			}
 		}
@@ -213,14 +203,15 @@ public class ChangeSetView implements IAdaptable {
 			}
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				final ScenarioResult target = pin == null ? other : pin;
-				setNewDataData(target, monitor -> {
+				setNewDataData(target, (monitor, targetSlotId) -> {
 					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
 					scheduleDiffUtils.setCheckAssignmentDifferences(true);
 					scheduleDiffUtils.setCheckSpotMarketDifferences(true);
 					scheduleDiffUtils.setCheckNextPortDifferences(true);
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
 					final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, equivalancesMap, table, pin, other, monitor);
-					return newRoot;
+
+					return new ViewState(newRoot);
 				}, null);
 			}
 		}
@@ -231,22 +222,8 @@ public class ChangeSetView implements IAdaptable {
 		}
 	};
 
-	private final Map<ScenarioResult, ScenarioInstanceDeletedListener> listenerMap = new HashMap<>();
-
-	private Font boldFont;
-
-	private Image imageClosedCircle;
-
-	private Image imageHalfCircle;
-	private Image imageOpenCircle;
-
 	private ViewMode viewMode = ViewMode.COMPARE;
 	private IAdditionalAttributeProvider additionalAttributeProvider;
-
-	private ChangeSetRoot root;
-
-	public ChangeSetTableRoot tableRootToBase;
-	public ChangeSetTableRoot tableRootToPrevious;
 
 	// flag to indicate whether or not to respond to data change events.
 	private boolean handleEvents;
@@ -255,24 +232,16 @@ public class ChangeSetView implements IAdaptable {
 
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
-	private @Nullable AnalyticsSolution lastSolution;
-	private @Nullable NamedObject lastTargetSlot;
-	private Collection<Slot> allTargetSlots = new HashSet<>();
-
 	private boolean diffToBase = false;
 	private boolean showNonStructuralChanges = false;
 
 	private boolean persistAnalyticsSolution = false;
 
 	private final class ViewUpdateRunnable implements Runnable {
-		private final ChangeSetRoot newRoot;
-		private final ChangeSetTableRoot csdiffToPrevious;
-		private final ChangeSetTableRoot csDdiffToBase;
+		private final ViewState newViewState;
 
-		private ViewUpdateRunnable(final ChangeSetRoot newRoot, final ChangeSetTableRoot diffToPrevious, final ChangeSetTableRoot diffToBase) {
-			this.newRoot = newRoot;
-			this.csdiffToPrevious = diffToPrevious;
-			this.csDdiffToBase = diffToBase;
+		private ViewUpdateRunnable(final ViewState newViewState) {
+			this.newViewState = newViewState;
 		}
 
 		@Override
@@ -288,6 +257,7 @@ public class ChangeSetView implements IAdaptable {
 			final Set<String> vesselnames = new LinkedHashSet<>();
 			final Map<String, String> shortNameMap = new HashMap<>();
 
+			final ChangeSetTableRoot csDdiffToBase = newViewState.tableRootToBase;
 			if (csDdiffToBase != null) {
 				for (final ChangeSetTableGroup group : csDdiffToBase.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
@@ -299,6 +269,7 @@ public class ChangeSetView implements IAdaptable {
 					}
 				}
 			}
+			final ChangeSetTableRoot csdiffToPrevious = newViewState.tableRootToPrevious;
 			if (csdiffToPrevious != null) {
 				for (final ChangeSetTableGroup group : csdiffToPrevious.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
@@ -315,130 +286,25 @@ public class ChangeSetView implements IAdaptable {
 
 			final List<String> sortedNames = new ArrayList<>(vesselnames);
 			Collections.sort(sortedNames);
-			for (final String name : sortedNames) {
-				assert name != null;
-				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-				gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-				gvc.getColumn().setText(shortNameMap.get(name));
-				gvc.getColumn().setHeaderTooltip(name);
-				gvc.getColumn().setWidth(22);
-				gvc.getColumn().setResizeable(false);
-				gvc.setLabelProvider(createVesselLabelProvider(name));
-				gvc.getColumn().setHeaderRenderer(new VesselNameColumnHeaderRenderer());
-				gvc.getColumn().setCellRenderer(createCellRenderer());
-				gvc.getColumn().setDetail(true);
-				gvc.getColumn().setSummary(false);
-				gvc.getColumn().addSelectionListener(new SelectionListener() {
 
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						if (viewer.getData(DATA_SELECTED_COLUMN) == gc) {
-							viewer.setData(DATA_SELECTED_COLUMN, null);
-						} else {
-							viewer.setData(DATA_SELECTED_COLUMN, gc);
-						}
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-
-					}
-				});
-			}
-
-			{
-				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-				gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-				gvc.getColumn().setText("");
-				gvc.getColumn().setHeaderTooltip("Vessel assignment changed");
-				gvc.getColumn().setWidth(22);
-				gvc.getColumn().setResizeable(false);
-				gvc.setLabelProvider(createGroupVesselLabelProvider());
-				gvc.getColumn().setHeaderRenderer(new VesselNameColumnHeaderRenderer());
-				gvc.getColumn().setCellRenderer(createCellRenderer());
-				gvc.getColumn().setDetail(false);
-				gvc.getColumn().setSummary(true);
-			}
+			columnHelper.updateVesselColumns(sortedNames, shortNameMap);
 
 			// Force header size recalculation
 			viewer.getGrid().recalculateHeader();
 
-			if (newRoot != null) {
-				for (final ChangeSet cs : newRoot.getChangeSets()) {
-					// createListener(cs.getBaseScenario());
-					// createListener(cs.getCurrentScenario());
-					// createListener(cs.getPrevScenario());
-				}
-			}
-			final ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
+			final ViewState oldRoot = currentViewState;
 
-			diagram.setChangeSetRoot(newTable);
-			viewer.setInput(newTable);
+			final ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
 			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
-			final ChangeSetRoot oldRoot = ChangeSetView.this.root;
-			ChangeSetView.this.root = newRoot;
-			ChangeSetView.this.tableRootToBase = csDdiffToBase;
-			ChangeSetView.this.tableRootToPrevious = csdiffToPrevious;
+
+			currentViewState = newViewState;
+
+			columnHelper.getDiagram().setChangeSetRoot(newTable);
+			viewer.setInput(newTable);
 			cleanUp(oldRoot);
 
 			// Repack some data column
-			column_SetName.getColumn().pack();
-			column_Lateness.getColumn().pack();
-			column_Violations.getColumn().pack();
-		}
-	}
-
-	private static class ScenarioInstanceDeletedListener extends ScenarioServiceListener {
-		private final ScenarioInstance scenarioInstance;
-		private final ChangeSetView view;
-
-		public ScenarioInstanceDeletedListener(@NonNull final ScenarioInstance scenarioInstance, final ChangeSetView view) {
-			this.scenarioInstance = scenarioInstance;
-			this.view = view;
-		}
-
-		@Override
-		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			boolean linkedScenario = false;
-			final ChangeSetRoot root = view.root;
-			if (root != null) {
-				for (final ChangeSet cs : root.getChangeSets()) {
-					if (scenarioInstance == cs.getBaseScenario()) {
-						linkedScenario = true;
-					} else if (scenarioInstance == cs.getCurrentScenario()) {
-						linkedScenario = true;
-					} else if (scenarioInstance == cs.getPrevScenario()) {
-						linkedScenario = true;
-					}
-				}
-			}
-			if (linkedScenario) {
-				RunnerHelper.syncExec(() -> view.handleAnalyseScenario(null));
-			}
-		}
-
-		@Override
-		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			if (scenarioInstance == this.scenarioInstance) {
-				boolean linkedScenario = false;
-				final ChangeSetRoot root = view.root;
-				if (root != null) {
-					for (final ChangeSet cs : root.getChangeSets()) {
-						if (scenarioInstance == cs.getBaseScenario()) {
-							linkedScenario = true;
-						} else if (scenarioInstance == cs.getCurrentScenario()) {
-							linkedScenario = true;
-						} else if (scenarioInstance == cs.getPrevScenario()) {
-							linkedScenario = true;
-						}
-					}
-				}
-				if (linkedScenario) {
-					RunnerHelper.syncExec(() -> view.handleAnalyseScenario(null));
-				}
-			}
+			columnHelper.packMainColumns();
 		}
 	}
 
@@ -449,14 +315,14 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public void begin() {
-				textualVesselMarkers = true;
+				columnHelper.setTextualVesselMarkers(true);
 				// Need to refresh the view to trigger creation of the text labels
 				ViewerHelper.refresh(viewer, true);
 			}
 
 			@Override
 			public void done() {
-				textualVesselMarkers = false;
+				columnHelper.setTextualVesselMarkers(false);
 				// Need to refresh the view to trigger creation of the text labels
 				ViewerHelper.refresh(viewer, true);
 			}
@@ -525,17 +391,23 @@ public class ChangeSetView implements IAdaptable {
 
 		if (IActionPlanHandler.class.isAssignableFrom(adapter)) {
 
-			if (viewMode == ViewMode.ACTION_SET) {
+			if (viewMode != ViewMode.COMPARE) {
 				return (T) new IActionPlanHandler() {
 
 					@Override
 					public void displayActionPlan(final List<ScenarioResult> scenarios) {
-						cleanUpVesselColumns();
+						columnHelper.cleanUpVesselColumns();
 
+						final ViewState newViewState = new ViewState();
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
 						final ChangeSetTableRoot csdiffToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, null);
 						final ChangeSetTableRoot csdiffToBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, null);
-						RunnerHelper.exec(new ViewUpdateRunnable(newRoot, csdiffToPrevious, csdiffToBase), true);
+
+						newViewState.root = newRoot;
+						newViewState.tableRootToBase = csdiffToBase;
+						newViewState.tableRootToPrevious = csdiffToPrevious;
+
+						RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 					}
 				};
 			}
@@ -557,7 +429,7 @@ public class ChangeSetView implements IAdaptable {
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			try {
-				textualVesselMarkers = true;
+				columnHelper.setTextualVesselMarkers(true);
 				// Need to refresh the view to trigger creation of the text labels
 				ViewerHelper.refresh(viewer, true);
 				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
@@ -573,7 +445,7 @@ public class ChangeSetView implements IAdaptable {
 
 				};
 			} finally {
-				textualVesselMarkers = false;
+				columnHelper.setTextualVesselMarkers(false);
 			}
 		}
 		return (T) null;
@@ -582,37 +454,25 @@ public class ChangeSetView implements IAdaptable {
 	private final Queue<Runnable> postCreateActions = new ConcurrentLinkedQueue<>();
 	private boolean viewCreated = false;
 
-	private GridViewerColumn column_SetName;
-
-	private GridViewerColumn column_Lateness;
-
-	private GridViewerColumn column_Violations;
-
 	@PostConstruct
 	public void createPartControl(@Optional final MPart part, final Composite parent) {
 		handleEvents = true;
 		if (part != null) {
 			for (final String tag : part.getTags()) {
-				if (tag.equals("action-set")) {
-					viewMode = ViewMode.ACTION_SET;
+				if (tag.equals(ChangeSetViewCreatorService.TAG_TYPE_OLD_ACTION_SET)) {
+					viewMode = ViewMode.OLD_ACTION_SET;
+				}
+				if (tag.equals(ChangeSetViewCreatorService.TAG_TYPE_NEW_ACTION_SET)) {
+					viewMode = ViewMode.NEW_ACTION_SET;
+				}
+				if (tag.equals(ChangeSetViewCreatorService.TAG_TYPE_INSERTIONS)) {
+					viewMode = ViewMode.INSERTIONS;
 				}
 				if (tag.equals("disable-event-handlers")) {
 					handleEvents = false;
 				}
 			}
 		}
-
-		final ImageDescriptor openCircleDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", "icons/open-circle.png");
-		final ImageDescriptor closedCircleDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", "icons/closed-circle.png");
-		final ImageDescriptor halfCircleDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lingo.reports", "icons/half-circle.png");
-
-		imageOpenCircle = openCircleDescriptor.createImage();
-		imageClosedCircle = closedCircleDescriptor.createImage();
-		imageHalfCircle = halfCircleDescriptor.createImage();
-
-		final Font systemFont = Display.getDefault().getSystemFont();
-		final FontData fontData = systemFont.getFontData()[0];
-		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -621,338 +481,15 @@ public class ChangeSetView implements IAdaptable {
 
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.getGrid().setLinesVisible(true);
-		// viewer.getGrid().setAutoHeight(true);
-		// viewer.getGrid().setRowHeaderRenderer(new DefaultRowHeaderRenderer());
-		// viewer.getGrid().setHeaderRowHeaderRenderer(new DefaultRowHeCaderRenderer());
 
+		// Note: Only applies to setInput - #refresh() will not trigger expansion
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
 		// Create content provider
 		viewer.setContentProvider(createContentProvider());
 
-		// Create columns
-		{
-			column_SetName = new GridViewerColumn(viewer, SWT.CENTER);
-			column_SetName.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			column_SetName.getColumn().setText("");
-			column_SetName.getColumn().setTree(true);
-			column_SetName.getColumn().setWidth(60);
-			column_SetName.getColumn().setResizeable(true);
-			column_SetName.getColumn().setMoveable(false);
-			column_SetName.setLabelProvider(createCSLabelProvider());
-			column_SetName.getColumn().setCellRenderer(createCellRenderer());
-		}
-
-		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER | SWT.TOGGLE);
-		pnlComponentGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
-
-		// pnlComponentGroup.setText("P&L Components");
-		createCenteringGroupRenderer(pnlComponentGroup);
-		pnlComponentGroup.setExpanded(false);
-		pnlComponentGroup.addTreeListener(new TreeListener() {
-
-			@Override
-			public void treeExpanded(final TreeEvent e) {
-				pnlComponentGroup.setText("P&L Components");
-
-			}
-
-			@Override
-			public void treeCollapsed(final TreeEvent e) {
-				pnlComponentGroup.setText("");
-
-			}
-		});
-
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("P&L (m)");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createPNLDeltaLabelProvider());
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(true);
-
-		}
-		// {
-		// final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-		// final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-		// gvc.getColumn().setText("");
-		// gvc.getColumn().setHeaderTooltip("P&&L Components");
-		// gvc.getColumn().setWidth(20);
-		// gvc.setLabelProvider(createStubLabelProvider());
-		// // gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
-		// // ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
-		// createWordWrapRenderer(gvc);
-		// gvc.getColumn().setCellRenderer(createCellRenderer());
-		// gvc.getColumn().setDetail(false);
-		// gvc.getColumn().setSummary(true);
-		// }
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("+ Sales");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-		}
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("- Purchase");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-		}
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("- Ship FOB");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createShippingDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-		}
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("- Ship DES");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createAdditionalShippingPNLDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-		}
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("- Upside");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createAdditionalUpsidePNLDeltaLabelProvider());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("+ Cargo other");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createCargoOtherPNLDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-		}
-		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("+ Equity");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createUpstreamDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-		}
-		{
-			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("+ Tax, etc.");
-			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createTaxDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		// Space col
-		createSpacerColumn();
-		{
-			column_Lateness = new GridViewerColumn(viewer, SWT.CENTER);
-			column_Lateness.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			column_Lateness.getColumn().setText("Late");
-			column_Lateness.getColumn().setHeaderTooltip("Lateness");
-			column_Lateness.getColumn().setWidth(50);
-			column_Lateness.setLabelProvider(createLatenessDeltaLabelProvider());
-			column_Lateness.getColumn().setCellRenderer(createCellRenderer());
-
-			this.latenessColumn = column_Lateness;
-		}
-		{
-			column_Violations = new GridViewerColumn(viewer, SWT.CENTER);
-			column_Violations.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			column_Violations.getColumn().setText("Violations");
-			column_Violations.getColumn().setHeaderTooltip("Capacity Violations");
-			column_Violations.getColumn().setWidth(50);
-			column_Violations.setLabelProvider(createViolationsDeltaLabelProvider());
-			createWordWrapRenderer(column_Violations);
-			column_Violations.getColumn().setCellRenderer(createCellRenderer());
-
-			this.violationColumn = column_Violations;
-
-		}
-
-		// Space col
-		createSpacerColumn();
-
-		final GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
-		loadGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
-		loadGroup.setText("Purchase");
-		createCenteringGroupRenderer(loadGroup);
-		{
-			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("ID");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createIDLabelProvider(true));
-			gvc.getColumn().setCellRenderer(createCellRenderer(SlotIDRenderMode.LHS_IN_TARGET));
-		}
-		{
-			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Date");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createDateLabelProvider(true));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		{
-			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Price");
-			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createPriceLabelProvider(true));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		{
-			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("tBtu");
-			gvc.getColumn().setWidth(55);
-			gvc.setLabelProvider(createDeltaLabelProvider(true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Wiring");
-			gvc.getColumn().setResizeable(false);
-			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(createWiringLabelProvider());
-			this.diagram = createWiringDiagram(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
-		dischargeGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
-		dischargeGroup.setText("Sale");
-		createCenteringGroupRenderer(dischargeGroup);
-
-		{
-			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("ID");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createIDLabelProvider(false));
-			gvc.getColumn().setCellRenderer(createCellRenderer(SlotIDRenderMode.RHS_IN_TARGET));
-		}
-		{
-			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Date");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createDateLabelProvider(false));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		{
-
-			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Price");
-			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createPriceLabelProvider(false));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-		{
-
-			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("tBtu");
-			gvc.getColumn().setWidth(55);
-			gvc.setLabelProvider(
-					createDeltaLabelProvider(true, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-
-		// Space col
-		createSpacerColumn();
-
-		vesselColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER | SWT.TOGGLE);
-		vesselColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
-
-		// vesselColumnGroup.setText("Vessels");
-		vesselColumnGroup.setExpanded(false);
-		createCenteringGroupRenderer(vesselColumnGroup);
-		vesselColumnGroup.addTreeListener(new TreeListener() {
-
-			@Override
-			public void treeExpanded(final TreeEvent e) {
-				// TODO Auto-generated method stub
-				vesselColumnGroup.setText("Vessels");
-
-			}
-
-			@Override
-			public void treeCollapsed(final TreeEvent e) {
-				// TODO Auto-generated method stub
-				vesselColumnGroup.setText("");
-
-			}
-		});
-		// Vessel columns are dynamically created - create a stub column to lock down the position in the table
-		{
-			final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("");
-			gvc.getColumn().setResizeable(false);
-			gvc.getColumn().setVisible(false);
-			gvc.getColumn().setWidth(0);
-			gvc.setLabelProvider(createStubLabelProvider());
-			vesselColumnStub = gvc;
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-
-		// Create sorter
-		// TODO: ?
+		columnHelper = new ChangeSetViewColumnHelper(this, viewer);
+		columnHelper.makeColumns();
 
 		// Selection listener for pin/diff driver.
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -962,7 +499,7 @@ public class ChangeSetView implements IAdaptable {
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-					if (viewMode == ViewMode.ACTION_SET) {
+					if (viewMode != ViewMode.COMPARE) {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							Object o = itr.next();
@@ -1128,9 +665,9 @@ public class ChangeSetView implements IAdaptable {
 									// Point cell = grid.getCell(mousePoint);
 									final ViewerCell cell = viewer.getCell(mousePoint);
 									if (cell != null && !cell.getText().isEmpty()) {
-										if (latenessColumn != null && latenessColumn.getColumn() == targetColumn) {
+										if (columnHelper.getLatenessColumn() == targetColumn) {
 											openView("com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView");
-										} else if (violationColumn != null && violationColumn.getColumn() == targetColumn) {
+										} else if (columnHelper.getViolationsColumn() == targetColumn) {
 											openView("com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView");
 										}
 									}
@@ -1162,566 +699,14 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	protected void createSpacerColumn() {
-		{
-
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("");
-			gvc.getColumn().setResizeable(false);
-			gvc.getColumn().setWidth(5);
-			gvc.setLabelProvider(createStubLabelProvider());
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
-	}
-
-	private enum SlotIDRenderMode {
-		None, LHS_IN_TARGET, RHS_IN_TARGET
-	};
-
-	protected DefaultCellRenderer createCellRenderer() {
-		return createCellRenderer(SlotIDRenderMode.None);
-	}
-
-	protected DefaultCellRenderer createCellRenderer(SlotIDRenderMode renderMode) {
-		return new DefaultCellRenderer() {
-
-			@Override
-			public boolean isSelected() {
-				if (viewer.getData(DATA_SELECTED_COLUMN) == viewer.getGrid().getColumn(getColumn())) {
-					return true;
-				}
-
-				return super.isSelected();
-			}
-
-			@Override
-			public void paint(final GC gc, final Object value) {
-				// TODO Auto-generated method stub
-				super.paint(gc, value);
-				if (value instanceof GridItem) {
-					final GridItem gridItem = (GridItem) value;
-					final Object data = gridItem.getData();
-					if (data instanceof ChangeSetTableGroup) {
-						int currentLineWidth = gc.getLineWidth();
-						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-						final int s = gc.getLineStyle();
-						gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
-						// gc.setLineStyle(SWT.LINE_DOT);
-						// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
-						gc.setLineStyle(SWT.LINE_DOT);
-						// gc.setLineWidth(1);
-						gc.drawLine(getBounds().x, getBounds().y + getBounds().height, getBounds().width + getBounds().x, getBounds().y + getBounds().height);
-						gc.setLineStyle(s);
-						gc.setLineWidth(currentLineWidth);
-
-					} else if (data instanceof ChangeSetTableRow) {
-
-						if (getBounds().height > 1) {
-							int currentLineWidth = gc.getLineWidth();
-							ChangeSetTableRow changeSetTableRow = (ChangeSetTableRow) data;
-							boolean found = false;
-							boolean foundTarget = false;
-							if (renderMode == SlotIDRenderMode.LHS_IN_TARGET) {
-								if (changeSetTableRow.getLhsAfter() != null) {
-									if (allTargetSlots.contains(changeSetTableRow.getLhsAfter().getLoadSlot())) {
-										found = true;
-										if (changeSetTableRow.getLhsAfter().getLoadSlot() == lastTargetSlot) {
-											foundTarget = true;
-										}
-									}
-								}
-							}
-							if (renderMode == SlotIDRenderMode.RHS_IN_TARGET) {
-								if (changeSetTableRow.getRhsAfter() != null) {
-									if (allTargetSlots.contains(changeSetTableRow.getRhsAfter().getDischargeSlot())) {
-										found = true;
-										if (changeSetTableRow.getRhsAfter().getDischargeSlot() == lastTargetSlot) {
-											foundTarget = true;
-										}
-									}
-								}
-							}
-							if (found) {
-								final int s = gc.getLineStyle();
-								gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-								// gc.setLineStyle(SWT.LINE_DOT);
-								// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
-								gc.setLineStyle(SWT.LINE_SOLID);
-								if (foundTarget) {
-									gc.setLineWidth(2);
-								} else {
-									gc.setLineWidth(1);
-								}
-								gc.drawRoundRectangle(getBounds().x, getBounds().y, getBounds().width - 1, getBounds().height, 4, 4);
-								gc.setLineStyle(s);
-							}
-							gc.setLineWidth(currentLineWidth);
-
-						}
-					}
-				}
-
-			}
-		};
-	}
-
-	@SuppressWarnings("restriction")
-	private void createWordWrapRenderer(final GridViewerColumn gvc) {
-		final WrappingColumnHeaderRenderer renderer = new WrappingColumnHeaderRenderer();
-		renderer.setWordWrap(true);
-		gvc.getColumn().setHeaderRenderer(renderer);
-	}
-
-	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
-		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
-		gcg.setHeaderRenderer(renderer);
-	}
-
-	// @PostConstruct
-	// private void updateToolItems(@Optional final MPart part) {
-	// updateToolItem(part, viewMode);
-	// }
-
-	private ChangeSetWiringDiagram createWiringDiagram(final GridViewerColumn gvc) {
-
-		final ChangeSetWiringDiagram d = new ChangeSetWiringDiagram(viewer.getGrid(), gvc);
-
-		return d;
-
-	}
-
-	private CellLabelProvider createStubLabelProvider() {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				// Do nothing
-			}
-		};
-	}
-
-	private CellLabelProvider createIDLabelProvider(final boolean lhs) {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow d = (ChangeSetTableRow) element;
-					if (lhs) {
-						if (d.getLhsName() != null && !d.getLhsName().isEmpty()) {
-							cell.setText((String) d.getLhsName());
-							return;
-						}
-					} else {
-						if (d.getRhsName() != null && !d.getRhsName().isEmpty()) {
-							cell.setText((String) d.getRhsName());
-							return;
-						}
-					}
-				}
-			}
-
-		};
-	}
-
-	private CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
-		return new CellLabelProvider() {
-
-			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
-
-					LocalDate windowStart = null;
-					boolean isDelta = false;
-					int deltaHours = 0;
-
-					if (isLoadSide) {
-						final SlotAllocation originalLoadAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
-						final SlotAllocation newLoadAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
-
-						if (newLoadAllocation != null) {
-							final Slot slot = newLoadAllocation.getSlot();
-							if (slot != null) {
-								windowStart = slot.getWindowStart();
-							}
-						} else if (originalLoadAllocation != null) {
-							final Slot slot = originalLoadAllocation.getSlot();
-							if (slot != null) {
-								windowStart = slot.getWindowStart();
-							}
-						}
-
-						if (newLoadAllocation != null && originalLoadAllocation != null) {
-							deltaHours = Hours.between(originalLoadAllocation.getSlotVisit().getStart(), newLoadAllocation.getSlotVisit().getStart());
-							if (deltaHours != 0) {
-								isDelta = true;
-							}
-						}
-
-						if (windowStart != null) {
-							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
-							} else {
-								cell.setText(windowStart.format(formatter));
-							}
-						}
-
-					} else {
-						// Unlike other RHS columns where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
-						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
-						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
-
-						if (newDischargeAllocation != null) {
-							final Slot slot = newDischargeAllocation.getSlot();
-							if (slot != null) {
-								windowStart = slot.getWindowStart();
-							}
-						} else if (originalDischargeAllocation != null) {
-							final Slot slot = originalDischargeAllocation.getSlot();
-							if (slot != null) {
-								windowStart = slot.getWindowStart();
-							}
-						}
-
-						if (newDischargeAllocation != null && originalDischargeAllocation != null) {
-							deltaHours = Hours.between(originalDischargeAllocation.getSlotVisit().getStart(), newDischargeAllocation.getSlotVisit().getStart());
-							if (deltaHours != 0) {
-								isDelta = true;
-							}
-						}
-
-						if (windowStart != null) {
-							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
-							} else {
-								cell.setText(windowStart.format(formatter));
-							}
-						}
-					}
-				}
-			}
-		};
-	}
-
-	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean isLHS, final EStructuralFeature field, final EStructuralFeature attrib) {
-
-		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
-		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER;
-
-		return createLambdaLabelProvider(asInt, false, change -> getNumber(from, field, attrib, change), change -> getNumber(to, field, attrib, change));
-	}
-
-	@NonNull
-	private Number getNumber(final EReference from, final EStructuralFeature field, final EStructuralFeature attrib, final ChangeSetTableRow row) {
-		Number n = null;
-		try {
-			final ChangeSetRowData change = (ChangeSetRowData) row.eGet(from);
-			if (change != null) {
-				n = getNumberInt(field, attrib, change);
-			}
-		} catch (final Exception e) {
-			final int ii = 0;
-		}
-		if (n == null) {
-			return Long.valueOf(0L);
-
-		}
-		return n;
-
-	}
-
-	@Nullable
-	private Number getNumberInt(final EStructuralFeature field, final EStructuralFeature attrib, final ChangeSetRowData change) {
-		if (change != null && change.eClass().getEAllStructuralFeatures().contains(field)) {
-			final EObject eObject = (EObject) change.eGet(field);
-			if (eObject != null) {
-				return (Number) eObject.eGet(attrib);
-			}
-		}
-		return null;
-
-	}
-
-	private CellLabelProvider createPNLDeltaLabelProvider() {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-				if (element instanceof ChangeSetTableGroup) {
-
-					cell.setFont(boldFont);
-
-					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
-					final DeltaMetrics metrics = changeSet.getDeltaMetrics();
-					if (metrics != null) {
-						double delta = metrics.getPnlDelta();
-
-						delta = delta / 1000000.0;
-						if (Math.abs(delta) < 0.0001) {
-							delta = 0;
-						}
-						if (delta == 0) {
-							cell.setText("0.00");
-						} else {
-							cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
-						}
-					}
-				}
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
-					final long f = ChangeSetKPIUtil.getPNL(change, ResultType.Before);
-					final long t = ChangeSetKPIUtil.getPNL(change, ResultType.After);
-
-					double delta = t - f;
-					delta = delta / 1000000.0;
-					if (Math.abs(delta) < 0.0001) {
-						delta = 0;
-					}
-					if (delta != 0) {
-						cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-					}
-
-				}
-			}
-		};
-	}
-
-	private CellLabelProvider createTaxDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, true, change -> {
-			return ChangeSetKPIUtil.getTax(change, ResultType.Before);
-		}, change -> {
-			return ChangeSetKPIUtil.getTax(change, ResultType.After);
-		});
-	}
-
-	private CellLabelProvider createLatenessDeltaLabelProvider() {
-		return new CellLabelProvider() {
-
-			@Override
-			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
-					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
-					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
-
-					// No lateness
-					if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0 && newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-						return null;
-					}
-
-					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-
-					if (originalInFlex != newInFlex) {
-						// Lateness shift between flex and non-flex times.
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						final String flexStr;
-						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-							assert originalInFlex == false;
-							flexStr = "within";
-						} else if (delta > 0) {
-							flexStr = "out of";
-						} else {
-							flexStr = "within";
-						}
-						// CHECK -- IF Original was zero, then we have moved into the felx time.
-						return String.format("Lateness %s by %d days, %d hours %s flex time", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24, flexStr);
-					}
-					if (!originalInFlex) {
-						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
-						// }
-					} else {
-						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
-						// }
-					}
-
-				}
-				return null;
-			}
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-				cell.setForeground(null);
-				if (element instanceof ChangeSetTableGroup) {
-
-					cell.setFont(boldFont);
-
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
-					final Metrics scenarioMetrics = group.getCurrentMetrics();
-					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
-
-					if (deltaMetrics != null) {
-						final int latenessDelta = (int) Math.round((double) deltaMetrics.getLatenessDelta() / 24.0);
-						final int lateness = (int) Math.round((double) scenarioMetrics.getLateness() / 24.0);
-						cell.setText(String.format("%s%d / %d", latenessDelta < 0 ? "↓" : latenessDelta == 0 ? "" : "↑", Math.abs(latenessDelta), lateness));
-
-						if (lateness != 0) {
-							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-						}
-					}
-				}
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
-					final long[] originalLateness = ChangeSetKPIUtil.getLateness(change, ResultType.Before);
-					final long[] newLateness = ChangeSetKPIUtil.getLateness(change, ResultType.After);
-
-					final boolean originalInFlex = originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && originalLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-					final boolean newInFlex = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] > 0 && newLateness[ChangeSetKPIUtil.FlexType.WithFlex.ordinal()] == 0;
-
-					String flexStr = "";
-					if (originalInFlex != newInFlex) {
-						// Lateness shift between flex and non-flex times.
-						final long delta = newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] - originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-						if (originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()] == 0) {
-							assert originalInFlex == false;
-							flexStr = " *";
-						} else if (delta > 0) {
-							flexStr = "";
-						} else {
-							flexStr = " *";
-						}
-					}
-					long delta = 0L;
-					delta -= originalLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-					delta += newLateness[ChangeSetKPIUtil.FlexType.WithoutFlex.ordinal()];
-					final long originalDelta = delta;
-					delta = (int) Math.round((double) delta / 24.0);
-					if (delta != 0L) {
-						cell.setText(String.format("%s %d%s", delta < 0 ? "↓" : "↑", Math.abs(delta), flexStr));
-					} else if (originalDelta != 0L) {
-						cell.setText(String.format("%s %s%s", originalDelta < 0 ? "↓" : "↑", "<1", flexStr));
-					}
-				}
-			}
-		};
-
-	}
-
-	private CellLabelProvider createViolationsDeltaLabelProvider() {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-				cell.setForeground(null);
-				if (element instanceof ChangeSetTableGroup) {
-
-					cell.setFont(boldFont);
-
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
-					final Metrics scenarioMetrics = group.getCurrentMetrics();
-					final DeltaMetrics deltaMetrics = group.getDeltaMetrics();
-					if (deltaMetrics != null) {
-						cell.setText(String.format("%s%d / %d", deltaMetrics.getCapacityDelta() < 0 ? "↓" : deltaMetrics.getCapacityDelta() == 0 ? "" : "↑", Math.abs(deltaMetrics.getCapacityDelta()),
-								scenarioMetrics.getCapacity()));
-
-						if (scenarioMetrics.getCapacity() != 0) {
-							cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-						}
-					}
-				}
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
-					final long f = ChangeSetKPIUtil.getViolations(change, ResultType.Before);
-					final long t = ChangeSetKPIUtil.getViolations(change, ResultType.After);
-
-					final long delta = t - f;
-					if (delta != 0) {
-						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-					}
-
-				}
-			}
-		};
-	}
-
-	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.Before), change -> ChangeSetKPIUtil.getCargoOtherPNL(change, ResultType.After));
-	}
-
-	private CellLabelProvider createUpstreamDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.Before), change -> ChangeSetKPIUtil.getUpstreamPNL(change, ResultType.After));
-	}
-
-	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.Before),
-				change -> ChangeSetKPIUtil.getAdditionalShippingPNL(change, ResultType.After));
-	}
-
-	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
-
-		return createLambdaLabelProvider(true, true, change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.Before),
-				change -> ChangeSetKPIUtil.getAdditionalUpsidePNL(change, ResultType.After));
-	}
-
-	private CellLabelProvider createShippingDeltaLabelProvider() {
-		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before), change -> ChangeSetKPIUtil.getShipping(change, ResultType.After));
-	}
-
-	private CellLabelProvider createCSLabelProvider() {
-
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-
-				if (element instanceof ChangeSetTableGroup) {
-
-					cell.setFont(boldFont);
-
-					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
-
-					if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
-						cell.setText(changeSet.getDescription());
-					} else {
-						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
-						int idx = 0;
-						if (root != null) {
-							idx = root.getGroups().indexOf(changeSet);
-						}
-
-						cell.setText(String.format("Set %d", idx + 1));
-					}
-				}
-			}
-		};
-
-	}
-
 	@PostConstruct
 	public void makeActions() {
 
 	}
 
-	public void setNewDataData(final Object target, final Function<IProgressMonitor, ChangeSetRoot> action, final @Nullable NamedObject targetToSortFirst) {
+	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final @Nullable String targetSlotId) {
 
-		cleanUpVesselColumns();
+		columnHelper.cleanUpVesselColumns();
 
 		if (target == null) {
 			setEmptyData();
@@ -1734,10 +719,10 @@ public class ChangeSetView implements IAdaptable {
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						final ChangeSetRoot newRoot = action.apply(monitor);
-						final ChangeSetTableRoot newTablePrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, targetToSortFirst);
-						final ChangeSetTableRoot newTableBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, targetToSortFirst);
-						display.asyncExec(new ViewUpdateRunnable(newRoot, newTablePrevious, newTableBase));
+						final ViewState newViewState = action.apply(monitor, targetSlotId);
+						newViewState.tableRootToBase = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot);
+						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot);
+						display.asyncExec(new ViewUpdateRunnable(newViewState));
 					}
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
@@ -1751,244 +736,34 @@ public class ChangeSetView implements IAdaptable {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
-		this.allTargetSlots.clear();
-		this.lastSolution = null;
-		this.lastTargetSlot = null;
-
-		diagram.setChangeSetRoot(newTableRoot);
+		columnHelper.getDiagram().setChangeSetRoot(newTableRoot);
 		ViewerHelper.setInput(viewer, true, newTableRoot);
 
-		final ChangeSetRoot oldRoot = ChangeSetView.this.root;
-		ChangeSetView.this.root = newRoot;
-		ChangeSetView.this.tableRootToBase = newTableRoot;
-		ChangeSetView.this.tableRootToPrevious = newTableRoot;
-		cleanUp(oldRoot);
+		final ViewState oldViewState = currentViewState;
+		final ViewState newViewState = new ViewState();
+		newViewState.root = newRoot;
+		newViewState.tableRootToBase = newTableRoot;
+		newViewState.tableRootToPrevious = newTableRoot;
+
+		cleanUp(oldViewState);
 	}
 
-	private void cleanUpVesselColumns() {
-		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
-			final GridColumn[] columns = vesselColumnGroup.getColumns();
-			for (final GridColumn c : columns) {
-				// Quick hack - do not dispose the hidden col
-				if (vesselColumnStub.getColumn() == c) {
-					continue;
-				}
-				if (!c.isDisposed()) {
-					c.dispose();
-				}
-			}
+	public void cleanUp(final ViewState viewState) {
+		if (viewState != null) {
+			viewState.dispose();
 		}
-	}
-
-	private void cleanUp(@Nullable final ChangeSetRoot root) {
-		if (root != null) {
-			for (final ChangeSet cs : root.getChangeSets()) {
-				// release(cs.getBaseScenarioRef());
-				// release(cs.getPrevScenarioRef());
-				// release(cs.getCurrentScenarioRef());
-				// removeListener(cs.getBaseScenario());
-				// removeListener(cs.getCurrentScenario());
-				// removeListener(cs.getPrevScenario());
-			}
-		}
-	}
-
-	// protected void removeListener(@Nullable final ScenarioResult scenarioInstance) {
-	// if (scenarioInstance != null) {
-	// final IScenarioServiceListener listener = listenerMap.get(scenarioInstance);
-	// final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
-	// if (scenarioService != null && listener != null) {
-	// scenarioService.removeScenarioServiceListener(listener);
-	// }
-	// listenerMap.remove(scenarioInstance);
-	//
-	// }
-	// }
-
-	// protected void createListener(@Nullable final ScenarioResult scenarioInstance) {
-	// if (scenarioInstance != null) {
-	// final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
-	// if (scenarioService != null) {
-	// final ScenarioInstanceDeletedListener listener = new ScenarioInstanceDeletedListener(scenarioInstance.getScenarioInstance(), this);
-	// listenerMap.put(scenarioInstance, listener);
-	// scenarioService.addScenarioServiceListener(listener);
-	// }
-	//
-	// }
-	// }
-
-	// private void release(final ModelReference ref) {
-	// if (ref != null) {
-	// ref.close();
-	// }
-	// }
-
-	private CellLabelProvider createVesselLabelProvider(@NonNull final String name) {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				cell.setText("");
-				cell.setImage(null);
-				final Object element = cell.getElement();
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-
-					if (name.equals(changeSetRow.getAfterVesselName())) {
-						cell.setImage(imageClosedCircle);
-						if (textualVesselMarkers) {
-							cell.setText("●");
-						}
-					} else if (name.equals(changeSetRow.getBeforeVesselName())) {
-						cell.setImage(imageOpenCircle);
-						if (textualVesselMarkers) {
-							cell.setText("○");
-						}
-					}
-				}
-			}
-
-			@Override
-			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-
-					if (name.equals(changeSetRow.getAfterVesselName())) {
-						return name;
-					}
-					if (name.equals(changeSetRow.getBeforeVesselName())) {
-						return name;
-					}
-				}
-				return null;
-			}
-		};
-	}
-
-	private CellLabelProvider createWiringLabelProvider() {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				cell.setText("");
-				cell.setImage(null);
-				final Object element = cell.getElement();
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-
-					if (textualVesselMarkers) {
-						if (changeSetRow.isWiringChange()) {
-							String left = "";
-							String right = "";
-							if (changeSetRow.isLhsSlot()) {
-								left = changeSetRow.isLhsNonShipped() ? "○" : "●";
-							}
-							if (changeSetRow.isRhsSlot()) {
-								right = !changeSetRow.isRhsNonShipped() ? "○" : "●";
-							}
-
-							if (left.isEmpty() && right.isEmpty()) {
-								final int ii = 0;
-							} else
-
-								cell.setText(String.format("%s      %s", left, right));
-						}
-					}
-				}
-			}
-		};
-	}
-
-	private CellLabelProvider createGroupVesselLabelProvider() {
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				cell.setText("");
-				cell.setImage(null);
-				final Object element = cell.getElement();
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-					if (!Objects.equals(changeSetRow.getAfterVesselName(), changeSetRow.getBeforeVesselName())) {
-						cell.setImage(imageHalfCircle);
-						if (textualVesselMarkers) {
-							cell.setText("○");
-						}
-						// } else {
-						// if (isSet(changeSetRow.getNewVesselName())) {
-						// cell.setImage(imageClosedCircle);
-						// if (textualVesselMarkers) {
-						// cell.setText("●");
-						// }
-						// }
-					}
-				}
-			}
-
-			@Override
-			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) element;
-
-					if (isSet(changeSetRow.getBeforeVesselName()) && isSet(changeSetRow.getAfterVesselName())) {
-						if (!Objects.equals(changeSetRow.getBeforeVesselName(), changeSetRow.getAfterVesselName())) {
-							return String.format("Changed from %s to %s", changeSetRow.getBeforeVesselName(), changeSetRow.getAfterVesselName());
-						} else {
-							return String.format("On %s", changeSetRow.getAfterVesselName());
-						}
-					} else if (isSet(changeSetRow.getBeforeVesselName())) {
-						return String.format("Unassigned from %s", changeSetRow.getBeforeVesselName());
-					} else if (isSet(changeSetRow.getAfterVesselName())) {
-						return String.format("Assigned to %s", changeSetRow.getAfterVesselName());
-					}
-				}
-				return null;
-			}
-		};
 	}
 
 	@PreDestroy
 	public void dispose() {
 
 		scenarioComparisonService.removeListener(listener);
-		cleanUp(this.root);
-		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
-		this.root = null;
-		{
-			// for (final Map.Entry<ScenarioResult, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
-			// final ScenarioResult scenarioResult = e.getKey();
-			// final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-			// final IScenarioService scenarioService = scenarioInstance.getScenarioService();
-			// final ScenarioInstanceDeletedListener listener = e.getValue();
-			// if (scenarioService != null && listener != null) {
-			// scenarioService.removeScenarioServiceListener(listener);
-			// }
-			// }
-			// listenerMap.clear();
-		}
+		cleanUp(this.currentViewState);
+		columnHelper.getDiagram().setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
+		this.currentViewState = null;
 
-		cleanUpVesselColumns();
-		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
-			vesselColumnGroup.dispose();
-
-		}
-
-		if (boldFont != null) {
-			boldFont.dispose();
-			boldFont = null;
-		}
-		if (imageHalfCircle != null) {
-			imageHalfCircle.dispose();
-			imageHalfCircle = null;
-		}
-		if (imageOpenCircle != null) {
-			imageOpenCircle.dispose();
-			imageOpenCircle = null;
-		}
-		if (imageClosedCircle != null) {
-			imageClosedCircle.dispose();
-			imageClosedCircle = null;
-		}
+		columnHelper.cleanUpVesselColumns();
+		columnHelper.dispose();
 	}
 
 	@Focus
@@ -2057,12 +832,15 @@ public class ChangeSetView implements IAdaptable {
 	@Optional
 	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
 		diffToBase = !diffToBase;
-		if (diffToBase) {
-			diagram.setChangeSetRoot(tableRootToBase);
-			ViewerHelper.setInput(viewer, true, tableRootToBase);
-		} else {
-			diagram.setChangeSetRoot(tableRootToPrevious);
-			ViewerHelper.setInput(viewer, true, tableRootToPrevious);
+		final ViewState viewState = currentViewState;
+		if (viewState != null) {
+			if (diffToBase) {
+				columnHelper.getDiagram().setChangeSetRoot(viewState.tableRootToBase);
+				ViewerHelper.setInput(viewer, true, viewState.tableRootToBase);
+			} else {
+				columnHelper.getDiagram().setChangeSetRoot(viewState.tableRootToPrevious);
+				ViewerHelper.setInput(viewer, true, viewState.tableRootToPrevious);
+			}
 		}
 	}
 
@@ -2089,11 +867,12 @@ public class ChangeSetView implements IAdaptable {
 	private void handleSwitchGroupByModel(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE) final SwitchGroupModeEvent event) {
 		if (event.activePart.getObject() == this) {
 			insertionPlanFilter.setGroupMode(event.mode);
-			final String id = lastTargetSlot == null ? null : lastTargetSlot.getName();
+			final ViewState viewState = currentViewState;
+			if (viewState != null) {
+				final String id = viewState.getTargetSlotID();
 
-			openAnalyticsSolution(lastSolution, id);
-			// this.solution = solution;
-			// ViewerHelper.refresh(viewer, true);
+				openAnalyticsSolution(viewState.lastSolution, id);
+			}
 		}
 	}
 
@@ -2101,9 +880,9 @@ public class ChangeSetView implements IAdaptable {
 	@Optional
 	private void handleSwitchSlot(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_TARGET_SLOT) final SwitchSlotEvent event) {
 		if (event.activePart.getObject() == this) {
-			openAnalyticsSolution(lastSolution, event.slotId);
-			// this.solution = solution;
-			// ViewerHelper.refresh(viewer, true);
+			if (currentViewState != null) {
+				openAnalyticsSolution(currentViewState.lastSolution, event.slotId);
+			}
 		}
 	}
 
@@ -2113,95 +892,14 @@ public class ChangeSetView implements IAdaptable {
 		if (!handleEvents) {
 			return;
 		}
-		if (viewMode != ViewMode.ACTION_SET) {
+		if (viewMode != ViewMode.OLD_ACTION_SET) {
 			return;
 		}
-		this.viewMode = ViewMode.ACTION_SET;
-		setNewDataData(target, monitor -> {
+		this.viewMode = ViewMode.OLD_ACTION_SET;
+		setNewDataData(target, (monitor, targetSlotId) -> {
 			final ActionSetTransformer transformer = new ActionSetTransformer();
-			return transformer.createDataModel(target, monitor);
+			return new ViewState(transformer.createDataModel(target, monitor));
 		}, null);
-	}
-
-	private CellLabelProvider createLambdaLabelProvider(final boolean asInt, final boolean asSigFigs, final Function<ChangeSetTableRow, Number> calcF,
-			final Function<ChangeSetTableRow, Number> calcT) {
-
-		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
-			double delta = 0.0;
-			if (f != null) {
-				delta -= f.doubleValue();
-			}
-			if (t != null) {
-				delta += t.doubleValue();
-			}
-			return delta;
-		};
-		final ToIntBiFunction<Number, Number> deltaIntegerUpdater = (f, t) -> {
-			int delta = 0;
-			if (f != null) {
-				delta -= f.intValue();
-			}
-			if (t != null) {
-				delta += t.intValue();
-			}
-			return delta;
-		};
-
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-				cell.setFont(null);
-				double delta = 0;
-				if (element instanceof ChangeSetTableGroup) {
-					cell.setFont(boldFont);
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
-					final List<ChangeSetTableRow> rows = group.getRows();
-					if (rows != null) {
-						for (final ChangeSetTableRow change : rows) {
-							if (asInt) {
-								delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
-							} else {
-								delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
-							}
-						}
-					}
-				} else if (element instanceof ChangeSetTableRow) {
-
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-					if (asInt) {
-						delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
-					} else {
-						delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
-					}
-				}
-
-				if (asInt) {
-					delta = delta / 1000000.0;
-					if (Math.abs(delta) > 0.001) {
-						if (asSigFigs) {
-							cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-						} else {
-							cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-						}
-					}
-				} else {
-					if (Math.abs(delta) > 0.009) {
-						if (asSigFigs) {
-							cell.setText(String.format("%s %,.2G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-						} else {
-							cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-						}
-					}
-				}
-			}
-		};
-	}
-
-	boolean isSet(@Nullable final String str) {
-		return str != null && !str.isEmpty();
 	}
 
 	private void openView(final @NonNull String viewId) {
@@ -2210,135 +908,15 @@ public class ChangeSetView implements IAdaptable {
 		partService.showPart(viewId, PartState.VISIBLE);
 	}
 
-	private CellLabelProvider createPriceLabelProvider(final boolean isLoad) {
-
-		final Function<ChangeSetTableRow, Number> calcF;
-		final Function<ChangeSetTableRow, Number> calcT;
-		if (isLoad) {
-			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-		} else {
-			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-		}
-		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
-			double delta = 0.0;
-			if (f != null) {
-				delta -= f.doubleValue();
-			}
-			if (t != null) {
-				delta += t.doubleValue();
-			}
-			return delta;
-		};
-
-		return new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
-				cell.setText("");
-				cell.setFont(null);
-				double delta = 0;
-				if (element instanceof ChangeSetTableGroup) {
-					// cell.setFont(boldFont);
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
-					final List<ChangeSetTableRow> rows = group.getRows();
-					if (rows != null) {
-						for (final ChangeSetTableRow change : rows) {
-							delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
-						}
-					}
-				} else if (element instanceof ChangeSetTableRow) {
-
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-					delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
-
-					if (isLoad) {
-						final SlotAllocation allocation = change.getLhsAfter() != null ? change.getLhsAfter().getLoadAllocation() : null;
-						if (allocation != null) {
-							final Slot slot = allocation.getSlot();
-							if (slot != null) {
-								final String expr = slot.getPriceExpression();
-								if (expr != null && expr.contains("?")) {
-									cell.setText(String.format("=%,.2f", allocation.getPrice()));
-									return;
-								}
-							}
-						}
-					} else {
-						final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
-						if (allocation != null) {
-							final Slot slot = allocation.getSlot();
-							if (slot != null) {
-								final String expr = slot.getPriceExpression();
-								if (expr != null && expr.contains("?")) {
-									cell.setText(String.format("=%,.2f", allocation.getPrice()));
-									return;
-								}
-							}
-						}
-					}
-				}
-				if (Math.abs(delta) > 0.009) {
-					cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-				}
-			}
-
-			@Override
-			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetTableRow) {
-
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
-
-					if (isLoad) {
-						final SlotAllocation allocation = change.getLhsAfter() != null ? change.getLhsAfter().getLoadAllocation() : null;
-						if (allocation != null) {
-							final Slot slot = allocation.getSlot();
-							if (slot != null) {
-								final String expr = slot.getPriceExpression();
-								if (expr != null && expr.contains("?")) {
-									return String.format("Break-even price is %,.2f", allocation.getPrice());
-								}
-							}
-						}
-					} else {
-						final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
-						if (allocation != null) {
-							final Slot slot = allocation.getSlot();
-							if (slot != null) {
-								final String expr = slot.getPriceExpression();
-								if (expr != null && expr.contains("?")) {
-									return String.format("Break-even price is %,.2f", allocation.getPrice());
-								}
-							}
-						}
-					}
-				}
-
-				return null;
-			}
-		};
-	}
-
 	private class ContextMenuManager implements MenuDetectListener {
-
-		// private final @NonNull MenuManager mgr;
-		//
-		// private Menu menu;
 
 		private final LocalMenuHelper helper = new LocalMenuHelper(viewer.getGrid());
 
 		public ContextMenuManager() {
-			// this.mgr = mgr;
 			viewer.getGrid().addDisposeListener(new DisposeListener() {
 
 				@Override
-				public void widgetDisposed(DisposeEvent e) {
+				public void widgetDisposed(final DisposeEvent e) {
 					helper.dispose();
 
 				}
@@ -2372,13 +950,13 @@ public class ChangeSetView implements IAdaptable {
 				}
 				if (selectedSets.size() == 1) {
 					if (canExportChangeSet) {
-						if (ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
+						if (ChangeSetView.this.viewMode == ViewMode.INSERTIONS || ChangeSetView.this.viewMode == ViewMode.NEW_ACTION_SET) {
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 							helper.addAction(new ExportChangeAction(changeSetTableGroup));
 							showMenu = true;
 						}
 						// Experimental code to generate a sandbox scenario.						
-						if (false && ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
+						if (false && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
 							// This does not work as insertion scenario is read-only. Data model is also unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 							helper.addAction(new CreateSandboxAction(changeSetTableGroup));
@@ -2410,66 +988,69 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
-		this.lastSolution = solution;
-		this.viewMode = ViewMode.ACTION_SET;
-
-		persistAnalyticsSolution = true;
+		this.viewMode = ViewMode.OLD_ACTION_SET;
+		this.persistAnalyticsSolution = true;
+		
+		final ViewState viewState = new ViewState();
+		viewState.lastSolution = solution;
 
 		final ScenarioInstance target = solution.getScenarioInstance();
 		final EObject plan = solution.getSolution();
 		// Do something?
 		if (plan instanceof ActionableSetPlan) {
-			this.viewMode = ViewMode.ACTION_SET;
+			this.viewMode = ViewMode.NEW_ACTION_SET;
 			this.canExportChangeSet = true;
-			setNewDataData(target, monitor -> {
+			setNewDataData(target, (monitor, targetSlotId) -> {
 				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-				return transformer.createDataModel(target, (ActionableSetPlan) plan, monitor);
-			}, null);
+				return new ViewState(transformer.createDataModel(target, (ActionableSetPlan) plan, monitor));
+			}, slotId);
 		} else if (plan instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
-			this.viewMode = ViewMode.ACTION_SET;
+			this.viewMode = ViewMode.INSERTIONS;
 			this.canExportChangeSet = true;
-			final NamedObject pTargetSlot;
-			if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
-				Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
-				if (slotId != null) {
-					for (Slot s : slotInsertionOptions.getSlotsInserted()) {
-						if (slotId.equals(s.getName())) {
-							targetSlot = s;
-							break;
-						}
-					}
-				}
-				pTargetSlot = targetSlot;
-				lastTargetSlot = pTargetSlot;
-			} else {
-				VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
-				if (slotId != null) {
-					for (VesselEvent s : slotInsertionOptions.getEventsInserted()) {
-						if (slotId.equals(s.getName())) {
-							targetSlot = s;
-							break;
-						}
-					}
-				}
-				pTargetSlot = targetSlot;
-				lastTargetSlot = pTargetSlot;
-			}
-			allTargetSlots.clear();
-			allTargetSlots.addAll(slotInsertionOptions.getSlotsInserted());
 
-			setNewDataData(target, monitor -> {
+			setNewDataData(target, (monitor, targetSlotId) -> {
+
+				final NamedObject pTargetSlot;
+				if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
+					Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
+					if (slotId != null) {
+						for (Slot s : slotInsertionOptions.getSlotsInserted()) {
+							if (slotId.equals(s.getName())) {
+								targetSlot = s;
+								break;
+							}
+						}
+					}
+					pTargetSlot = targetSlot;
+				} else {
+					VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
+					if (slotId != null) {
+						for (VesselEvent s : slotInsertionOptions.getEventsInserted()) {
+							if (slotId.equals(s.getName())) {
+								targetSlot = s;
+								break;
+							}
+						}
+					}
+					pTargetSlot = targetSlot;
+				}
+				viewState.lastTargetSlot = pTargetSlot;
+				viewState.allTargetSlots.clear();
+				viewState.allTargetSlots.addAll(slotInsertionOptions.getSlotsInserted());
+
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
 
 				// Returns a new sort order -- based on the assumption input data is sorted by best value first
-
 				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor, pTargetSlot);
 				final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 				newRoot.getChangeSets().clear();
 				newRoot.getChangeSets().addAll(processChangeSetRoot);
 				insertionPlanFilter.setFilterActive(true);
-				return newRoot;
-			}, pTargetSlot);
+
+				viewState.root = newRoot;
+				return viewState;
+			}, slotId);
 		}
 	}
 
@@ -2483,11 +1064,11 @@ public class ChangeSetView implements IAdaptable {
 				String scenarioUUID = null;
 				String solutionUUID = null;
 				for (final String tag : part.getTags()) {
-					if (tag.startsWith("ScenarioUUID-")) {
-						scenarioUUID = tag.replaceFirst("ScenarioUUID-", "");
+					if (tag.startsWith(ChangeSetViewCreatorService.TAG_PREFIX_SCENARIO_UUID)) {
+						scenarioUUID = tag.replaceFirst(ChangeSetViewCreatorService.TAG_PREFIX_SCENARIO_UUID, "");
 					}
-					if (tag.startsWith("SolutionUUID-")) {
-						solutionUUID = tag.replaceFirst("SolutionUUID-", "");
+					if (tag.startsWith(ChangeSetViewCreatorService.TAG_PREFIX_SOLUTION_UUID)) {
+						solutionUUID = tag.replaceFirst(ChangeSetViewCreatorService.TAG_PREFIX_SOLUTION_UUID, "");
 					}
 				}
 
@@ -2568,39 +1149,52 @@ public class ChangeSetView implements IAdaptable {
 
 	@GetCurrentAnalyticsSolution
 	public AnalyticsSolution getLastSolution() {
-		return lastSolution;
+		if (currentViewState != null) {
+			return currentViewState.lastSolution;
+		}
+		return null;
 	}
 
 	@GetCurrentTargetObject
 	public NamedObject getLastSlot() {
-		return lastTargetSlot;
+		if (currentViewState != null) {
+			return currentViewState.lastTargetSlot;
+		}
+		return null;
 	}
 
 	@Inject
 	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
-		Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && sr.getScenarioInstance() == scenarioInstance;
-		ChangeSetRoot pRoot = this.root;
-		boolean linked = false;
-		if (pRoot != null) {
-			for (ChangeSet changeSet : pRoot.getChangeSets()) {
-				if (checker.apply(changeSet.getBaseScenario())) {
-					linked = true;
-					break;
-				}
-				if (checker.apply(changeSet.getCurrentScenario())) {
-					linked = true;
-					break;
-				}
-				if (checker.apply(changeSet.getPrevScenario())) {
-					linked = true;
-					break;
+		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && sr.getScenarioInstance() == scenarioInstance;
+		ViewState viewState = currentViewState;
+		if (viewState != null) {
+			final ChangeSetRoot pRoot = viewState.root;
+			boolean linked = false;
+			if (pRoot != null) {
+				for (final ChangeSet changeSet : pRoot.getChangeSets()) {
+					if (checker.apply(changeSet.getBaseScenario())) {
+						linked = true;
+						break;
+					}
+					if (checker.apply(changeSet.getCurrentScenario())) {
+						linked = true;
+						break;
+					}
+					if (checker.apply(changeSet.getPrevScenario())) {
+						linked = true;
+						break;
+					}
 				}
 			}
+			if (linked) {
+				setEmptyData();
+				// TODO: Close view if dynamic
+			}
 		}
-		if (linked) {
-			setEmptyData();
-			// TODO: Close view if dynamic
-		}
+	}
+
+	public ViewState getCurrentViewState() {
+		return currentViewState;
 	}
 }
