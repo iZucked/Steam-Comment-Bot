@@ -715,6 +715,10 @@
             feature="cargo-actuals"
             plugin.xml="actuals.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="inventory-model"
+            plugin.xml="inventory.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="com.mmxlabs.rcp.common.ReplaceableView">
