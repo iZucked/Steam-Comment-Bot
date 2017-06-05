@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -355,6 +356,13 @@ public class PromptToolbarEditor extends ControlContribution {
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 				mgr2.removeAll();
+				{
+					IContributionItem[] items = mgr2.getItems();
+					mgr2.removeAll();
+					for (IContributionItem item : items) {
+						item.dispose();
+					}
+				}
 				if (isLocked()) {
 					return;
 				}

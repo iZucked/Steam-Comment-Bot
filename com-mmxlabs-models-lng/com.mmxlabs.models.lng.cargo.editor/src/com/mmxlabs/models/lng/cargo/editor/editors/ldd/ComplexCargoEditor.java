@@ -26,6 +26,7 @@ import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
@@ -322,6 +323,13 @@ public class ComplexCargoEditor extends Dialog {
 						menu = mgr.createContextMenu(viewer.getGrid());
 					}
 					mgr.removeAll();
+					{
+						IContributionItem[] items = mgr.getItems();
+						mgr.removeAll();
+						for (IContributionItem mItem : items) {
+							mItem.dispose();
+						}
+					}
 
 					final IMenuListener listener = menuHelper.createSwapSlotsMenuListener(cargo.getSlots(), idx);
 					listener.menuAboutToShow(mgr);

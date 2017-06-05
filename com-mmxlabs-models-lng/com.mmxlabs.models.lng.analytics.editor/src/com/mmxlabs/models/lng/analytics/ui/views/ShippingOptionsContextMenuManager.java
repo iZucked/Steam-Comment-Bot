@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -55,7 +56,13 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 			menu = mgr.createContextMenu(grid);
 		}
 		mgr.removeAll();
-
+		{
+			IContributionItem[] items = mgr.getItems();
+			mgr.removeAll();
+			for (IContributionItem item : items) {
+				item.dispose();
+			}
+		}
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {

@@ -15,6 +15,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -73,6 +74,13 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 			menu = mgr.createContextMenu(grid);
 		}
 		mgr.removeAll();
+		{
+			IContributionItem[] items = mgr.getItems();
+			mgr.removeAll();
+			for (IContributionItem mItem : items) {
+				mItem.dispose();
+			}
+		}
 
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);

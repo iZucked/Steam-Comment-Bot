@@ -27,6 +27,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
@@ -366,6 +367,13 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 						menu = mgr.createContextMenu(scenarioViewer.getGrid());
 					}
 					mgr.removeAll();
+					{
+						IContributionItem[] items = mgr.getItems();
+						mgr.removeAll();
+						for (IContributionItem mItem : items) {
+							mItem.dispose();
+						}
+					}
 
 					if (loadColumns.contains(column)) {
 						if (rowDataItem.loadSlot != null) {

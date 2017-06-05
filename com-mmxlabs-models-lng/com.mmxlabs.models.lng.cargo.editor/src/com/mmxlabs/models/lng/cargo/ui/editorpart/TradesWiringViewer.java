@@ -36,6 +36,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
@@ -541,6 +542,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						menu = mgr.createContextMenu(scenarioViewer.getGrid());
 					}
 					mgr.removeAll();
+					{
+						IContributionItem[] items = mgr.getItems();
+						mgr.removeAll();
+						for (IContributionItem mItem : items) {
+							mItem.dispose();
+						}
+					}
 
 					if (loadColumns.contains(column)) {
 						if (rowDataItem.loadSlot != null) {
@@ -623,7 +631,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
 				mgr.removeAll();
-
+				{
+					IContributionItem[] items = mgr.getItems();
+					mgr.removeAll();
+					for (IContributionItem item : items) {
+						item.dispose();
+					}
+				}
 				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
 				listener.menuAboutToShow(mgr);
 				
@@ -1230,10 +1244,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected void enableOpenListener() {
-		scenarioViewer.addOpenListener(new IOpenListener() {
-			LocalMenuHelper helper = new LocalMenuHelper(getScenarioViewer().getGrid());
+		final LocalMenuHelper helper = new LocalMenuHelper(scenarioViewer.getGrid());
+		scenarioViewer.getControl().addDisposeListener(new DisposeListener() {
 
-			AssignToMenuHelper assignToHelper = new AssignToMenuHelper(scenarioEditingLocation.getShell(), scenarioEditingLocation, getScenarioModel());
+			@Override
+			public void widgetDisposed(final DisposeEvent e) {
+				helper.dispose();
+			}
+		});
+		scenarioViewer.addOpenListener(new IOpenListener() {
+
+			private AssignToMenuHelper assignToHelper = new AssignToMenuHelper(scenarioEditingLocation.getShell(), scenarioEditingLocation, getScenarioModel());
 
 			@Override
 			public void open(final OpenEvent event) {

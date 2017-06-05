@@ -10,6 +10,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -57,6 +58,13 @@ public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 			menu = mgr.createContextMenu(grid);
 		}
 		mgr.removeAll();
+		{
+			IContributionItem[] items = mgr.getItems();
+			mgr.removeAll();
+			for (IContributionItem mItem : items) {
+				mItem.dispose();
+			}
+		}
 
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
