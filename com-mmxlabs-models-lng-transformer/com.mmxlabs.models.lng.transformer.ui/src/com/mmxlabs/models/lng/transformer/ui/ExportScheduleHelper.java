@@ -111,6 +111,10 @@ public class ExportScheduleHelper {
 		assert EMFUtils.checkValidContainment(scenarioModel);
 
 		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+		if (scenarioService == null) {
+			// Open but deleted scenario? 
+			return;
+		}		
 		final ScenarioInstance fork = scenarioService.insert(scenarioInstance, scenarioModel);
 		fork.setName(newForkName);
 
