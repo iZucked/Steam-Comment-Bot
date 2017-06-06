@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for PartialCase instances
+ * A component helper for ExistingVesselAvailability instances
  *
  * @generated
  */
-public class PartialCaseComponentHelper extends BaseComponentHelper {
+public class ExistingVesselAvailabilityComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class PartialCaseComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PartialCaseComponentHelper() {
+	public ExistingVesselAvailabilityComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,18 +45,19 @@ public class PartialCaseComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PartialCaseComponentHelper(IAdapterManager adapterManager) {
+	public ExistingVesselAvailabilityComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.SHIPPING_OPTION));
 	}
 	
 	/**
-	 * add editors to a composite, using PartialCase as the supertype
+	 * add editors to a composite, using ExistingVesselAvailability as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, AnalyticsPackage.Literals.PARTIAL_CASE);	
+		addEditorsToComposite(detailComposite, AnalyticsPackage.Literals.EXISTING_VESSEL_AVAILABILITY);	
 	}
 	
 	/**
@@ -67,24 +68,14 @@ public class PartialCaseComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_partialCaseEditor(detailComposite, topClass);
-		add_keepExistingScenarioEditor(detailComposite, topClass);
+		add_vesselAvailabilityEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the partialCase feature on PartialCase
+	 * Create the editor for the vesselAvailability feature on ExistingVesselAvailability
 	 *
 	 * @generated
 	 */
-	protected void add_partialCaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE));
-	}
-
-	/**
-	 * Create the editor for the keepExistingScenario feature on PartialCase
-	 *
-	 * @generated
-	 */
-	protected void add_keepExistingScenarioEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.PARTIAL_CASE__KEEP_EXISTING_SCENARIO));
+	protected void add_vesselAvailabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY));
 	}
 }

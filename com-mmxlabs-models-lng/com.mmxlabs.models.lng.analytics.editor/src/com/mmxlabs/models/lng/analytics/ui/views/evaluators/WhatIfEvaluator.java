@@ -78,6 +78,7 @@ public class WhatIfEvaluator {
 		final long targetPNL = model.getBaseCase().getProfitAndLoss();
 
 		final BaseCase baseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
+		baseCase.setKeepExistingScenario(model.getPartialCase().isKeepExistingScenario());
 		final List<List<Runnable>> combinations = new LinkedList<>();
 		for (final PartialCaseRow r : model.getPartialCase().getPartialCase()) {
 			final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
@@ -369,7 +370,7 @@ public class WhatIfEvaluator {
 					fixModelReferences(container.getCargoAllocation(), mapper);
 
 					container.getCargoAllocation().unsetSequence();
-//					container.getCargoAllocation().unsetInputCargo();
+					// container.getCargoAllocation().unsetInputCargo();
 				}
 				for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
 					slotAllocation.unsetSlot();
@@ -543,7 +544,7 @@ public class WhatIfEvaluator {
 										fixModelReferences(container.getCargoAllocation(), mapper);
 
 										container.getCargoAllocation().unsetSequence();
-//										container.getCargoAllocation().unsetInputCargo();
+										// container.getCargoAllocation().unsetInputCargo();
 									}
 									for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
 										slotAllocation.unsetSlot();

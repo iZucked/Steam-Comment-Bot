@@ -15,7 +15,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
  */
 public interface ITradesTableContextMenuExtension {
 
-	void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull Slot slot, @NonNull MenuManager menuManager);
+	void contributeToMenu(@NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull Slot slot, @NonNull MenuManager menuManager);
 
 	void contributeToMenu(@NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull IStructuredSelection selection, @NonNull MenuManager menuManager);
 }

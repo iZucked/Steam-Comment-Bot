@@ -119,7 +119,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 				public void mouseDown(final MouseEvent e) {
 					final OptionAnalysisModel m = modelProvider.get();
 					if (baseCaseValid && m != null) {
-						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(scenarioEditingLocation, m, m.getBaseCase(), false, "Base Case"));
+						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(scenarioEditingLocation, m, m.getBaseCase(), false, "Base Case", null));
 					}
 				}
 

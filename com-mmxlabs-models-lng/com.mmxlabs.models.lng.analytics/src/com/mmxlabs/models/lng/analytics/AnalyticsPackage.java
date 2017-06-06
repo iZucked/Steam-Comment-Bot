@@ -2252,13 +2252,22 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE__PROFIT_AND_LOSS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Keep Existing Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE__KEEP_EXISTING_SCENARIO = 2;
+
+	/**
 	 * The number of structural features of the '<em>Base Case</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_FEATURE_COUNT = 2;
+	int BASE_CASE_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
@@ -2280,13 +2289,87 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE__PARTIAL_CASE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Keep Existing Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE__KEEP_EXISTING_SCENARIO = 1;
+
+	/**
 	 * The number of structural features of the '<em>Partial Case</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_FEATURE_COUNT = 1;
+	int PARTIAL_CASE_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl <em>Existing Vessel Availability</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselAvailability()
+	 * @generated
+	 */
+	int EXISTING_VESSEL_AVAILABILITY = 36;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY = SHIPPING_OPTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Existing Vessel Availability</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_VESSEL_AVAILABILITY_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
+	 * @generated
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION = 37;
+
+	/**
+	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET = SHIPPING_OPTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX = SHIPPING_OPTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Existing Charter Market Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXISTING_CHARTER_MARKET_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
@@ -2296,7 +2379,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 36;
+	int ACTIONABLE_SET_PLAN = 38;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2351,7 +2434,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSet()
 	 * @generated
 	 */
-	int ACTIONABLE_SET = 37;
+	int ACTIONABLE_SET = 39;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
@@ -2379,7 +2462,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTIONS = 38;
+	int SLOT_INSERTION_OPTIONS = 40;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2452,7 +2535,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOption()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTION = 39;
+	int SLOT_INSERTION_OPTION = 41;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
@@ -2480,7 +2563,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
 	 * @generated
 	 */
-	int DESTINATION_TYPE = 40;
+	int DESTINATION_TYPE = 42;
 
 
 	/**
@@ -2491,7 +2574,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 41;
+	int VOLUME_MODE = 43;
 
 
 	/**
@@ -4355,6 +4438,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBaseCase_ProfitAndLoss();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCase#isKeepExistingScenario <em>Keep Existing Scenario</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Keep Existing Scenario</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCase#isKeepExistingScenario()
+	 * @see #getBaseCase()
+	 * @generated
+	 */
+	EAttribute getBaseCase_KeepExistingScenario();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCase <em>Partial Case</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4374,6 +4468,70 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getPartialCase_PartialCase();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.PartialCase#isKeepExistingScenario <em>Keep Existing Scenario</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Keep Existing Scenario</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCase#isKeepExistingScenario()
+	 * @see #getPartialCase()
+	 * @generated
+	 */
+	EAttribute getPartialCase_KeepExistingScenario();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability <em>Existing Vessel Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Existing Vessel Availability</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselAvailability
+	 * @generated
+	 */
+	EClass getExistingVesselAvailability();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability#getVesselAvailability <em>Vessel Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselAvailability#getVesselAvailability()
+	 * @see #getExistingVesselAvailability()
+	 * @generated
+	 */
+	EReference getExistingVesselAvailability_VesselAvailability();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption <em>Existing Charter Market Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Existing Charter Market Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption
+	 * @generated
+	 */
+	EClass getExistingCharterMarketOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption#getCharterInMarket <em>Charter In Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Charter In Market</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption#getCharterInMarket()
+	 * @see #getExistingCharterMarketOption()
+	 * @generated
+	 */
+	EReference getExistingCharterMarketOption_CharterInMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption#getSpotIndex <em>Spot Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Index</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption#getSpotIndex()
+	 * @see #getExistingCharterMarketOption()
+	 * @generated
+	 */
+	EAttribute getExistingCharterMarketOption_SpotIndex();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ActionableSetPlan <em>Actionable Set Plan</em>}'.
@@ -6068,6 +6226,14 @@ s	 * <!-- end-user-doc -->
 		EAttribute BASE_CASE__PROFIT_AND_LOSS = eINSTANCE.getBaseCase_ProfitAndLoss();
 
 		/**
+		 * The meta object literal for the '<em><b>Keep Existing Scenario</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE__KEEP_EXISTING_SCENARIO = eINSTANCE.getBaseCase_KeepExistingScenario();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6084,6 +6250,58 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PARTIAL_CASE__PARTIAL_CASE = eINSTANCE.getPartialCase_PartialCase();
+
+		/**
+		 * The meta object literal for the '<em><b>Keep Existing Scenario</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTIAL_CASE__KEEP_EXISTING_SCENARIO = eINSTANCE.getPartialCase_KeepExistingScenario();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl <em>Existing Vessel Availability</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ExistingVesselAvailabilityImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselAvailability()
+		 * @generated
+		 */
+		EClass EXISTING_VESSEL_AVAILABILITY = eINSTANCE.getExistingVesselAvailability();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EXISTING_VESSEL_AVAILABILITY__VESSEL_AVAILABILITY = eINSTANCE.getExistingVesselAvailability_VesselAvailability();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
+		 * @generated
+		 */
+		EClass EXISTING_CHARTER_MARKET_OPTION = eINSTANCE.getExistingCharterMarketOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET = eINSTANCE.getExistingCharterMarketOption_CharterInMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX = eINSTANCE.getExistingCharterMarketOption_SpotIndex();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.

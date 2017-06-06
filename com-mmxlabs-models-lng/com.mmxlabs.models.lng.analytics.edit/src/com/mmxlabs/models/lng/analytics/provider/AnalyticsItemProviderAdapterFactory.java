@@ -870,6 +870,52 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ExistingVesselAvailabilityItemProvider existingVesselAvailabilityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createExistingVesselAvailabilityAdapter() {
+		if (existingVesselAvailabilityItemProvider == null) {
+			existingVesselAvailabilityItemProvider = new ExistingVesselAvailabilityItemProvider(this);
+		}
+
+		return existingVesselAvailabilityItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ExistingCharterMarketOptionItemProvider existingCharterMarketOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createExistingCharterMarketOptionAdapter() {
+		if (existingCharterMarketOptionItemProvider == null) {
+			existingCharterMarketOptionItemProvider = new ExistingCharterMarketOptionItemProvider(this);
+		}
+
+		return existingCharterMarketOptionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ActionableSetPlan} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1129,6 +1175,8 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (resultSetItemProvider != null) resultSetItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
 		if (partialCaseItemProvider != null) partialCaseItemProvider.dispose();
+		if (existingVesselAvailabilityItemProvider != null) existingVesselAvailabilityItemProvider.dispose();
+		if (existingCharterMarketOptionItemProvider != null) existingCharterMarketOptionItemProvider.dispose();
 		if (actionableSetPlanItemProvider != null) actionableSetPlanItemProvider.dispose();
 		if (actionableSetItemProvider != null) actionableSetItemProvider.dispose();
 		if (slotInsertionOptionsItemProvider != null) slotInsertionOptionsItemProvider.dispose();

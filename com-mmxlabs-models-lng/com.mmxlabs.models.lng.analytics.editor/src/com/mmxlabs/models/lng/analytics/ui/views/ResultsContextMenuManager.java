@@ -45,6 +45,10 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 public class ResultsContextMenuManager implements MenuDetectListener {
@@ -99,12 +103,49 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			} else {
 				resultSet = null;
 			}
+
+			if (false) {
+				// Experimental code to generation and *OLD* style insertion plan. TODO: This should be a single scenario now.
+				// TODO: Should make into a new type of object similar to the insertion plan explicitly for sandboxes.
+				mgr.add(new RunnableAction("Generate suggestions", () -> {
+					if (resultSet != null) {
+						try {
+							ScenarioInstance parent = scenarioEditingLocation.getScenarioInstance();
+							final String newForkName = ScenarioServiceModelUtils.getNewForkName(parent, false);
+							if (newForkName != null) {
+								final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parent);
+								// Create place-holder parent
+								ScenarioInstance fork = ScenarioServiceCommandUtil.copyTo(parent, parent, newForkName);
+								// Create a base case scenario
+								{
+									BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel, optionAnalysisModel.getBaseCase(), true, "InsertionPlan-base", fork);
+								}
+
+								// Generate child result.
+								int idx = 1;
+								for (ResultSet rs : optionAnalysisModel.getResultSets()) {
+									final OptionAnalysisModel newModel = createNewBaseCase(rs);
+									BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, String.format("InsertionPlan-%d", idx++), fork);
+								}
+							}
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						// }
+					}
+				}));
+			}
+
 			mgr.add(new RunnableAction("Create fork", () -> {
 				if (resultSet != null) {
 					final String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
 					if (newForkName != null) {
 						final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
-						BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName);
+						newModel.getBaseCase().setKeepExistingScenario(optionAnalysisModel.getPartialCase().isKeepExistingScenario());
+						newModel.getBaseCase().setProfitAndLoss(optionAnalysisModel.getBaseCase().getProfitAndLoss());
+						newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
+						BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName, null);
 					}
 				}
 			}));

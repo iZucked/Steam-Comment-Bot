@@ -333,6 +333,20 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.EXISTING_VESSEL_AVAILABILITY: {
+				ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability)theEObject;
+				T result = caseExistingVesselAvailability(existingVesselAvailability);
+				if (result == null) result = caseShippingOption(existingVesselAvailability);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.EXISTING_CHARTER_MARKET_OPTION: {
+				ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption)theEObject;
+				T result = caseExistingCharterMarketOption(existingCharterMarketOption);
+				if (result == null) result = caseShippingOption(existingCharterMarketOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.ACTIONABLE_SET_PLAN: {
 				ActionableSetPlan actionableSetPlan = (ActionableSetPlan)theEObject;
 				T result = caseActionableSetPlan(actionableSetPlan);
@@ -902,6 +916,36 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCase(PartialCase object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Existing Vessel Availability</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Existing Vessel Availability</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExistingVesselAvailability(ExistingVesselAvailability object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Existing Charter Market Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Existing Charter Market Option</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExistingCharterMarketOption(ExistingCharterMarketOption object) {
 		return null;
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for BaseCase instances
+ * A component helper for ExistingCharterMarketOption instances
  *
  * @generated
  */
-public class BaseCaseComponentHelper extends BaseComponentHelper {
+public class ExistingCharterMarketOptionComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class BaseCaseComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public BaseCaseComponentHelper() {
+	public ExistingCharterMarketOptionComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,18 +45,19 @@ public class BaseCaseComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public BaseCaseComponentHelper(IAdapterManager adapterManager) {
+	public ExistingCharterMarketOptionComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.SHIPPING_OPTION));
 	}
 	
 	/**
-	 * add editors to a composite, using BaseCase as the supertype
+	 * add editors to a composite, using ExistingCharterMarketOption as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, AnalyticsPackage.Literals.BASE_CASE);	
+		addEditorsToComposite(detailComposite, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION);	
 	}
 	
 	/**
@@ -67,33 +68,23 @@ public class BaseCaseComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_baseCaseEditor(detailComposite, topClass);
-		add_profitAndLossEditor(detailComposite, topClass);
-		add_keepExistingScenarioEditor(detailComposite, topClass);
+		add_charterInMarketEditor(detailComposite, topClass);
+		add_spotIndexEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the baseCase feature on BaseCase
+	 * Create the editor for the charterInMarket feature on ExistingCharterMarketOption
 	 *
 	 * @generated
 	 */
-	protected void add_baseCaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE__BASE_CASE));
+	protected void add_charterInMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET));
 	}
 	/**
-	 * Create the editor for the profitAndLoss feature on BaseCase
+	 * Create the editor for the spotIndex feature on ExistingCharterMarketOption
 	 *
 	 * @generated
 	 */
-	protected void add_profitAndLossEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS));
-	}
-
-	/**
-	 * Create the editor for the keepExistingScenario feature on BaseCase
-	 *
-	 * @generated
-	 */
-	protected void add_keepExistingScenarioEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO));
+	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX));
 	}
 }

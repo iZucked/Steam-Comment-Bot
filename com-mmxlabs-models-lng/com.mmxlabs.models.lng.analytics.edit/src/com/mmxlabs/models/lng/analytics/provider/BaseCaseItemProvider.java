@@ -69,6 +69,7 @@ public class BaseCaseItemProvider
 			super.getPropertyDescriptors(object);
 
 			addProfitAndLossPropertyDescriptor(object);
+			addKeepExistingScenarioPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -91,6 +92,28 @@ public class BaseCaseItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Keep Existing Scenario feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addKeepExistingScenarioPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BaseCase_keepExistingScenario_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BaseCase_keepExistingScenario_feature", "_UI_BaseCase_type"),
+				 AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -162,6 +185,7 @@ public class BaseCaseItemProvider
 
 		switch (notification.getFeatureID(BaseCase.class)) {
 			case AnalyticsPackage.BASE_CASE__PROFIT_AND_LOSS:
+			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.BASE_CASE__BASE_CASE:

@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#getProfitAndLoss <em>Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
  * </ul>
  *
  * @generated
@@ -70,6 +71,26 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * @ordered
 	 */
 	protected long profitAndLoss = PROFIT_AND_LOSS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isKeepExistingScenario() <em>Keep Existing Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isKeepExistingScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean KEEP_EXISTING_SCENARIO_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isKeepExistingScenario() <em>Keep Existing Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isKeepExistingScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean keepExistingScenario = KEEP_EXISTING_SCENARIO_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -128,6 +149,27 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isKeepExistingScenario() {
+		return keepExistingScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setKeepExistingScenario(boolean newKeepExistingScenario) {
+		boolean oldKeepExistingScenario = keepExistingScenario;
+		keepExistingScenario = newKeepExistingScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO, oldKeepExistingScenario, keepExistingScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -149,6 +191,8 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 				return getBaseCase();
 			case AnalyticsPackage.BASE_CASE__PROFIT_AND_LOSS:
 				return getProfitAndLoss();
+			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
+				return isKeepExistingScenario();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,6 +213,9 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 			case AnalyticsPackage.BASE_CASE__PROFIT_AND_LOSS:
 				setProfitAndLoss((Long)newValue);
 				return;
+			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
+				setKeepExistingScenario((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -187,6 +234,9 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 			case AnalyticsPackage.BASE_CASE__PROFIT_AND_LOSS:
 				setProfitAndLoss(PROFIT_AND_LOSS_EDEFAULT);
 				return;
+			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
+				setKeepExistingScenario(KEEP_EXISTING_SCENARIO_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -203,6 +253,8 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 				return baseCase != null && !baseCase.isEmpty();
 			case AnalyticsPackage.BASE_CASE__PROFIT_AND_LOSS:
 				return profitAndLoss != PROFIT_AND_LOSS_EDEFAULT;
+			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
+				return keepExistingScenario != KEEP_EXISTING_SCENARIO_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -219,6 +271,8 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (profitAndLoss: ");
 		result.append(profitAndLoss);
+		result.append(", keepExistingScenario: ");
+		result.append(keepExistingScenario);
 		result.append(')');
 		return result.toString();
 	}

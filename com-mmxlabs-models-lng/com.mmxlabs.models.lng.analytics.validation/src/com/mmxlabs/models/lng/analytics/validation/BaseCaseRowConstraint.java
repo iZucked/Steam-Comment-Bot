@@ -16,6 +16,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
@@ -57,9 +59,9 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);
 					}
-					if (!(baseCaseRow.getShipping() instanceof FleetShippingOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("Target - incompatible shipping option defined."));
+					if (!(baseCaseRow.getShipping() instanceof FleetShippingOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption
+							|| baseCaseRow.getShipping() instanceof ExistingVesselAvailability || baseCaseRow.getShipping() instanceof ExistingCharterMarketOption)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Target - incompatible shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);
 					}
@@ -91,7 +93,8 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.portRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Target - shipping option cannot visit a port in this cargo"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Target - shipping option cannot visit a port in this cargo"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
@@ -132,7 +135,8 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				final int availableTime = Hours.between(windowStartDate, windowEndDate) - optionDuration;
 
 				if (travelTime > availableTime) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Target - not enough travel time."), IConstraintStatus.WARNING);
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Target - not enough travel time."),
+							IConstraintStatus.WARNING);
 					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 					statuses.add(deco);

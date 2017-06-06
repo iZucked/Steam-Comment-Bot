@@ -32,6 +32,8 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -163,17 +165,21 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static int getVesselCapacityInM3(ShippingOption shippingOption) {
+	public static int getVesselCapacityInM3(final ShippingOption shippingOption) {
 		if (shippingOption instanceof FleetShippingOption) {
 			return ((FleetShippingOption) shippingOption).getVessel().getVesselOrVesselClassCapacity();
 		} else if (shippingOption instanceof RoundTripShippingOption) {
 			return ((RoundTripShippingOption) shippingOption).getVesselClass().getCapacity();
 		} else if (shippingOption instanceof NominatedShippingOption) {
 			return ((NominatedShippingOption) shippingOption).getNominatedVessel().getCapacity();
+		} else if (shippingOption instanceof ExistingCharterMarketOption) {
+			return ((ExistingCharterMarketOption) shippingOption).getCharterInMarket().getVesselClass().getCapacity();
+		} else if (shippingOption instanceof ExistingVesselAvailability) {
+			return ((ExistingVesselAvailability) shippingOption).getVesselAvailability().getVessel().getVesselOrVesselClassCapacity();
 		}
 		return 0;
 	}
-	
+
 	public static String getUniqueID(final String baseName, final Set<String> usedIDStrings) {
 		String id;
 		if (usedIDStrings.contains(baseName)) {
@@ -297,7 +303,7 @@ public class AnalyticsBuilder {
 
 		return 0;
 	}
-	
+
 	public static int calculateLateness(final BuyOption buyOption, final SellOption sellOption, final PortModel portModel, final VesselClass vesselClass) {
 		if (buyOption == null || sellOption == null) {
 			return 0;
@@ -434,7 +440,7 @@ public class AnalyticsBuilder {
 		}
 		return ShippingType.NonShipped;
 	}
-	
+
 	public static boolean isShipped(final ShippingOption option) {
 		if (option == null) {
 			return false;
@@ -444,7 +450,6 @@ public class AnalyticsBuilder {
 			return true;
 		}
 	}
-
 
 	public static ShippingType getBuyShippingType(@Nullable final BuyOption buy) {
 		if (buy == null) {
@@ -975,7 +980,7 @@ public class AnalyticsBuilder {
 			final SellOpportunity sellOpportunity = (SellOpportunity) option;
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
-				LocalDate date = sellOpportunity.getDate();
+				final LocalDate date = sellOpportunity.getDate();
 				if (date != null) {
 					ZonedDateTime t = date.atStartOfDay(ZoneId.of(port.getTimeZone()));
 					if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
@@ -1083,10 +1088,23 @@ public class AnalyticsBuilder {
 			if (vessel != null) {
 				vesselClass = vessel.getVesselClass();
 			}
+		} else if (shippingOption instanceof ExistingVesselAvailability) {
+
+			final ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability) shippingOption;
+			final Vessel vessel = existingVesselAvailability.getVesselAvailability().getVessel();
+			if (vessel != null) {
+				vesselClass = vessel.getVesselClass();
+			}
+		} else if (shippingOption instanceof ExistingCharterMarketOption) {
+			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shippingOption;
+			final CharterInMarket market = existingCharterMarketOption.getCharterInMarket();
+			if (market != null) {
+				vesselClass = market.getVesselClass();
+			}
 		}
 		return vesselClass;
 	}
-	
+
 	public static AVesselSet<Vessel> getAVesselSet(final ShippingOption shippingOption) {
 		if (shippingOption instanceof FleetShippingOption) {
 			return ((FleetShippingOption) shippingOption).getVessel();
@@ -1124,71 +1142,71 @@ public class AnalyticsBuilder {
 		}
 		return 0;
 	}
-	
-	public static int[] getBuyVolumeInMMBTU(BuyOption buy) {
-		double cargoCV = AnalyticsBuilder.getCargoCV(buy);
+
+	public static int[] getBuyVolumeInMMBTU(final BuyOption buy) {
+		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
 		if (cargoCV == 0) {
 			return null;
 		}
 		if (buy instanceof BuyReference) {
-			BuyReference buyReference = (BuyReference) buy;
-			LoadSlot slot = ((BuyReference) buy).getSlot();
+			final BuyReference buyReference = (BuyReference) buy;
+			final LoadSlot slot = ((BuyReference) buy).getSlot();
 			if (slot == null) {
 				return null;
 			}
-			int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
-			int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
-			return new int[]{slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
-					slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity : (int) ((double) slotOrContractMaxQuantity * cargoCV)};
+			final int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
+			final int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
+			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
+					slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity : (int) ((double) slotOrContractMaxQuantity * cargoCV) };
 		} else if (buy instanceof BuyOpportunity) {
-			BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
+			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
 			if (buyOpportunity.getVolumeMode() == VolumeMode.FIXED) {
-				return new int[]{buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV),
-						buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV)};
+				return new int[] { buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV),
+						buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV) };
 			} else if (buyOpportunity.getVolumeMode() == VolumeMode.RANGE) {
-				return new int[]{buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMinVolume() : (int) ((double) buyOpportunity.getMinVolume() * cargoCV),
-						buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV)};
+				return new int[] { buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMinVolume() : (int) ((double) buyOpportunity.getMinVolume() * cargoCV),
+						buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV) };
 			} else {
-				return new int[]{0, (int) ((double) DEFAULT_MAX_VOLUME * cargoCV)};
+				return new int[] { 0, (int) ((double) DEFAULT_MAX_VOLUME * cargoCV) };
 			}
 		} else if (buy instanceof BuyMarket) {
-			BuyMarket market = (BuyMarket) buy;
-			return new int[] {market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMinQuantity() : (int) ((double) market.getMarket().getMinQuantity() * cargoCV),
-					market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMaxQuantity() : (int) ((double) market.getMarket().getMaxQuantity() * cargoCV)};
+			final BuyMarket market = (BuyMarket) buy;
+			return new int[] { market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMinQuantity() : (int) ((double) market.getMarket().getMinQuantity() * cargoCV),
+					market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMaxQuantity() : (int) ((double) market.getMarket().getMaxQuantity() * cargoCV) };
 		}
 		return null;
 	}
-	
-	public static int[] getSellVolumeInMMBTU(BuyOption buy, SellOption sell) {
-		double cargoCV = AnalyticsBuilder.getCargoCV(buy);
+
+	public static int[] getSellVolumeInMMBTU(final BuyOption buy, final SellOption sell) {
+		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
 		if (cargoCV == 0) {
 			return null;
 		}
 		if (sell instanceof SellReference) {
-			SellReference sellReference = (SellReference) sell;
-			DischargeSlot slot = ((SellReference) sell).getSlot();
-			int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
-			int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
-			return new int[]{slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
-					slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity : (int) ((double) slotOrContractMaxQuantity * cargoCV)};
+			final SellReference sellReference = (SellReference) sell;
+			final DischargeSlot slot = ((SellReference) sell).getSlot();
+			final int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
+			final int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
+			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
+					slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity : (int) ((double) slotOrContractMaxQuantity * cargoCV) };
 		} else if (sell instanceof SellOpportunity) {
-			SellOpportunity sellOpportunity = (SellOpportunity) sell;
+			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
 			if (sellOpportunity.getVolumeMode() == VolumeMode.FIXED) {
-				return new int[]{sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV),
-						sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV)};
+				return new int[] { sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV),
+						sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV) };
 			} else if (sellOpportunity.getVolumeMode() == VolumeMode.RANGE) {
-				return new int[]{sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMinVolume() : (int) ((double) sellOpportunity.getMinVolume() * cargoCV),
-						sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV)};
+				return new int[] { sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMinVolume() : (int) ((double) sellOpportunity.getMinVolume() * cargoCV),
+						sellOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? sellOpportunity.getMaxVolume() : (int) ((double) sellOpportunity.getMaxVolume() * cargoCV) };
 			}
 		} else if (sell instanceof SellMarket) {
-			SellMarket market = (SellMarket) sell;
-			return new int[] {market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMinQuantity() : (int) ((double) market.getMarket().getMinQuantity() * cargoCV),
-					market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMaxQuantity() : (int) ((double) market.getMarket().getMaxQuantity() * cargoCV)};
+			final SellMarket market = (SellMarket) sell;
+			return new int[] { market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMinQuantity() : (int) ((double) market.getMarket().getMinQuantity() * cargoCV),
+					market.getMarket().getVolumeLimitsUnit() == VolumeUnits.MMBTU ? market.getMarket().getMaxQuantity() : (int) ((double) market.getMarket().getMaxQuantity() * cargoCV) };
 		}
 		return null;
 	}
-	
-	public static Collection<APortSet<Port>> getPortRestrictions(ShippingOption option) {
+
+	public static Collection<APortSet<Port>> getPortRestrictions(final ShippingOption option) {
 		if (option == null) {
 			return Collections.emptyList();
 		} else if (option instanceof FleetShippingOption) {
@@ -1200,13 +1218,13 @@ public class AnalyticsBuilder {
 		}
 		return Collections.emptyList();
 	}
-	
-	public static Set<AVesselSet<Vessel>> getBuyVesselRestrictions(BuyOption buy) {
+
+	public static Set<AVesselSet<Vessel>> getBuyVesselRestrictions(final BuyOption buy) {
 		final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
 		if (buy instanceof BuyReference) {
-			LoadSlot slot = ((BuyReference) buy).getSlot();
+			final LoadSlot slot = ((BuyReference) buy).getSlot();
 			if (slot != null) {
-				EList<AVesselSet<Vessel>> allowedVessels = slot.getAllowedVessels();
+				final EList<AVesselSet<Vessel>> allowedVessels = slot.getAllowedVessels();
 				for (final AVesselSet<Vessel> s : allowedVessels) {
 					if (s instanceof Vessel) {
 						expandedVessels.add(s);
@@ -1222,7 +1240,7 @@ public class AnalyticsBuilder {
 		}
 		return expandedVessels;
 	}
-	
+
 	public static Predicate<BuyOption> isFOBPurchase() {
 		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false)
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == false));
@@ -1232,12 +1250,12 @@ public class AnalyticsBuilder {
 		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true)
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
 	}
-	
+
 	public static Predicate<SellOption> isFOBSale() {
 		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true)
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
 	}
-	
+
 	public static Predicate<SellOption> isDESSale() {
 		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == false)
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == false));

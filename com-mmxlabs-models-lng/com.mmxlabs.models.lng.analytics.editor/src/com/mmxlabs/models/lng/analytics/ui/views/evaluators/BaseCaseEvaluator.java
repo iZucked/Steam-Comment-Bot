@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +30,8 @@ import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -41,6 +45,7 @@ import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -172,7 +177,9 @@ public class BaseCaseEvaluator {
 			copier.copyReferences();
 			final IMapperClass mapper = new Mapper(copier);
 
-			clearData(clone, clonedModel, clonedBaseCase);
+			if (!baseCase.isKeepExistingScenario()) {
+				clearData(clone, clonedModel, clonedBaseCase);
+			}
 			buildScenario(clone, clonedModel, clonedBaseCase, mapper);
 
 			callback.accept(clone, mapper);
@@ -206,10 +213,13 @@ public class BaseCaseEvaluator {
 		return null;
 	}
 
-	public static void evaluate(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase, final boolean fork, final String forkName) {
+	public static void evaluate(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase, final boolean fork, final String forkName,
+			@Nullable final ScenarioInstance altParentForFork) {
 
 		generateScenario(scenarioEditingLocation, model, baseCase, (clone, mapper) -> {
-			evaluateScenario(clone, scenarioEditingLocation.getScenarioInstance(), fork, forkName);
+			final ScenarioInstance inst = scenarioEditingLocation.getScenarioInstance();
+			final ScenarioInstance parentForFork = altParentForFork != null ? altParentForFork : inst;
+			evaluateScenario(clone, parentForFork, fork, forkName);
 
 			updateResults(scenarioEditingLocation, clone, baseCase);
 		});
@@ -263,6 +273,17 @@ public class BaseCaseEvaluator {
 			}
 		}
 
+		// Fix up cargoes
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(clone);
+		final Iterator<Cargo> itr = cargoModel.getCargoes().iterator();
+		while (itr.hasNext()) {
+			final Cargo c = itr.next();
+			if (c.getSlots().size() < 2) {
+				c.getSlots().clear();
+				itr.remove();
+			}
+		}
+
 	}
 
 	protected static Map<ShippingOption, VesselAssignmentType> buildFullScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final IMapperClass mapper) {
@@ -290,9 +311,16 @@ public class BaseCaseEvaluator {
 			final DischargeSlot dischargeSlot) {
 		Cargo cargo = null;
 		if (loadSlot != null && dischargeSlot != null) {
-			cargo = CargoFactory.eINSTANCE.createCargo();
-			cargo.getSlots().add(loadSlot);
-			cargo.getSlots().add(dischargeSlot);
+			if (loadSlot.getCargo() != null) {
+				final Cargo c = loadSlot.getCargo();
+				c.getSlots().retainAll(Collections.singleton(loadSlot));
+				dischargeSlot.setCargo(c);
+				cargo = c;
+			} else {
+				cargo = CargoFactory.eINSTANCE.createCargo();
+				cargo.getSlots().add(loadSlot);
+				cargo.getSlots().add(dischargeSlot);
+			}
 		}
 
 		if (loadSlot != null && dischargeSlot != null) {
@@ -439,7 +467,16 @@ public class BaseCaseEvaluator {
 						loadSlot.setWindowStartTime(0);
 					}
 				}
-			}
+			}	
+		} else if (shipping instanceof ExistingVesselAvailability) {
+			final ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability) shipping;
+			cargo.setVesselAssignmentType(existingVesselAvailability.getVesselAvailability());
+		} else if (shipping instanceof ExistingCharterMarketOption) {
+			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shipping;
+			cargo.setVesselAssignmentType(existingCharterMarketOption.getCharterInMarket());
+			cargo.setSpotIndex(existingCharterMarketOption.getSpotIndex());
+				
+	
 		}
 	}
 

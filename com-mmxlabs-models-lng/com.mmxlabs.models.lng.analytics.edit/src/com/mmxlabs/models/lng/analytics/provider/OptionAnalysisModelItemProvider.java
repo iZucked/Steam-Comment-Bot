@@ -244,6 +244,16 @@ public class OptionAnalysisModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createExistingVesselAvailability()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE,
 				 AnalyticsFactory.eINSTANCE.createPartialCase()));
 

@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -19,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -33,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl#getPartialCase <em>Partial Case</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,6 +50,25 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * @ordered
 	 */
 	protected EList<PartialCaseRow> partialCase;
+
+	/**
+	 * The default value of the '{@link #isKeepExistingScenario() <em>Keep Existing Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isKeepExistingScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean KEEP_EXISTING_SCENARIO_EDEFAULT = false;
+	/**
+	 * The cached value of the '{@link #isKeepExistingScenario() <em>Keep Existing Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isKeepExistingScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean keepExistingScenario = KEEP_EXISTING_SCENARIO_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -84,6 +106,27 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isKeepExistingScenario() {
+		return keepExistingScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setKeepExistingScenario(boolean newKeepExistingScenario) {
+		boolean oldKeepExistingScenario = keepExistingScenario;
+		keepExistingScenario = newKeepExistingScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO, oldKeepExistingScenario, keepExistingScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -103,6 +146,8 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 		switch (featureID) {
 			case AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE:
 				return getPartialCase();
+			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
+				return isKeepExistingScenario();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -120,6 +165,9 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 				getPartialCase().clear();
 				getPartialCase().addAll((Collection<? extends PartialCaseRow>)newValue);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
+				setKeepExistingScenario((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -135,6 +183,9 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 			case AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE:
 				getPartialCase().clear();
 				return;
+			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
+				setKeepExistingScenario(KEEP_EXISTING_SCENARIO_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -149,8 +200,26 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 		switch (featureID) {
 			case AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE:
 				return partialCase != null && !partialCase.isEmpty();
+			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
+				return keepExistingScenario != KEEP_EXISTING_SCENARIO_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (keepExistingScenario: ");
+		result.append(keepExistingScenario);
+		result.append(')');
+		return result.toString();
 	}
 
 } //PartialCaseImpl

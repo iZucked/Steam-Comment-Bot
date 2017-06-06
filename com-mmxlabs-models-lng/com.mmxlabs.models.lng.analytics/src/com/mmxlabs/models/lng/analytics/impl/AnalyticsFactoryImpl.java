@@ -108,6 +108,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.RESULT_SET: return createResultSet();
 			case AnalyticsPackage.BASE_CASE: return createBaseCase();
 			case AnalyticsPackage.PARTIAL_CASE: return createPartialCase();
+			case AnalyticsPackage.EXISTING_VESSEL_AVAILABILITY: return createExistingVesselAvailability();
+			case AnalyticsPackage.EXISTING_CHARTER_MARKET_OPTION: return createExistingCharterMarketOption();
 			case AnalyticsPackage.ACTIONABLE_SET_PLAN: return createActionableSetPlan();
 			case AnalyticsPackage.ACTIONABLE_SET: return createActionableSet();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS: return createSlotInsertionOptions();
@@ -503,6 +505,26 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public PartialCase createPartialCase() {
 		PartialCaseImpl partialCase = new PartialCaseImpl();
 		return partialCase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExistingVesselAvailability createExistingVesselAvailability() {
+		ExistingVesselAvailabilityImpl existingVesselAvailability = new ExistingVesselAvailabilityImpl();
+		return existingVesselAvailability;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExistingCharterMarketOption createExistingCharterMarketOption() {
+		ExistingCharterMarketOptionImpl existingCharterMarketOption = new ExistingCharterMarketOptionImpl();
+		return existingCharterMarketOption;
 	}
 
 	/**

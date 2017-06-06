@@ -159,6 +159,18 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselAvailabilityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselAvailabilityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ExistingVesselAvailability">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingCharterMarketOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingCharterMarketOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption">
+  </componentHelper>
 		
 	</extension>
  <extension

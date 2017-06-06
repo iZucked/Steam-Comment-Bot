@@ -231,6 +231,14 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createPartialCaseAdapter();
 			}
 			@Override
+			public Adapter caseExistingVesselAvailability(ExistingVesselAvailability object) {
+				return createExistingVesselAvailabilityAdapter();
+			}
+			@Override
+			public Adapter caseExistingCharterMarketOption(ExistingCharterMarketOption object) {
+				return createExistingCharterMarketOptionAdapter();
+			}
+			@Override
 			public Adapter caseActionableSetPlan(ActionableSetPlan object) {
 				return createActionableSetPlanAdapter();
 			}
@@ -779,6 +787,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ExistingVesselAvailability <em>Existing Vessel Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingVesselAvailability
+	 * @generated
+	 */
+	public Adapter createExistingVesselAvailabilityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption <em>Existing Charter Market Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption
+	 * @generated
+	 */
+	public Adapter createExistingCharterMarketOptionAdapter() {
 		return null;
 	}
 

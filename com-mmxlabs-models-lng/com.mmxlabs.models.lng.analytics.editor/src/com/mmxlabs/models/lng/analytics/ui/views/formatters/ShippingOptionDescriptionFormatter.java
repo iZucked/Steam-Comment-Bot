@@ -6,12 +6,16 @@ package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.util.Collection;
 
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
+import com.mmxlabs.models.lng.analytics.ExistingVesselAvailability;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class ShippingOptionDescriptionFormatter extends BaseFormatter {
@@ -101,6 +105,26 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 				}
 			}
 			return String.format("%s (nominated)", vesselName);
+		} else if (object instanceof ExistingCharterMarketOption) {
+			final ExistingCharterMarketOption option = (ExistingCharterMarketOption) object;
+			final CharterInMarket market = option.getCharterInMarket();
+
+			if (option.getSpotIndex() == -1) {
+				return String.format("%s (roundtrip)", market.getName());
+			} else {
+				return String.format("%s (model - %d)", market.getName(), 1 + option.getSpotIndex());
+			}
+		} else if (object instanceof ExistingVesselAvailability) {
+			final ExistingVesselAvailability option = (ExistingVesselAvailability) object;
+			final VesselAvailability availability = option.getVesselAvailability();
+			String vesselName = "<No vessel>";
+			if (availability != null) {
+				final String s = availability.getVessel().getName();
+				if (s != null && !s.trim().isEmpty()) {
+					vesselName = s;
+				}
+			}
+			return String.format("%s (existing)", vesselName);
 		}
 
 		if (object == null) {

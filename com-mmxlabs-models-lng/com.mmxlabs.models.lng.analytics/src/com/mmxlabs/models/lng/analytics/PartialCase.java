@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCase#getPartialCase <em>Partial Case</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCase#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCase()
@@ -42,5 +43,31 @@ public interface PartialCase extends EObject {
 	 * @generated
 	 */
 	EList<PartialCaseRow> getPartialCase();
+
+	/**
+	 * Returns the value of the '<em><b>Keep Existing Scenario</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Keep Existing Scenario</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Keep Existing Scenario</em>' attribute.
+	 * @see #setKeepExistingScenario(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCase_KeepExistingScenario()
+	 * @model
+	 * @generated
+	 */
+	boolean isKeepExistingScenario();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.PartialCase#isKeepExistingScenario <em>Keep Existing Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Keep Existing Scenario</em>' attribute.
+	 * @see #isKeepExistingScenario()
+	 * @generated
+	 */
+	void setKeepExistingScenario(boolean value);
 
 } // PartialCase

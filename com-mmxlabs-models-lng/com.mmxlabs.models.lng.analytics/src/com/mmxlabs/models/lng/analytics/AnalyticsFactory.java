@@ -330,6 +330,24 @@ public interface AnalyticsFactory extends EFactory {
 	PartialCase createPartialCase();
 
 	/**
+	 * Returns a new object of class '<em>Existing Vessel Availability</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Existing Vessel Availability</em>'.
+	 * @generated
+	 */
+	ExistingVesselAvailability createExistingVesselAvailability();
+
+	/**
+	 * Returns a new object of class '<em>Existing Charter Market Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Existing Charter Market Option</em>'.
+	 * @generated
+	 */
+	ExistingCharterMarketOption createExistingCharterMarketOption();
+
+	/**
 	 * Returns a new object of class '<em>Actionable Set Plan</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
