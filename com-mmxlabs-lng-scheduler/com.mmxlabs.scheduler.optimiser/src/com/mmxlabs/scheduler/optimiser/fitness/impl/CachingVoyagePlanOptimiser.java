@@ -54,6 +54,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final @NonNull IVessel vessel;
 		private final long @NonNull [] startHeelRangeInM3;
 		private final int baseFuelPricePerMT;
+		private int startCV;
 
 		// Non hashcode fields
 		private final @NonNull List<@NonNull IOptionsSequenceElement> sequence;
@@ -61,7 +62,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private @NonNull IPortTimesRecord portTimesRecord;
 		private @Nullable IResource resource;
 
-		private	int originalHashCode;
+		private int originalHashCode;
 
 		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final long vesselCharterInRatePerDay, final int baseFuelPricePerMT,
 				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
@@ -81,12 +82,16 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int loadix = -1, dischargeix = -1;
 			for (final Object o : sequence) {
 				if (o instanceof PortOptions) {
-					slots[slotix] = ((PortOptions) o).getPortSlot();
-					durations[slotix] = ((PortOptions) o).getVisitDuration();
+					PortOptions portOptions = (PortOptions) o;
+					slots[slotix] = portOptions.getPortSlot();
+					durations[slotix] = portOptions.getVisitDuration();
 					if ((loadix == -1) && (slots[slotix] instanceof ILoadSlot)) {
 						loadix = slotix;
 					} else if ((dischargeix == -1) && (slots[slotix] instanceof IDischargeSlot)) {
 						dischargeix = slotix;
+					}
+					if (slotix == 0) {
+						startCV = portOptions.getCargoCVValue();
 					}
 					slotix++;
 				} else {
@@ -124,6 +129,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
+			result = (prime * result) + startCV;
 			result = (prime * result) + baseFuelPricePerMT;
 			result = (prime * result) + (int) vesselCharterInRatePerDay;
 
@@ -150,6 +156,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				return dischargePrice == other.dischargePrice//
 						&& baseFuelPricePerMT == other.baseFuelPricePerMT//
+						&& startCV == other.startCV //
 						&& (vessel == other.vessel) //
 						&& Arrays.equals(startHeelRangeInM3, other.startHeelRangeInM3) //
 						&& Arrays.equals(voyageTimes, other.voyageTimes) //
