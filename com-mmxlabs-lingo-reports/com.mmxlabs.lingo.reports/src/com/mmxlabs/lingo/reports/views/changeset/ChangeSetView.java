@@ -100,6 +100,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
+import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
 import com.mmxlabs.lingo.reports.views.changeset.handlers.SwitchGroupModeEvent;
@@ -2374,6 +2375,13 @@ public class ChangeSetView implements IAdaptable {
 						if (ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 							helper.addAction(new ExportChangeAction(changeSetTableGroup));
+							showMenu = true;
+						}
+						// Experimental code to generate a sandbox scenario.						
+						if (false && ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
+							// This does not work as insertion scenario is read-only. Data model is also unstable (not sure if containment works right.
+							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
+							helper.addAction(new CreateSandboxAction(changeSetTableGroup));
 							showMenu = true;
 						}
 					}
