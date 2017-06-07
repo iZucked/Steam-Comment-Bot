@@ -88,8 +88,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CapacityUtils;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -552,7 +552,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						return (int) total;
 					}
 					return null;
-					
+
 				}
 			}, targetObjectRef));
 			break;
@@ -566,7 +566,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						return (int) total;
 					}
 					return null;
-					
+
 				}
 			}, targetObjectRef));
 			break;
@@ -1316,6 +1316,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return super.render(object);
 				}
 			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchase_counterparty":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Counterparty", null, ColumnType.NORMAL, new BaseFormatter(), loadAllocationRef,
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrContractCounterparty()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.sale_counterparty":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale Counterparty", null, ColumnType.NORMAL, new BaseFormatter(), dischargeAllocationRef,
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrContractCounterparty()));
 			break;
 		}
 	}
