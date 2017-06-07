@@ -66,13 +66,13 @@ public class MigrationHelper {
 	}
 
 	public static void migrateAndLoad(@NonNull final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
-		ServiceHelper.withCheckedService(IMigrationRegistry.class, migrationRegistry -> {
+		ServiceHelper.withCheckedServiceConsumer(IMigrationRegistry.class, migrationRegistry -> {
 			migrateAndLoad(instance, scenarioCipherProvider, migrationRegistry);
 		});
 	}
 
 	public static void migrateAndLoad(@NonNull final ScenarioInstance instance) throws IOException {
-		ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+		ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 			migrateAndLoad(instance, scenarioCipherProvider);
 		});
 	}
