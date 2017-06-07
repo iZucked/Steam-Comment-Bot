@@ -65,7 +65,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 					}
 
 					// create a new folder in the top scenario service?
-					ServiceHelper.withOptionalService(ScenarioServiceRegistry.class, serviceRegistry -> {
+					ServiceHelper.withOptionalServiceConsumer(ScenarioServiceRegistry.class, serviceRegistry -> {
 						if (serviceRegistry != null) {
 							final Collection<IScenarioService> scenarioServices = serviceRegistry.getScenarioServices();
 							if (scenarioServices.size() == 1) {

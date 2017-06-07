@@ -19,7 +19,7 @@ public class DeselectAllCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(),
-				() -> ServiceHelper.withService(IScenarioServiceSelectionProvider.class, (Consumer<IScenarioServiceSelectionProvider>) p -> p.deselectAll()));
+				() -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, (Consumer<IScenarioServiceSelectionProvider>) p -> p.deselectAll()));
 
 		return null;
 	}

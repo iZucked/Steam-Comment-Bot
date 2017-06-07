@@ -124,7 +124,7 @@ public class ScenarioStorageUtil {
 
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
 
-		ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+		ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 			storeToFile(instance, file, scenarioCipherProvider);
 		});
 	}
