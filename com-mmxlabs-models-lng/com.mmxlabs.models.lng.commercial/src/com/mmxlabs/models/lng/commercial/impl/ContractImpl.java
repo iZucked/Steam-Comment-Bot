@@ -37,6 +37,7 @@ import java.time.YearMonth;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCode <em>Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCounterparty <em>Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEndDate <em>End Date</em>}</li>
@@ -97,6 +98,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String code = CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCounterparty() <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COUNTERPARTY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCounterparty() <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected String counterparty = COUNTERPARTY_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
@@ -765,6 +786,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getCounterparty() {
+		return counterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCounterparty(String newCounterparty) {
+		String oldCounterparty = counterparty;
+		counterparty = newCounterparty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__COUNTERPARTY, oldCounterparty, counterparty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public YearMonth getStartDate() {
 		return startDate;
 	}
@@ -878,6 +920,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getName();
 			case CommercialPackage.CONTRACT__CODE:
 				return getCode();
+			case CommercialPackage.CONTRACT__COUNTERPARTY:
+				return getCounterparty();
 			case CommercialPackage.CONTRACT__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
@@ -930,6 +974,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__CODE:
 				setCode((String)newValue);
+				return;
+			case CommercialPackage.CONTRACT__COUNTERPARTY:
+				setCounterparty((String)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
@@ -1000,6 +1047,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CODE:
 				setCode(CODE_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__COUNTERPARTY:
+				setCounterparty(COUNTERPARTY_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
@@ -1064,6 +1114,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CommercialPackage.CONTRACT__CODE:
 				return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
+			case CommercialPackage.CONTRACT__COUNTERPARTY:
+				return COUNTERPARTY_EDEFAULT == null ? counterparty != null : !COUNTERPARTY_EDEFAULT.equals(counterparty);
 			case CommercialPackage.CONTRACT__ENTITY:
 				return entity != null;
 			case CommercialPackage.CONTRACT__START_DATE:
@@ -1146,6 +1198,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(name);
 		result.append(", code: ");
 		result.append(code);
+		result.append(", counterparty: ");
+		result.append(counterparty);
 		result.append(", startDate: ");
 		if (startDateESet) result.append(startDate); else result.append("<unset>");
 		result.append(", endDate: ");

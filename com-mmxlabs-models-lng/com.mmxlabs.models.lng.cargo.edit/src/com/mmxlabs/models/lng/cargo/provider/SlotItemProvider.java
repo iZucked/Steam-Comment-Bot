@@ -51,6 +51,7 @@ public class SlotItemProvider
 
 			addNamePropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
+			addCounterpartyPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
@@ -279,6 +280,28 @@ public class SlotItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_counterparty_feature"),
+				 getString("_UI_Slot_counterparty_description"),
+				 CargoPackage.Literals.SLOT__COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -827,6 +850,7 @@ public class SlotItemProvider
 
 		switch (notification.getFeatureID(Slot.class)) {
 			case CargoPackage.SLOT__NAME:
+			case CargoPackage.SLOT__COUNTERPARTY:
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:

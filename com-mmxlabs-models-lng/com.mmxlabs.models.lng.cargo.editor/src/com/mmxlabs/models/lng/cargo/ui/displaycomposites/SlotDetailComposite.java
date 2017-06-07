@@ -99,6 +99,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity() });
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit() });
+		mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__COUNTERPARTY});
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
 		pricingFeatures = new ArrayList<EStructuralFeature[]>();

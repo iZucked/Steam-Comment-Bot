@@ -24,6 +24,13 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_COLD"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_WARM"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//InventoryFrequency">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Cargo"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Hourly"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Daily"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Monthly"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFrequency/Level"/>
+    </genEnums>
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dischargeSlots"/>
@@ -32,6 +39,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/vesselAvailabilities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/vesselEvents"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/vesselTypeGroups"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/inventoryModels"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//Cargo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Cargo/allowRewiring"/>
@@ -44,6 +52,8 @@
     <genClasses ecoreClass="cargo.ecore#//Slot">
       <genFeatures notify="false" createChild="false" propertyDescription="The contract, if any, for this deal"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
+      <genFeatures createChild="false" propertyDescription="The name of the counterparty for this deal"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/counterparty"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The load or discharge port for this trade"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
       <genFeatures createChild="false" propertyDescription="Arrival window start date"
@@ -178,10 +188,12 @@
       <genFeatures createChild="false" propertyDescription="The cost to reposition the vessel before use"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/repositioningFee"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/ballastBonusContract"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/charterContract"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartAfterAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getEndByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getEndAfterAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getAvailabilityOrCharterContractBallastBonusContract"/>
     </genClasses>
     <genClasses image="false" ecoreClass="cargo.ecore#//VesselEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/durationInDays"/>
@@ -234,6 +246,26 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/maxVolumeAvailable"/>
       <genFeatures createChild="false" propertyDescription="Purchase price per unit of heel."
           ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//InventoryEventRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/startDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/endDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/period"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/counterParty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volume"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//InventoryCapacityRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/minVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/maxVolume"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//Inventory">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Inventory/startDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Inventory/startVolume"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/feeds"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/offtakes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/capacities"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Inventory/name"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

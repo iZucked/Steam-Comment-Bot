@@ -32,6 +32,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCounterparty <em>Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartTime <em>Window Start Time</em>}</li>
@@ -121,6 +122,59 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetContract();
+
+	/**
+	 * Returns the value of the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Counterparty</em>' attribute.
+	 * @see #isSetCounterparty()
+	 * @see #unsetCounterparty()
+	 * @see #setCounterparty(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Counterparty()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	String getCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCounterparty <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Counterparty</em>' attribute.
+	 * @see #isSetCounterparty()
+	 * @see #unsetCounterparty()
+	 * @see #getCounterparty()
+	 * @generated
+	 */
+	void setCounterparty(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCounterparty <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCounterparty()
+	 * @see #getCounterparty()
+	 * @see #setCounterparty(String)
+	 * @generated
+	 */
+	void unsetCounterparty();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCounterparty <em>Counterparty</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Counterparty</em>' attribute is set.
+	 * @see #unsetCounterparty()
+	 * @see #getCounterparty()
+	 * @see #setCounterparty(String)
+	 * @generated
+	 */
+	boolean isSetCounterparty();
 
 	/**
 	 * Returns the value of the '<em><b>Window Start</b></em>' attribute.
@@ -1463,6 +1517,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	SlotContractParams getSlotContractParams();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getSlotOrContractCounterparty();
 
 } // end of  Slot
 

@@ -51,6 +51,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCounterparty <em>Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
@@ -123,6 +124,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean contractESet;
+
+	/**
+	 * The default value of the '{@link #getCounterparty() <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COUNTERPARTY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCounterparty() <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected String counterparty = COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * This is true if the Counterparty attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean counterpartyESet;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -1068,6 +1098,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public boolean isSetContract() {
 		return contractESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getCounterparty() {
+		return counterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCounterparty(String newCounterparty) {
+		String oldCounterparty = counterparty;
+		counterparty = newCounterparty;
+		boolean oldCounterpartyESet = counterpartyESet;
+		counterpartyESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__COUNTERPARTY, oldCounterparty, counterparty, !oldCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCounterparty() {
+		String oldCounterparty = counterparty;
+		boolean oldCounterpartyESet = counterpartyESet;
+		counterparty = COUNTERPARTY_EDEFAULT;
+		counterpartyESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__COUNTERPARTY, oldCounterparty, COUNTERPARTY_EDEFAULT, oldCounterpartyESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCounterparty() {
+		return counterpartyESet;
 	}
 
 	/**
@@ -2100,6 +2176,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getSlotOrContractCounterparty() {
+		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__COUNTERPARTY);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -2154,6 +2239,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
+			case CargoPackage.SLOT__COUNTERPARTY:
+				return getCounterparty();
 			case CargoPackage.SLOT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -2235,6 +2322,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)newValue);
+				return;
+			case CargoPackage.SLOT__COUNTERPARTY:
+				setCounterparty((String)newValue);
 				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)newValue);
@@ -2346,6 +2436,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CONTRACT:
 				unsetContract();
 				return;
+			case CargoPackage.SLOT__COUNTERPARTY:
+				unsetCounterparty();
+				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
 				return;
@@ -2451,6 +2544,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CargoPackage.SLOT__CONTRACT:
 				return isSetContract();
+			case CargoPackage.SLOT__COUNTERPARTY:
+				return isSetCounterparty();
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
@@ -2624,6 +2719,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getPricingDateAsDateTime();
 			case CargoPackage.SLOT___GET_SLOT_CONTRACT_PARAMS:
 				return getSlotContractParams();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_COUNTERPARTY:
+				return getSlotOrContractCounterparty();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -2641,6 +2738,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", counterparty: ");
+		if (counterpartyESet) result.append(counterparty); else result.append("<unset>");
 		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");
@@ -2706,6 +2805,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 140000);
 		} else if (CargoPackage.Literals.SLOT__ENTITY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
+		} else if (CargoPackage.Literals.SLOT__COUNTERPARTY == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Counterparty(), null);
 		} else if (CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationExpression(), (String)"");
 		} else if (CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT == feature) {

@@ -53,6 +53,7 @@ public class ContractItemProvider
 
 			addNamePropertyDescriptor(object);
 			addCodePropertyDescriptor(object);
+			addCounterpartyPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addStartDatePropertyDescriptor(object);
 			addEndDatePropertyDescriptor(object);
@@ -403,6 +404,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_counterparty_feature"),
+				 getString("_UI_Contract_counterparty_description"),
+				 CommercialPackage.Literals.CONTRACT__COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Start Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -515,6 +538,7 @@ public class ContractItemProvider
 		switch (notification.getFeatureID(Contract.class)) {
 			case CommercialPackage.CONTRACT__NAME:
 			case CommercialPackage.CONTRACT__CODE:
+			case CommercialPackage.CONTRACT__COUNTERPARTY:
 			case CommercialPackage.CONTRACT__START_DATE:
 			case CommercialPackage.CONTRACT__END_DATE:
 			case CommercialPackage.CONTRACT__MIN_QUANTITY:

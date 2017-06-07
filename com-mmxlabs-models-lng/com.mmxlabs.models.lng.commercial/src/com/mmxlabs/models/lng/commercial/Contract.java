@@ -22,6 +22,7 @@ import java.time.YearMonth;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCode <em>Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCounterparty <em>Counterparty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}</li>
@@ -446,6 +447,32 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Counterparty</em>' attribute.
+	 * @see #setCounterparty(String)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Counterparty()
+	 * @model
+	 * @generated
+	 */
+	String getCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getCounterparty <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Counterparty</em>' attribute.
+	 * @see #getCounterparty()
+	 * @generated
+	 */
+	void setCounterparty(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Start Date</b></em>' attribute.

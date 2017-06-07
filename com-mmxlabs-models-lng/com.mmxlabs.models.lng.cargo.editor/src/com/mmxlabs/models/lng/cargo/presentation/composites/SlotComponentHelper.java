@@ -81,6 +81,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
+		add_counterpartyEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);
@@ -345,6 +346,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT));
 		}
+	}
+
+	/**
+	 * Create the editor for the counterparty feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_counterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__COUNTERPARTY));
 	}
 
 	/**

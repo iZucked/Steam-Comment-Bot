@@ -34,6 +34,8 @@
     <genClasses ecoreClass="commercial.ecore#//Contract">
       <genFeatures createChild="false" propertyDescription="A short code for the contract."
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/code"/>
+      <genFeatures createChild="false" propertyDescription="The name of the counterparty for this contract"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/counterparty"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/entity"/>
       <genFeatures createChild="false" propertyDescription="Optional date this contract is valid from"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/startDate"/>

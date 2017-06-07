@@ -68,6 +68,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_codeEditor(detailComposite, topClass);
+		add_counterpartyEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_startDateEditor(detailComposite, topClass);
 		add_endDateEditor(detailComposite, topClass);
@@ -143,6 +144,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CODE));
 		}
 
+	}
+
+	/**
+	 * Create the editor for the counterparty feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_counterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__COUNTERPARTY));
 	}
 
 	/**
