@@ -81,7 +81,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 									viewPart = partService.showPart(viewPart, PartState.ACTIVATE); // Show part
 								}
 							}
-							ServiceHelper.withService(IScenarioServiceSelectionProvider.class,
+							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class,
 									(Consumer<IScenarioServiceSelectionProvider>) provider -> provider.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));
 						});
 					}
