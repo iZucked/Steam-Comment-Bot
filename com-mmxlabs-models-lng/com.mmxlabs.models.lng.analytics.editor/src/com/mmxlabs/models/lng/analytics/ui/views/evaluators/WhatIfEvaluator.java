@@ -417,7 +417,7 @@ public class WhatIfEvaluator {
 			userSettings.setShippingOnly(false);
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-			ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
+			ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class,
 					evaluator -> evaluator.multiEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
 							model.isUseTargetPNL() ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT, baseCases, mapper, shippingMap,
 							(baseCase, schedule) -> {
@@ -758,7 +758,7 @@ public class WhatIfEvaluator {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
 				useTargetPNL ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT));
 	}
 

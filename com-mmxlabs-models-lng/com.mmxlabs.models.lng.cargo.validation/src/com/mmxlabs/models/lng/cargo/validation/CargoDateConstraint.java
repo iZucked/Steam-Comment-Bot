@@ -289,7 +289,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			status.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		} else {
-			ServiceHelper.withCheckedService(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
+			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
 				int travelTime = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
 						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
