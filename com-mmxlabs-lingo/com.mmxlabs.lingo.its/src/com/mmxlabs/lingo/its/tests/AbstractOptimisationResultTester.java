@@ -253,7 +253,7 @@ public class AbstractOptimisationResultTester {
 	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
-		ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+		ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, scenarioCipherProvider);
 			Assert.assertNotNull(instance);
 			MigrationHelper.migrateAndLoad(instance);

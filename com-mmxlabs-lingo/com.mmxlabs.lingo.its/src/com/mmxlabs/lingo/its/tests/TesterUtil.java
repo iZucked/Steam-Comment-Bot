@@ -171,7 +171,7 @@ public class TesterUtil {
 		final File f = File.createTempFile("TesterUtil", ".xmi");
 		f.deleteOnExit();
 		try {
-			ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
 				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 				final Resource resource = resourceSet.createResource(URI.createFileURI(f.getAbsolutePath()));

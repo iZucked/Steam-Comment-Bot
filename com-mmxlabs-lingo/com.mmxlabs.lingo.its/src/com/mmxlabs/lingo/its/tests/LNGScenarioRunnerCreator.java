@@ -287,7 +287,7 @@ public class LNGScenarioRunnerCreator {
 	}
 
 	public static void saveScenarioModel(@NonNull final LNGScenarioModel scenario, @NonNull final File destinationFile) throws IOException {
-		ServiceHelper.withCheckedService(IMigrationRegistry.class, (migrationRegistry) -> {
+		ServiceHelper.withCheckedServiceConsumer(IMigrationRegistry.class, (migrationRegistry) -> {
 
 			final LNGScenarioModel copy = EcoreUtil.copy(scenario);
 			final String context = migrationRegistry.getDefaultMigrationContext();

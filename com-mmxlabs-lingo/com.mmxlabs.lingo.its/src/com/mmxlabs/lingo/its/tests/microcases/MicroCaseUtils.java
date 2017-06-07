@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultB
 public class MicroCaseUtils {
 
 	public static void storeToFile(final LNGScenarioModel lngScenarioModel, final String name) throws IOException {
-		ServiceHelper.withCheckedService(IMigrationRegistry.class, migrationRegistry -> {
+		ServiceHelper.withCheckedServiceConsumer(IMigrationRegistry.class, migrationRegistry -> {
 			storeToFile(lngScenarioModel, migrationRegistry, new File(String.format("C://temp//%s.lingo", name)));
 		});
 	}
