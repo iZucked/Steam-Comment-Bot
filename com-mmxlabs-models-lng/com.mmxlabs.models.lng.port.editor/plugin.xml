@@ -63,6 +63,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.port.Location">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.EntryPointComponentHelper"
+        id="com.mmxlabs.models.lng.port.presentation.composites.EntryPointComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.port.EntryPoint">
+  </componentHelper>
 		
 	</extension>
  <extension
