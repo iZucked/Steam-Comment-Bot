@@ -68,11 +68,11 @@ public final class MutableTimeWindow implements ITimeWindow {
 
 	@Override
 	public final boolean equals(final Object obj) {
-		
+
 		if (obj == this) {
 			return true;
 		}
-		
+
 		if (obj instanceof MutableTimeWindow) {
 			final MutableTimeWindow tw = (MutableTimeWindow) obj;
 			if (start != tw.start) {
@@ -96,4 +96,13 @@ public final class MutableTimeWindow implements ITimeWindow {
 		return Objects.hash(start, end, endFlex);
 	}
 
+	public void update(int inclusiveStart, int exclusiveEnd) {
+		this.start = inclusiveStart;
+		this.end = exclusiveEnd;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%d, %d)", start, end);
+	}
 }
