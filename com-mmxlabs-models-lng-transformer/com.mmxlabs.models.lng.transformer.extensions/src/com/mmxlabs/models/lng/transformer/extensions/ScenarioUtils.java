@@ -134,6 +134,17 @@ public class ScenarioUtils {
 		return similaritySettings;
 	}
 
+	public static SimilaritySettings createSimilaritySettings(int lowInterval, int lowWeight, int medInterval, int medWeight, int highInterval, int highWeight, int outOfBounds) {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.setLowInterval(createSimilarityInterval(lowInterval, lowWeight));
+		similaritySettings.setMedInterval(createSimilarityInterval(medInterval, medWeight));
+		similaritySettings.setHighInterval(createSimilarityInterval(highInterval, highWeight));
+		similaritySettings.setOutOfBoundsWeight(outOfBounds);
+
+		return similaritySettings;
+	}
+
 	public static SimilarityInterval createSimilarityInterval(final int upperChangeCount, final int weight) {
 		final SimilarityInterval interval = ParametersFactory.eINSTANCE.createSimilarityInterval();
 

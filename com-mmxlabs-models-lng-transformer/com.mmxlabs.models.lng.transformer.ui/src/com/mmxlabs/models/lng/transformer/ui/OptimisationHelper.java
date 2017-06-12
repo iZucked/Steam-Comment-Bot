@@ -909,8 +909,8 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	private static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
-		if (periodStart == null || periodEnd == null || mode == null) {
+	public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
+		if (periodStart == null || periodEnd == null || mode == null || mode == SimilarityMode.OFF) {
 			return ScenarioUtils.createOffSimilaritySettings();
 		} else {
 			return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
