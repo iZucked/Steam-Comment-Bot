@@ -49,8 +49,9 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PriceBasedSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
+import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
+import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @RunWith(value = ShiroRunner.class)
@@ -178,13 +179,14 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 			// ISequencesManipulator sequencesManipulator = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, ISequencesManipulator.class);
 			sequencesManipulator.manipulate(initialSequences);
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
-				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
-
-				priceBasedSequenceScheduler.schedule(initialSequences);
+				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
+				// Ensure scheduling with price window trimming is enabled.
+				priceBasedSequenceScheduler.setUsePriceBasedWindowTrimming(true);
+				ScheduledTimeWindows scheduledTimeWindows = priceBasedSequenceScheduler.schedule(initialSequences);
 
 				// get optimiser objects
-				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, scheduledTimeWindows);
+				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, scheduledTimeWindows);
 				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
 				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 

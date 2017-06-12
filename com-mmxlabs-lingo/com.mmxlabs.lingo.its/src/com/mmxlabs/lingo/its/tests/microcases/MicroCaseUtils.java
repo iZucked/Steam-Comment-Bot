@@ -18,22 +18,23 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.migration.IMigrationRegistry;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PriceBasedSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 
 public class MicroCaseUtils {
 
@@ -114,14 +115,23 @@ public class MicroCaseUtils {
 			@Override
 			@Nullable
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
-				if (moduleType == ModuleType.Module_Evaluation) {
+				if (moduleType == ModuleType.Module_LNGTransformerModule) {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+
+							// Time windows
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
+							bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
+
+						}
+					});
+				} else if (moduleType == ModuleType.Module_Evaluation) {
 					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 						@Override
 						protected void configure() {
 							bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
-							// time windows
-							bind(PriceBasedSequenceScheduler.class).in(PerChainUnitScope.class);
-							bind(ISequenceScheduler.class).to(PriceBasedSequenceScheduler.class);
 						}
 					});
 				}

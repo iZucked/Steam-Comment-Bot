@@ -121,22 +121,20 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testTimeWindows_higher_price_worthwhile_48hours() throws Exception {
-	
+
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-		
+		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
+
 		// Construct the cargo scenario
 		double salesPrice = 8.6;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.withPricingEvent(PricingEvent.START_LOAD, null)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
@@ -149,7 +147,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		
+
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
@@ -165,22 +163,20 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testTimeWindows_higher_price_48_hours_too_costly() throws Exception {
-		
+
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-		
+		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
+
 		// Construct the cargo scenario
 		double salesPrice = 8.55;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.withPricingEvent(PricingEvent.START_LOAD, null)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
@@ -193,7 +189,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		
+
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
@@ -209,22 +205,20 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testTimeWindows_higher_price_800hrs_too_costly() throws Exception {
-	
+
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-		
+		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
+
 		// Construct the cargo scenario
 		double salesPrice = 8.6;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withWindowStartTime(0) //
-				.withWindowSize(800, TimePeriod.HOURS)
-				.build() //
+				.withWindowSize(800, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.withPricingEvent(PricingEvent.START_LOAD, null)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
@@ -237,7 +231,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		
+
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
@@ -253,22 +247,20 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testTimeWindows_higher_price_800hrs_worthwhile() throws Exception {
-		
+
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-		
+		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
+
 		// Construct the cargo scenario
 		double salesPrice = 8.7;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withWindowStartTime(0) //
-				.withWindowSize(800, TimePeriod.HOURS)
-				.build() //
+				.withWindowSize(800, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.withPricingEvent(PricingEvent.START_LOAD, null)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
@@ -281,7 +273,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 7), 7.5);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), 8.5);
-		
+
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 5.0);
@@ -289,7 +281,6 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		checkDischargePrice(6.0, salesPrice);
 	}
 
-	
 	/**
 	 * Test: Both slots priced on discharge, choose higher price
 	 * 
@@ -299,21 +290,19 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testTimeWindows_DL_higher_price_800hrs_worthwhile() throws Exception {
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-		
+		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
+
 		// Construct the cargo scenario
 		double loadPrice = 6.999;
 		double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withWindowStartTime(0) //
-				.withWindowSize(0, TimePeriod.HOURS)
-				.withPricingEvent(PricingEvent.START_DISCHARGE, null)
-				.build() //
+				.withWindowSize(0, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_DISCHARGE, null).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
@@ -322,7 +311,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		@NonNull
 		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
-		
+
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 7.0);
@@ -343,23 +332,21 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testTimeWindows_DL_higher_price_800hrs_too_costly() throws Exception {
-		
+
 		// Create the required basic elements
-		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-		
+		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0),
+				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
+
 		// Construct the cargo scenario
 		double loadPrice = 6.9999;
 		double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withWindowStartTime(0) //
-				.withWindowSize(0, TimePeriod.HOURS)
-				.withPricingEvent(PricingEvent.START_DISCHARGE, null)
-				.build() //
+				.withWindowSize(0, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_DISCHARGE, null).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48, TimePeriod.HOURS)
-				.build() //
+				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
@@ -368,7 +355,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		@NonNull
 		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
-		
+
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 6), 6.0);
 		pricingModelBuilder.addDataToCommodityIndex(jcc, YearMonth.of(2016, 7), 7.0);
@@ -380,32 +367,31 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 8), salesPrice);
 		checkDischargePrice(7.0, salesPrice);
 	}
-	
+
 	public void checkDischargePrice(double loadPrice, double salesPrice) {
 		evaluateWithLSOTest(scenarioRunner -> {
-	
+
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-	
+
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 			@NonNull
 			ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-	
+
 			// get optimiser objects
 			ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
 			IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
-	
+
 			// make sure no objects are null
 			assert load != null;
 			assert discharge != null;
-	
+
 			Assert.assertEquals(loadPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()), 0.000001);
 			Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
-		} ,
+		},
 				/*
 				 * Include correct time windows scheduler
 				 */
-				MicroCaseUtils.getInjectorServiceWithPriceBasedScheduler()
-				);
+				MicroCaseUtils.getInjectorServiceWithPriceBasedScheduler());
 	}
 
 	private VesselAvailability createTestVesselAvailability(LocalDateTime startStart, LocalDateTime startEnd, LocalDateTime endStart) {
