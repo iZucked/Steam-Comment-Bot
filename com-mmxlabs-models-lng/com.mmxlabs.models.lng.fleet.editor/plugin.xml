@@ -45,12 +45,6 @@
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.BaseFuelComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />
-
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.HeelOptions"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.HeelOptionsComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.HeelOptions" />
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.VesselStateAttributes"

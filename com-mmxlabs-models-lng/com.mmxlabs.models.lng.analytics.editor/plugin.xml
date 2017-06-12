@@ -118,18 +118,6 @@
         modelClass="com.mmxlabs.models.lng.analytics.BuyMarket">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ModeOptionRuleComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.ModeOptionRuleComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.ModeOptionRule">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.OptionRuleComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.OptionRuleComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.OptionRule">
-  </componentHelper>
-  <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.NominatedShippingOptionComponentHelper"
         id="com.mmxlabs.models.lng.analytics.presentation.composites.NominatedShippingOptionComponentHelper"
         inheritable="true"
@@ -146,18 +134,6 @@
         id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingOptionComponentHelper"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.ShippingOption">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellGroupComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellGroupComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.SellGroup">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyGroupComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyGroupComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.BuyGroup">
   </componentHelper>
   <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowComponentHelper"
