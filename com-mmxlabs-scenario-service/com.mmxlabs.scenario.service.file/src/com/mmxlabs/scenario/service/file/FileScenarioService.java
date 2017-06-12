@@ -444,6 +444,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				// Unload instance from memory as no longer needed
 				instanceResource.unload();
 			} catch (final IOException e) {
+				log.error(e.getMessage(), e);
 				return null;
 			}
 			// Record new submodel URI
