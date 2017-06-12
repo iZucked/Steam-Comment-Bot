@@ -53,7 +53,6 @@ import com.mmxlabs.lingo.app.headless.utils.HeadlessParameters;
 import com.mmxlabs.lingo.app.headless.utils.JMap;
 import com.mmxlabs.lingo.app.headless.utils.JSONParseResult;
 import com.mmxlabs.lingo.app.headless.utils.LNGHeadlessParameters;
-import com.mmxlabs.lingo.app.headless.utils.StringParameter;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
@@ -61,6 +60,9 @@ import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -69,6 +71,7 @@ import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.ActionSetLogger;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -530,6 +533,9 @@ public class HeadlessApplication implements IApplication {
 		final Double coolingFactor = lsoSettings.getValue("cooling-factor", Double.class);
 		final Integer initialTemperature = lsoSettings.getValue("initial-temperature", Integer.class);
 		final Integer epochLength = lsoSettings.getValue("epoch-length", Integer.class);
+		createDateRanges(plan, headlessParameters);
+		// set Similarity Settings
+		SimilaritySettings similaritySettings = createSimilaritySettings(settingsOverride, headlessParameters, plan.getUserSettings());
 
 		{
 			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
@@ -547,6 +553,9 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setRestarting(restartingSettings.getValue("active", Boolean.class));
 			stage.getAnnealingSettings().setRestartIterationsThreshold(restartingSettings.getValue("threshold", Integer.class));
 
+			// Similarity
+			stage.getConstraintAndFitnessSettings().setSimilaritySettings(similaritySettings);
+			
 			final ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
 			pStage.setJobCount(headlessParameters.getParameterValue("lso-jobs", Integer.class));
@@ -566,6 +575,8 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setInitialTemperature(initialTemperature);
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			stage.getAnnealingSettings().setCooling(coolingFactor);
+			// Similarity
+			stage.getConstraintAndFitnessSettings().setSimilaritySettings(similaritySettings);
 
 			final ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
@@ -597,13 +608,11 @@ public class HeadlessApplication implements IApplication {
 		plan.getUserSettings().setWithSpotCargoMarkets(headlessParameters.getParameterValue("spot-market-optimisation", Boolean.class));
 		// action sets
 
-		createDateRanges(plan, headlessParameters);
-
 		for (final ConstraintAndFitnessSettings settings : constraintsAndFitnesses) {
 			createObjectives(settings, headlessParameters.getParameterValue("objectives", JMap.class));
 		}
 		setLatenessParameters(settingsOverride, headlessParameters);
-		setSimilarityParameters(settingsOverride, headlessParameters);
+
 		createPromptDates(rootObject, headlessParameters);
 		setMoveDistributions(settingsOverride, headlessParameters);
 	}
@@ -644,13 +653,24 @@ public class HeadlessApplication implements IApplication {
 		overrideSettings.setlatenessMap(latenessMap);
 	}
 
-	private void setSimilarityParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
-		final JMap similarity = headlessParameters.getParameterValue("similarity", JMap.class);
-		final Map<String, Integer> similarityMap = new HashMap<>();
-		for (final String key : similarity.getKeySet()) {
-			similarityMap.put(key, similarity.getValue(key, Integer.class));
+	private SimilaritySettings createSimilaritySettings(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters, UserSettings settings) {
+		SimilarityMode mode = getSimilarityModeFromParameters(headlessParameters.getParameterValue("similarity-mode", String.class));
+		if (mode != null) {
+			settings.setSimilarityMode(mode);
+			return OptimisationHelper.createSimilaritySettings(mode, settings.getPeriodStart(), settings.getPeriodEnd());
+		} else {
+			final JMap similarity = headlessParameters.getParameterValue("similarity", JMap.class);
+			final Map<String, Integer> similarityMap = new HashMap<>();
+			for (final String key : similarity.getKeySet()) {
+				similarityMap.put(key, similarity.getValue(key, Integer.class));
+			}
+			// TODO: not sure why we need to put things into JMAPS?
+			return ScenarioUtils.createSimilaritySettings(similarityMap.get("low-thresh"), similarityMap.get("low-weight"), similarityMap.get("med-thresh"), similarityMap.get("med-weight"), similarityMap.get("high-thresh"), similarityMap.get("high-weight"), similarityMap.get("out-of-bounds-weight"));
 		}
-		overrideSettings.setSimilarityMap(similarityMap);
+	}
+
+	private SimilarityMode getSimilarityModeFromParameters(@NonNull String parameter) {
+		return SimilarityMode.getByName(parameter);
 	}
 
 	private void createDateRanges(final OptimisationPlan plan, final HeadlessParameters headlessParameters) {
@@ -666,13 +686,15 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void createObjectives(final ConstraintAndFitnessSettings settings, final JMap jMap) {
-		settings.getObjectives().clear();
-		for (final String objectiveName : jMap.getJMap().keySet()) {
-			if (jMap.getClass(objectiveName) == Double.class) {
-				settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
-			} else {
-				settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Integer.class)));
-
+		if (jMap != null) {
+			settings.getObjectives().clear();
+			for (final String objectiveName : jMap.getJMap().keySet()) {
+				if (jMap.getClass(objectiveName) == Double.class) {
+					settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
+				} else {
+					settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Integer.class)));
+	
+				}
 			}
 		}
 	}

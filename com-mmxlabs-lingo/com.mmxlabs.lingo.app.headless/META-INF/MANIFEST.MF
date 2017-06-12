@@ -31,7 +31,8 @@ Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[4.2.9,5.0.0)
  com.mmxlabs.license.features;bundle-version="[4.2.9,5.0.0)",
  org.apache.shiro.core,
  com.mmxlabs.rcp.common;bundle-version="[4.2.9,5.0.0)",
- com.mmxlabs.license.ssl;bundle-version="[4.2.9,5.0.0)"
+ com.mmxlabs.license.ssl;bundle-version="[4.2.9,5.0.0)",
+ com.mmxlabs.models.lng.parameters
 Import-Package: org.apache.commons.cli;version="1.2.0",
  org.json.simple;version="1.1.1",
  org.json.simple.parser;version="1.1.1"

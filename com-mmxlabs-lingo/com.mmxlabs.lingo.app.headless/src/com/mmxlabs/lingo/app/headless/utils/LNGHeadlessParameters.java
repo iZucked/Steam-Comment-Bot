@@ -93,12 +93,13 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("spot-market-optimisation", false, Boolean.class, true);
 
 		// Objectives
-		Map<String, Object> defaultObjectives = new HashMap<>();
-		defaultObjectives.put("cargo-scheduler-group-profit", 1.0);
-		defaultObjectives.put(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1000000.0);
-		defaultObjectives.put(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 5000000.0);
-		defaultObjectives.put(NonOptionalSlotFitnessCoreFactory.NAME, 3000000.0);
-		setParameter("objectives", new JMap(defaultObjectives), JMap.class, true);
+		// NOTE: not passing anything through here
+//		Map<String, Object> defaultObjectives = new HashMap<>();
+//		defaultObjectives.put("cargo-scheduler-group-profit", 1.0);
+//		defaultObjectives.put(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1000000.0);
+//		defaultObjectives.put(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 5000000.0);
+//		defaultObjectives.put(NonOptionalSlotFitnessCoreFactory.NAME, 3000000.0);
+//		setParameter("objectives", new JMap(defaultObjectives), JMap.class, true);
 
 		// Moves
 		setParameter("roulette-wheel", false, Boolean.class, false);
@@ -135,5 +136,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		defaultIdleWeights.put("idle-time-end", 10_000);
 		setParameter("idle-weights", new JMap(defaultIdleWeights), JMap.class, false);
 
+		// Similarity class
+		setParameter("similarity-mode", null, String.class, false);
 	}
 }
