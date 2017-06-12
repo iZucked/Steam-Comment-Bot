@@ -64,8 +64,18 @@ import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTime
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.CachingTimeWindowScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.ITimeWindowScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.PortTimesRecordMaker;
+import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.RandomSlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
@@ -148,8 +158,28 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 
+		// <--- Time windows
+
+		bind(SchedulerCalculationUtils.class);
+
+		
+		bind(FeasibleTimeWindowTrimmer.class).in(PerChainUnitScope.class);
+		bind(PriceBasedWindowTrimmer.class).in(PerChainUnitScope.class);
+
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+
 		bind(PriceIntervalProviderHelper.class);
 		bind(PriceIntervalProducer.class);
+
+		bind(ArrivalTimeScheduler.class);
+		bind(ITimeWindowScheduler.class).annotatedWith(NotCaching.class).to(TimeWindowScheduler.class);
+
+		bind(ISlotTimeScheduler.class).to(RandomSlotTimeScheduler.class);
+
+		bind(PortTimesRecordMaker.class);
+
+		// --->
 
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
@@ -166,6 +196,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IEntityValueCalculator.class).annotatedWith(NotCaching.class).to(DefaultEntityValueCalculator.class);
 
 		// Default bindings for caches
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
@@ -223,9 +254,28 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	@PerChainUnitScope
+	private ITimeWindowScheduler provideTimeWindowScheduler(final @NonNull Injector injector, final @NotCaching ITimeWindowScheduler reference,
+			@Named(SchedulerConstants.Key_ArrivalTimeCache) final boolean enableCache) {
+
+		if (enableCache && hintEnableCache) {
+			final CachingTimeWindowScheduler cacher = new CachingTimeWindowScheduler(reference);
+			injector.injectMembers(cacher);
+			// if (false) {
+			// TODO: Implement checking variant
+			// return new CheckingTimeWindowScheduler(reference, cacher);
+			// } else {
+			return cacher;
+			// }
+		} else {
+			return reference;
+		}
+
+	}
+
+	@Provides
 	@Singleton
-	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap)
-			throws IncompleteScenarioException {
+	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
 
 		return optimisationData;

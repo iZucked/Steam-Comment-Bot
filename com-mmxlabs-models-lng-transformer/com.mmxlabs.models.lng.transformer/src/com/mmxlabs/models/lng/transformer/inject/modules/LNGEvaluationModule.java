@@ -18,14 +18,10 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.PortTimesPlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.LegalSequencingChecker;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
@@ -33,13 +29,11 @@ import com.mmxlabs.scheduler.optimiser.schedule.IdleTimeChecker;
 import com.mmxlabs.scheduler.optimiser.schedule.LatenessChecker;
 import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
-import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
  * This {@link Module} configures the default schedule optimisation classes.
@@ -60,14 +54,7 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		install(new SequencesManipulatorModule());
 
-		bind(TimeWindowsTrimming.class);
-		bind(SchedulerCalculationUtils.class);
-
-		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
-		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
-
 		bind(VoyagePlanner.class);
-		bind(PortTimesPlanner.class);
 		bind(IdleTimeChecker.class);
 		bind(LatenessChecker.class);
 		bind(CapacityViolationChecker.class);
@@ -114,5 +101,4 @@ public class LNGEvaluationModule extends AbstractModule {
 		install(new EvaluationProcessInstantiatorModule());
 		bind(LegalSequencingChecker.class);
 	}
-
 }

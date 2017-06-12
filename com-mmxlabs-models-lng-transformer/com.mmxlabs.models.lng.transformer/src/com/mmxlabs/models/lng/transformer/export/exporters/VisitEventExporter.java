@@ -226,6 +226,10 @@ public class VisitEventExporter {
 		}
 
 		portVisit.setPort(ePort);
+		
+		if (slot.getId().contains("BG_Charter")) {
+			int ii = 0;
+		}
 
 		int startTime = sequence.getArrivalTime(slot);
 		int endTime = startTime + sequence.getVisitDuration(slot);
