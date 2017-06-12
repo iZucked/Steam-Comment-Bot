@@ -91,10 +91,12 @@ public class MultiObjectiveFitnessEvaluator extends LinearSimulatedAnnealingFitn
 			@NonNull IEvaluationState evaluationState) {
 		// Store current fitness and sequences
 		bestSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(rawSequences), new Sequences(fullSequences), evaluationState);
-
-			for (final IFitnessComponent component : fitnessComponents) {
-				bestFitnesses.put(component.getName(), component.getFitness());
-			}
+		long total = 0;
+		for (final IFitnessComponent component : fitnessComponents) {
+			bestFitnesses.put(component.getName(), component.getFitness());
+			total += component.getFitness();
+		}
+		bestFitness = total;
 	}
 
 }

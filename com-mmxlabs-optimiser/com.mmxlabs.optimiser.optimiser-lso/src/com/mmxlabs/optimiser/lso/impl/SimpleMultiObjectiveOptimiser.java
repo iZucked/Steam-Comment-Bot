@@ -99,7 +99,6 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			initNextIteration();
-			// System.out.println("i:"+i);
 
 			// choose a solution from the archive
 			ISequences nonDominatedSolution = (ISequences) archive.get(r.nextInt(archive.size())).getFirst();
@@ -293,15 +292,6 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	}
 
 	public ISequences getBestRawSequences(List<Pair<ISequences, long[]>> unsortedArchive, int noGroups, int objectiveIndex) {
-		List<Pair<ISequences, long[]>> sortedArchive = getSortedArchive(unsortedArchive, objectiveIndex);
-		// go through archive, divide into 4 groups
-		// List<List<Pair<ISequences,long[]>>> spatiallyDividedSolutions = getSpatiallyDividedSolutions(sortedArchive, noGroups, objectiveIndex);
-		// long base = sortedArchive.get(0).getSecond()[0]; // this is used to get score for uplift
-		// if (spatiallyDividedSolutions != null) {
-		// return chooseSimilaritySolutionFromDividedSolutions(spatiallyDividedSolutions, similarityFitnessMode, base);
-		// } else {
-		// return chooseSimilaritySolutionFromWholeArchive(sortedArchive, similarityFitnessMode);
-		// }
 		return findSolutionWhichReachesQuartile(archive, objectiveIndex, mapSimilarityModeToQuartile(similarityFitnessMode), true).getFirst();
 	}
 
@@ -583,6 +573,9 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
 		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, clock);
 
+		if (bestRawSequences != null) {
+			getMultiObjectiveFitnessEvaluator().updateBest(bestRawSequences, fullSequences, evaluationState);
+		}
 		return annotatedSolution;
 	}
 
@@ -603,4 +596,12 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		return result;
 	}
 
+	@Override
+	protected void initNextIteration() {
+		super.initNextIteration();
+		if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
+			// this sets best fitness for the best solution	
+			getBestSolution();
+		}
+	}
 }

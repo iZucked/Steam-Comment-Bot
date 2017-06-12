@@ -69,7 +69,7 @@ public class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessEvaluat
 	private long initialFitness = Long.MAX_VALUE;
 	private long currentFitness = Long.MAX_VALUE;
 	private long lastFitness = Long.MAX_VALUE;
-	private long bestFitness = Long.MAX_VALUE;
+	protected long bestFitness = Long.MAX_VALUE;
 
 	public LinearSimulatedAnnealingFitnessEvaluator(@NonNull final IThresholder thresholder, @NonNull final List<IFitnessComponent> fitnessComponents,
 			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
