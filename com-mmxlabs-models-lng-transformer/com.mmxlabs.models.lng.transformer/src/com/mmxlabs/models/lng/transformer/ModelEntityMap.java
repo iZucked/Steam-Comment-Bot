@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
- * Class which maps model entities to classes; the LNGScenarioTransformer should populate one of these, which maps every PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
+ * Class which maps model entities to classes; the {@link LNGScenarioTransformer} should populate one of these, which maps every PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
  * classes, etc etc.
  * 
  * @author hinton

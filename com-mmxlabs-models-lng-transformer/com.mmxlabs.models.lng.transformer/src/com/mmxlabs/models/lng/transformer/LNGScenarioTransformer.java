@@ -37,6 +37,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
@@ -3406,8 +3407,9 @@ public class LNGScenarioTransformer {
 	
 	private void buildRouteEntryPoints(PortModel portModel, Association<Port, IPort> portAssociation){
 		portModel.getRoutes().forEach(r -> {
-			Set<IPort> entryPoints = r.getEntryPoints().stream().map(e -> portAssociation.lookup(e.getPort())).collect(Collectors.toSet());
-			distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), entryPoints);
+			if(r.getEntryA() != null && r.getEntryB() != null){
+				distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), ImmutableSet.of(portAssociation.lookup(r.getEntryA().getPort()), portAssociation.lookup(r.getEntryA().getPort())));
+			}
 		});
 	}
 }

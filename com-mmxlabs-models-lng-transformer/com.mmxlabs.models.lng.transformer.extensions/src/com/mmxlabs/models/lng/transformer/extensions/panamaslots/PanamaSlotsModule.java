@@ -14,6 +14,9 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.PanamaSlotsProviderEditor;
 
 /**
  * This is a PeaberryActivationModule to hook in the restricted elements constraints into the optimisation. This in not intended to be registered directly in the MANIFEST.MF file, but installed in a
@@ -47,7 +50,7 @@ public class PanamaSlotsModule extends PeaberryActivationModule {
 
 					@Override
 					protected void configure() {
-						final HashMapPanamaSlotsProviderEditor restrictedElementsProviderEditor = new HashMapPanamaSlotsProviderEditor();
+						final PanamaSlotsProviderEditor restrictedElementsProviderEditor = new PanamaSlotsProviderEditor();
 						bind(IPanamaSlotsProvider.class).toInstance(restrictedElementsProviderEditor);
 						bind(IPanamaSlotsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
 					}

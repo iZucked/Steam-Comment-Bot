@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -26,7 +27,13 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.ImmutableSet;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.impl.CargoModelImpl;
+import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -36,6 +43,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -43,11 +51,15 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
 
 /**
+ * @author robert
  */
 public class PanamaSlotsTransformer implements IContractTransformer {
 
@@ -55,58 +67,51 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 	private IPanamaSlotsProviderEditor panamaSlotsProviderEditor;
 	
 	@Inject
-	private IPortProvider portProvider;
-
-	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 	
 	@Inject
 	private ModelEntityMap modelEntityMap;
 
-	private LNGScenarioModel rootObject;
-	// TODO: these maps probably don't need to be separate from one another - it would simplify matters to use just one Map<EObject, Collection<ISequenceElement>>
-	private final Map<Contract, Collection<ISequenceElement>> contractMap = new HashMap<>();
-	private final Map<Port, Collection<ISequenceElement>> portMap = new HashMap<>();
-	private final Map<Slot, Collection<ISequenceElement>> slotMap = new HashMap<>();
+	private final List<CanalBookingSlot> providedPanamaSlots = new ArrayList<>();
+	private int relaxedBoundaryOffsetDays;
+	private int relaxedSlotCount;
+	private int strictBoundaryOffsetDays;
 	
-	private final Set<Pair<EntryPoint, LocalDateTime>> providedPanamaSlots = new HashSet<Pair<EntryPoint, LocalDateTime>>();
-
-	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
-
-
-	/**
-	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
-		this.rootObject = rootObject;
-		List<Pair<EntryPoint, LocalDateTime>> panamaDates = new ArrayList<>();
+		Optional<Route> potentialPanama = rootObject.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		if (!potentialPanama.isPresent()){
+			return;
+		}
 		
-		Route panama = rootObject.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption().equals(RouteOption.PANAMA)).findFirst().get();
-		EntryPoint colon = panama.getEntryPoints().get(0);
-		EntryPoint balboa = panama.getEntryPoints().get(1);
+		this.providedPanamaSlots.addAll(rootObject.getCargoModel().getCanalBookings().getCanalBookingSlots());
 		
-		panamaDates.add(new Pair<>(colon, LocalDateTime.of(LocalDate.of(2017, Month.JUNE, 10), LocalTime.of(14, 35))));
-		panamaDates.add(new Pair<>(colon, LocalDateTime.of(LocalDate.of(2017, Month.JUNE, 20), LocalTime.of(14, 35))));
-		panamaDates.add(new Pair<>(balboa, LocalDateTime.of(LocalDate.of(2017, Month.JUNE, 20), LocalTime.of(14, 35))));
-		panamaDates.add(new Pair<>(balboa, LocalDateTime.of(LocalDate.of(2017, Month.JULY, 20), LocalTime.of(14, 35))));
-		providedPanamaSlots.addAll(panamaDates);
+		strictBoundaryOffsetDays = rootObject.getCargoModel().getCanalBookings().getStrictBoundaryOffsetDays();
+		relaxedBoundaryOffsetDays = rootObject.getCargoModel().getCanalBookings().getRelaxedBoundaryOffsetDays();
+		relaxedSlotCount = rootObject.getCargoModel().getCanalBookings().getFlexibleSlotAmount();
 	}
 
 	@Override
 	public void finishTransforming() {
-		Map<IPort, SortedSet<Integer>> panamaSlots = new HashMap<>();
+		Map<IPort, SortedSet<IRouteOptionSlot>> panamaSlots = new HashMap<>();
 		providedPanamaSlots.forEach(slot -> {
-			IPort optPort = modelEntityMap.getOptimiserObject(slot.getFirst().getPort(), IPort.class);
-			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<Integer>())
-			.add( dateAndCurveHelper.convertTime(slot.getSecond().toLocalDate()) + slot.getSecond().getHour());
+			IPort optPort = modelEntityMap.getOptimiserObject(slot.getEntryPoint().getPort(), IPort.class);
+			if (optPort == null){
+				throw new IllegalStateException("No optimiser port found for: " + slot.getEntryPoint().getName());
+			}
+			int date = dateAndCurveHelper.convertTime(slot.getSlotDate());
+			IRouteOptionSlot optimiserSlot = IRouteOptionSlot.of(date, optPort, ERouteOption.PANAMA);
+			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<>())
+			.add(optimiserSlot);
+			
+			modelEntityMap.addModelObject(slot, optimiserSlot);
 		});
 
 		panamaSlotsProviderEditor.setSlots(panamaSlots);
-		rootObject = null;
-		contractMap.clear();
-		portMap.clear();
-		slotMap.clear();
-		allElements.clear();
+		
+		panamaSlotsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
+		panamaSlotsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);
+		panamaSlotsProviderEditor.setRelaxedSlotCount(relaxedSlotCount);
 	}
 
 	@Override
