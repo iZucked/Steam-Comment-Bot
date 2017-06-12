@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
@@ -77,12 +78,13 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		if (phase == Phase.Checked_Evaluation) {
 			// Calculate arrival times for sequences
 			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
+			IRouteOptionSlot[][] assignedSlots = scheduler.slotsAssigned();
 			if (arrivalTimes == null) {
 				return false;
 			}
 
 			@Nullable
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, arrivalTimes, assignedSlots, solution);
 			if (volumeAllocatedSequences == null) {
 				return false;
 			}

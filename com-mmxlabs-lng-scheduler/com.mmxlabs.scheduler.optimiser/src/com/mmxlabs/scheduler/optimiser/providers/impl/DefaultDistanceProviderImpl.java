@@ -20,6 +20,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
@@ -37,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
  *
  */
 public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
-
+	
 	@Inject
 	private IDistanceMatrixProvider distanceProvider;
 

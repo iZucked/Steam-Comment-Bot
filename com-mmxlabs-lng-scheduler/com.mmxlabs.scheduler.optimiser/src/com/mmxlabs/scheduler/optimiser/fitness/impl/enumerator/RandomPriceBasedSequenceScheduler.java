@@ -39,6 +39,7 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 		setSequences(sequences);
 
 		prepare();
+		trim();
 		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
 		for (int index = 0; index < sequences.size(); ++index) {
 			random.setSeed(seed);

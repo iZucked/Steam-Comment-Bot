@@ -35,13 +35,14 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	private boolean[] endsSet;
+	protected boolean[] endsSet;
 
 	@Override
 	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		setSequences(sequences);
 
 		prepare();
+		trim();
 		endsSet = new boolean[arrivalTimes.length];
 
 		sequentialEarliestTimePriceBasedWindowTrimming(sequences, portTimeWindowsRecords);
@@ -56,7 +57,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		return portTimeWindowsRecords;
 	}
 
-	private void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
+	protected void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
 			List<IPortTimeWindowsRecord> list = portTimeWindowsRecords.get(seqIndex);
 			for (int idx = 0; idx < list.size(); idx++) {
@@ -192,7 +193,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		}
 	}
 
-	private void synchroniseShipToShipBindings() {
+	protected void synchroniseShipToShipBindings() {
 		// TODO: why do we not fix up later voyages? Why do we not loop multiple times here?
 		// TODO: If the above is implemented, STS slots should probably arrive as early as possible.
 		for (int i = 0; i < bindings.size(); i += 4) {
@@ -207,7 +208,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 
 	}
 
-	private void setTimeWindowsToEarliest(final int seq) {
+	protected void setTimeWindowsToEarliest(final int seq) {
 		if (arrivalTimes[seq] == null) {
 			return;
 		}

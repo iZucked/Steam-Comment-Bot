@@ -7,9 +7,11 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -54,5 +56,9 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * @return
 	 */
 	IPortSlot getReturnSlot();
+	
+	
+	@Nullable IRouteOptionSlot getRouteOptionSlot();
+	void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot);
 
 }

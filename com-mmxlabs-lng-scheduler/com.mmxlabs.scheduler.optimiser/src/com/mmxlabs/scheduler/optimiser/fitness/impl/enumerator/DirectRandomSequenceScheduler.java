@@ -28,6 +28,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		setSequences(sequences);
 
 		prepare();
+		trim();
 
 		for (int index = 0; index < sequences.size(); ++index) {
 			// random.setSeed(seed);

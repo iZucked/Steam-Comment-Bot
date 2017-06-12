@@ -30,6 +30,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -67,11 +68,13 @@ public class ScheduleCalculator {
 		private final @NonNull IResource resource;
 		private final @NonNull ISequence sequence;
 		private final int[] arrivalTimes;
+		private final IRouteOptionSlot[] assignedSlots;
 
-		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes) {
+		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes, final IRouteOptionSlot[] assignedSlots) {
 			this.resource = resource;
 			this.sequence = sequence;
 			this.arrivalTimes = arrivalTimes;
+			this.assignedSlots = assignedSlots;
 		}
 
 		@Override
@@ -122,12 +125,12 @@ public class ScheduleCalculator {
 
 	public ScheduleCalculator() {
 		cache = new LHMCache<>("ScheduleCalculatorCache", (key) -> {
-			return new Pair<>(key, schedule(key.resource, key.sequence, key.arrivalTimes, null));
+			return new Pair<>(key, schedule(key.resource, key.sequence, key.arrivalTimes, key.assignedSlots, null));
 		}, 50_000);
 	}
 
 	@Nullable
-	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
+	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, final IRouteOptionSlot[][] assignedSlots, @Nullable final IAnnotatedSolution solution) {
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
@@ -149,13 +152,13 @@ public class ScheduleCalculator {
 			final VolumeAllocatedSequence volumeAllocatedSequence;
 			if (solution == null && enableCache && hintEnableCache) {
 				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
-				final Key key = new Key(resource, sequence, arrivalTimes[i]);
+				final Key key = new Key(resource, sequence, arrivalTimes[i], assignedSlots[i]);
 				volumeAllocatedSequence = cache.get(key);
 
 				// Verification
 				if (false) {
 					assert arrivalTimes[i] != null;
-					final VolumeAllocatedSequence reference = schedule(resource, sequence, arrivalTimes[i], solution);
+					final VolumeAllocatedSequence reference = schedule(resource, sequence, arrivalTimes[i], assignedSlots[i], solution);
 
 					if (volumeAllocatedSequence == null && reference == null) {
 						return null;
@@ -167,7 +170,7 @@ public class ScheduleCalculator {
 					}
 				}
 			} else {
-				volumeAllocatedSequence = schedule(resource, sequence, arrivalTimes[i], solution);
+				volumeAllocatedSequence = schedule(resource, sequence, arrivalTimes[i], assignedSlots[i], solution);
 			}
 
 			if (volumeAllocatedSequence == null) {
@@ -197,9 +200,9 @@ public class ScheduleCalculator {
 	 * @throws InfeasibleVoyageException
 	 */
 	@Nullable
-	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
+	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionSlot[] assignedSlots, @Nullable final IAnnotatedSolution solution) {
 
-		final VolumeAllocatedSequence volumeAllocatedSequence = doSchedule(resource, sequence, arrivalTimes);
+		final VolumeAllocatedSequence volumeAllocatedSequence = doSchedule(resource, sequence, arrivalTimes, assignedSlots);
 		if (volumeAllocatedSequence != null) {
 
 			// Perform capacity violations analysis
@@ -215,7 +218,7 @@ public class ScheduleCalculator {
 	}
 
 	@Nullable
-	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes) {
+	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionSlot[] assignedSlots) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -244,7 +247,7 @@ public class ScheduleCalculator {
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
-		final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes);
+		final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes, assignedSlots);
 
 		// Generate all the voyageplans and extra annotations for this sequence
 		final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, portTimesRecords);

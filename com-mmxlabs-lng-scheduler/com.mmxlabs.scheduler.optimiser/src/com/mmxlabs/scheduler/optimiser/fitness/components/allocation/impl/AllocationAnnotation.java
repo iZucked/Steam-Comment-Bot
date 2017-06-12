@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -81,6 +83,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		if (returnSlot != null) {
 			setReturnSlotTime(returnSlot, portTimesRecord.getSlotDuration(returnSlot));
 		}
+		setRouteOptionSlot(portTimesRecord.getRouteOptionSlot());
 	}
 
 	@Override
@@ -321,5 +324,17 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	public void setCacheLocked(boolean locked) {
 		assert !this.locked;
 		this.locked = locked;
+	}
+
+	@Override
+	public @Nullable IRouteOptionSlot getRouteOptionSlot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot) {
+		// TODO Auto-generated method stub
+		
 	}
 }

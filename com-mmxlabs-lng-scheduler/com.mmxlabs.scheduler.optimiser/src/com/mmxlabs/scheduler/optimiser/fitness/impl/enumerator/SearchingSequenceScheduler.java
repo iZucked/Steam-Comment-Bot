@@ -69,6 +69,7 @@ public class SearchingSequenceScheduler extends EnumeratingSequenceScheduler {
 		setSequences(sequences);
 
 		prepare();
+		trim();
 
 		for (int index = 0; index < sequences.size(); ++index) {
 			search(index);

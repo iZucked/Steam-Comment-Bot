@@ -5,13 +5,21 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Sets;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -19,9 +27,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -29,17 +37,17 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
@@ -84,10 +92,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	 * The minimum time this vessel can take to get from the indexed element to its successor. i.e. min travel time + visit time at indexed element.
 	 */
 	protected int[][] minTimeToNextElement;
-	/**
-	 * The maximum time to get from the indexed element to its successor. This is the maximum travel time + visit time at this element
-	 */
-	private int[][] maxTimeToNextElement;
 
 	/**
 	 * The number of elements in each array.
@@ -121,6 +125,16 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	 * 
 	 */
 	protected ArrayList<Integer> bindings = new ArrayList<Integer>();
+	
+	/**
+	 * Indicated whether the slot goes through Panama canal or not. Only used when {@link #trimPanama()} called. 
+	 */
+	protected boolean[][] throughPanama;
+	
+	/**
+	 * Contains the route option slot for the {@link IPortSlot}, if there is one.
+	 */
+	protected IRouteOptionSlot[][] routeOptionSlot;
 
 	/**
 	 * Holds a list of points at which the cost function can be separated. This occurs when a given journey leg <em>always</em> involves some idle time, so there can be no knock-on effects on the
@@ -149,9 +163,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	private IElementPortProvider portProvider;
 
 	@Inject
-	private IRouteCostProvider routeCostProvider;
-
-	@Inject
 	private IDistanceProvider distanceProvider;
 
 	@Inject
@@ -162,6 +173,9 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+	
+	@Inject
+	private IPanamaSlotsProvider panamaSlotsProvider;
 
 	/**
 	 * The sequences being evaluated at the moment
@@ -182,29 +196,28 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final int size = sequences.size();
 		bindings.clear();
 
-		// if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 		arrivalTimes = new int[size][];
 		windowStartTime = new int[size][];
 		isRoundTripEnd = new boolean[size][];
 		windowEndTime = new int[size][];
 		minTimeToNextElement = new int[size][];
-		maxTimeToNextElement = new int[size][];
 		isVirtual = new boolean[size][];
 		useTimeWindow = new boolean[size][];
 		actualisedTimeWindow = new boolean[size][];
+		throughPanama = new boolean[size][];
+		routeOptionSlot = new IRouteOptionSlot[size][];
 		sizes = new int[size];
-		// }
-
+		
+		panamaSlotsProvider.getSlots();
 		portTimeWindowsRecords.clear();
-		for (int i = 0; i < size; i++) {
-			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
-			prepare(i);
-			List<IPortTimeWindowsRecord> records = portTimeWindowsRecords.get(i);
-			if (records.size() > 0) {
-				IPortTimeWindowsRecord lastRecord = records.get(records.size() - 1);
-			}
-		}
 
+	}
+	
+	protected final void trim(){
+		for (int i = 0; i < sequences.size(); i++) {
+			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
+			trim(i);
+		}
 		imposeShipToShipConstraints();
 	}
 
@@ -423,7 +436,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	 * @param sequence
 	 * @return
 	 */
-	protected final void prepare(final int sequenceIndex) {
+	protected final void trim(final int sequenceIndex) {
 		final ISequence sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
 
@@ -444,15 +457,10 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final int[] windowStartTime = this.windowStartTime[sequenceIndex];
 		final int[] windowEndTime = this.windowEndTime[sequenceIndex];
 		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex];
-		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 		final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
 		final boolean[] actualisedTimeWindow = this.actualisedTimeWindow[sequenceIndex];
 		final boolean[] isRoundTripEnd = this.isRoundTripEnd[sequenceIndex];
-
-		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
-
-		final int minSpeed = vesselAvailability.getVessel().getVesselClass().getMinSpeed();
 
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 		final boolean isSpotCharter = vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
@@ -506,7 +514,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 						// but can be overridden by the specified end requirement
 						if (endRequirement.hasTimeRequirement()) {
 							final ITimeWindow timeWindow = endRequirement.getTimeWindow();
-							// Make sure we always use the time window [This never worked - value was overwritten]
+							// Make sure we always use the time window 
 							useTimeWindow[index] = true;
 							window = timeWindow;
 						} else {
@@ -514,6 +522,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 							window = portSlot.getTimeWindow();
 						}
 					} else {
+						//TODO: (robert) flag to be deleted 05/2017
+						assert false;
 						window = portSlot.getTimeWindow();
 					}
 				}
@@ -566,29 +576,18 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Round_Trip_Cargo_End;
-			// Calculate minimum inter-element durations
-			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
-
+			
 			if (prevElement != null) {
 				final IPort prevPort = portProvider.getPortForElement(prevElement);
 				final IPort port = portProvider.getPortForElement(element);
-
-				int minTravelTime = Integer.MAX_VALUE;
-				int maxTravelTime = 0;
-				for (final DistanceMatrixEntry entry : distanceProvider.getDistanceValues(prevPort, port, windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource),
-						vesselAvailability.getVessel())) {
-					final int distance = entry.getDistance();
-					if (distance != Integer.MAX_VALUE) {
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getRoute(), vesselAvailability.getVessel());
-						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
-						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
-						minTravelTime = Math.min(minTravelTime, minByRoute);
-						maxTravelTime = Math.max(maxTravelTime, maxByRoute);
-					}
-				}
-
-				minTimeToNextElement[index - 1] += minTravelTime;
-				maxTimeToNextElement[index - 1] += maxTravelTime;
+				
+				@NonNull Pair<@NonNull ERouteOption, @NonNull Integer> minTravelTimeFromLast = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), 
+						prevPort, 
+						port, 
+						windowStartTime[index - 1], 
+						vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+				
+				minTimeToNextElement[index - 1] = durationProvider.getElementDuration(element, resource) + minTravelTimeFromLast.getSecond();
 			}
 
 			// Handle time windows
@@ -642,32 +641,320 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				// Current window if flexible, next window is fixed, bring end window back
 				windowEndTime[index] = windowEndTime[index + 1] - minTimeToNextElement[index];
 			} else if (!useTimeWindow[index + 1]) {
-				windowEndTime[index] = Math.max(windowStartTime[index] + 1, Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
+				windowEndTime[index] = Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]);
 			}
 
-			// Make sure end if >= start - this may shift the end forward again violating min travel time.
+			// Make sure end if >= start - this may shift the end forward again violating min travel time.;
 			windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
 		}
-
-		// Compute separation points
-		// TODO fix this code for multi-route scheduler
-		// for (index = 1; index < arrivalTimes.length; index++) {
-		// // if there's an edge where window start > prev. window end + max
-		// // travel time,
-		// // that edge is separable, and it should be possible to solve from
-		// // here independently
-		// // of what has gone before
-		//
-		// final int latestArrivalTime = windowEndTime[index - 1]
-		// + maxTimeToNextElement[index - 1];
-		// if (latestArrivalTime < windowStartTime[index]) {
-		// separationPoints.add(index - 1);
-		// }
-		// }
-		//
-		// separationPoints.add(arrivalTimes.length - 1);
 	}
 
+	
+	/**
+	 * Trim time windows subject to available slots for Panama.
+	 */
+	protected final void trimPanama(){
+		portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
+		
+		Map<IPort, Set<IRouteOptionSlot>> assignedSlots = new HashMap<IPort, Set<IRouteOptionSlot>>();
+		Map<IPort, Set<IRouteOptionSlot>> unassignedSlots = new HashMap<IPort, Set<IRouteOptionSlot>>();
+		panamaSlotsProvider.getSlots().entrySet().forEach( e -> {
+			Set<IRouteOptionSlot> assigned = e.getValue().stream().filter(j -> j.getSlot().isPresent()).collect(Collectors.toSet());
+			assignedSlots.put(e.getKey(), new TreeSet<>(assigned));
+			unassignedSlots.put(e.getKey(), new TreeSet<>(Sets.difference(e.getValue(), assigned)));
+		});
+		
+		for (int sequenceIndex = 0; sequenceIndex < sequences.size(); sequenceIndex++) {
+			
+			final ISequence sequence = sequences.getSequence(sequenceIndex);
+			final IResource resource = sequences.getResources().get(sequenceIndex);
+
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+				return;
+			}
+
+			final int size = sequence.size();
+			// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
+			if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+				return;
+			}
+			
+			resizeAll(sequenceIndex, size);
+
+			final int[] windowStartTime = this.windowStartTime[sequenceIndex];
+			final int[] windowEndTime = this.windowEndTime[sequenceIndex];
+			final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex];
+			final int[] directTimeToNextElement = new int[size];
+			final int[] selectedTimeToNextElement = new int[size];
+			final boolean[] isVirtual = this.isVirtual[sequenceIndex];
+			final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
+			final boolean[] actualisedTimeWindow = this.actualisedTimeWindow[sequenceIndex];
+			final boolean[] isRoundTripEnd = this.isRoundTripEnd[sequenceIndex];
+
+			final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+			final boolean isSpotCharter = vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
+
+			int index = 0;
+			ISequenceElement prevElement = null;
+			final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
+
+			// from voyageplanner --->
+			IPortSlot prevPortSlot = null;
+			// Used for end of sequence checks
+			PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+			portTimeWindowsRecord.setResource(resource);
+			// --->
+			// first pass, collecting start time windows
+			for (final ISequenceElement element : sequence) {
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+
+				// from voyageplanner --->
+				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+				final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationProvider.getElementDuration(element, resource);
+				// --->
+
+				final ITimeWindow window;
+
+				// Take element start window into account
+				if (portTypeProvider.getPortType(element) == PortType.Start) {
+					final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+
+					// "windows" defaults to the default start window
+					ITimeWindow timeWindow = defaultStartWindow;
+
+					// but can be overridden by a specified start requirement
+					if (startRequirement != null && startRequirement.hasTimeRequirement()) {
+						timeWindow = startRequirement.getTimeWindow();
+					}
+
+					window = timeWindow;
+				} else if (portTypeProvider.getPortType(element) == PortType.End) {
+					// Previously this was null for spot & round trip vessels, so make null again here.
+					// Consider setting upper bound to "Integer.MAX_VALUE"
+					// Consider extra TW flag?
+					// Could make it null again...
+					if (isSpotCharter || isRoundTripSequence) {
+						// Special scheduling rules - finish as early as possible then the VPO or scheduling end date calculator kicks in
+						window = null;
+					} else {
+						final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+						// but can be overridden by the specified end requirement
+						if (endRequirement.hasTimeRequirement()) {
+							final ITimeWindow timeWindow = endRequirement.getTimeWindow();
+							// Make sure we always use the time window 
+							useTimeWindow[index] = true;
+							window = timeWindow;
+						} else {
+							window = portSlot.getTimeWindow();
+						}
+					}
+				} else {
+
+					final IPortSlot prevSlot = prevElement == null ? null : portSlotProvider.getPortSlot(prevElement);
+					if (prevSlot != null && actualsDataProvider.hasReturnActuals(prevSlot)) {
+						window = actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot);
+						if (actualsDataProvider.hasActuals(portSlot)) {
+							int a = actualsDataProvider.getArrivalTime(portSlot);
+							int b = actualsDataProvider.getReturnTime(prevSlot);
+							assert a == b;
+
+						}
+						actualisedTimeWindow[index] = true;
+					} else if (actualsDataProvider.hasActuals(portSlot)) {
+						window = actualsDataProvider.getArrivalTimeWindow(portSlot);
+						actualisedTimeWindow[index] = true;
+					} else {
+						window = portSlot.getTimeWindow();
+					}
+
+					recordShipToShipBindings(sequenceIndex, index, element);
+				}
+
+				isRoundTripEnd[index] = false;
+				if (breakSequence[index]) {
+					// last slot in plan, set return
+					portTimeWindowsRecord.setReturnSlot(thisPortSlot, null, visitDuration, index);
+					// finalise record
+					portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
+					// create new record
+					if (!(thisPortSlot instanceof RoundTripCargoEnd)) {
+						portTimeWindowsRecord = new PortTimeWindowsRecord();
+						portTimeWindowsRecord.setResource(resource);
+						portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+					} else {
+						isRoundTripEnd[index] = true;
+					}
+				} else {
+					if (!(prevPortSlot instanceof RoundTripCargoEnd)) {
+						portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+					} else {
+						portTimeWindowsRecord = new PortTimeWindowsRecord();
+						portTimeWindowsRecord.setResource(resource);
+						portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+						isRoundTripEnd[index] = true;
+					}
+				}
+
+				isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
+				useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Round_Trip_Cargo_End;
+				
+				if (prevElement != null) {
+					final IPort prevPort = portProvider.getPortForElement(prevElement);
+					final IPort port = portProvider.getPortForElement(element);
+					
+					@NonNull Pair<@NonNull ERouteOption, @NonNull Integer> minTravelTimeFromLast = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), 
+							prevPort, 
+							port, 
+							windowStartTime[index - 1], 
+							vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+					
+					int directTravelTimeFromLast = distanceProvider.getTravelTime(ERouteOption.DIRECT,
+							vesselAvailability.getVessel(), 
+							prevPort, 
+							port, 
+							windowStartTime[index - 1], 
+							vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+					
+					minTimeToNextElement[index - 1] = durationProvider.getElementDuration(element, resource) + minTravelTimeFromLast.getSecond();
+					directTimeToNextElement[index -1] = durationProvider.getElementDuration(element, resource) + directTravelTimeFromLast;
+				}
+
+				// Handle time windows
+				if (window == null) { // empty time windows are made to be the
+										// biggest reasonable gap
+					if (index > 0) {
+						// clip start of time window
+						windowStartTime[index] = windowStartTime[index - 1] + minTimeToNextElement[index - 1];
+						// backwards pass will fix this.
+						windowEndTime[index] = windowStartTime[index] + EMPTY_WINDOW_SIZE;
+					} else {
+						windowStartTime[index] = 0;
+						windowEndTime[index] = sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
+					}
+				} else {
+					if (index == 0) {// first time window is special
+						windowStartTime[index] = window.getInclusiveStart();
+						windowEndTime[index] = window.getExclusiveEnd();
+					} else {
+						// subsequent time windows have their start time clipped, so
+						// they don't start any earlier
+						// than you could get to them without being late.
+						windowEndTime[index] = window.getExclusiveEnd();
+						if (useTimeWindow[index] || actualisedTimeWindow[index]) {
+							// Cargo shorts - pretend this is a start element
+							// Actuals - use window directly
+							windowStartTime[index] = window.getInclusiveStart();
+						} else {
+							
+							IPort panamaEntry = distanceProvider.getRouteOptionEntry(prevPortSlot.getPort(), ERouteOption.PANAMA);
+							Optional<IRouteOptionSlot> potentialSlot = assignedSlots.get(panamaEntry).stream().filter(e -> {
+								return e.getSlot().isPresent() && e.getSlot().get().equals(portSlot);
+							}).findFirst();
+							
+							int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, 
+									vesselAvailability.getVessel(), 
+									prevPortSlot.getPort(), 
+									distanceProvider.getRouteOptionEntry(prevPortSlot.getPort(), ERouteOption.PANAMA), 
+									windowStartTime[index - 1], 
+									Math.max(panamaSlotsProvider.getSpeedToCanal(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed()));
+							
+							if (potentialSlot.isPresent()){
+								// window has a slot
+								throughPanama[sequenceIndex][index-1] = true;
+								portTimeWindowsRecord.setRouteOptionSlot(potentialSlot.get());
+								
+								// check if it can be reached in time
+								if (windowStartTime[index - 1] + toCanal + panamaSlotsProvider.getMargin() < potentialSlot.get().getSlotDate()){
+									routeOptionSlot[sequenceIndex][index-1] = potentialSlot.get();
+									int fromEntryPoint = distanceProvider.getTravelTime(potentialSlot.get().getRouteOption(), 
+											vesselAvailability.getVessel(), 
+											potentialSlot.get().getEntryPoint(), 
+											portSlot.getPort(), 
+											potentialSlot.get().getSlotDate(), 
+											vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+									int travelTime =  (potentialSlot.get().getSlotDate() + fromEntryPoint) - windowStartTime[index - 1];
+									windowStartTime[index] = windowStartTime[index - 1] + travelTime;
+									selectedTimeToNextElement[index - 1] = travelTime;
+									
+								}else{
+									// Slot can't be reached in time. Set to optimal time through panama and don't include slot.
+									windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
+									selectedTimeToNextElement[index - 1] =  minTimeToNextElement[index - 1];
+								}
+								
+							}else if (windowStartTime[index] > panamaSlotsProvider.getRelaxedBoundary()){
+								// assume a Panama slot because it's far enough in the future
+								throughPanama[sequenceIndex][index-1] = true;
+								windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
+								selectedTimeToNextElement[index - 1] = minTimeToNextElement[index - 1];
+							}else if( windowStartTime[index - 1] + directTimeToNextElement[index - 1] < windowEndTime[index] || 
+									directTimeToNextElement[index -1] == minTimeToNextElement[index - 1] ){
+								// journey can be made direct (or it does not go across Panama)
+								windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + directTimeToNextElement[index - 1]);
+								selectedTimeToNextElement[index - 1] = directTimeToNextElement[index - 1];
+								throughPanama[sequenceIndex][index-1] = false;
+							}else{
+								// go through panama, figure out if there is an unassigned slot
+								throughPanama[sequenceIndex][index-1] = true;
+								windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
+								selectedTimeToNextElement[index - 1] = minTimeToNextElement[index - 1];
+								
+								for (IRouteOptionSlot slot : unassignedSlots.get(panamaEntry)){
+									if (windowStartTime[index - 1] + toCanal + panamaSlotsProvider.getMargin() > slot.getSlotDate()){
+										// slot can't be reached. All following slots are later and can't be reached either
+										break;
+									}
+									int fromEntryPoint = distanceProvider.getTravelTime(slot.getRouteOption(), 
+											vesselAvailability.getVessel(), 
+											slot.getEntryPoint(), 
+											portSlot.getPort(), 
+											slot.getSlotDate(), 
+											vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+									int travelTime =  toCanal + panamaSlotsProvider.getMargin() + fromEntryPoint;
+									
+									if(slot.getSlotDate() + fromEntryPoint < windowEndTime[index]){
+										selectedTimeToNextElement[index - 1] = travelTime;
+										routeOptionSlot[sequenceIndex][index - 1] = slot;
+										portTimeWindowsRecord.setRouteOptionSlot(slot);
+										break;
+									}
+								}
+							}
+							// window end time has to be after window start time
+							windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
+						}
+					}
+				}
+
+				index++;
+				prevElement = element;
+				prevPortSlot = thisPortSlot;
+			}
+			// add the last time window
+			// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
+			// now perform reverse-pass to trim any overly late end times
+			// (that is end times which would make us late at the next element)
+			for (index = size - 2; index >= 0; index--) {
+				// trim the end of this time window so that the next element is
+				// reachable without lateness
+				// (but never so that the end time is before the start time)
+
+				if (actualisedTimeWindow[index] && actualisedTimeWindow[index + 1]) {
+					// Skip, windows should already match.
+				} else if (actualisedTimeWindow[index + 1] && !actualisedTimeWindow[index]) {
+					// Current window if flexible, next window is fixed, bring end window back
+					windowEndTime[index] = windowEndTime[index + 1] - selectedTimeToNextElement[index];
+				} else if (!useTimeWindow[index + 1]) {
+					windowEndTime[index] = Math.min(windowEndTime[index], windowEndTime[index + 1] - selectedTimeToNextElement[index]);
+				}
+
+				// Make sure end if >= start - this may shift the end forward again violating min travel time.;
+				windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
+			}
+		}
+	}
+	
 	/**
 	 * Gets the earliest time at which the current vessel can arrive at the given element, given the arrival times set for the previous elements.
 	 * 
@@ -763,6 +1050,12 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			arrays[arrayIndex] = new int[(size)];
 		}
 	}
+	
+	private final void resize(final IRouteOptionSlot[][] arrays, final int arrayIndex, final int size){
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
+			arrays[arrayIndex] = new IRouteOptionSlot[(size)];
+		}
+	}
 
 	/**
 	 * Resize one of the boolean buffers above.
@@ -784,13 +1077,22 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		resize(windowStartTime, sequenceIndex, size);
 		resize(windowEndTime, sequenceIndex, size);
 		resize(minTimeToNextElement, sequenceIndex, size);
-		resize(maxTimeToNextElement, sequenceIndex, size);
 
 		resize(isVirtual, sequenceIndex, size);
 		resize(useTimeWindow, sequenceIndex, size);
 		resize(actualisedTimeWindow, sequenceIndex, size);
 		resize(isRoundTripEnd, sequenceIndex, size);
+		resize(throughPanama, sequenceIndex, size);
+		resize(routeOptionSlot, sequenceIndex, size);
 
 		sizes[sequenceIndex] = size;
+	}
+	
+	public boolean[][] canalDecision(){
+		return throughPanama;
+	}
+	
+	public IRouteOptionSlot[][] slotsAssigned(){
+		return routeOptionSlot;
 	}
 }

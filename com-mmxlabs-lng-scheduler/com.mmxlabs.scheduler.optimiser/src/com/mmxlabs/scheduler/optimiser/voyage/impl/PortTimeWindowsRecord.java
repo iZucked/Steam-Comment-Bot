@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.RouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
@@ -51,6 +53,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
 	private IResource resource;
+	private IRouteOptionSlot routeOptionSlot = null;
 	
 	public PortTimeWindowsRecord() {
 
@@ -198,4 +201,11 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		return this.resource = resource;
 	}
 
+	public IRouteOptionSlot getRouteOptionSlot() {
+		return routeOptionSlot;
+	}
+
+	public void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot) {
+		this.routeOptionSlot = routeOptionSlot;
+	}
 }

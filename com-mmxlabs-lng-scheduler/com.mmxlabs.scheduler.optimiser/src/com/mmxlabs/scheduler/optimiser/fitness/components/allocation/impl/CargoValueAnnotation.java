@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 
@@ -292,5 +294,15 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	public void setCacheLocked(final boolean locked) {
 		assert !this.locked;
 		this.locked = locked;
+	}
+
+	@Override
+	public @Nullable IRouteOptionSlot getRouteOptionSlot() {
+		return allocationAnnotation.getRouteOptionSlot();
+	}
+
+	@Override
+	public void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot) {
+		allocationAnnotation.setRouteOptionSlot(routeOptionSlot);
 	}
 }

@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 
@@ -88,15 +89,20 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getTravelTime(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
-
+	
 	@NonNull
 	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
 
 	ERouteOption[] getRoutes();
 
-//	@NonNull
-//	List<@NonNull ERouteOption> getRoutes();
-	
+	/**
+	 * Returns the closest entry point of a route option (canal) for a given port.
+	 * @param port
+	 * @param routeOption
+	 * @return
+	 */
 	@NonNull
 	IPort getRouteOptionEntry(IPort port, ERouteOption routeOption);
+	
+	
 }
