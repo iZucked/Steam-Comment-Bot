@@ -1,42 +1,55 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
  */
-package com.mmxlabs.models.lng.port.provider;
+package com.mmxlabs.models.lng.cargo.provider;
 
+
+import com.mmxlabs.models.lng.cargo.CanalBookings;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.Route} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.CanalBookings} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RouteItemProvider
-	extends NamedObjectItemProvider {
+public class CanalBookingsItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RouteItemProvider(AdapterFactory adapterFactory) {
+	public CanalBookingsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -51,98 +64,75 @@ public class RouteItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addUuidPropertyDescriptor(object);
-			addRouteOptionPropertyDescriptor(object);
-			addCanalPropertyDescriptor(object);
-			addRoutingOptionsPropertyDescriptor(object);
+			addStrictBoundaryOffsetDaysPropertyDescriptor(object);
+			addRelaxedBoundaryOffsetDaysPropertyDescriptor(object);
+			addFlexibleSlotAmountPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Uuid feature.
+	 * This adds a property descriptor for the Strict Boundary Offset Days feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addUuidPropertyDescriptor(Object object) {
+	protected void addStrictBoundaryOffsetDaysPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_UUIDObject_uuid_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UUIDObject_uuid_feature", "_UI_UUIDObject_type"),
-				 MMXCorePackage.Literals.UUID_OBJECT__UUID,
+				 getString("_UI_CanalBookings_strictBoundaryOffsetDays_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_strictBoundaryOffsetDays_feature", "_UI_CanalBookings_type"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Route Option feature.
+	 * This adds a property descriptor for the Relaxed Boundary Offset Days feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRouteOptionPropertyDescriptor(Object object) {
+	protected void addRelaxedBoundaryOffsetDaysPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Route_routeOption_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Route_routeOption_feature", "_UI_Route_type"),
-				 PortPackage.Literals.ROUTE__ROUTE_OPTION,
+				 getString("_UI_CanalBookings_relaxedBoundaryOffsetDays_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_relaxedBoundaryOffsetDays_feature", "_UI_CanalBookings_type"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Canal feature.
+	 * This adds a property descriptor for the Flexible Slot Amount feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCanalPropertyDescriptor(Object object) {
+	protected void addFlexibleSlotAmountPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Route_canal_feature"),
-				 getString("_UI_Route_canal_description"),
-				 PortPackage.Literals.ROUTE__CANAL,
+				 getString("_UI_CanalBookings_flexibleSlotAmount_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_flexibleSlotAmount_feature", "_UI_CanalBookings_type"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Routing Options feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRoutingOptionsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Route_routingOptions_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Route_routingOptions_feature", "_UI_Route_type"),
-				 PortPackage.Literals.ROUTE__ROUTING_OPTIONS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -159,9 +149,7 @@ public class RouteItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PortPackage.Literals.ROUTE__LINES);
-			childrenFeatures.add(PortPackage.Literals.ROUTE__ENTRY_A);
-			childrenFeatures.add(PortPackage.Literals.ROUTE__ENTRY_B);
+			childrenFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
 		}
 		return childrenFeatures;
 	}
@@ -180,14 +168,14 @@ public class RouteItemProvider
 	}
 
 	/**
-	 * This returns Route.gif.
+	 * This returns CanalBookings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Route"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CanalBookings"));
 	}
 
 	/**
@@ -198,11 +186,10 @@ public class RouteItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Route)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Route_type") :
-			getString("_UI_Route_type") + " " + label;
+		CanalBookings canalBookings = (CanalBookings)object;
+		return getString("_UI_CanalBookings_type") + " " + canalBookings.getStrictBoundaryOffsetDays();
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -215,16 +202,13 @@ public class RouteItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Route.class)) {
-			case PortPackage.ROUTE__UUID:
-			case PortPackage.ROUTE__ROUTE_OPTION:
-			case PortPackage.ROUTE__CANAL:
-			case PortPackage.ROUTE__ROUTING_OPTIONS:
+		switch (notification.getFeatureID(CanalBookings.class)) {
+			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
+			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case PortPackage.ROUTE__LINES:
-			case PortPackage.ROUTE__ENTRY_A:
-			case PortPackage.ROUTE__ENTRY_B:
+			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -244,41 +228,19 @@ public class RouteItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.ROUTE__LINES,
-				 PortFactory.eINSTANCE.createRouteLine()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.ROUTE__ENTRY_A,
-				 PortFactory.eINSTANCE.createEntryPoint()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.ROUTE__ENTRY_B,
-				 PortFactory.eINSTANCE.createEntryPoint()));
+				(CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS,
+				 CargoFactory.eINSTANCE.createCanalBookingSlot()));
 	}
 
 	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * Return the resource locator for this item provider's resources.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == PortPackage.Literals.ROUTE__ENTRY_A ||
-			childFeature == PortPackage.Literals.ROUTE__ENTRY_B;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+	public ResourceLocator getResourceLocator() {
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

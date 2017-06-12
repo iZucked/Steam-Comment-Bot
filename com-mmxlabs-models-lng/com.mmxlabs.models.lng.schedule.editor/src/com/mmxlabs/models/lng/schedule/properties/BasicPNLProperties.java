@@ -45,6 +45,9 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		if (eObject instanceof ProfitAndLossContainer) {
 			final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) eObject;
 			final DetailProperty parent = createTree(profitAndLossContainer, null);
+			if (parent == null){
+				return null;
+			}
 			if (eObject instanceof EventGrouping) {
 				final BasicShippingDetailsProperties p = new BasicShippingDetailsProperties();
 				final DetailProperty pp = p.createProperties(eObject);
@@ -55,10 +58,10 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 
 			return parent;
 		}
-
 		return null;
 	}
 
+	@Nullable
 	private DetailProperty createTree(@NonNull final ProfitAndLossContainer profitAndLossContainer, @Nullable final MMXRootObject rootObject) {
 		final DetailPropertyFactoryRegistry registry = DetailPropertyFactoryRegistry.createRegistry();
 

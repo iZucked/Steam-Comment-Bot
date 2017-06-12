@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port.impl;
 
 import com.mmxlabs.models.lng.port.EntryPoint;
+import com.mmxlabs.models.lng.port.Port;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -39,7 +40,8 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getEntryPoints <em>Entry Points</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getEntryA <em>Entry A</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getEntryB <em>Entry B</em>}</li>
  * </ul>
  *
  * @generated
@@ -126,14 +128,24 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	protected EList<String> routingOptions;
 
 	/**
-	 * The cached value of the '{@link #getEntryPoints() <em>Entry Points</em>}' reference list.
+	 * The cached value of the '{@link #getEntryA() <em>Entry A</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEntryPoints()
+	 * @see #getEntryA()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<EntryPoint> entryPoints;
+	protected EntryPoint entryA;
+
+	/**
+	 * The cached value of the '{@link #getEntryB() <em>Entry B</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntryB()
+	 * @generated
+	 * @ordered
+	 */
+	protected EntryPoint entryB;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -246,11 +258,85 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<EntryPoint> getEntryPoints() {
-		if (entryPoints == null) {
-			entryPoints = new EObjectResolvingEList<EntryPoint>(EntryPoint.class, this, PortPackage.ROUTE__ENTRY_POINTS);
+	public EntryPoint getEntryA() {
+		return entryA;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetEntryA(EntryPoint newEntryA, NotificationChain msgs) {
+		EntryPoint oldEntryA = entryA;
+		entryA = newEntryA;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_A, oldEntryA, newEntryA);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return entryPoints;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEntryA(EntryPoint newEntryA) {
+		if (newEntryA != entryA) {
+			NotificationChain msgs = null;
+			if (entryA != null)
+				msgs = ((InternalEObject)entryA).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_A, null, msgs);
+			if (newEntryA != null)
+				msgs = ((InternalEObject)newEntryA).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_A, null, msgs);
+			msgs = basicSetEntryA(newEntryA, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_A, newEntryA, newEntryA));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntryPoint getEntryB() {
+		return entryB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetEntryB(EntryPoint newEntryB, NotificationChain msgs) {
+		EntryPoint oldEntryB = entryB;
+		entryB = newEntryB;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_B, oldEntryB, newEntryB);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEntryB(EntryPoint newEntryB) {
+		if (newEntryB != entryB) {
+			NotificationChain msgs = null;
+			if (entryB != null)
+				msgs = ((InternalEObject)entryB).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_B, null, msgs);
+			if (newEntryB != null)
+				msgs = ((InternalEObject)newEntryB).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_B, null, msgs);
+			msgs = basicSetEntryB(newEntryB, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_B, newEntryB, newEntryB));
 	}
 
 	/**
@@ -263,6 +349,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 		switch (featureID) {
 			case PortPackage.ROUTE__LINES:
 				return ((InternalEList<?>)getLines()).basicRemove(otherEnd, msgs);
+			case PortPackage.ROUTE__ENTRY_A:
+				return basicSetEntryA(null, msgs);
+			case PortPackage.ROUTE__ENTRY_B:
+				return basicSetEntryB(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -285,8 +375,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return isCanal();
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				return getRoutingOptions();
-			case PortPackage.ROUTE__ENTRY_POINTS:
-				return getEntryPoints();
+			case PortPackage.ROUTE__ENTRY_A:
+				return getEntryA();
+			case PortPackage.ROUTE__ENTRY_B:
+				return getEntryB();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -317,9 +409,11 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				getRoutingOptions().clear();
 				getRoutingOptions().addAll((Collection<? extends String>)newValue);
 				return;
-			case PortPackage.ROUTE__ENTRY_POINTS:
-				getEntryPoints().clear();
-				getEntryPoints().addAll((Collection<? extends EntryPoint>)newValue);
+			case PortPackage.ROUTE__ENTRY_A:
+				setEntryA((EntryPoint)newValue);
+				return;
+			case PortPackage.ROUTE__ENTRY_B:
+				setEntryB((EntryPoint)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -348,8 +442,11 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				getRoutingOptions().clear();
 				return;
-			case PortPackage.ROUTE__ENTRY_POINTS:
-				getEntryPoints().clear();
+			case PortPackage.ROUTE__ENTRY_A:
+				setEntryA((EntryPoint)null);
+				return;
+			case PortPackage.ROUTE__ENTRY_B:
+				setEntryB((EntryPoint)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -373,8 +470,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return canal != CANAL_EDEFAULT;
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				return routingOptions != null && !routingOptions.isEmpty();
-			case PortPackage.ROUTE__ENTRY_POINTS:
-				return entryPoints != null && !entryPoints.isEmpty();
+			case PortPackage.ROUTE__ENTRY_A:
+				return entryA != null;
+			case PortPackage.ROUTE__ENTRY_B:
+				return entryB != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -194,13 +194,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__VESSEL_TYPE_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Canal Bookings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__CANAL_BOOKINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4915,6 +4924,170 @@ public interface CargoPackage extends EPackage {
 	int START_HEEL_OPTIONS_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl <em>Canal Booking Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookingSlot()
+	 * @generated
+	 */
+	int CANAL_BOOKING_SLOT = 18;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__SLOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Entry Point</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__ENTRY_POINT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Slot Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__SLOT_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Canal Booking Slot</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Canal Booking Slot</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookings()
+	 * @generated
+	 */
+	int CANAL_BOOKINGS = 19;
+
+	/**
+	 * The feature id for the '<em><b>Canal Booking Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__CANAL_BOOKING_SLOTS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Strict Boundary Offset Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Relaxed Boundary Offset Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Flexible Slot Amount</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Canal Bookings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Canal Bookings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4922,7 +5095,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 18;
+	int CARGO_TYPE = 20;
 
 
 	/**
@@ -4933,7 +5106,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 19;
+	int VESSEL_TYPE = 21;
 
 
 	/**
@@ -4944,7 +5117,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEVesselTankState()
 	 * @generated
 	 */
-	int EVESSEL_TANK_STATE = 20;
+	int EVESSEL_TANK_STATE = 22;
 
 
 	/**
@@ -5829,6 +6002,17 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_VesselTypeGroups();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Canal Bookings</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CanalBookings();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6500,6 +6684,114 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getStartHeelOptions_PriceExpression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot <em>Canal Booking Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Canal Booking Slot</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot
+	 * @generated
+	 */
+	EClass getCanalBookingSlot();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRoute <em>Route</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Route</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRoute()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EReference getCanalBookingSlot_Route();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EReference getCanalBookingSlot_Slot();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getEntryPoint <em>Entry Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entry Point</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getEntryPoint()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EReference getCanalBookingSlot_EntryPoint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlotDate <em>Slot Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Slot Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlotDate()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EAttribute getCanalBookingSlot_SlotDate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Canal Bookings</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings
+	 * @generated
+	 */
+	EClass getCanalBookings();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getCanalBookingSlots <em>Canal Booking Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Canal Booking Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getCanalBookingSlots()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EReference getCanalBookings_CanalBookingSlots();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Strict Boundary Offset Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getStrictBoundaryOffsetDays()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_StrictBoundaryOffsetDays();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Relaxed Boundary Offset Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getRelaxedBoundaryOffsetDays()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_RelaxedBoundaryOffsetDays();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleSlotAmount <em>Flexible Slot Amount</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Flexible Slot Amount</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleSlotAmount()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_FlexibleSlotAmount();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
@@ -7220,6 +7512,14 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
 
 		/**
+		 * The meta object literal for the '<em><b>Canal Bookings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CANAL_BOOKINGS = eINSTANCE.getCargoModel_CanalBookings();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7748,6 +8048,90 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute START_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getStartHeelOptions_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl <em>Canal Booking Slot</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookingSlot()
+		 * @generated
+		 */
+		EClass CANAL_BOOKING_SLOT = eINSTANCE.getCanalBookingSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_SLOT__ROUTE = eINSTANCE.getCanalBookingSlot_Route();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_SLOT__SLOT = eINSTANCE.getCanalBookingSlot_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>Entry Point</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_SLOT__ENTRY_POINT = eINSTANCE.getCanalBookingSlot_EntryPoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKING_SLOT__SLOT_DATE = eINSTANCE.getCanalBookingSlot_SlotDate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookings()
+		 * @generated
+		 */
+		EClass CANAL_BOOKINGS = eINSTANCE.getCanalBookings();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Booking Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKINGS__CANAL_BOOKING_SLOTS = eINSTANCE.getCanalBookings_CanalBookingSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Strict Boundary Offset Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS = eINSTANCE.getCanalBookings_StrictBoundaryOffsetDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Relaxed Boundary Offset Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = eINSTANCE.getCanalBookings_RelaxedBoundaryOffsetDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Flexible Slot Amount</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT = eINSTANCE.getCanalBookings_FlexibleSlotAmount();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

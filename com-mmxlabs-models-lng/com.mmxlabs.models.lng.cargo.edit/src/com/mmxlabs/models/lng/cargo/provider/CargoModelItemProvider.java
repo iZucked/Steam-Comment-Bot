@@ -71,6 +71,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS);
 		}
 		return childrenFeatures;
 	}
@@ -132,6 +133,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
 			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -203,6 +205,11 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__VESSEL_TYPE_GROUPS,
 				 CargoFactory.eINSTANCE.createVesselTypeGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__CANAL_BOOKINGS,
+				 CargoFactory.eINSTANCE.createCanalBookings()));
 	}
 
 }

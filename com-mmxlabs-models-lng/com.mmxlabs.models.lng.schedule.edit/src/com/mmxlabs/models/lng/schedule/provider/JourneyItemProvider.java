@@ -56,6 +56,9 @@ public class JourneyItemProvider
 			addTollPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addSpeedPropertyDescriptor(object);
+			addCanalEntryPropertyDescriptor(object);
+			addCanalDatePropertyDescriptor(object);
+			addCanalBookingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -193,6 +196,72 @@ public class JourneyItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Canal Entry feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalEntryPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_canalEntry_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalEntry_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_ENTRY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Canal Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_canalDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalDate_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Canal Booking feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalBookingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_canalBooking_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalBooking_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_BOOKING,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -265,6 +334,7 @@ public class JourneyItemProvider
 			case SchedulePackage.JOURNEY__TOLL:
 			case SchedulePackage.JOURNEY__DISTANCE:
 			case SchedulePackage.JOURNEY__SPEED:
+			case SchedulePackage.JOURNEY__CANAL_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.JOURNEY__FUELS:

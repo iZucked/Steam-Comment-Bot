@@ -88,6 +88,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
 			case CargoPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
 			case CargoPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
+			case CargoPackage.CANAL_BOOKING_SLOT: return createCanalBookingSlot();
+			case CargoPackage.CANAL_BOOKINGS: return createCanalBookings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -269,6 +271,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public StartHeelOptions createStartHeelOptions() {
 		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
 		return startHeelOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookingSlot createCanalBookingSlot() {
+		CanalBookingSlotImpl canalBookingSlot = new CanalBookingSlotImpl();
+		return canalBookingSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookings createCanalBookings() {
+		CanalBookingsImpl canalBookings = new CanalBookingsImpl();
+		return canalBookings;
 	}
 
 	/**

@@ -3,8 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +25,9 @@ import com.mmxlabs.models.lng.port.Route;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney()
@@ -183,6 +190,84 @@ public interface Journey extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setSpeed(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Entry</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Entry</em>' reference.
+	 * @see #setCanalEntry(EntryPoint)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalEntry()
+	 * @model
+	 * @generated
+	 */
+	EntryPoint getCanalEntry();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Entry</em>' reference.
+	 * @see #getCanalEntry()
+	 * @generated
+	 */
+	void setCanalEntry(EntryPoint value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Date</em>' attribute.
+	 * @see #setCanalDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalDate()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getCanalDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Date</em>' attribute.
+	 * @see #getCanalDate()
+	 * @generated
+	 */
+	void setCanalDate(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Booking</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Booking</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Booking</em>' reference.
+	 * @see #setCanalBooking(CanalBookingSlot)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalBooking()
+	 * @model
+	 * @generated
+	 */
+	CanalBookingSlot getCanalBooking();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Booking</em>' reference.
+	 * @see #getCanalBooking()
+	 * @generated
+	 */
+	void setCanalBooking(CanalBookingSlot value);
 
 } // end of  Journey
 

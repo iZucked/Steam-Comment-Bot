@@ -398,8 +398,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRoute_EntryPoints() {
+	public EReference getRoute_EntryA() {
 		return (EReference)routeEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRoute_EntryB() {
+		return (EReference)routeEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -663,7 +672,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(routeEClass, ROUTE__ROUTE_OPTION);
 		createEAttribute(routeEClass, ROUTE__CANAL);
 		createEAttribute(routeEClass, ROUTE__ROUTING_OPTIONS);
-		createEReference(routeEClass, ROUTE__ENTRY_POINTS);
+		createEReference(routeEClass, ROUTE__ENTRY_A);
+		createEReference(routeEClass, ROUTE__ENTRY_B);
 
 		portGroupEClass = createEClass(PORT_GROUP);
 		createEReference(portGroupEClass, PORT_GROUP__CONTENTS);
@@ -783,7 +793,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getRoute_RouteOption(), this.getRouteOption(), "routeOption", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_Canal(), ecorePackage.getEBoolean(), "canal", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_RoutingOptions(), ecorePackage.getEString(), "routingOptions", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRoute_EntryPoints(), this.getEntryPoint(), null, "entryPoints", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRoute_EntryA(), this.getEntryPoint(), null, "entryA", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRoute_EntryB(), this.getEntryPoint(), null, "entryB", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portGroupEClass, PortGroup.class, "PortGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());

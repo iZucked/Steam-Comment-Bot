@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
@@ -176,6 +178,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass startHeelOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass canalBookingSlotEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass canalBookingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1005,6 +1021,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCargoModel_CanalBookings() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSpotSlot() {
 		return spotSlotEClass;
 	}
@@ -1572,6 +1597,96 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCanalBookingSlot() {
+		return canalBookingSlotEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingSlot_Route() {
+		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingSlot_Slot() {
+		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingSlot_EntryPoint() {
+		return (EReference)canalBookingSlotEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanalBookingSlot_SlotDate() {
+		return (EAttribute)canalBookingSlotEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCanalBookings() {
+		return canalBookingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookings_CanalBookingSlots() {
+		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanalBookings_StrictBoundaryOffsetDays() {
+		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanalBookings_RelaxedBoundaryOffsetDays() {
+		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanalBookings_FlexibleSlotAmount() {
+		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -1630,6 +1745,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_AVAILABILITIES);
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_EVENTS);
 		createEReference(cargoModelEClass, CARGO_MODEL__VESSEL_TYPE_GROUPS);
+		createEReference(cargoModelEClass, CARGO_MODEL__CANAL_BOOKINGS);
 
 		cargoEClass = createEClass(CARGO);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
@@ -1785,6 +1901,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
 		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__PRICE_EXPRESSION);
 
+		canalBookingSlotEClass = createEClass(CANAL_BOOKING_SLOT);
+		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ROUTE);
+		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__SLOT);
+		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ENTRY_POINT);
+		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__SLOT_DATE);
+
+		canalBookingsEClass = createEClass(CANAL_BOOKINGS);
+		createEReference(canalBookingsEClass, CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT);
+
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
@@ -1856,6 +1984,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		vesselTypeGroupEClass.getEGenericSuperTypes().add(g1);
 		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		canalBookingSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1866,6 +1995,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_VesselAvailabilities(), this.getVesselAvailability(), null, "vesselAvailabilities", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_VesselEvents(), this.getVesselEvent(), null, "vesselEvents", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_VesselTypeGroups(), this.getVesselTypeGroup(), null, "vesselTypeGroups", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_CanalBookings(), this.getCanalBookings(), null, "canalBookings", null, 0, 1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoEClass, Cargo.class, "Cargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", "false", 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2063,6 +2193,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getStartHeelOptions_MinVolumeAvailable(), ecorePackage.getEDouble(), "minVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStartHeelOptions_MaxVolumeAvailable(), ecorePackage.getEDouble(), "maxVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStartHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(canalBookingSlotEClass, CanalBookingSlot.class, "CanalBookingSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCanalBookingSlot_Route(), thePortPackage.getRoute(), null, "route", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalBookingSlot_Slot(), this.getSlot(), null, "slot", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalBookingSlot_EntryPoint(), thePortPackage.getEntryPoint(), null, "entryPoint", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookingSlot_SlotDate(), theDateTimePackage.getLocalDate(), "slotDate", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(canalBookingsEClass, CanalBookings.class, "CanalBookings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCanalBookings_CanalBookingSlots(), this.getCanalBookingSlot(), null, "canalBookingSlots", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_StrictBoundaryOffsetDays(), ecorePackage.getEInt(), "strictBoundaryOffsetDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_RelaxedBoundaryOffsetDays(), ecorePackage.getEInt(), "relaxedBoundaryOffsetDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_FlexibleSlotAmount(), ecorePackage.getEInt(), "flexibleSlotAmount", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");

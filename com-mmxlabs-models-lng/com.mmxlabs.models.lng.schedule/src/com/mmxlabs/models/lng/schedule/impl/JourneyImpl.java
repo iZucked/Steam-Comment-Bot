@@ -3,7 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.port.EntryPoint;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -43,6 +47,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getToll <em>Toll</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getSpeed <em>Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntry <em>Canal Entry</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalDate <em>Canal Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBooking <em>Canal Booking</em>}</li>
  * </ul>
  *
  * @generated
@@ -157,6 +164,46 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @ordered
 	 */
 	protected double speed = SPEED_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCanalEntry() <em>Canal Entry</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalEntry()
+	 * @generated
+	 * @ordered
+	 */
+	protected EntryPoint canalEntry;
+
+	/**
+	 * The default value of the '{@link #getCanalDate() <em>Canal Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate CANAL_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCanalDate() <em>Canal Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate canalDate = CANAL_DATE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCanalBooking() <em>Canal Booking</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalBooking()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalBookingSlot canalBooking;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -352,6 +399,103 @@ public class JourneyImpl extends EventImpl implements Journey {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntryPoint getCanalEntry() {
+		if (canalEntry != null && canalEntry.eIsProxy()) {
+			InternalEObject oldCanalEntry = (InternalEObject)canalEntry;
+			canalEntry = (EntryPoint)eResolveProxy(oldCanalEntry);
+			if (canalEntry != oldCanalEntry) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.JOURNEY__CANAL_ENTRY, oldCanalEntry, canalEntry));
+			}
+		}
+		return canalEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntryPoint basicGetCanalEntry() {
+		return canalEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalEntry(EntryPoint newCanalEntry) {
+		EntryPoint oldCanalEntry = canalEntry;
+		canalEntry = newCanalEntry;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ENTRY, oldCanalEntry, canalEntry));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getCanalDate() {
+		return canalDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalDate(LocalDate newCanalDate) {
+		LocalDate oldCanalDate = canalDate;
+		canalDate = newCanalDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_DATE, oldCanalDate, canalDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookingSlot getCanalBooking() {
+		if (canalBooking != null && canalBooking.eIsProxy()) {
+			InternalEObject oldCanalBooking = (InternalEObject)canalBooking;
+			canalBooking = (CanalBookingSlot)eResolveProxy(oldCanalBooking);
+			if (canalBooking != oldCanalBooking) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.JOURNEY__CANAL_BOOKING, oldCanalBooking, canalBooking));
+			}
+		}
+		return canalBooking;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookingSlot basicGetCanalBooking() {
+		return canalBooking;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalBooking(CanalBookingSlot newCanalBooking) {
+		CanalBookingSlot oldCanalBooking = canalBooking;
+		canalBooking = newCanalBooking;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_BOOKING, oldCanalBooking, canalBooking));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getFuelCost() {
@@ -400,6 +544,14 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return getDistance();
 			case SchedulePackage.JOURNEY__SPEED:
 				return getSpeed();
+			case SchedulePackage.JOURNEY__CANAL_ENTRY:
+				if (resolve) return getCanalEntry();
+				return basicGetCanalEntry();
+			case SchedulePackage.JOURNEY__CANAL_DATE:
+				return getCanalDate();
+			case SchedulePackage.JOURNEY__CANAL_BOOKING:
+				if (resolve) return getCanalBooking();
+				return basicGetCanalBooking();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -435,6 +587,15 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__SPEED:
 				setSpeed((Double)newValue);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_ENTRY:
+				setCanalEntry((EntryPoint)newValue);
+				return;
+			case SchedulePackage.JOURNEY__CANAL_DATE:
+				setCanalDate((LocalDate)newValue);
+				return;
+			case SchedulePackage.JOURNEY__CANAL_BOOKING:
+				setCanalBooking((CanalBookingSlot)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -468,6 +629,15 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__SPEED:
 				setSpeed(SPEED_EDEFAULT);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_ENTRY:
+				setCanalEntry((EntryPoint)null);
+				return;
+			case SchedulePackage.JOURNEY__CANAL_DATE:
+				setCanalDate(CANAL_DATE_EDEFAULT);
+				return;
+			case SchedulePackage.JOURNEY__CANAL_BOOKING:
+				setCanalBooking((CanalBookingSlot)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -494,6 +664,12 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return distance != DISTANCE_EDEFAULT;
 			case SchedulePackage.JOURNEY__SPEED:
 				return speed != SPEED_EDEFAULT;
+			case SchedulePackage.JOURNEY__CANAL_ENTRY:
+				return canalEntry != null;
+			case SchedulePackage.JOURNEY__CANAL_DATE:
+				return CANAL_DATE_EDEFAULT == null ? canalDate != null : !CANAL_DATE_EDEFAULT.equals(canalDate);
+			case SchedulePackage.JOURNEY__CANAL_BOOKING:
+				return canalBooking != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -578,6 +754,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(distance);
 		result.append(", speed: ");
 		result.append(speed);
+		result.append(", canalDate: ");
+		result.append(canalDate);
 		result.append(')');
 		return result.toString();
 	}

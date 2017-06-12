@@ -4,10 +4,14 @@
  */
 package com.mmxlabs.models.lng.port.importer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +19,8 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -29,12 +35,14 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
@@ -54,6 +62,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	public static final String DISTANCES_KEY = "DISTANCES";
 	public static final String SUEZ_KEY = "SUEZ";
 	public static final String PANAMA_KEY = "PANAMA";
+	public static final String CANAL_PORTS_KEY = "CANALPORTS";
 	public static final HashMap<String, String> inputs = new LinkedHashMap<String, String>();
 
 	static {
@@ -61,6 +70,7 @@ public class PortModelImporter implements ISubmodelImporter {
 		inputs.put(PORT_GROUP_KEY, "Port Groups");
 		inputs.put(DISTANCES_KEY, "Distance Matrix");
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
+		inputs.put(CANAL_PORTS_KEY, "Canal Ports");
 		if (LicenseFeatures.isPermitted("features:panama-canal")) {
 			inputs.put(PANAMA_KEY, "Panama Distance Matrix");
 		}
@@ -72,6 +82,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	private IClassImporter portImporter;
 	private IClassImporter portGroupImporter;
 	private final RouteImporter routeImporter = new RouteImporter();
+	private final DefaultClassImporter canalPortsImporter = new DefaultClassImporter();
 
 	/**
 	 */
@@ -102,6 +113,7 @@ public class PortModelImporter implements ISubmodelImporter {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
 
 		final PortModel portModel = result;
+		final @NonNull List<Route> importedRoutes = new ArrayList<Route>();
 
 		if (inputs.containsKey(PORT_KEY)) {
 			final CSVReader reader = inputs.get(PORT_KEY);
@@ -135,6 +147,14 @@ public class PortModelImporter implements ISubmodelImporter {
 			final CSVReader reader = inputs.get(PORT_GROUP_KEY);
 			result.getPortGroups().addAll((Collection<? extends PortGroup>) portGroupImporter.importObjects(PortPackage.eINSTANCE.getPortGroup(), reader, context));
 		}
+		
+		// Needs to be called before the canals are programmatically created because the DefaultClassImporter calls
+		// context.registerNamedObject((NamedObject) o);
+		if (inputs.containsKey(CANAL_PORTS_KEY)) {
+			importedRoutes.addAll(canalPortsImporter.importObjects(PortFactory.eINSTANCE.createRoute().eClass(), inputs.get(CANAL_PORTS_KEY), context)
+					.stream().map(e -> (Route)e).collect(Collectors.toList()));
+		}
+		
 		if (inputs.containsKey(DISTANCES_KEY)) {
 			final Route direct = routeImporter.importRoute(inputs.get(DISTANCES_KEY), context);
 			if (direct != null) {
@@ -152,6 +172,7 @@ public class PortModelImporter implements ISubmodelImporter {
 				suez.setName(SUEZ_CANAL_NAME);
 				suez.setRouteOption(RouteOption.SUEZ);
 				suez.setCanal(true);
+				
 				result.getRoutes().add(suez);
 				context.registerNamedObject(suez);
 			}
@@ -163,11 +184,13 @@ public class PortModelImporter implements ISubmodelImporter {
 					panama.setName(PANAMA_CANAL_NAME);
 					panama.setRouteOption(RouteOption.PANAMA);
 					panama.setCanal(true);
+					
 					result.getRoutes().add(panama);
 					context.registerNamedObject(panama);
 				}
 			}
 		}
+		
 
 		if (portModel != null) {
 
@@ -187,7 +210,16 @@ public class PortModelImporter implements ISubmodelImporter {
 					context.registerNamedObject(g);
 				}
 			}
-
+			
+			if (inputs.containsKey(CANAL_PORTS_KEY)) {
+				result.getRoutes().forEach(route -> {
+					Optional<Route> potentialImported = importedRoutes.stream().filter(e -> e.getName().equals(route.getName())).findFirst();
+					if (potentialImported.isPresent()){
+						route.setEntryA(potentialImported.get().getEntryA());
+						route.setEntryB(potentialImported.get().getEntryB());
+					}
+				});
+			}
 		}
 		return result;
 	}
