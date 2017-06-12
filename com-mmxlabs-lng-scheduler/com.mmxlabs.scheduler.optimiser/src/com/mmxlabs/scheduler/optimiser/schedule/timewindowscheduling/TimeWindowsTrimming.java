@@ -15,6 +15,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -139,7 +140,7 @@ public class TimeWindowsTrimming {
 				feasibleEnd = Math.max(endTimeWindow.getExclusiveEnd(), feasibleStart + 1);
 			}
 		}
-		portTimeWindowRecord.setSlotFeasibleTimeWindow(end, new TimeWindow(feasibleStart, feasibleEnd));
+		portTimeWindowRecord.setSlotFeasibleTimeWindow(end, new MutableTimeWindow(feasibleStart, feasibleEnd));
 	}
 
 	/**
@@ -212,7 +213,7 @@ public class TimeWindowsTrimming {
 				final IVessel vessel = getVesselFromPortTimeWindowsRecord(portTimeWindowRecord);
 				final int[] endElementTimes = trimEndElementTimeWindowsWithRouteOptimisationAndBoilOff(portTimeWindowRecord, load, discharge, end, vessel, dischargePriceIntervalsIndependentOfLoad,
 						dischargePriceIntervalsIndependentOfLoad, vesselStartTime);
-				final TimeWindow tw = new TimeWindow(endElementTimes[2], endElementTimes[2] + 1);
+				final MutableTimeWindow tw = new MutableTimeWindow(endElementTimes[2], endElementTimes[2] + 1);
 				portTimeWindowRecord.setSlotFeasibleTimeWindow(end, tw);
 			}
 		}

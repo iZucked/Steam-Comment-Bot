@@ -9,10 +9,10 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,12 +37,11 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.PortTimesPlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -66,17 +65,19 @@ public class ScheduleCalculator {
 	private static class Key {
 		private final @NonNull IResource resource;
 		private final @NonNull ISequence sequence;
-		private final int[] arrivalTimes;
+		private final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords;
+		private final @NonNull List<Object> voyageKeys = new LinkedList<>();
 
-		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes) {
+		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords) {
 			this.resource = resource;
 			this.sequence = sequence;
-			this.arrivalTimes = arrivalTimes;
+			this.portTimesRecords = portTimesRecords;
+			// portTimesRecords.forEach(ptr -> ptr.getVoyageSpecs().foreach(spec -> voyageKeys.add(spec.getRouteOption())));
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(resource, sequence);
+			return Objects.hash(resource, sequence, voyageKeys);
 		}
 
 		@Override
@@ -88,7 +89,8 @@ public class ScheduleCalculator {
 			if (obj instanceof Key) {
 				final Key other = (Key) obj;
 				return Objects.equals(this.resource, other.resource) //
-						&& Objects.equals(this.sequence, other.sequence);
+						&& Objects.equals(this.sequence, other.sequence) //
+						&& Objects.equals(this.voyageKeys, other.voyageKeys);
 			}
 			return false;
 		}
@@ -107,7 +109,7 @@ public class ScheduleCalculator {
 	private VoyagePlanner voyagePlanner;
 
 	@Inject
-	private PortTimesPlanner portTimesPlanner;
+	private ArrivalTimeScheduler arrivalTimeScheduler;
 
 	@Inject
 	private CapacityViolationChecker capacityViolationChecker;
@@ -122,12 +124,12 @@ public class ScheduleCalculator {
 
 	public ScheduleCalculator() {
 		cache = new LHMCache<>("ScheduleCalculatorCache", (key) -> {
-			return new Pair<>(key, schedule(key.resource, key.sequence, key.arrivalTimes, null));
+			return new Pair<>(key, schedule(key.resource, key.sequence, key.portTimesRecords, null));
 		}, 50_000);
 	}
 
 	@Nullable
-	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
+	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
@@ -141,21 +143,23 @@ public class ScheduleCalculator {
 
 		final List<@NonNull IResource> resources = sequences.getResources();
 
+		final Map<IResource, List<@NonNull IPortTimesRecord>> allPortTimeRecords = arrivalTimeScheduler.schedule(sequences);
+
 		for (int i = 0; i < sequences.size(); ++i) {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			final VolumeAllocatedSequence volumeAllocatedSequence;
+			final List<@NonNull IPortTimesRecord> portTimeRecords = allPortTimeRecords.get(resource);
 			if (solution == null && enableCache && hintEnableCache) {
-				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
-				final Key key = new Key(resource, sequence, arrivalTimes[i]);
+
+				final Key key = new Key(resource, sequence, portTimeRecords);
 				volumeAllocatedSequence = cache.get(key);
 
 				// Verification
 				if (false) {
-					assert arrivalTimes[i] != null;
-					final VolumeAllocatedSequence reference = schedule(resource, sequence, arrivalTimes[i], solution);
+					final VolumeAllocatedSequence reference = schedule(resource, sequence, portTimeRecords, solution);
 
 					if (volumeAllocatedSequence == null && reference == null) {
 						return null;
@@ -167,7 +171,7 @@ public class ScheduleCalculator {
 					}
 				}
 			} else {
-				volumeAllocatedSequence = schedule(resource, sequence, arrivalTimes[i], solution);
+				volumeAllocatedSequence = schedule(resource, sequence, portTimeRecords, solution);
 			}
 
 			if (volumeAllocatedSequence == null) {
@@ -197,9 +201,10 @@ public class ScheduleCalculator {
 	 * @throws InfeasibleVoyageException
 	 */
 	@Nullable
-	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
+	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final List<@NonNull IPortTimesRecord> records,
+			@Nullable final IAnnotatedSolution solution) {
 
-		final VolumeAllocatedSequence volumeAllocatedSequence = doSchedule(resource, sequence, arrivalTimes);
+		final VolumeAllocatedSequence volumeAllocatedSequence = doSchedule(resource, sequence, records);
 		if (volumeAllocatedSequence != null) {
 
 			// Perform capacity violations analysis
@@ -215,14 +220,17 @@ public class ScheduleCalculator {
 	}
 
 	@Nullable
-	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes) {
+	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final List<@NonNull IPortTimesRecord> records) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 			@Nullable
-			final IPortTimesRecord portTimesRecord = portTimesPlanner.makeDESOrFOBPortTimesRecord(resource, sequence);
+			IPortTimesRecord portTimesRecord = null;
+			if (records != null && records.size() > 0) {
+				portTimesRecord = records.get(0);
+			}
 
 			// Virtual vessels are those operated by a third party, for FOB and DES situations.
 			// Should we compute a schedule for them anyway? The arrival times don't mean much,
@@ -230,28 +238,28 @@ public class ScheduleCalculator {
 			return desOrFobSchedule(resource, sequence, portTimesRecord);
 		}
 
-		if (arrivalTimes == null) {
+		if (records == null) {
 			return new VolumeAllocatedSequence(resource, vesselAvailability, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 
 		// If this a cargo round trip sequence, but we have no data (i.e. there are no cargoes), return the basic data structure to avoid any exceptions
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
-		if (isRoundTripSequence && arrivalTimes.length == 0) {
+		if (isRoundTripSequence && records.size() == 0) {
 			return new VolumeAllocatedSequence(resource, vesselAvailability, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
 
-		// Get start time
-		final int startTime = arrivalTimes[0];
-
-		final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes);
+		// // Get start time
+		// final int startTime = arrivalTimes[0];
+		//
+		// final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes);
 
 		// Generate all the voyageplans and extra annotations for this sequence
-		final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, portTimesRecords);
+		final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, records);
 		if (voyagePlans == null) {
 			return null;
 		}
-
+		final int startTime = records.isEmpty() ? 0 : records.get(0).getFirstSlotTime();
 		// Put it all together and return
 		final VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, vesselAvailability, sequence, startTime, voyagePlans);
 

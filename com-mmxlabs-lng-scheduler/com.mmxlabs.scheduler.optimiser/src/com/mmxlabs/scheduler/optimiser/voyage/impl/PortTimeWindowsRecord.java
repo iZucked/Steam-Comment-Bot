@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -22,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 
 	private static class SlotWindowRecord {
-		public ITimeWindow feasibleWindow = null;
+		public MutableTimeWindow feasibleWindow = null;
 		public int duration;
 		public int index;
 
@@ -40,6 +42,11 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 
 			return Objects.hash(feasibleWindow, duration);
 		}
+
+		@Override
+		public @NonNull String toString() {
+			return String.format("Idx %d, Win: %s Dur: %d", feasibleWindow, duration);
+		}
 	}
 
 	// Most voyages are load, discharge, next. DES/FOB cargoes have a start, load, discharge end sequence. 4 elements is a good starting point, although LDD etc style cargoes could start to push this
@@ -47,11 +54,11 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private static final int INITIAL_CAPACITY = 4;
 	private final Map<IPortSlot, SlotWindowRecord> slotRecords = new HashMap<IPortSlot, SlotWindowRecord>(INITIAL_CAPACITY);
 	private final List<IPortSlot> slots = new ArrayList<IPortSlot>(INITIAL_CAPACITY);
-	private ITimeWindow firstSlotFeasibleTimeWindow = null;
+	private MutableTimeWindow firstSlotFeasibleTimeWindow = null;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
 	private IResource resource;
-	
+
 	public PortTimeWindowsRecord() {
 
 	}
@@ -90,9 +97,12 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		}
 		return allocation;
 	}
-	
+
 	@Override
-	public void setSlotFeasibleTimeWindow(final IPortSlot slot, final ITimeWindow timeWindow) {
+	public void setSlotFeasibleTimeWindow(final IPortSlot slot, final MutableTimeWindow timeWindow) {
+		if (getOrCreateSlotRecord(slot).feasibleWindow != null) {
+			// assert false;
+		}
 		getOrCreateSlotRecord(slot).feasibleWindow = timeWindow;
 		// Set or update the first port slot and time
 		if (firstPortSlot == null || slot == firstPortSlot) {
@@ -102,7 +112,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public void setSlot(final IPortSlot slot, final ITimeWindow timeWindow, final int duration, final int index) {
+	public void setSlot(final IPortSlot slot, final MutableTimeWindow timeWindow, final int duration, final int index) {
 		final SlotWindowRecord allocation = getOrCreateSlotRecord(slot);
 		allocation.feasibleWindow = timeWindow;
 		allocation.duration = duration;
@@ -114,14 +124,14 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		}
 	}
 
-	public void setReturnSlotFeasibleTimeWindow(final IPortSlot slot, final ITimeWindow timeWindow) {
+	public void setReturnSlotFeasibleTimeWindow(final IPortSlot slot, final MutableTimeWindow timeWindow) {
 		setSlotFeasibleTimeWindow(slot, timeWindow);
 		// Return slot should not be in list
 		slots.remove(slot);
 		this.returnSlot = slot;
 	}
 
-	public void setReturnSlot(final IPortSlot slot, final ITimeWindow timeWindow, final int duration, final int index) {
+	public void setReturnSlot(final IPortSlot slot, final MutableTimeWindow timeWindow, final int duration, final int index) {
 		setSlot(slot, timeWindow, duration, index);
 		// Return slot should not be in list
 		slots.remove(slot);
@@ -159,7 +169,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public ITimeWindow getSlotFeasibleTimeWindow(final IPortSlot slot) {
+	public MutableTimeWindow getSlotFeasibleTimeWindow(final IPortSlot slot) {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.feasibleWindow;
@@ -168,7 +178,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public ITimeWindow getFirstSlotFeasibleTimeWindow() {
+	public MutableTimeWindow getFirstSlotFeasibleTimeWindow() {
 		return firstSlotFeasibleTimeWindow;
 	}
 
@@ -181,8 +191,8 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	public IPortSlot getReturnSlot() {
 		return returnSlot;
 	}
-	
-	//TODO: remove this
+
+	// TODO: remove this
 	@Override
 	public int getIndex(IPortSlot slot) {
 		SlotWindowRecord allocation = slotRecords.get(slot);
@@ -193,7 +203,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	public IResource getResource() {
 		return resource;
 	}
-	
+
 	public IResource setResource(IResource resource) {
 		return this.resource = resource;
 	}

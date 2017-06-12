@@ -2,9 +2,8 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.fitness.impl;
+package com.mmxlabs.scheduler.optimiser.scheduling;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -24,31 +22,25 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ICustomNonShippedScheduler;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 /**
- * The {@link PortTimesPlanner} creates the initial {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time array from an {@link ISequenceScheduler}
+ * The {@link PortTimesRecordMaker} creates the initial {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time array from an {@link ISequenceScheduler}
  */
-public class PortTimesPlanner {
-
-	@Inject
-	private IElementDurationProvider durationsProvider;
+public class PortTimesRecordMaker {
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-
-	@Inject
-	private IPortTypeProvider portTypeProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -161,10 +153,13 @@ public class PortTimesPlanner {
 	 * 
 	 * @param resource
 	 * @param sequence
-	 * @param arrivalTimes
+	 * @param list
 	 * @return
 	 */
-	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes) {
+	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(int seqIndex, final @NonNull IResource resource, final @NonNull ISequence sequence,
+			final List<IPortTimeWindowsRecord> trimmedWindows, MinTravelTimeData travelTimeData, ISlotTimeScheduler timeScheduler) {
+
+		timeScheduler.startSequence(resource);
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -178,32 +173,75 @@ public class PortTimesPlanner {
 
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 
-		// Find the break points for this sequence
-		final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
+		// The expected arrival based on min travel time as set by the previously seen element.
+		int lastNextExpectedArrivalTime = 0;
 
-		// Create and add first record to the list.
-		PortTimesRecord portTimesRecord = new PortTimesRecord();
+		// If non-null, set the return slot time to the next calculated slot and time.
+		PortTimesRecord recordToUpdateReturnTime = null;
 
-		// Used for cargo short end of sequence checks
-		IPortSlot prevPortSlot = null;
+		Runnable recordUpdate = () -> {
+			IPortTimesRecord firstRecord = portTimesRecords.get(0);
+			IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(0);
+			IPortSlot from = firstRecord.getFirstSlot();
+			IPortSlot to = firstRecord.getSlots().size() > 1 ? firstRecord.getSlots().get(1) : firstRecord.getReturnSlot();
+			if (to != null) {
+				int time = firstRecord.getSlotTime(to);
+				int minTravelTime = travelTimeData.getMinTravelTime(seqIndex, 0);
+				int ideal = time - minTravelTime;
 
-		final Iterator<@NonNull ISequenceElement> itr = sequence.iterator();
+				ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
+				if (ideal < time) {
+					// Earlier than current feasible time, so ignore
+				}
+				if (ideal >= window.getExclusiveEnd()) {
+					// Later than window end, so use window end
+					firstRecord.setSlotTime(from, window.getExclusiveEnd() - 1);
+				} else {
+					// Still within window, so set to this time.
+					firstRecord.setSlotTime(from, ideal);
+				}
+			}
+		};
 
-		for (int idx = 0; itr.hasNext(); ++idx) {
-			final ISequenceElement element = itr.next();
+		boolean updateFirstRecordStartTime = false;
+		for (IPortTimeWindowsRecord record : trimmedWindows) {
+			// Create and add record to the list.
+			PortTimesRecord portTimesRecord = new PortTimesRecord();
+			portTimesRecords.add(portTimesRecord);
 
-			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-			final PortType portType = portTypeProvider.getPortType(element);
+			for (IPortSlot slot : record.getSlots()) {
+				final ITimeWindow window = record.getSlotFeasibleTimeWindow(slot);
+				int visitDuration = record.getSlotDuration(slot);
+				// Pick based on earliest time
+				// TODO: Extract into injectable component
+				int arrivalTime = timeScheduler.scheduleSlot(resource, slot, record, portTimesRecord, lastNextExpectedArrivalTime);
 
-			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationsProvider.getElementDuration(element, resource);
-			// Sequence scheduler should be using the actuals time
-			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == arrivalTimes[idx];
+				assert actualsDataProvider.hasActuals(slot) == false || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
 
-			// Set current slot arrival time and duration (if not end)
-			if (breakSequence[idx]) {
-				if (isRoundTripSequence && portType == PortType.Round_Trip_Cargo_End) {
-					assert prevPortSlot != null;
+				portTimesRecord.setSlotTime(slot, arrivalTime);
+
+				portTimesRecord.setSlotDuration(slot, visitDuration);
+				// What is the next travel time?
+				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(seqIndex, record.getIndex(slot));
+
+				if (recordToUpdateReturnTime != null) {
+					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
+					recordToUpdateReturnTime = null;
+				}
+			}
+
+			if (updateFirstRecordStartTime) {
+				recordUpdate.run();
+				updateFirstRecordStartTime = false;
+			} else if (portTimesRecords.size() == 1 && !isRoundTripSequence) {
+				updateFirstRecordStartTime = true;
+			}
+
+			IPortSlot returnSlot = record.getReturnSlot();
+			if (returnSlot != null) {
+				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
 					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
+					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
 					int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
 					final int availableTime = distanceProvider
@@ -211,87 +249,35 @@ public class PortTimesPlanner {
 							.getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
-					portTimesRecord.setReturnSlotTime(thisPortSlot, roundTripReturnArrivalTime);
-					prevPortSlot = null;
-				} else if (portType == PortType.End) {
-					portTimesRecords.add(portTimesRecord);
+					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
+
+					// Reset arrival time state
+					lastNextExpectedArrivalTime = 0;
+
+				} else if (returnSlot.getPortType() == PortType.End) {
+					ITimeWindow window = record.getSlotFeasibleTimeWindow(returnSlot);
+
+					// Pick based on earliest time
+					// TODO: Extract into injectable component
+					int arrivalTime = window == null ? lastNextExpectedArrivalTime : Math.max(window.getInclusiveStart(), lastNextExpectedArrivalTime);
+
+					// Only one voyage plan, we need to set the start time before adjustending end event.
+					if (updateFirstRecordStartTime) {
+						portTimesRecord.setReturnSlotTime(returnSlot, arrivalTime);
+						recordUpdate.run();
+						updateFirstRecordStartTime = false;
+					}
+
 					// Delegate to the end event schedule to determine correct end time.
-					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTimes[idx], thisPortSlot));
-					// Ensure this is the end of the loop
-					assert (sequence.size() == idx + 1);
-
-					break;
+					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTime, returnSlot));
 				} else {
-					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
+					// portTimesRecord.setReturnSlotTime(thisPortSlot, list[idx]);
+					recordToUpdateReturnTime = portTimesRecord;
 				}
-				// Return elements always have a duration of zero
-				portTimesRecord.setSlotDuration(thisPortSlot, 0);
-			} else {
-				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
-				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
 			}
-
-			// Is this the end of the sequence? If so, start new port times record
-			if (breakSequence[idx]) {
-				portTimesRecords.add(portTimesRecord);
-
-				if (!isRoundTripSequence) {
-					// This should have been caught above!
-					assert (sequence.size() != idx + 1);
-				}
-				// Is this the last element? Do not start a new PortTimesRecord and break out instead
-				if (sequence.size() == idx + 1) {
-					break;
-				}
-
-				// Reset object ref
-				portTimesRecord = new PortTimesRecord();
-				if (!isRoundTripSequence) {
-					// Round trip cargoes skip this element
-					portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
-					portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
-				}
-
-			}
-
-			// Setup for next iteration
-			prevPortSlot = thisPortSlot;
 		}
 
 		return portTimesRecords;
 	}
 
-	/**
-	 * Returns an array of boolean values indicating whether, for each index of the vessel location sequence, a sequence break occurs at that location (separating one cargo from the next one).
-	 * 
-	 * @param sequence
-	 * @return
-	 */
-	public boolean @NonNull [] findSequenceBreaks(final @NonNull ISequence sequence, boolean isRoundTripSequence) {
-		final boolean @NonNull [] result = new boolean[sequence.size()];
-
-		int idx = 0;
-		for (final ISequenceElement element : sequence) {
-			final PortType portType = portTypeProvider.getPortType(element);
-			switch (portType) {
-			case Load:
-				result[idx] = !isRoundTripSequence && (idx > 0); // don't break on first load port
-				break;
-			case CharterOut:
-			case DryDock:
-			case Other:
-			case Maintenance:
-			case Round_Trip_Cargo_End:
-			case End:
-				result[idx] = true;
-				break;
-			default:
-				result[idx] = false;
-				break;
-			}
-			idx++;
-		}
-
-		return result;
-	}
 }

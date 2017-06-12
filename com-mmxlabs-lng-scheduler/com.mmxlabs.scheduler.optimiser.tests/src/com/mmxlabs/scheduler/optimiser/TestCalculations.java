@@ -1135,6 +1135,7 @@ public class TestCalculations {
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
 
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);

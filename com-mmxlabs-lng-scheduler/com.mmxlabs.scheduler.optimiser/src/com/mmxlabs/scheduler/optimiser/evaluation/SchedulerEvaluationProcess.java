@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
@@ -43,10 +42,6 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	@NonNull
 	public static final String ADDITIONAL_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-additional-elements";
-
-	@Inject
-	@NonNull
-	private ISequenceScheduler scheduler;
 
 	@Inject
 	private ScheduleCalculator scheduleCalculator;
@@ -75,14 +70,14 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	private boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {
 		if (phase == Phase.Checked_Evaluation) {
-			// Calculate arrival times for sequences
-			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
-			if (arrivalTimes == null) {
-				return false;
-			}
+//			// Calculate arrival times for sequences
+//			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
+//			if (arrivalTimes == null) {
+//				return false;
+//			}
 
 			@Nullable
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences,  solution);
 			if (volumeAllocatedSequences == null) {
 				return false;
 			}

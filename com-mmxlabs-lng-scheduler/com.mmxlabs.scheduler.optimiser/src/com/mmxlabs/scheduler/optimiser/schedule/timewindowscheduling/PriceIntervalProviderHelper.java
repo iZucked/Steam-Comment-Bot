@@ -22,6 +22,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -714,7 +715,7 @@ public class PriceIntervalProviderHelper {
 
 	void createAndSetTimeWindow(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IPortSlot slot, final int start, final int end) {
 		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(slot);
-		final TimeWindow feasibleTimeWindow = new TimeWindow(start, end, timeWindow.getExclusiveEndFlex());
+		final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(start, end, timeWindow.getExclusiveEndFlex());
 		portTimeWindowRecord.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 	}
 

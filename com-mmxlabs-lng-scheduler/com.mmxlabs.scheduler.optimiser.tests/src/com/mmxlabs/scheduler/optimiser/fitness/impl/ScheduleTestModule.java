@@ -50,7 +50,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -60,7 +59,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -134,34 +132,11 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private ISequenceScheduler provideSchedulerFactory(final Injector injector) {
-		// final ISchedulerFactory factory = new ISchedulerFactory() {
-		//
-		// @Override
-		// public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
-		// //
-		// final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
-		// // TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-		// scheduleEvaluator.setFitnessComponents(schedulerComponents);
-		// injector.injectMembers(scheduleEvaluator);
-
-		final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-		// scheduler.setScheduleEvaluator(scheduleEvaluator);
-		injector.injectMembers(scheduler);
-		return scheduler;
-		// }
-		// };
-		// return factory;
-	}
-
-	@Provides
-	@Singleton
 	private IConstraintCheckerRegistry createConstraintRegistry(final Injector injector) {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
 		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
-		injector.injectMembers(constraintFactory);
 
 		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);

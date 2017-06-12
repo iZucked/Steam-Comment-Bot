@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public final class SchedulerConstants {
 
 	// Caching constants - used in injection framework
+	public static final String Key_ArrivalTimeCache = "cache-arrival-times";
 	public static final String Key_VolumeAllocationCache = "cache-volume-allocation";
 	public static final String Key_VolumeAllocatedSequenceCache = "cache-volume-allocated-sequence";
 	public static final String Key_ProfitandLossCache = "cache-profit-and-loss";
@@ -38,4 +39,7 @@ public final class SchedulerConstants {
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
 	 */
 	public static final String G_AI_scheduledSequence = "general-info-scheduleSequence";
+
+	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
+	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
 }

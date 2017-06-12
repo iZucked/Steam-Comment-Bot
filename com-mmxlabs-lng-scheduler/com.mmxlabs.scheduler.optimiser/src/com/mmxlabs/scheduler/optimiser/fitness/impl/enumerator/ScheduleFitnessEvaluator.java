@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -21,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * The {@link ScheduleFitnessEvaluator} evaluates the linear fitness (using {@link ICargoSchedulerFitnessComponent}s) of a {@link ScheduledSequences} after the {@link ScheduleCalculator} has processed
- * it. It is intended to be used within a {@link ISequenceScheduler} to compare one {@link ScheduledSequences} to another one.
+ * it.
  */
 public class ScheduleFitnessEvaluator {
 
