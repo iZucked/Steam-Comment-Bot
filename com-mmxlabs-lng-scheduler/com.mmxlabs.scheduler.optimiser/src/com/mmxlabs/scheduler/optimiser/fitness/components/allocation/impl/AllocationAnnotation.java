@@ -82,7 +82,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			assert portSlot != null;
 			getSlots().add(portSlot);
 			setSlotTime(portSlot, portTimesRecord.getSlotTime(portSlot));
-			setSlotTime(portSlot, portTimesRecord.getSlotDuration(portSlot));
+			setSlotDuration(portSlot, portTimesRecord.getSlotDuration(portSlot));
 			setRouteOptionSlot(portSlot, portTimesRecord.getRouteOptionSlot(portSlot));
 			setSlotNextVoyageOptions(portSlot, portTimesRecord.getSlotNextVoyageOptions(portSlot));
 		}

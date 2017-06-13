@@ -848,10 +848,10 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 							// Actuals - use window directly
 							windowStartTime[index] = window.getInclusiveStart();
 						} else {
-
+							final IPortSlot p_prevPortSlot = prevPortSlot;
 							IPort panamaEntry = distanceProvider.getRouteOptionEntry(prevPortSlot.getPort(), ERouteOption.PANAMA);
 							Optional<IRouteOptionSlot> potentialSlot = assignedSlots.get(panamaEntry).stream().filter(e -> {
-								return e.getSlot().isPresent() && e.getSlot().get().equals(portSlot);
+								return e.getSlot().isPresent() && e.getSlot().get().equals(p_prevPortSlot);
 							}).findFirst();
 
 							int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(),
@@ -862,10 +862,12 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 								// window has a slot
 								throughPanama[sequenceIndex][index - 1] = true;
 								portTimeWindowsRecord.setRouteOptionSlot(prevPortSlot, potentialSlot.get());
-
+								
 								// check if it can be reached in time
 								if (windowStartTime[index - 1] + toCanal + panamaSlotsProvider.getMargin() < potentialSlot.get().getSlotDate()) {
 									routeOptionSlot[sequenceIndex][index - 1] = potentialSlot.get();
+									currentPortTimeRecord.setRouteOptionSlot(prevPortSlot, potentialSlot.get());
+
 									int fromEntryPoint = distanceProvider.getTravelTime(potentialSlot.get().getRouteOption(), vesselAvailability.getVessel(), potentialSlot.get().getEntryPoint(),
 											portSlot.getPort(), potentialSlot.get().getSlotDate(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
 									// Visit duration should implicitly be included in this calculation.

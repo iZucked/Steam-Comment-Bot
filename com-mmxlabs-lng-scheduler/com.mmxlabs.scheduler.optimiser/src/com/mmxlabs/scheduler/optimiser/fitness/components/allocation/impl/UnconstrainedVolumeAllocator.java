@@ -97,10 +97,14 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				throw new IllegalStateException("Actuals Volume Mode, but no actuals specified");
 			}
 			annotation.getSlots().add(slot);
+		
+			
 			// TODO: This is keyed to E DES sale actuals requirements. Needs further customisability...
 			// Actuals mode, take values directly from sale
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(salesSlot));
 			annotation.setSlotDuration(slot, 0);
+			annotation.setRouteOptionSlot(slot, allocationRecord.portTimesRecord.getRouteOptionSlot(slot));
+			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot));
 
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
 			annotation.setPhysicalSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
@@ -149,6 +153,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			assert allocationRecord.portTimesRecord.getSlotDuration(slot) == (isFOBOrDES ? 0 : actualsDataProvider.getVisitDuration(slot));
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
+			annotation.setRouteOptionSlot(slot, allocationRecord.portTimesRecord.getRouteOptionSlot(slot));
+			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot));
 
 			// Actuals mode, take values directly
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
@@ -495,6 +501,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.getSlots().add(slot);
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
+			annotation.setRouteOptionSlot(slot, allocationRecord.portTimesRecord.getRouteOptionSlot(slot));
+			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot));
 
 			if (actualsDataProvider.hasActuals(slot)) {
 				annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));

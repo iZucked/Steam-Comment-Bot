@@ -269,14 +269,14 @@ public class PortTimesPlanner {
 				// TODO: Feature guard
 				if (throughPanama[idx]) {
 					// Forced panama
-					currentRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.PANAMA_ONLY);
+					portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.PANAMA_ONLY);
 				} else {
 					if (arrivalTimes[idx] > panamaSlotsProvider.getRelaxedBoundary()) {
 						// Past relaxed boundary, optimal choice
-						currentRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.OPTIMAL);
+						portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.OPTIMAL);
 					} else {
 						// Exclude direct
-						currentRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
+						portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
 					}
 				}
 			}
