@@ -654,7 +654,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	 * Trim time windows subject to available slots for Panama.
 	 */
 	protected final void trimPanama(){
-		portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
 		
 		Map<IPort, Set<IRouteOptionSlot>> assignedSlots = new HashMap<IPort, Set<IRouteOptionSlot>>();
 		Map<IPort, Set<IRouteOptionSlot>> unassignedSlots = new HashMap<IPort, Set<IRouteOptionSlot>>();
@@ -665,19 +664,20 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		});
 		
 		for (int sequenceIndex = 0; sequenceIndex < sequences.size(); sequenceIndex++) {
+			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
 			
 			final ISequence sequence = sequences.getSequence(sequenceIndex);
 			final IResource resource = sequences.getResources().get(sequenceIndex);
 
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-				return;
+				continue;
 			}
 
 			final int size = sequence.size();
 			// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
 			if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
-				return;
+				continue;
 			}
 			
 			resizeAll(sequenceIndex, size);
@@ -914,6 +914,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 									int travelTime =  toCanal + panamaSlotsProvider.getMargin() + fromEntryPoint;
 									
 									if(slot.getSlotDate() + fromEntryPoint < windowEndTime[index]){
+										
 										selectedTimeToNextElement[index - 1] = travelTime;
 										routeOptionSlot[sequenceIndex][index - 1] = slot;
 										portTimeWindowsRecord.setRouteOptionSlot(slot);
