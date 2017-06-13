@@ -85,16 +85,21 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 	@Override
 	public void finishTransforming() {
 		final Map<IPort, SortedSet<IRouteOptionSlot>> panamaSlots = new HashMap<>();
-		providedPanamaSlots.forEach(slot -> {
-			final IPort optPort = modelEntityMap.getOptimiserObject(slot.getEntryPoint().getPort(), IPort.class);
+		providedPanamaSlots.forEach(eBooking -> {
+			final IPort optPort = modelEntityMap.getOptimiserObject(eBooking.getEntryPoint().getPort(), IPort.class);
 			if (optPort == null) {
-				throw new IllegalStateException("No optimiser port found for: " + slot.getEntryPoint().getName());
+				throw new IllegalStateException("No optimiser port found for: " + eBooking.getEntryPoint().getName());
 			}
-			final int date = dateAndCurveHelper.convertTime(slot.getSlotDate());
-			final IRouteOptionSlot optimiserSlot = IRouteOptionSlot.of(date, optPort, ERouteOption.PANAMA);
-			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<>()).add(optimiserSlot);
+			final int date = dateAndCurveHelper.convertTime(eBooking.getSlotDate());
+			final IRouteOptionSlot oBooking;
+			if (eBooking.getSlot() != null) {
+				oBooking = IRouteOptionSlot.of(date, optPort, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
+			} else {
+				oBooking = IRouteOptionSlot.of(date, optPort, ERouteOption.PANAMA);
+			}
+			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<>()).add(oBooking);
 
-			modelEntityMap.addModelObject(slot, optimiserSlot);
+			modelEntityMap.addModelObject(eBooking, oBooking);
 		});
 
 		panamaSlotsProviderEditor.setSlots(panamaSlots);

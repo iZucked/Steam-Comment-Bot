@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -48,7 +49,10 @@ public class JourneyEventExporter {
 		@NonNull
 		final VoyageOptions options = voyageDetails.getOptions();
 
-		final Port eFromPort = modelEntityMap.getModelObject(options.getFromPortSlot().getPort(), Port.class);
+		@NonNull
+		IPortSlot fromPortSlot = options.getFromPortSlot();
+	
+		final Port eFromPort = modelEntityMap.getModelObject(fromPortSlot.getPort(), Port.class);
 		final Port eToPort = modelEntityMap.getModelObject(options.getToPortSlot().getPort(), Port.class);
 
 		if (eFromPort == null || eToPort == null) {
@@ -75,12 +79,12 @@ public class JourneyEventExporter {
 		journey.setSpeed(OptimiserUnitConvertor.convertToExternalSpeed(voyageDetails.getSpeed()));
 
 		journey.getFuels().addAll(exportFuelData(voyageDetails));
-
-		IPortTimesRecord portTimesRecord = volumeAllocatedSequence.getPortTimesRecord(options.getFromPortSlot());
+		
+		IPortTimesRecord portTimesRecord = volumeAllocatedSequence.getPortTimesRecord(fromPortSlot);
 
 		// set canal booking if present
-		if (portTimesRecord.getRouteOptionSlot(options.getFromPortSlot()) != null) {
-			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionSlot(options.getFromPortSlot()), CanalBookingSlot.class);
+		if (portTimesRecord.getRouteOptionSlot(fromPortSlot) != null) {
+			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionSlot(fromPortSlot), CanalBookingSlot.class);
 			journey.setCanalBooking(canalBookingSlot);
 			journey.setCanalEntry(canalBookingSlot.getEntryPoint());
 			journey.setCanalDate(canalBookingSlot.getSlotDate());
