@@ -30,4 +30,6 @@ public interface ISequenceScheduler {
 	int @Nullable [][] schedule(@NonNull ISequences sequences);
 	
 	IRouteOptionSlot[][] slotsAssigned();
+	
+	boolean[][] canalDecision();
 }

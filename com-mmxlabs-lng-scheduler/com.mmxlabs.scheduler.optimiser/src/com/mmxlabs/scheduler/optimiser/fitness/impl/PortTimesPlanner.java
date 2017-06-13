@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -35,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ICustomNonShippedScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 /**
@@ -68,6 +70,9 @@ public class PortTimesPlanner {
 
 	@Inject
 	private IEndEventScheduler endEventScheduler;
+
+	@Inject
+	private IPanamaSlotsProvider panamaSlotsProvider;
 
 	/**
 	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
@@ -165,7 +170,8 @@ public class PortTimesPlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionSlot[] assignedSlots) {
+	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes,
+			final IRouteOptionSlot[] assignedSlots, final boolean[] throughPanama) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -192,7 +198,7 @@ public class PortTimesPlanner {
 
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
-
+			PortTimesRecord currentRecord = portTimesRecord;
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
 
@@ -253,11 +259,28 @@ public class PortTimesPlanner {
 				}
 
 			}
-			
-			if (assignedSlots[idx] != null){
-				portTimesRecord.setRouteOptionSlot(assignedSlots[idx]);
+
+			if (assignedSlots[idx] != null) {
+				portTimesRecord.setRouteOptionSlot(thisPortSlot, assignedSlots[idx]);
 			}
-			
+
+			if (portType != PortType.Round_Trip_Cargo_End) {
+
+				// TODO: Feature guard
+				if (throughPanama[idx]) {
+					// Forced panama
+					currentRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.PANAMA_ONLY);
+				} else {
+					if (arrivalTimes[idx] > panamaSlotsProvider.getRelaxedBoundary()) {
+						// Past relaxed boundary, optimal choice
+						currentRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.OPTIMAL);
+					} else {
+						// Exclude direct
+						currentRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
+					}
+				}
+			}
+
 			// Setup for next iteration
 			prevPortSlot = thisPortSlot;
 		}

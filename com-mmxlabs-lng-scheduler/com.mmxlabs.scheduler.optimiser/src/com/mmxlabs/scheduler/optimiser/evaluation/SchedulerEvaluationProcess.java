@@ -61,7 +61,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	@Inject
 	private IOptimisationData optimisationData;
-	
+
 	@Override
 	public boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 		return evaluate(phase, sequences, evaluationState, null);
@@ -79,12 +79,13 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 			// Calculate arrival times for sequences
 			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
 			IRouteOptionSlot[][] assignedSlots = scheduler.slotsAssigned();
+			boolean[][] throughPanama = scheduler.canalDecision();
 			if (arrivalTimes == null) {
 				return false;
 			}
 
 			@Nullable
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, arrivalTimes, assignedSlots, solution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, arrivalTimes, assignedSlots, throughPanama, solution);
 			if (volumeAllocatedSequences == null) {
 				return false;
 			}

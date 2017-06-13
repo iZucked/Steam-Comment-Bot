@@ -32,7 +32,8 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
-	@NonNull List<@NonNull IPortSlot> getSlots();
+	@NonNull
+	List<@NonNull IPortSlot> getSlots();
 
 	int getSlotTime(@NonNull IPortSlot slot);
 
@@ -49,7 +50,8 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 */
 	int getFirstSlotTime();
 
-	@NonNull IPortSlot getFirstSlot();
+	@NonNull
+	IPortSlot getFirstSlot();
 
 	/**
 	 * Returns the final slot in the slots list
@@ -57,13 +59,14 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * @return
 	 */
 	IPortSlot getReturnSlot();
-	
-	
-	@Nullable IRouteOptionSlot getRouteOptionSlot();
-	void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot);
 
-	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
+	@Nullable
+	IRouteOptionSlot getRouteOptionSlot(@NonNull IPortSlot slot);
 
-	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
+	void setRouteOptionSlot(@NonNull IPortSlot slot, @Nullable IRouteOptionSlot routeOptionSlot);
+
+	void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute);
+
+	AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot);
 
 }

@@ -105,4 +105,9 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 	public IRouteOptionSlot[][] slotsAssigned() {
 		throw new UnsupportedOperationException("Not implemented");
 	}
+
+	@Override
+	public boolean[][] canalDecision() {
+		throw new UnsupportedOperationException("Not implemented");
+	}
 }

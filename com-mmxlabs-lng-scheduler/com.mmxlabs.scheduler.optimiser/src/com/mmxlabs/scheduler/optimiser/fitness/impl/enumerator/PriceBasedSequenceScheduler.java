@@ -42,7 +42,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		setSequences(sequences);
 
 		prepare();
-		trim();
+		trimPanama();
 		endsSet = new boolean[arrivalTimes.length];
 
 		sequentialEarliestTimePriceBasedWindowTrimming(sequences, portTimeWindowsRecords);

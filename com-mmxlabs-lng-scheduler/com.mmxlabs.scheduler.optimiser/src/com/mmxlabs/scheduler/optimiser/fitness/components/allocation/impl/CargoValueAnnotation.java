@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing {@link IAllocationAnnotation} instance adding on the {@link ICargoValueAnnotation} specific data items. Internally very
@@ -297,12 +298,23 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public @Nullable IRouteOptionSlot getRouteOptionSlot() {
-		return allocationAnnotation.getRouteOptionSlot();
+	public @Nullable IRouteOptionSlot getRouteOptionSlot(IPortSlot slot) {
+		return allocationAnnotation.getRouteOptionSlot(slot);
 	}
 
 	@Override
-	public void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot) {
-		allocationAnnotation.setRouteOptionSlot(routeOptionSlot);
+	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+		allocationAnnotation.setRouteOptionSlot(slot, routeOptionSlot);
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot) {
+		return allocationAnnotation.getSlotNextVoyageOptions(slot);
+	}
+
+	@Override
+	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute) {
+		allocationAnnotation.setSlotNextVoyageOptions(slot, nextVoyageRoute);
+
 	}
 }

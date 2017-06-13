@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * @author hinton
@@ -35,6 +36,8 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int startTime;
 		public int duration;
+		public IRouteOptionSlot routeOptionSlot;
+		public AvailableRouteChoices nextVoyageRouteChoice;
 
 		@Override
 		public boolean equals(Object obj) {
@@ -48,7 +51,9 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 						&& commercialVolumeInMMBTu == other.commercialVolumeInMMBTu //
 						&& cargoCV == other.cargoCV //
 						&& startTime == other.startTime //
-						&& duration == other.duration;
+						&& duration == other.duration //
+						&& nextVoyageRouteChoice == other.nextVoyageRouteChoice //
+						&& Objects.equal(routeOptionSlot, other.routeOptionSlot);
 
 			}
 
@@ -78,12 +83,13 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			getSlots().add(portSlot);
 			setSlotTime(portSlot, portTimesRecord.getSlotTime(portSlot));
 			setSlotTime(portSlot, portTimesRecord.getSlotDuration(portSlot));
+			setRouteOptionSlot(portSlot, portTimesRecord.getRouteOptionSlot(portSlot));
+			setSlotNextVoyageOptions(portSlot, portTimesRecord.getSlotNextVoyageOptions(portSlot));
 		}
 		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
 		if (returnSlot != null) {
 			setReturnSlotTime(returnSlot, portTimesRecord.getSlotDuration(returnSlot));
 		}
-		setRouteOptionSlot(portTimesRecord.getRouteOptionSlot());
 	}
 
 	@Override
@@ -327,14 +333,32 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public @Nullable IRouteOptionSlot getRouteOptionSlot() {
-		// TODO Auto-generated method stub
-		return null;
+	public @Nullable IRouteOptionSlot getRouteOptionSlot(IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.routeOptionSlot;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
 	@Override
-	public void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot) {
-		// TODO Auto-generated method stub
-		
+	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+		getOrCreateSlotAllocation(slot).routeOptionSlot = routeOptionSlot;
+
 	}
+
+	@Override
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		getOrCreateSlotAllocation(slot).nextVoyageRouteChoice = nextVoyageRoute;
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.nextVoyageRouteChoice;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
 }
