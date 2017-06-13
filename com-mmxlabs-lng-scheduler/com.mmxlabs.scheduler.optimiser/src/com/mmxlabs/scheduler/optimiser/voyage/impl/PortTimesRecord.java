@@ -32,8 +32,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	private static final class SlotVoyageRecord {
 		public int startTime;
 		public int duration;
-		
-		
+		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 
 		@Override
 		public boolean equals(final Object obj) {
@@ -41,7 +40,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 				return true;
 			} else if (obj instanceof SlotVoyageRecord) {
 				final SlotVoyageRecord other = (SlotVoyageRecord) obj;
-				return startTime == other.startTime && duration == other.duration;
+				return startTime == other.startTime && duration == other.duration && nextVoyageRoute == other.nextVoyageRoute;
 			}
 			return false;
 		}
@@ -49,7 +48,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 		@Override
 		public int hashCode() {
 
-			return Objects.hash(startTime, duration);
+			return Objects.hash(startTime, duration, nextVoyageRoute);
 		}
 	}
 
@@ -164,6 +163,20 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
 		getOrCreateSlotRecord(slot).duration = duration;
+	}
+
+	@Override
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(final IPortSlot slot) {
+		final SlotVoyageRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.nextVoyageRoute;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
 	@Override

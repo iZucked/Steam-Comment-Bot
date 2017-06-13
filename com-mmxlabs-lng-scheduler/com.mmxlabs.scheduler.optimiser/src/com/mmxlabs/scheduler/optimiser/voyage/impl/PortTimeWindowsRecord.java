@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.RouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
@@ -27,20 +26,25 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		public ITimeWindow feasibleWindow = null;
 		public int duration;
 		public int index;
+		private IRouteOptionSlot routeOptionSlot = null;
+		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj instanceof SlotWindowRecord) {
 				final SlotWindowRecord other = (SlotWindowRecord) obj;
-				return feasibleWindow == other.feasibleWindow && duration == other.duration;
+				return feasibleWindow == other.feasibleWindow //
+						&& duration == other.duration //
+						&& nextVoyageRoute == other.nextVoyageRoute //
+						&& routeOptionSlot == other.routeOptionSlot //
+				;
 			}
 			return false;
 		}
 
 		@Override
 		public int hashCode() {
-
-			return Objects.hash(feasibleWindow, duration);
+			return Objects.hash(feasibleWindow, duration, nextVoyageRoute);
 		}
 	}
 
@@ -53,8 +57,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
 	private IResource resource;
-	private IRouteOptionSlot routeOptionSlot = null;
-	
+
 	public PortTimeWindowsRecord() {
 
 	}
@@ -93,7 +96,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		}
 		return allocation;
 	}
-	
+
 	@Override
 	public void setSlotFeasibleTimeWindow(final IPortSlot slot, final ITimeWindow timeWindow) {
 		getOrCreateSlotRecord(slot).feasibleWindow = timeWindow;
@@ -184,8 +187,8 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	public IPortSlot getReturnSlot() {
 		return returnSlot;
 	}
-	
-	//TODO: remove this
+
+	// TODO: remove this
 	@Override
 	public int getIndex(IPortSlot slot) {
 		SlotWindowRecord allocation = slotRecords.get(slot);
@@ -196,16 +199,37 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	public IResource getResource() {
 		return resource;
 	}
-	
+
 	public IResource setResource(IResource resource) {
 		return this.resource = resource;
 	}
 
-	public IRouteOptionSlot getRouteOptionSlot() {
-		return routeOptionSlot;
+	@Override
+	public IRouteOptionSlot getRouteOptionSlot(final IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.routeOptionSlot;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
-	public void setRouteOptionSlot(IRouteOptionSlot routeOptionSlot) {
-		this.routeOptionSlot = routeOptionSlot;
+	@Override
+	public void setRouteOptionSlot(final IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+		getOrCreateSlotRecord(slot).routeOptionSlot = routeOptionSlot;
 	}
+
+	@Override
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(final IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.nextVoyageRoute;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
 }

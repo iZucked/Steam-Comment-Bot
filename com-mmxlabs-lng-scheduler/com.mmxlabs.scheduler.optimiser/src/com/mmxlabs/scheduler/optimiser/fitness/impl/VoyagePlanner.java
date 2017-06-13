@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -39,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -55,6 +57,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -116,6 +119,8 @@ public class VoyagePlanner {
 	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
 	 * messes with the VPO).
 	 * 
+	 * @param portTimesRecord
+	 * 
 	 * @param vessel
 	 * @param vesselState
 	 * @param availableTime
@@ -125,8 +130,8 @@ public class VoyagePlanner {
 	 * @param useNBO
 	 * @return
 	 */
-	private @NonNull VoyageOptions getVoyageOptionsAndSetVpoChoices(final @NonNull IVesselAvailability vesselAvailability, final @NonNull VesselState vesselState, final int voyageStartTime,
-			final int availableTime, final @NonNull IPortSlot prevPortSlot, final @NonNull IPortSlot thisPortSlot, final @Nullable VoyageOptions previousOptions,
+	private @NonNull VoyageOptions getVoyageOptionsAndSetVpoChoices(final @NonNull IVesselAvailability vesselAvailability, IPortTimesRecord portTimesRecord, final @NonNull VesselState vesselState,
+			final int voyageStartTime, final int availableTime, final @NonNull IPortSlot prevPortSlot, final @NonNull IPortSlot thisPortSlot, final @Nullable VoyageOptions previousOptions,
 			final @NonNull List<@NonNull IVoyagePlanChoice> vpoChoices, boolean useNBO) {
 
 		@NonNull
@@ -257,6 +262,42 @@ public class VoyagePlanner {
 		}
 
 		final List<@NonNull DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(prevPort, thisPort, voyageStartTime, vessel);
+		if (distances.isEmpty()) {
+			throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
+		}
+		assert !distances.isEmpty();
+
+		AvailableRouteChoices slotNextVoyageOptions = portTimesRecord.getSlotNextVoyageOptions(prevPortSlot);
+
+		Predicate<DistanceMatrixEntry> filter = null;
+
+		switch (slotNextVoyageOptions) {
+
+		case DIRECT_ONLY:
+			filter = entry -> entry.getRoute() != ERouteOption.DIRECT;
+			break;
+		case EXCLUDE_PANAMA:
+			filter = entry -> entry.getRoute() == ERouteOption.PANAMA;
+			break;
+		case OPTIMAL:
+			filter = entry -> false;
+			break;
+		case PANAMA_ONLY:
+			filter = entry -> entry.getRoute() != ERouteOption.PANAMA;
+			break;
+		case SUEZ_ONLY:
+			filter = entry -> entry.getRoute() != ERouteOption.SUEZ;
+			break;
+		case UNDEFINED:
+		default:
+			assert false;
+			// Assume optimal if assertions off.
+			filter = entry -> false;
+			break;
+		}
+		// Remove forbidden route options.
+		distances.removeIf(filter);
+
 		if (distances.isEmpty()) {
 			throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
 		}
@@ -400,8 +441,8 @@ public class VoyagePlanner {
 					final int voyageStartTime = prevArrivalTime + portTimesRecord.getSlotDuration(prevPortSlot);
 
 					final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
-					final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot, previousOptions,
-							vpoChoices, useNBO);
+					final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot,
+							previousOptions, vpoChoices, useNBO);
 					useNBO = options.useNBOForTravel();
 					voyageOrPortOptions.add(options);
 					previousOptions = options;
@@ -858,8 +899,8 @@ public class VoyagePlanner {
 				final int availableTravelTime = thisArrivalTime - prevArrivalTime - portTimesRecord.getSlotDuration(prevPortSlot);
 
 				final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
-				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot, previousOptions,
-						vpoChoices, useNBO);
+				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot,
+						previousOptions, vpoChoices, useNBO);
 				useNBO = options.useNBOForTravel();
 				voyageOrPortOptions.add(options);
 				previousOptions = options;

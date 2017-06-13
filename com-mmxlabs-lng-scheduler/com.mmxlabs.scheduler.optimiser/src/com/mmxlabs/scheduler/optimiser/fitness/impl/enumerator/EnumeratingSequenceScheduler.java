@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 /**
@@ -862,7 +863,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 							if (potentialSlot.isPresent()){
 								// window has a slot
 								throughPanama[sequenceIndex][index-1] = true;
-								portTimeWindowsRecord.setRouteOptionSlot(potentialSlot.get());
+								portTimeWindowsRecord.setRouteOptionSlot(prevPortSlot, potentialSlot.get());
 								
 								// check if it can be reached in time
 								if (windowStartTime[index - 1] + toCanal + panamaSlotsProvider.getMargin() < potentialSlot.get().getSlotDate()){
@@ -918,7 +919,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 										
 										selectedTimeToNextElement[index - 1] = travelTime;
 										routeOptionSlot[sequenceIndex][index - 1] = slot;
-										portTimeWindowsRecord.setRouteOptionSlot(slot);
+										portTimeWindowsRecord.setRouteOptionSlot(prevPortSlot, slot);
 										break;
 									}
 								}
@@ -927,6 +928,18 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 							// window end time has to be after window start time
 							windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
 						}
+					}
+				}
+				if (throughPanama[sequenceIndex][index - 1]) {
+					// Forced panama
+					portTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY);
+				} else {
+					if (windowStartTime[index] > panamaSlotsProvider.getRelaxedBoundary()) {
+						// Past relaxed boundary, optimal choice
+						portTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL);
+					} else {
+						// Exclude direct
+						portTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
 					}
 				}
 
