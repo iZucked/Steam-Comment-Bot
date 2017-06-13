@@ -4,19 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -25,29 +19,21 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.ImmutableSet;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.impl.CargoModelImpl;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.port.EntryPoint;
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -55,7 +41,6 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
 
 /**
@@ -65,10 +50,10 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 	@Inject
 	private IPanamaSlotsProviderEditor panamaSlotsProviderEditor;
-	
+
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
-	
+
 	@Inject
 	private ModelEntityMap modelEntityMap;
 
@@ -76,39 +61,44 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 	private int relaxedBoundaryOffsetDays;
 	private int relaxedSlotCount;
 	private int strictBoundaryOffsetDays;
-	
+
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
-		Optional<Route> potentialPanama = rootObject.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		if (!potentialPanama.isPresent()){
+		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		if (!potentialPanama.isPresent()) {
 			return;
 		}
-		
-		this.providedPanamaSlots.addAll(rootObject.getCargoModel().getCanalBookings().getCanalBookingSlots());
-		
-		strictBoundaryOffsetDays = rootObject.getCargoModel().getCanalBookings().getStrictBoundaryOffsetDays();
-		relaxedBoundaryOffsetDays = rootObject.getCargoModel().getCanalBookings().getRelaxedBoundaryOffsetDays();
-		relaxedSlotCount = rootObject.getCargoModel().getCanalBookings().getFlexibleSlotAmount();
+
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(rootObject);
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
+		if (canalBookings == null) {
+			return;
+		}
+		this.providedPanamaSlots.addAll(canalBookings.getCanalBookingSlots());
+
+		strictBoundaryOffsetDays = canalBookings.getStrictBoundaryOffsetDays();
+		relaxedBoundaryOffsetDays = canalBookings.getRelaxedBoundaryOffsetDays();
+		relaxedSlotCount = canalBookings.getFlexibleSlotAmount();
 	}
 
 	@Override
 	public void finishTransforming() {
-		Map<IPort, SortedSet<IRouteOptionSlot>> panamaSlots = new HashMap<>();
+		final Map<IPort, SortedSet<IRouteOptionSlot>> panamaSlots = new HashMap<>();
 		providedPanamaSlots.forEach(slot -> {
-			IPort optPort = modelEntityMap.getOptimiserObject(slot.getEntryPoint().getPort(), IPort.class);
-			if (optPort == null){
+			final IPort optPort = modelEntityMap.getOptimiserObject(slot.getEntryPoint().getPort(), IPort.class);
+			if (optPort == null) {
 				throw new IllegalStateException("No optimiser port found for: " + slot.getEntryPoint().getName());
 			}
-			int date = dateAndCurveHelper.convertTime(slot.getSlotDate());
-			IRouteOptionSlot optimiserSlot = IRouteOptionSlot.of(date, optPort, ERouteOption.PANAMA);
-			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<>())
-			.add(optimiserSlot);
-			
+			final int date = dateAndCurveHelper.convertTime(slot.getSlotDate());
+			final IRouteOptionSlot optimiserSlot = IRouteOptionSlot.of(date, optPort, ERouteOption.PANAMA);
+			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<>()).add(optimiserSlot);
+
 			modelEntityMap.addModelObject(slot, optimiserSlot);
 		});
 
 		panamaSlotsProviderEditor.setSlots(panamaSlots);
-		
+
 		panamaSlotsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
 		panamaSlotsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);
 		panamaSlotsProviderEditor.setRelaxedSlotCount(relaxedSlotCount);
@@ -116,7 +106,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 	@Override
 	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
-	
+
 	}
 
 	@Override

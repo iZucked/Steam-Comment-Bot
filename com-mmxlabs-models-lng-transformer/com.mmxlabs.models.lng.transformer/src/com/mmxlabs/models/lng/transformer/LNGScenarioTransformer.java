@@ -289,7 +289,6 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
-	
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -830,7 +829,7 @@ public class LNGScenarioTransformer {
 		buildMarkToMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
 		setNominatedVessels(builder, modelEntityMap);
-		
+
 		buildRouteEntryPoints(portModel, portAssociation);
 
 		// freeze any frozen assignments
@@ -3404,11 +3403,12 @@ public class LNGScenarioTransformer {
 
 		return builder.createHeelSupplier(minimumHeelInM3, maximumHeelInM3, cargoCV, heelPriceCalculator);
 	}
-	
-	private void buildRouteEntryPoints(PortModel portModel, Association<Port, IPort> portAssociation){
+
+	private void buildRouteEntryPoints(PortModel portModel, Association<Port, IPort> portAssociation) {
 		portModel.getRoutes().forEach(r -> {
-			if(r.getEntryA() != null && r.getEntryB() != null){
-				distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), ImmutableSet.of(portAssociation.lookup(r.getEntryA().getPort()), portAssociation.lookup(r.getEntryA().getPort())));
+			if (r.getEntryA() != null && r.getEntryB() != null) {
+				distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r),
+						ImmutableSet.of(portAssociation.lookup(r.getEntryA().getPort()), portAssociation.lookup(r.getEntryB().getPort())));
 			}
 		});
 	}
