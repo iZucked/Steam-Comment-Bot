@@ -879,6 +879,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 									
 								}else{
 									// Slot can't be reached in time. Set to optimal time through panama and don't include slot.
+									// TODO: what to do here, should we report this to the user somehow?
 									windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
 									selectedTimeToNextElement[index - 1] =  minTimeToNextElement[index - 1];
 								}
@@ -921,6 +922,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 										break;
 									}
 								}
+								// TODO: don't set time through panama if there is no slot!
 							}
 							// window end time has to be after window start time
 							windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
