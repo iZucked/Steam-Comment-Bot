@@ -17,8 +17,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
@@ -35,6 +37,7 @@ public class ScenarioElementNameHelper {
 	private static final @NonNull String TYPE_SPOT_MARKET = "Market";
 	private static final @NonNull String TYPE_CARGO = "Cargo";
 	private static final @NonNull String TYPE_SLOT = "Slot";
+	private static final @NonNull String TYPE_PORT = "Port";
 	private static final @NonNull String TYPE_VESSEL_EVENT = "Event";
 	private static final @NonNull String TYPE_VESSEL_AVAILABILITY = "Availability";
 
@@ -65,7 +68,10 @@ public class ScenarioElementNameHelper {
 		} else if (target instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) target;
 			return String.format("%s \"%s\"", TYPE_VESSEL_EVENT.toLowerCase(), getNonNullString(vesselEvent.getName()));
-		}
+		} else if (target instanceof APortSet) {
+			final APortSet port = (APortSet) target;
+			return String.format("%s \"%s\"", TYPE_PORT.toLowerCase(), getNonNullString(port.getName()));
+		} 
 		return defaultName;
 	}
 

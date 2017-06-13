@@ -218,9 +218,9 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				if (!coveredPorts.contains(endAtPort)) {
 					final DetailConstraintStatusFactory f = baseFactory.copyName();
 					if (anywhere) {
-						f.withMessage(String.format("Port %s is not covered by the ballast bonus rules (note the vessel can end anywhere)", ScenarioElementNameHelper.getName(endAtPort)));
+						f.withMessage(String.format("%s is not covered by the ballast bonus rules (note the vessel can end anywhere)", ScenarioElementNameHelper.getName(endAtPort)));
 					} else {
-						f.withMessage(String.format("Port %s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)));
+						f.withMessage(String.format("%s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)));
 					}
 					f.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 					failures.add(f.make(ctx));
