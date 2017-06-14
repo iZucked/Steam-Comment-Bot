@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.port.Port;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}</li>
@@ -30,6 +31,32 @@ import com.mmxlabs.models.lng.port.Port;
  * @generated
  */
 public interface CharterOutEvent extends VesselEvent {
+	/**
+	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Optional</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Optional</em>' attribute.
+	 * @see #setOptional(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_Optional()
+	 * @model
+	 * @generated
+	 */
+	boolean isOptional();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#isOptional <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Optional</em>' attribute.
+	 * @see #isOptional()
+	 * @generated
+	 */
+	void setOptional(boolean value);
+
 	/**
 	 * Returns the value of the '<em><b>Relocate To</b></em>' reference.
 	 * <!-- begin-user-doc -->

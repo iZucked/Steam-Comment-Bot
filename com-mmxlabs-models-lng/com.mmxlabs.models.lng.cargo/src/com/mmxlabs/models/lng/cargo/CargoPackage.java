@@ -4569,13 +4569,22 @@ public interface CargoPackage extends EPackage {
 	int CHARTER_OUT_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__OPTIONAL = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Relocate To</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__RELOCATE_TO = VESSEL_EVENT_FEATURE_COUNT + 0;
+	int CHARTER_OUT_EVENT__RELOCATE_TO = VESSEL_EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
@@ -4584,7 +4593,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__HIRE_RATE = VESSEL_EVENT_FEATURE_COUNT + 1;
+	int CHARTER_OUT_EVENT__HIRE_RATE = VESSEL_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Bonus</b></em>' attribute.
@@ -4593,7 +4602,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__BALLAST_BONUS = VESSEL_EVENT_FEATURE_COUNT + 2;
+	int CHARTER_OUT_EVENT__BALLAST_BONUS = VESSEL_EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
@@ -4602,7 +4611,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 3;
+	int CHARTER_OUT_EVENT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Required Heel</b></em>' containment reference.
@@ -4611,7 +4620,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__REQUIRED_HEEL = VESSEL_EVENT_FEATURE_COUNT + 4;
+	int CHARTER_OUT_EVENT__REQUIRED_HEEL = VESSEL_EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Available Heel</b></em>' containment reference.
@@ -4620,7 +4629,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__AVAILABLE_HEEL = VESSEL_EVENT_FEATURE_COUNT + 5;
+	int CHARTER_OUT_EVENT__AVAILABLE_HEEL = VESSEL_EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out Event</em>' class.
@@ -4629,7 +4638,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 6;
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6634,6 +6643,17 @@ public interface CargoPackage extends EPackage {
 	EClass getCharterOutEvent();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#isOptional()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_Optional();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRelocateTo <em>Relocate To</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8173,6 +8193,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHARTER_OUT_EVENT = eINSTANCE.getCharterOutEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__OPTIONAL = eINSTANCE.getCharterOutEvent_Optional();
 
 		/**
 		 * The meta object literal for the '<em><b>Relocate To</b></em>' reference feature.

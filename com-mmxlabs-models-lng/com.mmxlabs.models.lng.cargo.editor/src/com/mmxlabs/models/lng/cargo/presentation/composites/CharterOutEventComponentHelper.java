@@ -65,6 +65,7 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_optionalEditor(detailComposite, topClass);
 		add_relocateToEditor(detailComposite, topClass);
 		add_hireRateEditor(detailComposite, topClass);
 		add_ballastBonusEditor(detailComposite, topClass);
@@ -72,6 +73,16 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 		add_requiredHeelEditor(detailComposite, topClass);
 		add_availableHeelEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the optional feature on CharterOutEvent
+	 *
+	 * @generated NOT
+	 */
+	protected void add_optionalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+// BugzId: 1036 - NOT YET SUPPORTED
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__OPTIONAL));
+	}
+
 	/**
 	 * Create the editor for the relocateTo feature on CharterOutEvent
 	 *

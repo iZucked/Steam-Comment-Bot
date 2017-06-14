@@ -1433,8 +1433,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterOutEvent_Optional() {
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getCharterOutEvent_RelocateTo() {
-		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(0);
+		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1443,7 +1452,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOutEvent_RepositioningFee() {
-		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1452,15 +1461,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getCharterOutEvent_RequiredHeel() {
-		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCharterOutEvent_AvailableHeel() {
 		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -1469,8 +1469,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCharterOutEvent_AvailableHeel() {
+		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getCharterOutEvent_HireRate() {
-		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1479,7 +1488,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOutEvent_BallastBonus() {
-		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2000,6 +2009,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		dryDockEventEClass = createEClass(DRY_DOCK_EVENT);
 
 		charterOutEventEClass = createEClass(CHARTER_OUT_EVENT);
+		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__OPTIONAL);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__RELOCATE_TO);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__HIRE_RATE);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__BALLAST_BONUS);
@@ -2306,6 +2316,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(dryDockEventEClass, DryDockEvent.class, "DryDockEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(charterOutEventEClass, CharterOutEvent.class, "CharterOutEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCharterOutEvent_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutEvent_RelocateTo(), thePortPackage.getPort(), null, "relocateTo", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutEvent_HireRate(), ecorePackage.getEInt(), "hireRate", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutEvent_BallastBonus(), ecorePackage.getEInt(), "ballastBonus", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

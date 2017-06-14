@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.port.Port;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHireRate <em>Hire Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getBallastBonus <em>Ballast Bonus</em>}</li>
@@ -40,6 +41,26 @@ import com.mmxlabs.models.lng.port.Port;
  * @generated
  */
 public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEvent {
+	/**
+	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OPTIONAL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean optional = OPTIONAL_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getRelocateTo() <em>Relocate To</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -156,6 +177,27 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.CHARTER_OUT_EVENT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isOptional() {
+		return optional;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOptional(boolean newOptional) {
+		boolean oldOptional = optional;
+		optional = newOptional;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__OPTIONAL, oldOptional, optional));
 	}
 
 	/**
@@ -450,6 +492,8 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case CargoPackage.CHARTER_OUT_EVENT__OPTIONAL:
+				return isOptional();
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				if (resolve) return getRelocateTo();
 				return basicGetRelocateTo();
@@ -477,6 +521,9 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case CargoPackage.CHARTER_OUT_EVENT__OPTIONAL:
+				setOptional((Boolean)newValue);
+				return;
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				setRelocateTo((Port)newValue);
 				return;
@@ -507,6 +554,9 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case CargoPackage.CHARTER_OUT_EVENT__OPTIONAL:
+				setOptional(OPTIONAL_EDEFAULT);
+				return;
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				unsetRelocateTo();
 				return;
@@ -537,6 +587,8 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case CargoPackage.CHARTER_OUT_EVENT__OPTIONAL:
+				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				return isSetRelocateTo();
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
@@ -577,7 +629,9 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (hireRate: ");
+		result.append(" (optional: ");
+		result.append(optional);
+		result.append(", hireRate: ");
 		result.append(hireRate);
 		result.append(", ballastBonus: ");
 		result.append(ballastBonus);

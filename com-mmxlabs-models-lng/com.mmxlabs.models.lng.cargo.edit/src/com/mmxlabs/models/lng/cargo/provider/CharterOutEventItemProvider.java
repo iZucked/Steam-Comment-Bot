@@ -52,12 +52,35 @@ public class CharterOutEventItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addOptionalPropertyDescriptor(object);
 			addRelocateToPropertyDescriptor(object);
 			addHireRatePropertyDescriptor(object);
 			addBallastBonusPropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Optional feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOptionalPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_optional_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutEvent_optional_feature", "_UI_CharterOutEvent_type"),
+				 CargoPackage.Literals.CHARTER_OUT_EVENT__OPTIONAL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -216,6 +239,7 @@ public class CharterOutEventItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CharterOutEvent.class)) {
+			case CargoPackage.CHARTER_OUT_EVENT__OPTIONAL:
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
