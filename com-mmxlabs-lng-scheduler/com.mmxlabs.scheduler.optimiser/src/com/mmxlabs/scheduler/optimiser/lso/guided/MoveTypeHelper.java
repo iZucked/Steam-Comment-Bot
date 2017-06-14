@@ -67,8 +67,7 @@ public class MoveTypeHelper {
 			if (helper.isVesselEvent(element)) {
 				// If relocated charter event, do nothing.
 				moveTypes.add(GuidedMoveTypes.Insert_Vessel_Event);
-			}
-			if (helper.isDESPurchase(element)) {
+			} else if (helper.isDESPurchase(element)) {
 				moveTypes.add(GuidedMoveTypes.Insert_DES_Purchase);
 			} else if (helper.isFOBSale(element)) {
 				moveTypes.add(GuidedMoveTypes.Insert_FOB_Sale);
