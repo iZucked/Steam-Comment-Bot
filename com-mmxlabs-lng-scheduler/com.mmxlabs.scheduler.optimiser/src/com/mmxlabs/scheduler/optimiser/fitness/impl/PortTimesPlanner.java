@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
@@ -171,7 +171,7 @@ public class PortTimesPlanner {
 	 * @return
 	 */
 	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes,
-			final IRouteOptionSlot[] assignedSlots, final boolean[] throughPanama) {
+			final IRouteOptionBooking[] assignedSlots, final boolean[] throughPanama) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 

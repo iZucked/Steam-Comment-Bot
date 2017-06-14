@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 /**
  * This class contains the logic required to schedule a {@link ISequence}. This will determine arrival times and additional information.
@@ -29,7 +29,7 @@ public interface ISequenceScheduler {
 	 */
 	int @Nullable [][] schedule(@NonNull ISequences sequences);
 	
-	IRouteOptionSlot[][] slotsAssigned();
+	IRouteOptionBooking[][] slotsAssigned();
 	
 	boolean[][] canalDecision();
 }

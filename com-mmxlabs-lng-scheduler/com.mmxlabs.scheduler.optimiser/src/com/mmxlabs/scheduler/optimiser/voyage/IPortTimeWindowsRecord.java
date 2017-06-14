@@ -12,7 +12,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
@@ -67,7 +67,7 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
 
-	void setRouteOptionSlot(IPortSlot slot, IRouteOptionSlot routeOptionSlot);
+	void setRouteOptionSlot(IPortSlot slot, IRouteOptionBooking routeOptionSlot);
 
-	IRouteOptionSlot getRouteOptionSlot(IPortSlot slot);
+	IRouteOptionBooking getRouteOptionSlot(IPortSlot slot);
 }

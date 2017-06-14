@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
@@ -102,7 +102,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 	}
 
 	@Override
-	public IRouteOptionSlot[][] slotsAssigned() {
+	public IRouteOptionBooking[][] slotsAssigned() {
 		throw new UnsupportedOperationException("Not implemented");
 	}
 

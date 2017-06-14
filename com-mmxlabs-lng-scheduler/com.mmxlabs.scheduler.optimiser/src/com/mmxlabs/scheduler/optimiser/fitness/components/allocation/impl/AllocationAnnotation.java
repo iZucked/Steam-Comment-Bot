@@ -16,7 +16,7 @@ import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -36,7 +36,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int startTime;
 		public int duration;
-		public IRouteOptionSlot routeOptionSlot;
+		public IRouteOptionBooking routeOptionSlot;
 		public AvailableRouteChoices nextVoyageRouteChoice;
 
 		@Override
@@ -333,7 +333,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public @Nullable IRouteOptionSlot getRouteOptionSlot(IPortSlot slot) {
+	public @Nullable IRouteOptionBooking getRouteOptionSlot(IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
 			return allocation.routeOptionSlot;
@@ -342,7 +342,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionBooking routeOptionSlot) {
 		getOrCreateSlotAllocation(slot).routeOptionSlot = routeOptionSlot;
 
 	}

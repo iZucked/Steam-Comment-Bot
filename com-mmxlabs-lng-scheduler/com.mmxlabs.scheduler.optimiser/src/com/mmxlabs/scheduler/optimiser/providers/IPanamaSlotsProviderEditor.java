@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.SortedSet;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 /**
  * An editor interface for {@link IPanamaSlotsProvider}
@@ -19,7 +19,7 @@ public interface IPanamaSlotsProviderEditor extends IPanamaSlotsProvider {
 	/**
 	 * Sets the slots overwriting existing ones.
 	 */
-	void setSlots(Map<IPort, SortedSet<IRouteOptionSlot>> slots);
+	void setSlots(Map<IPort, SortedSet<IRouteOptionBooking>> slots);
 	
 	/**
 	 * All dates before this boundary strictly need a Panama slot. Exclusive
