@@ -4,9 +4,8 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.utils;
 
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyticsSolution {
@@ -16,6 +15,7 @@ public class AnalyticsSolution {
 	private UUIDObject solution;
 	private boolean createDiffToBaseAction;
 	private boolean createInsertionOptions;
+	private final ModelReference modelReference;
 
 	public boolean isCreateInsertionOptions() {
 		return createInsertionOptions;
@@ -38,6 +38,17 @@ public class AnalyticsSolution {
 		this.solution = solution;
 		id = instance.getUuid() + title;
 		this.title = title;
+
+		this.modelReference = instance.getReference("AnalyticsSolution:1");
+
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (this.modelReference != null) {
+			this.modelReference.close();
+		}
+		super.finalize();
 	}
 
 	public String getTitle() {
