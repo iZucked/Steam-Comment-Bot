@@ -16,10 +16,8 @@
 
 <plugin>
    <extension-point id="TradesTableContextMenuExtension" name="TradesTableContextMenuExtension" schema="schema/TradesTableContextMenuExtension.exsd"/>
+   <extension-point id="VesselEventsTableContextMenuExtension" name="VesselEventsTableContextMenuExtension" schema="schema/VesselEventsTableContextMenuExtension.exsd"/>
 
-
-
-	
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		

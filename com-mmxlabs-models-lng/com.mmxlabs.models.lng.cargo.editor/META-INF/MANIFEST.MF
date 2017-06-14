@@ -15,6 +15,7 @@ Export-Package: com.mmxlabs.models.lng.cargo.editor,
  com.mmxlabs.models.lng.cargo.ui.commands,
  com.mmxlabs.models.lng.cargo.ui.displaycomposites,
  com.mmxlabs.models.lng.cargo.ui.editorpart,
+ com.mmxlabs.models.lng.cargo.ui.editorpart.events,
  com.mmxlabs.models.lng.cargo.ui.editorpart.trades
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;visibility:=reexport,
