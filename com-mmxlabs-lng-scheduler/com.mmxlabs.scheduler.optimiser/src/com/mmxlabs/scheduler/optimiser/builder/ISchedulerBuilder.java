@@ -162,12 +162,13 @@ public interface ISchedulerBuilder {
 	 *            the port where the vessel is being returned to
 	 * @param durationHours
 	 *            how long the charter out is for, in hours
+	 * @param optional
 	 * 
 	 * @return
 	 */
 	@NonNull
 	IVesselEventPortSlot createCharterOutEvent(@NonNull String id, @NonNull ITimeWindow arrivalTimeWindow, @NonNull IPort startPort, @NonNull IPort endPort, int durationHours,
-			@NonNull IHeelOptionConsumer heelConsumer, @NonNull IHeelOptionSupplier heelSupplier, final long hireRevenue, final long repositioning, final long ballastBonus);
+			@NonNull IHeelOptionConsumer heelConsumer, @NonNull IHeelOptionSupplier heelSupplier, final long hireRevenue, final long repositioning, final long ballastBonus, boolean optional);
 
 	/**
 	 * Create a dry dock event
@@ -224,7 +225,8 @@ public interface ISchedulerBuilder {
 	 * @param vesselInstanceType
 	 * @param start
 	 * @param end
-	 * @param ballastBonusContract TODO
+	 * @param ballastBonusContract
+	 *            TODO
 	 * @param repositioningFee
 	 *            TODO
 	 * @param isOptional
@@ -674,7 +676,8 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt, IBallastBonusContract ballastBonusContract);
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
+			IBallastBonusContract ballastBonusContract);
 
 	/***
 	 * Create a sequence element

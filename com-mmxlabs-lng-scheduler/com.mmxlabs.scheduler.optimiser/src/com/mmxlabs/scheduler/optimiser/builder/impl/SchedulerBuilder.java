@@ -744,14 +744,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			end = spotCharterInMarket.getEndRequirement();
 		} else {
 			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
-				createHeelConsumer(vesselClass.getSafetyHeel(), vesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+					createHeelConsumer(vesselClass.getSafetyHeel(), vesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 		}
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 		final IVessel spotVessel = createVessel(name, vesselClass, vesselClass.getCargoCapacity());
 
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
-		final IVesselAvailability spotAvailability = createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotCharterInMarket.getBallastBonusContract(),
-				spotIndex, new ZeroLongCurve(), true);
+		final IVesselAvailability spotAvailability = createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket,
+				spotCharterInMarket.getBallastBonusContract(), spotIndex, new ZeroLongCurve(), true);
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
 
 		return spotAvailability;
@@ -878,7 +878,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vesselAvailability.setOptional(isOptional);
 		vesselAvailability.setRepositioningFee(repositioningFee);
-		
+
 		vesselAvailability.setBallastBonusContract(ballastBonusContract);
 		return vesselAvailability;
 	}
@@ -1274,7 +1274,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ICharterOutVesselEventPortSlot createCharterOutEvent(final String id, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours,
-			final IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier, final long totalHireRevenue, final long repositioning, final long ballastBonus) {
+			final IHeelOptionConsumer heelConsumer, IHeelOptionSupplier heelSupplier, final long totalHireRevenue, final long repositioning, final long ballastBonus, boolean optional) {
 		final CharterOutVesselEvent event = new CharterOutVesselEvent(arrival, fromPort, toPort, heelConsumer, heelSupplier);
 
 		// TODO should start port and end port be set on this single sequence
@@ -1332,6 +1332,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			sequenceElements.add(redirectElement);
 			sequenceElements.add(endElement);
 
+			optionalElements.setOptional(startElement, optional);
+			optionalElements.setOptional(redirectElement, optional);
+			optionalElements.setOptional(endElement, optional);
+
 			eventPortSlots.add(startSlot);
 			eventPortSlots.add(redirectSlot);
 			eventPortSlots.add(endSlot);
@@ -1363,6 +1367,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			elementDurationsProvider.setElementDuration(endElement, durationHours);
 			portSlotsProvider.setPortSlot(endElement, slot);
 			elementPortProvider.setPortForElement(slot.getPort(), endElement);
+
+			optionalElements.setOptional(endElement, optional);
+
 			return slot;
 		}
 	}
