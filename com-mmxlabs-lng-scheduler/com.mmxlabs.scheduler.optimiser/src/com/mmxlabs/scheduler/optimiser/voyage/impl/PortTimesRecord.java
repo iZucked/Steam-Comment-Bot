@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -32,7 +32,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	private static final class SlotVoyageRecord {
 		public int startTime;
 		public int duration;
-		private IRouteOptionSlot routeOptionSlot;
+		private IRouteOptionBooking routeOptionSlot;
 
 		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 
@@ -220,7 +220,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public @Nullable IRouteOptionSlot getRouteOptionSlot(IPortSlot slot) {
+	public @Nullable IRouteOptionBooking getRouteOptionSlot(IPortSlot slot) {
 		final SlotVoyageRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.routeOptionSlot;
@@ -229,7 +229,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionBooking routeOptionSlot) {
 		getOrCreateSlotRecord(slot).routeOptionSlot = routeOptionSlot;
 	}
 }

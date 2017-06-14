@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -298,12 +298,12 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public @Nullable IRouteOptionSlot getRouteOptionSlot(IPortSlot slot) {
+	public @Nullable IRouteOptionBooking getRouteOptionSlot(IPortSlot slot) {
 		return allocationAnnotation.getRouteOptionSlot(slot);
 	}
 
 	@Override
-	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+	public void setRouteOptionSlot(IPortSlot slot, IRouteOptionBooking routeOptionSlot) {
 		allocationAnnotation.setRouteOptionSlot(slot, routeOptionSlot);
 	}
 

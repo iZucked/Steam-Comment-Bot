@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 /**
  * 
@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
  */
 public interface IPanamaSlotsProvider extends IDataComponentProvider {
 	
-	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionSlot>> getSlots();
+	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getSlots();
 	
 	/**
 	 * All dates before this boundary strictly need a Panama slot. Exclusive

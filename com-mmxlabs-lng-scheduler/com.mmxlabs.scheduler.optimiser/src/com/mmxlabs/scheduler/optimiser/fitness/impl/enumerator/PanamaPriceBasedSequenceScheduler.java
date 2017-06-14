@@ -4,7 +4,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 /**
  * <b>Not thread-safe</b>
@@ -41,10 +41,10 @@ public class PanamaPriceBasedSequenceScheduler extends PriceBasedSequenceSchedul
 		return throughPanama;
 	}
 	
-	public IRouteOptionSlot[][] slotsAssigned(){
+	public IRouteOptionBooking[][] slotsAssigned(){
 		if (!trimmed){
 			throw new IllegalStateException("Canal decisions only exist after trimming");
 		}
-		return routeOptionSlot;
+		return routeOptionBookings;
 	}
 }

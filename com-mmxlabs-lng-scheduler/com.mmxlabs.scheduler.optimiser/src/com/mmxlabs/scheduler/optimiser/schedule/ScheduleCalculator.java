@@ -30,7 +30,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -68,10 +68,10 @@ public class ScheduleCalculator {
 		private final @NonNull IResource resource;
 		private final @NonNull ISequence sequence;
 		private final int[] arrivalTimes;
-		private final IRouteOptionSlot[] assignedSlots;
+		private final IRouteOptionBooking[] assignedSlots;
 		private final boolean[] throughPanama;
 
-		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes, final IRouteOptionSlot[] assignedSlots, boolean[] throughPanama) {
+		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes, final IRouteOptionBooking[] assignedSlots, boolean[] throughPanama) {
 			this.resource = resource;
 			this.sequence = sequence;
 			this.arrivalTimes = arrivalTimes;
@@ -133,7 +133,7 @@ public class ScheduleCalculator {
 	}
 
 	@Nullable
-	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, final IRouteOptionSlot[][] assignedSlots, final boolean[][] throughPanama,
+	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, final IRouteOptionBooking[][] assignedSlots, final boolean[][] throughPanama,
 			@Nullable final IAnnotatedSolution solution) {
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
 
@@ -204,7 +204,7 @@ public class ScheduleCalculator {
 	 * @throws InfeasibleVoyageException
 	 */
 	@Nullable
-	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionSlot[] assignedSlots,
+	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionBooking[] assignedSlots,
 			boolean[] throughPanama, @Nullable final IAnnotatedSolution solution) {
 
 		final VolumeAllocatedSequence volumeAllocatedSequence = doSchedule(resource, sequence, arrivalTimes, assignedSlots, throughPanama);
@@ -223,7 +223,7 @@ public class ScheduleCalculator {
 	}
 
 	@Nullable
-	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionSlot[] assignedSlots,
+	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionBooking[] assignedSlots,
 			boolean[] throughPanama) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);

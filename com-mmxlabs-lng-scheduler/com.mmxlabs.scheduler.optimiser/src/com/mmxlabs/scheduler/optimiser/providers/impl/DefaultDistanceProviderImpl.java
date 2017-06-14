@@ -20,7 +20,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
@@ -133,11 +134,28 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed) {
+	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed, AvailableRouteChoices availableRouteChoices) {
 
 		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
+			
+			if ( availableRouteChoices == AvailableRouteChoices.EXCLUDE_PANAMA && route == ERouteOption.PANAMA){
+				continue;
+			}
+			
+			if ( availableRouteChoices == AvailableRouteChoices.DIRECT_ONLY && route != ERouteOption.DIRECT){
+				continue;
+			}
+			
+			if ( availableRouteChoices == AvailableRouteChoices.PANAMA_ONLY && route != ERouteOption.PANAMA){
+				continue;
+			}
+			
+			if ( availableRouteChoices == AvailableRouteChoices.SUEZ_ONLY && route != ERouteOption.SUEZ){
+				continue;
+			}
+			
 			assert route != null;
 			final int travelTime = getTravelTime(route, vessel, from, to, voyageStartTime, speed);
 			if (travelTime < bestTime) {

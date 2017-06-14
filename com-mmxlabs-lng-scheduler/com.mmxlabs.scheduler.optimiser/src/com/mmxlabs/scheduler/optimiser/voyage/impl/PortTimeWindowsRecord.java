@@ -13,7 +13,7 @@ import java.util.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
@@ -26,7 +26,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		public ITimeWindow feasibleWindow = null;
 		public int duration;
 		public int index;
-		private IRouteOptionSlot routeOptionSlot = null;
+		private IRouteOptionBooking routeOptionSlot = null;
 		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 
 		@Override
@@ -205,7 +205,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public IRouteOptionSlot getRouteOptionSlot(final IPortSlot slot) {
+	public IRouteOptionBooking getRouteOptionSlot(final IPortSlot slot) {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.routeOptionSlot;
@@ -214,7 +214,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public void setRouteOptionSlot(final IPortSlot slot, IRouteOptionSlot routeOptionSlot) {
+	public void setRouteOptionSlot(final IPortSlot slot, IRouteOptionBooking routeOptionSlot) {
 		getOrCreateSlotRecord(slot).routeOptionSlot = routeOptionSlot;
 	}
 

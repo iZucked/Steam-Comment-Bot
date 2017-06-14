@@ -10,7 +10,7 @@ import java.util.SortedSet;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
 
 /**
@@ -23,14 +23,14 @@ public class PanamaSlotsProviderEditor implements IPanamaSlotsProviderEditor {
 	private static final int MAX_SPEED_TO_CANAL = 16;
 	private static final int CANAL_SLOT_MARGIN = 24;
 
-	private ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionSlot>> panamaSlots;
+	private ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> panamaSlots;
 	private int strictBoundary;
 	private int relaxedBoundary;
 	private int relaxedSlotCount;
 	
 	@Override
-	public void setSlots(Map<IPort, SortedSet<IRouteOptionSlot>> slots) {
-		ImmutableMap.Builder<IPort, ImmutableSortedSet<IRouteOptionSlot>> builder = new ImmutableMap.Builder<>();
+	public void setSlots(Map<IPort, SortedSet<IRouteOptionBooking>> slots) {
+		ImmutableMap.Builder<IPort, ImmutableSortedSet<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
 		slots.forEach((k,v) -> {
 			builder.put(k, ImmutableSortedSet.copyOf(v));
 		});
@@ -38,7 +38,7 @@ public class PanamaSlotsProviderEditor implements IPanamaSlotsProviderEditor {
 	}
 
 	@Override
-	public ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionSlot>> getSlots() {
+	public ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getSlots() {
 		if (panamaSlots == null){
 			throw new IllegalStateException("Panama slots not set");
 		}

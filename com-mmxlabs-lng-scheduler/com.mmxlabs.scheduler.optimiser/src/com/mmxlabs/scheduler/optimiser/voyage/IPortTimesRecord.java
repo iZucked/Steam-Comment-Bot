@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -61,9 +61,9 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	IPortSlot getReturnSlot();
 
 	@Nullable
-	IRouteOptionSlot getRouteOptionSlot(@NonNull IPortSlot slot);
+	IRouteOptionBooking getRouteOptionSlot(@NonNull IPortSlot slot);
 
-	void setRouteOptionSlot(@NonNull IPortSlot slot, @Nullable IRouteOptionSlot routeOptionSlot);
+	void setRouteOptionSlot(@NonNull IPortSlot slot, @Nullable IRouteOptionBooking routeOptionSlot);
 
 	void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute);
 
