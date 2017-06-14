@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.export.exporters;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,12 +20,15 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -40,7 +44,10 @@ public class JourneyEventExporter {
 
 	@Inject
 	private IDistanceProvider distanceProvider;
-
+	
+	@Inject 
+	IPanamaSlotsProvider panamaSlotsProvider;
+	
 	public Journey export(final VoyageDetails voyageDetails, final VolumeAllocatedSequence volumeAllocatedSequence, final int currentTime) {
 
 		if (voyageDetails.getTravelTime() == 0 && voyageDetails.getOptions().getDistance() == 0) {
@@ -91,6 +98,17 @@ public class JourneyEventExporter {
 		} else if (journey.getRoute().isCanal()) {
 			@NonNull
 			final IPort routeOptionEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
+			
+			int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, 
+					voyageDetails.getOptions().getVessel(), 
+					voyageDetails.getOptions().getFromPortSlot().getPort(),
+					routeOptionEntry, 
+					portTimesRecord.getFirstSlotTime(),
+					Math.max(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed()));
+			
+			ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(portTimesRecord.getFirstSlotTime() + toCanal, voyageDetails.getOptions().getFromPortSlot().getPort());
+			journey.setCanalDate(estimatedArrival.toLocalDate());
+			
 			if (routeOptionEntry != null) {
 				@NonNull
 				final Port expectedEntryPort = modelEntityMap.getModelObjectNullChecked(routeOptionEntry, Port.class);
