@@ -12,6 +12,8 @@ import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * A similar class to {@link IPortTimesRecord}, created before arrival times have been scheduled. TODO: Replace {@link IPortTimesRecord} with this
@@ -60,4 +62,12 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	int getIndex(@NonNull IPortSlot slot);
 
 	IResource getResource();
+
+	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
+
+	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
+
+	void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionSlot);
+
+	IRouteOptionBooking getRouteOptionBooking(IPortSlot slot);
 }

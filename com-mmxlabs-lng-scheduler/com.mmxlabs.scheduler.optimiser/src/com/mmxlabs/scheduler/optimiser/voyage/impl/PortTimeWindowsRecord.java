@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
@@ -27,20 +28,25 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		public MutableTimeWindow feasibleWindow = null;
 		public int duration;
 		public int index;
+		private IRouteOptionBooking routeOptionBooking = null;
+		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj instanceof SlotWindowRecord) {
 				final SlotWindowRecord other = (SlotWindowRecord) obj;
-				return feasibleWindow == other.feasibleWindow && duration == other.duration;
+				return feasibleWindow == other.feasibleWindow //
+						&& duration == other.duration //
+						&& nextVoyageRoute == other.nextVoyageRoute //
+						&& routeOptionBooking == other.routeOptionBooking //
+				;
 			}
 			return false;
 		}
 
 		@Override
 		public int hashCode() {
-
-			return Objects.hash(feasibleWindow, duration);
+			return Objects.hash(feasibleWindow, duration, nextVoyageRoute);
 		}
 
 		@Override
@@ -206,6 +212,34 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 
 	public IResource setResource(IResource resource) {
 		return this.resource = resource;
+	}
+
+	@Override
+	public IRouteOptionBooking getRouteOptionBooking(final IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.routeOptionBooking;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public void setRouteOptionBooking(final IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
+		getOrCreateSlotRecord(slot).routeOptionBooking = routeOptionBooking;
+	}
+
+	@Override
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(final IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.nextVoyageRoute;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
 }

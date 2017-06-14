@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
@@ -24,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
@@ -43,6 +46,13 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
+
+	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
+
+	private final Map<ERouteOption, Set<IPort>> routeOptionEntryPoints = new HashMap<>();
+
+	// cache
+	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntry = new ConcurrentHashMap();
 
 	@Override
 	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final IVessel vessel) {
@@ -103,11 +113,28 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int speed) {
+	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int speed, AvailableRouteChoices availableRouteChoices) {
 
 		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
+
+			if (availableRouteChoices == AvailableRouteChoices.EXCLUDE_PANAMA && route == ERouteOption.PANAMA) {
+				continue;
+			}
+
+			if (availableRouteChoices == AvailableRouteChoices.DIRECT_ONLY && route != ERouteOption.DIRECT) {
+				continue;
+			}
+
+			if (availableRouteChoices == AvailableRouteChoices.PANAMA_ONLY && route != ERouteOption.PANAMA) {
+				continue;
+			}
+
+			if (availableRouteChoices == AvailableRouteChoices.SUEZ_ONLY && route != ERouteOption.SUEZ) {
+				continue;
+			}
+
 			assert route != null;
 			final int travelTime = getTravelTime(route, vessel, from, to, speed);
 			if (travelTime < bestTime) {
@@ -126,5 +153,23 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	@Override
 	public ERouteOption[] getRoutes() {
 		return distanceProvider.getRoutes();
+	}
+
+	@Override
+	public void setEntryPointsForRouteOption(ERouteOption route, Set<IPort> entryPoints) {
+		routeOptionEntryPoints.put(route, entryPoints);
+	}
+
+	@Override
+	public IPort getRouteOptionEntry(IPort port, ERouteOption routeOption) {
+		return nearestRouteOptionEntry.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
+			Set<IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
+			if (entryPoints != null) {
+				return entryPoints.stream().min((p1, p2) -> {
+					return Integer.compare(getDistance(ERouteOption.DIRECT, port, p1, null), getDistance(ERouteOption.DIRECT, port, p2, null));
+				}).get();
+			}
+			return null;
+		});
 	}
 }

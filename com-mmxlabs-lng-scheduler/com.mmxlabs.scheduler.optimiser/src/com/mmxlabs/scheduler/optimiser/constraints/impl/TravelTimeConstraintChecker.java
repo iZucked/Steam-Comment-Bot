@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * A constraint checker which tests whether the ports in a sequence can be reached from one another presuming the vessel travels at its maximum speed all the way and spends a minimum amount of time at
@@ -234,7 +235,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final int voyageStartTime = tw1.getInclusiveStart() + elementDurationProvider.getElementDuration(first, resource);
 
 		@NonNull
-		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), resourceMaxSpeed);
+		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), resourceMaxSpeed,
+				AvailableRouteChoices.OPTIMAL);
 		if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
 			return false;
 		}

@@ -10,13 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * @author hinton
@@ -25,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public final class AllocationAnnotation implements IAllocationAnnotation {
 	private boolean locked;
 
-	public class SlotAllocationAnnotation {
+	public static class SlotAllocationAnnotation {
 		public long commercialVolumeInM3;
 		public long commercialVolumeInMMBTu;
 		public long physicalVolumeInM3;
@@ -33,6 +36,8 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int startTime;
 		public int duration;
+		public IRouteOptionBooking routeOptionBooking;
+		public AvailableRouteChoices nextVoyageRouteChoice;
 
 		@Override
 		public boolean equals(Object obj) {
@@ -46,7 +51,9 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 						&& commercialVolumeInMMBTu == other.commercialVolumeInMMBTu //
 						&& cargoCV == other.cargoCV //
 						&& startTime == other.startTime //
-						&& duration == other.duration;
+						&& duration == other.duration //
+						&& nextVoyageRouteChoice == other.nextVoyageRouteChoice //
+						&& Objects.equal(routeOptionBooking, other.routeOptionBooking);
 
 			}
 
@@ -75,7 +82,9 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			assert portSlot != null;
 			getSlots().add(portSlot);
 			setSlotTime(portSlot, portTimesRecord.getSlotTime(portSlot));
-			setSlotTime(portSlot, portTimesRecord.getSlotDuration(portSlot));
+			setSlotDuration(portSlot, portTimesRecord.getSlotDuration(portSlot));
+			setRouteOptionBooking(portSlot, portTimesRecord.getRouteOptionBooking(portSlot));
+			setSlotNextVoyageOptions(portSlot, portTimesRecord.getSlotNextVoyageOptions(portSlot));
 		}
 		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
 		if (returnSlot != null) {
@@ -322,4 +331,34 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		assert !this.locked;
 		this.locked = locked;
 	}
+
+	@Override
+	public @Nullable IRouteOptionBooking getRouteOptionBooking(IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.routeOptionBooking;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
+		getOrCreateSlotAllocation(slot).routeOptionBooking = routeOptionBooking;
+
+	}
+
+	@Override
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		getOrCreateSlotAllocation(slot).nextVoyageRouteChoice = nextVoyageRoute;
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.nextVoyageRouteChoice;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
 }

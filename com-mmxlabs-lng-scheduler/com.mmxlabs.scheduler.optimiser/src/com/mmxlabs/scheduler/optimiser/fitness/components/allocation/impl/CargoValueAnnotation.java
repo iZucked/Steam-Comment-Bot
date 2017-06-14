@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing {@link IAllocationAnnotation} instance adding on the {@link ICargoValueAnnotation} specific data items. Internally very
@@ -292,5 +295,26 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	public void setCacheLocked(final boolean locked) {
 		assert !this.locked;
 		this.locked = locked;
+	}
+
+	@Override
+	public @Nullable IRouteOptionBooking getRouteOptionBooking(IPortSlot slot) {
+		return allocationAnnotation.getRouteOptionBooking(slot);
+	}
+
+	@Override
+	public void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
+		allocationAnnotation.setRouteOptionBooking(slot, routeOptionBooking);
+	}
+
+	@Override
+	public AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot) {
+		return allocationAnnotation.getSlotNextVoyageOptions(slot);
+	}
+
+	@Override
+	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute) {
+		allocationAnnotation.setSlotNextVoyageOptions(slot, nextVoyageRoute);
+
 	}
 }

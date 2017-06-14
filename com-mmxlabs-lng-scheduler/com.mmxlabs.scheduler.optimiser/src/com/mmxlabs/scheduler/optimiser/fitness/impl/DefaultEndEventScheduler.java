@@ -107,8 +107,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		final int prevVisitDuration = partialPortTimesRecord.getSlotDuration(prevPortSlot);
 
 		// TODO: Quickest != most economical routing
-		final int availableTime = distanceProvider
-				.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed()).getSecond();
+		final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(),
+				vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
 		final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 		partialPortTimesRecord.setReturnSlotTime(endEventSlot, shortCargoReturnArrivalTime);
@@ -361,8 +361,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 
 			if (bestCost == Long.MAX_VALUE) {
 				// Lets return as fast as possible
-				final int availableTime = Math.max(timeWindow.getInclusiveStart(),
-						prevArrivalTime + prevVisitDuration + distanceProvider.getQuickestTravelTime(vessel, from, to, maxSpeed).getSecond());
+				final int availableTime = Math.max(timeWindow.getInclusiveStart(), prevArrivalTime + prevVisitDuration
+						+ distanceProvider.getQuickestTravelTime(vessel, from, to, maxSpeed, partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond());
 				partialPortTimesRecord.setReturnSlotTime(endEventSlot, prevArrivalTime + prevVisitDuration + availableTime);
 				partialPortTimesRecord.setSlotDuration(endEventSlot, 0);
 

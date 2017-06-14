@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProviderEditor;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor {
 
@@ -82,7 +83,7 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 			throw new IllegalSelectorException();
 		}
 
-		final int ballastTime = distanceProvider.getQuickestTravelTime(vessel, fromPort, origin.getPort(), speed).getSecond();
+		final int ballastTime = distanceProvider.getQuickestTravelTime(vessel, fromPort, origin.getPort(), speed, AvailableRouteChoices.OPTIMAL).getSecond();
 		final int returnTime = completionOfDischarge + ballastTime;
 
 		// TODO: treemap?

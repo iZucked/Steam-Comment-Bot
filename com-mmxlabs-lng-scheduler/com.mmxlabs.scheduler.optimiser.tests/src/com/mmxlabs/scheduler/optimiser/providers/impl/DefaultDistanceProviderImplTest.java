@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class DefaultDistanceProviderImplTest {
 
@@ -177,27 +178,27 @@ public class DefaultDistanceProviderImplTest {
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(6);
 		// try to exclude Direct (but direct is always open!)
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.DIRECT));
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000, AvailableRouteChoices.OPTIMAL));
 
 		// Suez is open
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000, AvailableRouteChoices.OPTIMAL));
 
 		// exclude Suez
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ));
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel2)).thenReturn(1);
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
-		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel2, port1, port2, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000, AvailableRouteChoices.OPTIMAL));
+		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel2, port1, port2, 10_000, AvailableRouteChoices.OPTIMAL));
 
 		// Exclude Suez, open panama
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(0);
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ));
-		Assert.assertEquals(new Pair<>(ERouteOption.PANAMA, 3 + 0), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.PANAMA, 3 + 0), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000, AvailableRouteChoices.OPTIMAL));
 
 		// Exclude Panama and Suez
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ, ERouteOption.PANAMA));
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000, AvailableRouteChoices.OPTIMAL));
 	}
 
 	private void verifyListResult(final Integer directDistance, final Integer suezDistance, final Integer panamaDistance, final List<DistanceMatrixEntry> results) {

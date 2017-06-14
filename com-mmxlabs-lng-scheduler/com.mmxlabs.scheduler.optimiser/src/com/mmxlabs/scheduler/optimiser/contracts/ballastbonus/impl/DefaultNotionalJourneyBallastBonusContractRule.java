@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonusContractRule implements INotionalJourneyBallastBonusContractRule {
 	private final @NonNull ICurve fuelPriceCurve;
@@ -51,7 +52,8 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 		long minCost = Long.MAX_VALUE;
 		for (IPort returnPort : getReturnPorts()) {
 			@NonNull
-			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort, speedInKnots);
+			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort, speedInKnots,
+					AvailableRouteChoices.OPTIMAL);
 			ERouteOption route = quickestTravelTime.getFirst();
 			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getVesselClass().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
 					(quickestTravelTime.getSecond() - routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel()))) / 24L;
@@ -76,7 +78,8 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 		IPort minReturnPort = null;
 		for (IPort returnPort : getReturnPorts()) {
 			@NonNull
-			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort, speedInKnots);
+			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort, speedInKnots,
+					AvailableRouteChoices.OPTIMAL);
 			ERouteOption route = quickestTravelTime.getFirst();
 			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getVesselClass().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
 					(quickestTravelTime.getSecond() - routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel()))) / 24L;

@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public interface IDistanceProvider extends IDataComponentProvider {
 
@@ -70,7 +71,17 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	int getTravelTime(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed);
 
 	@NonNull
-	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed);
+	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed, AvailableRouteChoices availableRouteChoices);
 
 	ERouteOption[] getRoutes();
+
+	/**
+	 * Returns the closest entry point of a route option (canal) for a given port.
+	 * 
+	 * @param port
+	 * @param routeOption
+	 * @return
+	 */
+	@NonNull
+	IPort getRouteOptionEntry(IPort port, ERouteOption routeOption);
 }

@@ -210,6 +210,9 @@ public class PortTimesRecordMaker {
 			portTimesRecords.add(portTimesRecord);
 
 			for (IPortSlot slot : record.getSlots()) {
+				portTimesRecord.setRouteOptionBooking(slot, record.getRouteOptionBooking(slot));
+				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot));
+
 				final ITimeWindow window = record.getSlotFeasibleTimeWindow(slot);
 				int visitDuration = record.getSlotDuration(slot);
 				// Pick based on earliest time
@@ -244,9 +247,11 @@ public class PortTimesRecordMaker {
 					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
 					int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
-					final int availableTime = distanceProvider
-							.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), startPortSlot.getPort(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed())
-							.getSecond();
+					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
+							prevPortSlot.getPort(), startPortSlot.getPort(), //
+							vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), //
+							record.getSlotNextVoyageOptions(prevPortSlot) //
+							).getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);

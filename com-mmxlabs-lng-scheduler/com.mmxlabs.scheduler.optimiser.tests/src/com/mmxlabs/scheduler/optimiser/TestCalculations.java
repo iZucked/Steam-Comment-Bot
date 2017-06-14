@@ -171,8 +171,8 @@ public class TestCalculations {
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement,
-					null, new ConstantValueLongCurve(0), false);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
+					new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -255,7 +255,8 @@ public class TestCalculations {
 			// scope.enter();
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			// TODO: Fix arrival time feed in.
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, annotatedSolution);
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 			// }
 			Assert.assertNotNull(volumeAllocatedSequences);
@@ -493,8 +494,8 @@ public class TestCalculations {
 					false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement,
-					null, new ConstantValueLongCurve(0), false);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
+					new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -568,7 +569,8 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			// TODO: Fix arrival time feed in.
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 
@@ -816,8 +818,8 @@ public class TestCalculations {
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement,
-					null, new ConstantValueLongCurve(0), isOptional);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
+					new ConstantValueLongCurve(0), isOptional);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -890,8 +892,8 @@ public class TestCalculations {
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
-
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			// TODO: Fix arrival time feed in.
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
 
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
