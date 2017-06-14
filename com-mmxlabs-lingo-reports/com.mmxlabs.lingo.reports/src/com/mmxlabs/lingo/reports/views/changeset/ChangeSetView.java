@@ -119,12 +119,14 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
@@ -249,7 +251,7 @@ public class ChangeSetView implements IAdaptable {
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
 	private @Nullable AnalyticsSolution lastSolution;
-	private @Nullable Slot lastTargetSlot;
+	private @Nullable NamedObject lastTargetSlot;
 
 	private boolean diffToBase = false;
 	private boolean showNonStructuralChanges = false;
@@ -1644,7 +1646,7 @@ public class ChangeSetView implements IAdaptable {
 
 	}
 
-	public void setNewDataData(final Object target, final Function<IProgressMonitor, ChangeSetRoot> action, final @Nullable Slot targetToSortFirst) {
+	public void setNewDataData(final Object target, final Function<IProgressMonitor, ChangeSetRoot> action, final @Nullable NamedObject targetToSortFirst) {
 
 		cleanUpVesselColumns();
 
@@ -2327,18 +2329,32 @@ public class ChangeSetView implements IAdaptable {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			this.viewMode = ViewMode.ACTION_SET;
 			this.canExportChangeSet = true;
-
-			Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
-			if (slotId != null) {
-				for (Slot s : slotInsertionOptions.getSlotsInserted()) {
-					if (slotId.equals(s.getName())) {
-						targetSlot = s;
-						break;
+			final NamedObject pTargetSlot;
+			if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
+				Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
+				if (slotId != null) {
+					for (Slot s : slotInsertionOptions.getSlotsInserted()) {
+						if (slotId.equals(s.getName())) {
+							targetSlot = s;
+							break;
+						}
 					}
 				}
+				pTargetSlot = targetSlot;
+				lastTargetSlot = pTargetSlot;
+			} else {
+				VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
+				if (slotId != null) {
+					for (VesselEvent s : slotInsertionOptions.getEventsInserted()) {
+						if (slotId.equals(s.getName())) {
+							targetSlot = s;
+							break;
+						}
+					}
+				}
+				pTargetSlot = targetSlot;
+				lastTargetSlot = pTargetSlot;
 			}
-			Slot pTargetSlot = targetSlot;
-			lastTargetSlot = pTargetSlot;
 
 			setNewDataData(target, monitor -> {
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
@@ -2451,8 +2467,8 @@ public class ChangeSetView implements IAdaptable {
 		return lastSolution;
 	}
 
-	@GetCurrentTargetSlot
-	public Slot getLastSlot() {
+	@GetCurrentTargetObject
+	public NamedObject getLastSlot() {
 		return lastTargetSlot;
 	}
 }

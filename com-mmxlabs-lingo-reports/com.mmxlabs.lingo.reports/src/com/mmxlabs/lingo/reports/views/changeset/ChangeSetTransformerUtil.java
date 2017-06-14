@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -69,6 +70,7 @@ import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 public final class ChangeSetTransformerUtil {
 
@@ -879,7 +881,7 @@ public final class ChangeSetTransformerUtil {
 		return sum;
 	}
 
-	public static void sortRows(@NonNull final List<ChangeSetTableRow> rows, @Nullable final Slot targetToSortFirst) {
+	public static void sortRows(@NonNull final List<ChangeSetTableRow> rows, @Nullable final NamedObject targetToSortFirst) {
 		// Sort into wiring groups.
 		final Map<ChangeSetTableRow, Collection<ChangeSetTableRow>> rowToRowGroup = new HashMap<>();
 		for (final ChangeSetTableRow row : rows) {
@@ -946,6 +948,10 @@ public final class ChangeSetTransformerUtil {
 		if (targetToSortFirst != null) {
 			ChangeSetTableRow targetRow = null;
 			for (final ChangeSetTableRow row : rows) {
+				if (targetToSortFirst instanceof VesselEvent && !row.isLhsSlot() && targetToSortFirst.getName().equals(row.getLhsName())) {
+					targetRow = row;
+					break;
+				}
 				if (targetToSortFirst instanceof LoadSlot && row.isLhsSlot() && targetToSortFirst.getName().equals(row.getLhsName())) {
 					targetRow = row;
 					break;

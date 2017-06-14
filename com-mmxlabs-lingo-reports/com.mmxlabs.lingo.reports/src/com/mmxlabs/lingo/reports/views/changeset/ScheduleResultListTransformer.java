@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,25 +14,10 @@ import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.Mappin
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Cooldown;
-import com.mmxlabs.models.lng.schedule.EndEvent;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SequenceType;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -67,7 +51,7 @@ public class ScheduleResultListTransformer {
 		return buildChangeSet(base, prev, current, null);
 	}
 
-	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable Slot targetToSortFirst) {
+	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable NamedObject targetToSortFirst) {
 		final ModelReference baseReference = base.getScenarioInstance().getReference("ScheduleResultListTransformer:1");
 		final ModelReference prevReference = prev.getScenarioInstance().getReference("ScheduleResultListTransformer:2");
 		final ModelReference currentReference = current.getScenarioInstance().getReference("ScheduleResultListTransformer:3");
@@ -91,7 +75,7 @@ public class ScheduleResultListTransformer {
 		return changeSet;
 	}
 
-	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase, @Nullable Slot targetToSortFirst) {
+	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase, @Nullable NamedObject targetToSortFirst) {
 
 		final ScheduleModel beforeScheduleModel = from.getTypedResult(ScheduleModel.class);
 		final ScheduleModel afterScheduleModel = to.getTypedResult(ScheduleModel.class);

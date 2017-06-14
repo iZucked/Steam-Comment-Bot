@@ -13,13 +13,13 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
-import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class InsertionPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance instance, final SlotInsertionOptions plan, final IProgressMonitor monitor, Slot target) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance instance, final SlotInsertionOptions plan, final IProgressMonitor monitor, NamedObject target) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 

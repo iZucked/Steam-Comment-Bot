@@ -21,10 +21,11 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 import com.mmxlabs.lingo.reports.views.changeset.GetCurrentAnalyticsSolution;
-import com.mmxlabs.lingo.reports.views.changeset.GetCurrentTargetSlot;
+import com.mmxlabs.lingo.reports.views.changeset.GetCurrentTargetObject;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class InsertionSelectedSlotHandler {
 
@@ -40,7 +41,7 @@ public class InsertionSelectedSlotHandler {
 	public void aboutToShow(final List<MMenuElement> items, final EModelService modelService, final MPart activePart) {
 
 		final AnalyticsSolution solution = (AnalyticsSolution) ContextInjectionFactory.invoke(activePart.getObject(), GetCurrentAnalyticsSolution.class, null);
-		final Slot lastSlot = (Slot) ContextInjectionFactory.invoke(activePart.getObject(), GetCurrentTargetSlot.class, null);
+		final NamedObject lastSlot = (NamedObject) ContextInjectionFactory.invoke(activePart.getObject(), GetCurrentTargetObject.class, null);
 		if (solution != null && solution.getSolution() instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) solution.getSolution();
 			if (slotInsertionOptions != null && slotInsertionOptions.getSlotsInserted().size() > 1) {

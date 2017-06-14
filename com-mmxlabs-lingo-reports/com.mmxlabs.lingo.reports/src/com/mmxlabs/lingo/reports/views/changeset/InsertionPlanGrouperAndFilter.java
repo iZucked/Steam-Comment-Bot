@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.nio.channels.IllegalSelectorException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,11 +25,12 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * Class to organise insertion plans and optionally filter out related but "poorer" choices
@@ -116,7 +116,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 	}
 
-	public List<ChangeSet> processChangeSetRoot(final ChangeSetRoot root, final Slot target) {
+	public List<ChangeSet> processChangeSetRoot(final ChangeSetRoot root, final NamedObject target) {
 		setsToInclude.clear();
 
 		// Group by change count and target
@@ -137,6 +137,14 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							targetRow = row;
 							targetRowData = d;
 							break;
+						} else if (d.getLhsEvent() instanceof VesselEventVisit) {
+							VesselEventVisit vesselEventVisit = (VesselEventVisit) d.getLhsEvent();
+							if (vesselEventVisit.getVesselEvent() == target ){
+								assert targetRow == null;
+								targetRow = row;
+								targetRowData = d;
+								break;
+							} 
 						}
 					}
 				}

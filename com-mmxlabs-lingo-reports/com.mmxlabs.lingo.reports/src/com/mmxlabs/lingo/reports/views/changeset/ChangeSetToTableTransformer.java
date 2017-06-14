@@ -19,12 +19,12 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class ChangeSetToTableTransformer {
 
-	public ChangeSetTableRoot createViewDataModel(final ChangeSetRoot changeSetRoot, final boolean isDiffToBase, Slot targetToSortFirst) {
+	public ChangeSetTableRoot createViewDataModel(final ChangeSetRoot changeSetRoot, final boolean isDiffToBase, NamedObject targetToSortFirst) {
 
 		final ChangeSetTableRoot changeSetTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 

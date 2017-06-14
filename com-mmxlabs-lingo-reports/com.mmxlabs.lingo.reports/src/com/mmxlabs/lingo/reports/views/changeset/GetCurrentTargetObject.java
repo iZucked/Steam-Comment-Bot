@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
 @Documented
 @Retention (RUNTIME)
 @Target(METHOD)
-public @interface GetCurrentTargetSlot {
+public @interface GetCurrentTargetObject {
 
 }
