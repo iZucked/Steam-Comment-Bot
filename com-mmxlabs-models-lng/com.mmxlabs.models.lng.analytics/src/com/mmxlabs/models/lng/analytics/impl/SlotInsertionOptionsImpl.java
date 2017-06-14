@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.util.Collection;
 
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl#getSlotsInserted <em>Slots Inserted</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl#getEventsInserted <em>Events Inserted</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl#getInsertionOptions <em>Insertion Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl#getExtraSlots <em>Extra Slots</em>}</li>
  * </ul>
@@ -53,6 +55,16 @@ public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInse
 	 * @ordered
 	 */
 	protected EList<Slot> slotsInserted;
+
+	/**
+	 * The cached value of the '{@link #getEventsInserted() <em>Events Inserted</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEventsInserted()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselEvent> eventsInserted;
 
 	/**
 	 * The cached value of the '{@link #getInsertionOptions() <em>Insertion Options</em>}' containment reference list.
@@ -110,6 +122,18 @@ public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInse
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselEvent> getEventsInserted() {
+		if (eventsInserted == null) {
+			eventsInserted = new EObjectResolvingEList<VesselEvent>(VesselEvent.class, this, AnalyticsPackage.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED);
+		}
+		return eventsInserted;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<SlotInsertionOption> getInsertionOptions() {
 		if (insertionOptions == null) {
 			insertionOptions = new EObjectContainmentEList<SlotInsertionOption>(SlotInsertionOption.class, this, AnalyticsPackage.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS);
@@ -155,6 +179,8 @@ public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInse
 		switch (featureID) {
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED:
 				return getSlotsInserted();
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED:
+				return getEventsInserted();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS:
 				return getInsertionOptions();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS:
@@ -175,6 +201,10 @@ public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInse
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED:
 				getSlotsInserted().clear();
 				getSlotsInserted().addAll((Collection<? extends Slot>)newValue);
+				return;
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED:
+				getEventsInserted().clear();
+				getEventsInserted().addAll((Collection<? extends VesselEvent>)newValue);
 				return;
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS:
 				getInsertionOptions().clear();
@@ -199,6 +229,9 @@ public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInse
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED:
 				getSlotsInserted().clear();
 				return;
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED:
+				getEventsInserted().clear();
+				return;
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS:
 				getInsertionOptions().clear();
 				return;
@@ -219,6 +252,8 @@ public class SlotInsertionOptionsImpl extends UUIDObjectImpl implements SlotInse
 		switch (featureID) {
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED:
 				return slotsInserted != null && !slotsInserted.isEmpty();
+			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED:
+				return eventsInserted != null && !eventsInserted.isEmpty();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS:
 				return insertionOptions != null && !insertionOptions.isEmpty();
 			case AnalyticsPackage.SLOT_INSERTION_OPTIONS__EXTRA_SLOTS:

@@ -2409,13 +2409,22 @@ s	 * <!-- end-user-doc -->
 	int SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Events Inserted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_INSERTION_OPTIONS__EVENTS_INSERTED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Insertion Options</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Extra Slots</b></em>' containment reference list.
@@ -2424,7 +2433,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SLOT_INSERTION_OPTIONS__EXTRA_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Slot Insertion Options</em>' class.
@@ -2433,7 +2442,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SLOT_INSERTION_OPTIONS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionImpl <em>Slot Insertion Option</em>}' class.
@@ -4441,6 +4450,17 @@ s	 * <!-- end-user-doc -->
 	EReference getSlotInsertionOptions_SlotsInserted();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getEventsInserted <em>Events Inserted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Events Inserted</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getEventsInserted()
+	 * @see #getSlotInsertionOptions()
+	 * @generated
+	 */
+	EReference getSlotInsertionOptions_EventsInserted();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getInsertionOptions <em>Insertion Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6126,6 +6146,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference SLOT_INSERTION_OPTIONS__SLOTS_INSERTED = eINSTANCE.getSlotInsertionOptions_SlotsInserted();
+
+		/**
+		 * The meta object literal for the '<em><b>Events Inserted</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_INSERTION_OPTIONS__EVENTS_INSERTED = eINSTANCE.getSlotInsertionOptions_EventsInserted();
 
 		/**
 		 * The meta object literal for the '<em><b>Insertion Options</b></em>' containment reference list feature.

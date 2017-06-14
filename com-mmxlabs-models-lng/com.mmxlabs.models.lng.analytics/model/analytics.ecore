@@ -450,6 +450,8 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotsInserted" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventsInserted" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="insertionOptions" upperBound="-1"
         eType="#//SlotInsertionOption" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extraSlots" upperBound="-1"

@@ -65,6 +65,7 @@ public class SlotInsertionOptionsItemProvider
 			super.getPropertyDescriptors(object);
 
 			addSlotsInsertedPropertyDescriptor(object);
+			addEventsInsertedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -83,6 +84,28 @@ public class SlotInsertionOptionsItemProvider
 				 getString("_UI_SlotInsertionOptions_slotsInserted_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotInsertionOptions_slotsInserted_feature", "_UI_SlotInsertionOptions_type"),
 				 AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Events Inserted feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEventsInsertedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotInsertionOptions_eventsInserted_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotInsertionOptions_eventsInserted_feature", "_UI_SlotInsertionOptions_type"),
+				 AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED,
 				 true,
 				 false,
 				 true,

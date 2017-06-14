@@ -70,6 +70,7 @@ public class SlotInsertionOptionsComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotsInsertedEditor(detailComposite, topClass);
+		add_eventsInsertedEditor(detailComposite, topClass);
 		add_insertionOptionsEditor(detailComposite, topClass);
 		add_extraSlotsEditor(detailComposite, topClass);
 	}
@@ -81,6 +82,15 @@ public class SlotInsertionOptionsComponentHelper extends BaseComponentHelper {
 	protected void add_slotsInsertedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__SLOTS_INSERTED));
 	}
+	/**
+	 * Create the editor for the eventsInserted feature on SlotInsertionOptions
+	 *
+	 * @generated
+	 */
+	protected void add_eventsInsertedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SLOT_INSERTION_OPTIONS__EVENTS_INSERTED));
+	}
+
 	/**
 	 * Create the editor for the insertionOptions feature on SlotInsertionOptions
 	 *

@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
 
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getSlotsInserted <em>Slots Inserted</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getEventsInserted <em>Events Inserted</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getInsertionOptions <em>Insertion Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SlotInsertionOptions#getExtraSlots <em>Extra Slots</em>}</li>
  * </ul>
@@ -47,6 +49,22 @@ public interface SlotInsertionOptions extends UUIDObject {
 	 * @generated
 	 */
 	EList<Slot> getSlotsInserted();
+
+	/**
+	 * Returns the value of the '<em><b>Events Inserted</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Events Inserted</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Events Inserted</em>' reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSlotInsertionOptions_EventsInserted()
+	 * @model
+	 * @generated
+	 */
+	EList<VesselEvent> getEventsInserted();
 
 	/**
 	 * Returns the value of the '<em><b>Insertion Options</b></em>' containment reference list.

@@ -2157,7 +2157,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSlotInsertionOptions_InsertionOptions() {
+	public EReference getSlotInsertionOptions_EventsInserted() {
 		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -2166,8 +2166,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSlotInsertionOptions_ExtraSlots() {
+	public EReference getSlotInsertionOptions_InsertionOptions() {
 		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotInsertionOptions_ExtraSlots() {
+		return (EReference)slotInsertionOptionsEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2525,6 +2534,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		slotInsertionOptionsEClass = createEClass(SLOT_INSERTION_OPTIONS);
 		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__SLOTS_INSERTED);
+		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__EVENTS_INSERTED);
 		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__INSERTION_OPTIONS);
 		createEReference(slotInsertionOptionsEClass, SLOT_INSERTION_OPTIONS__EXTRA_SLOTS);
 
@@ -2840,6 +2850,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(slotInsertionOptionsEClass, SlotInsertionOptions.class, "SlotInsertionOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotInsertionOptions_SlotsInserted(), theCargoPackage.getSlot(), null, "slotsInserted", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotInsertionOptions_EventsInserted(), theCargoPackage.getVesselEvent(), null, "eventsInserted", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotInsertionOptions_InsertionOptions(), this.getSlotInsertionOption(), null, "insertionOptions", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotInsertionOptions_ExtraSlots(), theCargoPackage.getSlot(), null, "extraSlots", null, 0, -1, SlotInsertionOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
