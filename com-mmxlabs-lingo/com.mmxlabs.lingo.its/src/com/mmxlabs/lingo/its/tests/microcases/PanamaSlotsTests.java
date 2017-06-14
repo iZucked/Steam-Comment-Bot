@@ -84,7 +84,7 @@ public class PanamaSlotsTests extends AbstractMicroTestCase {
 		CanalBookingSlot d2 = CargoFactory.eINSTANCE.createCanalBookingSlot();
 		d2.setRoute(panama);
 		d2.setEntryPoint(colon);
-		d2.setSlotDate(LocalDate.of(2017, Month.JUNE, 15));
+		d2.setSlotDate(LocalDate.of(2017, Month.JUNE, 20));
 		model.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d2);
 		
 		CanalBookingSlot d3 = CargoFactory.eINSTANCE.createCanalBookingSlot();
@@ -120,6 +120,66 @@ public class PanamaSlotsTests extends AbstractMicroTestCase {
 		final Port port1 = portFinder.findPort("Sabine Pass");
 
 		@NonNull
+		final Port port2 = portFinder.findPort("Quintero");
+
+		// map into same timezone to make expectations easier
+		port1.setTimeZone("UTC");
+		port2.setTimeZone("UTC");
+
+		// Set distance and speed to exact multiple -- quickest travel time is
+		// 100 hours
+		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
+		vesselClass.setMaxSpeed(16.0);
+
+		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
+		final LocalDateTime dischargeDate = loadDate.plusDays(13);
+
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L", loadDate.toLocalDate(), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final PanamaSlotsConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, PanamaSlotsConstraintChecker.class);
+
+			ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule()).getInstance(ISequencesManipulator.class);
+			@NonNull
+			IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
+			checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge), null);
+			assertTrue(checker.checkConstraints(manipulatedSequences, null));
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void panamaSlotNoDubleAssignmentTest(){
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.build();
+		
+		final Vessel vessel2 = fleetModelBuilder.createVessel("vessel2", vesselClass);
+		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
+				.build();
+
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
 		final Port port2 = portFinder.findPort("Chita");
 
 		// map into same timezone to make expectations easier
@@ -149,18 +209,38 @@ public class PanamaSlotsTests extends AbstractMicroTestCase {
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
+		
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L", loadDate.toLocalDate(), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability2, 1) //
+				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final PanamaSlotsConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, PanamaSlotsConstraintChecker.class);
+			
+			// run with empty sequnces to because of whitelisting in constraint checker
+			checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge), null);
 
 			ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule()).getInstance(ISequencesManipulator.class);
 			@NonNull
 			IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
-
-			assertTrue(checker.checkConstraints(manipulatedSequences, null));
+			SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability2, cargo2);
+			
+			assertFalse(checker.checkConstraints(manipulatedSequences, null));
 		});
 	}
 
@@ -215,7 +295,7 @@ public class PanamaSlotsTests extends AbstractMicroTestCase {
 			ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule()).getInstance(ISequencesManipulator.class);
 			@NonNull
 			IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
-
+			checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge), null);
 			assertFalse(checker.checkConstraints(manipulatedSequences, null));
 		});
 	}
