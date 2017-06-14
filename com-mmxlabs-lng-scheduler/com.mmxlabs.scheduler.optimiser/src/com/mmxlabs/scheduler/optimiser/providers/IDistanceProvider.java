@@ -83,6 +83,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * Returns the travel time between the given ports on the given route at the specified speed. This takes into account route additional transit times.
 	 * 
 	 * @param route
+	 * @param vessel
 	 * @param from
 	 * @param to
 	 * @param voyageStartTime
@@ -101,6 +102,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed, AvailableRouteChoices availableRouteChoices);
 	
 	ERouteOption[] getRoutes();
+
 
 	/**
 	 * Returns the closest entry point of a route option (canal) for a given port.
