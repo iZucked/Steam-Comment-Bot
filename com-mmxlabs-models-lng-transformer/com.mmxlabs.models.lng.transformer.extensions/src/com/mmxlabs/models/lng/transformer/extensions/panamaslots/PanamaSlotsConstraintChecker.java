@@ -27,7 +27,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
@@ -74,7 +74,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		int[][] schedule = scheduler.schedule(sequences);
 		boolean[][] throughPanama = scheduler.canalDecision();
-		IRouteOptionSlot[][] assignedSlots = scheduler.slotsAssigned();
+		IRouteOptionBooking[][] assignedSlots = scheduler.slotsAssigned();
 		
 		int strictBoundary = panamaSlotsProvider.getStrictBoundary();
 		int relaxedBoundary = panamaSlotsProvider.getRelaxedBoundary();
@@ -133,7 +133,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 			}
 			
 			// relaxed constraint
-			int countBefore = currentUnbookedSlots.size();						// 6
+			int countBefore = currentUnbookedSlots.size();						// 0
 			currentUnbookedSlotsInRelaxed.removeAll(unbookedSlots);
 			int countAfter = currentUnbookedSlotsInRelaxed.size();				// 0
 			int whitelistedSlotCount = (countBefore - countAfter);				// 6
