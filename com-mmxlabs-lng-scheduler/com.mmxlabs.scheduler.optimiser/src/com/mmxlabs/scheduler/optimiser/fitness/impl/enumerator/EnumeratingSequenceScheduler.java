@@ -861,7 +861,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 							if (potentialSlot.isPresent()) {
 								// window has a slot
 								throughPanama[sequenceIndex][index - 1] = true;
-								portTimeWindowsRecord.setRouteOptionSlot(prevPortSlot, potentialSlot.get());
+								currentPortTimeRecord.setRouteOptionSlot(prevPortSlot, potentialSlot.get());
 								
 								// check if it can be reached in time
 								if (windowStartTime[index - 1] + toCanal + panamaSlotsProvider.getMargin() < potentialSlot.get().getBookingDate()) {
@@ -878,7 +878,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 									// Slot can't be reached in time. Set to optimal time through panama and don't include slot.
 									// TODO: what to do here, should we report this to the user somehow?
 									minTimeToNextElement[index - 1] = panamaTimeToNextElement[index - 1];
-									windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
 								}
 
 							} else if (windowStartTime[index - 1] + directTimeToNextElement[index - 1] < windowEndTime[index]
@@ -887,7 +886,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 								// journey can be made direct (or it does not go across Panama)
 								// TODO: check for Suez!
 								minTimeToNextElement[index - 1] = Math.min(suezTimeToNextElement[index - 1], directTimeToNextElement[index - 1]);
-								windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
 								throughPanama[sequenceIndex][index - 1] = false;
 							} else if (windowStartTime[index] > panamaSlotsProvider.getRelaxedBoundary()) {
 								// assume a Panama booking because it's far enough in the future
@@ -914,7 +912,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 										minTimeToNextElement[index - 1] = travelTime;
 										routeOptionBookings[sequenceIndex][index - 1] = booking;
-										portTimeWindowsRecord.setRouteOptionSlot(prevPortSlot, booking);
+										currentPortTimeRecord.setRouteOptionSlot(prevPortSlot, booking);
 										assignedBookings.get(panamaEntry).add(booking);
 										unassignedBookings.get(panamaEntry).remove(booking);
 										break;
