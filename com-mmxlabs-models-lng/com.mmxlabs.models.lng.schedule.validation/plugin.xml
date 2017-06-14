@@ -104,6 +104,22 @@
                                  class="Sequence">
                            </target>
                         </constraint>
+                        <constraint
+                              class="com.mmxlabs.models.lng.schedule.validation.UnbookedSlotConstraint"
+                              id="com.mmxlabs.models.lng.schedule.validation.UnbookedSlotConstraint"
+                              isEnabledByDefault="true"
+                              lang="java"
+                              mode="Batch"
+                              name="UnbookedSlotConstraint"
+                              severity="INFO"
+                              statusCode="1">
+                           <message>
+                              {0}
+                           </message>
+                           <target
+                                 class="Journey">
+                           </target>
+                        </constraint>
          </constraints>
          <constraints></constraints>
       </constraintProvider>
