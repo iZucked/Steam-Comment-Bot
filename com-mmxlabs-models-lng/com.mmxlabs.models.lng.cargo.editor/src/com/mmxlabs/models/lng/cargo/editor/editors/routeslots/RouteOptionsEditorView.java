@@ -57,11 +57,7 @@ public class RouteOptionsEditorView extends ScenarioTableViewerView<RouteOptionE
 				}
 			}
 			pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCanalBookings_CanalBookingSlots() }), null, domain.getCommandStack());
-			pane.getViewer().setInput(canalBookingsModel);
-			//
-			// // Add action to create and edit cargo groups
-			// pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
-			// pane.getToolBarManager().update(true);
+			pane. setInput(canalBookingsModel);
 		}
 	}
 
