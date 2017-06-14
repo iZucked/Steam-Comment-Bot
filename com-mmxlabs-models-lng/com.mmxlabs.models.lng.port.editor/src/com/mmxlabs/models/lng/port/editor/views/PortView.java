@@ -53,15 +53,6 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 			// Add action to create and edit cargo groups
 			pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
 			
-			// STick in menu
-			PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel)getRootObject());
-			for (Route route : portModel.getRoutes()) {
-				if (route.isCanal()) {
-					pane.getToolBarManager().appendToGroup("edit", new RunnableAction("Edit " + route.getName(), () -> {
-						DetailCompositeDialogUtil.editSingleObject(pane.getJointModelEditorPart(), route);	
-					}));
-				}
-			}
 			pane.getToolBarManager().update(true);
 		}
 	}

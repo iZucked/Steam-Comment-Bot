@@ -11,6 +11,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
@@ -25,23 +26,20 @@ public class NamedIndexContainerTopLevelComposite extends DefaultTopLevelComposi
 	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
 	}
-	
-
 
 	/**
 	 * Don't display DataIndex child objects for editing.
 	 */
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		/*
 		 * Note: the logic is implemented in the #createChildArea method because the #shouldDisplay method does not permit the particular value of a child object to be interrogated.
 		 */
 
 		if ((value instanceof DataIndex) == false) {
-			super.createChildArea(root, object, parent, ref, value);
+			return super.createChildArea(root, object, parent, ref, value);
 		}
+		return null;
 	}
-	
-	
 
 }

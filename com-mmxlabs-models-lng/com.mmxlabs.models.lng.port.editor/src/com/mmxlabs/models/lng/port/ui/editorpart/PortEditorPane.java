@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
@@ -55,11 +56,13 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
 
@@ -465,31 +468,39 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			return new LockableAction("Edit distances...") {
 				@Override
 				public void run() {
-
-					final Route newModel = edit(distanceModel);
-					if (newModel == null) {
-						return;
-					}
-
-					final EditingDomain ed = getJointModelEditorPart().getEditingDomain();
-					final CompoundCommand cc = new CompoundCommand("Edit distances");
-					cc.append(DeleteCommand.create(ed, new ArrayList<>(distanceModel.getLines())));
-					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), new ArrayList<>(newModel.getLines())));
-					getJointModelEditorPart().setDisableUpdates(true);
-					ed.getCommandStack().execute(cc);
-					getJointModelEditorPart().setDisableUpdates(false);
+//					// STick in menu
+//					PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel)getRootObject());
+//					for (Route route : portModel.getRoutes()) {
+//						if (route.isCanal()) {
+//							pane.getToolBarManager().appendToGroup("edit", new RunnableAction("Edit " + route.getName(), () -> {
+								DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getJointModelEditorPart(), distanceModel);	
+//							}));
+//						}
+//					}
+//					final Route newModel = edit(distanceModel);
+//					if (newModel == null) {
+//						return;
+//					}
+//
+//					final EditingDomain ed = getJointModelEditorPart().getEditingDomain();
+//					final CompoundCommand cc = new CompoundCommand("Edit distances");
+//					cc.append(DeleteCommand.create(ed, new ArrayList<>(distanceModel.getLines())));
+//					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), new ArrayList<>(newModel.getLines())));
+//					getJointModelEditorPart().setDisableUpdates(true);
+//					ed.getCommandStack().execute(cc);
+//					getJointModelEditorPart().setDisableUpdates(false);
 					// display error
 
 				}
 
-				private Route edit(final Route distanceModel) {
-					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-
-					if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), distanceModel) == Window.OK) {
-						return ded.getResult();
-					}
-					return null;
-				}
+//				private Route edit(final Route distanceModel) {
+//					final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
+//
+//					if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), distanceModel) == Window.OK) {
+//						return ded.getResult();
+//					}
+//					return null;
+//				}
 			};
 		}
 	}

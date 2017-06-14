@@ -178,6 +178,12 @@
           id="com.mmxlabs.models.lng.port.editor.portGroupCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.port.Route"
+          factory="com.mmxlabs.models.lng.port.ui.editors.RouteDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.RouteDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
