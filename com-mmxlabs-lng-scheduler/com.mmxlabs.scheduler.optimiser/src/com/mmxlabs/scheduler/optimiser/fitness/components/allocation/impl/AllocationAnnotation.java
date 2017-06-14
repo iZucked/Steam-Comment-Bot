@@ -28,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 public final class AllocationAnnotation implements IAllocationAnnotation {
 	private boolean locked;
 
-	public class SlotAllocationAnnotation {
+	public static class SlotAllocationAnnotation {
 		public long commercialVolumeInM3;
 		public long commercialVolumeInMMBTu;
 		public long physicalVolumeInM3;
