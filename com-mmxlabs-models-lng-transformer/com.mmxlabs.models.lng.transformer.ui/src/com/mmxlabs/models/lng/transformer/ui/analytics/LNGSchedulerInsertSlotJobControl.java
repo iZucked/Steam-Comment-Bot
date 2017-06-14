@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
@@ -95,6 +96,8 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 	private final List<Slot> targetSlots;
 	private final List<Slot> targetOptimiserSlots;
+	private final List<VesselEvent> targetEvents;
+	private final List<VesselEvent> targetOptimiserEvents;
 
 	private final EditingDomain originalEditingDomain;
 
@@ -135,6 +138,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		final UserSettings userSettings = jobDescriptor.getUserSettings();
 		targetSlots = jobDescriptor.getTargetSlots();
+		targetEvents = jobDescriptor.getTargetEvents();
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
@@ -182,7 +186,8 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		if (userSettings.isSetPeriodStart() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario
-			targetOptimiserSlots = new LinkedList<Slot>();
+			targetOptimiserSlots = new LinkedList<>();
+			targetOptimiserEvents = new LinkedList<>();
 			CargoModelFinder finder = new CargoModelFinder(scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario().getCargoModel());
 			for (Slot original : targetSlots) {
 				try {
@@ -196,8 +201,17 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 					throw new RuntimeException(String.format("Slot %s not included within period", original.getName()));
 				}
 			}
+			for (VesselEvent original : targetEvents) {
+				try {
+					targetOptimiserEvents.add(finder.findVesselEvent(original.getName()));
+				} catch (IllegalArgumentException e) {
+					// Slot not found - probably outside of period.
+					throw new RuntimeException(String.format("Vessel event %s not included within period", original.getName()));
+				}
+			}
 		} else {
 			targetOptimiserSlots = targetSlots;
+			targetOptimiserEvents = targetEvents;
 		}
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
@@ -211,7 +225,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	@Override
 	protected void doRunJob(final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
-		progressMonitor.beginTask("Insert slot(s)", 100);
+		progressMonitor.beginTask("Inserting option(s)", 100);
 		try {
 
 			@NonNull
@@ -259,7 +273,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				}
 				return newName;
 			};
-			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, 5_000, new SubProgressMonitor(progressMonitor, 90));
+			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 5_000, new SubProgressMonitor(progressMonitor, 90));
 			if (progressMonitor.isCanceled()) {
 				return;
 			}
@@ -279,6 +293,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				final SlotInsertionOptions plan = AnalyticsFactory.eINSTANCE.createSlotInsertionOptions();
 				// Make sure this is the original, not the optimiser
 				plan.getSlotsInserted().addAll(targetSlots);
+				plan.getEventsInserted().addAll(targetEvents);
 
 				try {
 					int changeSetIdx = 0;

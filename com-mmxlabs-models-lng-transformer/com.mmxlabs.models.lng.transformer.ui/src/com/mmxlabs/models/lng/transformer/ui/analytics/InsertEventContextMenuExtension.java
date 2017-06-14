@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -43,12 +41,9 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.events.IVesselEventsTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -67,48 +62,37 @@ import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
-public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
+public class InsertEventContextMenuExtension implements IVesselEventsTableContextMenuExtension {
 
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
 
-	private static final Logger log = LoggerFactory.getLogger(InsertSlotContextMenuExtension.class);
+	private static final Logger log = LoggerFactory.getLogger(InsertEventContextMenuExtension.class);
 
-	public InsertSlotContextMenuExtension() {
+	public InsertEventContextMenuExtension() {
 	}
 
 	@Override
-	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Slot slot, @NonNull final MenuManager menuManager) {
+	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final VesselEvent vesselEvent, @NonNull final MenuManager menuManager) {
 
 		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
 
-		if (slot.getCargo() == null) {
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(slot));
-
-			if (slot.isLocked()) {
-				action.setEnabled(false);
-				action.setText(action.getText() + " (Kept open)");
-			}
-
-			menuManager.add(action);
+		if (!LicenseFeatures.isPermitted("features:options-suggester-events")) {
 			return;
-		} else {
-			List<Slot> slots = slot.getCargo().getSortedSlots();
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+		}
+		if (vesselEvent instanceof CharterOutEvent) {
 
-			for (Slot slot2 : slots) {
-				if (slot2.isLocked()) {
-					action.setEnabled(false);
-					action.setText(action.getText() + " (Kept open)");
-				}
-			}
-			if (slot.getCargo().isLocked()) {
+			final InsertEventAction action = new InsertEventAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(vesselEvent));
+
+			if (vesselEvent.isLocked()) {
 				action.setEnabled(false);
 				action.setText(action.getText() + " (Locked)");
 			}
+
 			menuManager.add(action);
 		}
+		return;
 	}
 
 	@Override
@@ -117,74 +101,26 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		if (!LicenseFeatures.isPermitted("features:options-suggester")) {
 			return;
 		}
-		{
-			final List<Slot> slots = new LinkedList<>();
-			final Iterator<?> itr = selection.iterator();
-			while (itr.hasNext()) {
-				final Object obj = itr.next();
-				if (obj instanceof RowData) {
-					final RowData rowData = (RowData) obj;
-					final LoadSlot load = rowData.getLoadSlot();
-					if (load != null && load.getCargo() == null) {
-						slots.add(load);
-						break;
-					}
-					final DischargeSlot discharge = rowData.getDischargeSlot();
-					if (discharge != null && discharge.getCargo() == null) {
-						slots.add(discharge);
-						break;
-					}
-				}
-			}
-
-			if (slots.size() > 0) {
-				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
-
-				for (Slot slot : slots) {
-					if (slot.isLocked()) {
-						action.setEnabled(false);
-						action.setText(action.getText() + " (Kept open)");
-						break;
-					}
-				}
-				menuManager.add(action);
-
-				return;
-			}
+		if (!LicenseFeatures.isPermitted("features:options-suggester-events")) {
+			return;
 		}
 		{
-			final Set<Cargo> cargoes = new LinkedHashSet<>();
+			final List<VesselEvent> events = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
-				if (obj instanceof RowData) {
-					final RowData rowData = (RowData) obj;
-					final LoadSlot load = rowData.getLoadSlot();
-					if (load != null && load.getCargo() != null) {
-						cargoes.add(load.getCargo());
-						break;
-					}
-					final DischargeSlot discharge = rowData.getDischargeSlot();
-					if (discharge != null && discharge.getCargo() != null) {
-						cargoes.add(discharge.getCargo());
-						break;
-					}
+				if (obj instanceof CharterOutEvent) {
+					events.add((CharterOutEvent) obj);
+					break;
+
 				}
 			}
 
-			if (cargoes.size() == 1) {
-				List<Slot> slots = cargoes.iterator().next().getSortedSlots();
-				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+			if (events.size() > 0) {
+				final InsertEventAction action = new InsertEventAction(scenarioEditingLocation.getScenarioInstance(), events);
 
-				for (Slot slot : slots) {
-					if (slot.isLocked()) {
-						action.setEnabled(false);
-						action.setText(action.getText() + " (Kept open)");
-						break;
-					}
-				}
-				for (Cargo cargo : cargoes) {
-					if (cargo.isLocked()) {
+				for (VesselEvent event : events) {
+					if (event.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Locked)");
 						break;
@@ -197,15 +133,15 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		}
 	}
 
-	private static class InsertSlotAction extends Action {
+	private static class InsertEventAction extends Action {
 
-		private final List<Slot> originalTargetSlots;
+		private final List<VesselEvent> originalTargetEvents;
 		private final ScenarioInstance original;
 
-		public InsertSlotAction(final ScenarioInstance scenarioInstance, final List<Slot> targetSlots) {
-			super(generateActionName(targetSlots) + " (Beta)");
+		public InsertEventAction(final ScenarioInstance scenarioInstance, final List<VesselEvent> targetVesselEvents) {
+			super(generateActionName(targetVesselEvents) + " (Beta)");
 			this.original = scenarioInstance;
-			this.originalTargetSlots = targetSlots;
+			this.originalTargetEvents = targetVesselEvents;
 		}
 
 		@Override
@@ -216,7 +152,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			try {
 				duplicate = original.getScenarioService().duplicate(original, original);
 
-				duplicate.setName(generateActionName(originalTargetSlots));
+				duplicate.setName(generateActionName(originalTargetEvents));
 
 				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
@@ -237,6 +173,9 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
+						if (userSettings == null) {
+							return;
+						}
 						// Reset settings not supplied to the user
 						userSettings.setShippingOnly(false);
 						userSettings.setBuildActionSets(false);
@@ -254,18 +193,14 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 							try {
 
 								// Map between original and fork
-								List<Slot> targetSlots = new LinkedList<Slot>();
+								List<VesselEvent> targetEvents = new LinkedList<>();
 								CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-								for (Slot original : originalTargetSlots) {
-									if (original instanceof LoadSlot) {
-										targetSlots.add(finder.findLoadSlot(original.getName()));
-									} else if (original instanceof DischargeSlot) {
-										targetSlots.add(finder.findDischargeSlot(original.getName()));
-									}
+								for (VesselEvent original : originalTargetEvents) {
+									targetEvents.add(finder.findVesselEvent(original.getName()));
 								}
 
 								// create a new job
-								job = new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, userSettings, targetSlots, Collections.emptyList());
+								job = new LNGSlotInsertionJobDescriptor(generateName(targetEvents), duplicate, userSettings, Collections.emptyList(), targetEvents);
 
 								// New optimisation, so check there are no validation errors.
 								if (!validateScenario(root, false)) {
@@ -425,27 +360,27 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	private static String generateName(SlotInsertionOptions plan) {
 
 		List<String> names = new LinkedList<String>();
-		for (Slot s : plan.getSlotsInserted()) {
+		for (VesselEvent s : plan.getEventsInserted()) {
 			names.add(s.getName());
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
-	private static String generateName(Collection<Slot> slots) {
+	private static String generateName(Collection<VesselEvent> events) {
 
 		List<String> names = new LinkedList<String>();
-		for (Slot s : slots) {
+		for (VesselEvent s : events) {
 			names.add(s.getName());
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
-	private static String generateActionName(Collection<Slot> slots) {
+	private static String generateActionName(Collection<VesselEvent> events) {
 
 		List<String> names = new LinkedList<String>();
-		for (Slot s : slots) {
+		for (VesselEvent s : events) {
 			names.add(s.getName());
 		}
 

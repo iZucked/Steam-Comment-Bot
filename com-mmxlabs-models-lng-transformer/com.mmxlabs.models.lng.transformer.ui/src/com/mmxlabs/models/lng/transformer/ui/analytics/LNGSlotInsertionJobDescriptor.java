@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -28,6 +29,7 @@ public final class LNGSlotInsertionJobDescriptor implements IJobDescriptor, Seri
 	private UserSettings userSettings;
 
 	private List<Slot> targetSlots;
+	private List<VesselEvent> targetEvents;
 
 	public UserSettings getUserSettings() {
 		return userSettings;
@@ -37,11 +39,16 @@ public final class LNGSlotInsertionJobDescriptor implements IJobDescriptor, Seri
 		return targetSlots;
 	}
 
-	public LNGSlotInsertionJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final UserSettings userSettings, List<Slot> targetSlots) {
+	public List<VesselEvent> getTargetEvents() {
+		return targetEvents;
+	}
+
+	public LNGSlotInsertionJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final UserSettings userSettings, List<Slot> targetSlots, List<VesselEvent> targetEvents) {
 		this.name = name;
 		this.scenarioInstance = scenarioInstance;
 		this.userSettings = userSettings;
 		this.targetSlots = targetSlots;
+		this.targetEvents = targetEvents;
 	}
 
 	@Override
@@ -49,6 +56,7 @@ public final class LNGSlotInsertionJobDescriptor implements IJobDescriptor, Seri
 		scenarioInstance = null;
 		userSettings = null;
 		targetSlots = null;
+		targetEvents = null;
 	}
 
 	@Override

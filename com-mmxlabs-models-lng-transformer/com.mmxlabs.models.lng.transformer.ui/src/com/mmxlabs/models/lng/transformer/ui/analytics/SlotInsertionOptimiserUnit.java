@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -140,17 +142,24 @@ public class SlotInsertionOptimiserUnit {
 		this.inputState = inputState;
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
 		// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 		// scope.enter();
 		try {
 
 			@NonNull
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
-			final List<IPortSlot> elements = slotsToInsert.stream() //
+			final List<IPortSlot> slotElements = slotsToInsert.stream() //
+					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
+					.collect(Collectors.toList());
+			final List<IPortSlot> eventElements = eventsToInsert.stream() //
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
 					.collect(Collectors.toList());
 
+			List<IPortSlot> optionElements = new ArrayList<IPortSlot>(slotElements.size() + eventElements.size());
+			optionElements.addAll(slotElements);
+			optionElements.addAll(eventElements);
+			
 			monitor.beginTask("Generate solutions", tries);
 
 			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
@@ -180,7 +189,7 @@ public class SlotInsertionOptimiserUnit {
 					}
 
 					// Makes sure target slots are not contained in the solution.
-					for (final IPortSlot portSlot : elements) {
+					for (final IPortSlot portSlot : optionElements) {
 						final ISequenceElement element = portSlotProvider.getElement(portSlot);
 
 						final LookupManager lookupManager = new LookupManager(tmp);
@@ -218,7 +227,7 @@ public class SlotInsertionOptimiserUnit {
 							// Bit nasty, but we are still in PoC stages
 
 							final SlotInsertionOptimiser calculator = injector.getInstance(SlotInsertionOptimiser.class);
-							return calculator.generate(elements, state, pTryNo);
+							return calculator.generate(optionElements, state, pTryNo);
 						} finally {
 							monitor.worked(1);
 						}
