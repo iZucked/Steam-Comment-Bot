@@ -850,7 +850,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 						} else {
 							final IPortSlot p_prevPortSlot = prevPortSlot;
 							IPort panamaEntry = distanceProvider.getRouteOptionEntry(prevPortSlot.getPort(), ERouteOption.PANAMA);
-							Optional<IRouteOptionBooking> potentialSlot = assignedBookings.get(panamaEntry).stream().filter(e -> {
+							Optional<IRouteOptionBooking> potentialSlot = assignedBookings.computeIfAbsent(panamaEntry, k -> new TreeSet()).stream().filter(e -> {
 								return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot);
 							}).findFirst();
 
