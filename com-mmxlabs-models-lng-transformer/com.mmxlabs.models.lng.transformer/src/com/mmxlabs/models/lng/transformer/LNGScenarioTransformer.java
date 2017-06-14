@@ -854,7 +854,8 @@ public class LNGScenarioTransformer {
 		if (eBallastBonusContract != null) {
 			for (final IBallastBonusContractTransformer ballastBonusContractTransformer : ballastBonusContractTransformers) {
 				// This can be null if the availability is generated from a Spot option
-				@Nullable IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
+				@Nullable
+				IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
 				vesselAvailability.setBallastBonusContract(ballastBonusContract);
 			}
 		}
@@ -864,7 +865,8 @@ public class LNGScenarioTransformer {
 		if (eBallastBonusContract != null) {
 			for (final IBallastBonusContractTransformer ballastBonusContractTransformer : ballastBonusContractTransformers) {
 				// This can be null if the availability is generated from a Spot option
-				@Nullable IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
+				@Nullable
+				IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
 				if (ballastBonusContract != null) {
 					return ballastBonusContract;
 				}
@@ -1060,7 +1062,8 @@ public class LNGScenarioTransformer {
 				// IHeelOptionConsumer heelConsumer = new HeelOptionConsumer(0L, Long.MAX_VALUE, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
 				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel());
 
-				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus);
+				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus,
+						charterOut.isOptional());
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -1772,7 +1775,7 @@ public class LNGScenarioTransformer {
 			marketSlotsByID.put(elementName, loadSlot);
 			addSpotSlotToCount((SpotSlot) loadSlot);
 		}
-		
+
 		for (final ISlotTransformer slotTransformer : slotTransformers) {
 			slotTransformer.slotTransformed(loadSlot, load);
 		}
@@ -2135,7 +2138,7 @@ public class LNGScenarioTransformer {
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(fobSlot, fobSaleSlot);
 								}
-								
+
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
 									// Use the UTC based time window
@@ -2411,7 +2414,6 @@ public class LNGScenarioTransformer {
 									slotTransformer.slotTransformed(fobSlot, fobPurchaseSlot);
 								}
 
-								
 								marketSlots.add(fobPurchaseSlot);
 								marketGroupSlots.add(fobPurchaseSlot);
 
@@ -3016,7 +3018,8 @@ public class LNGScenarioTransformer {
 			IBallastBonusContract ballastBonusContract = createAndGetBallastBonusContract(eBallastBonusContract);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, ballastBonusContract, repositioningFeeCurve, eVesselAvailability.isOptional());
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, ballastBonusContract,
+					repositioningFeeCurve, eVesselAvailability.isOptional());
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
@@ -3040,9 +3043,9 @@ public class LNGScenarioTransformer {
 			} else {
 				builder.setGeneratedCharterOutStartTime(0);
 			}
-			
-//			final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
-//					createHeelConsumer(vesselClass.getSafetyHeel(), vesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+
+			// final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
+			// createHeelConsumer(vesselClass.getSafetyHeel(), vesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 
 			for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
 
@@ -3059,7 +3062,6 @@ public class LNGScenarioTransformer {
 				charterCount = charterInMarket.getSpotCharterCount();
 				final IVesselClass oVesselClass = vesselClassAssociation.lookupNullChecked(eVesselClass);
 
-				
 				@Nullable
 				IBallastBonusContract ballastBonusContract = null;
 				IEndRequirement charterInEndRule = null;
@@ -3075,7 +3077,8 @@ public class LNGScenarioTransformer {
 						}
 					}
 				}
-				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVesselClass, charterInCurve, charterCount, charterInEndRule, ballastBonusContract);
+				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVesselClass, charterInCurve, charterCount, charterInEndRule,
+						ballastBonusContract);
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
 				// Only create a nominal vessel if enabled
@@ -3156,7 +3159,9 @@ public class LNGScenarioTransformer {
 	private IEndRequirement createDefaultCharterInEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap,
 			final IVesselClass oVesselClass) {
 		@NonNull
-		IEndRequirement allDischargeCharterInEndRequirement = createEndRequirement(builder, portAssociation, null, null, modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()), new HeelOptionConsumer(oVesselClass.getSafetyHeel(), oVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+		IEndRequirement allDischargeCharterInEndRequirement = createEndRequirement(builder, portAssociation, null, null,
+				modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()),
+				new HeelOptionConsumer(oVesselClass.getSafetyHeel(), oVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 		return allDischargeCharterInEndRequirement;
 	}
 

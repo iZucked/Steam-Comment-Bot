@@ -335,12 +335,14 @@ public class AnnotatedSolutionExporter {
 		for (final ISequenceElement element : annotatedSolution.getFullSequences().getUnusedElements()) {
 			assert element != null;
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
-			final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
-			if (slot != null) {
-				output.getUnusedElements().add(modelSlot);
+			if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
+				final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
+				if (slot != null) {
+					output.getUnusedElements().add(modelSlot);
+				}
+				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
+				openSlotExporter.export(element, annotations);
 			}
-			final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
-			openSlotExporter.export(element, annotations);
 			// mtmExporter.export(element, annotations);
 		}
 
