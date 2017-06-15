@@ -11,38 +11,38 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
 /**
- * Implementation of {@link IPanamaSlotsProviderEditor} using a {@link HashMap} as backing data store.
+ * Implementation of {@link IPanamaBookingsProviderEditor} using a {@link HashMap} as backing data store.
  * 
  */
-public class PanamaBookingsProviderEditor implements IPanamaSlotsProviderEditor {
+public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEditor {
 	
 	// make client configurable
 	private static final int MAX_SPEED_TO_CANAL = 16;
-	private static final int CANAL_SLOT_MARGIN = 24;
+	private static final int CANAL_BOOKING_MARGIN = 24;
 
-	private ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> panamaSlots;
+	private ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> panamaBookings;
 	private int strictBoundary;
 	private int relaxedBoundary;
-	private int relaxedSlotCount;
+	private int relaxedBookingsCount;
 	
 	@Override
-	public void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> slots) {
+	public void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> bookings) {
 		ImmutableMap.Builder<IPort, ImmutableSortedSet<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
-		slots.forEach((k,v) -> {
+		bookings.forEach((k,v) -> {
 			builder.put(k, ImmutableSortedSet.copyOf(v));
 		});
-		panamaSlots = builder.build();
+		panamaBookings = builder.build();
 	}
 
 	@Override
 	public ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings() {
-		if (panamaSlots == null){
-			throw new IllegalStateException("Panama slots not set");
+		if (panamaBookings == null){
+			throw new IllegalStateException("Panama booking not set");
 		}
-		return panamaSlots;
+		return panamaBookings;
 	}
 
 	@Override
@@ -51,8 +51,8 @@ public class PanamaBookingsProviderEditor implements IPanamaSlotsProviderEditor 
 	}
 
 	@Override
-	public int getRelaxedSlotCount() {
-		return relaxedSlotCount;
+	public int getRelaxedBookingCount() {
+		return relaxedBookingsCount;
 	}
 
 	@Override
@@ -66,8 +66,8 @@ public class PanamaBookingsProviderEditor implements IPanamaSlotsProviderEditor 
 	}
 
 	@Override
-	public void setRelaxedSlotCount(int slotCount) {
-		relaxedSlotCount = slotCount;
+	public void setRelaxedBookingCount(int bookingCount) {
+		relaxedBookingsCount = bookingCount;
 	}
 
 	@Override
@@ -82,6 +82,6 @@ public class PanamaBookingsProviderEditor implements IPanamaSlotsProviderEditor 
 
 	@Override
 	public int getMargin() {
-		return CANAL_SLOT_MARGIN;
+		return CANAL_BOOKING_MARGIN;
 	}
 }

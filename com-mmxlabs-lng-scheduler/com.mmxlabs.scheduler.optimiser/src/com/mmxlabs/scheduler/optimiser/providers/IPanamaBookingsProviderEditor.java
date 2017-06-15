@@ -15,26 +15,26 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
  * 
  * @author Robert
  */
-public interface IPanamaSlotsProviderEditor extends IPanamaBookingsProvider {
+public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 	/**
-	 * Sets the slots overwriting existing ones.
+	 * Sets the bookings, overwriting existing ones.
 	 */
-	void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> slots);
+	void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> bookings);
 	
 	/**
-	 * All dates before this boundary strictly need a Panama slot. Exclusive
+	 * All dates before this boundary strictly need a Panama booking. Exclusive
 	 * @param boundary
 	 */
 	void setStrictBoundary(int boundary);
 	
 	/**
-	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a slot.
+	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
 	 * @return
 	 */
-	void setRelaxedSlotCount(int slotCount);
+	void setRelaxedBookingCount(int bookingCount);
 	
 	/**
-	 * All dates after this boundary don't need a Panama slot. Inclusive
+	 * All dates after this boundary don't need a Panama booking. Inclusive
 	 * @return
 	 */
 	void setRelaxedBoundary(int boundary);

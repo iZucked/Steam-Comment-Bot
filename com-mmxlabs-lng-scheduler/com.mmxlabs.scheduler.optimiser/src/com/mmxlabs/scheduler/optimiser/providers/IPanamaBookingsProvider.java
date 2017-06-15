@@ -19,19 +19,19 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings();
 	
 	/**
-	 * All dates before this boundary strictly need a Panama slot. Exclusive
+	 * All dates before this boundary strictly need a Panama booking. Exclusive
 	 * @return
 	 */
 	int getStrictBoundary();
 	
 	/**
-	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a slot.
+	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
 	 * @return
 	 */
-	int getRelaxedSlotCount();
+	int getRelaxedBookingCount();
 	
 	/**
-	 * All dates after this boundary don't need a Panama slot. Inclusive.
+	 * All dates after this boundary don't need a Panama booking. Inclusive.
 	 * @return
 	 */
 	int getRelaxedBoundary();
@@ -43,7 +43,7 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	int getSpeedToCanal();
 	
 	/**
-	 * The margin in hours before the slot.
+	 * The margin in hours before the booking, i.e. a vessel has to arrive n hours before the booking time.
 	 * @return
 	 */
 	int getMargin();
