@@ -102,7 +102,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 			modelEntityMap.addModelObject(eBooking, oBooking);
 		});
 
-		panamaSlotsProviderEditor.setSlots(panamaSlots);
+		panamaSlotsProviderEditor.setBookings(panamaSlots);
 
 		panamaSlotsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
 		panamaSlotsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);

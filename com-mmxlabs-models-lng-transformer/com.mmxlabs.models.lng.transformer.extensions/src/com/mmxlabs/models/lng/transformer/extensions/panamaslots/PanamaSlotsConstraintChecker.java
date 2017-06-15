@@ -34,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequen
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.NonSchedulingScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PanamaPriceBasedSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -46,7 +46,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 	private final String name;
 
 	@Inject
-	private IPanamaSlotsProvider panamaSlotsProvider;
+	private IPanamaBookingsProvider panamaSlotsProvider;
 
 	@Inject
 	private NonSchedulingScheduler scheduler;
