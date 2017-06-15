@@ -55,14 +55,17 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -130,7 +133,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
 		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
-			rows.addAll(factory.createRows(options));
+			rows.addAll(factory.createRows(options, null));
 			return true;
 		});
 		Collections.sort(rows, (a, b) -> a.order - b.order);
@@ -264,7 +267,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
 				}
 
-				if (obj instanceof CargoAllocation) {
+				if (obj instanceof VesselEventVisit) {
+					validObjects.add(obj);
+				} else if (obj instanceof CargoAllocation) {
 					validObjects.add(obj);
 				} else if (obj instanceof SlotAllocation) {
 					final SlotAllocation slotAllocation = (SlotAllocation) obj;
@@ -276,10 +281,13 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					}
 				} else if (obj instanceof SlotVisit) {
 					validObjects.add((((SlotVisit) obj).getSlotAllocation().getCargoAllocation()));
-				} else if (obj instanceof Cargo || obj instanceof Slot) {
+				} else if (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent) {
 					Cargo cargo = null;
 					Slot slot = null;
-					if (obj instanceof Cargo) {
+					VesselEvent event = null;
+					if (obj instanceof VesselEvent) {
+						event = (VesselEvent) obj;
+					} else if (obj instanceof Cargo) {
 						cargo = (Cargo) obj;
 					} else {
 						// Must be a slot
@@ -349,6 +357,39 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 								}
 							}
 						}
+					} else if (event != null) {
+
+						// TODO: Look up ScheduleModel somehow....
+
+						if (part instanceof IEditorPart) {
+							final IEditorPart editorPart = (IEditorPart) part;
+							final IEditorInput editorInput = editorPart.getEditorInput();
+							if (editorInput instanceof IScenarioServiceEditorInput) {
+								final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+								final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
+								final EObject instance = scenarioInstance.getInstance();
+								if (instance instanceof LNGScenarioModel) {
+									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+									final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+									if (scheduleModel != null) {
+										final Schedule schedule = scheduleModel.getSchedule();
+										if (schedule != null) {
+											LOOP: for (final Sequence sequence : schedule.getSequences()) {
+												for (final Event evt : sequence.getEvents()) {
+													if (evt instanceof VesselEventVisit) {
+														final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+														if (vesselEventVisit.getVesselEvent() == event) {
+															validObjects.add(vesselEventVisit);
+															break LOOP;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -396,6 +437,15 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 				final Collection<Object> validObjects = CargoEconsReportComponent.this.processSelection(e3part, selection);
 
+				final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+				ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
+					rows.addAll(factory.createRows(options, validObjects));
+					return true;
+				});
+				Collections.sort(rows, (a, b) -> a.order - b.order);
+
+				viewer.setInput(rows);
+
 				for (final Object selectedObject : validObjects) {
 
 					// Currently only CargoAllocations
@@ -412,6 +462,21 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 						@Nullable
 						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+							gvc.getColumn().setImage(pinImage);
+						}
+					} else if (selectedObject instanceof VesselEventVisit) {
+						final VesselEventVisit vesselEventVisit = (VesselEventVisit) selectedObject;
+
+						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+						GridViewerHelper.configureLookAndFeel(gvc);
+						// Mark column for disposal on selection change
+						dataColumns.add(gvc);
+						gvc.getColumn().setText(vesselEventVisit.name());
+						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+						gvc.getColumn().setWidth(100);
+						@Nullable
+						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(vesselEventVisit)) {
 							gvc.getColumn().setImage(pinImage);
 						}
 					} else if (selectedObject instanceof MarketAllocation) {
