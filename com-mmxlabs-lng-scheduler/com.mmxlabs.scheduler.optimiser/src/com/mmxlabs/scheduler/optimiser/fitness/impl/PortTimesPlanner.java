@@ -206,8 +206,9 @@ public class PortTimesPlanner {
 					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
 					int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
-					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), startPortSlot.getPort(),
-							prevArrivalTime + prevVisitDuration, vesselAvailability.getVessel().getVesselClass().getMaxSpeed()).getSecond();
+					final int availableTime = distanceProvider
+							.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), startPortSlot.getPort(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed())
+							.getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 					portTimesRecord.setReturnSlotTime(thisPortSlot, roundTripReturnArrivalTime);

@@ -44,10 +44,8 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
 
-	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
-
 	@Override
-	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime, final IVessel vessel) {
+	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final IVessel vessel) {
 
 		List<DistanceMatrixEntry> distances = getAllDistanceValues(from, to);
 
@@ -57,9 +55,6 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			final DistanceMatrixEntry e = itr.next();
 			// No distance?
 			if (e.getDistance() == Integer.MAX_VALUE) {
-				itr.remove();
-			} else if (!isRouteAvailable(e.getRoute(), vessel, voyageStartTime)) {
-				// Distance available, but route is closed at this time
 				itr.remove();
 			}
 		}
@@ -74,29 +69,13 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public int getRouteAvailableFrom(@NonNull final ERouteOption route) {
-		final Integer v = routeAvailableFrom.getOrDefault(route, Integer.MIN_VALUE);
-		assert v != null;
-		return v.intValue();
+	public boolean isRouteAvailable(@NonNull final ERouteOption route, final IVessel vessel) {
+		return routeExclusionProvider.isRouteEnabled(vessel, route);
 	}
 
 	@Override
-	public boolean isRouteAvailable(@NonNull final ERouteOption route, final IVessel vessel, final int voyageStartTime) {
-		final int routeAvailableFrom = getRouteAvailableFrom(route);
-		return (voyageStartTime >= routeAvailableFrom) && routeExclusionProvider.isRouteEnabled(vessel, route);
-	}
+	public int getDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to, final IVessel vessel) {
 
-	@Override
-	public void setRouteAvailableFrom(final ERouteOption route, final int availableFrom) {
-		routeAvailableFrom.put(route, availableFrom);
-	}
-
-	@Override
-	public int getDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime, final IVessel vessel) {
-
-		if (!isRouteAvailable(route, vessel, voyageStartTime)) {
-			return Integer.MAX_VALUE;
-		}
 		return getOpenDistance(route, from, to);
 	}
 
@@ -107,11 +86,11 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public int getTravelTime(@NonNull final ERouteOption route, @NonNull final IVessel vessel, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime, final int speed) {
+	public int getTravelTime(@NonNull final ERouteOption route, @NonNull final IVessel vessel, @NonNull final IPort from, @NonNull final IPort to, final int speed) {
 		if (speed == 0) {
 			return Integer.MAX_VALUE;
 		}
-		final int distance = getDistance(route, from, to, voyageStartTime, vessel);
+		final int distance = getDistance(route, from, to, vessel);
 		if (distance == Integer.MAX_VALUE) {
 			return Integer.MAX_VALUE;
 		}
@@ -124,13 +103,13 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed) {
+	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int speed) {
 
 		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
 			assert route != null;
-			final int travelTime = getTravelTime(route, vessel, from, to, voyageStartTime, speed);
+			final int travelTime = getTravelTime(route, vessel, from, to, speed);
 			if (travelTime < bestTime) {
 				bestRoute = route;
 				bestTime = travelTime;

@@ -170,14 +170,14 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-			
+
 			if (firstType == PortType.Start) {
 				return true;
 			}
 			if (secondType == PortType.End) {
 				return true;
 			}
-			
+
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
 
@@ -234,8 +234,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final int voyageStartTime = tw1.getInclusiveStart() + elementDurationProvider.getElementDuration(first, resource);
 
 		@NonNull
-		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), voyageStartTime,
-				resourceMaxSpeed);
+		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), resourceMaxSpeed);
 		if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
 			return false;
 		}
@@ -257,9 +256,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		assert tw1 != null;
 		assert tw2 != null;
-		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
 
-		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getInclusiveStart() + visitDuration, vesselProvider.getVesselAvailability(resource).getVessel());
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), vesselProvider.getVesselAvailability(resource).getVessel());
 
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";

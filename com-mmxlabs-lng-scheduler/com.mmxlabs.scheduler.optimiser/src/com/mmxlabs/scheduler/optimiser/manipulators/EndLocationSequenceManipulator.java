@@ -14,8 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -31,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -101,12 +98,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	@Inject
 	private IDistanceProvider distanceProvider;
-
-	@Inject
-	private IPortSlotProvider portSlotProvider;
-
-	@Inject
-	private IElementDurationProvider durationsProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -273,10 +264,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 		final ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
 		final IPort fromPort = portProvider.getPortForElement(lastVisit);
-		// The time window should not be null for most sequences. However a "bad" sequence (one which the constraint checkers will throw out) may well present a null time window here, so be lenient.
-		final @Nullable ITimeWindow timeWindow = portSlotProvider.getPortSlot(lastVisit).getTimeWindow();
-		final int visitDuration = durationsProvider.getElementDuration(lastVisit, resource);
-		final int lastVoyageStartTime = (timeWindow == null ? 0 : timeWindow.getInclusiveStart()) + visitDuration;
 
 		IPort closestPort = null;
 		int closestPortDistance = Integer.MAX_VALUE;
@@ -286,7 +273,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				break;
 			}
 
-			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime, vesselProvider.getVesselAvailability(resource).getVessel());
+			final List<DistanceMatrixEntry> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, vesselProvider.getVesselAvailability(resource).getVessel());
 			int distance = Integer.MAX_VALUE;
 			for (final DistanceMatrixEntry distanceOption : distanceValues) {
 				final int routeDistance = distanceOption.getDistance();

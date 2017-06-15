@@ -83,7 +83,7 @@ public class PriceIntervalProviderHelperTest {
 		final List<DistanceMatrixEntry> distances = new LinkedList<>();
 		distances.add(new DistanceMatrixEntry(ERouteOption.DIRECT, from, to, 400));
 		distances.add(new DistanceMatrixEntry(ERouteOption.SUEZ, from, to, 300));
-		final TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
+		final TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
 
 		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000 * 22.4));
@@ -141,21 +141,6 @@ public class PriceIntervalProviderHelperTest {
 		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
 		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyLong())).thenReturn(fixedSpeedValue);
 		return consumptionRateCalculator;
-	}
-
-	private List<Pair<ERouteOption, Integer>> getDefaultCanalOpenings() {
-		final List<Pair<ERouteOption, Integer>> openings = new LinkedList<>();
-		openings.add(new Pair<>(ERouteOption.DIRECT, 0));
-		openings.add(new Pair<>(ERouteOption.SUEZ, 0));
-		return openings;
-	}
-
-	private List<Pair<ERouteOption, Integer>> getCanalOpenings(final int suezOpens) {
-		final List<Pair<ERouteOption, Integer>> openings = new LinkedList<>();
-		openings.add(new Pair<>(ERouteOption.DIRECT, 0));
-		openings.add(new Pair<>(ERouteOption.SUEZ, suezOpens));
-		openings.add(new Pair<>(ERouteOption.PANAMA, 0));
-		return openings;
 	}
 
 	@Test
@@ -659,15 +644,14 @@ public class PriceIntervalProviderHelperTest {
 		return ppih;
 	}
 
-	private static TimeWindowSchedulingCanalDistanceProvider getTimeWindowSchedulingCanalDistanceProvider(final List<DistanceMatrixEntry> distances,
-			final List<Pair<ERouteOption, Integer>> canalOpenings) {
+	private static TimeWindowSchedulingCanalDistanceProvider getTimeWindowSchedulingCanalDistanceProvider(final List<DistanceMatrixEntry> distances) {
 		final TimeWindowSchedulingCanalDistanceProvider timeWindowSchedulingCanalDistanceProvider = new TimeWindowSchedulingCanalDistanceProvider();
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
-				bind(IDistanceProvider.class).toInstance(getDistanceProvider(distances, canalOpenings));
+				bind(IDistanceProvider.class).toInstance(getDistanceProvider(distances));
 				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
 				bind(IConsumptionRateCalculator.class).toInstance(Mockito.mock(IConsumptionRateCalculator.class));
 			}
@@ -677,7 +661,7 @@ public class PriceIntervalProviderHelperTest {
 		return timeWindowSchedulingCanalDistanceProvider;
 	}
 
-	private static TimeWindowsTrimming getTimeWindowsTrimming(final List<DistanceMatrixEntry> distances, final List<Pair<ERouteOption, Integer>> canalOpenings) {
+	private static TimeWindowsTrimming getTimeWindowsTrimming(final List<DistanceMatrixEntry> distances) {
 		final TimeWindowsTrimming timeWindowsTrimming = new TimeWindowsTrimming();
 
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
@@ -718,13 +702,13 @@ public class PriceIntervalProviderHelperTest {
 				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
 				bind(PriceIntervalProviderHelper.class).toInstance(createPriceIntervalProviderHelper(0));
-				bind(IDistanceProvider.class).toInstance(getDistanceProvider(distances, canalOpenings));
+				bind(IDistanceProvider.class).toInstance(getDistanceProvider(distances));
 				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
 				bind(IConsumptionRateCalculator.class).toInstance(Mockito.mock(IConsumptionRateCalculator.class));
 
 				bind(IVesselBaseFuelCalculator.class).toInstance(vesselBaseFuelCalculator);
 				bind(ICharterRateCalculator.class).toInstance(Mockito.mock(ICharterRateCalculator.class));
-				bind(ITimeWindowSchedulingCanalDistanceProvider.class).toInstance(getTimeWindowSchedulingCanalDistanceProvider(distances, canalOpenings));
+				bind(ITimeWindowSchedulingCanalDistanceProvider.class).toInstance(getTimeWindowSchedulingCanalDistanceProvider(distances));
 			}
 		});
 
@@ -733,23 +717,9 @@ public class PriceIntervalProviderHelperTest {
 
 	}
 
-	private static IDistanceProvider getDistanceProvider(final List<DistanceMatrixEntry> distances, final List<Pair<ERouteOption, Integer>> canalOpenings) {
+	private static IDistanceProvider getDistanceProvider(final List<DistanceMatrixEntry> distances) {
 		final IDistanceProvider distanceProvider = Mockito.mock(IDistanceProvider.class);
 		Mockito.when(distanceProvider.getAllDistanceValues(Mockito.any(IPort.class), Mockito.any(IPort.class))).thenReturn(distances);
-		for (final Pair<ERouteOption, Integer> openings : canalOpenings) {
-			when(distanceProvider.isRouteAvailable(Matchers.eq(openings.getFirst()), Matchers.any(), Matchers.anyInt())).thenAnswer(new Answer<Boolean>() {
-				@Override
-				public Boolean answer(final InvocationOnMock invocation) throws Throwable {
-					final Object[] args = invocation.getArguments();
-					final int input = (int) args[2];
-					if (input >= openings.getSecond()) {
-						return true;
-					} else {
-						return false;
-					}
-				}
-			});
-		}
 		return distanceProvider;
 	}
 

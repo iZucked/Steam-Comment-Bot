@@ -17,20 +17,12 @@ import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 public interface IDistanceProvider extends IDataComponentProvider {
 
 	/**
-	 * Returns the time the route is available from. Returns {@link Integer#MIN_VALUE} if always open.
-	 * 
-	 * @param route
-	 * @return
-	 */
-	int getRouteAvailableFrom(@NonNull ERouteOption route);
-
-	/**
 	 * Indicate whether a route is available for voyages starting at the given time
 	 * 
 	 * @param voyageStartTime
 	 * @return
 	 */
-	boolean isRouteAvailable(@NonNull ERouteOption route, IVessel vessel, int voyageStartTime);
+	boolean isRouteAvailable(@NonNull ERouteOption route, IVessel vessel);
 
 	/**
 	 * Get available distances. This filters out invalid distances and closed route distances.
@@ -40,13 +32,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	@NonNull
-	List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime, IVessel vessel);
-
-	@Deprecated
-	@NonNull
-	default List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
-		return getDistanceValues(from, to, Integer.MAX_VALUE, null);
-	}
+	List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to, IVessel vessel);
 
 	@NonNull
 	List<@NonNull DistanceMatrixEntry> getAllDistanceValues(@NonNull IPort from, @NonNull IPort to);
@@ -57,15 +43,9 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @param route
 	 * @param from
 	 * @param to
-	 * @param voyageStartTime
 	 * @return
 	 */
-	int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, IVessel vessel);
-
-	@Deprecated
-	default int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to) {
-		return getDistance(route, from, to, Integer.MAX_VALUE, null);
-	}
+	int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to, IVessel vessel);
 
 	/**
 	 * Returns the distance assuming the route is open. May return {@link Integer#MAX_VALUE} if there is no distance
@@ -87,13 +67,10 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @param speed
 	 * @return
 	 */
-	int getTravelTime(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
+	int getTravelTime(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed);
 
 	@NonNull
-	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
+	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int speed);
 
 	ERouteOption[] getRoutes();
-
-//	@NonNull
-//	List<@NonNull ERouteOption> getRoutes();
 }

@@ -82,7 +82,7 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 			throw new IllegalSelectorException();
 		}
 
-		final int ballastTime = distanceProvider.getQuickestTravelTime(vessel, fromPort, origin.getPort(), completionOfDischarge, speed).getSecond();
+		final int ballastTime = distanceProvider.getQuickestTravelTime(vessel, fromPort, origin.getPort(), speed).getSecond();
 		final int returnTime = completionOfDischarge + ballastTime;
 
 		// TODO: treemap?

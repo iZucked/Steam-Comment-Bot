@@ -56,7 +56,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		final int loadDuration = durationProvider.getElementDuration(buyElement, resource);
 
 		final Triple<Integer, ERouteOption, Integer> distanceData = getShortestTravelTimeToPort(buyOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
-				getReferenceSpeed(buyOption, nominatedVessel, VesselState.Laden), fobLoadTime + loadDuration);
+				getReferenceSpeed(buyOption, nominatedVessel, VesselState.Laden));
 		if (distanceData == null) {
 			throw new IllegalStateException(String.format("No distance between %s and %s", buyOption.getPort().getName(), sellOption.getPort().getName()));
 		}
@@ -78,10 +78,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		final ISequenceElement sellElement = portSlotProvider.getElement(sellOption);
 		final int dischargeDuration = durationProvider.getElementDuration(sellElement, resource);
 
-		final int startOfDischarge = dischargeJourney.getFirst();
-		final int completionOfDischarge = startOfDischarge + dischargeDuration;
-
-		final int ballastDistance = distanceProvider.getDistance(ballastRoute, sellOption.getPort(), buyOption.getPort(), completionOfDischarge, nominatedVessel);
+		final int ballastDistance = distanceProvider.getDistance(ballastRoute, sellOption.getPort(), buyOption.getPort(), nominatedVessel);
 		// Get notional speed
 		final int referenceSpeed = getReferenceSpeed(buyOption, nominatedVessel, VesselState.Ballast);
 
@@ -102,12 +99,12 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 	 */
 	@Nullable
 	private Triple<Integer, ERouteOption, Integer> getShortestTravelTimeToPort(@NonNull final ILoadOption loadOption, final @NonNull IPort to, final @NonNull IPort from, final IVessel vessel,
-			final int referenceSpeed, final int voyageStartTime) {
+			final int referenceSpeed) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 		final Collection<ERouteOption> allowedRoutes = shippingHoursRestrictionProvider.getDivertableDESAllowedRoutes(loadOption);
-		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(to, from, voyageStartTime, vessel);
+		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(to, from, vessel);
 		for (final DistanceMatrixEntry d : distances) {
 			final ERouteOption routeOption = d.getRoute();
 			if (allowedRoutes == null || allowedRoutes.isEmpty() || allowedRoutes.contains(routeOption)) {

@@ -91,7 +91,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
 				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(),
 						distanceProvider.getDistance(ERouteOption.DIRECT, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element),
-								lastTimeWindowStart /* + visitDuration */, vesselProvider.getVesselAvailability(resource).getVessel()));
+								vesselProvider.getVesselAvailability(resource).getVessel()));
 			} else {
 				timeWindowStart = Math.min(timeWindowStart, timeWindow.getInclusiveStart());
 			}

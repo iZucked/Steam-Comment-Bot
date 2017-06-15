@@ -74,18 +74,19 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 					return Integer.compare(Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o1.getDistance()) + routeCostProvider.getRouteTransitTime(o1.getRoute(), vessel),
 							Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o2.getDistance()) + routeCostProvider.getRouteTransitTime(o2.getRoute(), vessel));
 				} else {
-					return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), vessel, ladenStartTime, costType), routeCostProvider.getRouteCost(o2.getRoute(), vessel, ladenStartTime, costType));
+					return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), vessel, ladenStartTime, costType),
+							routeCostProvider.getRouteCost(o2.getRoute(), vessel, ladenStartTime, costType));
 				}
 			}
 		});
 
 		// filter out closed distances
-		allDistanceValues = allDistanceValues.stream().filter(d -> distanceProvider.isRouteAvailable(d.getRoute(), vessel, ladenStartTime)).collect(Collectors.toList());
+		allDistanceValues = allDistanceValues.stream().filter(d -> distanceProvider.isRouteAvailable(d.getRoute(), vessel)).collect(Collectors.toList());
 
 		// remove dominated distances
 		for (int i = allDistanceValues.size() - 1; i > 0; i--) {
-			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getRoute(), vessel, ladenStartTime, costType) >= routeCostProvider.getRouteCost(allDistanceValues.get(i - 1).getRoute(), vessel,
-					ladenStartTime, costType)) && allDistanceValues.get(i).getDistance() > allDistanceValues.get(i - 1).getDistance()) {
+			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getRoute(), vessel, ladenStartTime, costType) >= routeCostProvider.getRouteCost(allDistanceValues.get(i - 1).getRoute(),
+					vessel, ladenStartTime, costType)) && allDistanceValues.get(i).getDistance() > allDistanceValues.get(i - 1).getDistance()) {
 				allDistanceValues.remove(i);
 			}
 		}

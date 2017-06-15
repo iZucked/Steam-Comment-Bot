@@ -28,47 +28,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 
 public class DefaultDistanceProviderImplTest {
-	@Test
-	public void testGetRouteAvailable() {
 
-		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
-		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-
-		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
-
-		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.DIRECT));
-		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.SUEZ));
-		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.PANAMA));
-
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 10);
-
-		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.DIRECT));
-		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.SUEZ));
-		Assert.assertEquals(10, distanceProvider.getRouteAvailableFrom(ERouteOption.PANAMA));
-	}
-
-	@Test
-	public void testIsRouteAvailable() {
-
-		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
-		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-
-		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
-
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, null, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, null, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, null, 0));
-
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 10);
-
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, null, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, null, 0));
-
-		Assert.assertFalse(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, null, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, null, 10));
-	}
-
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetOpenDistance() {
 		final IPort port1 = Mockito.mock(IPort.class, "port1");
@@ -109,25 +69,9 @@ public class DefaultDistanceProviderImplTest {
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
 		// No restriction set, all open
-		Assert.assertEquals(10, distanceProvider.getDistance(ERouteOption.DIRECT, port1, port2, 100, null));
-		Assert.assertEquals(20, distanceProvider.getDistance(ERouteOption.SUEZ, port1, port2, 100, null));
-		Assert.assertEquals(30, distanceProvider.getDistance(ERouteOption.PANAMA, port1, port2, 100, null));
-
-		// Open Suez at time 101
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
-		Assert.assertEquals(10, distanceProvider.getDistance(ERouteOption.DIRECT, port1, port2, 100, null));
-		Assert.assertEquals(Integer.MAX_VALUE, distanceProvider.getDistance(ERouteOption.SUEZ, port1, port2, 100, null));
-		Assert.assertEquals(20, distanceProvider.getDistance(ERouteOption.SUEZ, port1, port2, 101, null));
-		Assert.assertEquals(30, distanceProvider.getDistance(ERouteOption.PANAMA, port1, port2, 100, null));
-
-		// Open Panama at time 150
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 150);
-
-		Assert.assertEquals(10, distanceProvider.getDistance(ERouteOption.DIRECT, port1, port2, 100, null));
-		Assert.assertEquals(20, distanceProvider.getDistance(ERouteOption.SUEZ, port1, port2, 100, null));
-		Assert.assertEquals(Integer.MAX_VALUE, distanceProvider.getDistance(ERouteOption.PANAMA, port1, port2, 149, null));
-		Assert.assertEquals(30, distanceProvider.getDistance(ERouteOption.PANAMA, port1, port2, 150, null));
+		Assert.assertEquals(10, distanceProvider.getDistance(ERouteOption.DIRECT, port1, port2, null));
+		Assert.assertEquals(20, distanceProvider.getDistance(ERouteOption.SUEZ, port1, port2, null));
+		Assert.assertEquals(30, distanceProvider.getDistance(ERouteOption.PANAMA, port1, port2, null));
 	}
 
 	@Test
@@ -161,28 +105,7 @@ public class DefaultDistanceProviderImplTest {
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
 		// No restriction set, all open
-		verifyListResult(10, 20, 30, distanceProvider.getDistanceValues(port1, port2, 100, null));
-
-		// Open Suez at time 101
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
-
-		verifyListResult(10, null, 30, distanceProvider.getDistanceValues(port1, port2, 100, null));
-		verifyListResult(10, 20, 30, distanceProvider.getDistanceValues(port1, port2, 101, null));
-
-		// Open Panama at time 150
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 150);
-
-		verifyListResult(10, 20, null, distanceProvider.getDistanceValues(port1, port2, 149, null));
-		verifyListResult(10, 20, 30, distanceProvider.getDistanceValues(port1, port2, 150, null));
-
-		// Open Direct at time 200
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.DIRECT, 200);
-
-		verifyListResult(null, 20, 30, distanceProvider.getDistanceValues(port1, port2, 199, null));
-		verifyListResult(10, 20, 30, distanceProvider.getDistanceValues(port1, port2, 200, null));
+		verifyListResult(10, 20, 30, distanceProvider.getDistanceValues(port1, port2, null));
 	}
 
 	@Test
@@ -214,82 +137,9 @@ public class DefaultDistanceProviderImplTest {
 
 		// No restriction set, all open
 		// 10 knots speed
-		Assert.assertEquals(1, distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, port1, port2, 100, 10_000));
-		Assert.assertEquals(2 + 6, distanceProvider.getTravelTime(ERouteOption.SUEZ, vessel, port1, port2, 100, 10_000));
-		Assert.assertEquals(3 + 12, distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, port1, port2, 100, 10_000));
-
-		// Open Suez at time 101
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
-		Assert.assertEquals(1, distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, port1, port2, 100, 10_000));
-		Assert.assertEquals(Integer.MAX_VALUE, distanceProvider.getTravelTime(ERouteOption.SUEZ, vessel, port1, port2, 100, 10_000));
-		Assert.assertEquals(2 + 6, distanceProvider.getTravelTime(ERouteOption.SUEZ, vessel, port1, port2, 101, 10_000));
-		Assert.assertEquals(3 + 12, distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, port1, port2, 100, 10_000));
-
-		// Open Panama at time 150
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 150);
-
-		Assert.assertEquals(1, distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, port1, port2, 149, 10_000));
-		Assert.assertEquals(2 + 6, distanceProvider.getTravelTime(ERouteOption.SUEZ, vessel, port1, port2, 149, 10_000));
-		Assert.assertEquals(Integer.MAX_VALUE, distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, port1, port2, 149, 10_000));
-		Assert.assertEquals(3 + 12, distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, port1, port2, 150, 10_000));
-
-		// Open Direct at time 200
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, Integer.MIN_VALUE);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.DIRECT, 200);
-
-		Assert.assertEquals(Integer.MAX_VALUE, distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, port1, port2, 199, 10_000));
-		Assert.assertEquals(1, distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, port1, port2, 200, 10_000));
-		Assert.assertEquals(2 + 6, distanceProvider.getTravelTime(ERouteOption.SUEZ, vessel, port1, port2, 200, 10_000));
-		Assert.assertEquals(3 + 12, distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, port1, port2, 199, 10_000));
-	}
-
-	@Test
-	public void testGetQuickestTravelTime() {
-		final IPort port1 = Mockito.mock(IPort.class, "port1");
-		final IPort port2 = Mockito.mock(IPort.class, "port2");
-
-		final IDistanceMatrixProvider matrixProvider = Mockito.mock(IDistanceMatrixProvider.class);
-		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-
-		Mockito.when(matrixProvider.get(ERouteOption.DIRECT, port1, port2)).thenReturn(40);
-		Mockito.when(matrixProvider.get(ERouteOption.SUEZ, port1, port2)).thenReturn(20);
-		Mockito.when(matrixProvider.get(ERouteOption.PANAMA, port1, port2)).thenReturn(30);
-
-		final List<DistanceMatrixEntry> matrixDistanceValues = new LinkedList<>();
-		// Make direct longest!
-		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.DIRECT, port1, port2, 40));
-		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.SUEZ, port1, port2, 20));
-		matrixDistanceValues.add(new DistanceMatrixEntry(ERouteOption.PANAMA, port1, port2, 30));
-
-		Mockito.when(matrixProvider.getValues(port1, port2)).thenReturn(matrixDistanceValues);
-		Mockito.when(matrixProvider.getRoutes()).thenReturn(new ERouteOption[] { ERouteOption.DIRECT, ERouteOption.SUEZ, ERouteOption.PANAMA });
-
-		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
-
-		IVessel vessel = Mockito.mock(IVessel.class);
-
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vessel)).thenReturn(0);
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(12);
-
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(6);
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
-
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
-
-		// Close Suez
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
-
-		// Close Direct and Suez
-		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
-		distanceProvider.setRouteAvailableFrom(ERouteOption.DIRECT, 101);
-
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.PANAMA, 3 + 12), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
+		Assert.assertEquals(1, distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, port1, port2, 10_000));
+		Assert.assertEquals(2 + 6, distanceProvider.getTravelTime(ERouteOption.SUEZ, vessel, port1, port2, 10_000));
+		Assert.assertEquals(3 + 12, distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, port1, port2, 10_000));
 
 	}
 
@@ -327,27 +177,27 @@ public class DefaultDistanceProviderImplTest {
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(6);
 		// try to exclude Direct (but direct is always open!)
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.DIRECT));
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
 
 		// Suez is open
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
 
 		// exclude Suez
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ));
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel2)).thenReturn(1);
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
-		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel2, port1, port2, 100, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel2, port1, port2, 10_000));
 
 		// Exclude Suez, open panama
 		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(0);
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ));
-		Assert.assertEquals(new Pair<>(ERouteOption.PANAMA, 3 + 0), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.PANAMA, 3 + 0), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
 
 		// Exclude Panama and Suez
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.SUEZ, ERouteOption.PANAMA));
-		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
+		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 10_000));
 	}
 
 	private void verifyListResult(final Integer directDistance, final Integer suezDistance, final Integer panamaDistance, final List<DistanceMatrixEntry> results) {
