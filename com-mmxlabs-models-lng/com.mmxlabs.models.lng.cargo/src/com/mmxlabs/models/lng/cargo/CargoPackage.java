@@ -4970,13 +4970,13 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKING_SLOT__ENTRY_POINT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Slot Date</b></em>' attribute.
+	 * The feature id for the '<em><b>Booking Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT__SLOT_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CANAL_BOOKING_SLOT__BOOKING_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Canal Booking Slot</em>' class.
@@ -5061,13 +5061,13 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Flexible Slot Amount</b></em>' attribute.
+	 * The feature id for the '<em><b>Flexible Booking Amount</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT = 3;
+	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = 3;
 
 	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
@@ -6729,15 +6729,15 @@ public interface CargoPackage extends EPackage {
 	EReference getCanalBookingSlot_EntryPoint();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlotDate <em>Slot Date</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Slot Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlotDate()
+	 * @return the meta object for the attribute '<em>Booking Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate()
 	 * @see #getCanalBookingSlot()
 	 * @generated
 	 */
-	EAttribute getCanalBookingSlot_SlotDate();
+	EAttribute getCanalBookingSlot_BookingDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
@@ -6783,15 +6783,15 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_RelaxedBoundaryOffsetDays();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleSlotAmount <em>Flexible Slot Amount</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Flexible Slot Amount</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleSlotAmount()
+	 * @return the meta object for the attribute '<em>Flexible Booking Amount</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount()
 	 * @see #getCanalBookings()
 	 * @generated
 	 */
-	EAttribute getCanalBookings_FlexibleSlotAmount();
+	EAttribute getCanalBookings_FlexibleBookingAmount();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
@@ -8084,12 +8084,12 @@ public interface CargoPackage extends EPackage {
 		EReference CANAL_BOOKING_SLOT__ENTRY_POINT = eINSTANCE.getCanalBookingSlot_EntryPoint();
 
 		/**
-		 * The meta object literal for the '<em><b>Slot Date</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Booking Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CANAL_BOOKING_SLOT__SLOT_DATE = eINSTANCE.getCanalBookingSlot_SlotDate();
+		EAttribute CANAL_BOOKING_SLOT__BOOKING_DATE = eINSTANCE.getCanalBookingSlot_BookingDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.
@@ -8126,12 +8126,12 @@ public interface CargoPackage extends EPackage {
 		EAttribute CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = eINSTANCE.getCanalBookings_RelaxedBoundaryOffsetDays();
 
 		/**
-		 * The meta object literal for the '<em><b>Flexible Slot Amount</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Flexible Booking Amount</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT = eINSTANCE.getCanalBookings_FlexibleSlotAmount();
+		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = eINSTANCE.getCanalBookings_FlexibleBookingAmount();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getCanalBookingSlots <em>Canal Booking Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleSlotAmount <em>Flexible Slot Amount</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}</li>
  * </ul>
  *
  * @generated
@@ -90,24 +90,24 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 	protected int relaxedBoundaryOffsetDays = RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getFlexibleSlotAmount() <em>Flexible Slot Amount</em>}' attribute.
+	 * The default value of the '{@link #getFlexibleBookingAmount() <em>Flexible Booking Amount</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFlexibleSlotAmount()
+	 * @see #getFlexibleBookingAmount()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int FLEXIBLE_SLOT_AMOUNT_EDEFAULT = 0;
+	protected static final int FLEXIBLE_BOOKING_AMOUNT_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getFlexibleSlotAmount() <em>Flexible Slot Amount</em>}' attribute.
+	 * The cached value of the '{@link #getFlexibleBookingAmount() <em>Flexible Booking Amount</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFlexibleSlotAmount()
+	 * @see #getFlexibleBookingAmount()
 	 * @generated
 	 * @ordered
 	 */
-	protected int flexibleSlotAmount = FLEXIBLE_SLOT_AMOUNT_EDEFAULT;
+	protected int flexibleBookingAmount = FLEXIBLE_BOOKING_AMOUNT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -187,8 +187,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getFlexibleSlotAmount() {
-		return flexibleSlotAmount;
+	public int getFlexibleBookingAmount() {
+		return flexibleBookingAmount;
 	}
 
 	/**
@@ -196,11 +196,11 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setFlexibleSlotAmount(int newFlexibleSlotAmount) {
-		int oldFlexibleSlotAmount = flexibleSlotAmount;
-		flexibleSlotAmount = newFlexibleSlotAmount;
+	public void setFlexibleBookingAmount(int newFlexibleBookingAmount) {
+		int oldFlexibleBookingAmount = flexibleBookingAmount;
+		flexibleBookingAmount = newFlexibleBookingAmount;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT, oldFlexibleSlotAmount, flexibleSlotAmount));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT, oldFlexibleBookingAmount, flexibleBookingAmount));
 	}
 
 	/**
@@ -231,8 +231,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 				return getStrictBoundaryOffsetDays();
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				return getRelaxedBoundaryOffsetDays();
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT:
-				return getFlexibleSlotAmount();
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
+				return getFlexibleBookingAmount();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -256,8 +256,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				setRelaxedBoundaryOffsetDays((Integer)newValue);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT:
-				setFlexibleSlotAmount((Integer)newValue);
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
+				setFlexibleBookingAmount((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -280,8 +280,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				setRelaxedBoundaryOffsetDays(RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT:
-				setFlexibleSlotAmount(FLEXIBLE_SLOT_AMOUNT_EDEFAULT);
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
+				setFlexibleBookingAmount(FLEXIBLE_BOOKING_AMOUNT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -301,8 +301,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 				return strictBoundaryOffsetDays != STRICT_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				return relaxedBoundaryOffsetDays != RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT:
-				return flexibleSlotAmount != FLEXIBLE_SLOT_AMOUNT_EDEFAULT;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
+				return flexibleBookingAmount != FLEXIBLE_BOOKING_AMOUNT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -321,8 +321,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 		result.append(strictBoundaryOffsetDays);
 		result.append(", relaxedBoundaryOffsetDays: ");
 		result.append(relaxedBoundaryOffsetDays);
-		result.append(", flexibleSlotAmount: ");
-		result.append(flexibleSlotAmount);
+		result.append(", flexibleBookingAmount: ");
+		result.append(flexibleBookingAmount);
 		result.append(')');
 		return result.toString();
 	}

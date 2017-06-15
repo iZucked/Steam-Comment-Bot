@@ -70,7 +70,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		add_canalBookingSlotsEditor(detailComposite, topClass);
 		add_strictBoundaryOffsetDaysEditor(detailComposite, topClass);
 		add_relaxedBoundaryOffsetDaysEditor(detailComposite, topClass);
-		add_flexibleSlotAmountEditor(detailComposite, topClass);
+		add_flexibleBookingAmountEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the canalBookingSlots feature on CanalBookings
@@ -97,11 +97,11 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS));
 	}
 	/**
-	 * Create the editor for the flexibleSlotAmount feature on CanalBookings
+	 * Create the editor for the flexibleBookingAmount feature on CanalBookings
 	 *
 	 * @generated
 	 */
-	protected void add_flexibleSlotAmountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT));
+	protected void add_flexibleBookingAmountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT));
 	}
 }

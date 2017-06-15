@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getEntryPoint <em>Entry Point</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlotDate <em>Slot Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingDate <em>Booking Date</em>}</li>
  * </ul>
  *
  * @generated
@@ -69,24 +69,24 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	protected EntryPoint entryPoint;
 
 	/**
-	 * The default value of the '{@link #getSlotDate() <em>Slot Date</em>}' attribute.
+	 * The default value of the '{@link #getBookingDate() <em>Booking Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSlotDate()
+	 * @see #getBookingDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate SLOT_DATE_EDEFAULT = null;
+	protected static final LocalDate BOOKING_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getSlotDate() <em>Slot Date</em>}' attribute.
+	 * The cached value of the '{@link #getBookingDate() <em>Booking Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSlotDate()
+	 * @see #getBookingDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected LocalDate slotDate = SLOT_DATE_EDEFAULT;
+	protected LocalDate bookingDate = BOOKING_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -226,8 +226,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LocalDate getSlotDate() {
-		return slotDate;
+	public LocalDate getBookingDate() {
+		return bookingDate;
 	}
 
 	/**
@@ -235,11 +235,11 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSlotDate(LocalDate newSlotDate) {
-		LocalDate oldSlotDate = slotDate;
-		slotDate = newSlotDate;
+	public void setBookingDate(LocalDate newBookingDate) {
+		LocalDate oldBookingDate = bookingDate;
+		bookingDate = newBookingDate;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__SLOT_DATE, oldSlotDate, slotDate));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE, oldBookingDate, bookingDate));
 	}
 
 	/**
@@ -259,8 +259,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
 				if (resolve) return getEntryPoint();
 				return basicGetEntryPoint();
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT_DATE:
-				return getSlotDate();
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
+				return getBookingDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -282,8 +282,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
 				setEntryPoint((EntryPoint)newValue);
 				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT_DATE:
-				setSlotDate((LocalDate)newValue);
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
+				setBookingDate((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -306,8 +306,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
 				setEntryPoint((EntryPoint)null);
 				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT_DATE:
-				setSlotDate(SLOT_DATE_EDEFAULT);
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
+				setBookingDate(BOOKING_DATE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -327,8 +327,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return slot != null;
 			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
 				return entryPoint != null;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT_DATE:
-				return SLOT_DATE_EDEFAULT == null ? slotDate != null : !SLOT_DATE_EDEFAULT.equals(slotDate);
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
+				return BOOKING_DATE_EDEFAULT == null ? bookingDate != null : !BOOKING_DATE_EDEFAULT.equals(bookingDate);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -343,8 +343,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (slotDate: ");
-		result.append(slotDate);
+		result.append(" (bookingDate: ");
+		result.append(bookingDate);
 		result.append(')');
 		return result.toString();
 	}

@@ -36,9 +36,9 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 						.make(ctx));
 			}
 			
-			if (canalBookingSlot.getSlotDate() == null) {
+			if (canalBookingSlot.getBookingDate() == null) {
 				statuses.add(baseFactory.copyName() //
-						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT_DATE) //
+						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_DATE) //
 						.withMessage("Date must be specified.") //
 						.make(ctx));
 			}else {

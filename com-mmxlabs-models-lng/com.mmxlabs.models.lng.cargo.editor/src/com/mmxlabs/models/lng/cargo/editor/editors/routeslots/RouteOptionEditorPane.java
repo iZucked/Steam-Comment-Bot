@@ -58,7 +58,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			if (msg.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}
-			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT) {
+			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT) {
 				flexEditor.setValue(msg.getNewValue());
 				return;
 			}
@@ -142,8 +142,8 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				@Override
 				public void modifyText(ModifyEvent e) {
 					Object newValue = flexEditor.getValue();
-					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleSlotAmount())) {
-						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleSlotAmount(), newValue);
+					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleBookingAmount())) {
+						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleBookingAmount(), newValue);
 						getEditingDomain().getCommandStack().execute(cmd);
 					}
 				}
@@ -162,7 +162,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Entry Point",
 				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_EntryPoint(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Canal", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Route(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
-		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_SlotDate(), getEditingDomain()));
+		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getEditingDomain()));
 		addTypicalColumn("Slot", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Slot(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
 
 		defaultSetTitle("Canal Bookings");
@@ -181,7 +181,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		if (canalBookingsModel != null) {
 			strictEditor.setValue(canalBookingsModel.getStrictBoundaryOffsetDays());
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
-			flexEditor.setValue(canalBookingsModel.getFlexibleSlotAmount());
+			flexEditor.setValue(canalBookingsModel.getFlexibleBookingAmount());
 		} else {
 			strictEditor.setValue(0);
 			relaxedEditor.setValue(0);

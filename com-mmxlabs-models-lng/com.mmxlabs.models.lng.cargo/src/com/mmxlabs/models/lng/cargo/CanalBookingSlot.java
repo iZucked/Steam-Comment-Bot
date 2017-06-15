@@ -22,7 +22,7 @@ import java.time.LocalDate;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getEntryPoint <em>Entry Point</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlotDate <em>Slot Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookingSlot()
@@ -109,29 +109,29 @@ public interface CanalBookingSlot extends MMXObject {
 	void setEntryPoint(EntryPoint value);
 
 	/**
-	 * Returns the value of the '<em><b>Slot Date</b></em>' attribute.
+	 * Returns the value of the '<em><b>Booking Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Slot Date</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Booking Date</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Slot Date</em>' attribute.
-	 * @see #setSlotDate(LocalDate)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookingSlot_SlotDate()
+	 * @return the value of the '<em>Booking Date</em>' attribute.
+	 * @see #setBookingDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookingSlot_BookingDate()
 	 * @model dataType="com.mmxlabs.models.datetime.LocalDate" required="true"
 	 * @generated
 	 */
-	LocalDate getSlotDate();
+	LocalDate getBookingDate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlotDate <em>Slot Date</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Slot Date</em>' attribute.
-	 * @see #getSlotDate()
+	 * @param value the new value of the '<em>Booking Date</em>' attribute.
+	 * @see #getBookingDate()
 	 * @generated
 	 */
-	void setSlotDate(LocalDate value);
+	void setBookingDate(LocalDate value);
 
 } // CanalBookingSlot

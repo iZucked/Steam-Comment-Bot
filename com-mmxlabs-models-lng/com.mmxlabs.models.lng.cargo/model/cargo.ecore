@@ -408,7 +408,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="#//Slot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entryPoint" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//EntryPoint"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotDate" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bookingDate" lowerBound="1"
         eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CanalBookings">
@@ -418,6 +418,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relaxedBoundaryOffsetDays"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleSlotAmount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleBookingAmount"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>

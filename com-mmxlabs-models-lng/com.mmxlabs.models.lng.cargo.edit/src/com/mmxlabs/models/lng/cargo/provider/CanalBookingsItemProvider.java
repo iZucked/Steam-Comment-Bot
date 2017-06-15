@@ -66,7 +66,7 @@ public class CanalBookingsItemProvider
 
 			addStrictBoundaryOffsetDaysPropertyDescriptor(object);
 			addRelaxedBoundaryOffsetDaysPropertyDescriptor(object);
-			addFlexibleSlotAmountPropertyDescriptor(object);
+			addFlexibleBookingAmountPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,19 +116,19 @@ public class CanalBookingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Flexible Slot Amount feature.
+	 * This adds a property descriptor for the Flexible Booking Amount feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addFlexibleSlotAmountPropertyDescriptor(Object object) {
+	protected void addFlexibleBookingAmountPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CanalBookings_flexibleSlotAmount_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_flexibleSlotAmount_feature", "_UI_CanalBookings_type"),
-				 CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT,
+				 getString("_UI_CanalBookings_flexibleBookingAmount_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_flexibleBookingAmount_feature", "_UI_CanalBookings_type"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT,
 				 true,
 				 false,
 				 false,
@@ -205,7 +205,7 @@ public class CanalBookingsItemProvider
 		switch (notification.getFeatureID(CanalBookings.class)) {
 			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_SLOT_AMOUNT:
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:

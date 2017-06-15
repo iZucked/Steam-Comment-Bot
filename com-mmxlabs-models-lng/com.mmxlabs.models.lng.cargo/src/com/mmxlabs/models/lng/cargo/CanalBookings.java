@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getCanalBookingSlots <em>Canal Booking Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleSlotAmount <em>Flexible Slot Amount</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -95,29 +95,29 @@ public interface CanalBookings extends EObject {
 	void setRelaxedBoundaryOffsetDays(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Flexible Slot Amount</b></em>' attribute.
+	 * Returns the value of the '<em><b>Flexible Booking Amount</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Flexible Slot Amount</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Flexible Booking Amount</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Flexible Slot Amount</em>' attribute.
-	 * @see #setFlexibleSlotAmount(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_FlexibleSlotAmount()
+	 * @return the value of the '<em>Flexible Booking Amount</em>' attribute.
+	 * @see #setFlexibleBookingAmount(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_FlexibleBookingAmount()
 	 * @model
 	 * @generated
 	 */
-	int getFlexibleSlotAmount();
+	int getFlexibleBookingAmount();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleSlotAmount <em>Flexible Slot Amount</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Flexible Slot Amount</em>' attribute.
-	 * @see #getFlexibleSlotAmount()
+	 * @param value the new value of the '<em>Flexible Booking Amount</em>' attribute.
+	 * @see #getFlexibleBookingAmount()
 	 * @generated
 	 */
-	void setFlexibleSlotAmount(int value);
+	void setFlexibleBookingAmount(int value);
 
 } // CanalBookings

@@ -73,7 +73,7 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 		add_routeEditor(detailComposite, topClass);
 		add_slotEditor(detailComposite, topClass);
 		add_entryPointEditor(detailComposite, topClass);
-		add_slotDateEditor(detailComposite, topClass);
+		add_bookingDateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the route feature on CanalBookingSlot
@@ -100,11 +100,11 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__ENTRY_POINT));
 	}
 	/**
-	 * Create the editor for the slotDate feature on CanalBookingSlot
+	 * Create the editor for the bookingDate feature on CanalBookingSlot
 	 *
 	 * @generated
 	 */
-	protected void add_slotDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT_DATE));
+	protected void add_bookingDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_DATE));
 	}
 }

@@ -52,7 +52,7 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 			addRoutePropertyDescriptor(object);
 			addSlotPropertyDescriptor(object);
 			addEntryPointPropertyDescriptor(object);
-			addSlotDatePropertyDescriptor(object);
+			addBookingDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -124,19 +124,19 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Slot Date feature.
+	 * This adds a property descriptor for the Booking Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSlotDatePropertyDescriptor(Object object) {
+	protected void addBookingDatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CanalBookingSlot_slotDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_slotDate_feature", "_UI_CanalBookingSlot_type"),
-				 CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT_DATE,
+				 getString("_UI_CanalBookingSlot_bookingDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_bookingDate_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_DATE,
 				 true,
 				 false,
 				 false,
@@ -164,7 +164,7 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		LocalDate labelValue = ((CanalBookingSlot)object).getSlotDate();
+		LocalDate labelValue = ((CanalBookingSlot)object).getBookingDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_CanalBookingSlot_type") :
@@ -184,7 +184,7 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CanalBookingSlot.class)) {
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT_DATE:
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
