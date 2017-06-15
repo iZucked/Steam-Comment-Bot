@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PanamaPriceBasedS
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * An implementation of {@link IConstraintChecker} to forbid certain {@link ISequenceElement} pairings
@@ -50,12 +51,12 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	@Inject
 	private NonSchedulingScheduler scheduler;
-	
+
 	@Inject
 	private IVesselProvider vesselProvider;
-	
-	private Set<ISequenceElement> unbookedSlots; 
-	
+
+	private Set<ISequenceElement> unbookedSlots;
+
 	public PanamaSlotsConstraintChecker(final String name) {
 		this.name = name;
 	}
@@ -73,24 +74,23 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		int[][] schedule = scheduler.schedule(sequences);
-		boolean[][] throughPanama = scheduler.canalDecision();
+		AvailableRouteChoices[][] throughPanama = scheduler.canalDecision();
 		IRouteOptionBooking[][] assignedSlots = scheduler.slotsAssigned();
-		
+
 		int strictBoundary = panamaSlotsProvider.getStrictBoundary();
 		int relaxedBoundary = panamaSlotsProvider.getRelaxedBoundary();
-		
+
 		Set<ISequenceElement> currentUnbookedSlots = new HashSet<>();
 		Set<ISequenceElement> currentUnbookedSlotsInRelaxed = new HashSet<ISequenceElement>();
-				
-		//TODO: what to do with potential vessel return when end time is not specified?
-		//TODO: nominal vessel
-		//TODO: original solution might not be feasible at 16 knots and 24h early arrival time
-		
-		for (int r = 0; r < sequences.getResources().size(); r++){
+
+		// TODO: what to do with potential vessel return when end time is not specified?
+		// TODO: nominal vessel
+		// TODO: original solution might not be feasible at 16 knots and 24h early arrival time
+
+		for (int r = 0; r < sequences.getResources().size(); r++) {
 			IResource resource = sequences.getResources().get(r);
 			ISequence sequence = sequences.getSequence(resource);
-			
-			
+
 			// skip resources that are not scheduled
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
@@ -102,56 +102,56 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 			if (sequence.size() < 2) {
 				continue;
 			}
-			
-			for (int index = 0; index < sequence.size(); index++){
-				
-				if (!throughPanama[r][index]){
+
+			for (int index = 0; index < sequence.size(); index++) {
+
+				// TODO: What about optimal?
+				if (throughPanama[r][index] != AvailableRouteChoices.PANAMA_ONLY) {
 					// not going through Panama, ignore
 					continue;
 				}
-				if (assignedSlots[r][index] != null){
-					//has a slot... all good.
+				if (assignedSlots[r][index] != null) {
+					// has a slot... all good.
 					continue;
 				}
-				if (schedule[r][index] >= relaxedBoundary){
+				if (schedule[r][index] >= relaxedBoundary) {
 					continue;
 				}
-				
-				if (schedule[r][index] >= strictBoundary && schedule[r][index] < relaxedBoundary){
+
+				if (schedule[r][index] >= strictBoundary && schedule[r][index] < relaxedBoundary) {
 					currentUnbookedSlotsInRelaxed.add(sequence.get(index));
 				}
 				currentUnbookedSlots.add(sequence.get(index));
 			}
 		}
-		
-		if (unbookedSlots != null){
+
+		if (unbookedSlots != null) {
 			// strict constraint
 			currentUnbookedSlots.removeAll(unbookedSlots);
 			currentUnbookedSlots.removeAll(currentUnbookedSlotsInRelaxed);
-			if (!currentUnbookedSlots.isEmpty()){
+			if (!currentUnbookedSlots.isEmpty()) {
 				return false;
 			}
-			
+
 			// relaxed constraint
-			int countBefore = currentUnbookedSlots.size();						// 0
+			int countBefore = currentUnbookedSlots.size(); // 0
 			currentUnbookedSlotsInRelaxed.removeAll(unbookedSlots);
-			int countAfter = currentUnbookedSlotsInRelaxed.size();				// 0
-			int whitelistedSlotCount = (countBefore - countAfter);				// 6
-			
-			int relaxedSlotCount = panamaSlotsProvider.getRelaxedBookingCount(); 	// 5
-			int newCount = relaxedSlotCount - whitelistedSlotCount;				// -1
-			
-			if (countAfter == 0 || countAfter <= newCount){
+			int countAfter = currentUnbookedSlotsInRelaxed.size(); // 0
+			int whitelistedSlotCount = (countBefore - countAfter); // 6
+
+			int relaxedSlotCount = panamaSlotsProvider.getRelaxedBookingCount(); // 5
+			int newCount = relaxedSlotCount - whitelistedSlotCount; // -1
+
+			if (countAfter == 0 || countAfter <= newCount) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		}else {
+		} else {
 			unbookedSlots = currentUnbookedSlots;
 		}
 		return true;
 	}
-	
 
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
