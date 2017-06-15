@@ -39,7 +39,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
  *
  */
 public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
-	
+
 	@Inject
 	private IDistanceMatrixProvider distanceProvider;
 
@@ -50,9 +50,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	private IRouteExclusionProvider routeExclusionProvider;
 
 	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
-	
+
 	private final Map<ERouteOption, Set<IPort>> routeOptionEntryPoints = new HashMap<>();
-	
+
 	// cache
 	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntry = new ConcurrentHashMap();
 
@@ -134,28 +134,29 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed, AvailableRouteChoices availableRouteChoices) {
+	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed,
+			AvailableRouteChoices availableRouteChoices) {
 
 		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
-			
-			if ( availableRouteChoices == AvailableRouteChoices.EXCLUDE_PANAMA && route == ERouteOption.PANAMA){
+
+			if (availableRouteChoices == AvailableRouteChoices.EXCLUDE_PANAMA && route == ERouteOption.PANAMA) {
 				continue;
 			}
-			
-			if ( availableRouteChoices == AvailableRouteChoices.DIRECT_ONLY && route != ERouteOption.DIRECT){
+
+			if (availableRouteChoices == AvailableRouteChoices.DIRECT_ONLY && route != ERouteOption.DIRECT) {
 				continue;
 			}
-			
-			if ( availableRouteChoices == AvailableRouteChoices.PANAMA_ONLY && route != ERouteOption.PANAMA){
+
+			if (availableRouteChoices == AvailableRouteChoices.PANAMA_ONLY && route != ERouteOption.PANAMA) {
 				continue;
 			}
-			
-			if ( availableRouteChoices == AvailableRouteChoices.SUEZ_ONLY && route != ERouteOption.SUEZ){
+
+			if (availableRouteChoices == AvailableRouteChoices.SUEZ_ONLY && route != ERouteOption.SUEZ) {
 				continue;
 			}
-			
+
 			assert route != null;
 			final int travelTime = getTravelTime(route, vessel, from, to, voyageStartTime, speed);
 			if (travelTime < bestTime) {
@@ -175,19 +176,22 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	public ERouteOption[] getRoutes() {
 		return distanceProvider.getRoutes();
 	}
-	
+
 	@Override
 	public void setEntryPointsForRouteOption(ERouteOption route, Set<IPort> entryPoints) {
 		routeOptionEntryPoints.put(route, entryPoints);
 	}
-	
+
 	@Override
 	public IPort getRouteOptionEntry(IPort port, ERouteOption routeOption) {
 		return nearestRouteOptionEntry.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
-			return routeOptionEntryPoints.get(pair.getSecond()).stream().min((p1, p2) ->  {
-				return Integer.compare(getDistance(ERouteOption.DIRECT, port, p1, Integer.MAX_VALUE, null), getDistance(ERouteOption.DIRECT, port, p2, Integer.MAX_VALUE, null));
-			}).get();
+			Set<IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
+			if (entryPoints != null) {
+				return entryPoints.stream().min((p1, p2) -> {
+					return Integer.compare(getDistance(ERouteOption.DIRECT, port, p1, Integer.MAX_VALUE, null), getDistance(ERouteOption.DIRECT, port, p2, Integer.MAX_VALUE, null));
+				}).get();
+			}
+			return null;
 		});
-		
 	}
 }
