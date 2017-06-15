@@ -83,10 +83,11 @@ public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the availableFrom feature on PanamaCanalTariff
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_availableFromEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PANAMA_CANAL_TARIFF__AVAILABLE_FROM));
+		// HIDE FROM VIEW. TODO: Migrate out
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PANAMA_CANAL_TARIFF__AVAILABLE_FROM));
 	}
 
 	/**
