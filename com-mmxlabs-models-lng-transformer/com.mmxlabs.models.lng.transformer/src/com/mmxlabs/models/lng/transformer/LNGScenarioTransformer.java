@@ -37,6 +37,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
@@ -835,6 +836,8 @@ public class LNGScenarioTransformer {
 		buildMarkToMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
 		setNominatedVessels(builder, modelEntityMap);
+
+		buildRouteEntryPoints(portModel, portAssociation);
 
 		// freeze any frozen assignments
 		freezeAssignmentModel(builder, modelEntityMap);
@@ -3464,5 +3467,14 @@ public class LNGScenarioTransformer {
 		}
 
 		return builder.createHeelSupplier(minimumHeelInM3, maximumHeelInM3, cargoCV, heelPriceCalculator);
+	}
+
+	private void buildRouteEntryPoints(PortModel portModel, Association<Port, IPort> portAssociation) {
+		portModel.getRoutes().forEach(r -> {
+			if (r.getEntryA() != null && r.getEntryB() != null) {
+				distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r),
+						ImmutableSet.of(portAssociation.lookup(r.getEntryA().getPort()), portAssociation.lookup(r.getEntryB().getPort())));
+			}
+		});
 	}
 }

@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
@@ -356,6 +357,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(ShippingHoursRestrictionCheckerFactory.NAME, true));
 			constraints.add(createConstraint(LockedUnusedElementsConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives

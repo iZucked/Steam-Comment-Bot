@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
-import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporter;
 import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -47,7 +46,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
@@ -97,6 +95,7 @@ public class CSVImporter {
 		dataMap.put(PortModelImporter.DISTANCES_KEY, createURL(urlRoot, "Distance Matrix.csv"));
 		dataMap.put(PortModelImporter.SUEZ_KEY, createURL(urlRoot, "Suez Distance Matrix.csv"));
 		dataMap.put(PortModelImporter.PANAMA_KEY, createURL(urlRoot, "Panama Distance Matrix.csv"));
+		dataMap.put(PortModelImporter.CANAL_PORTS_KEY, createURL(urlRoot, "Canal Ports.csv"));
 	}
 
 	public void importFleetData(@NonNull final String urlRoot) throws MalformedURLException {
