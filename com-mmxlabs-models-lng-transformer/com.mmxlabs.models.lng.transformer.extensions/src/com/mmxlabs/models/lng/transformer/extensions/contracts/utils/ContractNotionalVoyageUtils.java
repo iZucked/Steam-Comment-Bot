@@ -113,7 +113,7 @@ public class ContractNotionalVoyageUtils {
 
 		final VoyagePlan newVP = new VoyagePlan();
 
-		final int minBallastTime = distanceProvider.getTravelTime(routeOption, calculationVessel, destinationPort, buy.getPort(), dischargeTime + dischargeDuration, notionalSpeed);
+		final int minBallastTime = distanceProvider.getTravelTime(routeOption, calculationVessel, destinationPort, buy.getPort(), notionalSpeed);
 		final int d2_inHours = (dischargeTime + dischargeDuration + minBallastTime) - loadTime;
 		final int returnTime = loadTime + d2_inHours;
 

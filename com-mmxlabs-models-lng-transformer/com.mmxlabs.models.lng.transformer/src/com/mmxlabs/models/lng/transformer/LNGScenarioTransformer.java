@@ -2651,13 +2651,6 @@ public class LNGScenarioTransformer {
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
 			buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
-			if (panamaCanalTariff.isSetAvailableFrom()) {
-				final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
-				if (availableFrom != null) {
-					final int time = dateHelper.convertTime(availableFrom);
-					distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
-				}
-			}
 		}
 
 		/*

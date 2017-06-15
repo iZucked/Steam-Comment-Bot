@@ -72,12 +72,12 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			final int dischargeDuration, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 
-		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration, vessel);
+		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
 		if (ladenDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration, vessel);
+		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, vessel);
 		if (ballastDistance == Integer.MAX_VALUE) {
 			return null;
 		}
@@ -96,12 +96,12 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
 			final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
-		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration, vessel);
+		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, vessel);
 		if (ladenDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration, vessel);
+		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, vessel);
 		if (ballastDistance == Integer.MAX_VALUE) {
 			return null;
 		}
@@ -250,12 +250,12 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			loadOptions.setVisitDuration(loadDuration);
 			loadOptions.setVessel(vessel);
 			loadOptions.setCargoCVValue(cargoCVValue);
-			
+
 			final PortOptions dischargeOptions = new PortOptions(notionalDischargeSlot);
 			dischargeOptions.setVisitDuration(dischargeDuration);
 			dischargeOptions.setVessel(vessel);
 			dischargeOptions.setCargoCVValue(cargoCVValue);
-			
+
 			final PortOptions returnOptions = new PortOptions(notionalReturnSlot);
 			returnOptions.setVisitDuration(0);
 			returnOptions.setVessel(vessel);
