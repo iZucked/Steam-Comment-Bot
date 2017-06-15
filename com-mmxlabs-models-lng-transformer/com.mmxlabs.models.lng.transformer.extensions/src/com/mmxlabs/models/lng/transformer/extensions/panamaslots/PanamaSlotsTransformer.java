@@ -41,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
 /**
  * @author robert
@@ -49,7 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
 public class PanamaSlotsTransformer implements IContractTransformer {
 
 	@Inject
-	private IPanamaSlotsProviderEditor panamaSlotsProviderEditor;
+	private IPanamaBookingsProviderEditor panamaBookingsProviderEditor;
 
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
@@ -57,9 +57,9 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 	@Inject
 	private ModelEntityMap modelEntityMap;
 
-	private final List<CanalBookingSlot> providedPanamaSlots = new ArrayList<>();
+	private final List<CanalBookingSlot> providedPanamaBookings = new ArrayList<>();
 	private int relaxedBoundaryOffsetDays;
-	private int relaxedSlotCount;
+	private int relaxedBookingsCount;
 	private int strictBoundaryOffsetDays;
 
 	@Override
@@ -75,22 +75,22 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		if (canalBookings == null) {
 			return;
 		}
-		this.providedPanamaSlots.addAll(canalBookings.getCanalBookingSlots());
+		this.providedPanamaBookings.addAll(canalBookings.getCanalBookingSlots());
 
 		strictBoundaryOffsetDays = canalBookings.getStrictBoundaryOffsetDays();
 		relaxedBoundaryOffsetDays = canalBookings.getRelaxedBoundaryOffsetDays();
-		relaxedSlotCount = canalBookings.getFlexibleSlotAmount();
+		relaxedBookingsCount = canalBookings.getFlexibleBookingAmount();
 	}
 
 	@Override
 	public void finishTransforming() {
 		final Map<IPort, SortedSet<IRouteOptionBooking>> panamaSlots = new HashMap<>();
-		providedPanamaSlots.forEach(eBooking -> {
+		providedPanamaBookings.forEach(eBooking -> {
 			final IPort optPort = modelEntityMap.getOptimiserObject(eBooking.getEntryPoint().getPort(), IPort.class);
 			if (optPort == null) {
 				throw new IllegalStateException("No optimiser port found for: " + eBooking.getEntryPoint().getName());
 			}
-			final int date = dateAndCurveHelper.convertTime(eBooking.getSlotDate());
+			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate());
 			final IRouteOptionBooking oBooking;
 			if (eBooking.getSlot() != null) {
 				oBooking = IRouteOptionBooking.of(date, optPort, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
@@ -102,11 +102,11 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 			modelEntityMap.addModelObject(eBooking, oBooking);
 		});
 
-		panamaSlotsProviderEditor.setBookings(panamaSlots);
+		panamaBookingsProviderEditor.setBookings(panamaSlots);
 
-		panamaSlotsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
-		panamaSlotsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);
-		panamaSlotsProviderEditor.setRelaxedSlotCount(relaxedSlotCount);
+		panamaBookingsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
+		panamaBookingsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);
+		panamaBookingsProviderEditor.setRelaxedBookingCount(relaxedBookingsCount);
 	}
 
 	@Override

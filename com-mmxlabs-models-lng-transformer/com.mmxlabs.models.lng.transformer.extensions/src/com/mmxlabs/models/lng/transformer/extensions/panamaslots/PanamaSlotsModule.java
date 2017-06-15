@@ -15,7 +15,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.PanamaBookingsProviderEditor;
 
 /**
@@ -52,7 +52,7 @@ public class PanamaSlotsModule extends PeaberryActivationModule {
 					protected void configure() {
 						final PanamaBookingsProviderEditor restrictedElementsProviderEditor = new PanamaBookingsProviderEditor();
 						bind(IPanamaBookingsProvider.class).toInstance(restrictedElementsProviderEditor);
-						bind(IPanamaSlotsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
+						bind(IPanamaBookingsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
 					}
 				};
 			}

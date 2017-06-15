@@ -94,7 +94,7 @@ public class JourneyEventExporter {
 			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionSlot(fromPortSlot), CanalBookingSlot.class);
 			journey.setCanalBooking(canalBookingSlot);
 			journey.setCanalEntry(canalBookingSlot.getEntryPoint());
-			journey.setCanalDate(canalBookingSlot.getSlotDate());
+			journey.setCanalDate(canalBookingSlot.getBookingDate());
 		} else if (journey.getRoute().isCanal()) {
 			@NonNull
 			final IPort routeOptionEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());

@@ -138,7 +138,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 			int countAfter = currentUnbookedSlotsInRelaxed.size();				// 0
 			int whitelistedSlotCount = (countBefore - countAfter);				// 6
 			
-			int relaxedSlotCount = panamaSlotsProvider.getRelaxedSlotCount(); 	// 5
+			int relaxedSlotCount = panamaSlotsProvider.getRelaxedBookingCount(); 	// 5
 			int newCount = relaxedSlotCount - whitelistedSlotCount;				// -1
 			
 			if (countAfter == 0 || countAfter <= newCount){
