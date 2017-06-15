@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPanamaSlotsProviderEditor;
  * Implementation of {@link IPanamaSlotsProviderEditor} using a {@link HashMap} as backing data store.
  * 
  */
-public class PanamaSlotsProviderEditor implements IPanamaSlotsProviderEditor {
+public class PanamaBookingsProviderEditor implements IPanamaSlotsProviderEditor {
 	
 	// make client configurable
 	private static final int MAX_SPEED_TO_CANAL = 16;
@@ -29,7 +29,7 @@ public class PanamaSlotsProviderEditor implements IPanamaSlotsProviderEditor {
 	private int relaxedSlotCount;
 	
 	@Override
-	public void setSlots(Map<IPort, SortedSet<IRouteOptionBooking>> slots) {
+	public void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> slots) {
 		ImmutableMap.Builder<IPort, ImmutableSortedSet<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
 		slots.forEach((k,v) -> {
 			builder.put(k, ImmutableSortedSet.copyOf(v));
@@ -38,7 +38,7 @@ public class PanamaSlotsProviderEditor implements IPanamaSlotsProviderEditor {
 	}
 
 	@Override
-	public ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getSlots() {
+	public ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings() {
 		if (panamaSlots == null){
 			throw new IllegalStateException("Panama slots not set");
 		}

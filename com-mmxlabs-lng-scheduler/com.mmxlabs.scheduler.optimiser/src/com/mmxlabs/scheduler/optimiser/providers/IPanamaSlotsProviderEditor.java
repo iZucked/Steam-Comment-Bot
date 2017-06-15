@@ -11,15 +11,15 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 /**
- * An editor interface for {@link IPanamaSlotsProvider}
+ * An editor interface for {@link IPanamaBookingsProvider}
  * 
  * @author Robert
  */
-public interface IPanamaSlotsProviderEditor extends IPanamaSlotsProvider {
+public interface IPanamaSlotsProviderEditor extends IPanamaBookingsProvider {
 	/**
 	 * Sets the slots overwriting existing ones.
 	 */
-	void setSlots(Map<IPort, SortedSet<IRouteOptionBooking>> slots);
+	void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> slots);
 	
 	/**
 	 * All dates before this boundary strictly need a Panama slot. Exclusive

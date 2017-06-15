@@ -205,7 +205,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public IRouteOptionBooking getRouteOptionSlot(final IPortSlot slot) {
+	public IRouteOptionBooking getRouteOptionBooking(final IPortSlot slot) {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.routeOptionSlot;
@@ -214,7 +214,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public void setRouteOptionSlot(final IPortSlot slot, IRouteOptionBooking routeOptionSlot) {
+	public void setRouteOptionBooking(final IPortSlot slot, IRouteOptionBooking routeOptionSlot) {
 		getOrCreateSlotRecord(slot).routeOptionSlot = routeOptionSlot;
 	}
 

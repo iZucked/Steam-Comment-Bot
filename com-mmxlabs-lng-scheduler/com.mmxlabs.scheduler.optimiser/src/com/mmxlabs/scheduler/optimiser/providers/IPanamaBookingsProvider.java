@@ -14,9 +14,9 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
  * 
  * @author Robert Erdin
  */
-public interface IPanamaSlotsProvider extends IDataComponentProvider {
+public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	
-	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getSlots();
+	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings();
 	
 	/**
 	 * All dates before this boundary strictly need a Panama slot. Exclusive
