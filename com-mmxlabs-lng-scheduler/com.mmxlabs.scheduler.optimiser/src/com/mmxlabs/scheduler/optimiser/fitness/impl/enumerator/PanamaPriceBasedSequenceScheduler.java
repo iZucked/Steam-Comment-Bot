@@ -5,16 +5,18 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * <b>Not thread-safe</b>
+ * 
  * @author robert
  *
  */
 public class PanamaPriceBasedSequenceScheduler extends PriceBasedSequenceScheduler {
-	
+
 	private boolean trimmed = false;
-	
+
 	@Override
 	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		setSequences(sequences);
@@ -28,21 +30,21 @@ public class PanamaPriceBasedSequenceScheduler extends PriceBasedSequenceSchedul
 			setTimeWindowsToEarliest(index);
 		}
 		synchroniseShipToShipBindings();
-		
+
 		trimmed = true;
-		
+
 		return arrivalTimes;
 	}
-	
-	public boolean[][] canalDecision(){
-		if (!trimmed){
+
+	public AvailableRouteChoices[][] canalDecision() {
+		if (!trimmed) {
 			throw new IllegalStateException("Canal decisions only exist after trimming");
 		}
 		return throughPanama;
 	}
-	
-	public IRouteOptionBooking[][] slotsAssigned(){
-		if (!trimmed){
+
+	public IRouteOptionBooking[][] slotsAssigned() {
+		if (!trimmed) {
 			throw new IllegalStateException("Canal decisions only exist after trimming");
 		}
 		return routeOptionBookings;

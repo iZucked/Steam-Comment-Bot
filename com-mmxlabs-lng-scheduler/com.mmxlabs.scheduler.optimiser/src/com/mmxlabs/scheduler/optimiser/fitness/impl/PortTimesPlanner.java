@@ -171,7 +171,7 @@ public class PortTimesPlanner {
 	 * @return
 	 */
 	public final @NonNull List<@NonNull IPortTimesRecord> makeShippedPortTimesRecords(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes,
-			final IRouteOptionBooking[] assignedSlots, final boolean[] throughPanama) {
+			final IRouteOptionBooking[] assignedSlots, final AvailableRouteChoices[] throughPanama) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -265,20 +265,7 @@ public class PortTimesPlanner {
 			}
 
 			if (portType != PortType.Round_Trip_Cargo_End) {
-
-				// TODO: Feature guard
-				if (throughPanama[idx]) {
-					// Forced panama
-					portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.PANAMA_ONLY);
-				} else {
-					if (arrivalTimes[idx] > panamaSlotsProvider.getRelaxedBoundary()) {
-						// Past relaxed boundary, optimal choice
-						portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.OPTIMAL);
-					} else {
-						// Exclude direct
-						portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
-					}
-				}
+				portTimesRecord.setSlotNextVoyageOptions(thisPortSlot, throughPanama[idx]);
 			}
 
 			// Setup for next iteration

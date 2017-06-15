@@ -220,6 +220,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 
 	@Override
 	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		assert nextVoyageRoute != null;
 		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
 	}
 

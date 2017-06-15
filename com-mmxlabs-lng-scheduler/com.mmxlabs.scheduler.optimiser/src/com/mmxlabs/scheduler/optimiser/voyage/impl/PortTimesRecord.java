@@ -171,6 +171,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 
 	@Override
 	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+		assert nextVoyageRoute != null;
 		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
 	}
 

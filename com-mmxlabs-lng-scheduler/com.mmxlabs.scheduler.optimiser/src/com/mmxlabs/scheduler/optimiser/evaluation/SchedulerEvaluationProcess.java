@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
@@ -79,7 +80,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 			// Calculate arrival times for sequences
 			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
 			IRouteOptionBooking[][] assignedSlots = scheduler.slotsAssigned();
-			boolean[][] throughPanama = scheduler.canalDecision();
+			AvailableRouteChoices[][] throughPanama = scheduler.canalDecision();
 			if (arrivalTimes == null) {
 				return false;
 			}

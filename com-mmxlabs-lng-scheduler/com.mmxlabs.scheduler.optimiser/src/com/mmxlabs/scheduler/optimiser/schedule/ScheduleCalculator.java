@@ -12,8 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import javax.inject.Provider;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -38,13 +36,13 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.PortTimesPlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -69,9 +67,9 @@ public class ScheduleCalculator {
 		private final @NonNull ISequence sequence;
 		private final int[] arrivalTimes;
 		private final IRouteOptionBooking[] assignedSlots;
-		private final boolean[] throughPanama;
+		private final AvailableRouteChoices[] throughPanama;
 
-		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes, final IRouteOptionBooking[] assignedSlots, boolean[] throughPanama) {
+		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final int[] arrivalTimes, final IRouteOptionBooking[] assignedSlots, AvailableRouteChoices[] throughPanama) {
 			this.resource = resource;
 			this.sequence = sequence;
 			this.arrivalTimes = arrivalTimes;
@@ -133,7 +131,7 @@ public class ScheduleCalculator {
 	}
 
 	@Nullable
-	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, final IRouteOptionBooking[][] assignedSlots, final boolean[][] throughPanama,
+	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final int[][] arrivalTimes, final IRouteOptionBooking[][] assignedSlots, final AvailableRouteChoices[][] throughPanama,
 			@Nullable final IAnnotatedSolution solution) {
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
 
@@ -205,7 +203,7 @@ public class ScheduleCalculator {
 	 */
 	@Nullable
 	private VolumeAllocatedSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionBooking[] assignedSlots,
-			boolean[] throughPanama, @Nullable final IAnnotatedSolution solution) {
+			AvailableRouteChoices[] throughPanama, @Nullable final IAnnotatedSolution solution) {
 
 		final VolumeAllocatedSequence volumeAllocatedSequence = doSchedule(resource, sequence, arrivalTimes, assignedSlots, throughPanama);
 		if (volumeAllocatedSequence != null) {
@@ -224,7 +222,7 @@ public class ScheduleCalculator {
 
 	@Nullable
 	private VolumeAllocatedSequence doSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes, final IRouteOptionBooking[] assignedSlots,
-			boolean[] throughPanama) {
+			AvailableRouteChoices[] throughPanama) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 

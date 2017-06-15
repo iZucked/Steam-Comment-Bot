@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * Simple scheduler. Try to arrive at the {@link ITimeWindow} start.
@@ -107,7 +108,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 	}
 
 	@Override
-	public boolean[][] canalDecision() {
+	public AvailableRouteChoices[][] canalDecision() {
 		throw new UnsupportedOperationException("Not implemented");
 	}
 }
