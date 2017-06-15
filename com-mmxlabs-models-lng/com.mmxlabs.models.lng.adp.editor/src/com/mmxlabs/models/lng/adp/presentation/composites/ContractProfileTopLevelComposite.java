@@ -241,7 +241,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return super.shouldDisplay(ref) // 
+		return super.shouldDisplay(ref) //
 				|| ref == ADPPackage.eINSTANCE.getContractProfile_SubProfiles() //
 				|| ref == ADPPackage.eINSTANCE.getSubContractProfile_CustomAttribs();
 	}
@@ -270,7 +270,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 	}
 
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {
 			final IDisplayComposite sub;
 			if (value instanceof SubContractProfile<?>) {
@@ -290,7 +290,10 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 			childReferences.add(ref);
 			childComposites.add(sub);
 			childObjects.add(value);
+
+			return sub;
 		}
+		return null;
 	}
 
 }

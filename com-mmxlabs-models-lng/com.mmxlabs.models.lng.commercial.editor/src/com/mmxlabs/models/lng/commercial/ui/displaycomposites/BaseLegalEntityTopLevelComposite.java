@@ -101,7 +101,7 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 	}
 
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK) {
@@ -128,6 +128,9 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 			childReferences.add(ref);
 			childComposites.add(sub);
 			childObjects.add(value);
+			
+			return sub;
 		}
+		return null;
 	}
 }

@@ -149,7 +149,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	// }
 
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			if (value instanceof Slot) {
@@ -184,15 +184,18 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 			g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			toolkit.adapt(g2);
 
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())
-					.createSublevelComposite(g2, value.eClass(), dialogContext, toolkit);
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
+					dialogContext, toolkit);
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);
 			childReferences.add(ref);
 			childComposites.add(sub);
 			childObjects.add(value);
+
+			return sub;
 		}
+		return null;
 	}
 
 }
