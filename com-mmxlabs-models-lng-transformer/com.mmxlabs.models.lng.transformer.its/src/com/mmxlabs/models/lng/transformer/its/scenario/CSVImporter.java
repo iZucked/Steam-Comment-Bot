@@ -146,6 +146,7 @@ public class CSVImporter {
 		dataMap.put(CargoModelImporter.EVENTS_KEY, createURL(urlRoot, "Events.csv"));
 		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, createURL(urlRoot, "Vessel Availability.csv"));
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURL(urlRoot, "Assignments.csv"));
+		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURL(urlRoot, "Canal Bookings.csv"));
 		dataMap.put(VesselAvailabilityBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURL(urlRoot, "Vessel Availability--Ballast Bonus.csv"));
 	}
 
