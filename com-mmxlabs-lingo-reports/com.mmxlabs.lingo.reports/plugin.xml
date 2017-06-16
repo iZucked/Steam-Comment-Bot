@@ -411,6 +411,14 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.sale_counterparty">
       </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.canal_date">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.canal_entry">
+      </ScheduleBasedColumn>      
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
@@ -611,6 +619,18 @@
       <PortRotationBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.portrotation.totalcosts">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.canaldate">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.canalentry">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.canal.booked">
       </PortRotationBasedColumn>
    </extension>
    <extension

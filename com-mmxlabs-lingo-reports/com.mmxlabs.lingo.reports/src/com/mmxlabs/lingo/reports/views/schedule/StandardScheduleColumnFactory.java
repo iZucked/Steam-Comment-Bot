@@ -429,6 +429,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Purchase Cost", null, ColumnType.NORMAL, Formatters.integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeValue()));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.canal_date":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, loadAllocationRef, s.getJourney_CanalDate()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.canal_entry":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, loadAllocationRef, s.getJourney_CanalEntry()));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sell_value":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,

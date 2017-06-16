@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -19,6 +20,7 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
@@ -27,7 +29,10 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -38,6 +43,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -430,6 +436,53 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.routecost":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Canal Cost", null, ColumnType.NORMAL, new IntegerFormatter(), sp.getJourney_Toll());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canaldate":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_CanalDate()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalentry":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, sp.getJourney_CanalEntry()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canal.booked":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Booked", null, ColumnType.NORMAL, new BaseFormatter() {
+				String getValue(Object object) {
+					if (object instanceof Journey) {
+						Journey journey = (Journey) object;
+						Route route = journey.getRoute();
+						if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
+							CanalBookingSlot canalBooking = journey.getCanalBooking();
+							
+							
+							if (canalBooking != null) {
+								return "Yes";
+							} else {
+								if (journey.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
+									return "-";
+								}
+								return "No";
+							}
+//							return canalBooking != null;
+						}
+					}
+					return null;
+				}
+
+				@Override
+				public @Nullable String render(Object object) {
+					String value = getValue(object);
+					if (value != null) {
+						return value ;//? "Yes" : "No";
+					}
+					return "";
+				}
+
+				@Override
+				public Comparable getComparable(Object object) {
+					return getValue(object);
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.portcosts":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Port Costs", null, ColumnType.NORMAL, new IntegerFormatter() {
