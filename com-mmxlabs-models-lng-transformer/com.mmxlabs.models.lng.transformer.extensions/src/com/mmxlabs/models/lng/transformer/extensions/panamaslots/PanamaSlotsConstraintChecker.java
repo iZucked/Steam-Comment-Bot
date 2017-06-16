@@ -14,10 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.caches.AbstractCache;
-import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -29,8 +25,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
-import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
+import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
+import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
@@ -46,32 +42,16 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 	private IPanamaBookingsProvider panamaSlotsProvider;
 
 	@Inject
-	private FeasibleTimeWindowTrimmer scheduler;
+	private TimeWindowScheduler scheduler;
 
 	@Inject
 	private IVesselProvider vesselProvider;
 
 	private Set<IPortSlot> unbookedSlots;
 
-	@Inject
-	@Named("hint-lngtransformer-disable-caches")
-	private boolean hintEnableCache;
-
-	private final @NonNull AbstractCache<@NonNull ISequences, @Nullable Map<IResource, List<IPortTimeWindowsRecord>>> cache;
-
+	@SuppressWarnings("null")
 	public PanamaSlotsConstraintChecker(final String name) {
 		this.name = name;
-
-		cache = new LHMCache<>("ScheduleCalculatorCache", (key) -> {
-
-			// TODO: Better mechanism!
-			scheduler.setTrimByPanamaCanalBookings(true);
-
-			MinTravelTimeData minTimeData = new MinTravelTimeData(key);
-			Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = scheduler.generateTrimmedWindows(key, minTimeData);
-
-			return new Pair<>(key, trimmedWindows);
-		}, 50_000);
 	}
 
 	@Override
@@ -86,28 +66,27 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
-		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows;
-		if (hintEnableCache) {
-			trimmedWindows = cache.get(sequences);
-		} else {
-			scheduler.setTrimByPanamaCanalBookings(true);
-			MinTravelTimeData minTimeData = new MinTravelTimeData(sequences);
-			trimmedWindows = scheduler.generateTrimmedWindows(sequences, minTimeData);
-		}
 
-		int strictBoundary = panamaSlotsProvider.getStrictBoundary();
-		int relaxedBoundary = panamaSlotsProvider.getRelaxedBoundary();
+		scheduler.setUseCanalBasedWindowTrimming(true);
+		scheduler.setUsePriceBasedWindowTrimming(false);
 
-		Set<IPortSlot> currentUnbookedSlots = new HashSet<>();
-		Set<IPortSlot> currentUnbookedSlotsInRelaxed = new HashSet<>();
+		ScheduledTimeWindows schedule = scheduler.schedule(sequences);
+
+		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = schedule.getTrimmedTimeWindowsMap();
+
+		final int strictBoundary = panamaSlotsProvider.getStrictBoundary();
+		final int relaxedBoundary = panamaSlotsProvider.getRelaxedBoundary();
+
+		final Set<IPortSlot> currentUnbookedSlots = new HashSet<>();
+		final Set<IPortSlot> currentUnbookedSlotsInRelaxed = new HashSet<>();
 
 		// TODO: what to do with potential vessel return when end time is not specified?
 		// TODO: nominal vessel
 		// TODO: original solution might not be feasible at 16 knots and 24h early arrival time
 
 		for (int r = 0; r < sequences.getResources().size(); r++) {
-			IResource resource = sequences.getResources().get(r);
-			ISequence sequence = sequences.getSequence(resource);
+			final IResource resource = sequences.getResources().get(r);
+			final ISequence sequence = sequences.getSequence(resource);
 
 			// skip resources that are not scheduled
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
@@ -125,10 +104,10 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 				continue;
 			}
 
-			List<IPortTimeWindowsRecord> records = trimmedWindows.get(resource);
-			IPortSlot prevSlot = null;
-			for (IPortTimeWindowsRecord record : records) {
-				for (IPortSlot slot : record.getSlots()) {
+			final List<IPortTimeWindowsRecord> records = trimmedWindows.get(resource);
+			final IPortSlot prevSlot = null;
+			for (final IPortTimeWindowsRecord record : records) {
+				for (final IPortSlot slot : record.getSlots()) {
 					// TODO - fill in details
 					// note return slot not used in same way!
 					if (record.getSlotNextVoyageOptions(slot) != AvailableRouteChoices.PANAMA_ONLY) {
@@ -140,7 +119,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 						continue;
 					}
 
-					int windowStart = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
+					final int windowStart = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
 					if (windowStart >= relaxedBoundary) {
 						continue;
 					}
@@ -162,13 +141,13 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 			}
 
 			// relaxed constraint
-			int countBefore = currentUnbookedSlots.size(); // 0
+			final int countBefore = currentUnbookedSlots.size(); // 0
 			currentUnbookedSlotsInRelaxed.removeAll(unbookedSlots);
-			int countAfter = currentUnbookedSlotsInRelaxed.size(); // 0
-			int whitelistedSlotCount = (countBefore - countAfter); // 6
+			final int countAfter = currentUnbookedSlotsInRelaxed.size(); // 0
+			final int whitelistedSlotCount = (countBefore - countAfter); // 6
 
-			int relaxedSlotCount = panamaSlotsProvider.getRelaxedBookingCount(); // 5
-			int newCount = relaxedSlotCount - whitelistedSlotCount; // -1
+			final int relaxedSlotCount = panamaSlotsProvider.getRelaxedBookingCount(); // 5
+			final int newCount = relaxedSlotCount - whitelistedSlotCount; // -1
 
 			if (countAfter == 0 || countAfter <= newCount) {
 				return true;

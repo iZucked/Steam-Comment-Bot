@@ -65,10 +65,8 @@ import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindow
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.CachingTimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
-import com.mmxlabs.scheduler.optimiser.scheduling.ITimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PortTimesRecordMaker;
 import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.RandomSlotTimeScheduler;
@@ -162,9 +160,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(SchedulerCalculationUtils.class);
 
-		
-		bind(FeasibleTimeWindowTrimmer.class);//.in(PerChainUnitScope.class);
-		bind(PriceBasedWindowTrimmer.class).in(PerChainUnitScope.class);
+		bind(FeasibleTimeWindowTrimmer.class);
+		bind(PriceBasedWindowTrimmer.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
@@ -173,7 +170,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(PriceIntervalProducer.class);
 
 		bind(ArrivalTimeScheduler.class);
-		bind(ITimeWindowScheduler.class).annotatedWith(NotCaching.class).to(TimeWindowScheduler.class);
+		bind(TimeWindowScheduler.class);
 
 		bind(ISlotTimeScheduler.class).to(RandomSlotTimeScheduler.class);
 
@@ -247,26 +244,6 @@ public class LNGTransformerModule extends AbstractModule {
 			} else {
 				return cacher;
 			}
-		} else {
-			return reference;
-		}
-
-	}
-
-	@Provides
-	@PerChainUnitScope
-	private ITimeWindowScheduler provideTimeWindowScheduler(final @NonNull Injector injector, final @NotCaching ITimeWindowScheduler reference,
-			@Named(SchedulerConstants.Key_ArrivalTimeCache) final boolean enableCache) {
-
-		if (enableCache && hintEnableCache) {
-			final CachingTimeWindowScheduler cacher = new CachingTimeWindowScheduler(reference);
-			injector.injectMembers(cacher);
-			// if (false) {
-			// TODO: Implement checking variant
-			// return new CheckingTimeWindowScheduler(reference, cacher);
-			// } else {
-			return cacher;
-			// }
 		} else {
 			return reference;
 		}
