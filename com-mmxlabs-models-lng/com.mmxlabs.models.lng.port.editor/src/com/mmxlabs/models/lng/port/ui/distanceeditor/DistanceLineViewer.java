@@ -132,6 +132,9 @@ public class DistanceLineViewer extends GridTableViewer {
 			final GridViewerColumn toColumn = new GridViewerColumn(this, SWT.NONE);
 			toColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			toColumn.getColumn().setText(p.getName());
+//			toColumn.getColumn().setWidth(50);
+			toColumn.getColumn().setResizeable(true);
+			toColumn.getColumn().pack();
 
 			toColumn.setLabelProvider(new ColumnLabelProvider() {
 				@Override

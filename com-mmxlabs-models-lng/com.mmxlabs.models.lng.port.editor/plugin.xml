@@ -63,6 +63,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.port.Location">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.EntryPointComponentHelper"
+        id="com.mmxlabs.models.lng.port.presentation.composites.EntryPointComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.port.EntryPoint">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -170,6 +176,12 @@
           eClass="com.mmxlabs.models.lng.port.PortGroup"
           factory="com.mmxlabs.models.lng.port.ui.editors.PortGroupCompositeFactory"
           id="com.mmxlabs.models.lng.port.editor.portGroupCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.port.Route"
+          factory="com.mmxlabs.models.lng.port.ui.editors.RouteDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.RouteDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>

@@ -177,6 +177,24 @@ public interface CargoFactory extends EFactory {
 	Inventory createInventory();
 
 	/**
+	 * Returns a new object of class '<em>Canal Booking Slot</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal Booking Slot</em>'.
+	 * @generated
+	 */
+	CanalBookingSlot createCanalBookingSlot();
+
+	/**
+	 * Returns a new object of class '<em>Canal Bookings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal Bookings</em>'.
+	 * @generated
+	 */
+	CanalBookings createCanalBookings();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

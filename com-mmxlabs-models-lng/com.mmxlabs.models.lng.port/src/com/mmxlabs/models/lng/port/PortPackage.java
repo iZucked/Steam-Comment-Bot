@@ -361,13 +361,31 @@ public interface PortPackage extends EPackage {
 	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Entry A</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__ENTRY_A = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Entry B</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__ENTRY_B = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Route</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -719,6 +737,52 @@ public interface PortPackage extends EPackage {
 	int PORT_COUNTRY_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.EntryPointImpl <em>Entry Point</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.EntryPointImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getEntryPoint()
+	 * @generated
+	 */
+	int ENTRY_POINT = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__PORT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Entry Point</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -726,7 +790,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
 	 * @generated
 	 */
-	int ROUTE_OPTION = 8;
+	int ROUTE_OPTION = 9;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -1002,6 +1066,28 @@ public interface PortPackage extends EPackage {
 	EAttribute getRoute_RoutingOptions();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getEntryA <em>Entry A</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Entry A</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getEntryA()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EReference getRoute_EntryA();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getEntryB <em>Entry B</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Entry B</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getEntryB()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EReference getRoute_EntryB();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortGroup <em>Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1214,6 +1300,27 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPortCountryGroup();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.EntryPoint <em>Entry Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entry Point</em>'.
+	 * @see com.mmxlabs.models.lng.port.EntryPoint
+	 * @generated
+	 */
+	EClass getEntryPoint();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.EntryPoint#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.port.EntryPoint#getPort()
+	 * @see #getEntryPoint()
+	 * @generated
+	 */
+	EReference getEntryPoint_Port();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}'.
@@ -1452,6 +1559,22 @@ public interface PortPackage extends EPackage {
 		EAttribute ROUTE__ROUTING_OPTIONS = eINSTANCE.getRoute_RoutingOptions();
 
 		/**
+		 * The meta object literal for the '<em><b>Entry A</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROUTE__ENTRY_A = eINSTANCE.getRoute_EntryA();
+
+		/**
+		 * The meta object literal for the '<em><b>Entry B</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROUTE__ENTRY_B = eINSTANCE.getRoute_EntryB();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1622,6 +1745,24 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PORT_COUNTRY_GROUP = eINSTANCE.getPortCountryGroup();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.EntryPointImpl <em>Entry Point</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.EntryPointImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getEntryPoint()
+		 * @generated
+		 */
+		EClass ENTRY_POINT = eINSTANCE.getEntryPoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTRY_POINT__PORT = eINSTANCE.getEntryPoint_Port();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.

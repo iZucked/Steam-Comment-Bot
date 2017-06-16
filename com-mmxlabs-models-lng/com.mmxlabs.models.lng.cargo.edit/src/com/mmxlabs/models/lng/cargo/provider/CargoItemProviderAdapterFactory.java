@@ -479,6 +479,52 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CanalBookingSlot} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CanalBookingSlotItemProvider canalBookingSlotItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CanalBookingSlot}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCanalBookingSlotAdapter() {
+		if (canalBookingSlotItemProvider == null) {
+			canalBookingSlotItemProvider = new CanalBookingSlotItemProvider(this);
+		}
+
+		return canalBookingSlotItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CanalBookings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CanalBookingsItemProvider canalBookingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CanalBookings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCanalBookingsAdapter() {
+		if (canalBookingsItemProvider == null) {
+			canalBookingsItemProvider = new CanalBookingsItemProvider(this);
+		}
+
+		return canalBookingsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -621,6 +667,8 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (inventoryEventRowItemProvider != null) inventoryEventRowItemProvider.dispose();
 		if (inventoryCapacityRowItemProvider != null) inventoryCapacityRowItemProvider.dispose();
 		if (inventoryItemProvider != null) inventoryItemProvider.dispose();
+		if (canalBookingSlotItemProvider != null) canalBookingSlotItemProvider.dispose();
+		if (canalBookingsItemProvider != null) canalBookingsItemProvider.dispose();
 	}
 
 }

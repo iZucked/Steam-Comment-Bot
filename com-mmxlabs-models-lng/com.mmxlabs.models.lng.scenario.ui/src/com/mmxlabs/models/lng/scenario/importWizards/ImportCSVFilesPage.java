@@ -376,7 +376,7 @@ public class ImportCSVFilesPage extends WizardPage {
 					try {
 						r.close();
 					} catch (final IOException e) {
-
+						log.error(e.getMessage(), e);
 					}
 				}
 			}

@@ -2175,13 +2175,40 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__SPEED = EVENT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Canal Entry</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CANAL_ENTRY = EVENT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Canal Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CANAL_DATE = EVENT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Canal Booking</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CANAL_BOOKING = EVENT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Journey</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
+	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5413,6 +5440,39 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_Speed();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Canal Entry</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalEntry()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_CanalEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Canal Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalDate()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_CanalDate();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Canal Booking</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalBooking()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_CanalBooking();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Idle <em>Idle</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7247,6 +7307,30 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute JOURNEY__SPEED = eINSTANCE.getJourney_Speed();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Entry</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__CANAL_ENTRY = eINSTANCE.getJourney_CanalEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__CANAL_DATE = eINSTANCE.getJourney_CanalDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Booking</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__CANAL_BOOKING = eINSTANCE.getJourney_CanalBooking();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl <em>Idle</em>}' class.

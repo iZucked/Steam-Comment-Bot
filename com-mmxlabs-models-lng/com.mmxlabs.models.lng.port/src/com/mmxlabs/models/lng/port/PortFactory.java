@@ -96,6 +96,15 @@ public interface PortFactory extends EFactory {
 	PortCountryGroup createPortCountryGroup();
 
 	/**
+	 * Returns a new object of class '<em>Entry Point</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Entry Point</em>'.
+	 * @generated
+	 */
+	EntryPoint createEntryPoint();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

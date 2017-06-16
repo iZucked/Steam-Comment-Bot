@@ -137,7 +137,12 @@
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.InventoryCapacityRow">
          </componentHelper>
-        
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingSlotComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingSlotComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
+         </componentHelper>        
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -245,6 +250,12 @@
            id="VesselAvailabilityStartPortValueProviderFactory"
            ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
            referenceEClass="com.mmxlabs.models.lng.port.Port">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingEntryPointValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingEntryPointValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
+           referenceEClass="com.mmxlabs.models.lng.port.EntryPoint">
      </valueProvider>
  </extension>
  <extension
@@ -412,6 +423,12 @@
           label="Capacity"
           targetEClass="com.mmxlabs.models.lng.cargo.InventoryCapacityRow">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.CanalBookingSlot.factory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Booking"
+          targetEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
+    </factory>    
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
@@ -496,6 +513,15 @@
                attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
          </dataType>
       </attributeImporter>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.models.lng.cargo.editor.editors.routeslots.RouteOptionsEditorView"
+            id="com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView"
+            name="Canal Slot Bookings"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

@@ -84,7 +84,7 @@ public final class SlotContractParamsHelper {
 	@Nullable
 	public static EClass getSlotContractParamsEClass(final EClass priceInfoClass) {
 		final EAnnotation annotation = priceInfoClass.getEAnnotation(ANNOTATION_SLOT_CONTRACT_PARAMS);
-		if (annotation == null) {
+		if (annotation == null || annotation.getReferences().size() == 0) {
 			return null;
 		}
 		final EClass paramsObjectEClass = (EClass) annotation.getReferences().get(0);

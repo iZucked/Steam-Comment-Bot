@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel()
@@ -160,6 +161,32 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<Inventory> getInventoryModels();
+
+	/**
+	 * Returns the value of the '<em><b>Canal Bookings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Bookings</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Bookings</em>' containment reference.
+	 * @see #setCanalBookings(CanalBookings)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_CanalBookings()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	CanalBookings getCanalBookings();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Bookings</em>' containment reference.
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	void setCanalBookings(CanalBookings value);
 
 } // end of  CargoModel
 

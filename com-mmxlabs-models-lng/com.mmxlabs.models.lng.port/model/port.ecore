@@ -83,6 +83,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canal" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routingOptions" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entryA" eType="#//EntryPoint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entryB" eType="#//EntryPoint"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortGroup">
     <eAnnotations source="http://www.mmxlabs.com/models/csv">
@@ -155,5 +159,8 @@
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntryPoint" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//Port"/>
   </eClassifiers>
 </ecore:EPackage>

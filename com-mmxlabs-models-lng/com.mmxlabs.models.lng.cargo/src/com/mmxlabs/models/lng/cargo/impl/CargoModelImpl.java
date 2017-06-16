@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -43,6 +44,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getInventoryModels <em>Inventory Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCanalBookings <em>Canal Bookings</em>}</li>
  * </ul>
  *
  * @generated
@@ -127,6 +129,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<Inventory> inventoryModels;
+
+	/**
+	 * The cached value of the '{@link #getCanalBookings() <em>Canal Bookings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalBookings()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalBookings canalBookings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -248,6 +260,72 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CanalBookings getCanalBookings() {
+		if (canalBookings != null && canalBookings.eIsProxy()) {
+			InternalEObject oldCanalBookings = (InternalEObject)canalBookings;
+			canalBookings = (CanalBookings)eResolveProxy(oldCanalBookings);
+			if (canalBookings != oldCanalBookings) {
+				InternalEObject newCanalBookings = (InternalEObject)canalBookings;
+				NotificationChain msgs = oldCanalBookings.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, null, null);
+				if (newCanalBookings.eInternalContainer() == null) {
+					msgs = newCanalBookings.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, oldCanalBookings, canalBookings));
+			}
+		}
+		return canalBookings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookings basicGetCanalBookings() {
+		return canalBookings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCanalBookings(CanalBookings newCanalBookings, NotificationChain msgs) {
+		CanalBookings oldCanalBookings = canalBookings;
+		canalBookings = newCanalBookings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, oldCanalBookings, newCanalBookings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalBookings(CanalBookings newCanalBookings) {
+		if (newCanalBookings != canalBookings) {
+			NotificationChain msgs = null;
+			if (canalBookings != null)
+				msgs = ((InternalEObject)canalBookings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, null, msgs);
+			if (newCanalBookings != null)
+				msgs = ((InternalEObject)newCanalBookings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, null, msgs);
+			msgs = basicSetCanalBookings(newCanalBookings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__CANAL_BOOKINGS, newCanalBookings, newCanalBookings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -265,6 +343,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
 				return ((InternalEList<?>)getVesselTypeGroups()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
+				return basicSetCanalBookings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -293,6 +373,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getVesselTypeGroups();
 			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
 				return getInventoryModels();
+			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
+				if (resolve) return getCanalBookings();
+				return basicGetCanalBookings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -338,6 +421,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getInventoryModels().clear();
 				getInventoryModels().addAll((Collection<? extends Inventory>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
+				setCanalBookings((CanalBookings)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -374,6 +460,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
 				getInventoryModels().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
+				setCanalBookings((CanalBookings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -402,6 +491,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return vesselTypeGroups != null && !vesselTypeGroups.isEmpty();
 			case CargoPackage.CARGO_MODEL__INVENTORY_MODELS:
 				return inventoryModels != null && !inventoryModels.isEmpty();
+			case CargoPackage.CARGO_MODEL__CANAL_BOOKINGS:
+				return canalBookings != null;
 		}
 		return super.eIsSet(featureID);
 	}

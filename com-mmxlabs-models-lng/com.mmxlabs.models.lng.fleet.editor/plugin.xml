@@ -44,7 +44,7 @@
 			id="com.mmxlabs.models.lng.fleet.helpers.BaseFuel"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.BaseFuelComponentHelper"
 			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />		
+			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.VesselStateAttributes"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselStateAttributesComponentHelper"

@@ -22,6 +22,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRoutingOptions <em>Routing Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getEntryA <em>Entry A</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getEntryB <em>Entry B</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getRoute()
@@ -115,5 +117,57 @@ public interface Route extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	EList<String> getRoutingOptions();
+
+	/**
+	 * Returns the value of the '<em><b>Entry A</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entry A</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entry A</em>' containment reference.
+	 * @see #setEntryA(EntryPoint)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_EntryA()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EntryPoint getEntryA();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getEntryA <em>Entry A</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Entry A</em>' containment reference.
+	 * @see #getEntryA()
+	 * @generated
+	 */
+	void setEntryA(EntryPoint value);
+
+	/**
+	 * Returns the value of the '<em><b>Entry B</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entry B</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entry B</em>' containment reference.
+	 * @see #setEntryB(EntryPoint)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_EntryB()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EntryPoint getEntryB();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getEntryB <em>Entry B</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Entry B</em>' containment reference.
+	 * @see #getEntryB()
+	 * @generated
+	 */
+	void setEntryB(EntryPoint value);
 
 } // Route

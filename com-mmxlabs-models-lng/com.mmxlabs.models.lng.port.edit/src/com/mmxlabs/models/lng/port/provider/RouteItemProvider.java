@@ -160,6 +160,8 @@ public class RouteItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PortPackage.Literals.ROUTE__LINES);
+			childrenFeatures.add(PortPackage.Literals.ROUTE__ENTRY_A);
+			childrenFeatures.add(PortPackage.Literals.ROUTE__ENTRY_B);
 		}
 		return childrenFeatures;
 	}
@@ -221,6 +223,8 @@ public class RouteItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.ROUTE__LINES:
+			case PortPackage.ROUTE__ENTRY_A:
+			case PortPackage.ROUTE__ENTRY_B:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -242,6 +246,39 @@ public class RouteItemProvider
 			(createChildParameter
 				(PortPackage.Literals.ROUTE__LINES,
 				 PortFactory.eINSTANCE.createRouteLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.ROUTE__ENTRY_A,
+				 PortFactory.eINSTANCE.createEntryPoint()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.ROUTE__ENTRY_B,
+				 PortFactory.eINSTANCE.createEntryPoint()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == PortPackage.Literals.ROUTE__ENTRY_A ||
+			childFeature == PortPackage.Literals.ROUTE__ENTRY_B;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

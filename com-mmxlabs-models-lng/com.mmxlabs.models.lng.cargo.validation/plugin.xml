@@ -855,6 +855,22 @@
                   <target
                         class="VesselAvailability">
                   </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.CanalBookingSlotConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.CanalBookingSlotConstraint"
+                     isEnabledByDefault="true"
+                     lang="Java"
+                     mode="Batch"
+                     name="CanalBookingSlotConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="CanalBookingSlot">
+                  </target>
                </constraint>       
         </constraints>
       </constraintProvider>

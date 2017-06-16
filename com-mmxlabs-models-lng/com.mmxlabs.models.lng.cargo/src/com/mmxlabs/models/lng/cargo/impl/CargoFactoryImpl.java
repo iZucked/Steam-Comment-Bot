@@ -91,6 +91,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.INVENTORY_EVENT_ROW: return createInventoryEventRow();
 			case CargoPackage.INVENTORY_CAPACITY_ROW: return createInventoryCapacityRow();
 			case CargoPackage.INVENTORY: return createInventory();
+			case CargoPackage.CANAL_BOOKING_SLOT: return createCanalBookingSlot();
+			case CargoPackage.CANAL_BOOKINGS: return createCanalBookings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -306,6 +308,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public Inventory createInventory() {
 		InventoryImpl inventory = new InventoryImpl();
 		return inventory;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookingSlot createCanalBookingSlot() {
+		CanalBookingSlotImpl canalBookingSlot = new CanalBookingSlotImpl();
+		return canalBookingSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookings createCanalBookings() {
+		CanalBookingsImpl canalBookings = new CanalBookingsImpl();
+		return canalBookings;
 	}
 
 	/**

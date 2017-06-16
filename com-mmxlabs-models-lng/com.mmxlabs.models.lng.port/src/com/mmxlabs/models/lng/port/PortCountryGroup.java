@@ -16,7 +16,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortCountryGroup()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/csv namePrefix='CountryGroup'"
  * @generated
  */
 public interface PortCountryGroup extends APortSet<Port>, NamedObject {

@@ -178,6 +178,14 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createInventoryAdapter();
 			}
 			@Override
+			public Adapter caseCanalBookingSlot(CanalBookingSlot object) {
+				return createCanalBookingSlotAdapter();
+			}
+			@Override
+			public Adapter caseCanalBookings(CanalBookings object) {
+				return createCanalBookingsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -558,6 +566,34 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createInventoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot <em>Canal Booking Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot
+	 * @generated
+	 */
+	public Adapter createCanalBookingSlotAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings
+	 * @generated
+	 */
+	public Adapter createCanalBookingsAdapter() {
 		return null;
 	}
 
