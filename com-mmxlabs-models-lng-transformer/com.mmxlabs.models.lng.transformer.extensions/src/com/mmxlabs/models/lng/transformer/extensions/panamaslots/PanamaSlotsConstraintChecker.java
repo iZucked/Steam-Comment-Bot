@@ -14,6 +14,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.caches.AbstractCache;
+import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -49,8 +53,25 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	private Set<IPortSlot> unbookedSlots;
 
+	@Inject
+	@Named("hint-lngtransformer-disable-caches")
+	private boolean hintEnableCache;
+
+	private final @NonNull AbstractCache<@NonNull ISequences, @Nullable Map<IResource, List<IPortTimeWindowsRecord>>> cache;
+
 	public PanamaSlotsConstraintChecker(final String name) {
 		this.name = name;
+
+		cache = new LHMCache<>("ScheduleCalculatorCache", (key) -> {
+
+			// TODO: Better mechanism!
+			scheduler.setTrimByPanamaCanalBookings(true);
+
+			MinTravelTimeData minTimeData = new MinTravelTimeData(key);
+			Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = scheduler.generateTrimmedWindows(key, minTimeData);
+
+			return new Pair<>(key, trimmedWindows);
+		}, 50_000);
 	}
 
 	@Override
@@ -65,13 +86,14 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
-		// TODO: Better mechanism!
-		scheduler.setTrimByPanamaCanalBookings(true);
-		
-		MinTravelTimeData minTimeData = new MinTravelTimeData(sequences);
-		Map<IResource, List<IPortTimeWindowsRecord>> generateTrimmedWindows = scheduler.generateTrimmedWindows(sequences, minTimeData);
-		// AvailableRouteChoices[][] throughPanama = scheduler.canalDecision();
-		// IRouteOptionBooking[][] assignedSlots = scheduler.slotsAssigned();
+		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows;
+		if (hintEnableCache) {
+			trimmedWindows = cache.get(sequences);
+		} else {
+			scheduler.setTrimByPanamaCanalBookings(true);
+			MinTravelTimeData minTimeData = new MinTravelTimeData(sequences);
+			trimmedWindows = scheduler.generateTrimmedWindows(sequences, minTimeData);
+		}
 
 		int strictBoundary = panamaSlotsProvider.getStrictBoundary();
 		int relaxedBoundary = panamaSlotsProvider.getRelaxedBoundary();
@@ -103,7 +125,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 				continue;
 			}
 
-			List<IPortTimeWindowsRecord> records = generateTrimmedWindows.get(resource);
+			List<IPortTimeWindowsRecord> records = trimmedWindows.get(resource);
 			IPortSlot prevSlot = null;
 			for (IPortTimeWindowsRecord record : records) {
 				for (IPortSlot slot : record.getSlots()) {
