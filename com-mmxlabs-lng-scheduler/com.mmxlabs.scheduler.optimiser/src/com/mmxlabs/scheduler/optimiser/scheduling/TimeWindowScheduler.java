@@ -22,10 +22,6 @@ public class TimeWindowScheduler implements ITimeWindowScheduler {
 	private PriceBasedWindowTrimmer priceBasedWindowTrimmer;
 
 	@Inject
-	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
-	private boolean useCanalSlotBasedWindowTrimming = false;
-
-	@Inject
 	@Named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)
 	private boolean usePriceBasedWindowTrimming = false;
 
@@ -35,10 +31,6 @@ public class TimeWindowScheduler implements ITimeWindowScheduler {
 		final MinTravelTimeData travelTimeData = new MinTravelTimeData(fullSequences);
 
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = timeWindowTrimmer.generateTrimmedWindows(fullSequences, travelTimeData);
-
-		if (useCanalSlotBasedWindowTrimming) {
-			// panamaTrimmer.update_trimmedWindows, travelTimeData);
-		}
 
 		if (usePriceBasedWindowTrimming) {
 			priceBasedWindowTrimmer.updateWindows(trimmedWindows, fullSequences, travelTimeData);
@@ -51,8 +43,7 @@ public class TimeWindowScheduler implements ITimeWindowScheduler {
 		return usePriceBasedWindowTrimming;
 	}
 
-	public void setUsePriceBasedWindowTrimming(boolean usePriceBasedWindowTrimming) {
+	public void setUsePriceBasedWindowTrimming(final boolean usePriceBasedWindowTrimming) {
 		this.usePriceBasedWindowTrimming = usePriceBasedWindowTrimming;
 	}
-
 }

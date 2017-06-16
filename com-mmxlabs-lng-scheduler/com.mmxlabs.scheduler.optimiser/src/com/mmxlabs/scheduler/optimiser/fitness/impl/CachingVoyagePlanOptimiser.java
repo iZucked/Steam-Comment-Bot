@@ -5,7 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -55,6 +58,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final long @NonNull [] startHeelRangeInM3;
 		private final int baseFuelPricePerMT;
 		private int startCV;
+		private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
 
 		// Non hashcode fields
 		private final @NonNull List<@NonNull IOptionsSequenceElement> sequence;
@@ -136,6 +140,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			result = (prime * result) + vessel.hashCode();
 
 			result = (prime * result) + Arrays.hashCode(startHeelRangeInM3);
+			result = (prime * result) + voyageKeys.hashCode();
 
 			return result;
 		}
@@ -161,6 +166,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 						&& Arrays.equals(startHeelRangeInM3, other.startHeelRangeInM3) //
 						&& Arrays.equals(voyageTimes, other.voyageTimes) //
 						&& Arrays.equals(durations, other.durations)//
+						&& Objects.equals(voyageKeys, other.voyageKeys)//
 						&& Equality.shallowEquals(slots, other.slots);
 			}
 			return false;

@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
@@ -67,6 +69,8 @@ public class FeasibleTimeWindowTrimmer {
 	private static final int LOAD_SEQUENCE_INDEX_OFFSET = 2;
 	private static final int LOAD_WITHIN_SEQUENCE_INDEX_OFFSET = 3;
 
+	@Inject
+	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;
 
 	/**
@@ -423,7 +427,7 @@ public class FeasibleTimeWindowTrimmer {
 
 				int minTravelTime = Math.min(directTravelTime, Math.min(panamaTravelTime, suezTravelTime));
 
-				//final int currentTime = travelTimeData.getMinTravelTime(sequenceIndex, index - 1);
+				// final int currentTime = travelTimeData.getMinTravelTime(sequenceIndex, index - 1);
 				travelTimeData.setMinTravelTime(sequenceIndex, index - 1, minTravelTime);
 			}
 

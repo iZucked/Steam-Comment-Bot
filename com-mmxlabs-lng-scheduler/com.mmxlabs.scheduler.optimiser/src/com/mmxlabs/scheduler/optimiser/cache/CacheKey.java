@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.cache;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -14,12 +15,14 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public final class CacheKey<T> {
 
 	private final @NonNull IVesselAvailability vesselAvailability;
 	private final @NonNull IPortTimesRecord portTimesRecord;
 	private final long startHeelInM3;
+	private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
 
 	private final @NonNull T record;
 
@@ -38,9 +41,10 @@ public final class CacheKey<T> {
 		this.portTimesRecord = portTimesRecord;
 		this.record = record;
 		this.dependencyKeys = dependencyKeys;
-
+		portTimesRecord.getSlots().forEach(slot -> voyageKeys.add(portTimesRecord.getSlotNextVoyageOptions(slot)));
 		this.hash = Objects.hash(startHeelInM3, vesselAvailability, portTimesRecord.getSlots().stream().map(IPortSlot::getId).collect(Collectors.toList()), portTimesRecord.getFirstSlotTime(),
-				dependencyKeys);
+				dependencyKeys, voyageKeys);
+
 	}
 
 	@Override
@@ -63,7 +67,8 @@ public final class CacheKey<T> {
 			final boolean partA = startHeelInM3 == other.startHeelInM3 //
 					&& Objects.equals(vesselAvailability, other.vesselAvailability) //
 					&& Objects.equals(returnSlot, otherReturnSlot) //
-					&& Objects.equals(portTimesRecord.getSlots(), other.portTimesRecord.getSlots());
+					&& Objects.equals(portTimesRecord.getSlots(), other.portTimesRecord.getSlots()) //
+					&& Objects.equals(voyageKeys, other.voyageKeys);
 
 			if (partA) {
 				for (final IPortSlot slot : portTimesRecord.getSlots()) {
