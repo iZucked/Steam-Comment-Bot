@@ -20,13 +20,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEditor {
 	
 	// make client configurable
-	private static final int MAX_SPEED_TO_CANAL = 16;
-	private static final int CANAL_BOOKING_MARGIN = 24;
+	private static final int MAX_SPEED_TO_CANAL = Integer.MAX_VALUE;
 
 	private ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> panamaBookings;
 	private int strictBoundary;
 	private int relaxedBoundary;
 	private int relaxedBookingsCount;
+	private int arrivalMargin;
 	
 	@Override
 	public void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> bookings) {
@@ -82,6 +82,11 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 
 	@Override
 	public int getMargin() {
-		return CANAL_BOOKING_MARGIN;
+		return arrivalMargin;
+	}
+
+	@Override
+	public void setArrivalMargin(int margin) {
+		arrivalMargin = margin;
 	}
 }

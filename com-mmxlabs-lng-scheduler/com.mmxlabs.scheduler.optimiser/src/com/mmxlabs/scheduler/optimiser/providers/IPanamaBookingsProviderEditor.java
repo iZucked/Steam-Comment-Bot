@@ -38,4 +38,6 @@ public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 	 * @return
 	 */
 	void setRelaxedBoundary(int boundary);
+	
+	void setArrivalMargin(int margin);
 }
