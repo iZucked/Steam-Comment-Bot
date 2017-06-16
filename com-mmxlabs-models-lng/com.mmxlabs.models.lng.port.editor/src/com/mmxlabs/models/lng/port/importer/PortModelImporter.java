@@ -84,11 +84,11 @@ public class PortModelImporter implements ISubmodelImporter {
 	private final RouteImporter routeImporter = new RouteImporter();
 
 	private final DefaultClassImporter canalPortsImporter = new DefaultClassImporter() {
-		
+
 		protected boolean shouldImportReference(org.eclipse.emf.ecore.EReference reference) {
 			return shouldExportFeature(reference);
 		};
-		
+
 		protected boolean shouldExportFeature(org.eclipse.emf.ecore.EStructuralFeature feature) {
 			if (feature == PortPackage.Literals.ROUTE__CANAL) {
 				return false;
@@ -238,6 +238,13 @@ public class PortModelImporter implements ISubmodelImporter {
 					if (potentialImported.isPresent()) {
 						route.setEntryA(potentialImported.get().getEntryA());
 						route.setEntryB(potentialImported.get().getEntryB());
+
+						if (route.getEntryA() != null) {
+							context.registerNamedObject(route.getEntryA());
+						}
+						if (route.getEntryB() != null) {
+							context.registerNamedObject(route.getEntryB());
+						}
 					}
 				});
 			}

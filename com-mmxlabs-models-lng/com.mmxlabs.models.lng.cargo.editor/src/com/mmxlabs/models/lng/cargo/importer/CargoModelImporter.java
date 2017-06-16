@@ -17,6 +17,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
@@ -53,13 +55,16 @@ public class CargoModelImporter implements ISubmodelImporter {
 	private final @NonNull Map<String, String> inputs = new HashMap<>();
 	private IClassImporter vesselAvailabilityImporter;
 	private IClassImporter vesselEventImporter;
+	private IClassImporter canalBookingsImporter;
 	public static final @NonNull String EVENTS_KEY = "EVENTS";
+	public static final @NonNull String CANAL_BOOKINGS_KEY = "CANAL_BOOKINGS";
 	public static final @NonNull String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
 		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
 		inputs.put(EVENTS_KEY, "Events");
+		inputs.put(CANAL_BOOKINGS_KEY, "Canal Bookings");
 	}
 
 	/**
@@ -81,6 +86,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoImporter.setImporterRegistry(importerRegistry);
 			vesselAvailabilityImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselAvailability());
 			vesselEventImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselEvent());
+			canalBookingsImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getCanalBookingSlot());
 		}
 	}
 
@@ -177,9 +183,15 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoModel.getVesselAvailabilities().addAll(
 					(Collection<? extends VesselAvailability>) vesselAvailabilityImporter.importObjects(CargoPackage.eINSTANCE.getVesselAvailability(), inputs.get(VESSEL_AVAILABILITY_KEY), context));
 
-		if (inputs.containsKey(EVENTS_KEY))
+		if (inputs.containsKey(EVENTS_KEY)) {
 			cargoModel.getVesselEvents().addAll((Collection<? extends VesselEvent>) vesselEventImporter.importObjects(CargoPackage.eINSTANCE.getVesselEvent(), inputs.get(EVENTS_KEY), context));
-
+		}
+		CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
+		cargoModel.setCanalBookings(canalBookings);
+		if (inputs.containsKey(CANAL_BOOKINGS_KEY)) {
+			canalBookings.getCanalBookingSlots()
+					.addAll((Collection<? extends CanalBookingSlot>) canalBookingsImporter.importObjects(CargoPackage.eINSTANCE.getCanalBookingSlot(), inputs.get(CANAL_BOOKINGS_KEY), context));
+		}
 		return cargoModel;
 	}
 
@@ -190,6 +202,10 @@ public class CargoModelImporter implements ISubmodelImporter {
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));
 		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(cargoModel.getVesselAvailabilities(), context));
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(cargoModel.getVesselEvents(), context));
+		CanalBookings canalBookings = cargoModel.getCanalBookings();
+		if (canalBookings != null) {
+			output.put(CANAL_BOOKINGS_KEY, canalBookingsImporter.exportObjects(canalBookings.getCanalBookingSlots(), context));
+		}
 	}
 
 	@Override
