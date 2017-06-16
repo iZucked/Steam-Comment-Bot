@@ -176,7 +176,9 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
-		topLevel.displayValidationStatus(status);
+		if (topLevel != null) {
+			topLevel.displayValidationStatus(status);
+		}
 		for (final IDisplayComposite child : childComposites) {
 			child.displayValidationStatus(status);
 		}
@@ -204,7 +206,9 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	public boolean checkVisibility(final IDialogEditingContext context) {
 
 		boolean changed = false;
-		topLevel.checkVisibility(context);
+		if (topLevel != null) {
+			topLevel.checkVisibility(context);
+		}
 		for (final IDisplayComposite child : childComposites) {
 			changed |= child.checkVisibility(context);
 		}

@@ -30,6 +30,7 @@ public class DetailConstraintStatusFactory {
 	private final List<Pair<EObject, EStructuralFeature>> features = new LinkedList<>();
 	private @NonNull String message = "";
 	private @Nullable String name;
+	private @Nullable String prefix;
 
 	private DetailConstraintStatusFactory() {
 
@@ -69,6 +70,12 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
+	public DetailConstraintStatusFactory withPrefix(@Nullable final String prefix) {
+		this.prefix = prefix;
+
+		return this;
+	}
+
 	public DetailConstraintStatusFactory withTypedName(@NonNull final String type, @NonNull final String name) {
 		this.name = String.format("%s|%s", type, name);
 
@@ -83,7 +90,10 @@ public class DetailConstraintStatusFactory {
 	}
 
 	public DetailConstraintStatusDecorator make(final IValidationContext ctx) {
-		final String finalMessage = name == null ? message : String.format("[%s]%s", name, message);
+		String finalMessage = name == null ? message : String.format("[%s] %s", name, message);
+		if (prefix != null) {
+			finalMessage = prefix + finalMessage;
+		}
 
 		final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(finalMessage);
 
