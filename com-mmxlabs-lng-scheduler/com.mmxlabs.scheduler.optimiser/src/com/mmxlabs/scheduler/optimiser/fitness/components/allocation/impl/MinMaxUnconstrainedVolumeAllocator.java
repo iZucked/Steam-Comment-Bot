@@ -262,10 +262,10 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			annotation.setCommercialSlotVolumeInMMBTu(slot, (annotation.getCommercialSlotVolumeInMMBTu(slot) + 5L) / scaleFactorL);
 			annotation.setPhysicalSlotVolumeInMMBTu(slot, (annotation.getPhysicalSlotVolumeInMMBTu(slot) + 5L) / scaleFactorL);
 		}
-		
+
 		assert annotation.getStartHeelVolumeInM3() >= 0;
 		assert annotation.getRemainingHeelVolumeInM3() >= 0;
-		
+
 		return annotation;
 	}
 }

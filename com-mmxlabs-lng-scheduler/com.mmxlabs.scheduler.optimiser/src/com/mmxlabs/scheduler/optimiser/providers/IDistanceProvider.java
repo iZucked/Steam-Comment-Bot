@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -82,6 +83,6 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @param routeOption
 	 * @return
 	 */
-	@NonNull
+	@Nullable
 	IPort getRouteOptionEntry(IPort port, ERouteOption routeOption);
 }

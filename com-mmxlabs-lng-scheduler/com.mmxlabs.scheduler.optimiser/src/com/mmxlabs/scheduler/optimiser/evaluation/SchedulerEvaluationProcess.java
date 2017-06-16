@@ -70,14 +70,9 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	private boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {
 		if (phase == Phase.Checked_Evaluation) {
-//			// Calculate arrival times for sequences
-//			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
-//			if (arrivalTimes == null) {
-//				return false;
-//			}
 
 			@Nullable
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences,  solution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, solution);
 			if (volumeAllocatedSequences == null) {
 				return false;
 			}

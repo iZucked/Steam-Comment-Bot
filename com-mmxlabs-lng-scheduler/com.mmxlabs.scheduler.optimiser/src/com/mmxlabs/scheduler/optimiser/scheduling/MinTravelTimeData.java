@@ -44,6 +44,10 @@ public final class MinTravelTimeData {
 	}
 
 	public void setMinTravelTime(int seqIndex, int elementIndex, int travelTime) {
+		if (travelTime == Integer.MIN_VALUE) {
+			int ii = 0;
+		}
+		
 		minTimeToNextElement[seqIndex][elementIndex] = travelTime;
 	}
 

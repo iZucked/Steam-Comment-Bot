@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -65,14 +66,16 @@ public class ScheduleCalculator {
 	private static class Key {
 		private final @NonNull IResource resource;
 		private final @NonNull ISequence sequence;
-		private final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords;
-		private final @NonNull List<Object> voyageKeys = new LinkedList<>();
+		private final @Nullable List<@NonNull IPortTimesRecord> portTimesRecords;
+		private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
 
-		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords) {
+		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final @Nullable List<@NonNull IPortTimesRecord> portTimesRecords) {
 			this.resource = resource;
 			this.sequence = sequence;
 			this.portTimesRecords = portTimesRecords;
-			// portTimesRecords.forEach(ptr -> ptr.getVoyageSpecs().foreach(spec -> voyageKeys.add(spec.getRouteOption())));
+			if (portTimesRecords != null) {
+				portTimesRecords.forEach(ptr -> ptr.getSlots().forEach(slot -> voyageKeys.add(ptr.getSlotNextVoyageOptions(slot))));
+			}
 		}
 
 		@Override
@@ -248,11 +251,6 @@ public class ScheduleCalculator {
 		if (isRoundTripSequence && records.size() == 0) {
 			return new VolumeAllocatedSequence(resource, vesselAvailability, sequence, 0, Collections.<@NonNull Pair<VoyagePlan, IPortTimesRecord>> emptyList());
 		}
-
-		// // Get start time
-		// final int startTime = arrivalTimes[0];
-		//
-		// final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes);
 
 		// Generate all the voyageplans and extra annotations for this sequence
 		final List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, records);
