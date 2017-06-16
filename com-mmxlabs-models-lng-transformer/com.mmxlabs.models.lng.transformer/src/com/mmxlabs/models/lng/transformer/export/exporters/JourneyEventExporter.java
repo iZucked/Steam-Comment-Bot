@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.export.exporters;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -89,6 +90,26 @@ public class JourneyEventExporter {
 
 		IPortTimesRecord portTimesRecord = volumeAllocatedSequence.getPortTimesRecord(fromPortSlot);
 
+		// set latest possible canal date
+		if (journey.getRoute().isCanal()){
+			final IPort canalEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
+			
+			if (canalEntry != null){
+				int fromCanalEntry = distanceProvider.getTravelTime(voyageDetails.getOptions().getRoute(), //
+						voyageDetails.getOptions().getVessel(), //
+						canalEntry, //
+						voyageDetails.getOptions().getToPortSlot().getPort(), //
+						voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
+
+				journey.setLatestPossibleCanalDate(journey.getEnd() //
+						.withZoneSameInstant(ZoneId.of(voyageDetails.getOptions().getFromPortSlot().getPort().getTimeZoneId()))
+						.minusHours(fromCanalEntry) //
+						.minusHours(panamaSlotsProvider.getMargin()) //
+						.minusDays(1) // round to previous day
+						.toLocalDate());
+			}
+		}
+
 		// set canal booking if present
 		if (portTimesRecord.getRouteOptionBooking(fromPortSlot) != null) {
 			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionBooking(fromPortSlot), CanalBookingSlot.class);
@@ -97,15 +118,19 @@ public class JourneyEventExporter {
 			journey.setCanalDate(canalBookingSlot.getBookingDate());
 		} else if (journey.getRoute().isCanal()) {
 
-			final IPort routeOptionEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
-			if (routeOptionEntry != null) {
-				int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, voyageDetails.getOptions().getVessel(), voyageDetails.getOptions().getFromPortSlot().getPort(), routeOptionEntry,
-						Math.max(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed()));
+			final IPort canalEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
+			if (canalEntry != null) {
+				int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, //
+						voyageDetails.getOptions().getVessel(), //
+						voyageDetails.getOptions().getFromPortSlot().getPort(), // 
+						canalEntry, //
+						Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed()));
 
-				int fromCanal = distanceProvider.getTravelTime(voyageDetails.getOptions().getRoute(), voyageDetails.getOptions().getVessel(), routeOptionEntry,
+				int fromCanal = distanceProvider.getTravelTime(voyageDetails.getOptions().getRoute(), voyageDetails.getOptions().getVessel(), canalEntry,
 						voyageDetails.getOptions().getToPortSlot().getPort(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
+				
 				int departureTime = portTimesRecord.getSlotTime(voyageDetails.getOptions().getFromPortSlot()) + portTimesRecord.getSlotDuration(voyageDetails.getOptions().getFromPortSlot());
-				ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + toCanal, voyageDetails.getOptions().getFromPortSlot().getPort());
+				ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + panamaSlotsProvider.getMargin() + toCanal, voyageDetails.getOptions().getFromPortSlot().getPort());
 				// Add 200 years if we would not make out arrival times based on canal rules
 
 				if (departureTime + toCanal + fromCanal > portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot())) {
@@ -113,9 +138,9 @@ public class JourneyEventExporter {
 				}
 				journey.setCanalDate(estimatedArrival.toLocalDate());
 
-				if (routeOptionEntry != null) {
+				if (canalEntry != null) {
 					@NonNull
-					final Port expectedEntryPort = modelEntityMap.getModelObjectNullChecked(routeOptionEntry, Port.class);
+					final Port expectedEntryPort = modelEntityMap.getModelObjectNullChecked(canalEntry, Port.class);
 					if (journey.getRoute().getEntryA() != null && journey.getRoute().getEntryA().getPort() == expectedEntryPort) {
 						journey.setCanalEntry(journey.getRoute().getEntryA());
 					}

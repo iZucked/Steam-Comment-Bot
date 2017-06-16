@@ -61,6 +61,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 	private int relaxedBoundaryOffsetDays;
 	private int relaxedBookingsCount;
 	private int strictBoundaryOffsetDays;
+	private int arrivalMargin;
 
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
@@ -80,6 +81,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		strictBoundaryOffsetDays = canalBookings.getStrictBoundaryOffsetDays();
 		relaxedBoundaryOffsetDays = canalBookings.getRelaxedBoundaryOffsetDays();
 		relaxedBookingsCount = canalBookings.getFlexibleBookingAmount();
+		arrivalMargin = canalBookings.getArrivalMarginHours();
 	}
 
 	@Override
@@ -107,6 +109,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		panamaBookingsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
 		panamaBookingsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);
 		panamaBookingsProviderEditor.setRelaxedBookingCount(relaxedBookingsCount);
+		panamaBookingsProviderEditor.setArrivalMargin(arrivalMargin);
 	}
 
 	@Override
