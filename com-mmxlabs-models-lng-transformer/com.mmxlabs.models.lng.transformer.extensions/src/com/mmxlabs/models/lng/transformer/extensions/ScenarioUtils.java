@@ -357,7 +357,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(ShippingHoursRestrictionCheckerFactory.NAME, true));
 			constraints.add(createConstraint(LockedUnusedElementsConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
+//			constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives

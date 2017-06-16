@@ -163,7 +163,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(SchedulerCalculationUtils.class);
 
 		
-		bind(FeasibleTimeWindowTrimmer.class).in(PerChainUnitScope.class);
+		bind(FeasibleTimeWindowTrimmer.class);//.in(PerChainUnitScope.class);
 		bind(PriceBasedWindowTrimmer.class).in(PerChainUnitScope.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);

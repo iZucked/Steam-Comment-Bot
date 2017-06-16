@@ -4,16 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -25,17 +20,14 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.NonSchedulingScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PanamaPriceBasedSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
@@ -50,12 +42,12 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 	private IPanamaBookingsProvider panamaSlotsProvider;
 
 	@Inject
-	private NonSchedulingScheduler scheduler;
+	private FeasibleTimeWindowTrimmer scheduler;
 
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	private Set<ISequenceElement> unbookedSlots;
+	private Set<IPortSlot> unbookedSlots;
 
 	public PanamaSlotsConstraintChecker(final String name) {
 		this.name = name;
@@ -73,15 +65,19 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
-		int[][] schedule = scheduler.schedule(sequences);
-		AvailableRouteChoices[][] throughPanama = scheduler.canalDecision();
-		IRouteOptionBooking[][] assignedSlots = scheduler.slotsAssigned();
+		// TODO: Better mechanism!
+		scheduler.setTrimByPanamaCanalBookings(true);
+		
+		MinTravelTimeData minTimeData = new MinTravelTimeData(sequences);
+		Map<IResource, List<IPortTimeWindowsRecord>> generateTrimmedWindows = scheduler.generateTrimmedWindows(sequences, minTimeData);
+		// AvailableRouteChoices[][] throughPanama = scheduler.canalDecision();
+		// IRouteOptionBooking[][] assignedSlots = scheduler.slotsAssigned();
 
 		int strictBoundary = panamaSlotsProvider.getStrictBoundary();
 		int relaxedBoundary = panamaSlotsProvider.getRelaxedBoundary();
 
-		Set<ISequenceElement> currentUnbookedSlots = new HashSet<>();
-		Set<ISequenceElement> currentUnbookedSlotsInRelaxed = new HashSet<ISequenceElement>();
+		Set<IPortSlot> currentUnbookedSlots = new HashSet<>();
+		Set<IPortSlot> currentUnbookedSlotsInRelaxed = new HashSet<>();
 
 		// TODO: what to do with potential vessel return when end time is not specified?
 		// TODO: nominal vessel
@@ -97,31 +93,41 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 				// TODO: Implement something here rather than rely on VoyagePlanner
 				continue;
 			}
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+				// TODO: Implement something here rather than rely on VoyagePlanner
+				continue;
+			}
 
 			// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
 			if (sequence.size() < 2) {
 				continue;
 			}
 
-			for (int index = 0; index < sequence.size(); index++) {
+			List<IPortTimeWindowsRecord> records = generateTrimmedWindows.get(resource);
+			IPortSlot prevSlot = null;
+			for (IPortTimeWindowsRecord record : records) {
+				for (IPortSlot slot : record.getSlots()) {
+					// TODO - fill in details
+					// note return slot not used in same way!
+					if (record.getSlotNextVoyageOptions(slot) != AvailableRouteChoices.PANAMA_ONLY) {
+						// not going through Panama, ignore
+						continue;
+					}
+					if (record.getRouteOptionBooking(slot) != null) {
+						// not going through Panama, ignore
+						continue;
+					}
 
-				// TODO: What about optimal?
-				if (throughPanama[r][index] != AvailableRouteChoices.PANAMA_ONLY) {
-					// not going through Panama, ignore
-					continue;
-				}
-				if (assignedSlots[r][index] != null) {
-					// has a slot... all good.
-					continue;
-				}
-				if (schedule[r][index] >= relaxedBoundary) {
-					continue;
-				}
+					int windowStart = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
+					if (windowStart >= relaxedBoundary) {
+						continue;
+					}
 
-				if (schedule[r][index] >= strictBoundary && schedule[r][index] < relaxedBoundary) {
-					currentUnbookedSlotsInRelaxed.add(sequence.get(index));
+					if (windowStart >= strictBoundary && windowStart < relaxedBoundary) {
+						currentUnbookedSlotsInRelaxed.add(slot);
+					}
+					currentUnbookedSlots.add(slot);
 				}
-				currentUnbookedSlots.add(sequence.get(index));
 			}
 		}
 
