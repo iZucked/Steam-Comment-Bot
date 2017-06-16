@@ -78,15 +78,6 @@ public interface ScheduleFactory extends EFactory {
 	VesselEventVisit createVesselEventVisit();
 
 	/**
-	 * Returns a new object of class '<em>Journey</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Journey</em>'.
-	 * @generated
-	 */
-	Journey createJourney();
-
-	/**
 	 * Returns a new object of class '<em>Idle</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -211,6 +202,15 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	EndEvent createEndEvent();
+
+	/**
+	 * Returns a new object of class '<em>Journey</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Journey</em>'.
+	 * @generated
+	 */
+	Journey createJourney();
 
 	/**
 	 * Returns a new object of class '<em>Capacity Violations Holder</em>'.

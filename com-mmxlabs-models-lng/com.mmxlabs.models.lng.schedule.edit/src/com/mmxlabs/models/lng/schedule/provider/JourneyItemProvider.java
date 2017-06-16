@@ -59,6 +59,7 @@ public class JourneyItemProvider
 			addCanalEntryPropertyDescriptor(object);
 			addCanalDatePropertyDescriptor(object);
 			addCanalBookingPropertyDescriptor(object);
+			addLatestPossibleCanalDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -123,7 +124,7 @@ public class JourneyItemProvider
 				 SchedulePackage.Literals.JOURNEY__ROUTE,
 				 true,
 				 false,
-				 false,
+				 true,
 				 null,
 				 null,
 				 null));
@@ -262,6 +263,28 @@ public class JourneyItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Latest Possible Canal Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLatestPossibleCanalDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_latestPossibleCanalDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_latestPossibleCanalDate_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -330,11 +353,11 @@ public class JourneyItemProvider
 
 		switch (notification.getFeatureID(Journey.class)) {
 			case SchedulePackage.JOURNEY__LADEN:
-			case SchedulePackage.JOURNEY__ROUTE:
 			case SchedulePackage.JOURNEY__TOLL:
 			case SchedulePackage.JOURNEY__DISTANCE:
 			case SchedulePackage.JOURNEY__SPEED:
 			case SchedulePackage.JOURNEY__CANAL_DATE:
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.JOURNEY__FUELS:

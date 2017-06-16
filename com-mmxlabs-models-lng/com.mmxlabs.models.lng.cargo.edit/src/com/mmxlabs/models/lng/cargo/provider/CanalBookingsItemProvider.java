@@ -67,6 +67,7 @@ public class CanalBookingsItemProvider
 			addStrictBoundaryOffsetDaysPropertyDescriptor(object);
 			addRelaxedBoundaryOffsetDaysPropertyDescriptor(object);
 			addFlexibleBookingAmountPropertyDescriptor(object);
+			addArrivalMarginHoursPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -129,6 +130,28 @@ public class CanalBookingsItemProvider
 				 getString("_UI_CanalBookings_flexibleBookingAmount_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_flexibleBookingAmount_feature", "_UI_CanalBookings_type"),
 				 CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Arrival Margin Hours feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addArrivalMarginHoursPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookings_arrivalMarginHours_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_arrivalMarginHours_feature", "_UI_CanalBookings_type"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS,
 				 true,
 				 false,
 				 false,
@@ -206,6 +229,7 @@ public class CanalBookingsItemProvider
 			case CargoPackage.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS:
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
+			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:

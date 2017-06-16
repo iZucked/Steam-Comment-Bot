@@ -135,6 +135,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalEntry" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//EntryPoint"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalBooking" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CanalBookingSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestPossibleCanalDate"
+        eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="laden" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

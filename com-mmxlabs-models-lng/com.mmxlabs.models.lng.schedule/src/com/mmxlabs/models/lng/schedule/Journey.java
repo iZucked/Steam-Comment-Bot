@@ -8,7 +8,6 @@ import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +27,7 @@ import java.time.ZonedDateTime;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney()
@@ -268,6 +268,32 @@ public interface Journey extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setCanalBooking(CanalBookingSlot value);
+
+	/**
+	 * Returns the value of the '<em><b>Latest Possible Canal Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Latest Possible Canal Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Latest Possible Canal Date</em>' attribute.
+	 * @see #setLatestPossibleCanalDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_LatestPossibleCanalDate()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getLatestPossibleCanalDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Latest Possible Canal Date</em>' attribute.
+	 * @see #getLatestPossibleCanalDate()
+	 * @generated
+	 */
+	void setLatestPossibleCanalDate(LocalDate value);
 
 } // end of  Journey
 

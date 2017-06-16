@@ -321,16 +321,6 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT = 15;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.JourneyImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
-	 * @generated
-	 */
-	int JOURNEY = 11;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl <em>Idle</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2022,6 +2012,16 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.JourneyImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
+	 * @generated
+	 */
+	int JOURNEY = 11;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2202,13 +2202,22 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__CANAL_BOOKING = EVENT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Latest Possible Canal Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__LATEST_POSSIBLE_CANAL_DATE = EVENT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Journey</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
+	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5364,115 +5373,6 @@ public interface SchedulePackage extends EPackage {
 	EReference getVesselEventVisit_RedeliveryPort();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Journey <em>Journey</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Journey</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey
-	 * @generated
-	 */
-	EClass getJourney();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getDestination <em>Destination</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Destination</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getDestination()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EReference getJourney_Destination();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#isLaden <em>Laden</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Laden</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#isLaden()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EAttribute getJourney_Laden();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EReference getJourney_Route();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Toll</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getToll()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EAttribute getJourney_Toll();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Distance</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getDistance()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EAttribute getJourney_Distance();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Speed</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getSpeed()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EAttribute getJourney_Speed();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Canal Entry</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalEntry()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EReference getJourney_CanalEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Canal Date</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalDate()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EAttribute getJourney_CanalDate();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Canal Booking</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalBooking()
-	 * @see #getJourney()
-	 * @generated
-	 */
-	EReference getJourney_CanalBooking();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Idle <em>Idle</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6112,6 +6012,126 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEndEvent_SlotAllocation();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Journey <em>Journey</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Journey</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey
+	 * @generated
+	 */
+	EClass getJourney();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getDestination <em>Destination</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Destination</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getDestination()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_Destination();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#isLaden <em>Laden</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#isLaden()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_Laden();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Route</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_Route();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Toll</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getToll()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_Toll();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getDistance()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_Distance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Speed</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getSpeed()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_Speed();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Canal Entry</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalEntry()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_CanalEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Canal Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalDate()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_CanalDate();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Canal Booking</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalBooking()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_CanalBooking();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Latest Possible Canal Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_LatestPossibleCanalDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
@@ -7251,88 +7271,6 @@ public interface SchedulePackage extends EPackage {
 		EReference VESSEL_EVENT_VISIT__REDELIVERY_PORT = eINSTANCE.getVesselEventVisit_RedeliveryPort();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.JourneyImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
-		 * @generated
-		 */
-		EClass JOURNEY = eINSTANCE.getJourney();
-
-		/**
-		 * The meta object literal for the '<em><b>Destination</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference JOURNEY__DESTINATION = eINSTANCE.getJourney_Destination();
-
-		/**
-		 * The meta object literal for the '<em><b>Laden</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute JOURNEY__LADEN = eINSTANCE.getJourney_Laden();
-
-		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
-
-		/**
-		 * The meta object literal for the '<em><b>Toll</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute JOURNEY__TOLL = eINSTANCE.getJourney_Toll();
-
-		/**
-		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute JOURNEY__DISTANCE = eINSTANCE.getJourney_Distance();
-
-		/**
-		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute JOURNEY__SPEED = eINSTANCE.getJourney_Speed();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal Entry</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference JOURNEY__CANAL_ENTRY = eINSTANCE.getJourney_CanalEntry();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute JOURNEY__CANAL_DATE = eINSTANCE.getJourney_CanalDate();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal Booking</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference JOURNEY__CANAL_BOOKING = eINSTANCE.getJourney_CanalBooking();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl <em>Idle</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7839,6 +7777,96 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference END_EVENT__SLOT_ALLOCATION = eINSTANCE.getEndEvent_SlotAllocation();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.JourneyImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
+		 * @generated
+		 */
+		EClass JOURNEY = eINSTANCE.getJourney();
+
+		/**
+		 * The meta object literal for the '<em><b>Destination</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__DESTINATION = eINSTANCE.getJourney_Destination();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__LADEN = eINSTANCE.getJourney_Laden();
+
+		/**
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
+
+		/**
+		 * The meta object literal for the '<em><b>Toll</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__TOLL = eINSTANCE.getJourney_Toll();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__DISTANCE = eINSTANCE.getJourney_Distance();
+
+		/**
+		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__SPEED = eINSTANCE.getJourney_Speed();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Entry</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__CANAL_ENTRY = eINSTANCE.getJourney_CanalEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__CANAL_DATE = eINSTANCE.getJourney_CanalDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Booking</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__CANAL_BOOKING = eINSTANCE.getJourney_CanalBooking();
+
+		/**
+		 * The meta object literal for the '<em><b>Latest Possible Canal Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__LATEST_POSSIBLE_CANAL_DATE = eINSTANCE.getJourney_LatestPossibleCanalDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.

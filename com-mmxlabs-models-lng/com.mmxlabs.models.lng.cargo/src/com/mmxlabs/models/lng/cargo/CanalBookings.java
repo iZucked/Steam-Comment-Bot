@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -119,5 +120,31 @@ public interface CanalBookings extends EObject {
 	 * @generated
 	 */
 	void setFlexibleBookingAmount(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Arrival Margin Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Arrival Margin Hours</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Arrival Margin Hours</em>' attribute.
+	 * @see #setArrivalMarginHours(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_ArrivalMarginHours()
+	 * @model
+	 * @generated
+	 */
+	int getArrivalMarginHours();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Arrival Margin Hours</em>' attribute.
+	 * @see #getArrivalMarginHours()
+	 * @generated
+	 */
+	void setArrivalMarginHours(int value);
 
 } // CanalBookings

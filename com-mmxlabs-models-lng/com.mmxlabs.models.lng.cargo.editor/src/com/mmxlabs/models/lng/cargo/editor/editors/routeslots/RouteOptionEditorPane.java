@@ -49,6 +49,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	private FormattedText strictEditor;
 	private FormattedText relaxedEditor;
 	private FormattedText flexEditor;
+	private FormattedText marginEditor;
 	private CanalBookings canalBookingsModel;
 
 	private AdapterImpl changeListener = new AdapterImpl() {
@@ -68,6 +69,10 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS) {
 				strictEditor.setValue(msg.getNewValue());
+				return;
+			}
+			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS) {
+				marginEditor.setValue(msg.getNewValue());
 				return;
 			}
 		};
@@ -150,6 +155,27 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 
 			});
 			flexEditor.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
+			
+			final Label lbl4 = new Label(pparent, SWT.NONE);
+			lbl4.setText(". Arrival margin in hours ");
+			lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+			marginEditor = new FormattedText(pparent);
+			marginEditor.setFormatter(new IntegerFormatter());
+			// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+			marginEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+			marginEditor.getControl().addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					Object newValue = marginEditor.getValue();
+					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getArrivalMarginHours())) {
+						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_ArrivalMarginHours(), newValue);
+						getEditingDomain().getCommandStack().execute(cmd);
+					}
+				}
+
+			});
+			marginEditor.getControl().setToolTipText("The time in hours to arrive prior to 00:00 of the day of the slot.");
 		}
 
 		return super.createViewer(parent);
@@ -182,10 +208,12 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			strictEditor.setValue(canalBookingsModel.getStrictBoundaryOffsetDays());
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
 			flexEditor.setValue(canalBookingsModel.getFlexibleBookingAmount());
+			marginEditor.setValue(canalBookingsModel.getArrivalMarginHours());
 		} else {
 			strictEditor.setValue(0);
 			relaxedEditor.setValue(0);
 			flexEditor.setValue(0);
+			marginEditor.setValue(0);
 		}
 
 		if (this.canalBookingsModel != null) {

@@ -71,6 +71,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		add_strictBoundaryOffsetDaysEditor(detailComposite, topClass);
 		add_relaxedBoundaryOffsetDaysEditor(detailComposite, topClass);
 		add_flexibleBookingAmountEditor(detailComposite, topClass);
+		add_arrivalMarginHoursEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the canalBookingSlots feature on CanalBookings
@@ -103,5 +104,14 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_flexibleBookingAmountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT));
+	}
+
+	/**
+	 * Create the editor for the arrivalMarginHours feature on CanalBookings
+	 *
+	 * @generated
+	 */
+	protected void add_arrivalMarginHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS));
 	}
 }

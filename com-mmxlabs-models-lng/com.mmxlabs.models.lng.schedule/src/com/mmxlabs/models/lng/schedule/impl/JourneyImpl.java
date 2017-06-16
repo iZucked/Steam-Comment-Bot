@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntry <em>Canal Entry</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalDate <em>Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBooking <em>Canal Booking</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
  * </ul>
  *
  * @generated
@@ -204,6 +205,26 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @ordered
 	 */
 	protected CanalBookingSlot canalBooking;
+
+	/**
+	 * The default value of the '{@link #getLatestPossibleCanalDate() <em>Latest Possible Canal Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLatestPossibleCanalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate LATEST_POSSIBLE_CANAL_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getLatestPossibleCanalDate() <em>Latest Possible Canal Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLatestPossibleCanalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate latestPossibleCanalDate = LATEST_POSSIBLE_CANAL_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -496,6 +517,27 @@ public class JourneyImpl extends EventImpl implements Journey {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getLatestPossibleCanalDate() {
+		return latestPossibleCanalDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLatestPossibleCanalDate(LocalDate newLatestPossibleCanalDate) {
+		LocalDate oldLatestPossibleCanalDate = latestPossibleCanalDate;
+		latestPossibleCanalDate = newLatestPossibleCanalDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE, oldLatestPossibleCanalDate, latestPossibleCanalDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getFuelCost() {
@@ -552,6 +594,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				if (resolve) return getCanalBooking();
 				return basicGetCanalBooking();
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
+				return getLatestPossibleCanalDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -596,6 +640,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				setCanalBooking((CanalBookingSlot)newValue);
 				return;
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
+				setLatestPossibleCanalDate((LocalDate)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -638,6 +685,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				setCanalBooking((CanalBookingSlot)null);
 				return;
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
+				setLatestPossibleCanalDate(LATEST_POSSIBLE_CANAL_DATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -670,6 +720,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return CANAL_DATE_EDEFAULT == null ? canalDate != null : !CANAL_DATE_EDEFAULT.equals(canalDate);
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
 				return canalBooking != null;
+			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
+				return LATEST_POSSIBLE_CANAL_DATE_EDEFAULT == null ? latestPossibleCanalDate != null : !LATEST_POSSIBLE_CANAL_DATE_EDEFAULT.equals(latestPossibleCanalDate);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -756,6 +808,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(speed);
 		result.append(", canalDate: ");
 		result.append(canalDate);
+		result.append(", latestPossibleCanalDate: ");
+		result.append(latestPossibleCanalDate);
 		result.append(')');
 		return result.toString();
 	}

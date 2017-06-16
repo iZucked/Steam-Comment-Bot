@@ -5406,13 +5406,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = 3;
 
 	/**
+	 * The feature id for the '<em><b>Arrival Margin Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = 4;
+
+	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = 4;
+	int CANAL_BOOKINGS_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Canal Bookings</em>' class.
@@ -7389,6 +7398,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_FlexibleBookingAmount();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrival Margin Hours</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_ArrivalMarginHours();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8927,6 +8947,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = eINSTANCE.getCanalBookings_FlexibleBookingAmount();
+
+		/**
+		 * The meta object literal for the '<em><b>Arrival Margin Hours</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = eINSTANCE.getCanalBookings_ArrivalMarginHours();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

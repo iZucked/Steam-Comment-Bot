@@ -73,6 +73,7 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 		add_canalEntryEditor(detailComposite, topClass);
 		add_canalDateEditor(detailComposite, topClass);
 		add_canalBookingEditor(detailComposite, topClass);
+		add_latestPossibleCanalDateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the destination feature on Journey
@@ -150,5 +151,14 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_canalBookingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_BOOKING));
+	}
+
+	/**
+	 * Create the editor for the latestPossibleCanalDate feature on Journey
+	 *
+	 * @generated
+	 */
+	protected void add_latestPossibleCanalDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE));
 	}
 }

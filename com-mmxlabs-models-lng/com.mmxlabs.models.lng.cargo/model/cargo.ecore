@@ -27,7 +27,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventoryModels" upperBound="-1"
         eType="#//Inventory"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalBookings" eType="#//CanalBookings"
-        containment="true"/>        
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
@@ -460,5 +460,6 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleBookingAmount"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>  
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalMarginHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
 </ecore:EPackage>

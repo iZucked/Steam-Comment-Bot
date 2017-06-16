@@ -226,29 +226,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Journey} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected JourneyItemProvider journeyItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.Journey}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createJourneyAdapter() {
-		if (journeyItemProvider == null) {
-			journeyItemProvider = new JourneyItemProvider(this);
-		}
-
-		return journeyItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Idle} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -568,6 +545,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		}
 
 		return endEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.Journey} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected JourneyItemProvider journeyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.Journey}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createJourneyAdapter() {
+		if (journeyItemProvider == null) {
+			journeyItemProvider = new JourneyItemProvider(this);
+		}
+
+		return journeyItemProvider;
 	}
 
 	/**

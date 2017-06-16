@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
  * </ul>
  *
  * @generated
@@ -108,6 +109,26 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected int flexibleBookingAmount = FLEXIBLE_BOOKING_AMOUNT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getArrivalMarginHours() <em>Arrival Margin Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getArrivalMarginHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int ARRIVAL_MARGIN_HOURS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getArrivalMarginHours() <em>Arrival Margin Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getArrivalMarginHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected int arrivalMarginHours = ARRIVAL_MARGIN_HOURS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -208,6 +229,27 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getArrivalMarginHours() {
+		return arrivalMarginHours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setArrivalMarginHours(int newArrivalMarginHours) {
+		int oldArrivalMarginHours = arrivalMarginHours;
+		arrivalMarginHours = newArrivalMarginHours;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS, oldArrivalMarginHours, arrivalMarginHours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -233,6 +275,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 				return getRelaxedBoundaryOffsetDays();
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
 				return getFlexibleBookingAmount();
+			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
+				return getArrivalMarginHours();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -259,6 +303,9 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
 				setFlexibleBookingAmount((Integer)newValue);
 				return;
+			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
+				setArrivalMarginHours((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -283,6 +330,9 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
 				setFlexibleBookingAmount(FLEXIBLE_BOOKING_AMOUNT_EDEFAULT);
 				return;
+			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
+				setArrivalMarginHours(ARRIVAL_MARGIN_HOURS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -303,6 +353,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 				return relaxedBoundaryOffsetDays != RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
 				return flexibleBookingAmount != FLEXIBLE_BOOKING_AMOUNT_EDEFAULT;
+			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
+				return arrivalMarginHours != ARRIVAL_MARGIN_HOURS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -323,6 +375,8 @@ public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
 		result.append(relaxedBoundaryOffsetDays);
 		result.append(", flexibleBookingAmount: ");
 		result.append(flexibleBookingAmount);
+		result.append(", arrivalMarginHours: ");
+		result.append(arrivalMarginHours);
 		result.append(')');
 		return result.toString();
 	}

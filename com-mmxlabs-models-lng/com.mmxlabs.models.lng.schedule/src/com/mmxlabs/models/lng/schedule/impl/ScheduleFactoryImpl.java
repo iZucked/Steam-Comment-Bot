@@ -274,16 +274,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Journey createJourney() {
-		JourneyImpl journey = new JourneyImpl();
-		return journey;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Idle createIdle() {
 		IdleImpl idle = new IdleImpl();
 		return idle;
@@ -417,6 +407,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public EndEvent createEndEvent() {
 		EndEventImpl endEvent = new EndEventImpl();
 		return endEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey createJourney() {
+		JourneyImpl journey = new JourneyImpl();
+		return journey;
 	}
 
 	/**
