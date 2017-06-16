@@ -7,14 +7,14 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public class ScheduledTimeWindows {
-	public ScheduledTimeWindows(MinTravelTimeData travelTimeData, Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows) {
+	public ScheduledTimeWindows(Map<IResource, MinTravelTimeData> travelTimeData, Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows) {
 		this.travelTimeData = travelTimeData;
 		trimmedTimeWindows = trimmedWindows;
 	}
 
-	private final MinTravelTimeData travelTimeData;
+	private final Map<IResource, MinTravelTimeData> travelTimeData;
 
-	public MinTravelTimeData getTravelTimeData() {
+	public Map<IResource, MinTravelTimeData> getTravelTimeData() {
 		return travelTimeData;
 	}
 

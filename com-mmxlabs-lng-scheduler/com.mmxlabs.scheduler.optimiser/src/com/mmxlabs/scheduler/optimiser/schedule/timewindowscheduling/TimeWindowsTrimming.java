@@ -487,12 +487,12 @@ public class TimeWindowsTrimming {
 				priceIntervalProducer.getLoadIntervalsBasedOnDischarge(load, portTimeWindowRecord));
 	}
 
-	private void trimLoadWindowBasedOnDischarge(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull ILoadOption load, final IDischargeOption discharge) {
-		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getLoadPriceIntervalsBasedOnDischarge(portTimeWindowRecord, load));
-		final int start = bounds.getFirst();
-		final int end = bounds.getSecond();
-		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
-	}
+//	private void trimLoadWindowBasedOnDischarge(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull ILoadOption load, final IDischargeOption discharge) {
+//		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getLoadPriceIntervalsBasedOnDischarge(portTimeWindowRecord, load));
+//		final int start = bounds.getFirst();
+//		final int end = bounds.getSecond();
+//		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
+//	}
 
 	private void trimDischargeWindowIndependentOfLoad(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull IDischargeOption discharge) {
 		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge));
@@ -540,28 +540,28 @@ public class TimeWindowsTrimming {
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(lowerBound, upperBound, priceIntervalProviderHelper.getEndElementPriceIntervals(sortedTimes));
 	}
 
-	private void trimDischargeWindowBasedOnLoad(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge) {
-		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
-		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getLowestPriceInterval(priceIntervalProviderHelper.getFeasibleIntervalSubSet(timeWindow.getInclusiveStart(),
-				timeWindow.getExclusiveEnd(), priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord)));
-		final int start = bounds.getFirst();
-		final int end = bounds.getSecond();
-		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
-	}
-
-	private void loadOrDischargeDeterminesBothPricingEvents(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final IPriceIntervalProvider loadPriceIntervalProvider,
-			final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider, final IPortTimeWindowsRecord portTimeWindowRecord, final boolean dateFromLoad) {
-		final List<int @NonNull []> complexPricingIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider,
-				portTimeWindowRecord, dateFromLoad);
-		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(complexPricingIntervals);
-		final int start = bounds.getFirst();
-		final int end = bounds.getSecond();
-		if (dateFromLoad) {
-			priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
-		} else {
-			priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
-		}
-	}
+//	private void trimDischargeWindowBasedOnLoad(final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge) {
+//		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+//		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getLowestPriceInterval(priceIntervalProviderHelper.getFeasibleIntervalSubSet(timeWindow.getInclusiveStart(),
+//				timeWindow.getExclusiveEnd(), priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord)));
+//		final int start = bounds.getFirst();
+//		final int end = bounds.getSecond();
+//		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
+//	}
+//
+//	private void loadOrDischargeDeterminesBothPricingEvents(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final IPriceIntervalProvider loadPriceIntervalProvider,
+//			final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider, final IPortTimeWindowsRecord portTimeWindowRecord, final boolean dateFromLoad) {
+//		final List<int @NonNull []> complexPricingIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider,
+//				portTimeWindowRecord, dateFromLoad);
+//		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(complexPricingIntervals);
+//		final int start = bounds.getFirst();
+//		final int end = bounds.getSecond();
+//		if (dateFromLoad) {
+//			priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
+//		} else {
+//			priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
+//		}
+//	}
 
 	/**
 	 * Makes sure the end of a time window is in the proper format. Takes as input the inclusive end and outputs the correct format.

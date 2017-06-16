@@ -186,7 +186,7 @@ public class PortTimesRecordMaker {
 			IPortSlot to = firstRecord.getSlots().size() > 1 ? firstRecord.getSlots().get(1) : firstRecord.getReturnSlot();
 			if (to != null) {
 				int time = firstRecord.getSlotTime(to);
-				int minTravelTime = travelTimeData.getMinTravelTime(seqIndex, 0);
+				int minTravelTime = travelTimeData.getMinTravelTime(0);
 				int ideal = time - minTravelTime;
 
 				ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
@@ -225,7 +225,7 @@ public class PortTimesRecordMaker {
 
 				portTimesRecord.setSlotDuration(slot, visitDuration);
 				// What is the next travel time?
-				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(seqIndex, record.getIndex(slot));
+				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(record.getIndex(slot));
 
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
@@ -251,7 +251,7 @@ public class PortTimesRecordMaker {
 							prevPortSlot.getPort(), startPortSlot.getPort(), //
 							vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), //
 							record.getSlotNextVoyageOptions(prevPortSlot) //
-							).getSecond();
+					).getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);

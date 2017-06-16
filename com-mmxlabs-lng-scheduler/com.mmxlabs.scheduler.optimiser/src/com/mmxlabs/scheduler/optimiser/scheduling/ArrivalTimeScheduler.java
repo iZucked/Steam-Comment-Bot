@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public class ArrivalTimeScheduler {
 
 	@Inject
-	private ITimeWindowScheduler timeWindowScheduler;
+	private TimeWindowScheduler timeWindowScheduler;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -36,7 +36,6 @@ public class ArrivalTimeScheduler {
 
 		final ScheduledTimeWindows scheduledTimeWindows = timeWindowScheduler.schedule(fullSequences);
 
-		final MinTravelTimeData travelTimeData = scheduledTimeWindows.getTravelTimeData();
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = scheduledTimeWindows.getTrimmedTimeWindowsMap();
 
 		final Map<IResource, List<IPortTimesRecord>> portTimeRecords = new HashMap<>();
@@ -45,6 +44,8 @@ public class ArrivalTimeScheduler {
 			final IResource resource = fullSequences.getResources().get(seqIndex);
 			final ISequence sequence = fullSequences.getSequence(resource);
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+
+			final MinTravelTimeData travelTimeData = scheduledTimeWindows.getTravelTimeData().get(resource);
 
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 

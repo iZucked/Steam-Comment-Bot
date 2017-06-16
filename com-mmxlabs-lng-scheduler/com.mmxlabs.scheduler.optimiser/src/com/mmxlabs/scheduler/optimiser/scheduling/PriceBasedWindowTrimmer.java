@@ -34,28 +34,31 @@ public class PriceBasedWindowTrimmer {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	public void updateWindows(final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows, final ISequences fullSequences, final MinTravelTimeData travelTimeData) {
+	public void updateWindows(final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows, final ISequences fullSequences, final Map<IResource, MinTravelTimeData> travelTimeDataMap) {
 
 		for (int seqIndex = 0; seqIndex < fullSequences.size(); seqIndex++) {
 			final IResource resource = fullSequences.getResources().get(seqIndex);
-			final List<IPortTimeWindowsRecord> list = trimmedWindows.get(resource);
+			trimWindows(resource, trimmedWindows.get(resource), travelTimeDataMap.get(resource));
+		}
+	}
 
-			final int vesselStartTime = 0;// arrivalTimes[seqIndex][0];
-			ITimeWindow lastFeasibleWindow = new TimeWindow(0, 1);
-			for (int idx = 0; idx < list.size(); idx++) {
-				final IPortTimeWindowsRecord portTimeWindowsRecord = list.get(idx);
+	public void trimWindows(IResource resource, List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData) {
 
-				// Retrim current window based on last window trim.
-				if (isSequentialVessel(portTimeWindowsRecord.getResource())) {
-					setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, seqIndex, travelTimeData, lastFeasibleWindow);
-				}
+		final int vesselStartTime = 0;// arrivalTimes[seqIndex][0];
+		ITimeWindow lastFeasibleWindow = new TimeWindow(0, 1);
+		for (int idx = 0; idx < trimmedWindows.size(); idx++) {
+			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(idx);
 
-				timeWindowsTrimming.processCargo(portTimeWindowsRecord, vesselStartTime);
-
-				@NonNull
-				final IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);
-				lastFeasibleWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot);
+			// Retrim current window based on last window trim.
+			if (isSequentialVessel(portTimeWindowsRecord.getResource())) {
+				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, travelTimeData, lastFeasibleWindow);
 			}
+
+			timeWindowsTrimming.processCargo(portTimeWindowsRecord, vesselStartTime);
+
+			@NonNull
+			final IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);
+			lastFeasibleWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot);
 		}
 	}
 
@@ -67,15 +70,14 @@ public class PriceBasedWindowTrimmer {
 		return true;
 	}
 
-	private int getFeasibleWindowEnd(final IPortTimeWindowsRecord portTimeWindowsRecord, final int seqIndex, final IPortSlot portSlot, final int feasibleWindowStart) {
+	private int getFeasibleWindowEnd(final IPortTimeWindowsRecord portTimeWindowsRecord, final IPortSlot portSlot, final int feasibleWindowStart) {
 		final ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
 		return Math.max(feasibleWindowStart + 1, window.getExclusiveEnd());
 	}
 
-	private int getFeasibleWindowStartForFirstSlot(final IPortTimeWindowsRecord portTimeWindowsRecord, final int seqIndex, final MinTravelTimeData travelTimeData,
-			@NonNull final ITimeWindow previousTimeWindow) {
+	private int getFeasibleWindowStartForFirstSlot(final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData, @NonNull final ITimeWindow previousTimeWindow) {
 		final ITimeWindow timeWindow = portTimeWindowsRecord.getFirstSlotFeasibleTimeWindow();
-		return Math.max(previousTimeWindow.getInclusiveStart() + travelTimeData.getMinTravelTime(seqIndex, portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1),
+		return Math.max(previousTimeWindow.getInclusiveStart() + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1),
 				timeWindow.getInclusiveStart());
 	}
 
@@ -85,8 +87,7 @@ public class PriceBasedWindowTrimmer {
 	 * @param portTimeWindowsRecord
 	 * @param seqIndex
 	 */
-	private void setFeasibleTimeWindowsUsingPrevious(final IPortTimeWindowsRecord portTimeWindowsRecord, final int seqIndex, final MinTravelTimeData travelTimeData,
-			final ITimeWindow previousRecordWindow) {
+	private void setFeasibleTimeWindowsUsingPrevious(final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData, final ITimeWindow previousRecordWindow) {
 		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 
@@ -94,15 +95,15 @@ public class PriceBasedWindowTrimmer {
 			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
 				// first load
-				feasibleWindowStart = getFeasibleWindowStartForFirstSlot(portTimeWindowsRecord, seqIndex, travelTimeData, previousRecordWindow);
-				feasibleWindowEnd = getFeasibleWindowEnd(portTimeWindowsRecord, seqIndex, portSlot, feasibleWindowStart);
+				feasibleWindowStart = getFeasibleWindowStartForFirstSlot(portTimeWindowsRecord, travelTimeData, previousRecordWindow);
+				feasibleWindowEnd = getFeasibleWindowEnd(portTimeWindowsRecord, portSlot, feasibleWindowStart);
 				timeWindow.update(feasibleWindowStart, feasibleWindowEnd);
 			} else {
 				if (prevFeasibleWindowStart == IPortSlot.NO_PRICING_DATE) {
 					feasibleWindowStart = timeWindow.getInclusiveStart();
 					feasibleWindowEnd = timeWindow.getExclusiveEnd();
 				} else {
-					feasibleWindowStart = Math.max(timeWindow.getInclusiveStart(), prevFeasibleWindowStart + travelTimeData.getMinTravelTime(seqIndex, portTimeWindowsRecord.getIndex(portSlot) - 1));
+					feasibleWindowStart = Math.max(timeWindow.getInclusiveStart(), prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 					feasibleWindowEnd = Math.max(timeWindow.getExclusiveEnd(), feasibleWindowStart + 1);
 				}
 				timeWindow.update(feasibleWindowStart, feasibleWindowEnd);

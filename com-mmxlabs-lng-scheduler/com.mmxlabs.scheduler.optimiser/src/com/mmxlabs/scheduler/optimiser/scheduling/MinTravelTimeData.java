@@ -4,12 +4,18 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 
 /**
  * An object storing the travel times and route options (TODO) between element pairs.
@@ -22,36 +28,35 @@ public final class MinTravelTimeData {
 	/**
 	 * The minimum time this vessel can take to get from the indexed element to its successor. i.e. min travel time + visit time at indexed element.
 	 */
-	private int[][] minTimeToNextElement;
+	private int[] minTimeToNextElement;
+	private @NonNull IResource resource;
 
-	public MinTravelTimeData(@NonNull ISequences sequences) {
+	private ISequence sequence;
 
-		final int size = sequences.size();
+	public MinTravelTimeData(@NonNull IResource resource, ISequence sequence) {
 
-		minTimeToNextElement = new int[size][];
+		this.resource = resource;
+		this.sequence = sequence;
 
-		for (int seqIndex = 0; seqIndex < size; seqIndex++) {
-			final IResource resource = sequences.getResources().get(seqIndex);
-			final ISequence sequence = sequences.getSequence(resource);
-			final int seqSize = sequence.size();
-			// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
-			if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
-				// return;
-			}
-			// Do we need plus one?
-			minTimeToNextElement[seqIndex] = new int[seqSize + 1];
-		}
+		final int seqSize = sequence.size();
+
+		// Do we need plus one?
+		minTimeToNextElement = new int[seqSize + 1];
 	}
 
-	public void setMinTravelTime(int seqIndex, int elementIndex, int travelTime) {
-		if (travelTime == Integer.MIN_VALUE) {
-			int ii = 0;
-		}
-		
-		minTimeToNextElement[seqIndex][elementIndex] = travelTime;
+	public void setMinTravelTime(int elementIndex, int travelTime) {
+		minTimeToNextElement[elementIndex] = travelTime;
 	}
 
-	public int getMinTravelTime(int seqIndex, int elementIndex) {
-		return minTimeToNextElement[seqIndex][elementIndex];
+	public int getMinTravelTime(int elementIndex) {
+		return minTimeToNextElement[elementIndex];
+	}
+
+	public IResource getResource() {
+		return resource;
+	}
+
+	public ISequence getSequence() {
+		return sequence;
 	}
 }
