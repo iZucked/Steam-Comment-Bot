@@ -72,6 +72,14 @@ public class MicroTestUtils {
 		return failedCheckers.isEmpty() ? null : failedCheckers;
 	}
 
+	public static Injector createEvaluationInjector(@NonNull final LNGDataTransformer dataTransformer) {
+
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
+
+		return evaluationTransformerUnit.getInjector();
+	}
+
 	/**
 	 * Returns null on success, or returns the failing evaluated state constraint checkers.
 	 * 
