@@ -441,6 +441,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_CanalDate()));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.latestpossiblecanaldate":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Latest Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_LatestPossibleCanalDate()));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalentry":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, sp.getJourney_CanalEntry()));
