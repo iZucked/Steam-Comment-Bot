@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -95,13 +96,17 @@ public class JourneyEventExporter {
 			final IPort canalEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
 			
 			if (canalEntry != null){
+				
 				int fromCanalEntry = distanceProvider.getTravelTime(voyageDetails.getOptions().getRoute(), //
 						voyageDetails.getOptions().getVessel(), //
 						canalEntry, //
 						voyageDetails.getOptions().getToPortSlot().getPort(), //
 						voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
-
-				journey.setLatestPossibleCanalDate(journey.getEnd() //
+				
+				
+				ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + voyageDetails.getTravelTime() + options.getAvailableTime(), canalEntry);
+				
+				journey.setLatestPossibleCanalDate(endTime //
 						.withZoneSameInstant(ZoneId.of(voyageDetails.getOptions().getFromPortSlot().getPort().getTimeZoneId()))
 						.minusHours(fromCanalEntry) //
 						.minusHours(panamaSlotsProvider.getMargin()) //
@@ -130,7 +135,7 @@ public class JourneyEventExporter {
 						voyageDetails.getOptions().getToPortSlot().getPort(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
 				
 				int departureTime = portTimesRecord.getSlotTime(voyageDetails.getOptions().getFromPortSlot()) + portTimesRecord.getSlotDuration(voyageDetails.getOptions().getFromPortSlot());
-				ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + panamaSlotsProvider.getMargin() + toCanal, voyageDetails.getOptions().getFromPortSlot().getPort());
+				ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + panamaSlotsProvider.getMargin() + toCanal, canalEntry);
 				// Add 200 years if we would not make out arrival times based on canal rules
 
 				if (departureTime + toCanal + fromCanal > portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot())) {
