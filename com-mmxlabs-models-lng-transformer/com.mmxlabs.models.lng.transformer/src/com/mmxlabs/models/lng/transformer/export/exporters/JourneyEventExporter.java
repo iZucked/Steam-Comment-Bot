@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.export.exporters;
 
+import java.security.cert.PKIXRevocationChecker.Option;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -93,24 +95,26 @@ public class JourneyEventExporter {
 
 		// set latest possible canal date
 		if (journey.getRoute().isCanal()){
-			final IPort canalEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
+			final IPort canalEntry = distanceProvider.getRouteOptionEntry(options.getFromPortSlot().getPort(), options.getRoute());
 			
 			if (canalEntry != null){
 				
-				int fromCanalEntry = distanceProvider.getTravelTime(voyageDetails.getOptions().getRoute(), //
+				int fromCanalEntry = distanceProvider.getTravelTime(options.getRoute(), //
 						voyageDetails.getOptions().getVessel(), //
 						canalEntry, //
 						voyageDetails.getOptions().getToPortSlot().getPort(), //
 						voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
 				
-				
 				ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
 				
-				journey.setLatestPossibleCanalDate(endTime //
-						.minusHours(fromCanalEntry) //
-						.minusHours(panamaSlotsProvider.getMargin()) //
-						.minusDays(1) // round to previous day
-						.toLocalDate());
+				ZonedDateTime latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(panamaSlotsProvider.getMargin());
+				
+				journey.setLatestPossibleCanalDate(latestCanalEntry.toLocalDate());
+				if (latestCanalEntry.getHour()*60 + latestCanalEntry.getMinute() > IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_MINUTES
+						&& journey.getRoute().getRouteOption() == RouteOption.PANAMA){
+					// slot can't be reached that day, set to previous day
+					journey.setLatestPossibleCanalDate(latestCanalEntry.minusDays(1).toLocalDate());
+				}
 			}
 		}
 
@@ -125,22 +129,28 @@ public class JourneyEventExporter {
 			final IPort canalEntry = distanceProvider.getRouteOptionEntry(voyageDetails.getOptions().getFromPortSlot().getPort(), voyageDetails.getOptions().getRoute());
 			if (canalEntry != null) {
 				int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, //
-						voyageDetails.getOptions().getVessel(), //
-						voyageDetails.getOptions().getFromPortSlot().getPort(), // 
+						options.getVessel(), //
+						options.getFromPortSlot().getPort(), // 
 						canalEntry, //
-						Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed()));
+						Math.min(panamaSlotsProvider.getSpeedToCanal(), options.getVessel().getVesselClass().getMaxSpeed()))
+						+ panamaSlotsProvider.getMargin();
 
 				int fromCanal = distanceProvider.getTravelTime(voyageDetails.getOptions().getRoute(), voyageDetails.getOptions().getVessel(), canalEntry,
 						voyageDetails.getOptions().getToPortSlot().getPort(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
 				
 				int departureTime = portTimesRecord.getSlotTime(voyageDetails.getOptions().getFromPortSlot()) + portTimesRecord.getSlotDuration(voyageDetails.getOptions().getFromPortSlot());
-				ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + panamaSlotsProvider.getMargin() + toCanal, canalEntry);
+				ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + toCanal, canalEntry);
 				// Add 200 years if we would not make out arrival times based on canal rules
 
 				if (departureTime + toCanal + fromCanal > portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot())) {
 					estimatedArrival = estimatedArrival.plusYears(200);
 				}
 				journey.setCanalDate(estimatedArrival.toLocalDate());
+				if (estimatedArrival.getHour()*60 + estimatedArrival.getMinute() > IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_MINUTES 
+						&& journey.getRoute().getRouteOption() == RouteOption.PANAMA){
+					// slot can't be reached that day, set arrival to next day
+					journey.setCanalDate(estimatedArrival.plusDays(1).toLocalDate());
+				}
 
 				if (canalEntry != null) {
 					@NonNull

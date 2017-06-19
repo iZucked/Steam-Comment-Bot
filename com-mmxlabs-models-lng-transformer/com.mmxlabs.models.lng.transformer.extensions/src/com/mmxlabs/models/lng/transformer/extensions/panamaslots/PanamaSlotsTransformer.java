@@ -41,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 
@@ -48,7 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
  * @author robert
  */
 public class PanamaSlotsTransformer implements IContractTransformer {
-
+	
 	@Inject
 	private IPanamaBookingsProviderEditor panamaBookingsProviderEditor;
 
@@ -97,7 +98,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 				throw new IllegalStateException("No optimiser port found for: " + eBooking.getEntryPoint().getName());
 			}
 			
-			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDateAsDateTime());
+			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDateAsDateTime().plusMinutes(IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_MINUTES));
 			final IRouteOptionBooking oBooking;
 			if (eBooking.getSlot() != null) {
 				oBooking = IRouteOptionBooking.of(date, optPort, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
