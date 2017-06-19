@@ -63,7 +63,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		model.getCargoModel().setCanalBookings(canalBookings);
 
-		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		PortModel portModel = ScenarioModelUtil.getPortModel(model);
 
 		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
