@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.OptionalInt;
 
@@ -53,6 +54,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentForma
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -63,7 +65,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -429,15 +434,341 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Purchase Cost", null, ColumnType.NORMAL, Formatters.integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeValue()));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.canal_date":
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden.canal_date":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, loadAllocationRef, s.getJourney_CanalDate()));
+					new SimpleEmfBlockColumnFactory(columnID, "Laden Canal Date", "Estimated or booked canal entry date", ColumnType.NORMAL, new BaseFormatter() {
+
+						private LocalDate getDate(final Object object) {
+							if (object instanceof EObject) {
+								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (portVisit != null) {
+									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+									if (journey != null) {
+										return journey.getCanalDate();
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return Formatters.asLocalDateFormatter.render(date);
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return date;
+							}
+							return null;
+						}
+					}, targetObjectRef));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.canal_entry":
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden.canal_latest_date":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, loadAllocationRef, s.getJourney_CanalEntry()));
+					new SimpleEmfBlockColumnFactory(columnID, "Laden Canal latest Date", "Latest canal arrival date", ColumnType.NORMAL, new BaseFormatter() {
+
+						private LocalDate getDate(final Object object) {
+							if (object instanceof EObject) {
+								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (portVisit != null) {
+									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+									if (journey != null) {
+										return journey.getLatestPossibleCanalDate();
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return Formatters.asLocalDateFormatter.render(date);
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return date;
+							}
+							return null;
+						}
+					}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden.canal_entry":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Canal Entry", "The canal entry port", ColumnType.NORMAL, new BaseFormatter() {
+
+				private EntryPoint getValue(final Object object) {
+					if (object instanceof EObject) {
+						final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+						if (portVisit != null) {
+							final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+							if (journey != null) {
+								return journey.getCanalEntry();
+							}
+						}
+					}
+					return null;
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final EntryPoint value = getValue(object);
+					if (value != null) {
+						return value.getName();
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final EntryPoint value = getValue(object);
+					if (value != null) {
+						return value.getName();
+					}
+					return "";
+				}
+			}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden.canal_booked":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Laden Canal Booked", "Canal voyage used a pre-booked slot", ColumnType.NORMAL, new BaseFormatter() {
+
+						private String getValue(final Object object) {
+							if (object instanceof EObject) {
+								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (portVisit != null) {
+									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+									if (journey != null) {
+										final Route route = journey.getRoute();
+										if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
+											final CanalBookingSlot canalBooking = journey.getCanalBooking();
+
+											if (canalBooking != null) {
+												return "Yes";
+											} else {
+												final Sequence sequence = journey.getSequence();
+												if (sequence != null && sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+													return "-";
+												}
+												return "No";
+											}
+										}
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final String value = getValue(object);
+							if (value != null) {
+								return value;
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final String value = getValue(object);
+							if (value != null) {
+								return value;
+							}
+							return "";
+						}
+					}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast.canal_date":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Date", "Estimated or booked canal entry date", ColumnType.NORMAL, new BaseFormatter() {
+
+						private LocalDate getDate(final Object object) {
+							if (object instanceof EObject) {
+								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (portVisit != null) {
+									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+									if (journey != null) {
+										return journey.getCanalDate();
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return Formatters.asLocalDateFormatter.render(date);
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return date;
+							}
+							return null;
+						}
+					}, dischargeAllocationRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast.canal_latest_date":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Latest Date", "Latest canal arrival date", ColumnType.NORMAL, new BaseFormatter() {
+
+						private LocalDate getDate(final Object object) {
+							if (object instanceof EObject) {
+								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (portVisit != null) {
+									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+									if (journey != null) {
+										return journey.getLatestPossibleCanalDate();
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return Formatters.asLocalDateFormatter.render(date);
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final LocalDate date = getDate(object);
+							if (date != null) {
+								return date;
+							}
+							return null;
+						}
+					}, dischargeAllocationRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast.canal_entry":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Entry", "The canal entry port", ColumnType.NORMAL, new BaseFormatter() {
+
+				private EntryPoint getValue(final Object object) {
+					if (object instanceof EObject) {
+						final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+						if (portVisit != null) {
+							final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+							if (journey != null) {
+								return journey.getCanalEntry();
+							}
+						}
+					}
+					return null;
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final EntryPoint value = getValue(object);
+					if (value != null) {
+						return value.getName();
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final EntryPoint value = getValue(object);
+					if (value != null) {
+						return value.getName();
+					}
+					return "";
+				}
+			}, dischargeAllocationRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast.canal_booked":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Entry", "Canal voyage used a pre-booked slot", ColumnType.NORMAL, new BaseFormatter() {
+
+						private String getValue(final Object object) {
+							if (object instanceof EObject) {
+								final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (portVisit != null) {
+									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+									if (journey != null) {
+										final Route route = journey.getRoute();
+										if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
+											final CanalBookingSlot canalBooking = journey.getCanalBooking();
+
+											if (canalBooking != null) {
+												return "Yes";
+											} else {
+												final Sequence sequence = journey.getSequence();
+												if (sequence != null && sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+													return "-";
+												}
+												return "No";
+											}
+										}
+									}
+								}
+							}
+							return null;
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final String value = getValue(object);
+							if (value != null) {
+								return value;
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final String value = getValue(object);
+							if (value != null) {
+								return value;
+							}
+							return "";
+						}
+					}, dischargeAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sell_value":
 
