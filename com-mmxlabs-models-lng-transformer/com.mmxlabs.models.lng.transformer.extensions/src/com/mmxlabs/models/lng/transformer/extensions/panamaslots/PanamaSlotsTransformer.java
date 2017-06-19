@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 
 /**
  * @author robert
@@ -50,6 +51,9 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 	@Inject
 	private IPanamaBookingsProviderEditor panamaBookingsProviderEditor;
+
+	@Inject
+	private IPromptPeriodProvider promptPeriodProvider;
 
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
@@ -106,8 +110,8 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 		panamaBookingsProviderEditor.setBookings(panamaSlots);
 
-		panamaBookingsProviderEditor.setStrictBoundary(strictBoundaryOffsetDays * 24);
-		panamaBookingsProviderEditor.setRelaxedBoundary(relaxedBoundaryOffsetDays * 24);
+		panamaBookingsProviderEditor.setStrictBoundary(promptPeriodProvider.getStartOfPromptPeriod() + strictBoundaryOffsetDays * 24);
+		panamaBookingsProviderEditor.setRelaxedBoundary(promptPeriodProvider.getStartOfPromptPeriod() + relaxedBoundaryOffsetDays * 24);
 		panamaBookingsProviderEditor.setRelaxedBookingCount(relaxedBookingsCount);
 		panamaBookingsProviderEditor.setArrivalMargin(arrivalMargin);
 	}
