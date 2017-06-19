@@ -120,7 +120,7 @@ public class TimeWindowScheduler {
 			data.assignedBookings.put(e.getKey(), new TreeSet<>(assigned));
 			data.unassignedBookings.put(e.getKey(), new TreeSet<>(Sets.difference(e.getValue(), assigned)));
 		});
-		
+
 		for (final IResource resource : sequences.getResources()) {
 
 			List<IPortTimeWindowsRecord> list;
