@@ -33,12 +33,16 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 
 		@Override
 		public boolean equals(final Object obj) {
+			if (obj == this) {
+				return true;
+			}
 			if (obj instanceof SlotWindowRecord) {
 				final SlotWindowRecord other = (SlotWindowRecord) obj;
-				return feasibleWindow == other.feasibleWindow //
-						&& duration == other.duration //
+				return duration == other.duration //
+						&& index == other.index //
 						&& nextVoyageRoute == other.nextVoyageRoute //
 						&& routeOptionBooking == other.routeOptionBooking //
+						&& Objects.equals(feasibleWindow, other.feasibleWindow) //
 				;
 			}
 			return false;
