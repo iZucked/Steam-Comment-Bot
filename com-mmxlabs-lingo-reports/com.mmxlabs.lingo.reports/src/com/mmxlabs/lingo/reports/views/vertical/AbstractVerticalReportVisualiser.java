@@ -144,7 +144,11 @@ public abstract class AbstractVerticalReportVisualiser {
 
 		// Journey events just show the day number
 		if (event instanceof Journey) {
+			Journey journey = (Journey) event;
 			final LocalDate eventStart = getLocalDateFor(event.getStart());
+			if (journey.getCanalDate() != null && date.equals(journey.getCanalDate())) {
+				return journey.getCanalEntry().getName();
+			}
 
 			// how many days since the start of the event?
 			int days = Days.between(eventStart, date);
@@ -246,7 +250,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		if (eventStart.equals(eventEnd)) {
 			return !eventStart.equals(day);
 		}
-		
+
 		return (nextDay.isBefore(eventStart) || (eventEnd.isAfter(day) == false));
 	}
 
