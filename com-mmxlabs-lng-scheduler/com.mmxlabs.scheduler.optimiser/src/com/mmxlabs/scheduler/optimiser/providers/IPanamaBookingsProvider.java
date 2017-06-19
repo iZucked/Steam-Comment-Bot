@@ -16,6 +16,8 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
  */
 public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	
+	public static int BOOKING_OFFSET_FROM_MIDNIGHT_MINUTES = 210;
+	
 	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings();
 	
 	/**
