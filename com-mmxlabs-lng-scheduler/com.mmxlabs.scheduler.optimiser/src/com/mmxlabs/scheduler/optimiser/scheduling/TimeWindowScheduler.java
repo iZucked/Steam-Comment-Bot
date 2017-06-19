@@ -62,7 +62,7 @@ public class TimeWindowScheduler {
 			this.currentBookingData = currentBookingData;
 			this.unassignedBookings = new HashMap<>();
 			if (currentBookingData.unassignedBookings != null) {
-				for (final Map.Entry<IPort, Set<IRouteOptionBooking>> e : currentBookingData.unassignedBookings.entrySet()) {
+				for (final Map.Entry<IPort, TreeSet<IRouteOptionBooking>> e : currentBookingData.unassignedBookings.entrySet()) {
 					unassignedBookings.put(e.getKey(), new TreeSet<>(e.getValue()));
 				}
 			}
@@ -114,7 +114,7 @@ public class TimeWindowScheduler {
 
 		final CurrentBookingData data = new CurrentBookingData();
 		data.assignedBookings = new HashMap<IPort, Set<IRouteOptionBooking>>();
-		data.unassignedBookings = new HashMap<IPort, Set<IRouteOptionBooking>>();
+		data.unassignedBookings = new HashMap<IPort, TreeSet<IRouteOptionBooking>>();
 		panamaSlotsProvider.getBookings().entrySet().forEach(e -> {
 			final Set<IRouteOptionBooking> assigned = e.getValue().stream().filter(j -> j.getPortSlot().isPresent()).collect(Collectors.toSet());
 			data.assignedBookings.put(e.getKey(), new TreeSet<>(assigned));
@@ -124,7 +124,7 @@ public class TimeWindowScheduler {
 		for (final IResource resource : sequences.getResources()) {
 
 			List<IPortTimeWindowsRecord> list;
-			if (hintEnableCache) {
+			if (false) {
 				@Nullable
 				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = cache.get(new CacheKey(resource, sequences.getSequence(resource), data));
 				if (p != null) {

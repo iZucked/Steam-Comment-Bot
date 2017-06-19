@@ -390,6 +390,7 @@ public class FeasibleTimeWindowTrimmer {
 					} else {
 
 						assert prevElement != null;
+						windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
 						if (checkPanamaCanalBookings) {
 							final IPortSlot p_prevPortSlot = prevPortSlot;
 
@@ -426,6 +427,7 @@ public class FeasibleTimeWindowTrimmer {
 										
 										windowEndTime[index - 1] = Math.min(potentialBooking.get().getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
 										assert windowStartTime[index - 1] < windowEndTime[index - 1];
+										windowStartTime[index] = Math.max(windowStartTime[index], potentialBooking.get().getBookingDate() + fromEntryPoint);
 
 									} else {
 										// Booking can't be reached in time. Set to optimal time through panama and don't include slot.
@@ -468,6 +470,7 @@ public class FeasibleTimeWindowTrimmer {
 												// destination can be reached from slot
 												windowEndTime[index - 1] = Math.min(booking.getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
 												assert windowStartTime[index - 1] < windowEndTime[index - 1];
+												windowStartTime[index] = Math.max(windowStartTime[index], booking.getBookingDate() + fromEntryPoint);
 												travelTimeData.setMinTravelTime(index - 1, travelTime);
 												currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, booking);
 												currentBookings.assignedBookings.get(panamaEntry).add(booking);
@@ -486,7 +489,7 @@ public class FeasibleTimeWindowTrimmer {
 								}
 							}
 						}
-						windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
+						windowStartTime[index] = Math.max(windowStartTime[index], windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
 						windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
 					}
 				}
