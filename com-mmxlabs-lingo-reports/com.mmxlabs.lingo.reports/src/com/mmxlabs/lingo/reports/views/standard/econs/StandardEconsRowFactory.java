@@ -116,7 +116,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		rows.add(createRow(190, "P&L", "$", createPNLTotal(options)));
 		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(160, "Margin", "$/mmBTu", createPNLPerMMBTU(options));
+			final CargoEconsReportRow row = createRow(200, "Margin", "$/mmBTu", createPNLPerMMBTU(options));
 			row.tooltip = () -> {
 				switch (options.marginBy) {
 				case PURCHASE_VOLUME:
