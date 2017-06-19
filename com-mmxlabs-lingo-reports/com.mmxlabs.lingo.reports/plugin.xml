@@ -151,6 +151,14 @@
             name="Cargo Econs"
             restorable="true">
       </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport"
+            icon="icons/cview16/exec_statistic_view.gif"
+            id="com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport"
+            name="Canal Bookings Report"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
