@@ -103,6 +103,10 @@ public class CanalBookingsReport extends ViewPart {
 						}
 					}
 
+					if (scheduleColumn != null) {
+						scheduleColumn.getColumn().setVisible((others.size() + (pinned == null ? 0 : 1)) > 1);
+					}
+
 					ViewerHelper.setInput(viewer, true, rowData);
 				}
 			};
