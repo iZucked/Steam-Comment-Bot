@@ -30,6 +30,7 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.standard.CanalBookingsReportTransformer.RowData;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -153,7 +154,7 @@ public class CanalBookingsReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(column);
 
 			column.getColumn().setText("Schedule");
-
+			column.getColumn().setWidth(50);
 			column.setLabelProvider(new CellLabelProvider() {
 
 				@Override
@@ -176,7 +177,7 @@ public class CanalBookingsReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(column);
 
 			column.getColumn().setText("Pre-booked");
-
+			column.getColumn().setWidth(50);
 			column.setLabelProvider(new CellLabelProvider() {
 
 				@Override
@@ -201,7 +202,7 @@ public class CanalBookingsReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(column);
 
 			column.getColumn().setText("Canal");
-
+			column.getColumn().setWidth(50);
 			column.setLabelProvider(new CellLabelProvider() {
 
 				@Override
@@ -227,7 +228,7 @@ public class CanalBookingsReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(column);
 
 			column.getColumn().setText("Canal Entry");
-
+			column.getColumn().setWidth(50);
 			column.setLabelProvider(new CellLabelProvider() {
 
 				@Override
@@ -254,6 +255,7 @@ public class CanalBookingsReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(column);
 
 			column.getColumn().setText("Date");
+			column.getColumn().setWidth(50);
 
 			column.setLabelProvider(new CellLabelProvider() {
 
@@ -264,7 +266,7 @@ public class CanalBookingsReport extends ViewPart {
 					if (element instanceof RowData) {
 						final RowData rowData = (RowData) element;
 						if (rowData.bookingDate != null) {
-							cell.setText(rowData.bookingDate.toString());
+							cell.setText(Formatters.asLocalDateFormatter.render(rowData.bookingDate));
 						} else {
 							cell.setText("");
 						}
@@ -279,7 +281,7 @@ public class CanalBookingsReport extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(column);
 
 			column.getColumn().setText("Event");
-
+			column.getColumn().setWidth(50);
 			column.setLabelProvider(new CellLabelProvider() {
 
 				@Override
@@ -295,6 +297,27 @@ public class CanalBookingsReport extends ViewPart {
 						} else {
 							cell.setText("");
 						}
+					} else {
+						cell.setText("");
+					}
+				}
+			});
+		}
+		{
+			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+			GridViewerHelper.configureLookAndFeel(column);
+
+			column.getColumn().setText("Period");
+			column.getColumn().setWidth(50);
+			column.setLabelProvider(new CellLabelProvider() {
+
+				@Override
+				public void update(final ViewerCell cell) {
+
+					final Object element = cell.getElement();
+					if (element instanceof RowData) {
+						final RowData rowData = (RowData) element;
+						cell.setText(rowData.period);
 					} else {
 						cell.setText("");
 					}
