@@ -361,6 +361,7 @@ public class FeasibleTimeWindowTrimmer {
 				travelTimeData.setMinTravelTime(index - 1, minTravelTime);
 			}
 
+			
 			// Handle time windows
 			if (window == null) { // empty time windows are made to be the
 									// biggest reasonable gap
@@ -388,6 +389,7 @@ public class FeasibleTimeWindowTrimmer {
 						windowStartTime[index] = window.getInclusiveStart();
 					} else {
 
+						assert prevElement != null;
 						if (checkPanamaCanalBookings) {
 							final IPortSlot p_prevPortSlot = prevPortSlot;
 
@@ -399,9 +401,11 @@ public class FeasibleTimeWindowTrimmer {
 								final Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new TreeSet()).stream().filter(e -> {
 									return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot);
 								}).findFirst();
-
+								
 								final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), routeOptionEntry,
-										Math.max(panamaBookingsProvider.getSpeedToCanal(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed()));
+										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed()))
+										+ panamaBookingsProvider.getMargin()
+										+ durationProvider.getElementDuration(prevElement, resource);
 								if (isRoundTripSequence) {
 									// // Normal behaviour
 								} else if (potentialBooking.isPresent()) {
@@ -410,7 +414,7 @@ public class FeasibleTimeWindowTrimmer {
 									// currentPortTimeRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
 
 									// check if it can be reached in time
-									if (windowStartTime[index - 1] + toCanal + panamaBookingsProvider.getMargin() < potentialBooking.get().getBookingDate()) {
+									if (windowStartTime[index - 1] + toCanal < potentialBooking.get().getBookingDate()) {
 										currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
 
 										final int fromEntryPoint = distanceProvider.getTravelTime(potentialBooking.get().getRouteOption(), vesselAvailability.getVessel(),
@@ -419,6 +423,9 @@ public class FeasibleTimeWindowTrimmer {
 										// Visit duration should implicitly be included in this calculation.
 										final int travelTime = (potentialBooking.get().getBookingDate() + fromEntryPoint) - windowStartTime[index - 1];
 										travelTimeData.setMinTravelTime(index - 1, travelTime);
+										
+										windowEndTime[index - 1] = Math.min(potentialBooking.get().getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
+										assert windowStartTime[index - 1] < windowEndTime[index - 1];
 
 									} else {
 										// Booking can't be reached in time. Set to optimal time through panama and don't include slot.
@@ -448,17 +455,19 @@ public class FeasibleTimeWindowTrimmer {
 									Set<IRouteOptionBooking> set = currentBookings.unassignedBookings.get(panamaEntry);
 									if (set != null) {
 										for (final IRouteOptionBooking booking : set) {
-											int canalTime = windowStartTime[index - 1] + durationProvider.getElementDuration(prevElement, resource) + toCanal + panamaBookingsProvider.getMargin();
+											int canalTime = windowStartTime[index - 1] + toCanal;
 											if (canalTime > booking.getBookingDate()) {
 												// booking can't be reached. All following bookings are later and can't be reached either
 												continue;
 											}
 											final int fromEntryPoint = distanceProvider.getTravelTime(booking.getRouteOption(), vesselAvailability.getVessel(), booking.getEntryPoint(),
 													portSlot.getPort(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
-											final int travelTime = durationProvider.getElementDuration(prevElement, resource) + toCanal + panamaBookingsProvider.getMargin() + fromEntryPoint;
+											final int travelTime = toCanal + fromEntryPoint;
 
 											if (booking.getBookingDate() + fromEntryPoint < windowEndTime[index]) {
-
+												// destination can be reached from slot
+												windowEndTime[index - 1] = Math.min(booking.getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
+												assert windowStartTime[index - 1] < windowEndTime[index - 1];
 												travelTimeData.setMinTravelTime(index - 1, travelTime);
 												currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, booking);
 												currentBookings.assignedBookings.get(panamaEntry).add(booking);
