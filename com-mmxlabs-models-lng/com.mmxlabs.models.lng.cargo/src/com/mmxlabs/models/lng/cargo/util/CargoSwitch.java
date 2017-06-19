@@ -291,12 +291,14 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				CanalBookingSlot canalBookingSlot = (CanalBookingSlot)theEObject;
 				T1 result = caseCanalBookingSlot(canalBookingSlot);
 				if (result == null) result = caseMMXObject(canalBookingSlot);
+				if (result == null) result = caseITimezoneProvider(canalBookingSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case CargoPackage.CANAL_BOOKINGS: {
 				CanalBookings canalBookings = (CanalBookings)theEObject;
 				T1 result = caseCanalBookings(canalBookings);
+				if (result == null) result = caseMMXObject(canalBookings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -26,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface CanalBookings extends EObject {
+public interface CanalBookings extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Canal Booking Slots</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.CanalBookingSlot}.

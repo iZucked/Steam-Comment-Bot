@@ -6,6 +6,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -39,7 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class CanalBookingsImpl extends EObjectImpl implements CanalBookings {
+public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	/**
 	 * The cached value of the '{@link #getCanalBookingSlots() <em>Canal Booking Slots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

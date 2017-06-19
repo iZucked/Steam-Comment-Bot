@@ -7,15 +7,22 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 import com.mmxlabs.models.lng.port.EntryPoint;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
-
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -245,6 +252,39 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public ZonedDateTime getBookingDateAsDateTime() {
+		
+		final LocalDate bookingDate = getBookingDate();
+		if (bookingDate == null) {
+			return null;
+		}
+		ZonedDateTime dateTime = bookingDate.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate())));
+		return dateTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getTimeZone(EAttribute attribute) {
+		final EntryPoint entryPoint = getEntryPoint();
+		if (entryPoint != null) {
+			final Port p = entryPoint.getPort();
+			if (p!= null) {
+				if (p.getTimeZone() != null && !p.getTimeZone().isEmpty()) {
+					return p.getTimeZone();
+				}
+			}
+		}
+		return "UTC";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -331,6 +371,38 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return BOOKING_DATE_EDEFAULT == null ? bookingDate != null : !BOOKING_DATE_EDEFAULT.equals(bookingDate);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == ITimezoneProvider.class) {
+			switch (baseOperationID) {
+				case TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE: return CargoPackage.CANAL_BOOKING_SLOT___GET_TIME_ZONE__EATTRIBUTE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME:
+				return getBookingDateAsDateTime();
+			case CargoPackage.CANAL_BOOKING_SLOT___GET_TIME_ZONE__EATTRIBUTE:
+				return getTimeZone((EAttribute)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

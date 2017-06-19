@@ -5351,13 +5351,31 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKING_SLOT___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT___GET_TIME_ZONE__EATTRIBUTE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Booking Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Canal Booking Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+	int CANAL_BOOKING_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.
@@ -5370,13 +5388,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS = 22;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
 	 * The feature id for the '<em><b>Canal Booking Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__CANAL_BOOKING_SLOTS = 0;
+	int CANAL_BOOKINGS__CANAL_BOOKING_SLOTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Strict Boundary Offset Days</b></em>' attribute.
@@ -5385,7 +5412,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS = 1;
+	int CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Relaxed Boundary Offset Days</b></em>' attribute.
@@ -5394,7 +5421,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = 2;
+	int CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Flexible Booking Amount</b></em>' attribute.
@@ -5403,7 +5430,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = 3;
+	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Arrival Margin Hours</b></em>' attribute.
@@ -5412,7 +5439,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = 4;
+	int CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
@@ -5421,7 +5448,34 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = 5;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Canal Bookings</em>' class.
@@ -5430,7 +5484,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_OPERATION_COUNT = 0;
+	int CANAL_BOOKINGS_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
@@ -7344,6 +7398,16 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookingSlot_BookingDate();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDateAsDateTime() <em>Get Booking Date As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Booking Date As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDateAsDateTime()
+	 * @generated
+	 */
+	EOperation getCanalBookingSlot__GetBookingDateAsDateTime();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8905,6 +8969,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKING_SLOT__BOOKING_DATE = eINSTANCE.getCanalBookingSlot_BookingDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Booking Date As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME = eINSTANCE.getCanalBookingSlot__GetBookingDateAsDateTime();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.

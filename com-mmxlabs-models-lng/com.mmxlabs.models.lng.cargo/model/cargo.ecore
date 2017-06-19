@@ -443,7 +443,8 @@
     <eLiterals name="Monthly" value="3"/>
     <eLiterals name="Level" value="4"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CanalBookingSlot" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="CanalBookingSlot" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+    <eOperations name="getBookingDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="#//Slot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entryPoint" lowerBound="1"
@@ -451,7 +452,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bookingDate" lowerBound="1"
         eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CanalBookings">
+  <eClassifiers xsi:type="ecore:EClass" name="CanalBookings" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalBookingSlots" upperBound="-1"
         eType="#//CanalBookingSlot" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="strictBoundaryOffsetDays"

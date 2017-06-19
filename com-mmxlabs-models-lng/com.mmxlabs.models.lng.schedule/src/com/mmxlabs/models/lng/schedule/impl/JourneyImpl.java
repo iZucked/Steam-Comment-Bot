@@ -859,6 +859,16 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return "UTC";
 			}
 			return p.getTimeZone();
+		} else	if (attribute == SchedulePackage.Literals.JOURNEY__CANAL_DATE || attribute == SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE) {
+			final EntryPoint entryPoint = getCanalEntry();
+			if (entryPoint != null) {
+				final Port p = entryPoint.getPort();
+				if (p == null || p.getTimeZone() == null || p.getTimeZone().isEmpty()) {
+					return "UTC";
+				}
+				return p.getTimeZone();
+			}
+			return "UTC";
 		} else {
 			return super.getTimeZone(attribute);
 		}

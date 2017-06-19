@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,13 +37,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class CanalBookingsItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends MMXObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -254,17 +249,6 @@ public class CanalBookingsItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS,
 				 CargoFactory.eINSTANCE.createCanalBookingSlot()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

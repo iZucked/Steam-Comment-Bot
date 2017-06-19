@@ -5,10 +5,12 @@ package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Route;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,7 @@ import java.time.LocalDate;
  * @model
  * @generated
  */
-public interface CanalBookingSlot extends MMXObject {
+public interface CanalBookingSlot extends MMXObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -133,5 +135,13 @@ public interface CanalBookingSlot extends MMXObject {
 	 * @generated
 	 */
 	void setBookingDate(LocalDate value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	ZonedDateTime getBookingDateAsDateTime();
 
 } // CanalBookingSlot

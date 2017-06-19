@@ -1881,6 +1881,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getCanalBookingSlot__GetBookingDateAsDateTime() {
+		return canalBookingSlotEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCanalBookings() {
 		return canalBookingsEClass;
 	}
@@ -2189,6 +2198,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__SLOT);
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ENTRY_POINT);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__BOOKING_DATE);
+		createEOperation(canalBookingSlotEClass, CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME);
 
 		canalBookingsEClass = createEClass(CANAL_BOOKINGS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
@@ -2270,6 +2280,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		vesselTypeGroupEClass.getEGenericSuperTypes().add(g1);
 		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		canalBookingSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		canalBookingSlotEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
+		canalBookingsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2512,6 +2524,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCanalBookingSlot_Slot(), this.getSlot(), null, "slot", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookingSlot_EntryPoint(), thePortPackage.getEntryPoint(), null, "entryPoint", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookingSlot_BookingDate(), theDateTimePackage.getLocalDate(), "bookingDate", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getCanalBookingSlot__GetBookingDateAsDateTime(), theDateTimePackage.getDateTime(), "getBookingDateAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(canalBookingsEClass, CanalBookings.class, "CanalBookings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalBookings_CanalBookingSlots(), this.getCanalBookingSlot(), null, "canalBookingSlots", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
