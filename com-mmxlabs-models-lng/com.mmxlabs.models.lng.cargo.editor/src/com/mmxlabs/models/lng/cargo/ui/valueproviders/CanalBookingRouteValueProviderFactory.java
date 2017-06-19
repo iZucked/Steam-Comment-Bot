@@ -85,6 +85,10 @@ public class CanalBookingRouteValueProviderFactory implements IReferenceValuePro
 						if (route.getRouteOption() == RouteOption.DIRECT) {
 							continue;
 						}
+						// Only panama for now
+						if (route.getRouteOption() == RouteOption.SUEZ) {
+							continue;
+						}
 						delegateValue.add(new Pair<String, EObject>(route.getName(), route));
 					}
 				}
