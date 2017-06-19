@@ -24,15 +24,18 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -44,8 +47,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
-import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
-import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -62,10 +63,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		model.getCargoModel().setCanalBookings(canalBookings);
 
-		final Optional<Route> potentialPanama = model.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 
-		model.getReferenceModel().getPortModel().getPorts().stream().filter(p -> {
+		portModel.getPorts().stream().filter(p -> {
 			return "Colon".equals(p.getName()) || "Balboa".equals(p.getName());
 		}).forEach(p -> {
 			final EntryPoint ep = PortFactory.eINSTANCE.createEntryPoint();
@@ -109,16 +112,14 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void panamaSlotAvailableTest() {
 
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+
 		final Route panama = potentialPanama.get();
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -168,15 +169,14 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void panamaSlotNoDubleAssignmentTest() {
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -242,16 +242,15 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void panamaSlotUnavailableTest() {
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -303,16 +302,15 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void bookingButNoVoyageTest() {
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -370,16 +368,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void nonMatchingBookingTest() {
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 10));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 10), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -436,7 +431,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void bookingAssignedToSlotTest() {
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 
 		final EntryPoint colon = panama.getEntryA();
@@ -466,12 +463,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		d1.setSlot(cargo.getSortedSlots().get(0));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -501,7 +493,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void asssignedBookingNotUsedTest() {
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 
 		final EntryPoint colon = panama.getEntryA();
@@ -537,12 +531,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = createFobDesCargo(vesselAvailability2, port1, port2, loadDate, dischargeDate);
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		d1.setSlot(cargo2.getSortedSlots().get(0));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo2.getSortedSlots().get(0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -578,15 +567,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void journeyCanBeMadeDirectTest() {
 
-		final Optional<Route> potentialPanama = lngScenarioModel.getReferenceModel().getPortModel().getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		d1.setRoute(panama);
-		d1.setEntryPoint(colon);
-		d1.setBookingDate(LocalDate.of(2017, Month.JUNE, 7));
-		lngScenarioModel.getCargoModel().getCanalBookings().getCanalBookingSlots().add(d1);
+		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
