@@ -104,10 +104,9 @@ public class JourneyEventExporter {
 						voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
 				
 				
-				ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
+				ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + voyageDetails.getTravelTime() + options.getAvailableTime(), canalEntry);
 				
 				journey.setLatestPossibleCanalDate(endTime //
-						.withZoneSameInstant(ZoneId.of(voyageDetails.getOptions().getFromPortSlot().getPort().getTimeZoneId()))
 						.minusHours(fromCanalEntry) //
 						.minusHours(panamaSlotsProvider.getMargin()) //
 						.minusDays(1) // round to previous day
