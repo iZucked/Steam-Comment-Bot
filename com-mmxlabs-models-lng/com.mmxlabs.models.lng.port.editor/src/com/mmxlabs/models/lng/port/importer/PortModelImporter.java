@@ -85,11 +85,11 @@ public class PortModelImporter implements ISubmodelImporter {
 
 	private final DefaultClassImporter canalPortsImporter = new DefaultClassImporter() {
 
-		protected boolean shouldImportReference(org.eclipse.emf.ecore.EReference reference) {
+		protected boolean shouldImportReference(final org.eclipse.emf.ecore.EReference reference) {
 			return shouldExportFeature(reference);
 		};
 
-		protected boolean shouldExportFeature(org.eclipse.emf.ecore.EStructuralFeature feature) {
+		protected boolean shouldExportFeature(final org.eclipse.emf.ecore.EStructuralFeature feature) {
 			if (feature == PortPackage.Literals.ROUTE__CANAL) {
 				return false;
 			}
@@ -234,16 +234,21 @@ public class PortModelImporter implements ISubmodelImporter {
 
 			if (inputs.containsKey(CANAL_PORTS_KEY)) {
 				result.getRoutes().forEach(route -> {
-					Optional<Route> potentialImported = importedRoutes.stream().filter(e -> e.getName().equals(route.getName())).findFirst();
+					final Optional<Route> potentialImported = importedRoutes.stream().filter(e -> e.getName().equals(route.getName())).findFirst();
 					if (potentialImported.isPresent()) {
-						route.setEntryA(potentialImported.get().getEntryA());
-						route.setEntryB(potentialImported.get().getEntryB());
+						final Route tmpRoute = potentialImported.get();
+						if (tmpRoute.getRouteOption() != RouteOption.DIRECT) {
 
-						if (route.getEntryA() != null) {
-							context.registerNamedObject(route.getEntryA());
-						}
-						if (route.getEntryB() != null) {
-							context.registerNamedObject(route.getEntryB());
+							// Move data to real route
+							route.setEntryA(tmpRoute.getEntryA());
+							route.setEntryB(tmpRoute.getEntryB());
+
+							if (route.getEntryA() != null) {
+								context.registerNamedObject(route.getEntryA());
+							}
+							if (route.getEntryB() != null) {
+								context.registerNamedObject(route.getEntryB());
+							}
 						}
 					}
 				});
