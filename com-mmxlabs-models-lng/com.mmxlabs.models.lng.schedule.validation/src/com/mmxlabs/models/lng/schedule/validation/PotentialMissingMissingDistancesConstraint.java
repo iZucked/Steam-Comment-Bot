@@ -26,6 +26,11 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BallastBonusContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -57,10 +62,6 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
-		if (true) {
-			// return Activator.PLUGIN_ID;
-		}
-
 		final EObject target = ctx.getTarget();
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
@@ -71,11 +72,37 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
+			Map<RouteOption, RouteDistanceLineCache> caches = new EnumMap<>(RouteOption.class);
+			for (final Route route : portModel.getRoutes()) {
+				caches.put(route.getRouteOption(), (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName()));
+			}
+			final RouteDistanceLineCache fCache = caches.get(RouteOption.DIRECT);
+			if (fCache == null) {
+				// No direct matrix?
+				return Activator.PLUGIN_ID;
+			}
+
+			// Lambda function to check two sets of distances
+			final BiFunction<Set<Port>, Set<Port>, Set<Pair<Port, Port>>> distanceChecker = (froms, tos) -> {
+				return froms.stream()//
+						.filter(from -> from != null) //
+						.flatMap(from -> tos.stream() //
+								.filter(to -> to != null) //
+								// Skip identity distance
+								.filter(to -> !from.equals(to)) //
+								.filter(to -> !fCache.hasDistance(from, to)) //
+								.map(to -> new Pair<Port, Port>(from, to))) //
+						.collect(Collectors.toSet());
+			};
+			final Set<Pair<Port, Port>> missingDistances = new HashSet<>();
+
 			final Set<Port> startPorts = new HashSet<>();
 			final Set<Port> endPorts = new HashSet<>();
 			final Set<Port> eventPorts = new HashSet<>();
 			final Set<Port> loadPorts = new HashSet<>();
 			final Set<Port> dischargePorts = new HashSet<>();
+			final Set<Port> ballastBonusReDeliverToPorts = new HashSet<>();
+			final Set<Port> ballastBonusReturnToPorts = new HashSet<>();
 
 			cargoModel.getVesselAvailabilities().forEach(va -> startPorts.addAll(SetUtils.getObjects(va.getStartAt())));
 			cargoModel.getVesselAvailabilities().forEach(va -> endPorts.addAll(SetUtils.getObjects(va.getEndAt())));
@@ -101,44 +128,81 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			spotMarketsModel.getFobPurchasesSpotMarket().getMarkets().forEach(m -> loadPorts.add(((FOBPurchasesMarket) m).getNotionalPort()));
 			spotMarketsModel.getDesSalesSpotMarket().getMarkets().forEach(m -> dischargePorts.add(((DESSalesMarket) m).getNotionalPort()));
 
-			Map<RouteOption, RouteDistanceLineCache> caches = new EnumMap<>(RouteOption.class);
-			for (final Route route : portModel.getRoutes()) {
-				caches.put(route.getRouteOption(), (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName()));
-			}
-			final RouteDistanceLineCache fCache = caches.get(RouteOption.DIRECT);
-			if (fCache == null) {
-				// No direct matrix?
-				return Activator.PLUGIN_ID;
-			}
-
-			// Lambda function to check two sets of distances
-			final BiFunction<Set<Port>, Set<Port>, Set<Pair<Port, Port>>> distanceChecker = (froms, tos) -> {
-				return froms.stream()//
-						.filter(from -> from != null) //
-						.flatMap(from -> tos.stream() //
-								.filter(to -> to != null) //
-								// Skip identity distance
-								.filter(to -> !from.equals(to)) //
-								.filter(to -> !fCache.hasDistance(from, to)) //
-								.map(to -> new Pair<Port, Port>(from, to))) //
-						.collect(Collectors.toSet());
-			};
+			// Filter end ports by likely end ports as with ballast bonus work we may specify world-wide redelivery, but in practise we would not use all possible ports.
+			final Set<Port> likelyEndPorts = new HashSet<>();
+			likelyEndPorts.addAll(dischargePorts);
+			likelyEndPorts.addAll(eventPorts);
+			likelyEndPorts.addAll(startPorts);
+			endPorts.retainAll(likelyEndPorts);
 
 			// Use lamba function against our different possible from/tos
-			final Set<Pair<Port, Port>> missingDistances = new HashSet<>();
+
+			cargoModel.getVesselAvailabilities().forEach(va -> {
+
+				final Set<Port> vaLikelyEndPorts = new HashSet<>();
+				vaLikelyEndPorts.addAll(loadPorts);
+				vaLikelyEndPorts.addAll(dischargePorts);
+				vaLikelyEndPorts.addAll(eventPorts);
+
+				final Set<Port> vaEndPorts = SetUtils.getObjects(va.getEndAt());
+				// vaEndPorts.retainAll(vaLikelyEndPorts);
+				if (vaEndPorts != null) {
+					vaLikelyEndPorts.retainAll(vaEndPorts);
+				}
+				BallastBonusContract contract = va.getBallastBonusContract();
+				if (contract instanceof RuleBasedBallastBonusContract) {
+					RuleBasedBallastBonusContract ruleBasedBallastBonusContract = (RuleBasedBallastBonusContract) contract;
+					for (BallastBonusContractLine line : ruleBasedBallastBonusContract.getRules()) {
+						if (line instanceof NotionalJourneyBallastBonusContractLine) {
+							NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusContractLine) line;
+							// This is a specific check to do this here, rather than add to main list
+							Set<Port> redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
+							redeliveryPorts.retainAll(vaLikelyEndPorts);
+							int intialRedeliveryPortsSize = redeliveryPorts.size();
+							if (redeliveryPorts.size() == 0 && intialRedeliveryPortsSize > 0) {
+								// Blanked out set, so re-initialise as it was probably important information
+								redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
+							}
+							Set<Port> returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
+							int intialReturnPortsSize = returnPorts.size();
+							returnPorts.retainAll(vaLikelyEndPorts);
+							if (returnPorts.size() == 0 && intialReturnPortsSize > 0) {
+								// Blanked out set, so re-initialise as it was probably important information
+								returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
+							}
+							missingDistances.addAll(distanceChecker.apply(redeliveryPorts, returnPorts));
+
+						} else if (line instanceof LumpSumBallastBonusContractLine) {
+							LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = (LumpSumBallastBonusContractLine) line;
+						}
+
+					}
+				}
+
+				// Remove common ports from group as we will pick the common port and not travels
+				// Tmp has unique end ports.
+				Set<Port> tmp = new HashSet<>(vaLikelyEndPorts);
+				tmp.removeAll(vaEndPorts);
+
+				// Again unique ports
+				vaEndPorts.remove(vaLikelyEndPorts);
+
+				missingDistances.addAll(distanceChecker.apply(vaEndPorts, tmp));
+			});
+
 			missingDistances.addAll(distanceChecker.apply(startPorts, loadPorts));
 			missingDistances.addAll(distanceChecker.apply(loadPorts, dischargePorts));
 			missingDistances.addAll(distanceChecker.apply(dischargePorts, loadPorts));
-			missingDistances.addAll(distanceChecker.apply(dischargePorts, endPorts));
+			// missingDistances.addAll(distanceChecker.apply(dischargePorts, endPorts));
 
 			missingDistances.addAll(distanceChecker.apply(startPorts, eventPorts));
 			missingDistances.addAll(distanceChecker.apply(eventPorts, loadPorts));
 			missingDistances.addAll(distanceChecker.apply(dischargePorts, eventPorts));
-			missingDistances.addAll(distanceChecker.apply(eventPorts, endPorts));
+			// missingDistances.addAll(distanceChecker.apply(eventPorts, endPorts));
 
 			missingDistances.addAll(distanceChecker.apply(eventPorts, eventPorts));
 
-			missingDistances.addAll(distanceChecker.apply(startPorts, endPorts));
+			// missingDistances.addAll(distanceChecker.apply(startPorts, endPorts));
 
 			// Complex cargoes
 			for (final Cargo c : cargoModel.getCargoes()) {
