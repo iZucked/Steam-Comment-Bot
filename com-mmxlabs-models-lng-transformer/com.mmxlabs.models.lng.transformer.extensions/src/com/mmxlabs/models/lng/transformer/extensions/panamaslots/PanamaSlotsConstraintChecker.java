@@ -84,6 +84,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 		// TODO: nominal vessel
 		// TODO: original solution might not be feasible at 16 knots and 24h early arrival time
 
+		LOOP_RESOURCE:
 		for (int r = 0; r < sequences.getResources().size(); r++) {
 			final IResource resource = sequences.getResources().get(r);
 			final ISequence sequence = sequences.getSequence(resource);
@@ -121,7 +122,8 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 					final int windowStart = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
 					if (windowStart >= relaxedBoundary) {
-						continue;
+						// Everything else on resource is in relaxed period.
+						continue LOOP_RESOURCE;
 					}
 
 					if (windowStart >= strictBoundary && windowStart < relaxedBoundary) {
