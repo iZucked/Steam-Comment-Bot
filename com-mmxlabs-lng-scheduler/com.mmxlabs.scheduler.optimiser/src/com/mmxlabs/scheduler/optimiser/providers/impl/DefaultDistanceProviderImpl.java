@@ -56,6 +56,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			// No distance?
 			if (e.getDistance() == Integer.MAX_VALUE) {
 				itr.remove();
+			} else if (!isRouteAvailable(e.getRoute(), vessel)) {
+				// Distance available, but route is closed at this time
+				itr.remove();
 			}
 		}
 		return distances;
