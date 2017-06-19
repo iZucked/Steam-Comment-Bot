@@ -6,11 +6,13 @@ package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -29,13 +31,14 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
@@ -371,5 +374,23 @@ public class CargoModelBuilder {
 
 	public @NonNull SlotMaker<SpotDischargeSlot> makeSpotFOBSale(String name, @NonNull YearMonth windowStart, @NonNull FOBSalesMarket market, @NonNull Port port) {
 		return new SlotMaker<SpotDischargeSlot>(this).withMarketFOBSale(name, market, windowStart, port);
+	}
+
+	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull Route route, final @NonNull EntryPoint entryPoint, final @NonNull LocalDate date, @Nullable Slot slot) {
+		final CanalBookingSlot booking = CargoFactory.eINSTANCE.createCanalBookingSlot();
+		booking.setRoute(route);
+		booking.setEntryPoint(entryPoint);
+		booking.setBookingDate(date);
+		if (slot != null) {
+			booking.setSlot(slot);
+		}
+
+		if (cargoModel.getCanalBookings() == null) {
+			cargoModel.setCanalBookings(CargoFactory.eINSTANCE.createCanalBookings());
+		}
+
+		cargoModel.getCanalBookings().getCanalBookingSlots().add(booking);
+
+		return booking;
 	}
 }
