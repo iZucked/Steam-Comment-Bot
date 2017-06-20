@@ -1,9 +1,6 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -24,7 +21,6 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -46,10 +42,10 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 @RunWith(value = ShiroRunner.class)
 public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
@@ -107,6 +103,15 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				.build();
 		return cargo;
 	}
+	
+	private VesselAvailability getDefaultVesselAvailability() {
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vesselClass.setMaxSpeed(16.0);
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.build();
+		return vesselAvailability;
+	}
 
 	@Test
 	@Category({ MicroTest.class })
@@ -121,10 +126,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.build();
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Sabine Pass");
@@ -135,11 +137,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -176,7 +173,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final Route panama = potentialPanama.get();
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -197,9 +194,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
 
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
 		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
@@ -250,12 +244,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.build();
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Sabine Pass");
@@ -266,11 +257,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
@@ -314,12 +300,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.build();
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Sabine Pass");
@@ -330,11 +313,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -378,12 +356,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 10), null);
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 10), null);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.build();
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Sabine Pass");
@@ -394,11 +369,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -442,10 +412,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final EntryPoint colon = panama.getEntryA();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.build();
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Sabine Pass");
@@ -457,17 +424,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
 
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
-		vesselClass.setMaxSpeed(16.0);
-
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
 		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
 
-		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -523,19 +485,15 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
 
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
 		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
 		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
-
 		final Cargo cargo2 = createFobDesCargo(vesselAvailability2, port1, port2, loadDate, dischargeDate);
 
-		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo2.getSortedSlots().get(0));
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo2.getSortedSlots().get(0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -577,12 +535,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final Route panama = potentialPanama.get();
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.build();
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Sabine Pass");
@@ -593,11 +548,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		// Set distance and speed to exact multiple -- quickest travel time is
-		// 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 9158, 9158, 4196, true);
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(25);
@@ -631,5 +581,119 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void choosePanamaIfRelaxedTest() {
 
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		lngScenarioModel.getCargoModel().getCanalBookings().setStrictBoundaryOffsetDays(0);
+		lngScenarioModel.getCargoModel().getCanalBookings().setRelaxedBoundaryOffsetDays(0);
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		final Route panama = potentialPanama.get();
+
+		final EntryPoint colon = panama.getEntryA();
+
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+		@NonNull
+		final Port port2 = portFinder.findPort("Quintero");
+
+		// map into same timezone to make expectations easier
+		port1.setTimeZone("UTC");
+		port2.setTimeZone("UTC");
+
+		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
+		// journey could be made direct
+		final LocalDateTime dischargeDate = loadDate.plusDays(30);
+
+		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+				@NonNull
+				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
+				
+				assertEquals(AvailableRouteChoices.OPTIMAL, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
+				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
+			}
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void marginTest() {
+
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		lngScenarioModel.getCargoModel().getCanalBookings().setArrivalMarginHours(4);
+
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		final Route panama = potentialPanama.get();
+
+		final EntryPoint colon = panama.getEntryA();
+
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Quintero");
+
+		// map into same timezone to make expectations easier
+		port1.setTimeZone("America/Panama");
+		port2.setTimeZone("America/Panama");
+
+		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
+		final LocalDateTime dischargeDate = loadDate.plusDays(10);
+
+		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+				@NonNull
+				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
+
+				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
+			}
+		});
+	}
 }
