@@ -171,7 +171,7 @@ public class PortModelImporter implements ISubmodelImporter {
 		// context.registerNamedObject((NamedObject) o);
 		if (inputs.containsKey(CANAL_PORTS_KEY)) {
 			importedRoutes.addAll(
-					canalPortsImporter.importObjects(PortFactory.eINSTANCE.createRoute().eClass(), inputs.get(CANAL_PORTS_KEY), context).stream().map(e -> (Route) e).collect(Collectors.toList()));
+					canalPortsImporter.importObjects(PortPackage.Literals.ROUTE, inputs.get(CANAL_PORTS_KEY), context).stream().map(e -> (Route) e).collect(Collectors.toList()));
 		}
 
 		if (inputs.containsKey(DISTANCES_KEY)) {
@@ -234,7 +234,7 @@ public class PortModelImporter implements ISubmodelImporter {
 					final Optional<Route> potentialImported = importedRoutes.stream().filter(e -> e.getName().equals(route.getName())).findFirst();
 					if (potentialImported.isPresent()) {
 						final Route tmpRoute = potentialImported.get();
-						if (tmpRoute.getRouteOption() != RouteOption.DIRECT) {
+						if (!tmpRoute.getName().toLowerCase().contains("direct")) {
 
 							// Move data to real route
 							route.setEntryA(tmpRoute.getEntryA());
