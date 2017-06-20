@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getBands <em>Bands</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getAvailableFrom <em>Available From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getMarkupRate <em>Markup Rate</em>}</li>
  * </ul>
  *
@@ -52,34 +51,6 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * @ordered
 	 */
 	protected EList<PanamaCanalTariffBand> bands;
-
-	/**
-	 * The default value of the '{@link #getAvailableFrom() <em>Available From</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAvailableFrom()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final LocalDate AVAILABLE_FROM_EDEFAULT = null;
-	/**
-	 * The cached value of the '{@link #getAvailableFrom() <em>Available From</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAvailableFrom()
-	 * @generated
-	 * @ordered
-	 */
-	protected LocalDate availableFrom = AVAILABLE_FROM_EDEFAULT;
-
-	/**
-	 * This is true if the Available From attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean availableFromESet;
 
 	/**
 	 * The default value of the '{@link #getMarkupRate() <em>Markup Rate</em>}' attribute.
@@ -137,52 +108,6 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LocalDate getAvailableFrom() {
-		return availableFrom;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAvailableFrom(LocalDate newAvailableFrom) {
-		LocalDate oldAvailableFrom = availableFrom;
-		availableFrom = newAvailableFrom;
-		boolean oldAvailableFromESet = availableFromESet;
-		availableFromESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM, oldAvailableFrom, availableFrom, !oldAvailableFromESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetAvailableFrom() {
-		LocalDate oldAvailableFrom = availableFrom;
-		boolean oldAvailableFromESet = availableFromESet;
-		availableFrom = AVAILABLE_FROM_EDEFAULT;
-		availableFromESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM, oldAvailableFrom, AVAILABLE_FROM_EDEFAULT, oldAvailableFromESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetAvailableFrom() {
-		return availableFromESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public double getMarkupRate() {
 		return markupRate;
 	}
@@ -223,8 +148,6 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 		switch (featureID) {
 			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
 				return getBands();
-			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
-				return getAvailableFrom();
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				return getMarkupRate();
 		}
@@ -244,9 +167,6 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 				getBands().clear();
 				getBands().addAll((Collection<? extends PanamaCanalTariffBand>)newValue);
 				return;
-			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
-				setAvailableFrom((LocalDate)newValue);
-				return;
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				setMarkupRate((Double)newValue);
 				return;
@@ -265,9 +185,6 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
 				getBands().clear();
 				return;
-			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
-				unsetAvailableFrom();
-				return;
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				setMarkupRate(MARKUP_RATE_EDEFAULT);
 				return;
@@ -285,8 +202,6 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 		switch (featureID) {
 			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
 				return bands != null && !bands.isEmpty();
-			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
-				return isSetAvailableFrom();
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				return markupRate != MARKUP_RATE_EDEFAULT;
 		}
@@ -303,9 +218,7 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (availableFrom: ");
-		if (availableFromESet) result.append(availableFrom); else result.append("<unset>");
-		result.append(", markupRate: ");
+		result.append(" (markupRate: ");
 		result.append(markupRate);
 		result.append(')');
 		return result.toString();

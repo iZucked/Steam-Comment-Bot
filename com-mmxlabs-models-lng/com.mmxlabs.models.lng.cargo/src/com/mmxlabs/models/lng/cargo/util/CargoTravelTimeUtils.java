@@ -85,11 +85,6 @@ public class CargoTravelTimeUtils {
 		final List<Route> routes = new LinkedList<Route>();
 		final Pair<VesselClass, List<RouteOption>> vatData = getVesselAssignmentTypeData(vesselAssignmentType);
 		for (final Route route : portModel.getRoutes()) {
-			if (route.getRouteOption() == RouteOption.PANAMA
-					&& (costModel.getPanamaCanalTariff() != null && costModel.getPanamaCanalTariff().getAvailableFrom() != null && costModel.getPanamaCanalTariff().getAvailableFrom().isAfter(date))) {
-				// Panama is closed
-				continue;
-			}
 			if (!vatData.getSecond().contains(route.getRouteOption()) && !vatData.getFirst().getInaccessibleRoutes().contains(route.getRouteOption())) {
 				routes.add(route);
 			}

@@ -69,32 +69,9 @@ public class PanamaCanalTariffItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addAvailableFromPropertyDescriptor(object);
 			addMarkupRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Available From feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAvailableFromPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PanamaCanalTariff_availableFrom_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaCanalTariff_availableFrom_feature", "_UI_PanamaCanalTariff_type"),
-				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__AVAILABLE_FROM,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -168,11 +145,8 @@ public class PanamaCanalTariffItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		LocalDate labelValue = ((PanamaCanalTariff)object).getAvailableFrom();
-		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ?
-			getString("_UI_PanamaCanalTariff_type") :
-			getString("_UI_PanamaCanalTariff_type") + " " + label;
+		PanamaCanalTariff panamaCanalTariff = (PanamaCanalTariff)object;
+		return getString("_UI_PanamaCanalTariff_type") + " " + panamaCanalTariff.getMarkupRate();
 	}
 	
 
@@ -188,7 +162,6 @@ public class PanamaCanalTariffItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PanamaCanalTariff.class)) {
-			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
 			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

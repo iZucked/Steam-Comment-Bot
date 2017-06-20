@@ -68,7 +68,6 @@ public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_bandsEditor(detailComposite, topClass);
-		add_availableFromEditor(detailComposite, topClass);
 		add_markupRateEditor(detailComposite, topClass);
 	}
 	/**

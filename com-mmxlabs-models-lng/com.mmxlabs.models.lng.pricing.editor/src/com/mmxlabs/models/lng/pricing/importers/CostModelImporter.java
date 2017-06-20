@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.importers.PanamaCanalTariffImporter.AvailableFrom;
 import com.mmxlabs.models.lng.pricing.importers.PanamaCanalTariffImporter.MarkupRate;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -114,9 +113,6 @@ public class CostModelImporter implements ISubmodelImporter {
 				if (o instanceof PanamaCanalTariffBand) {
 					final PanamaCanalTariffBand band = (PanamaCanalTariffBand) o;
 					panamaCanalTariff.getBands().add(band);
-				} else if (o instanceof AvailableFrom) {
-					final AvailableFrom availableFrom = (AvailableFrom) o;
-					panamaCanalTariff.setAvailableFrom(availableFrom.availableFrom);
 				} else if (o instanceof MarkupRate) {
 					final MarkupRate markupRate = (MarkupRate) o;
 					panamaCanalTariff.setMarkupRate(markupRate.markupRate);
