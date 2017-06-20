@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalDate <em>Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBooking <em>Canal Booking</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalArrival <em>Canal Arrival</em>}</li>
  * </ul>
  *
  * @generated
@@ -225,6 +226,26 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @ordered
 	 */
 	protected LocalDate latestPossibleCanalDate = LATEST_POSSIBLE_CANAL_DATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCanalArrival() <em>Canal Arrival</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalArrival()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate CANAL_ARRIVAL_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCanalArrival() <em>Canal Arrival</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalArrival()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate canalArrival = CANAL_ARRIVAL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -538,6 +559,27 @@ public class JourneyImpl extends EventImpl implements Journey {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getCanalArrival() {
+		return canalArrival;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalArrival(LocalDate newCanalArrival) {
+		LocalDate oldCanalArrival = canalArrival;
+		canalArrival = newCanalArrival;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ARRIVAL, oldCanalArrival, canalArrival));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getFuelCost() {
@@ -596,6 +638,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return basicGetCanalBooking();
 			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 				return getLatestPossibleCanalDate();
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
+				return getCanalArrival();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -643,6 +687,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 				setLatestPossibleCanalDate((LocalDate)newValue);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
+				setCanalArrival((LocalDate)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -688,6 +735,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 				setLatestPossibleCanalDate(LATEST_POSSIBLE_CANAL_DATE_EDEFAULT);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
+				setCanalArrival(CANAL_ARRIVAL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -722,6 +772,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return canalBooking != null;
 			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 				return LATEST_POSSIBLE_CANAL_DATE_EDEFAULT == null ? latestPossibleCanalDate != null : !LATEST_POSSIBLE_CANAL_DATE_EDEFAULT.equals(latestPossibleCanalDate);
+			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
+				return CANAL_ARRIVAL_EDEFAULT == null ? canalArrival != null : !CANAL_ARRIVAL_EDEFAULT.equals(canalArrival);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -810,6 +862,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(canalDate);
 		result.append(", latestPossibleCanalDate: ");
 		result.append(latestPossibleCanalDate);
+		result.append(", canalArrival: ");
+		result.append(canalArrival);
 		result.append(')');
 		return result.toString();
 	}

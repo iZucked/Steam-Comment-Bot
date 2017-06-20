@@ -2211,13 +2211,22 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__LATEST_POSSIBLE_CANAL_DATE = EVENT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Canal Arrival</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CANAL_ARRIVAL = EVENT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Journey</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 11;
+	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6134,6 +6143,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_LatestPossibleCanalDate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrival <em>Canal Arrival</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Canal Arrival</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalArrival()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_CanalArrival();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7867,6 +7887,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute JOURNEY__LATEST_POSSIBLE_CANAL_DATE = eINSTANCE.getJourney_LatestPossibleCanalDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Arrival</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__CANAL_ARRIVAL = eINSTANCE.getJourney_CanalArrival();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
