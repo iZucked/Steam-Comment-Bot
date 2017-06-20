@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
@@ -56,6 +57,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.Uncons
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.CheckingVPO;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -166,9 +168,10 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IEntityValueCalculator.class).annotatedWith(NotCaching.class).to(DefaultEntityValueCalculator.class);
 
 		// Default bindings for caches
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanOptimiserCache)).toInstance(CacheMode.On);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
 
 	}
 
@@ -187,13 +190,36 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
+	private boolean isVPOSpeedStepping() {
+		return true;
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate, @Named(SchedulerConstants.Key_VoyagePlanOptimiserCache) CacheMode cacheMode) {
+
+		if (cacheMode == CacheMode.Off) {
+			return delegate;
+		} else {
+			final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
+			if (cacheMode == CacheMode.On) {
+				return cachingVoyagePlanOptimiser;
+			} else {
+				assert cacheMode == CacheMode.Verify;
+				return new CheckingVPO(delegate, cachingVoyagePlanOptimiser);
+			}
+		}
+	}
+
+	@Provides
 	@PerChainUnitScope
 	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NotCaching IVolumeAllocator reference,
-			@Named(SchedulerConstants.Key_VolumeAllocationCache) final boolean enableCache) {
-		if (enableCache && hintEnableCache) {
+			@Named(SchedulerConstants.Key_VolumeAllocationCache) final CacheMode cacheMode) {
+		if (cacheMode != CacheMode.Off && hintEnableCache) {
 			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
 			injector.injectMembers(cacher);
-			if (false) {
+			if (cacheMode == CacheMode.Verify) {
 				return new CheckingVolumeAllocator(reference, cacher);
 			}
 			return cacher;
@@ -206,12 +232,12 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@PerChainUnitScope
 	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NotCaching IEntityValueCalculator reference,
-			@Named(SchedulerConstants.Key_ProfitandLossCache) final boolean enableCache) {
+			@Named(SchedulerConstants.Key_ProfitandLossCache) final CacheMode cacheMode) {
 
-		if (enableCache && hintEnableCache) {
+		if (cacheMode != CacheMode.Off && hintEnableCache) {
 			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
 			injector.injectMembers(cacher);
-			if (false) {
+			if (cacheMode == CacheMode.Verify) {
 				return new CheckingEntityValueCalculator(reference, cacher);
 			} else {
 				return cacher;
@@ -224,8 +250,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap)
-			throws IncompleteScenarioException {
+	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
 
 		return optimisationData;
@@ -265,19 +290,6 @@ public class LNGTransformerModule extends AbstractModule {
 				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
 
 		return months;
-	}
-
-	@Provides
-	@PerChainUnitScope
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
-		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
-		return cachingVoyagePlanOptimiser;
-	}
-
-	@Provides
-	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
-	private boolean isVPOSpeedStepping() {
-		return true;
 	}
 
 	@Provides
