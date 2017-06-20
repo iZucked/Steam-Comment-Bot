@@ -36,7 +36,10 @@ import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -142,7 +145,6 @@ public class CanalBookingsReport extends ViewPart {
 			fd.setStyle(fd.getStyle() | SWT.BOLD);
 			boldFont = new Font(Display.getDefault(), fd);
 		}
-
 		viewer = new GridTableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
 
@@ -152,6 +154,9 @@ public class CanalBookingsReport extends ViewPart {
 		viewer.setContentProvider(new ArrayContentProvider());
 
 		viewer.setInput(new ArrayList<>());
+
+		EObjectTableViewerSortingSupport tv = new EObjectTableViewerSortingSupport();
+		viewer.setComparator(tv.createViewerComparer());
 
 		{
 			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
@@ -175,6 +180,8 @@ public class CanalBookingsReport extends ViewPart {
 			});
 
 			scheduleColumn = column;
+			tv.addSortableColumn(viewer, column, column.getColumn());
+			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).scheduleName));
 		}
 		{
 			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
@@ -200,6 +207,8 @@ public class CanalBookingsReport extends ViewPart {
 					}
 				}
 			});
+			tv.addSortableColumn(viewer, column, column.getColumn());
+			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).preBooked));
 		}
 		{
 			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
@@ -253,6 +262,8 @@ public class CanalBookingsReport extends ViewPart {
 					}
 				}
 			});
+			tv.addSortableColumn(viewer, column, column.getColumn());
+			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).entryPoint != null ? ((RowData) o).entryPoint.getName() : ""));
 		}
 		{
 			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
@@ -279,6 +290,8 @@ public class CanalBookingsReport extends ViewPart {
 					}
 				}
 			});
+			tv.addSortableColumn(viewer, column, column.getColumn());
+			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).bookingDate));
 		}
 		{
 			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
@@ -306,6 +319,8 @@ public class CanalBookingsReport extends ViewPart {
 					}
 				}
 			});
+			tv.addSortableColumn(viewer, column, column.getColumn());
+			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).event != null ? ((RowData) o).event.name() : null));
 		}
 		{
 			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
@@ -327,6 +342,8 @@ public class CanalBookingsReport extends ViewPart {
 					}
 				}
 			});
+			tv.addSortableColumn(viewer, column, column.getColumn());
+			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).period));
 		}
 
 		viewer.getGrid().setLinesVisible(true);

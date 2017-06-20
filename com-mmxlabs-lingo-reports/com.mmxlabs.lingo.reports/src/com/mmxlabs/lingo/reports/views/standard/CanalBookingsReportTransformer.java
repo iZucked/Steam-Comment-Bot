@@ -89,11 +89,11 @@ public class CanalBookingsReportTransformer {
 		CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 		if (cargoModel.getCanalBookings() != null) {
 			cargoModel.getCanalBookings().getCanalBookingSlots().forEach(booking -> existingBookings.add(booking));
-			strictDate = promptDate;
-			relaxedDate = promptDate;
-		} else {
 			strictDate = promptDate.plusDays(cargoModel.getCanalBookings().getStrictBoundaryOffsetDays());
 			relaxedDate = promptDate.plusDays(cargoModel.getCanalBookings().getRelaxedBoundaryOffsetDays());
+		} else {
+			strictDate = promptDate;
+			relaxedDate = promptDate;
 		}
 
 		List<RowData> result = new LinkedList<>();
