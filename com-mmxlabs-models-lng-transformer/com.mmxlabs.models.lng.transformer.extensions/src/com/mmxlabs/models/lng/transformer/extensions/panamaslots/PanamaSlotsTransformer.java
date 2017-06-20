@@ -98,7 +98,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 				throw new IllegalStateException("No optimiser port found for: " + eBooking.getEntryPoint().getName());
 			}
 			
-			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDateAsDateTime().plusHours(IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_HOURS));
+			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDateAsDateTime());
 			final IRouteOptionBooking oBooking;
 			if (eBooking.getSlot() != null) {
 				oBooking = IRouteOptionBooking.of(date, optPort, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
