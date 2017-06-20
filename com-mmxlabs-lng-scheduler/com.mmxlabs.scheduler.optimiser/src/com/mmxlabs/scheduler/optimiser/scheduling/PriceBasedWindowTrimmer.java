@@ -97,7 +97,7 @@ public class PriceBasedWindowTrimmer {
 				// first load
 				feasibleWindowStart = getFeasibleWindowStartForFirstSlot(portTimeWindowsRecord, travelTimeData, previousRecordWindow);
 				feasibleWindowEnd = getFeasibleWindowEnd(portTimeWindowsRecord, portSlot, feasibleWindowStart);
-				timeWindow.update(feasibleWindowStart, feasibleWindowEnd);
+				portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd));
 			} else {
 				if (prevFeasibleWindowStart == IPortSlot.NO_PRICING_DATE) {
 					feasibleWindowStart = timeWindow.getInclusiveStart();
@@ -106,7 +106,7 @@ public class PriceBasedWindowTrimmer {
 					feasibleWindowStart = Math.max(timeWindow.getInclusiveStart(), prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 					feasibleWindowEnd = Math.max(timeWindow.getExclusiveEnd(), feasibleWindowStart + 1);
 				}
-				timeWindow.update(feasibleWindowStart, feasibleWindowEnd);
+				portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd));
 			}
 			prevFeasibleWindowStart = feasibleWindowStart;
 		}
