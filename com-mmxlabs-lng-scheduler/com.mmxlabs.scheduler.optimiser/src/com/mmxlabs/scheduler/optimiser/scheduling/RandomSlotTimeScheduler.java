@@ -17,18 +17,15 @@ public class RandomSlotTimeScheduler implements ISlotTimeScheduler {
 	private Random random;
 
 	@Override
-	public void startSequence(IResource resource) {
+	public void startSequence(final IResource resource) {
 		random = new Random(seed);
 	}
 
 	@Override
-	public int scheduleSlot(IResource resource, IPortSlot portSlot, IPortTimeWindowsRecord portTimeWindowsRecord, PortTimesRecord partialPortTimesRecord, int expectedArrivalTime) {
-		ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
-		int start = Math.max(window.getInclusiveStart(), expectedArrivalTime);
-		if (portSlot.getId().contains("BG_Charter")) {
-			int ii = 0;
-		}
-		int arrivalTime = RandomHelper.nextIntBetween(random, start, window.getExclusiveEnd() - 1);
+	public int scheduleSlot(final IResource resource, final IPortSlot portSlot, final IPortTimeWindowsRecord portTimeWindowsRecord, final PortTimesRecord partialPortTimesRecord, final int expectedArrivalTime) {
+		final ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
+		final int start = Math.max(window.getInclusiveStart(), expectedArrivalTime);
+		final int arrivalTime = RandomHelper.nextIntBetween(random, start, window.getExclusiveEnd() - 1);
 		if (portSlot instanceof RoundTripCargoEnd) {
 			// Reset
 			random = new Random(seed);
