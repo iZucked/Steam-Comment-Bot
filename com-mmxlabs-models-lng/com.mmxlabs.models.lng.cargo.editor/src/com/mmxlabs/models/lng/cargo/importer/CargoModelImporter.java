@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.cargo.importer;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -55,7 +57,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 	private final @NonNull Map<String, String> inputs = new HashMap<>();
 	private IClassImporter vesselAvailabilityImporter;
 	private IClassImporter vesselEventImporter;
-	private IClassImporter canalBookingsImporter;
+	private final CanalBookingImporter canalBookingsImporter = new CanalBookingImporter();
 	public static final @NonNull String EVENTS_KEY = "EVENTS";
 	public static final @NonNull String CANAL_BOOKINGS_KEY = "CANAL_BOOKINGS";
 	public static final @NonNull String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
@@ -86,7 +88,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoImporter.setImporterRegistry(importerRegistry);
 			vesselAvailabilityImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselAvailability());
 			vesselEventImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselEvent());
-			canalBookingsImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getCanalBookingSlot());
 		}
 	}
 
@@ -135,7 +136,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 					context.doLater(new IDeferment() {
 
 						@Override
-						public void run(IImportContext context) {
+						public void run(final IImportContext context) {
 							if (!(loadSlot instanceof SpotSlot) && loadSlot.getContract() == null) {
 								if (loadSlot.getPricingEvent() == null) {
 									loadSlot.setPricingEvent(PricingEvent.START_LOAD);
@@ -156,7 +157,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 					context.doLater(new IDeferment() {
 
 						@Override
-						public void run(IImportContext context) {
+						public void run(final IImportContext context) {
 							if (!(dischargeSlot instanceof SpotSlot) && dischargeSlot.getContract() == null) {
 								if (dischargeSlot.getPricingEvent() == null) {
 									dischargeSlot.setPricingEvent(PricingEvent.START_DISCHARGE);
@@ -189,8 +190,21 @@ public class CargoModelImporter implements ISubmodelImporter {
 		CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModel.setCanalBookings(canalBookings);
 		if (inputs.containsKey(CANAL_BOOKINGS_KEY)) {
-			canalBookings.getCanalBookingSlots()
-					.addAll((Collection<? extends CanalBookingSlot>) canalBookingsImporter.importObjects(CargoPackage.eINSTANCE.getCanalBookingSlot(), inputs.get(CANAL_BOOKINGS_KEY), context));
+			final CSVReader reader = inputs.get(CANAL_BOOKINGS_KEY);
+			final Collection<?> importObjects = canalBookingsImporter.importObjects(CargoPackage.eINSTANCE.getCanalBookingSlot(), reader, context);
+			// See if we have imported a replacement object with params.
+			for (final Object o : importObjects) {
+				if (o instanceof CanalBookings) {
+					canalBookings = (CanalBookings) o;
+					cargoModel.setCanalBookings(canalBookings);
+				}
+			}
+			for (final Object o : importObjects) {
+				if (o instanceof CanalBookingSlot) {
+					final CanalBookingSlot canalBookingSlot = (CanalBookingSlot) o;
+					canalBookings.getCanalBookingSlots().add(canalBookingSlot);
+				}
+			}
 		}
 		return cargoModel;
 	}
@@ -202,9 +216,12 @@ public class CargoModelImporter implements ISubmodelImporter {
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));
 		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(cargoModel.getVesselAvailabilities(), context));
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(cargoModel.getVesselEvents(), context));
-		CanalBookings canalBookings = cargoModel.getCanalBookings();
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
-			output.put(CANAL_BOOKINGS_KEY, canalBookingsImporter.exportObjects(canalBookings.getCanalBookingSlots(), context));
+			final List<EObject> l = new LinkedList<>();
+			l.add(canalBookings);
+			l.addAll(canalBookings.getCanalBookingSlots());
+			output.put(CANAL_BOOKINGS_KEY, canalBookingsImporter.exportObjects(l, context));
 		}
 	}
 

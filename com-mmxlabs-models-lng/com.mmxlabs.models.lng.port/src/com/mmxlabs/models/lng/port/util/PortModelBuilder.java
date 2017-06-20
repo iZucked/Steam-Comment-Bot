@@ -30,11 +30,19 @@ public class PortModelBuilder {
 		this.portModel = portModel;
 	}
 
+	/**
+	 * Make all existing ports use the UTC timezone. Useful in unit testing
+	 */
+	public void setAllExistingPortsToUTC() {
+		portModel.getPorts().forEach(p -> p.setTimeZone(TIMEZONE_UTC));
+	}
+
 	@NonNull
 	public Route createRoute(final String name, final RouteOption option) {
 		final Route r = PortFactory.eINSTANCE.createRoute();
 		r.setName(option.getName());
 		r.setRouteOption(option);
+		r.setCanal(option != RouteOption.DIRECT);
 
 		portModel.getRoutes().add(r);
 		return r;
