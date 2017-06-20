@@ -114,6 +114,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// loadPrice =
 				dischargePrice = -1;
 			}
+			portTimesRecord.getSlots().forEach(slot -> voyageKeys.add(portTimesRecord.getSlotNextVoyageOptions(slot)));
 
 			originalHashCode = doHashCode();
 		}
