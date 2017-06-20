@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -57,7 +58,7 @@ public class ScheduleCalculator {
 
 	@Inject
 	@Named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)
-	private boolean enableCache;
+	private CacheMode cacheMode;
 
 	@Inject
 	@Named("hint-lngtransformer-disable-caches")
@@ -155,16 +156,20 @@ public class ScheduleCalculator {
 
 			final VolumeAllocatedSequence volumeAllocatedSequence;
 			final List<@NonNull IPortTimesRecord> portTimeRecords = allPortTimeRecords.get(resource);
-			if (solution == null && enableCache && hintEnableCache) {
+			if (solution == null && cacheMode != CacheMode.Off && hintEnableCache) {
 
 				final Key key = new Key(resource, sequence, portTimeRecords);
 				volumeAllocatedSequence = cache.get(key);
 
 				// Verification
-				if (false) {
+				if (cacheMode == CacheMode.Verify) {
 					final VolumeAllocatedSequence reference = schedule(resource, sequence, portTimeRecords, solution);
 
-					if (volumeAllocatedSequence == null && reference == null) {
+					if (volumeAllocatedSequence == null) {
+						return null;
+					}
+
+					if (reference == null) {
 						return null;
 					}
 

@@ -23,6 +23,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
@@ -46,6 +47,10 @@ public class TimeWindowScheduler {
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean useCanalBasedWindowTrimming = false;
+
+	@Inject
+	@Named(SchedulerConstants.Key_ArrivalTimeCache)
+	private CacheMode cacheMode;
 
 	@Inject
 	@Named("hint-lngtransformer-disable-caches")
@@ -134,7 +139,7 @@ public class TimeWindowScheduler {
 			List<IPortTimeWindowsRecord> list;
 			@NonNull
 			final ISequence sequence = sequences.getSequence(resource);
-			if (hintEnableCache) {
+			if (hintEnableCache && cacheMode != CacheMode.Off) {
 
 				@Nullable
 				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = cache.get(new CacheKey(resource, sequence, data.copy()));
@@ -146,7 +151,7 @@ public class TimeWindowScheduler {
 				}
 
 				// VERIFY
-				if (false) {
+				if (cacheMode == CacheMode.Verify) {
 
 					timeWindowTrimmer.setTrimByPanamaCanalBookings(useCanalBasedWindowTrimming);
 					final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
