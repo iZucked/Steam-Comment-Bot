@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.export.exporters;
 
-import java.security.cert.PKIXRevocationChecker.Option;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -91,11 +89,14 @@ public class JourneyEventExporter {
 
 		final IPortTimesRecord portTimesRecord = volumeAllocatedSequence.getPortTimesRecord(fromPortSlot);
 
-		// set latest possible canal date
+		
 		final Route journeyRoute = journey.getRoute();
+		ZonedDateTime estimatedArrival = null;
 		if (journey.getRoute().isCanal()){
+
 			final IPort canalEntry = distanceProvider.getRouteOptionEntry(options.getFromPortSlot().getPort(), options.getRoute());
 			
+			// set latest possible canal date
 			if (canalEntry != null){
 				
 				final int fromCanalEntry = distanceProvider.getTravelTime(options.getRoute(), //
@@ -104,28 +105,43 @@ public class JourneyEventExporter {
 						voyageDetails.getOptions().getToPortSlot().getPort(), //
 						voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
 				
-				
-
 				final ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
 				final int marginHours;
-				
+				final int toCanalSpeed;
 				if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
 					marginHours = panamaSlotsProvider.getMargin();
 				} else {
+					// Suez - use voyage speed
+					toCanalSpeed = voyageDetails.getSpeed();
 					marginHours = 0;
 				}
 				
 				ZonedDateTime latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
 				journey.setLatestPossibleCanalDate(latestCanalEntry.toLocalDate());
 				
-				if (latestCanalEntry.getHour()*60 + latestCanalEntry.getMinute() > IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_MINUTES
+				if (latestCanalEntry.getHour() > IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_HOURS
 						&& journey.getRoute().getRouteOption() == RouteOption.PANAMA){
 					// slot can't be reached that day, set to previous day
 					journey.setLatestPossibleCanalDate(latestCanalEntry.minusDays(1).toLocalDate());
 				}
-			}
-		}
+				
+				// set canal arrival
+				int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, //
+						options.getVessel(), //
+						options.getFromPortSlot().getPort(), // 
+						canalEntry, //
+						toCanalSpeed)
+						+ marginHours;
 
+				final int departureTime = portTimesRecord.getSlotTime(fromPortSlot) + portTimesRecord.getSlotDuration(fromPortSlot);
+				estimatedArrival = modelEntityMap.getDateFromHours(departureTime + toCanal, canalEntry);
+				journey.setCanalArrival(estimatedArrival.toLocalDate());
+			}
+			
+
+		}
+		
 		// set canal booking if present
 		if (portTimesRecord.getRouteOptionBooking(fromPortSlot) != null) {
 			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionBooking(fromPortSlot), CanalBookingSlot.class);
@@ -135,30 +151,8 @@ public class JourneyEventExporter {
 		} else if (journeyRoute.isCanal()) {
 			final IPort canalEntry = distanceProvider.getRouteOptionEntry(fromPortSlot.getPort(), voyageDetails.getOptions().getRoute());
 			if (canalEntry != null) {
-
-				final int toCanalSpeed;
-				final int marginHours;
-				if (journeyRoute.getRouteOption() == RouteOption.PANAMA) {
-					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
-					marginHours = panamaSlotsProvider.getMargin();
-				} else {
-					// Suez - use voyage speed
-					toCanalSpeed = voyageDetails.getSpeed();
-					marginHours = 0;
-				}
-				int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, //
-						options.getVessel(), //
-						options.getFromPortSlot().getPort(), // 
-						canalEntry, //
-						toCanalSpeed)
-						+ marginHours;
-
-				final int departureTime = portTimesRecord.getSlotTime(fromPortSlot) + portTimesRecord.getSlotDuration(fromPortSlot);
-				final ZonedDateTime estimatedArrival = modelEntityMap.getDateFromHours(departureTime + toCanal, canalEntry);
-
-				
-				journey.setCanalDate(estimatedArrival.toLocalDate());
-				if (estimatedArrival.getHour()*60 + estimatedArrival.getMinute() > IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_MINUTES 
+				journey.setCanalDate(journey.getCanalArrival());
+				if (estimatedArrival != null && estimatedArrival.getHour() > IPanamaBookingsProvider.BOOKING_OFFSET_FROM_MIDNIGHT_HOURS 
 						&& journey.getRoute().getRouteOption() == RouteOption.PANAMA){
 					// slot can't be reached that day, set arrival to next day
 					journey.setCanalDate(estimatedArrival.plusDays(1).toLocalDate());
@@ -176,7 +170,6 @@ public class JourneyEventExporter {
 				}
 			}
 		}
-
 		return journey;
 	}
 
