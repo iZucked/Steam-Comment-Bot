@@ -65,8 +65,10 @@ public class TimeWindowScheduler {
 			this.sequence = sequence;
 			// Copy unassigned elements for use in key
 			this.unassignedBookings = new HashMap<>();
-			for (final Map.Entry<IPort, TreeSet<IRouteOptionBooking>> e : this.currentBookingData.unassignedBookings.entrySet()) {
-				this.unassignedBookings.put(e.getKey(), new TreeSet<>(e.getValue()));
+			if (_currentBookingData.unassignedBookings != null) {
+				for (final Map.Entry<IPort, TreeSet<IRouteOptionBooking>> e : _currentBookingData.unassignedBookings.entrySet()) {
+					this.unassignedBookings.put(e.getKey(), new TreeSet<>(e.getValue()));
+				}
 			}
 			// used to evaluate
 			this.currentBookingData = _currentBookingData;
