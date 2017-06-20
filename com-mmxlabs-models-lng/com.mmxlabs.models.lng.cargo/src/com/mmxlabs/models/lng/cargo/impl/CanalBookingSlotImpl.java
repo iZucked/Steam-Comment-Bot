@@ -262,7 +262,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 		}
 		ZonedDateTime dateTime = bookingDate.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate())));
 		// Assume slots start a 3AM
-		dateTime = dateTime.withHour(3);
+		dateTime = dateTime.withHour(CanalBookingSlot.BOOKING_HOURS_OFFSET);
 		return dateTime;
 	}
 

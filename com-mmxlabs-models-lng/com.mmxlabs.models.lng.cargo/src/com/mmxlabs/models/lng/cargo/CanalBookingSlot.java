@@ -32,6 +32,12 @@ import java.time.ZonedDateTime;
  * @generated
  */
 public interface CanalBookingSlot extends MMXObject, ITimezoneProvider {
+	
+	/**
+	 * @generated NOT
+	 */
+	public static int BOOKING_HOURS_OFFSET = 3;
+	
 	/**
 	 * Returns the value of the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
