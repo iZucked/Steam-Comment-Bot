@@ -32,9 +32,4 @@ public class CharterMarketEditorPane extends ScenarioTableViewerPane {
 
 		defaultSetTitle("Charter Contracts");
 	}
-
-	@Override
-	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
-		return null;
-	}
 }
