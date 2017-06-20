@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -57,7 +58,7 @@ public class ScheduleCalculator {
 
 	@Inject
 	@Named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)
-	private boolean enableCache;
+	private CacheMode cacheMode;
 
 	@Inject
 	@Named("hint-lngtransformer-disable-caches")
@@ -147,17 +148,21 @@ public class ScheduleCalculator {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			final VolumeAllocatedSequence volumeAllocatedSequence;
-			if (solution == null && enableCache && hintEnableCache) {
+			if (solution == null && cacheMode != CacheMode.Off && hintEnableCache) {
 				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
 				final Key key = new Key(resource, sequence, arrivalTimes[i]);
 				volumeAllocatedSequence = cache.get(key);
 
 				// Verification
-				if (false) {
+				if (cacheMode == CacheMode.Verify) {
 					assert arrivalTimes[i] != null;
 					final VolumeAllocatedSequence reference = schedule(resource, sequence, arrivalTimes[i], solution);
 
-					if (volumeAllocatedSequence == null && reference == null) {
+					if (volumeAllocatedSequence == null) {
+						return null;
+					}
+
+					if (reference == null) {
 						return null;
 					}
 

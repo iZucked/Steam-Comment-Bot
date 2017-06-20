@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public final class SchedulerConstants {
 
 	// Caching constants - used in injection framework
+	public static final String Key_VoyagePlanOptimiserCache = "cache-voyage-plan-optimiser";
 	public static final String Key_VolumeAllocationCache = "cache-volume-allocation";
 	public static final String Key_VolumeAllocatedSequenceCache = "cache-volume-allocated-sequence";
 	public static final String Key_ProfitandLossCache = "cache-profit-and-loss";

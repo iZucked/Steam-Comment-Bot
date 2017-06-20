@@ -21,12 +21,12 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	private static final Logger LOG = LoggerFactory.getLogger(CheckingVPO.class);
 
 	private final @NonNull IVoyagePlanOptimiser reference;
-	private final @NonNull IVoyagePlanOptimiser delegate;
+	private final @NonNull IVoyagePlanOptimiser cache;
 
-	public CheckingVPO(final @NonNull IVoyagePlanOptimiser reference, final @NonNull IVoyagePlanOptimiser delegate) {
+	public CheckingVPO(final @NonNull IVoyagePlanOptimiser reference, final @NonNull IVoyagePlanOptimiser cache) {
 		super();
 		this.reference = reference;
-		this.delegate = delegate;
+		this.cache = cache;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 			@NonNull final IPortTimesRecord portTimesRecord, @NonNull final List<@NonNull IOptionsSequenceElement> basicSequence, @NonNull final List<@NonNull IVoyagePlanChoice> choices) {
 
 		final VoyagePlan ref = reference.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
-		final VoyagePlan res = delegate.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+		final VoyagePlan res = cache.optimise(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
 
 		@NonNull
 		String refStr = getString(ref);
