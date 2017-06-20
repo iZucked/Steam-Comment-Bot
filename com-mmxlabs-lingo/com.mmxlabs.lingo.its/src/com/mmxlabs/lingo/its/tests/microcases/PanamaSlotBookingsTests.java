@@ -176,7 +176,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final Route panama = potentialPanama.get();
 		final EntryPoint colon = panama.getEntryA();
 
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
@@ -282,19 +282,23 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-
 			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 				scope.enter();
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				final ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule())
-						.getInstance(ISequencesManipulator.class);
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge), null);
-				assertFalse(checker.checkConstraints(manipulatedSequences, null));
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
+
+				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
 			}
 		});
 	}
