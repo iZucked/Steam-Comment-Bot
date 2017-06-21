@@ -49,11 +49,11 @@ public class PriceBasedWindowTrimmer {
 			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(idx);
 
 			// Retrim current window based on last window trim.
-			if (isSequentialVessel(portTimeWindowsRecord.getResource())) {
+			if (isSequentialVessel(resource)) {
 				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, travelTimeData, lastFeasibleWindow);
 			}
 
-			timeWindowsTrimming.processCargo(portTimeWindowsRecord, vesselStartTime);
+			timeWindowsTrimming.processCargo(resource, portTimeWindowsRecord, vesselStartTime);
 
 			@NonNull
 			final IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);

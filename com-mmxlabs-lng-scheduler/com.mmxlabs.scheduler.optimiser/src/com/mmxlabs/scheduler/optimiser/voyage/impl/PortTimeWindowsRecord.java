@@ -67,7 +67,6 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private ITimeWindow firstSlotFeasibleTimeWindow = null;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
-	private IResource resource;
 
 	public PortTimeWindowsRecord() {
 
@@ -207,15 +206,6 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	public int getIndex(final IPortSlot slot) {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		return allocation != null ? allocation.index : -1;
-	}
-
-	@Override
-	public IResource getResource() {
-		return resource;
-	}
-
-	public IResource setResource(final IResource resource) {
-		return this.resource = resource;
 	}
 
 	@Override

@@ -61,8 +61,6 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	int getIndex(@NonNull IPortSlot slot);
 
-	IResource getResource();
-
 	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
 	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);

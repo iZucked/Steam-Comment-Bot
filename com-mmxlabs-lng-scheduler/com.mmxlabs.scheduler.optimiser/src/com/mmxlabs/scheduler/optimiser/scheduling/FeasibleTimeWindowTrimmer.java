@@ -16,6 +16,7 @@ import javax.inject.Named;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -141,7 +142,7 @@ public class FeasibleTimeWindowTrimmer {
 
 		for (int idx = 0; idx < portTimeWindowRecords.size(); idx++) {
 			final IPortTimeWindowsRecord portTimeWindowsRecord = portTimeWindowRecords.get(idx);
-			if (isSequentialVessel(portTimeWindowsRecord.getResource())) {
+			if (isSequentialVessel(resource)) {
 				final boolean isLastRecord = idx == portTimeWindowRecords.size() - 1;
 				setFeasibleTimeWindowsUsingPrevious(resource, portTimeWindowsRecord, travelTimeData, isLastRecord);
 			} else {
@@ -222,10 +223,11 @@ public class FeasibleTimeWindowTrimmer {
 		ISequenceElement prevElement = null;
 		final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
 
+		int vesselMaxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
+		
 		IPortSlot prevPortSlot = null;
 		// Used for end of sequence checks
 		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
-		portTimeWindowsRecord.setResource(resource);
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
@@ -307,7 +309,6 @@ public class FeasibleTimeWindowTrimmer {
 				// create new record
 				if (!(thisPortSlot instanceof RoundTripCargoEnd)) {
 					portTimeWindowsRecord = new PortTimeWindowsRecord();
-					portTimeWindowsRecord.setResource(resource);
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
 				} else {
 					isRoundTripEnd[index] = true;
@@ -317,7 +318,6 @@ public class FeasibleTimeWindowTrimmer {
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
 				} else {
 					portTimeWindowsRecord = new PortTimeWindowsRecord();
-					portTimeWindowsRecord.setResource(resource);
 					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
 					isRoundTripEnd[index] = true;
 				}
@@ -325,6 +325,7 @@ public class FeasibleTimeWindowTrimmer {
 
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Round_Trip_Cargo_End;
+			
 			// Calculate minimum inter-element durations
 			travelTimeData.setMinTravelTime(index, durationProvider.getElementDuration(element, resource));
 			int directTravelTime = Integer.MAX_VALUE;
@@ -337,9 +338,9 @@ public class FeasibleTimeWindowTrimmer {
 
 				int prevVisitDuration = durationProvider.getElementDuration(prevElement, resource);
 
-				directTravelTime = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPort, port, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
-				suezTravelTime = distanceProvider.getTravelTime(ERouteOption.SUEZ, vesselAvailability.getVessel(), prevPort, port, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
-				panamaTravelTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), prevPort, port, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+				directTravelTime = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
+				suezTravelTime = distanceProvider.getTravelTime(ERouteOption.SUEZ, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
+				panamaTravelTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
 
 				if (directTravelTime != Integer.MAX_VALUE) {
 					directTravelTime += prevVisitDuration;
@@ -386,7 +387,8 @@ public class FeasibleTimeWindowTrimmer {
 
 						assert prevElement != null;
 						windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
-						if (checkPanamaCanalBookings) {
+						
+						if (!isRoundTripSequence && checkPanamaCanalBookings) {
 							final IPortSlot p_prevPortSlot = prevPortSlot;
 
 							@Nullable
@@ -399,7 +401,7 @@ public class FeasibleTimeWindowTrimmer {
 								}).findFirst();
 
 								final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), routeOptionEntry,
-										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed())) + panamaBookingsProvider.getMargin()
+										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselMaxSpeed)) + panamaBookingsProvider.getMargin()
 										+ durationProvider.getElementDuration(prevElement, resource);
 								if (isRoundTripSequence) {
 									// // Normal behaviour
@@ -413,7 +415,7 @@ public class FeasibleTimeWindowTrimmer {
 										currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
 
 										final int fromEntryPoint = distanceProvider.getTravelTime(potentialBooking.get().getRouteOption(), vesselAvailability.getVessel(),
-												potentialBooking.get().getEntryPoint(), portSlot.getPort(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+												potentialBooking.get().getEntryPoint(), portSlot.getPort(), vesselMaxSpeed);
 
 										// Visit duration should implicitly be included in this calculation.
 										final int travelTime = (potentialBooking.get().getBookingDate() + fromEntryPoint) - windowStartTime[index - 1];
@@ -457,7 +459,7 @@ public class FeasibleTimeWindowTrimmer {
 												continue;
 											}
 											final int fromEntryPoint = distanceProvider.getTravelTime(booking.getRouteOption(), vesselAvailability.getVessel(), booking.getEntryPoint(),
-													portSlot.getPort(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+													portSlot.getPort(), vesselMaxSpeed);
 											final int travelTime = toCanal + fromEntryPoint;
 
 											if (booking.getBookingDate() + fromEntryPoint < windowEndTime[index]) {
@@ -561,19 +563,22 @@ public class FeasibleTimeWindowTrimmer {
 	 * @param seqIndex
 	 */
 	private void setFeasibleTimeWindowsRoundTrip(IResource resource, final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData) {
-		int prevFeasibleWindowStart = Integer.MIN_VALUE;
+		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
+			final MutableTimeWindow timeWindow;
 			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot)) {
 				// first load
 				feasibleWindowStart = windowStartTime[portTimeWindowsRecord.getIndex(portSlot)];
 				feasibleWindowEnd = windowEndTime[portTimeWindowsRecord.getIndex(portSlot)];
+				timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			} else {
 				feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
 						prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 				feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
+				timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			}
-			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new TimeWindow(feasibleWindowStart, feasibleWindowEnd));
+			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 			prevFeasibleWindowStart = feasibleWindowStart;
 		}
 	}
@@ -587,10 +592,10 @@ public class FeasibleTimeWindowTrimmer {
 	private void setFeasibleTimeWindowsUsingPrevious(final IResource resource, final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData, final boolean isLast) {
 		int prevFeasibleWindowStart = Integer.MIN_VALUE;
 		boolean lastSlotWasVirtual = false;
-		TimeWindow rollingWindow = null;
+		MutableTimeWindow rollingWindow = null;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 
-			final TimeWindow timeWindow;
+			final MutableTimeWindow timeWindow;
 			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
 				// first load
@@ -613,7 +618,7 @@ public class FeasibleTimeWindowTrimmer {
 								prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 						feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
 					}
-					timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+					timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
 				}
 			}
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
@@ -642,7 +647,7 @@ public class FeasibleTimeWindowTrimmer {
 			// This vessel is empty - we skipped an earlier "skip resource" check - is this important here?
 			// Finally - port rotations is wrong order (sort by next./prev then date)
 			//
-			final TimeWindow timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+			final MutableTimeWindow timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
 	}
