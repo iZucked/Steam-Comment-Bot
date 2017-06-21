@@ -16,6 +16,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
@@ -31,7 +32,6 @@ import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
@@ -84,6 +84,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 						transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 						transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
+						transformerExtensionFactories.add(new PanamaSlotsTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 						// TODO - Remove once we have explicit use of export stage

@@ -32,14 +32,14 @@ public class PanamaSlotsModule extends PeaberryActivationModule {
 	protected void configure() {
 
 		bindService(PanamaSlotsConstraintCheckerFactory.class).export();
-		bindService(RestrictedElementsInjectorService.class).export();
+		bindService(PanamaSlotsInjectorService.class).export();
 		bindService(PanamaSlotsTransformerFactory.class).export();
 	}
 
 	/**
 	 * An implementation of @link{IOptimiserInjectorService} to bind a @link{IRestrictedElementsProvider} to the DCP module
 	 */
-	public static class RestrictedElementsInjectorService implements IOptimiserInjectorService {
+	public static class PanamaSlotsInjectorService implements IOptimiserInjectorService {
 
 		@Override
 		@Nullable
