@@ -122,9 +122,6 @@ public class ChangeSetToTableTransformer {
 					}
 				}
 				if (after != null && ChangeSetTransformerUtil.isSet(after.getRhsName())) {
-					if (after.getRhsName().contains("FOB_SPL")) {
-						int ii = 0;
-					}
 					changeSetTableRow.setRhsName(after.getRhsName());
 					if (after.getDischargeSlot() != null) {
 						changeSetTableRow.setRhsSlot(true);
