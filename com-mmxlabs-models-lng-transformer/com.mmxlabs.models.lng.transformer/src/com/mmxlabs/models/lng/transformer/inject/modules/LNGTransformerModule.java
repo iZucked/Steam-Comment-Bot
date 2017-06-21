@@ -68,6 +68,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceInterv
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.FeasibleTimeWindowTrimmer;
+import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PortTimesRecordMaker;
 import com.mmxlabs.scheduler.optimiser.scheduling.PriceBasedWindowTrimmer;
@@ -171,7 +172,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(PriceIntervalProviderHelper.class);
 		bind(PriceIntervalProducer.class);
 
-		bind(ArrivalTimeScheduler.class);
+		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
 		bind(TimeWindowScheduler.class);
 
 		bind(ISlotTimeScheduler.class).to(RandomSlotTimeScheduler.class);
