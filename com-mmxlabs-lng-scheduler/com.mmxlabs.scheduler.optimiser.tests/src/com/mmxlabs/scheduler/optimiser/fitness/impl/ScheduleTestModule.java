@@ -11,6 +11,8 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
@@ -41,6 +43,7 @@ import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -61,6 +64,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoil
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
+import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
@@ -110,6 +118,8 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 		bind(IBoilOffHelper.class).toInstance(new InPortBoilOffHelper(true));
 
+		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
+		bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
 		// if (Platform.isRunning()) {
 		// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 		// bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
@@ -117,11 +127,17 @@ public class ScheduleTestModule extends AbstractModule {
 		// }
 
 		// bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
 
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
 		bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.FALSE);
+
+		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
+
 	}
 
 	@Provides

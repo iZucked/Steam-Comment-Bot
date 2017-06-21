@@ -115,9 +115,6 @@ public class FeasibleTimeWindowTrimmer {
 	private IElementPortProvider portProvider;
 
 	@Inject
-	private IRouteCostProvider routeCostProvider;
-
-	@Inject
 	private IDistanceProvider distanceProvider;
 
 	@Inject
@@ -361,7 +358,6 @@ public class FeasibleTimeWindowTrimmer {
 				travelTimeData.setMinTravelTime(index - 1, minTravelTime);
 			}
 
-			
 			// Handle time windows
 			if (window == null) { // empty time windows are made to be the
 									// biggest reasonable gap
@@ -402,10 +398,9 @@ public class FeasibleTimeWindowTrimmer {
 								final Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new TreeSet()).stream().filter(e -> {
 									return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot);
 								}).findFirst();
-								
+
 								final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), routeOptionEntry,
-										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed()))
-										+ panamaBookingsProvider.getMargin()
+										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselAvailability.getVessel().getVesselClass().getMaxSpeed())) + panamaBookingsProvider.getMargin()
 										+ durationProvider.getElementDuration(prevElement, resource);
 								if (isRoundTripSequence) {
 									// // Normal behaviour
@@ -424,7 +419,7 @@ public class FeasibleTimeWindowTrimmer {
 										// Visit duration should implicitly be included in this calculation.
 										final int travelTime = (potentialBooking.get().getBookingDate() + fromEntryPoint) - windowStartTime[index - 1];
 										travelTimeData.setMinTravelTime(index - 1, travelTime);
-										
+
 										windowEndTime[index - 1] = Math.min(potentialBooking.get().getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
 										assert windowStartTime[index - 1] < windowEndTime[index - 1];
 										windowStartTime[index] = Math.max(windowStartTime[index], potentialBooking.get().getBookingDate() + fromEntryPoint);

@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.inject.Singleton;
@@ -39,6 +40,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
+import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -84,6 +86,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -211,15 +214,22 @@ public class TestCalculations {
 			final ISequence sequence = new ListSequence(sequenceList);
 
 			final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
+			final PortTimesRecord expectedPTR1 = new PortTimesRecord();
 			{
-				final PortTimesRecord expectedPTR = new PortTimesRecord();
-				expectedPTR.setSlotTime(loadSlot, 25);
-				expectedPTR.setSlotTime(dischargeSlot, 50);
-				expectedPTR.setSlotDuration(loadSlot, 1);
-				expectedPTR.setSlotDuration(dischargeSlot, 1);
-				expectedPTR.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+				expectedPTR1.setSlotTime(portSlotProvider.getPortSlot(startElement), 1);
+				expectedPTR1.setSlotDuration(portSlotProvider.getPortSlot(startElement), 0);
+				expectedPTR1.setReturnSlotTime(loadSlot, 25);
+			}
 
-				Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR)))
+			final PortTimesRecord expectedPTR2 = new PortTimesRecord();
+			{
+				expectedPTR2.setSlotTime(loadSlot, 25);
+				expectedPTR2.setSlotTime(dischargeSlot, 50);
+				expectedPTR2.setSlotDuration(loadSlot, 1);
+				expectedPTR2.setSlotDuration(dischargeSlot, 1);
+				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+
+				Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2)))
 						.thenReturn(allocationAnnotation);
 			}
 
@@ -255,8 +265,9 @@ public class TestCalculations {
 			// scope.enter();
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			// TODO: Fix arrival time feed in.
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, annotatedSolution);
+			Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2));
+
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 			// }
 			Assert.assertNotNull(volumeAllocatedSequences);
@@ -533,15 +544,22 @@ public class TestCalculations {
 			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
 
 			final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
+			final PortTimesRecord expectedPTR1 = new PortTimesRecord();
 			{
-				final PortTimesRecord expectedPTR = new PortTimesRecord();
-				expectedPTR.setSlotTime(loadSlot, 25);
-				expectedPTR.setSlotTime(dischargeSlot, 50);
-				expectedPTR.setSlotDuration(loadSlot, 1);
-				expectedPTR.setSlotDuration(dischargeSlot, 1);
-				expectedPTR.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+				expectedPTR1.setSlotTime(portSlotProvider.getPortSlot(startElement), 1);
+				expectedPTR1.setSlotDuration(portSlotProvider.getPortSlot(startElement), 0);
+				expectedPTR1.setReturnSlotTime(loadSlot, 25);
 
-				Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR)))
+			}
+			final PortTimesRecord expectedPTR2 = new PortTimesRecord();
+			{
+				expectedPTR2.setSlotTime(loadSlot, 25);
+				expectedPTR2.setSlotTime(dischargeSlot, 50);
+				expectedPTR2.setSlotDuration(loadSlot, 1);
+				expectedPTR2.setSlotDuration(dischargeSlot, 1);
+				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+
+				Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2)))
 						.thenReturn(allocationAnnotation);
 			}
 
@@ -568,9 +586,9 @@ public class TestCalculations {
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
+			Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2));
 
-			// TODO: Fix arrival time feed in.
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, annotatedSolution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 
@@ -856,15 +874,21 @@ public class TestCalculations {
 			final ISequence sequence = new ListSequence(sequenceList);
 
 			final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
+			final PortTimesRecord expectedPTR1 = new PortTimesRecord();
 			{
-				final PortTimesRecord expectedPTR = new PortTimesRecord();
-				expectedPTR.setSlotTime(loadSlot, 25);
-				expectedPTR.setSlotTime(dischargeSlot, 50);
-				expectedPTR.setSlotDuration(loadSlot, 1);
-				expectedPTR.setSlotDuration(dischargeSlot, 1);
-				expectedPTR.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+				expectedPTR1.setSlotTime(portSlotProvider.getPortSlot(startElement), 1);
+				expectedPTR1.setSlotDuration(portSlotProvider.getPortSlot(startElement), 0);
+				expectedPTR1.setReturnSlotTime(loadSlot, 25);
+			}
+			final PortTimesRecord expectedPTR2 = new PortTimesRecord();
+			{
+				expectedPTR2.setSlotTime(loadSlot, 25);
+				expectedPTR2.setSlotTime(dischargeSlot, 50);
+				expectedPTR2.setSlotDuration(loadSlot, 1);
+				expectedPTR2.setSlotDuration(dischargeSlot, 1);
+				expectedPTR2.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
 
-				Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR)))
+				Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR2)))
 						.thenReturn(allocationAnnotation);
 			}
 
@@ -885,15 +909,16 @@ public class TestCalculations {
 			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(4150L);
 
 			// Schedule sequence
-			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+
+			Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2));
 
 			final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 			// TODO: Fix arrival time feed in.
-			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, annotatedSolution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, allPortTimeRecords, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
 
 			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
@@ -1128,6 +1153,8 @@ public class TestCalculations {
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
 
+				bind(IArrivalTimeScheduler.class).toInstance(Mockito.mock(IArrivalTimeScheduler.class));
+
 				bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
@@ -1137,11 +1164,11 @@ public class TestCalculations {
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
 
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.FALSE);
+				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
+				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(CacheMode.Off);
+				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(CacheMode.Off);
+				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(CacheMode.Off);
+				bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.TRUE);
 
 			}
 		});

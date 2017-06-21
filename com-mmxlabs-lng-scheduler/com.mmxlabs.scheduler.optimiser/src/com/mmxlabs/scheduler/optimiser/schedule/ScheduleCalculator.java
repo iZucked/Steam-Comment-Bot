@@ -42,7 +42,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.scheduling.ArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -113,7 +113,7 @@ public class ScheduleCalculator {
 	private VoyagePlanner voyagePlanner;
 
 	@Inject
-	private ArrivalTimeScheduler arrivalTimeScheduler;
+	private IArrivalTimeScheduler arrivalTimeScheduler;
 
 	@Inject
 	private CapacityViolationChecker capacityViolationChecker;
@@ -134,6 +134,13 @@ public class ScheduleCalculator {
 
 	@Nullable
 	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+		final Map<IResource, List<@NonNull IPortTimesRecord>> allPortTimeRecords = arrivalTimeScheduler.schedule(sequences);
+		return schedule(sequences, allPortTimeRecords, solution);
+	}
+
+	@Nullable
+	public VolumeAllocatedSequences schedule(@NonNull final ISequences sequences, final Map<IResource, List<@NonNull IPortTimesRecord>> allPortTimeRecords,
+			@Nullable final IAnnotatedSolution solution) {
 		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
@@ -146,8 +153,6 @@ public class ScheduleCalculator {
 		}
 
 		final List<@NonNull IResource> resources = sequences.getResources();
-
-		final Map<IResource, List<@NonNull IPortTimesRecord>> allPortTimeRecords = arrivalTimeScheduler.schedule(sequences);
 
 		for (int i = 0; i < sequences.size(); ++i) {
 			final ISequence sequence = sequences.getSequence(i);

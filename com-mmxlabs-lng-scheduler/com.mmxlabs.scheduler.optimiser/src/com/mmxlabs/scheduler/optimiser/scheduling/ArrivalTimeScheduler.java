@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
-public class ArrivalTimeScheduler {
+public class ArrivalTimeScheduler implements IArrivalTimeScheduler {
 
 	@Inject
 	private TimeWindowScheduler timeWindowScheduler;
@@ -36,7 +36,11 @@ public class ArrivalTimeScheduler {
 	@Inject
 	private ISlotTimeScheduler slotTimeScheduler;
 
-	public Map<IResource, List<@NonNull IPortTimesRecord>> schedule(final @NonNull ISequences fullSequences) {
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler#schedule(com.mmxlabs.optimiser.core.ISequences)
+	 */
+	@Override
+	public Map<IResource, List<@NonNull IPortTimesRecord>> schedule(final ISequences fullSequences) {
 
 		final ScheduledTimeWindows scheduledTimeWindows = timeWindowScheduler.schedule(fullSequences);
 

@@ -39,7 +39,7 @@ public class TimeWindowScheduler {
 	@Inject
 	private FeasibleTimeWindowTrimmer timeWindowTrimmer;
 
-	@Inject
+	@com.google.inject.Inject(optional = true)
 	private PriceBasedWindowTrimmer priceBasedWindowTrimmer;
 
 	@Inject
@@ -114,7 +114,7 @@ public class TimeWindowScheduler {
 
 			final MinTravelTimeData minTimeData = new MinTravelTimeData(key.resource, key.sequence);
 			final List<IPortTimeWindowsRecord> trimmedWindows = timeWindowTrimmer.generateTrimmedWindows(key.resource, key.sequence, minTimeData, key.currentBookingData);
-			if (usePriceBasedWindowTrimming) {
+			if (usePriceBasedWindowTrimming && priceBasedWindowTrimmer != null) {
 				priceBasedWindowTrimmer.trimWindows(key.resource, trimmedWindows, minTimeData);
 			}
 			return new Pair<>(key, new Pair<>(trimmedWindows, minTimeData));
@@ -132,11 +132,13 @@ public class TimeWindowScheduler {
 		data.assignedBookings = new HashMap<IPort, Set<IRouteOptionBooking>>();
 		data.unassignedBookings = new HashMap<IPort, TreeSet<IRouteOptionBooking>>();
 
-		panamaSlotsProvider.getBookings().entrySet().forEach(e -> {
-			final Set<IRouteOptionBooking> assigned = e.getValue().stream().filter(j -> j.getPortSlot().isPresent()).collect(Collectors.toSet());
-			data.assignedBookings.put(e.getKey(), new TreeSet<>(assigned));
-			data.unassignedBookings.put(e.getKey(), new TreeSet<>(Sets.difference(e.getValue(), assigned)));
-		});
+		if (useCanalBasedWindowTrimming) {
+			panamaSlotsProvider.getBookings().entrySet().forEach(e -> {
+				final Set<IRouteOptionBooking> assigned = e.getValue().stream().filter(j -> j.getPortSlot().isPresent()).collect(Collectors.toSet());
+				data.assignedBookings.put(e.getKey(), new TreeSet<>(assigned));
+				data.unassignedBookings.put(e.getKey(), new TreeSet<>(Sets.difference(e.getValue(), assigned)));
+			});
+		}
 
 		for (final IResource resource : sequences.getResources()) {
 
@@ -161,7 +163,7 @@ public class TimeWindowScheduler {
 					final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
 					final List<IPortTimeWindowsRecord> list2 = timeWindowTrimmer.generateTrimmedWindows(resource, sequence, minTimeData, data.copy());
 
-					if (usePriceBasedWindowTrimming) {
+					if (usePriceBasedWindowTrimming && priceBasedWindowTrimmer != null) {
 						priceBasedWindowTrimmer.trimWindows(resource, list2, minTimeData);
 					}
 					if (list != null) {
@@ -225,7 +227,7 @@ public class TimeWindowScheduler {
 				final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
 				list = timeWindowTrimmer.generateTrimmedWindows(resource, sequence, minTimeData, data);
 
-				if (usePriceBasedWindowTrimming) {
+				if (usePriceBasedWindowTrimming && priceBasedWindowTrimmer != null) {
 					priceBasedWindowTrimmer.trimWindows(resource, list, minTimeData);
 				}
 				travelTimeDataMap.put(resource, minTimeData);
