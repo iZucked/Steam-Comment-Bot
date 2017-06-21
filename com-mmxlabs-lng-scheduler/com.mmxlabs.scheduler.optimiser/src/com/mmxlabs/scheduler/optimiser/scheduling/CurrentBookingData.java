@@ -12,7 +12,7 @@ import java.util.TreeSet;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
-public class CurrentBookingData {
+public final class CurrentBookingData {
 	public Map<IPort, Set<IRouteOptionBooking>> assignedBookings = new HashMap<>();
 	public Map<IPort, TreeSet<IRouteOptionBooking>> unassignedBookings = new HashMap<>();
 
