@@ -22,6 +22,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -74,59 +75,34 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 		this.rootObject = (LNGScenarioModel) sel.getRootObject();
 		currentPortModel = new WeakReference<PortModel>(rootObject.getReferenceModel().getPortModel());
 
-		// final Composite c = (Composite) super.createControls(parent);
-		final Composite c2 = new Composite(this, SWT.NONE);
+		final Composite c2 = new Composite(this, SWT.NONE) {
+
+			@Override
+			protected void checkSubclass() {
+			}
+
+			@Override
+			public Point computeSize(int wHint, int hHint, boolean changed) {
+				Point p = super.computeSize(wHint, hHint, changed);
+
+				// Special handling to open dialog with an initial size but allow the control to grow after.
+				if (hHint == -1) {
+					p.y = 600;
+				} else {
+					p.y = Math.max(p.y, 600);
+				}
+				if (wHint == -1) {
+					p.x = 800;
+				} else {
+					p.x = Math.max(p.x, 800);
+				}
+				return p;
+			}
+		};
 		final GridLayout c2Layout = new GridLayout(1, false);
 		c2Layout.marginHeight = c2Layout.marginWidth = c2Layout.verticalSpacing = c2Layout.horizontalSpacing = 0;
 		c2.setLayout(c2Layout);
 
-//		final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
-
-//		final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
-//
-//		if (menuService != null) {
-//			menuService.populateContributionManager(barManager, DISTANCE_EDITOR_TOOLBAR_ID);
-//			getShell().addDisposeListener(new DisposeListener() {
-//				@Override
-//				public void widgetDisposed(final DisposeEvent e) {
-//					menuService.releaseContributions(barManager);
-//				}
-//			});
-//		}
-
-		// barManager.add(new ImportCSVAction() {
-		// @Override
-		// protected EObject getToplevelObject() {
-		// return valueProviderProvider.getModel();
-		// }
-		//
-		// @Override
-		// protected EClass getImportClass() {
-		// return PortPackage.eINSTANCE.getDistanceModel();
-		// }
-		//
-		// @Override
-		// public void addObjects(final Collection<EObject> newObjects) {
-		// assert newObjects.size() == 1;
-		// final DistanceModel newModel = (DistanceModel) newObjects.iterator().next();
-		// DistanceEditorDialog.this.distanceModel = newModel;
-		// DistanceEditorDialog.this.viewer.setInput(DistanceEditorDialog.this.distanceModel);
-		// DistanceEditorDialog.this.viewer.refresh();
-		// }
-		// });
-
-		// barManager.add(new ExportCSVAction() {
-		// @Override
-		// public List<EObject> getObjectsToExport() {
-		// return Collections.singletonList((EObject) distanceModel);
-		// }
-		//
-		// @Override
-		// public EClass getExportEClass() {
-		// return distanceModel.eClass();
-		// }
-		// });
-//
 		final Composite barComposite = new Composite(c2, SWT.NONE);
 		final GridLayout barLayout = new GridLayout(5, false);
 		barLayout.marginWidth = 2;
@@ -180,32 +156,6 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 			}
 		});
 
-		// columnFilter.addKeyListener(new KeyAdapter() {
-		// @Override
-		// public void keyPressed(final KeyEvent e) {
-		// if (e.keyCode == SWT.ESC) {
-		// if (columnFilter.getText().isEmpty()) {
-		// getButton(CANCEL).notifyListeners(SWT.Selection, new Event());
-		// } else {
-		// columnFilter.setText("");
-		// }
-		// }
-		// }
-		// });
-
-		// rowFilter.addKeyListener(new KeyAdapter() {
-		// @Override
-		// public void keyPressed(final KeyEvent e) {
-		// if (e.keyCode == SWT.ESC) {
-		// if (rowFilter.getText().isEmpty()) {
-		// getButton(CANCEL).notifyListeners(SWT.Selection, new Event());
-		// } else {
-		// rowFilter.setText("");
-		// }
-		// }
-		// }
-		// });
-
 		rowFilter.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -225,13 +175,6 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 
 		barComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-//		barManager.createControl(barComposite).setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-
-//		final CopyGridToClipboardAction copyAction = new CopyGridToClipboardAction(viewer.getGrid());
-//		copyAction.setRowHeadersIncluded(true);
-//		barManager.add(copyAction);
-//		barManager.update(true);
-
 		final Grid table = viewer.getGrid();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -243,8 +186,7 @@ public class DistanceEditorComposite extends DefaultDetailComposite {
 		viewer.setInput(distanceModel);
 
 		viewer.refresh();
-
-		c2.setLayoutData(GridDataFactory.fillDefaults().hint(800, 400).create());
+		c2.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 		final GridLayout cLayout = (GridLayout) this.getLayout();
 

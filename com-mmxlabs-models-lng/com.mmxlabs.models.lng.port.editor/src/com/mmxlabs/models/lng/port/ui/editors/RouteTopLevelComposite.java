@@ -11,11 +11,15 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -45,11 +49,14 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		if (object instanceof Route) {
+			this.setLayout(new GridLayout(1, true));
+			this.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, true));
 
 			final Route route = (Route) object;
 			final EClass eClass = object.eClass();
 			final Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
 			containerComposite.setLayout(new GridLayout(2, true));
+			containerComposite.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, true));
 
 			IDisplayComposite entryAComposite = null;
 			IDisplayComposite entryBComposite = null;
@@ -81,7 +88,6 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 
 			topLevel.display(dialogContext, root, object, range, dbc);
 
-			this.setLayout(new GridLayout(1, true));
 		} else {
 			assert false;
 			super.display(dialogContext, root, object, range, dbc);
