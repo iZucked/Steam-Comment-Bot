@@ -16,7 +16,6 @@ import javax.inject.Named;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -562,22 +561,19 @@ public class FeasibleTimeWindowTrimmer {
 	 * @param seqIndex
 	 */
 	private void setFeasibleTimeWindowsRoundTrip(IResource resource, final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData) {
-		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
+		int prevFeasibleWindowStart = Integer.MIN_VALUE;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			final MutableTimeWindow timeWindow;
 			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot)) {
 				// first load
 				feasibleWindowStart = windowStartTime[portTimeWindowsRecord.getIndex(portSlot)];
 				feasibleWindowEnd = windowEndTime[portTimeWindowsRecord.getIndex(portSlot)];
-				timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			} else {
 				feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
 						prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 				feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
-				timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			}
-			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
+			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new TimeWindow(feasibleWindowStart, feasibleWindowEnd));
 			prevFeasibleWindowStart = feasibleWindowStart;
 		}
 	}
@@ -591,10 +587,10 @@ public class FeasibleTimeWindowTrimmer {
 	private void setFeasibleTimeWindowsUsingPrevious(final IResource resource, final IPortTimeWindowsRecord portTimeWindowsRecord, final MinTravelTimeData travelTimeData, final boolean isLast) {
 		int prevFeasibleWindowStart = Integer.MIN_VALUE;
 		boolean lastSlotWasVirtual = false;
-		MutableTimeWindow rollingWindow = null;
+		TimeWindow rollingWindow = null;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 
-			final MutableTimeWindow timeWindow;
+			final TimeWindow timeWindow;
 			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
 				// first load
@@ -617,7 +613,7 @@ public class FeasibleTimeWindowTrimmer {
 								prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 						feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
 					}
-					timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
+					timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 				}
 			}
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
@@ -646,7 +642,7 @@ public class FeasibleTimeWindowTrimmer {
 			// This vessel is empty - we skipped an earlier "skip resource" check - is this important here?
 			// Finally - port rotations is wrong order (sort by next./prev then date)
 			//
-			final MutableTimeWindow timeWindow = new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd);
+			final TimeWindow timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
 	}

@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSchedulingCanalDistanceProvider {
 
@@ -21,12 +22,14 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 		IPort discharge;
 		IVessel vessel;
 		int ladenStartTime;
+		AvailableRouteChoices availableRouteChoice;
 
-		public CacheKey(final IPort load, final IPort discharge, final IVessel vessel, final int ladenStartTime) {
+		public CacheKey(final IPort load, final IPort discharge, final IVessel vessel, final int ladenStartTime, AvailableRouteChoices availableRouteChoice) {
 			this.load = load;
 			this.discharge = discharge;
 			this.vessel = vessel;
 			this.ladenStartTime = ladenStartTime;
+			this.availableRouteChoice = availableRouteChoice;
 		}
 
 		@Override
@@ -35,7 +38,11 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 				return true;
 			} else if (obj instanceof CacheKey) {
 				final CacheKey other = (CacheKey) obj;
-				return this.load == other.load && this.discharge == other.discharge && this.vessel == other.vessel && this.ladenStartTime == other.ladenStartTime;
+				return this.load == other.load //
+						&& this.discharge == other.discharge//
+						&& this.vessel == other.vessel //
+						&& this.ladenStartTime == other.ladenStartTime //
+						&& this.availableRouteChoice == other.availableRouteChoice;
 			} else {
 				return false;
 			}
@@ -49,6 +56,9 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 			result = (prime * result) + (discharge != null ? discharge.hashCode() : 0);
 			result = (prime * result) + (vessel != null ? vessel.hashCode() : 0);
 			result = (prime * result) + ladenStartTime;
+			if (availableRouteChoice != null) {
+				result = (prime * result) + availableRouteChoice.ordinal();
+			}
 			return result;
 		}
 	}
@@ -62,12 +72,13 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 	}
 
 	@Override
-	public @NonNull LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime) {
-		final CacheKey key = new CacheKey(load, discharge, vessel, ladenStartTime);
+	public @NonNull LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime,
+			AvailableRouteChoices availableRouteChoice) {
+		final CacheKey key = new CacheKey(load, discharge, vessel, ladenStartTime, availableRouteChoice);
 		@NonNull
 		LadenRouteData @Nullable [] values = cache.get(key);
 		if (values == null) {
-			values = delegate.getMinimumLadenTravelTimes(load, discharge, vessel, ladenStartTime);
+			values = delegate.getMinimumLadenTravelTimes(load, discharge, vessel, ladenStartTime, availableRouteChoice);
 			assert values != null;
 			cache.put(key, values);
 		}
@@ -86,12 +97,14 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 	}
 
 	@Override
-	public @NonNull List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden) {
-		return delegate.getTimeDataForDifferentSpeedsAndRoutes(load, discharge, vessel, cv, startTime, isLaden);
+	public @NonNull List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden,
+			AvailableRouteChoices availableRouteChoice) {
+		return delegate.getTimeDataForDifferentSpeedsAndRoutes(load, discharge, vessel, cv, startTime, isLaden, availableRouteChoice);
 	}
 
 	@Override
-	public @NonNull LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime) {
-		return delegate.getMinimumBallastTravelTimes(load, discharge, vessel, ladenStartTime);
+	public @NonNull LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime,
+			AvailableRouteChoices availableRouteChoice) {
+		return delegate.getMinimumBallastTravelTimes(load, discharge, vessel, ladenStartTime, availableRouteChoice);
 	}
 }

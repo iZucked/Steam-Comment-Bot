@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -31,9 +31,9 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	@NonNull
 	List<@NonNull IPortSlot> getSlots();
 
-	MutableTimeWindow getSlotFeasibleTimeWindow(@NonNull IPortSlot slot);
+	ITimeWindow getSlotFeasibleTimeWindow(@NonNull IPortSlot slot);
 
-	void setSlotFeasibleTimeWindow(@NonNull IPortSlot slot, MutableTimeWindow timeWindow);
+	void setSlotFeasibleTimeWindow(@NonNull IPortSlot slot, @NonNull ITimeWindow timeWindow);
 
 	int getSlotDuration(@NonNull IPortSlot slot);
 
@@ -44,7 +44,7 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
-	MutableTimeWindow getFirstSlotFeasibleTimeWindow();
+	ITimeWindow getFirstSlotFeasibleTimeWindow();
 
 	IPortSlot getFirstSlot();
 
@@ -55,9 +55,9 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 */
 	IPortSlot getReturnSlot();
 
-	void setSlot(@NonNull IPortSlot slot, MutableTimeWindow timeWindow, int duration, int index);
+	void setSlot(@NonNull IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
 
-	void setReturnSlot(@NonNull IPortSlot slot, MutableTimeWindow timeWindow, int duration, int index);
+	void setReturnSlot(@NonNull IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
 
 	int getIndex(@NonNull IPortSlot slot);
 

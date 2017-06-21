@@ -55,7 +55,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntry = new ConcurrentHashMap();
 
 	@Override
-	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final IVessel vessel) {
+	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final IVessel vessel, AvailableRouteChoices availableRouteChoices) {
 
 		List<DistanceMatrixEntry> distances = getAllDistanceValues(from, to);
 
@@ -68,6 +68,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 				itr.remove();
 			} else if (!isRouteAvailable(e.getRoute(), vessel)) {
 				// Distance available, but route is closed at this time
+				itr.remove();
+			} else if (!isRouteValid(e.getRoute(), availableRouteChoices)) {
+				// Restricted route choice
 				itr.remove();
 			}
 		}
@@ -125,19 +128,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
 
-			if (availableRouteChoices == AvailableRouteChoices.EXCLUDE_PANAMA && route == ERouteOption.PANAMA) {
-				continue;
-			}
-
-			if (availableRouteChoices == AvailableRouteChoices.DIRECT_ONLY && route != ERouteOption.DIRECT) {
-				continue;
-			}
-
-			if (availableRouteChoices == AvailableRouteChoices.PANAMA_ONLY && route != ERouteOption.PANAMA) {
-				continue;
-			}
-
-			if (availableRouteChoices == AvailableRouteChoices.SUEZ_ONLY && route != ERouteOption.SUEZ) {
+			if (!isRouteValid(route, availableRouteChoices)) {
 				continue;
 			}
 
@@ -177,5 +168,24 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			}
 			return null;
 		});
+	}
+
+	private boolean isRouteValid(ERouteOption routeOption, AvailableRouteChoices availableRouteChoice) {
+		if (availableRouteChoice == AvailableRouteChoices.EXCLUDE_PANAMA && routeOption == ERouteOption.PANAMA) {
+			return false;
+		}
+
+		if (availableRouteChoice == AvailableRouteChoices.DIRECT_ONLY && routeOption != ERouteOption.DIRECT) {
+			return false;
+		}
+
+		if (availableRouteChoice == AvailableRouteChoices.PANAMA_ONLY && routeOption != ERouteOption.PANAMA) {
+			return false;
+		}
+
+		if (availableRouteChoice == AvailableRouteChoices.SUEZ_ONLY && routeOption != ERouteOption.SUEZ) {
+			return false;
+		}
+		return true;
 	}
 }

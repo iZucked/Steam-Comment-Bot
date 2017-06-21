@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
  * An interface to provide details on routes that can be used for pairs of time windows.
@@ -32,7 +33,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime);
+	LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice);
 
 	/**
 	 * Get feasible routes for min and max times
@@ -57,17 +58,20 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 
 	/**
 	 * Return a list of potential end times based on different speeds a vessel can travel and routes it can take
+	 * 
 	 * @param load
 	 * @param discharge
-	 * @param cv TODO
+	 * @param cv
+	 *            TODO
 	 * @param vessel
 	 * @param startTime
 	 * @return
 	 */
 	@NonNull
-	List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden);
+	List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden,
+			AvailableRouteChoices availableRouteChoice);
 
 	@NonNull
-	LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime);
+	LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice);
 
 }

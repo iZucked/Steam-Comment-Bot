@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -91,13 +90,13 @@ public class PriceBasedWindowTrimmer {
 		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 
-			MutableTimeWindow timeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
+			ITimeWindow timeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
 			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
 				// first load
 				feasibleWindowStart = getFeasibleWindowStartForFirstSlot(portTimeWindowsRecord, travelTimeData, previousRecordWindow);
 				feasibleWindowEnd = getFeasibleWindowEnd(portTimeWindowsRecord, portSlot, feasibleWindowStart);
-				portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd));
+				portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new TimeWindow(feasibleWindowStart, feasibleWindowEnd));
 			} else {
 				if (prevFeasibleWindowStart == IPortSlot.NO_PRICING_DATE) {
 					feasibleWindowStart = timeWindow.getInclusiveStart();
@@ -106,7 +105,7 @@ public class PriceBasedWindowTrimmer {
 					feasibleWindowStart = Math.max(timeWindow.getInclusiveStart(), prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 					feasibleWindowEnd = Math.max(timeWindow.getExclusiveEnd(), feasibleWindowStart + 1);
 				}
-				portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new MutableTimeWindow(feasibleWindowStart, feasibleWindowEnd));
+				portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, new TimeWindow(feasibleWindowStart, feasibleWindowEnd));
 			}
 			prevFeasibleWindowStart = feasibleWindowStart;
 		}

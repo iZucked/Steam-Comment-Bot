@@ -122,7 +122,6 @@ public class TimeWindowScheduler {
 	}
 
 	public ScheduledTimeWindows schedule(final @NonNull ISequences sequences) {
-
 		final Map<IResource, MinTravelTimeData> travelTimeDataMap = new HashMap<>();
 
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = new HashMap<IResource, List<IPortTimeWindowsRecord>>();

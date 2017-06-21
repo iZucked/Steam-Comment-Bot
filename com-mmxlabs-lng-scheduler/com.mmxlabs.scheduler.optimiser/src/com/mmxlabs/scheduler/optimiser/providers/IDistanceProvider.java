@@ -31,10 +31,16 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * 
 	 * @param from
 	 * @param to
+	 * @param availableRouteChoice
 	 * @return
 	 */
 	@NonNull
-	List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to, IVessel vessel);
+	default List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to, IVessel vessel) {
+		return getDistanceValues(from, to, vessel, AvailableRouteChoices.OPTIMAL);
+	}
+
+	@NonNull
+	List<@NonNull DistanceMatrixEntry> getDistanceValues(@NonNull IPort from, @NonNull IPort to, IVessel vessel, AvailableRouteChoices availableRouteChoice);
 
 	@NonNull
 	List<@NonNull DistanceMatrixEntry> getAllDistanceValues(@NonNull IPort from, @NonNull IPort to);
