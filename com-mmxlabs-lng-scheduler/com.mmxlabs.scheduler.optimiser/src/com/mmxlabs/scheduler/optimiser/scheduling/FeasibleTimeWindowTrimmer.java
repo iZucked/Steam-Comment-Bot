@@ -365,10 +365,16 @@ public class FeasibleTimeWindowTrimmer {
 					// clip start of time window
 					windowStartTime[index] = windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1);
 					// backwards pass will fix this.
-					windowEndTime[index] = windowStartTime[index] + EMPTY_WINDOW_SIZE;
+					if (isRoundTripEnd[index]) {
+						// FIXME: This forces the previous discharge to be as early as possible. Pick a suitable window size!
+						windowEndTime[index] = windowStartTime[index] + 1 + EMPTY_WINDOW_SIZE;
+					} else {
+						// 2017/06/21 -- SG -- Is this a valid case anymore?
+						windowEndTime[index] = windowStartTime[index] + 1 + EMPTY_WINDOW_SIZE;
+					}
 				} else {
 					windowStartTime[index] = 0;
-					windowEndTime[index] = sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
+					windowEndTime[index] = 1 + sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
 				}
 			} else {
 				if (index == 0) {// first time window is special
