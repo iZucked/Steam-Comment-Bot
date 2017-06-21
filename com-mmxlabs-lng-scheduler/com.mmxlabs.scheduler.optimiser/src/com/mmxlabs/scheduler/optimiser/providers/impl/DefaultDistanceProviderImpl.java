@@ -89,6 +89,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	@Override
 	public int getDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to, final IVessel vessel) {
 
+		if (!isRouteAvailable(route, vessel)) {
+			return Integer.MAX_VALUE;
+		}
 		return getOpenDistance(route, from, to);
 	}
 
