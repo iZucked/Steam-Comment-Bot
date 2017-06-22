@@ -83,6 +83,9 @@ public class ReportTesterHelper {
 
 	public static final String CARGO_ECONS_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	public static final String CARGO_ECONS_REPORT_SHORTNAME = "CargoEcons";
+	
+	public static final String CANAL_BOOKINGS_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport";
+	public static final String CANAL_BOOKINGS_REPORT_SHORTNAME = "CanalBookings";
 
 	@FunctionalInterface
 	interface IScenarioSelection {

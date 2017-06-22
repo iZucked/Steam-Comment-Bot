@@ -41,6 +41,7 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
 		testReports(reportID, shortName, extension, null);
 	}
+
 	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception;
 
 	@Test
@@ -99,9 +100,15 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 
 	@Test
 	@Category(ReportTest.class)
+	public void testCanalBookingsReport() throws Exception {
+		testReports(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	@Category(ReportTest.class)
 	public void testExposuresReport() throws Exception {
 		Assume.assumeTrue(LicenseFeatures.isPermitted("features:exposures"));
-		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html", instance-> {
+		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html", instance -> {
 			try (ModelReference ref = instance.getReference("ExposuresReportView")) {
 
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
