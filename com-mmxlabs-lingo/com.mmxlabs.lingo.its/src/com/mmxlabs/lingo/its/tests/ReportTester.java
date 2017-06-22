@@ -21,6 +21,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class ReportTester {
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
 	// Never commit as true
-	private static final boolean storeReports = false;
+	private static final TestMode storeReports = TestMode.Run;
 
 	public static void testReportsWithElement(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, String elementID,
 			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {
@@ -88,6 +89,8 @@ public class ReportTester {
 	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension,
 			@Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 
+		Assume.assumeTrue(storeReports != TestMode.Skip);
+
 		// A side-effect is the initial evaluation.
 		LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance.getInstance();
 		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(lngScenarioModel, true);
@@ -103,7 +106,7 @@ public class ReportTester {
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();
 		Assert.assertNotNull(actualContents);
-		if (storeReports) {
+		if (storeReports == TestMode.Generate) {
 
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
@@ -141,6 +144,7 @@ public class ReportTester {
 
 	public static void testPinDiffReports(final ScenarioInstance pinInstance, ScenarioInstance refInstance, final URL scenarioURL, final String reportID, final String shortName,
 			final String extension) throws Exception {
+		Assume.assumeTrue(storeReports != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 		final LNGScenarioRunner pinRunner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation((LNGScenarioModel) pinInstance.getInstance(), true);
@@ -156,7 +160,7 @@ public class ReportTester {
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();
 		Assert.assertNotNull(actualContents);
-		if (storeReports) {
+		if (storeReports == TestMode.Generate) {
 
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
@@ -194,6 +198,7 @@ public class ReportTester {
 
 	public static void testActionPlanReport(final List<ScenarioInstance> orderedInstances, final URL scenarioURL, final String reportID, final String shortName, final String extension)
 			throws Exception {
+		Assume.assumeTrue(storeReports != TestMode.Skip);
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
 
@@ -211,7 +216,7 @@ public class ReportTester {
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();
 		Assert.assertNotNull(actualContents);
-		if (storeReports) {
+		if (storeReports == TestMode.Generate) {
 
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 

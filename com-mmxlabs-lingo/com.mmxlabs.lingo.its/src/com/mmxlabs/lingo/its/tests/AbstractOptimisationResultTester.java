@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -72,7 +73,7 @@ public class AbstractOptimisationResultTester {
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
-	protected static final boolean storeFitnessMap = false;
+	protected static final TestMode storeFitnessMap = TestMode.Run;
 
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
@@ -169,24 +170,25 @@ public class AbstractOptimisationResultTester {
 	}
 
 	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
+		Assume.assumeTrue(storeFitnessMap != TestMode.Skip);
 
 		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
 
 		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
-		final Properties props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap);
-		if (!storeFitnessMap) {
+		final Properties props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap == TestMode.Generate);
+		if (storeFitnessMap == TestMode.Generate) {
+			TesterUtil.storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+		} else {
 			// Assert old and new are equal
 			TesterUtil.testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
-		} else {
-			TesterUtil.storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 		}
 
 		final IMultiStateResult result = scenarioRunner.run();
 
 		boolean checkSolutions = true;
 		// Store the number of extra solutions so we can verify we get the same amount back out
-		if (storeFitnessMap) {
+		if (storeFitnessMap == TestMode.Generate) {
 			// FIXME: Constant
 			props.put("solution-count", Integer.toString(result.getSolutions().size()));
 		} else {
@@ -204,7 +206,7 @@ public class AbstractOptimisationResultTester {
 			for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
 				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(p.getSecond());
 				final String mapName = String.format("solution-%d", i++);
-				if (storeFitnessMap) {
+				if (storeFitnessMap == TestMode.Generate) {
 					TesterUtil.storeFitnesses(props, mapName, currentEndFitnesses);
 				} else {
 					// Check for old test cases where we do not have this data stored, we do not want to abort here.
@@ -219,7 +221,7 @@ public class AbstractOptimisationResultTester {
 		// Check final optimised result
 		{
 			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
-			if (storeFitnessMap) {
+			if (storeFitnessMap == TestMode.Generate) {
 				TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 			} else {
 				// Assert old and new are equal
@@ -227,7 +229,7 @@ public class AbstractOptimisationResultTester {
 			}
 		}
 
-		if (storeFitnessMap) {
+		if (storeFitnessMap == TestMode.Generate) {
 			try {
 				TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
 			} catch (final URISyntaxException e) {
