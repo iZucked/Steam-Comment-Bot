@@ -187,7 +187,6 @@ public class CanalBookingsReport extends ViewPart {
 		GridViewerHelper.configureLookAndFeel(column);
 
 		column.getColumn().setText(title);
-		column.getColumn().setWidth(50);
 		column.setLabelProvider(new CellLabelProvider() {
 
 			@Override
@@ -206,6 +205,8 @@ public class CanalBookingsReport extends ViewPart {
 
 		final IComparableProvider provider = (o) -> sortFunction.apply((RowData) o);
 		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
+
+		column.getColumn().pack();
 
 		return column;
 	}
