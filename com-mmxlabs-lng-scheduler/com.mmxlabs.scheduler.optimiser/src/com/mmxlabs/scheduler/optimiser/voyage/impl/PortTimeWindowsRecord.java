@@ -140,6 +140,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		this.returnSlot = slot;
 	}
 
+	@Override
 	public void setReturnSlot(final IPortSlot slot, final ITimeWindow timeWindow, final int duration, final int index) {
 		setSlot(slot, timeWindow, duration, index);
 		// Return slot should not be in list
