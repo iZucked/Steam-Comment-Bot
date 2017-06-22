@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -32,8 +32,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.standard.CanalBookingsReportTransformer.RowData;
-import com.mmxlabs.models.lng.port.EntryPoint;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -155,196 +153,24 @@ public class CanalBookingsReport extends ViewPart {
 
 		viewer.setInput(new ArrayList<>());
 
-		EObjectTableViewerSortingSupport tv = new EObjectTableViewerSortingSupport();
-		viewer.setComparator(tv.createViewerComparer());
+		final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
+		viewer.setComparator(sortingSupport.createViewerComparer());
 
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
+		scheduleColumn = createColumn(sortingSupport, "Schedule", rowData -> rowData.scheduleName, rowData -> rowData.scheduleName);
 
-			column.getColumn().setText("Schedule");
-			column.getColumn().setWidth(50);
-			column.setLabelProvider(new CellLabelProvider() {
+		createColumn(sortingSupport, "Pre-booked", rowData -> (rowData.preBooked) ? "Yes" : "No", rowData -> rowData.preBooked);
 
-				@Override
-				public void update(final ViewerCell cell) {
+		createColumn(sortingSupport, "Canal", rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString(),
+				rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString());
 
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						cell.setText(rowData.scheduleName);
-					} else {
-						cell.setText("");
-					}
-				}
-			});
+		createColumn(sortingSupport, "Canal Entry", rowData -> (rowData.entryPoint == null) ? "" : rowData.entryPoint.getName(),
+				rowData -> (rowData.entryPoint == null) ? "" : rowData.entryPoint.getName());
 
-			scheduleColumn = column;
-			tv.addSortableColumn(viewer, column, column.getColumn());
-			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).scheduleName));
-		}
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
+		createColumn(sortingSupport, "Date", rowData -> Formatters.asLocalDateFormatter.render(rowData.bookingDate), rowData -> rowData.bookingDate);
 
-			column.getColumn().setText("Pre-booked");
-			column.getColumn().setWidth(50);
-			column.setLabelProvider(new CellLabelProvider() {
+		createColumn(sortingSupport, "Event", rowData -> (rowData.event == null) ? "" : rowData.event.name(), rowData -> (rowData.event == null) ? "" : rowData.event.name());
 
-				@Override
-				public void update(final ViewerCell cell) {
-
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						if (rowData.preBooked) {
-							cell.setText("Yes");
-						} else {
-							cell.setText("No");
-						}
-					} else {
-						cell.setText("");
-					}
-				}
-			});
-			tv.addSortableColumn(viewer, column, column.getColumn());
-			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).preBooked));
-		}
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
-
-			column.getColumn().setText("Canal");
-			column.getColumn().setWidth(50);
-			column.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						if (rowData.routeOption != null) {
-							cell.setText(rowData.routeOption.toString());
-						} else {
-							cell.setText("");
-						}
-					} else {
-						cell.setText("");
-					}
-				}
-			});
-		}
-
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
-
-			column.getColumn().setText("Canal Entry");
-			column.getColumn().setWidth(50);
-			column.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						@Nullable
-						final EntryPoint entryPoint = rowData.entryPoint;
-						if (entryPoint != null) {
-							cell.setText(entryPoint.getName());
-						} else {
-							cell.setText("");
-						}
-					} else {
-						cell.setText("");
-					}
-				}
-			});
-			tv.addSortableColumn(viewer, column, column.getColumn());
-			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).entryPoint != null ? ((RowData) o).entryPoint.getName() : ""));
-		}
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
-
-			column.getColumn().setText("Date");
-			column.getColumn().setWidth(50);
-
-			column.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						if (rowData.bookingDate != null) {
-							cell.setText(Formatters.asLocalDateFormatter.render(rowData.bookingDate));
-						} else {
-							cell.setText("");
-						}
-					} else {
-						cell.setText("");
-					}
-				}
-			});
-			tv.addSortableColumn(viewer, column, column.getColumn());
-			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).bookingDate));
-		}
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
-
-			column.getColumn().setText("Event");
-			column.getColumn().setWidth(50);
-			column.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						@Nullable
-						final PortVisit event = rowData.event;
-						if (event != null) {
-							cell.setText(event.name());
-						} else {
-							cell.setText("");
-						}
-					} else {
-						cell.setText("");
-					}
-				}
-			});
-			tv.addSortableColumn(viewer, column, column.getColumn());
-			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).event != null ? ((RowData) o).event.name() : null));
-		}
-		{
-			final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-			GridViewerHelper.configureLookAndFeel(column);
-
-			column.getColumn().setText("Period");
-			column.getColumn().setWidth(50);
-			column.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-
-					final Object element = cell.getElement();
-					if (element instanceof RowData) {
-						final RowData rowData = (RowData) element;
-						cell.setText(rowData.period);
-					} else {
-						cell.setText("");
-					}
-				}
-			});
-			tv.addSortableColumn(viewer, column, column.getColumn());
-			column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, (IComparableProvider) (o -> ((RowData) o).period));
-		}
+		createColumn(sortingSupport, "Period", rowData -> rowData.period, rowData -> rowData.period);
 
 		viewer.getGrid().setLinesVisible(true);
 
@@ -353,6 +179,35 @@ public class CanalBookingsReport extends ViewPart {
 
 		makeActions();
 
+	}
+
+	private GridViewerColumn createColumn(final EObjectTableViewerSortingSupport tv, final String title, final Function<RowData, String> labelProvider,
+			final Function<RowData, Comparable> sortFunction) {
+		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+		GridViewerHelper.configureLookAndFeel(column);
+
+		column.getColumn().setText(title);
+		column.getColumn().setWidth(50);
+		column.setLabelProvider(new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+
+				final Object element = cell.getElement();
+				if (element instanceof RowData) {
+					final RowData rowData = (RowData) element;
+					cell.setText(labelProvider.apply(rowData));
+				} else {
+					cell.setText("");
+				}
+			}
+		});
+		tv.addSortableColumn(viewer, column, column.getColumn());
+
+		final IComparableProvider provider = (o) -> sortFunction.apply((RowData) o);
+		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
+
+		return column;
 	}
 
 	int getTextWidth(final int minWidth, final String string) {
