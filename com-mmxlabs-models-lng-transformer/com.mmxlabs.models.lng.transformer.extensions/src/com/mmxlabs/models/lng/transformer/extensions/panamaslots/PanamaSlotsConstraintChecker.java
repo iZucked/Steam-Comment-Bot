@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -34,9 +35,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
  * An implementation of {@link IConstraintChecker} to forbid certain {@link ISequenceElement} pairings
  * 
  */
-public class PanamaSlotsConstraintChecker implements IConstraintChecker {
+public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraintChecker {
 
-	private final String name;
+	private final @NonNull String name;
 
 	@Inject
 	private IPanamaBookingsProvider panamaSlotsProvider;
@@ -49,8 +50,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	private Set<IPortSlot> unbookedSlots;
 
-	@SuppressWarnings("null")
-	public PanamaSlotsConstraintChecker(final String name) {
+	public PanamaSlotsConstraintChecker(final @NonNull String name) {
 		this.name = name;
 	}
 
@@ -66,6 +66,16 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
+
+		return checkConstraints(sequences, false);
+	}
+
+	@Override
+	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences) {
+		checkConstraints(fullSequences, true);
+	}
+
+	public boolean checkConstraints(final ISequences sequences, boolean initialState) {
 
 		scheduler.setUseCanalBasedWindowTrimming(true);
 		scheduler.setUsePriceBasedWindowTrimming(false);
@@ -84,8 +94,7 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 		// TODO: nominal vessel
 		// TODO: original solution might not be feasible at 16 knots and 24h early arrival time
 
-		LOOP_RESOURCE:
-		for (int r = 0; r < sequences.getResources().size(); r++) {
+		LOOP_RESOURCE: for (int r = 0; r < sequences.getResources().size(); r++) {
 			final IResource resource = sequences.getResources().get(r);
 			final ISequence sequence = sequences.getSequence(resource);
 
@@ -106,7 +115,6 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 			}
 
 			final List<IPortTimeWindowsRecord> records = trimmedWindows.get(resource);
-			final IPortSlot prevSlot = null;
 			for (final IPortTimeWindowsRecord record : records) {
 				for (final IPortSlot slot : record.getSlots()) {
 					// TODO - fill in details
@@ -134,7 +142,8 @@ public class PanamaSlotsConstraintChecker implements IConstraintChecker {
 			}
 		}
 
-		if (unbookedSlots != null) {
+		if (!initialState) {
+			assert unbookedSlots != null;
 			// strict constraint
 			currentUnbookedSlots.removeAll(unbookedSlots);
 			currentUnbookedSlots.removeAll(currentUnbookedSlotsInRelaxed);
