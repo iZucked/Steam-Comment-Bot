@@ -243,6 +243,7 @@ public class PortTimesRecordMaker {
 			IPortSlot returnSlot = record.getReturnSlot();
 			if (returnSlot != null) {
 				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
+					// TODO: Delegate to endEventScheduler so it can be customised
 					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
 					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
 					int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
