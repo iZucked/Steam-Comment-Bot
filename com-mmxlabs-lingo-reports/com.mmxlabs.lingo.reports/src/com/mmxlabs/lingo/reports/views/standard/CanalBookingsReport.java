@@ -400,40 +400,7 @@ public class CanalBookingsReport extends ViewPart {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
-
-		// if (IProvideEditorInputScenario.class.isAssignableFrom(adapter)) {
-		// return (T) new IProvideEditorInputScenario() {
-		// @Override
-		// public void provideScenarioInstance(ScenarioResult scenarioResult) {
-		//
-		// if (HeadlineReportView.this.modelReference != null) {
-		// HeadlineReportView.this.modelReference.close();
-		// HeadlineReportView.this.modelReference = null;
-		// }
-		// HeadlineReportView.this.currentActiveEditor = null;
-		// ScheduleModel scheduleModel = null;
-		//
-		// if (scenarioResult != null) {
-		// ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-		// if (!scenarioInstance.isLoadFailure()) {
-		// HeadlineReportView.this.modelReference = scenarioInstance.getReference("HeadlineReportView:2");
-		// final EObject instance = modelReference.getInstance();
-		// if (instance instanceof LNGScenarioModel) {
-		// final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-		// scheduleModel = lngScenarioModel.getScheduleModel();
-		// }
-		// }
-		// }
-		// // this.activeEditor = activeEditor;
-		// HeadlineReportView.this.scheduleModel = scheduleModel;
-		//
-		// }
-		// };
-		// }
-
-		if (IReportContents.class.isAssignableFrom(adapter))
-
-		{
+		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
@@ -444,6 +411,7 @@ public class CanalBookingsReport extends ViewPart {
 					return contents;
 				}
 			};
+
 		}
 
 		return super.getAdapter(adapter);
