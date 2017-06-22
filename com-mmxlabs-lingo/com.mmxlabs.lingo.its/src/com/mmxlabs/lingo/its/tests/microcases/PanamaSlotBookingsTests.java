@@ -107,7 +107,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				.build();
 		return cargo;
 	}
-	
+
 	private VesselAvailability getDefaultVesselAvailability() {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
@@ -119,7 +119,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
-	public void panamaSlotAvailableTest() {
+	public void panamaSlotAvailableTest_Constraint() {
 
 		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
@@ -158,10 +158,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
 				injector.injectMembers(checker);
 
+				// Set blank sequences as initial state
+				checker.sequencesAccepted(SequenceHelper.createSequences(scenarioToOptimiserBridge), SequenceHelper.createSequences(scenarioToOptimiserBridge));
+
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge), null);
 				assertTrue(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
@@ -169,7 +171,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ MicroTest.class })
-	public void panamaSlotNoDubleAssignmentTest() {
+	public void panamaSlotNoDoubleAssignmentTest() {
 
 		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
@@ -585,7 +587,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void choosePanamaIfRelaxedTest() {
@@ -637,13 +639,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final IResource r0 = manipulatedSequences.getResources().get(0);
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
-				
+
 				assertEquals(AvailableRouteChoices.OPTIMAL, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
 				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void marginTest() {
