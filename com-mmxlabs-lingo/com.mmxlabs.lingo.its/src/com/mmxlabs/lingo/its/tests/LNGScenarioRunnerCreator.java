@@ -141,6 +141,27 @@ public class LNGScenarioRunnerCreator {
 		});
 	}
 
+	public static <E extends Exception> void withOptimisationRunner(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimisationPlan optimisationPlan,
+			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer, @Nullable IOptimiserInjectorService optimiserInjectorService, String... extraHints) throws E {
+
+		String[] hints = new String[1 + (extraHints == null ? 0 : extraHints.length)];
+		hints[0] = LNGTransformerHelper.HINT_OPTIMISE_LSO;
+		if (extraHints != null) {
+			int idx = 1;
+			for (String h : extraHints) {
+				hints[idx++] = h;
+			}
+		}
+
+		withExecutorService(executorService -> {
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+					optimiserInjectorService, null, false, hints);
+
+			scenarioRunner.evaluateInitialState();
+			consumer.accept(scenarioRunner);
+		});
+	}
+
 	public static <E extends Exception> void withLegacyOptimisationRunner(@NonNull final LNGScenarioModel originalScenario, @Nullable final Boolean withGCO, @Nullable final Integer lsoIterations,
 			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer) throws E {
 		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
