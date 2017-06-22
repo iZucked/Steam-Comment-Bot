@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scheduler.optimiser.components.impl.RouteOptionBooking;
 
 /**
  * 
@@ -43,13 +44,15 @@ public class CanalBookingsReportTransformer {
 		public final @Nullable EntryPoint entryPoint;
 		public final @Nullable PortVisit event;
 		public final RouteOption routeOption;
+		public final CanalBookingSlot booking;
 		public final String period;
 
-		public RowData(final @NonNull String scheduleName, boolean preBooked, RouteOption routeOption, final @NonNull LocalDate bookingDate, final @NonNull EntryPoint entryPoint,
-				final @Nullable PortVisit usedSlot, String period) {
+		public RowData(final @NonNull String scheduleName, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
+				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
+			this.booking = booking;
 			this.routeOption = routeOption;
 			this.bookingDate = bookingDate;
 			this.entryPoint = entryPoint;
@@ -62,6 +65,7 @@ public class CanalBookingsReportTransformer {
 		public RowData() {
 			super();
 			this.scheduleName = "";
+			this.booking = null;
 			this.bookingDate = null;
 			this.entryPoint = null;
 			this.event = null;
@@ -118,11 +122,11 @@ public class CanalBookingsReportTransformer {
 
 					if (journey.getCanalBooking() != null) {
 						CanalBookingSlot booking = journey.getCanalBooking();
-						result.add(new RowData(scenarioInstance.getName(), true, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
+						result.add(new RowData(scenarioInstance.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
 								(PortVisit) journey.getPreviousEvent(), period));
 						existingBookings.remove(booking);
 					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-						result.add(new RowData(scenarioInstance.getName(), false, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
+						result.add(new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
 								(PortVisit) journey.getPreviousEvent(), period));
 					}
 				}
@@ -131,7 +135,7 @@ public class CanalBookingsReportTransformer {
 
 		// unused options
 		for (CanalBookingSlot booking : existingBookings) {
-			result.add(new RowData(scenarioInstance.getName(), true, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused"));
+			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused"));
 		}
 
 		return result;

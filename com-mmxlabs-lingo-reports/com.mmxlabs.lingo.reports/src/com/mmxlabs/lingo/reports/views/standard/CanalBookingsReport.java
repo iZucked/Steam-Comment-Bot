@@ -6,13 +6,19 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -26,14 +32,22 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.collect.Lists;
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.components.AbstractReportView;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.standard.CanalBookingsReportTransformer.RowData;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -51,69 +65,77 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * @author Simon Goodall
  * 
  */
-public class CanalBookingsReport extends ViewPart {
+public class CanalBookingsReport extends AbstractReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport";
 
-	private SelectedScenariosService selectedScenariosService;
-
 	private GridTableViewer viewer;
 
 	private Font boldFont;
 
-	@NonNull
-	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+	private final CanalBookingsReportTransformer transformer = new CanalBookingsReportTransformer();
 
-		private final CanalBookingsReportTransformer transformer = new CanalBookingsReportTransformer();
+	@Override
+	protected Object doSelectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others) {
+		final List<RowData> rows = new LinkedList<>();
 
-		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					final List<RowData> rowData = new LinkedList<>();
-					RowData pPinnedData = null;
-					if (pinned != null) {
-						final ScheduleModel other_scheduleModel = pinned.getTypedResult(ScheduleModel.class);
-						if (other_scheduleModel != null) {
-							final Schedule schedule = other_scheduleModel.getSchedule();
-							if (schedule != null) {
-								rowData.addAll(transformer.transform(schedule, pinned));
-							}
-						}
-					}
-
-					for (final ScenarioResult other : others) {
-						final ScheduleModel other_scheduleModel = other.getTypedResult(ScheduleModel.class);
-						if (other_scheduleModel != null) {
-							final Schedule schedule = other_scheduleModel.getSchedule();
-							if (schedule != null) {
-								rowData.addAll(transformer.transform(schedule, other));
-							}
-						}
-					}
-
-					if (rowData.isEmpty()) {
-						if (pPinnedData != null) {
-							rowData.add(pPinnedData);
-							pPinnedData = null;
-						} else {
-							rowData.add(new RowData());
-						}
-					}
-
-					if (scheduleColumn != null) {
-						scheduleColumn.getColumn().setVisible((others.size() + (pinned == null ? 0 : 1)) > 1);
-					}
-
-					ViewerHelper.setInput(viewer, true, rowData);
-				}
-			};
-			RunnerHelper.exec(r, block);
+		final List<ScenarioResult> scenarios = new LinkedList<>();
+		if (pinned != null) {
+			scenarios.add(pinned);
 		}
-	};
+		scenarios.addAll(others);
+
+		for (final ScenarioResult other : scenarios) {
+			final ScheduleModel other_scheduleModel = other.getTypedResult(ScheduleModel.class);
+			if (other_scheduleModel != null) {
+				final Schedule schedule = other_scheduleModel.getSchedule();
+				if (schedule != null) {
+					@NonNull
+					final List<RowData> transform = transformer.transform(schedule, other);
+					transform.forEach(rowData -> {
+						rows.add(rowData);
+						addElementMapping(rowData, other);
+
+						final Set<Object> equivalents = new HashSet<>();
+						if (rowData.event != null) {
+							equivalents.add(rowData.event);
+							if (rowData.event instanceof SlotVisit) {
+								final SlotVisit slotVisit = (SlotVisit) rowData.event;
+								equivalents.add(slotVisit.getSlotAllocation().getCargoAllocation());
+								Slot slot = slotVisit.getSlotAllocation().getSlot();
+								if (slot != null) {
+									equivalents.add(slot);
+									equivalents.add(slot.getCargo());
+								}
+							} else if (rowData.event instanceof VesselEventVisit) {
+								final VesselEventVisit vesselEventVisit = (VesselEventVisit) rowData.event;
+								equivalents.add(vesselEventVisit.getVesselEvent());
+							}
+						}
+						if (rowData.booking != null) {
+							equivalents.add(rowData.booking);
+						}
+
+						final Event nextEvent = rowData.event != null ? rowData.event.getNextEvent() : null;
+						final Journey nextJourney = nextEvent instanceof Journey ? (Journey) nextEvent : null;
+						equivalents.add(nextJourney);
+						setInputEquivalents(rowData, equivalents);
+					});
+				}
+			}
+		}
+
+		if (rows.isEmpty()) {
+			rows.add(new RowData());
+		}
+
+		if (scheduleColumn != null) {
+			scheduleColumn.getColumn().setVisible((others.size() + (pinned == null ? 0 : 1)) > 1);
+		}
+		return rows;
+	}
 
 	private GridViewerColumn scheduleColumn;
 
@@ -126,6 +148,7 @@ public class CanalBookingsReport extends ViewPart {
 	 */
 	public CanalBookingsReport() {
 		// super("com.mmxlabs.lingo.doc.Reports_CanalBookingsReport");
+		super();
 	}
 
 	/**
@@ -133,7 +156,6 @@ public class CanalBookingsReport extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		{
 			final Font systemFont = Display.getDefault().getSystemFont();
@@ -143,7 +165,7 @@ public class CanalBookingsReport extends ViewPart {
 			fd.setStyle(fd.getStyle() | SWT.BOLD);
 			boldFont = new Font(Display.getDefault(), fd);
 		}
-		viewer = new GridTableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer = createGridTableViewer(parent, SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
 
 		viewer.getGrid().setHeaderVisible(true);
@@ -174,11 +196,9 @@ public class CanalBookingsReport extends ViewPart {
 
 		viewer.getGrid().setLinesVisible(true);
 
-		selectedScenariosService.addListener(selectedScenariosServiceListener);
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
-
 		makeActions();
 
+		postCreate(viewer);
 	}
 
 	private GridViewerColumn createColumn(final EObjectTableViewerSortingSupport tv, final String title, final Function<RowData, String> labelProvider,
@@ -248,8 +268,6 @@ public class CanalBookingsReport extends ViewPart {
 			boldFont = null;
 		}
 
-		selectedScenariosService.removeListener(selectedScenariosServiceListener);
-
 		super.dispose();
 	}
 
@@ -282,6 +300,42 @@ public class CanalBookingsReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
 
 		getViewSite().getActionBars().getToolBarManager().update(true);
+	}
+
+	@Override
+	protected Viewer getViewer() {
+		return viewer;
+	}
+
+	@Override
+	protected boolean handleSelections() {
+		return true;
+	}
+
+	@Override
+	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
+
+		final List<Object> newSelection = new LinkedList<Object>();
+		for (final Object o : selection) {
+			if (o instanceof RowData) {
+				final RowData rowData = (RowData) o;
+				if (rowData.event != null) {
+					newSelection.add(rowData.event);
+					if (rowData.event instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) rowData.event;
+						newSelection.add(slotVisit.getSlotAllocation().getSlot());
+					} else if (rowData.event instanceof VesselEventVisit) {
+						final VesselEventVisit vesselEventVisit = (VesselEventVisit) rowData.event;
+						newSelection.add(vesselEventVisit.getVesselEvent());
+					}
+				}
+				if (rowData.booking != null) {
+					newSelection.add(rowData.booking);
+				}
+			}
+		}
+
+		return newSelection;
 	}
 
 }
