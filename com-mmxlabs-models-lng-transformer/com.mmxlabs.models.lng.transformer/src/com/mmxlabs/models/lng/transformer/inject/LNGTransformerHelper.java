@@ -33,7 +33,10 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  */
 public class LNGTransformerHelper {
 
-	
+	/**
+	 * Ignore cache override settings as we will re-override in a unit test module and need to avoid binding clashes
+	 */
+	public static final @NonNull String HINT_TESTING_IGNORE_CACHE_SETTINGS= "hint-ignore-cache-settings";	
 	
 	/**
 	 */
