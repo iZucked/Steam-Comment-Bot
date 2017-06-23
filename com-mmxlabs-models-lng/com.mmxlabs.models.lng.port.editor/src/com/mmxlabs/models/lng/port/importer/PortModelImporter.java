@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
@@ -170,8 +171,7 @@ public class PortModelImporter implements ISubmodelImporter {
 		// Needs to be called before the canals are programmatically created because the DefaultClassImporter calls
 		// context.registerNamedObject((NamedObject) o);
 		if (inputs.containsKey(CANAL_PORTS_KEY)) {
-			importedRoutes.addAll(
-					canalPortsImporter.importObjects(PortPackage.Literals.ROUTE, inputs.get(CANAL_PORTS_KEY), context).stream().map(e -> (Route) e).collect(Collectors.toList()));
+			importedRoutes.addAll(canalPortsImporter.importObjects(PortPackage.Literals.ROUTE, inputs.get(CANAL_PORTS_KEY), context).stream().map(e -> (Route) e).collect(Collectors.toList()));
 		}
 
 		if (inputs.containsKey(DISTANCES_KEY)) {
@@ -249,6 +249,32 @@ public class PortModelImporter implements ISubmodelImporter {
 						}
 					}
 				});
+			}
+			for (Route route : portModel.getRoutes()) {
+				if (route.getRouteOption() == RouteOption.PANAMA) {
+					if (route.getEntryA() == null) {
+						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						entryPoint.setName("Panama East");
+						route.setEntryA(entryPoint);
+					}
+					if (route.getEntryB() == null) {
+						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						entryPoint.setName("Panama West");
+						route.setEntryB(entryPoint);
+					}
+				}
+				if (route.getRouteOption() == RouteOption.SUEZ) {
+					if (route.getEntryA() == null) {
+						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						entryPoint.setName("Suez North");
+						route.setEntryA(entryPoint);
+					}
+					if (route.getEntryB() == null) {
+						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						entryPoint.setName("Suez South");
+						route.setEntryB(entryPoint);
+					}
+				}
 			}
 		}
 		return result;
