@@ -2935,14 +2935,13 @@ public class LNGScenarioTransformer {
 	 * @param modelEntityMap
 	 * @return
 	 */
-	private NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(@NonNull final ISchedulerBuilder builder,
-			@NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation,
-			@NonNull final Association<CharterIndex, ILongCurve> charterIndexAssociation, @NonNull final ModelEntityMap modelEntityMap) {
+	private Association<Vessel, IVessel> buildFleet(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation, @NonNull final Association<CharterIndex, ILongCurve> charterIndexAssociation,
+			@NonNull final ModelEntityMap modelEntityMap) {
 
 		/*
 		 * Build the fleet model - first we must create the vessel classes from the model
 		 */
-		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<VesselClass, IVesselClass>();
 		final Association<Vessel, IVessel> vesselAssociation = new Association<Vessel, IVessel>();
 		final Association<VesselAvailability, IVesselAvailability> vesselAvailabilityAssociation = new Association<VesselAvailability, IVesselAvailability>();
 
