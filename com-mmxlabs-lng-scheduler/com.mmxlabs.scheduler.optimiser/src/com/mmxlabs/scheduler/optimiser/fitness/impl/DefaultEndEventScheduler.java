@@ -135,6 +135,16 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		if (false && extraExtent > 0) {
 			// TODO: Cacheable!
 
+//			Plan
+			// Assume spot charter only (end cold, NBO ballast)
+			// Assume choice is best speed for FBO vs Base and routechoice
+			// Generate big table per vessel class of speed (to .1 knots) to LNG (mmbtu) and base fuel (MT) per day, canal lump sums. 
+			// Iterate of .5 knot intervals to find best interval, reduce to .1 knots within interval (nbo speed to max speed).
+			// Find lowest cost! Prefer NBO speed DIRECT if conflict.
+//			 Assume can switch to nbo+base if needed for capacity constraint.
+			
+			
+			
 			// >>>>>>>>>>>>>SPLIT OFF INTO OVERRIABLE METHOD
 
 			// There are some cases where we wish to evaluate the best time to
