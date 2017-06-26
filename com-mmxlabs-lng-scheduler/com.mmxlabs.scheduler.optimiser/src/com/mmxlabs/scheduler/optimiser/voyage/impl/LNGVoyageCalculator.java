@@ -1135,7 +1135,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					if (portSlot instanceof IDischargeOption) {
 						final IDischargeOption dischargeOption = (IDischargeOption) portSlot;
 						final int cargoCVValue = portDetails.getOptions().getCargoCVValue();
-						heelInM3 -= dischargeOption.getMaxDischargeVolume(cargoCVValue);
+						// Check for Long.MAX_VALUE and keep heel positive
+						long maxDischargeVolume = dischargeOption.getMaxDischargeVolume(cargoCVValue);
+						if (maxDischargeVolume == Long.MAX_VALUE) {
+							heelInM3 = 0;
+						} else {
+							heelInM3 -= maxDischargeVolume;
+						}
+						if (heelInM3 < 0) {
+							heelInM3 = 0;
+						}
 					}
 				} else if (e instanceof VoyageDetails) {
 					final VoyageDetails voyageDetails = (VoyageDetails) e;

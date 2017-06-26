@@ -11,7 +11,9 @@ import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -38,13 +40,17 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 	@NotCaching
 	private Provider<IEntityValueCalculator> entityValueCalculatorProvider;
 
+	@Inject
+	@Named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)
+	private long defaultMaxVolumeInM3;
+
 	@Override
 	protected @NonNull AllocationAnnotation calculateTransferMode(final AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
 		final AllocationAnnotation annotation = createNewAnnotation(allocationRecord, slots);
 
 		// Note: Calculations in MMBTU
 		final long startVolumeInMMBTu;
-		final long vesselCapacityInMMBTu;
+		long vesselCapacityInMMBTu;
 
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
 		// Assuming a single cargo CV!
@@ -65,6 +71,18 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			startVolumeInMMBTu = 0;
 			vesselCapacityInMMBTu = Long.MAX_VALUE;
 		}
+
+		// If there are no upper bounds, apply default volume limit
+		boolean isAllMaxValue = vesselCapacityInMMBTu == Long.MAX_VALUE;
+		if (isAllMaxValue) {
+			for (int i = 0; i < slots.size(); ++i) {
+				isAllMaxValue &= allocationRecord.maxVolumesInMMBtu.get(i) == Long.MAX_VALUE;
+			}
+		}
+		if (isAllMaxValue) {
+			vesselCapacityInMMBTu = Calculator.convertM3ToMMBTu(defaultMaxVolumeInM3, defaultCargoCVValue);
+		}
+
 		final long availableCargoSpaceMMBTu = vesselCapacityInMMBTu - startVolumeInMMBTu;
 
 		long maxTransferVolumeMMBTu = availableCargoSpaceMMBTu;
@@ -204,7 +222,8 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 			if (unusedVolumeInMMBTU > 0 && allocationRecord.preferShortLoadOverLeftoverHeel) {
 				// Use up the full heel range before short loading....
-				final long additionalEndHeelInMMBtu = allocationRecord.maximumEndVolumeInM3 == Long.MAX_VALUE ? unusedVolumeInMMBTU : Calculator.convertM3ToMMBTu(allocationRecord.maximumEndVolumeInM3 - allocationRecord.minimumEndVolumeInM3, scaleFactor * cargoCV);
+				final long additionalEndHeelInMMBtu = allocationRecord.maximumEndVolumeInM3 == Long.MAX_VALUE ? unusedVolumeInMMBTU
+						: Calculator.convertM3ToMMBTu(allocationRecord.maximumEndVolumeInM3 - allocationRecord.minimumEndVolumeInM3, scaleFactor * cargoCV);
 				loadVolumeInMMBTU -= Math.max(0, unusedVolumeInMMBTU - additionalEndHeelInMMBtu);
 			}
 		}
