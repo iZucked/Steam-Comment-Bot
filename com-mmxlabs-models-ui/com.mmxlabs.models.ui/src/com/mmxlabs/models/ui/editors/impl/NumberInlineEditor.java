@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.google.common.base.Objects;
+
 /**
  * TODO look at nebula formattedtext
  * 
@@ -78,10 +80,28 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 		if (type == EcorePackage.eINSTANCE.getELong()) {
 			defaultValue = Long.parseLong(defaultValueString);
-			formatter = format == null ? new LongFormatter() : new LongFormatter(format);
+			formatter = format == null ? new LongFormatter() : new LongFormatter(format) {
+
+				@Override
+				public String getDisplayString() {
+					if (Objects.equal(Long.MAX_VALUE, getValue())) {
+						return "∞";
+					}
+					return super.getDisplayString();
+				};
+			};
 		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
 			defaultValue = Integer.parseInt(defaultValueString);
-			formatter = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
+			formatter = format == null ? new IntegerFormatter() : new IntegerFormatter(format) {
+
+				@Override
+				public String getDisplayString() {
+					if (Objects.equal(Integer.MAX_VALUE, getValue())) {
+						return "∞";
+					}
+					return super.getDisplayString();
+				};
+			};
 		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
 			defaultValue = Float.parseFloat(defaultValueString);
 			formatter = format == null ? new FloatFormatter() : new FloatFormatter(format);
