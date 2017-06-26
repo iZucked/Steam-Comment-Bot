@@ -135,6 +135,9 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		defaultIdleWeights.put("idle-time-high", 10_000);
 		defaultIdleWeights.put("idle-time-end", 10_000);
 		setParameter("idle-weights", new JMap(defaultIdleWeights), JMap.class, false);
+		
+		
+		setParameter("shuffle-cutoff", 0, Integer.class, false);
 
 		// Similarity class
 		setParameter("similarity-mode", null, String.class, false);

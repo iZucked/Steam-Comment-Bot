@@ -601,6 +601,7 @@ public class HeadlessApplication implements IApplication {
 
 		createPromptDates(rootObject, headlessParameters);
 		setMoveDistributions(settingsOverride, headlessParameters);
+		settingsOverride.setShuffleCutoff(headlessParameters.getParameterValue("shuffle-cutoff", Integer.class));
 	}
 
 	private void createPromptDates(final LNGScenarioModel rootObject, final HeadlessParameters parameters) {

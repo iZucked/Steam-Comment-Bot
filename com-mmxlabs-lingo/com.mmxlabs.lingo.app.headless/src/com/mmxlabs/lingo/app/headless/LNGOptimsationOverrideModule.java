@@ -55,5 +55,11 @@ public class LNGOptimsationOverrideModule extends AbstractModule {
 	private boolean useguidedMoves() {
 		return settings.useGuidedMoves();
 	}
+	
+	@Provides
+	@Named("shuffleCutoff")
+	private int getShuffleCutoff(){
+		return settings.getShuffleCutoff();
+	}
 
 }

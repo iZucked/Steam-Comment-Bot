@@ -74,6 +74,16 @@ public final class SettingsOverride {
 	private int idleTimeEnd = 10_000;
 
 	private boolean equalMoveDistributions = true;
+	
+	private int shuffleCutoff = 0;
+	
+	public void setShuffleCutoff(int shuffleCutoff){
+		this.shuffleCutoff = shuffleCutoff;
+	}
+	
+	public int getShuffleCutoff(){
+		return shuffleCutoff;
+	}
 
 	private boolean useLegacyCheck = false;
 	private boolean useGuidedMoves = false;
