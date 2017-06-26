@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientVersionContext <em>Client Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance()
@@ -203,6 +204,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setReadonly(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Validation Status Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Validation Status Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Validation Status Code</em>' attribute.
+	 * @see #setValidationStatusCode(int)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ValidationStatusCode()
+	 * @model transient="true"
+	 * @generated
+	 */
+	int getValidationStatusCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Validation Status Code</em>' attribute.
+	 * @see #getValidationStatusCode()
+	 * @generated
+	 */
+	void setValidationStatusCode(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Client Scenario Version</b></em>' attribute.

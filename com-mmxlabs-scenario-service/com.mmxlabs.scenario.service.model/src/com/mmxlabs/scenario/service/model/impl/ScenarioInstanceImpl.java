@@ -31,6 +31,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getClientVersionContext <em>Client Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
  * </ul>
  *
  * @generated
@@ -183,6 +184,24 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 */
 	public void setReadonly(boolean newReadonly) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly(), newReadonly);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getValidationStatusCode() {
+		return (Integer) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setValidationStatusCode(int newValidationStatusCode) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), newValidationStatusCode);
 	}
 
 	/**
