@@ -22,6 +22,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -31,6 +33,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.ToolTip;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -39,13 +42,14 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -80,7 +84,6 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -89,7 +92,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  */
 public abstract class AbstractConfigurableGridReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	// Memto keys
+	// Memento keys
 	protected static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
 	protected static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 	protected static final String CONFIGURABLE_COLUMNS_REPORT_KEY = "CONFIGURABLE_COLUMNS_REPORT_KEY";
@@ -138,6 +141,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		final IMemento configMemento = memento.createChild(getColumnSettingsMementoKey());
 		getBlockManager().saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 		saveConfigState(configMemento);
+		if (getViewSite().getSecondaryId() != null) {
+
+		}
 	}
 
 	protected void saveConfigState(final IMemento configMemento) {
@@ -147,7 +153,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	@Override
 	public final void createPartControl(final Composite parent) {
 		initPartControl(parent);
-
+		if (getViewSite().getSecondaryId() != null) {
+			setPartName(getViewSite().getSecondaryId());
+		}
 		// TODO: Maybe add a view toggle as this makes it hard to find the subsequent discharge of an LDD when sorting as it will be done on the first row.
 		// Maybe render l-ID in (?) and sort on other row only if there are empty values?
 		// Add toplevel sorted to keep linked row groups together (i.e. complex cargoes)
@@ -485,6 +493,45 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			};
 			manager.appendToGroup("additions", configureColumnsAction);
+
+			final Action newViewPartAction = new Action("New view...") {
+				@Override
+				public void run() {
+
+					final InputDialog dialog = new InputDialog(getSite().getShell(), "New view", "Choose name for view. This view persists until explicitly closed.", getPartName(),
+							new IInputValidator() {
+
+								@Override
+								public String isValid(String newText) {
+									if (newText == null || newText.isEmpty()) {
+										return "A name must be set";
+									}
+									// FIXME: Should really look this up rather than hard-code.
+									if ("Port Rotation".equals(newText.trim())) {
+										return "Cannot use this name";
+									}
+									if ("Schedule Summary".equals(newText.trim())) {
+										return "Cannot use this name";
+									}
+
+									return null;
+								}
+							});
+					if (dialog.open() == Window.OK) {
+						final String name = dialog.getValue();
+						IWorkbenchPage page = getSite().getPage();
+						String id = getViewSite().getId();
+						try {
+							page.showView(id, name.trim(), IWorkbenchPage.VIEW_ACTIVATE);
+						} catch (PartInitException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+
+			};
+			newViewPartAction.setDescription("Create a new version of this view. The new view settings will be lost if the view is closed");
+			manager.appendToGroup("additions", newViewPartAction);
 		}
 
 	}
