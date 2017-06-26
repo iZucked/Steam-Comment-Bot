@@ -597,7 +597,9 @@ public class FileScenarioService extends AbstractScenarioService {
 			// Change to the backup URI
 			if (backupURI.isFile() && !new File(backupURI.toFileString()).exists()) {
 				backupFileExists = false;
-				log.error("Error reading main scenario service models.", ex);
+				if (mainFileExists) {
+					log.error("Error reading main scenario service models.", ex);
+				}
 			} else {
 				// Assume it exists
 				backupFileExists = true;
