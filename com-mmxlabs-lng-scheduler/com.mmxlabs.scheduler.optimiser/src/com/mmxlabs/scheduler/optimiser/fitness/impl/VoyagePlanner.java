@@ -1105,6 +1105,9 @@ public class VoyagePlanner {
 				// New arrival time = Previous element arrival time + visit duration + travel time + idle time.
 				final IPortSlot fromSlot = lastVoyage.getOptions().getFromPortSlot();
 				final int newTime = portTimesRecord.getSlotTime(fromSlot) + portTimesRecord.getSlotDuration(fromSlot) + lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
+				// FIXME: This breaks the caches! This either changes previously changed data (actually - no cache here) or it changes the input data in the ScheduleCalculator cache as the same PTR is
+				// used as an input, but this changes it between cache calculation and verification pass.
+				// Other caches should be ok at they would always work on the modified value
 				portTimesRecord.setSlotTime(portTimesRecord.getReturnSlot(), newTime);
 			}
 		}
