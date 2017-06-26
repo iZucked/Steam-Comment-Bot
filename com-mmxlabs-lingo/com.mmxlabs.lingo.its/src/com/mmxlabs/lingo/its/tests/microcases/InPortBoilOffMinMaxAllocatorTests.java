@@ -17,6 +17,7 @@ import org.junit.runners.Parameterized;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
  * Test cases for load and discharge events with NBO when using MinMaxUnconstrainedVolumeAllocator.
@@ -72,6 +73,7 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 
 		cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, priceExpression) //
 				.build() //

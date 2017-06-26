@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -157,8 +158,10 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		// Create cargo 1
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
+				//
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 1), portFinder.findPort("Incheon"), null, entity, "10") //
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
@@ -232,6 +235,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //
@@ -307,6 +311,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //
@@ -385,6 +390,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
@@ -461,6 +467,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
@@ -544,6 +551,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		final double salesPrice = 8.87;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
@@ -625,6 +633,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		final double salesPrice = 8.86;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(5, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 7, 31), portFinder.findPort("Dragon LNG"), null, entity, "Henry_Hub") //
@@ -702,6 +711,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withWindowSize(0, TimePeriod.HOURS).build() //
 				.makeDESSale(dischargeName, LocalDate.of(2016, 8, 21), portFinder.findPort("Incheon"), null, entity, "Henry_Hub") //

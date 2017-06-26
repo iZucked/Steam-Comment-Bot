@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
  * 
@@ -66,6 +67,7 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 		
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.HOURS) //
@@ -128,6 +130,7 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 		
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.HOURS) //
@@ -189,6 +192,7 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 		
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
 				.withWindowSize(0, TimePeriod.HOURS) //
