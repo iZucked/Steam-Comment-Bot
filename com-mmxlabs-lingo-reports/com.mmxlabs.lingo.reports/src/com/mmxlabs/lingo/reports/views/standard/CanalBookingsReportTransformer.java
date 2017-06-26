@@ -112,6 +112,8 @@ public class CanalBookingsReportTransformer {
 					String period = "";
 					if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
 						period = "Nominal";
+					} else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
+						period = "Open";
 					} else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
 						period = "Open";
 					} else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
