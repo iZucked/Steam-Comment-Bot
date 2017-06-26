@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -188,6 +189,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		Activator.getPlugin().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 	}
 
+	private Runnable updateScollBarsRunnable = null;
+
 	public void initPartControl(final Composite parent) {
 
 		// Find the column definitions
@@ -202,8 +205,14 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			layout.marginHeight = layout.marginWidth = 0;
 			container.setLayout(layout);
 			filterField = new FilterField(container);
-
-			viewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
+			Grid grid = new Grid(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
+				{
+					// This appears to be the only non-private method to trigger scrollbar size refresh. As it is protected we make an anonymous inner class/runnable combo. We could also explicitly
+					// subclasss it and expose the method.
+					updateScollBarsRunnable = () -> setScrollValuesObsolete();
+				}
+			};
+			viewer = new GridTableViewer(grid) {
 
 				@Override
 				protected List<?> getSelectionFromWidget() {
@@ -392,7 +401,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						public void setColumnVisible(final Object columnObj, final boolean visible) {
 
 							((ColumnBlock) columnObj).setUserVisible(visible);
-							viewer.refresh();
+							if (updateScollBarsRunnable != null) {
+								updateScollBarsRunnable.run();
+							}
 
 						}
 
