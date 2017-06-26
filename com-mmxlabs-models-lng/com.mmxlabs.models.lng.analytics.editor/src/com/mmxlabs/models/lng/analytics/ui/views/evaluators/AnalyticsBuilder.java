@@ -1157,7 +1157,8 @@ public class AnalyticsBuilder {
 			final int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
 			final int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
 			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
-					slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity : (int) ((double) slotOrContractMaxQuantity * cargoCV) };
+					slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
+							: (int) ((double) slotOrContractMaxQuantity * cargoCV) };
 		} else if (buy instanceof BuyOpportunity) {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
 			if (buyOpportunity.getVolumeMode() == VolumeMode.FIXED) {
@@ -1188,7 +1189,8 @@ public class AnalyticsBuilder {
 			final int slotOrContractMinQuantity = slot.getSlotOrContractMinQuantity();
 			final int slotOrContractMaxQuantity = slot.getSlotOrContractMaxQuantity();
 			return new int[] { slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMinQuantity : (int) ((double) slotOrContractMinQuantity * cargoCV),
-					slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity : (int) ((double) slotOrContractMaxQuantity * cargoCV) };
+					slotOrContractMaxQuantity == Integer.MAX_VALUE || slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU ? slotOrContractMaxQuantity
+							: (int) ((double) slotOrContractMaxQuantity * cargoCV) };
 		} else if (sell instanceof SellOpportunity) {
 			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
 			if (sellOpportunity.getVolumeMode() == VolumeMode.FIXED) {

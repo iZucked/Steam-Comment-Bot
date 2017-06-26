@@ -147,11 +147,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 				for (final LoadSlot slot : modelObject.getLoadSlots()) {
 					if (slot.getPort().getName().equals("Bintulu")) {
-						int volums = slot.getSlotOrContractMaxQuantity();
-						if (slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU) {
-							volums = (int) ((double) volums / slot.getSlotOrDelegatedCV());
+						int volume = slot.getSlotOrContractMaxQuantity();
+						if (volume != Integer.MAX_VALUE && slot.getVolumeLimitsUnit() == VolumeUnits.MMBTU) {
+							volume = (int) ((double) volume / slot.getSlotOrDelegatedCV());
 						}
-						makeOfftake(bin, slot.getWindowStart(), slot.getWindowStart(), InventoryFrequency.CARGO, slot.getName(), volums);
+						makeOfftake(bin, slot.getWindowStart(), slot.getWindowStart(), InventoryFrequency.CARGO, slot.getName(), volume);
 					}
 				}
 
