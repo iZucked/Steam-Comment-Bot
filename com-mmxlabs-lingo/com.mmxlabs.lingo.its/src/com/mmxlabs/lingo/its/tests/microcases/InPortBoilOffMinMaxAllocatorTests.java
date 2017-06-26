@@ -87,7 +87,7 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 		int actualPhysicalLoadVolumeInM3 = result.getPhysicalLoadVolume();
 		int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
 
-		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
+		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getSlotOrContractMaxQuantity();
 		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 
 		int actualStartHeelInM3 = result.getStartHeel();
