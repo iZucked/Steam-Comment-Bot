@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
@@ -143,6 +144,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 		// Default binding - no limit
 		bind(int.class).annotatedWith(Names.named(LNGScenarioTransformer.LIMIT_SPOT_SLOT_CREATION)).toInstance(-1);
+
+		bind(long.class).annotatedWith(Names.named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)).toInstance(OptimiserUnitConvertor.convertToInternalVolume(140_000));
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);

@@ -1557,7 +1557,12 @@ public class LNGScenarioTransformer {
 				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 			} else {
 				minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
-				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
+				if (dischargeSlot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+					maxVolume = Long.MAX_VALUE;
+					// maxVolume = OptimiserUnitConvertor.convertToInternalVolume(140_000);
+				} else {
+					maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
+				}
 			}
 
 			final long minCv;
@@ -1732,7 +1737,12 @@ public class LNGScenarioTransformer {
 			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 		} else {
 			minVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity());
-			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity());
+			if (loadSlot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+				maxVolume = Long.MAX_VALUE;
+				// maxVolume = OptimiserUnitConvertor.convertToInternalVolume(140_000);
+			} else {
+				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity());
+			}
 		}
 
 		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
