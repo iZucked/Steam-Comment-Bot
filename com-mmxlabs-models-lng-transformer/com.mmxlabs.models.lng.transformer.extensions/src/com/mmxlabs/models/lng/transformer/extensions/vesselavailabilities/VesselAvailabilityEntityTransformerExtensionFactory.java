@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 /**
  */
 public class VesselAvailabilityEntityTransformerExtensionFactory implements ITransformerExtensionFactory {
-
+ 
 	@Override
 	public ITransformerExtension createInstance() {
 		return new VesselAvailabilityEntityTransformer();

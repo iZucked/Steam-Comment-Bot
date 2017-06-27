@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
+ * Interface to manipulate the data model once the given Schedule has been applied to it.
  */
 public interface IPostExportProcessor {
 

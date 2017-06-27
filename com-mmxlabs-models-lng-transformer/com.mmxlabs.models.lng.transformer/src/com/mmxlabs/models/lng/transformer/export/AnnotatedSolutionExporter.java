@@ -17,7 +17,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
@@ -40,6 +43,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.exporters.CooldownExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.GeneratedCharterOutEventExporter;
@@ -380,6 +384,18 @@ public class AnnotatedSolutionExporter {
 			extension.finishExporting();
 		}
 
+		final Key<List<IOutputScheduleProcessor>> key = Key.get(new TypeLiteral<List<IOutputScheduleProcessor>>() {
+		});
+
+		try {
+			Iterable<IOutputScheduleProcessor> scheduleProcessors = injector.getInstance(key);
+			for (IOutputScheduleProcessor processor : scheduleProcessors) {
+				processor.process(output);
+			}
+		} catch (final ConfigurationException e) {
+		}
+		
+		
 		return output;
 	}
 
