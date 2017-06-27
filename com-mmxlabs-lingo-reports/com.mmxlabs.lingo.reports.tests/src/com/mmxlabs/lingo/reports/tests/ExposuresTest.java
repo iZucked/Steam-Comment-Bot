@@ -141,6 +141,24 @@ public class ExposuresTest {
 				{ "HH - Complex Shift : (3)", "SHIFT(HH,1) - SHIFT(NBP,1) + SHIFT(HH,2)", "HH",
 						multi(calcExpected("NBP", YearMonth.of(2016, 3), 16, -1), calcExpected("HH", YearMonth.of(2016, 2), 5, 1), calcExpected("HH", YearMonth.of(2016, 3), 6, 1)),
 						indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8), makeIndex("NBP", "$", "mmbtu", YearMonth.of(2016, 2), 15, 16, 17, 18)) }, //
+
+				{ "HH - Max: (1)", "MAX(HH, NBP)", "HH", multi(calcExpected("NBP", YearMonth.of(2016, 4), 17, 1)),
+						indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 4), 7), makeIndex("NBP", "$", "mmbtu", YearMonth.of(2016, 4), 17)) }, //
+
+				{ "HH - Max: (2)", "MAX(HH, 2*HH2)", "HH", multi(calcExpected("HH2", YearMonth.of(2016, 4), 6, 2, 12)),
+						indiciesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 4), 5), makeIndex("HH2", "$", "mmbtu", YearMonth.of(2016, 4), 6)) }, //
+
+				{ "Max (with Units - TTF better) ", "MAX(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 3.409511, (12.6 - 0.4) / 3.409511 * 1.111)),
+						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 3.9)) }, //
+
+				{ "Max (with Units - HH better) ", "MAX(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 4, 1.0, 4.0)),
+						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4)) }, //
+				
+				{ "Min (with Units - TTF better) ", "MIN(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 3.409511, (12.6 - 0.4) / 3.409511 * 1.111)),
+							indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4.0)) }, //
+				
+				{ "Min (with Units - HH better) ", "MIN(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 3.9, 1.0, 3.9)),
+								indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 3.9)) }, //
 		});
 	}
 
