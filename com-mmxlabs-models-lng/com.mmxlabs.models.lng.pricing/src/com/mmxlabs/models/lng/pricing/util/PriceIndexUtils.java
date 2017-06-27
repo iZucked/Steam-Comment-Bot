@@ -16,8 +16,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -58,6 +60,36 @@ public class PriceIndexUtils {
 			// Convert back to internal time units.
 			return Hours.between(dateTimeZero, plusMonths);
 		});
+		indices.setCalendarMonthMapper(new CalendarMonthMapper() {
+
+			@Override
+			public int mapMonthToChangePoint(int months) {
+
+				final LocalDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				@NonNull
+				final LocalDateTime plusMonths = startOfYear.plusMonths(months);
+
+				
+				
+				return Hours.between(dateTimeZero, plusMonths);
+			}
+
+			@Override
+			public int mapChangePointToMonth(int date) {
+
+				final LocalDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				@NonNull
+				final LocalDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
+
+				int m = Months.between(startOfYear,plusMonths);
+
+				int a = startOfYear.getMonthValue();
+				int b = plusMonths.getMonthValue();
+				
+				return m;
+			}
+		});
+
 		{
 			final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
 			for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {

@@ -306,6 +306,34 @@ public class Exposures {
 			// n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
 			n = new ShiftNode(child, (int) Math.round(shift));
 			return n;
+		} else if (parentNode.token.equalsIgnoreCase("DATEDAVG")) {
+			final MarkedUpNode child = markupNodes(parentNode.children[0], lookupData);
+			final MarkedUpNode monthsValue = markupNodes(parentNode.children[1], lookupData);
+			final MarkedUpNode lagValue = markupNodes(parentNode.children[2], lookupData);
+			final MarkedUpNode resetValue = markupNodes(parentNode.children[3], lookupData);
+			final double months;
+			final double lag;
+			final double reset;
+			if (monthsValue instanceof ConstantNode) {
+				ConstantNode constantNode = (ConstantNode) monthsValue;
+				months = constantNode.getConstant();
+			} else {
+				throw new IllegalStateException();
+			}
+			if (lagValue instanceof ConstantNode) {
+				ConstantNode constantNode = (ConstantNode) lagValue;
+				lag = constantNode.getConstant();
+			} else {
+				throw new IllegalStateException();
+			}
+			if (resetValue instanceof ConstantNode) {
+				ConstantNode constantNode = (ConstantNode) resetValue;
+				reset = constantNode.getConstant();
+			} else {
+				throw new IllegalStateException();
+			}
+			n = new DatedAverageNode(child, (int) Math.round(months), (int) Math.round(lag), (int) Math.round(reset));
+			return n;
 		} else if (parentNode.token.equals("-") && parentNode.children.length == 1) {
 			// Prefix operator! - Convert to 0-expr
 			n = new OperatorNode(parentNode.token);
@@ -477,6 +505,26 @@ public class Exposures {
 		if (node instanceof ShiftNode) {
 			final ShiftNode shiftNode = (ShiftNode) node;
 			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData);
+		} else if (node instanceof DatedAverageNode) {
+			final DatedAverageNode averageNode = (DatedAverageNode) node;
+
+			YearMonth startDate = date.minusMonths(averageNode.getMonths());
+			if (averageNode.getReset() != 1) {
+				startDate = startDate.minusMonths((date.getMonthValue() - 1) % averageNode.getReset());
+			}
+			startDate = startDate.minusMonths(averageNode.getLag());
+			double months = averageNode.getMonths();
+			ExposureRecords records = new ExposureRecords();
+			double price = 0.0;
+			for (int i = 0; i < averageNode.getMonths(); ++i) {
+				Pair<Double, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData);
+				ExposureRecords result = (ExposureRecords) p.getSecond();
+				price += p.getFirst();
+				result = modify(result, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, -c.mmbtuVolume / months, c.date));
+				records.records.addAll(result.records);
+			}
+
+			return new Pair<>(price / months, records);
 		} else if (node instanceof ConstantNode) {
 			final ConstantNode constantNode = (ConstantNode) node;
 			return new Pair<>(constantNode.getConstant(), new Constant(constantNode.getConstant()));
