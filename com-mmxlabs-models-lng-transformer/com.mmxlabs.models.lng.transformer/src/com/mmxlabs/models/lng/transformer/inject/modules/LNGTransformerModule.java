@@ -17,8 +17,11 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
+import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
@@ -341,11 +344,51 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	private CalendarMonthMapper getMonthMapperFunction(final ModelEntityMap map, final DateAndCurveHelper helper) {
+		return new CalendarMonthMapper() {
+
+			@Override
+			public int mapMonthToChangePoint(int months) {
+
+				// Convert internal time units back into UTC date/time
+				@NonNull
+				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
+
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				@NonNull
+				final ZonedDateTime plusMonths = startOfYear.plusMonths(months);
+
+				return Hours.between(dateTimeZero, plusMonths);
+			}
+
+			@Override
+			public int mapChangePointToMonth(int date) {
+				// Convert internal time units back into UTC date/time
+				@NonNull
+				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
+
+				final ZonedDateTime startOfYear = dateTimeZero.withDayOfYear(1);
+				@NonNull
+				final ZonedDateTime plusMonths = dateTimeZero.plusHours(date).withDayOfMonth(1);
+
+				int m = Months.between(startOfYear, plusMonths);
+
+				int a = startOfYear.getMonthValue();
+				int b = plusMonths.getMonthValue();
+
+				return m;
+			}
+
+		};
+	}
+
+	@Provides
 	@Named(Parser_Commodity)
 	@Singleton
-	private SeriesParser provideCommodityParser(final ShiftFunctionMapper shiftMapper) {
+	private SeriesParser provideCommodityParser(final ShiftFunctionMapper shiftMapper, CalendarMonthMapper monthMapper) {
 		final SeriesParser parser = new SeriesParser();
 		parser.setShiftMapper(shiftMapper);
+		parser.setCalendarMonthMapper(monthMapper);
 		return parser;
 	}
 
