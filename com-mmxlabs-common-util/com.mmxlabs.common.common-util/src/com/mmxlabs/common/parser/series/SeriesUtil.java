@@ -87,8 +87,10 @@ public class SeriesUtil {
 		// Subtract one for floor
 		final int pos2 = insertionIndex - 1;
 		// Bounds checks
-		if (pos2 < 0)
-			return 0;
+		if (pos2 < 0) {
+			// Indicate before start of data range
+			return -1;
+		}
 		if (pos2 >= points.length)
 			return points.length - 1;
 		return pos2;

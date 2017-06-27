@@ -21,6 +21,7 @@ import com.mmxlabs.common.parser.IInfixOperatorFactory;
 import com.mmxlabs.common.parser.IPrefixOperatorFactory;
 import com.mmxlabs.common.parser.ITermFactory;
 import com.mmxlabs.common.parser.series.functions.And;
+import com.mmxlabs.common.parser.series.functions.DatedAverageSeries;
 import com.mmxlabs.common.parser.series.functions.Equal;
 import com.mmxlabs.common.parser.series.functions.If;
 import com.mmxlabs.common.parser.series.functions.InOrder;
@@ -37,6 +38,15 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
 
 	private @Nullable ShiftFunctionMapper shiftMapper;
+	private @Nullable CalendarMonthMapper calendarMonthMapper;
+
+	public CalendarMonthMapper getCalendarMonthMapper() {
+		return calendarMonthMapper;
+	}
+
+	public void setCalendarMonthMapper(CalendarMonthMapper calendarMonthMapper) {
+		this.calendarMonthMapper = calendarMonthMapper;
+	}
 
 	public ShiftFunctionMapper getShiftMapper() {
 		return shiftMapper;
@@ -150,6 +160,21 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 							return new ShiftedSeries(arguments.get(0).evaluate(), evaluate.intValue(), pShiftMapper);
 						}
 					};
+				} else if (name.equals("DATEDAVG")) {
+					@Nullable
+					CalendarMonthMapper pMapper = calendarMonthMapper;
+					if (pMapper == null) {
+						throw new IllegalStateException("No calender mapper function defined");
+					}
+					return new IExpression<ISeries>() {
+						@Override
+						public @NonNull ISeries evaluate() {
+							Number months = arguments.get(1).evaluate().evaluate(0);
+							Number lag = arguments.get(2).evaluate().evaluate(0);
+							Number reset = arguments.get(3).evaluate().evaluate(0);
+							return new DatedAverageSeries(arguments.get(0).evaluate(), months.intValue(), lag.intValue(), reset.intValue(), pMapper);
+						}
+					};
 				} else if (name.equals("AND")) {
 					return new FunctionConstructor(And.class, arguments);
 				} else if (name.equals("OR")) {
@@ -167,6 +192,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		});
 
 		setPrefixOperatorFactory(new IPrefixOperatorFactory<ISeries>() {
+
 			@Override
 			public boolean isPrefixOperator(final char operator) {
 				if (operator == '-') {
@@ -188,6 +214,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 				throw new RuntimeException("Unknown prefix op " + operator);
 			}
+
 		});
 	}
 
@@ -238,7 +265,11 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 			@Override
 			public Number evaluate(final int point) {
-				return values.length == 0 ? 0 : values[SeriesUtil.floor(points, point)];
+				int pos = SeriesUtil.floor(points, point);
+				if (pos == -1) {
+					return 0;
+				}
+				return values.length == 0 ? 0 : values[pos];
 			}
 		});
 		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
