@@ -18,8 +18,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class PricingMonthUtils {
 	/**
@@ -31,10 +34,10 @@ public class PricingMonthUtils {
 	public static @Nullable YearMonth getPricingDate(@NonNull final SlotAllocation slotAllocation) {
 		final Slot slot = slotAllocation.getSlot();
 
-		final Optional<YearMonth> pricingDate;
+		Optional<LocalDate> pricingDate = Optional.empty();
 		if (slot.isSetPricingDate()) {
 			final LocalDate slotPricingDate = slot.getPricingDate();
-			pricingDate = Optional.of(YearMonth.of(slotPricingDate.getYear(), slotPricingDate.getMonthValue()));
+			pricingDate = Optional.of(slotPricingDate);
 		} else {
 			switch (slot.getSlotOrDelegatedPricingEvent()) {
 			case END_DISCHARGE:
@@ -50,27 +53,48 @@ public class PricingMonthUtils {
 				pricingDate = getStartOf.apply(getLoadAllocationOf.apply(slotAllocation));
 				break;
 			default:
-				pricingDate = null;
+				// pricingDate = null;
 			}
+
+			// Special case for spot market date shift pricing. Transform the pricing date to the correct month.
+			// TODO: Should be part of pricing syntax
+			if (pricingDate != null && pricingDate.isPresent() && slot instanceof SpotSlot) {
+				final SpotSlot spotSlot = (SpotSlot) slot;
+				final SpotMarket market = spotSlot.getMarket();
+				if (market.getPriceInfo() instanceof DateShiftExpressionPriceParameters) {
+					final DateShiftExpressionPriceParameters params = (DateShiftExpressionPriceParameters) market.getPriceInfo();
+					if (params.isSpecificDay()) {
+						if (pricingDate.get().getDayOfMonth() >= params.getValue()) {
+							pricingDate = Optional.of(pricingDate.get().plusMonths(1));
+						}
+					} else {
+						pricingDate = Optional.of(pricingDate.get().minusDays(params.getValue()));
+					}
+				}
+			}
+
 		}
-		return pricingDate.get();
+		if (pricingDate.isPresent()) {
+			return YearMonth.of(pricingDate.get().getYear(), pricingDate.get().getMonthValue());
+		}
+		return null;
 	}
 
-	private static final Function<Optional<SlotAllocation>, Optional<YearMonth>> getCompletionOf = slotAllocation -> {
+	private static final Function<Optional<SlotAllocation>, Optional<LocalDate>> getCompletionOf = slotAllocation -> {
 		if (slotAllocation.isPresent()) {
 			final ZonedDateTime end = slotAllocation.get().getSlotVisit().getEnd();
 			final ZonedDateTime withZoneSameLocal = end.withZoneSameLocal(ZoneId.of("UTC"));
-			return Optional.of(YearMonth.of(withZoneSameLocal.getYear(), withZoneSameLocal.getMonthValue()));
+			return Optional.of(withZoneSameLocal.toLocalDate());
 		} else {
 			return Optional.empty();
 		}
 	};
 
-	private static final Function<Optional<SlotAllocation>, Optional<YearMonth>> getStartOf = slotAllocation -> {
+	private static final Function<Optional<SlotAllocation>, Optional<LocalDate>> getStartOf = slotAllocation -> {
 		if (slotAllocation.isPresent()) {
 			final ZonedDateTime end = slotAllocation.get().getSlotVisit().getStart();
 			final ZonedDateTime withZoneSameLocal = end.withZoneSameLocal(ZoneId.of("UTC"));
-			return Optional.of(YearMonth.of(withZoneSameLocal.getYear(), withZoneSameLocal.getMonthValue()));
+			return Optional.of(withZoneSameLocal.toLocalDate());
 		} else {
 			return Optional.empty();
 		}

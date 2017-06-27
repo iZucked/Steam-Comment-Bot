@@ -222,6 +222,10 @@ public class Exposures {
 			if (parameters instanceof ExpressionPriceParameters) {
 				final ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
 				priceExpression = pec.getPriceExpression();
+			} else if (parameters instanceof DateShiftExpressionPriceParameters) {
+				final DateShiftExpressionPriceParameters pec = (DateShiftExpressionPriceParameters) parameters;
+				// Note: date shift should be taken care of from PricingMonthUtils call
+				priceExpression = pec.getPriceExpression();
 			}
 		} else if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
