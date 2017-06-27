@@ -162,7 +162,11 @@ public class DefaultModelFactory implements IModelFactory {
 		// create singly-contained sub objects, by default
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
-			if (reference.isMany() == false && reference.isContainment() == true && !reference.getEReferenceType().isInterface() && !reference.getEReferenceType().isAbstract()) {
+			if (reference.isMany() == false && reference.isContainment() == true 
+					&& (
+							(!reference.getEReferenceType().isInterface() && !reference.getEReferenceType().isAbstract())
+							|| (referenceToUseGivenClass != null && reference.getName().equalsIgnoreCase(referenceToUseGivenClass))))
+							{
 				object.eSet(reference, createSubInstance(object, reference));
 			}
 		}
