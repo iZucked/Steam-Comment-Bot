@@ -153,12 +153,50 @@ public class ExposuresTest {
 
 				{ "Max (with Units - HH better) ", "MAX(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 4, 1.0, 4.0)),
 						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4)) }, //
-				
+
 				{ "Min (with Units - TTF better) ", "MIN(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("TTF", 12.6, 1.0 / 3.409511, (12.6 - 0.4) / 3.409511 * 1.111)),
-							indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4.0)) }, //
-				
+						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 4.0)) }, //
+
 				{ "Min (with Units - HH better) ", "MIN(HH, ((TTF-0.4)) *mmBtus_per_MwH*FX_EURO_to_USD)", "TTF", single(calcExpected("HH", 3.9, 1.0, 3.9)),
-								indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 3.9)) }, //
+						indiciesOf(makeIndex("TTF", "EURO", "mwh", YearMonth.of(2000, 1), 12.6), makeIndex("HH", "$", "mmbtu", YearMonth.of(2000, 1), 3.9)) }, //
+
+				{ "DatedAvg 3,0,1 ", "DATEDAVG(Brent,3,0,1)", "Brent",
+						multi(//
+								calcExpected("Brent", YearMonth.of(2016, 1), 54.89, 1.0 / 3.0), //
+								calcExpected("Brent", YearMonth.of(2016, 2), 55.47, 1.0 / 3.0), //
+								calcExpected("Brent", YearMonth.of(2016, 3), 55.76, 1.0 / 3.0)), //
+						indiciesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2016, 1), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+
+				{ "DatedAvg 6,0,1 ", "DATEDAVG(Brent,6,0,1)", "Brent",
+						multi(//
+								calcExpected("Brent", YearMonth.of(2015, 10), 54.89, 1.0 / 6.0), //
+								calcExpected("Brent", YearMonth.of(2015, 11), 55.47, 1.0 / 6.0), //
+								calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 6.0), //
+								calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 6.0), //
+								calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 6.0), //
+								calcExpected("Brent", YearMonth.of(2016, 3), 56.26, 1.0 / 6.0) //
+						), //
+						indiciesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+				{ "DatedAvg 3,1,1 ", "DATEDAVG(Brent,3,1,1)", "Brent",
+						multi(//
+								calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 3.0), //
+								calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 3.0), //
+								calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 3.0) //
+						), //
+						indiciesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+
+				{ "DatedAvg 3,1,3 ", "DATEDAVG(Brent,3,1,3)", "Brent",
+						multi(//
+								calcExpected("Brent", YearMonth.of(2015, 12), 55.76, 1.0 / 3.0), //
+								calcExpected("Brent", YearMonth.of(2016, 1), 56.01, 1.0 / 3.0), //
+								calcExpected("Brent", YearMonth.of(2016, 2), 56.16, 1.0 / 3.0) //
+						), //
+						indiciesOf(//
+								makeIndex("Brent", "$", "mmbtu", YearMonth.of(2015, 10), 54.89, 55.47, 55.76, 56.01, 56.16, 56.26, 56.23, 56.28, 56.23, 56.17)) }, //
+
 		});
 	}
 
