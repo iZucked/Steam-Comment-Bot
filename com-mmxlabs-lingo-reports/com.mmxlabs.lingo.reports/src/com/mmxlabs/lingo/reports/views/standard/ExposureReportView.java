@@ -316,40 +316,42 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	protected void makeActions() {
 		super.makeActions();
+		if (false) {
+			// Automatically calculated on evaluate.
+			final Action calculateExposures = new Action("Calculate") {
+				public void run() {
 
-		final Action calculateExposures = new Action("Calculate") {
-			public void run() {
-
-				final SelectedScenariosService service = getViewSite().getService(SelectedScenariosService.class);
-				if (service == null) {
-					return;
-				}
-				@Nullable
-				final ISelectedDataProvider currentSelectedDataProvider = service.getCurrentSelectedDataProvider();
-
-				if (currentSelectedDataProvider == null) {
-					return;
-				}
-
-				@NonNull
-				final Collection<@NonNull ScenarioResult> scenarioResults = currentSelectedDataProvider.getScenarioResults();
-				for (final ScenarioResult scenarioResult : scenarioResults) {
-					final ScenarioInstance instance = scenarioResult.getScenarioInstance();
-
-					ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-					try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
-
-						final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
-						final EditingDomain domain = ref.getEditingDomain();
-						final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
-						Exposures.calculateExposures(scenarioModel, schedule, domain);
+					final SelectedScenariosService service = getViewSite().getService(SelectedScenariosService.class);
+					if (service == null) {
+						return;
 					}
-				}
-				// refresh();
-			}
-		};
+					@Nullable
+					final ISelectedDataProvider currentSelectedDataProvider = service.getCurrentSelectedDataProvider();
 
-		getViewSite().getActionBars().getToolBarManager().add(calculateExposures);
+					if (currentSelectedDataProvider == null) {
+						return;
+					}
+
+					@NonNull
+					final Collection<@NonNull ScenarioResult> scenarioResults = currentSelectedDataProvider.getScenarioResults();
+					for (final ScenarioResult scenarioResult : scenarioResults) {
+						final ScenarioInstance instance = scenarioResult.getScenarioInstance();
+
+						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+						try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
+
+							final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();
+							final EditingDomain domain = ref.getEditingDomain();
+							final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
+							Exposures.calculateExposures(scenarioModel, schedule, domain);
+						}
+					}
+					// refresh();
+				}
+			};
+
+			getViewSite().getActionBars().getToolBarManager().add(calculateExposures);
+		}
 
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
 			public void run() {
