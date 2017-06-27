@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPN
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.inject.IOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
@@ -95,6 +96,9 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 
 						final List<IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<IPostExportProcessorFactory>();
 						bind(TypeLiterals.iterable(IPostExportProcessorFactory.class)).toInstance(postExportExtensionFactories);
+						
+						final List<IOutputScheduleProcessorFactory> outputProcessorFactories = new ArrayList<IOutputScheduleProcessorFactory>();
+						bind(TypeLiterals.iterable(IOutputScheduleProcessorFactory.class)).toInstance(outputProcessorFactories);
 					}
 				}
 			};
