@@ -46,6 +46,10 @@ public class DatedAverageSeries implements ISeries {
 			int m = startMonth + i;
 			int time = mapper.mapMonthToChangePoint(m);
 			double v = shiftee.evaluate(time).doubleValue();
+			if (v == 0.0) {
+				// No data, cannot create average, return 0
+				return 0.0;
+			}
 			sum += v;
 		}
 		sum /= (double) months;
