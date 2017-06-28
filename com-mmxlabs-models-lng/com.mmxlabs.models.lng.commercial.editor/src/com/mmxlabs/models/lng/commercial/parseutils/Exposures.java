@@ -131,7 +131,6 @@ public class Exposures {
 						}
 					}
 					
-					// Should be added to a command!
 					cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
 				}
 			}
