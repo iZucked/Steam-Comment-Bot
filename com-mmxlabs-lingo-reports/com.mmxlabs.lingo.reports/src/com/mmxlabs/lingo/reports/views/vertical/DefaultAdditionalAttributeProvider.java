@@ -199,8 +199,9 @@ public class DefaultAdditionalAttributeProvider implements IAdditionalAttributeP
 				final Event event = index < events.length ? events[index] : null;
 				if (event != null) {
 					// Get the date?
-					return date;
+					return null;
 				}
+				return date;
 			}
 		}
 		
