@@ -67,7 +67,8 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
-		return checkConstraints(sequences, false);
+		// Should really be false, but action set code does not call sequencedAccepted
+		return checkConstraints(sequences, unbookedSlots == null);
 	}
 
 	@Override
