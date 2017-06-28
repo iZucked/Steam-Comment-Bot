@@ -6,15 +6,19 @@ package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -42,9 +46,12 @@ public class ScheduleSequenceData {
 	final public LocalDate start;
 	final public LocalDate end;
 	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
+	final public LNGScenarioModel model;
+	public Set<CanalBookingSlot> usedCanalBookings = new HashSet<>();
 
 	/** Extracts the relevant information from the model */
 	public ScheduleSequenceData(final LNGScenarioModel model, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+		this.model = model;
 		this.verticalReportVisualiser = verticalReportVisualiser;
 		final ScheduleModel scheduleModel = (model == null ? null : model.getScheduleModel());
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
@@ -66,6 +73,11 @@ public class ScheduleSequenceData {
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
 
+				if (event instanceof Journey) {
+					Journey journey = (Journey) event;
+					usedCanalBookings.add(journey.getCanalBooking());
+				}
+				
 				// Event data
 				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event.getStart());
 				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event.getEnd());
@@ -136,7 +148,6 @@ public class ScheduleSequenceData {
 		} else {
 			end = endDate;
 		}
-		
 
 		// find the sequences per vessel, and the FOB & DES sequences
 		Sequence tempDes = null;

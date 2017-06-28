@@ -15,11 +15,15 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -116,7 +120,7 @@ public final class VerticalReportUtils {
 	//
 	// }
 
-	public static List<Event> getSaleSlotsForContract(final ScheduleSequenceData data, String contractName) {
+	public static List<Event> getSaleSlotsForContract(final ScheduleSequenceData data, final String contractName) {
 
 		final List<Event> loadings = new LinkedList<>();
 
@@ -157,9 +161,9 @@ public final class VerticalReportUtils {
 	 * @param contractNames
 	 * @return
 	 */
-	public static Function<Slot, Boolean> getContractMatcher(String contractName) {
+	public static Function<Slot, Boolean> getContractMatcher(final String contractName) {
 		return slot -> {
-			Contract contract = slot.getContract();
+			final Contract contract = slot.getContract();
 			if (contract != null) {
 				return contractName.equals(contract.getName());
 			}
@@ -174,9 +178,9 @@ public final class VerticalReportUtils {
 	 * @param contractNames
 	 * @return
 	 */
-	public static Function<Slot, Boolean> getContractSubstringMatcher(String contractName) {
+	public static Function<Slot, Boolean> getContractSubstringMatcher(final String contractName) {
 		return slot -> {
-			Contract contract = slot.getContract();
+			final Contract contract = slot.getContract();
 			if (contract != null) {
 				return contract.getName().contains(contractName);
 			}
@@ -191,11 +195,11 @@ public final class VerticalReportUtils {
 	 * @param contractNames
 	 * @return
 	 */
-	public static Function<Slot, Boolean> getExceptContractsMatcher(String... contractNames) {
-		Set<String> names = Sets.newHashSet(contractNames);
+	public static Function<Slot, Boolean> getExceptContractsMatcher(final String... contractNames) {
+		final Set<String> names = Sets.newHashSet(contractNames);
 
 		return slot -> {
-			Contract contract = slot.getContract();
+			final Contract contract = slot.getContract();
 			if (contract != null) {
 				return !names.contains(contract.getName());
 			}
@@ -204,7 +208,7 @@ public final class VerticalReportUtils {
 		};
 	}
 
-	public static List<Event> getMatchingSlots(final ScheduleSequenceData data, SlotType slotType, Function<Slot, Boolean> matcher) {
+	public static List<Event> getMatchingSlots(final ScheduleSequenceData data, final SlotType slotType, final Function<Slot, Boolean> matcher) {
 
 		final List<Event> events = new LinkedList<>();
 		if (slotType == SlotType.SALE || slotType == SlotType.BOTH) {
@@ -253,5 +257,50 @@ public final class VerticalReportUtils {
 			}
 		}
 		return events;
+	}
+
+	public static List<Event> getCanalBookings(final ScheduleSequenceData data) {
+
+		final List<Event> events = new LinkedList<Event>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
+		if (canalBookings != null) {
+			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
+				events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
+			}
+		}
+		return events;
+
+	}
+
+	public static List<Event> getCanalBookingsForEntryA(final ScheduleSequenceData data) {
+
+		final List<Event> events = new LinkedList<Event>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
+		if (canalBookings != null) {
+			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
+				if (slot.getRoute().getEntryA() == slot.getEntryPoint()) {
+					events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
+				}
+			}
+		}
+		return events;
+	}
+
+	public static List<Event> getCanalBookingsForEntryB(final ScheduleSequenceData data) {
+
+		final List<Event> events = new LinkedList<Event>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
+		final CanalBookings canalBookings = cargoModel.getCanalBookings();
+		if (canalBookings != null) {
+			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
+				if (slot.getRoute().getEntryB() == slot.getEntryPoint()) {
+					events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
+				}
+			}
+		}
+		return events;
+
 	}
 }
