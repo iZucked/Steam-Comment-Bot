@@ -378,7 +378,8 @@ public class CopyGridToExcelMLStringUtil {
 					if (v instanceof LocalDate) {
 						typeString = String.format(" ss:Type=\"DateTime\" ");
 						LocalDate dt = (LocalDate) v;
-						text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+//						text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+						text = String.format("%4d-%02d-%02dT00:00:00.000", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth());
 
 					}
 				}
