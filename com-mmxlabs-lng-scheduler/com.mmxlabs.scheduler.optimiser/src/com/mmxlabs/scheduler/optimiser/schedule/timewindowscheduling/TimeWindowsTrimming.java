@@ -15,7 +15,6 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -140,7 +139,7 @@ public class TimeWindowsTrimming {
 				feasibleEnd = Math.max(endTimeWindow.getExclusiveEnd(), feasibleStart + 1);
 			}
 		}
-		portTimeWindowRecord.setSlotFeasibleTimeWindow(end, new MutableTimeWindow(feasibleStart, feasibleEnd));
+		portTimeWindowRecord.setSlotFeasibleTimeWindow(end, new TimeWindow(feasibleStart, feasibleEnd));
 	}
 
 	/**
