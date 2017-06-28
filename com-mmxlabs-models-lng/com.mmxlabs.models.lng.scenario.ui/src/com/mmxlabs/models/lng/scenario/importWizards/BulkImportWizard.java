@@ -55,7 +55,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	final private ScenarioInstance currentScenario;
 	private final FieldChoice importedField;
 
-	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice, String windowTitle) {
+	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice, final String windowTitle) {
 		currentScenario = scenarioInstance;
 		importedField = fieldChoice;
 		setWindowTitle(windowTitle);
@@ -148,20 +148,24 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 					continue;
 				}
 
-				if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
-					doImportAction(importTarget, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, false);
-				} else {
-					// iterate through curves we want to import in a unified manner
-					for (FieldChoice choice : getUnifiedChoices()) {
-						doImportAction(choice, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, true);
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				modelRecord.execute(ref -> ref.executeWithLock(() -> {
+
+					if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
+						doImportAction(importTarget, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, false);
+					} else {
+						// iterate through curves we want to import in a unified manner
+						for (final FieldChoice choice : getUnifiedChoices()) {
+							doImportAction(choice, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, true);
+						}
 					}
-				}
+				}));
 				monitor.worked(1);
 				if (monitor.isCanceled()) {
 					break;
 				}
 			}
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 			log.error(t.getMessage(), t);
 			allProblems.add(String.format("Uncaught exception during import. Import aborted. See error log"));
 		} finally {
@@ -182,7 +186,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private void doImportAction(final FieldChoice importTarget, final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance,
 			final Set<String> uniqueProblems, final List<String> allProblems, final boolean multipleDetails) {
 		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
+		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
 		try (final ModelReference modelReference = modelRecord.aquireReference("BulkImportWizard")) {
 			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, getShell(), filename, listSeparator, decimalSeparator);
 
