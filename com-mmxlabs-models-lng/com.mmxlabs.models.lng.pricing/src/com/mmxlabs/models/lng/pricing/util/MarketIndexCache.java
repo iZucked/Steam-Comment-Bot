@@ -108,6 +108,7 @@ public class MarketIndexCache extends EContentAdapter {
 	public synchronized void clearCache() {
 		cache.clear();
 		earlyDateCache.clear();
+		expressionToIndexUseCache.clear();
 	}
 
 	public @NonNull SeriesParser getSeriesParser(final @NonNull PriceIndexType marketIndexType) {
