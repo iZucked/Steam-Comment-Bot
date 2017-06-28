@@ -115,6 +115,22 @@ public class Exposures {
 				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, slot instanceof LoadSlot, lookupData);
 				if (exposureDetail != null && !exposureDetail.isEmpty()) {
 
+					for (final ExposureDetail d : exposureDetail) {
+						// This is only for unit test reload validation as -0.0 != 0.0 and we cannot persist/reload -0.0
+						if (d.getNativeValue() == -0.0) {
+							d.setNativeValue(0.0);
+						}
+						if (d.getUnitPrice() == -0.0) {
+							d.setUnitPrice(0.0);
+						}
+						if (d.getVolumeInMMBTU() == -0.0) {
+							d.setVolumeInMMBTU(0.0);
+						}
+						if (d.getVolumeInNativeUnits() == -0.0) {
+							d.setVolumeInNativeUnits(0.0);
+						}
+					}
+					
 					// Should be added to a command!
 					cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
 				}
@@ -286,11 +302,11 @@ public class Exposures {
 			final MarkedUpNode shiftValue = markupNodes(parentNode.children[1], lookupData);
 			final double shift;
 			if (shiftValue instanceof ConstantNode) {
-				ConstantNode constantNode = (ConstantNode) shiftValue;
+				final ConstantNode constantNode = (ConstantNode) shiftValue;
 				shift = constantNode.getConstant();
 			} else if (shiftValue instanceof OperatorNode) {
 				// FIXME: Only allow a specific operation here -- effectively the expression -x, generated as 0-x.
-				OperatorNode operatorNode = (OperatorNode) shiftValue;
+				final OperatorNode operatorNode = (OperatorNode) shiftValue;
 				if (operatorNode.getOperator().equals("-") && operatorNode.getChildren().size() == 2 && operatorNode.getChildren().get(0) instanceof ConstantNode
 						&& operatorNode.getChildren().get(1) instanceof ConstantNode) {
 					shift = ((ConstantNode) operatorNode.getChildren().get(0)).getConstant() - ((ConstantNode) operatorNode.getChildren().get(1)).getConstant();
@@ -315,19 +331,19 @@ public class Exposures {
 			final double lag;
 			final double reset;
 			if (monthsValue instanceof ConstantNode) {
-				ConstantNode constantNode = (ConstantNode) monthsValue;
+				final ConstantNode constantNode = (ConstantNode) monthsValue;
 				months = constantNode.getConstant();
 			} else {
 				throw new IllegalStateException();
 			}
 			if (lagValue instanceof ConstantNode) {
-				ConstantNode constantNode = (ConstantNode) lagValue;
+				final ConstantNode constantNode = (ConstantNode) lagValue;
 				lag = constantNode.getConstant();
 			} else {
 				throw new IllegalStateException();
 			}
 			if (resetValue instanceof ConstantNode) {
-				ConstantNode constantNode = (ConstantNode) resetValue;
+				final ConstantNode constantNode = (ConstantNode) resetValue;
 				reset = constantNode.getConstant();
 			} else {
 				throw new IllegalStateException();
@@ -513,11 +529,11 @@ public class Exposures {
 				startDate = startDate.minusMonths((date.getMonthValue() - 1) % averageNode.getReset());
 			}
 			startDate = startDate.minusMonths(averageNode.getLag());
-			double months = averageNode.getMonths();
-			ExposureRecords records = new ExposureRecords();
+			final double months = averageNode.getMonths();
+			final ExposureRecords records = new ExposureRecords();
 			double price = 0.0;
 			for (int i = 0; i < averageNode.getMonths(); ++i) {
-				Pair<Double, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData);
+				final Pair<Double, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), lookupData);
 				ExposureRecords result = (ExposureRecords) p.getSecond();
 				price += p.getFirst();
 				result = modify(result, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / months, c.nativeValue / months, -c.mmbtuVolume / months, c.date));
@@ -540,8 +556,8 @@ public class Exposures {
 			final String operator = operatorNode.getOperator();
 			final Pair<Double, IExposureNode> pc0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
 			final Pair<Double, IExposureNode> pc1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData);
-			IExposureNode c0 = pc0.getSecond();
-			IExposureNode c1 = pc1.getSecond();
+			final IExposureNode c0 = pc0.getSecond();
+			final IExposureNode c1 = pc1.getSecond();
 			if (operator.equals("+")) {
 				// addition: add coefficients of summands
 				if (c0 instanceof Constant && c1 instanceof Constant) {
@@ -655,7 +671,7 @@ public class Exposures {
 
 			return new Pair<>(unitPrice, new Constant(1.0));
 		} else if (node instanceof ConversionNode) {
-			ConversionNode conversionNode = (ConversionNode) node;
+			final ConversionNode conversionNode = (ConversionNode) node;
 			return new Pair<>(conversionNode.getFactor().getFactor(), new Constant(1.0));
 		} else if (node instanceof MaxFunctionNode) {
 			if (node.getChildren().size() == 0) {
