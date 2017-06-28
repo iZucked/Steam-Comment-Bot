@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -45,6 +46,11 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof Journey && target.eContainer() instanceof Sequence) {
 			final Journey journey = (Journey) target;
 
+			Sequence sequence = (Sequence) target.eContainer() ;
+			if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+				return Activator.PLUGIN_ID;
+			}
+			
 			final Route route = journey.getRoute();
 			if (route != null) {
 				if (route.getRouteOption() == RouteOption.PANAMA) {
