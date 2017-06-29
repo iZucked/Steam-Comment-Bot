@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.dirscan.DirScanScenarioService;
 import com.mmxlabs.scenario.service.dirscan.preferences.PreferenceConstants;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 /**
  * The activator class controls the plug-in life cycle

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -23,8 +24,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -37,15 +40,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants2;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -54,12 +60,15 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.file.internal.Activator;
 import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
 import com.mmxlabs.scenario.service.file.preferences.PreferenceConstants;
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -67,13 +76,14 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.manager.InstanceData;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
+import com.mmxlabs.scenario.service.model.util.ResourceHelper;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
-import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
-import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 public class FileScenarioService extends AbstractScenarioService {
 
@@ -81,7 +91,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	private static final String PROPERTY_MODEL = "com.mmxlabs.scenario.service.file.model";
 
-	private final @NonNull ResourceSet resourceSet = new ResourceSetImpl();
+	private final ResourceSet resourceSet = new ResourceSetImpl();
 	private Resource resource;
 
 	private final Map<Object, Object> options;
@@ -198,10 +208,10 @@ public class FileScenarioService extends AbstractScenarioService {
 
 					@Override
 					public IStatus run(final IProgressMonitor monitor) {
-						SubMonitor m = SubMonitor.convert(monitor, "Storing scenario data backup in " + destinationLocation.toString(), 10);
+						monitor.beginTask("Storing scenario data backup in " + destinationLocation.toString(), 10);
 						try {
 							final File destFile = new File(destinationLocation + "/" + targetName);
-							moveLocalArchive(localArchive, destFile, m.split(10));
+							moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
 						} catch (final IOException e) {
 							log.error("Error moving archive to remote " + e.getMessage(), e);
 						} finally {
@@ -291,7 +301,7 @@ public class FileScenarioService extends AbstractScenarioService {
 							final File destinationLocation = new File(dest);
 							if (destinationLocation.exists() && destinationLocation.isDirectory()) {
 								final File destFile = new File(destinationLocation + "/" + targetName);
-								moveLocalArchive(localArchive, destFile, SubMonitor.convert(monitor, 10));
+								moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
 							}
 						} catch (final Exception e) {
 							log.error("Error performing backup: " + e.getMessage(), e);
@@ -310,18 +320,19 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	public void save() {
-		try {
-			synchronized (resource) {
-				resource.save(options);
+		if (resource != null) {
+			try {
+				synchronized (resource) {
+					resource.save(options);
+				}
+			} catch (final Throwable e) {
+				log.error(e.getMessage(), e);
 			}
-		} catch (final Throwable e) {
-			log.error(e.getMessage(), e);
 		}
-
 	}
 
 	@Override
-	public void delete(final @NonNull Container container) {
+	public void delete(final Container container) {
 		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 		if (scenarioService != null && scenarioService != this) {
@@ -360,184 +371,78 @@ public class FileScenarioService extends AbstractScenarioService {
 			}
 
 			@NonNull
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
 			System.gc();
 			System.gc();
 
-			@Nullable
-			final ModelReference ref = modelRecord.aquireReferenceIfLoaded("FileScenarioService:1");
-			if (ref != null) {
-				ref.close();
-				modelRecord.dumpReferences();
+			if (modelRecord != null) {
+				@Nullable
+				final ModelReference ref = modelRecord.aquireReferenceIfLoaded("FileScenarioService:1");
+				if (ref != null) {
+					ref.close();
+					modelRecord.dumpReferences();
+				}
+				SSDataManager.Instance.remove(instance);
+				modelRecord.setScenarioInstance(null);
 			}
-			// With the ScenarioReferences it is possible we still have some references open at this stage.
-			// assert ref == null;
-
-			// Find a resource set
-			ResourceSet instanceResourceSet = null;
-			if (instanceResourceSet == null) {
-				instanceResourceSet = createResourceSet();
-			}
-
-			// Create or re-use a Resource - again after unloading we should probably always we creating a new resource
-			final URI rooObjectURI = resolveURI(instance.getRootObjectURI());
-			if (instanceResourceSet.getResource(rooObjectURI, false) == null) {
-				instanceResourceSet.createResource(rooObjectURI);
-			}
-
-			// Delete the scenario
-			// Copy list as delete will remove it from the resource set
-			for (final Resource r : new ArrayList<Resource>(instanceResourceSet.getResources())) {
+			// TODO: Move to "trash?"
+			final File mainFile = new File(resolveURI(instance.getUuid() + ".lingo").toFileString());
+			final File backupFile = new File(resolveURI(instance.getUuid() + ".lingo.backup").toFileString());
+			if (mainFile.exists()) {
 				try {
-					r.unload();
-					instanceResourceSet.getResources().remove(r);
-					final URI scenaruiURI = resolveURI(instance.getUuid() + ".xmi");
-					if (scenaruiURI.isFile()) {
-						FileDeleter.delete(new File(scenaruiURI.toFileString()), LicenseFeatures.isPermitted("features:secure-delete"));
-					} else {
-						log.warn("Unable to securely delete scenario - " + scenaruiURI.toString());
-						r.delete(null);
-					}
+					FileDeleter.delete(mainFile, LicenseFeatures.isPermitted("features:secure-delete"));
 				} catch (final IOException e) {
-					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + r.getURI(), e);
+					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario " + mainFile, e);
 				}
 			}
-
-			// Delete backup metadata
-			if (scenarioService != null) {
+			if (backupFile.exists()) {
 				try {
-					final Resource resource = resourceSet.createResource(resolveURI("instances/" + instance.getUuid() + ".xmi"));
-
-					instanceResourceSet.getResources().remove(resource);
-					final URI metadataURI = resolveURI("instances/" + instance.getUuid() + ".xmi");
-					if (metadataURI.isFile()) {
-						FileDeleter.delete(new File(metadataURI.toFileString()), LicenseFeatures.isPermitted("features:secure-delete"));
-					} else {
-						resource.delete(null);
-					}
-					resourceSet.getResources().remove(resource);
-				} catch (final Throwable th) {
+					FileDeleter.delete(backupFile, LicenseFeatures.isPermitted("features:secure-delete"));
+				} catch (final IOException e) {
+					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario backup " + backupFile, e);
 				}
-				// fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
 			}
-		}
-	}
-	//
-	// @Override
-	// public void save(final ScenarioInstance scenarioInstance) throws IOException {
-	// // store backup manifest
-	// saveManifest(scenarioInstance);
-	//
-	// super.save(scenarioInstance);
-	// }
 
-	private void saveManifest(final ScenarioInstance scenarioInstance) {
-		try {
-			final Resource resource = resourceSet.createResource(resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi"));
-			final ScenarioInstance copy = EcoreUtil.copy(scenarioInstance);
-			resource.getContents().add(copy);
-			resource.save(null);
-			resourceSet.getResources().remove(resource);
-		} catch (final Throwable th) {
 		}
 	}
 
 	@Override
-	public ScenarioInstance insert(final @NonNull Container container, final @NonNull EObject rootObject, @Nullable final Consumer<ScenarioInstance> customiser) throws Exception {
-		log.debug("Inserting scenario into " + container);
-
-		// Create new model nodes
-		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord sourceRecord, String name) throws Exception {
 
 		// Create a new UUID
 		final String uuid = EcoreUtil.generateUUID();
-		newInstance.setUuid(uuid);
+		URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
 
-		newInstance.setMetadata(metadata);
-
-		// Construct new URIs into the model service for our models.
-		final ResourceSet instanceResourceSet = createResourceSet();
-		{
-			// Construct internal URI based on UUID and model class name
-			final String uriString = "./" + uuid + ".xmi";
-			final URI resolved = resolveURI(uriString);
-			log.debug("Storing submodel into " + resolved);
-			try {
-				final Resource instanceResource = instanceResourceSet.createResource(resolved);
-				instanceResource.getContents().add(rootObject);
-				// "Store" - map URI to model instance
-				ResourceHelper.saveResource(instanceResource);
-				// Unload instance from memory as no longer needed
-				instanceResource.unload();
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
-				return null;
-			}
-			// Record new submodel URI
-			newInstance.setRootObjectURI(uriString);
-		}
-
-		// Update last modified date
-		metadata.setLastModified(new Date());
-
-		// Save the scenario instance to a file for recovery
-		saveManifest(newInstance);
-
-		if (customiser != null) {
-			customiser.accept(newInstance);
-		}
-
-		// Finally add to node in the service model.
-		container.getElements().add(newInstance);
-
-		return newInstance;
-	}
-
-	@Override
-	public ScenarioInstance insert(final @NonNull Container container, final @NonNull URI sourceURI, @Nullable final Consumer<ScenarioInstance> customiser) throws Exception {
-		log.debug("Inserting scenario into " + container);
+		sourceRecord.saveCopyTo(uuid, archiveURI);
 
 		// Create new model nodes
 		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
 
-		// Create a new UUID
-		final String uuid = EcoreUtil.generateUUID();
+		newInstance.setName(name);
 		newInstance.setUuid(uuid);
+		newInstance.setScenarioVersion(sourceRecord.getManifest().getScenarioVersion());
+		newInstance.setVersionContext(sourceRecord.getManifest().getVersionContext());
+		newInstance.setClientScenarioVersion(sourceRecord.getManifest().getClientScenarioVersion());
+		newInstance.setClientVersionContext(sourceRecord.getManifest().getClientVersionContext());
 
-		newInstance.setMetadata(metadata);
+		newInstance.setRootObjectURI(archiveURI.toString());
 
-		// Construct new URIs into the model service for our models.
-		final ResourceSet instanceResourceSet = createResourceSet();
-		{
-			// Construct internal URI based on UUID and model class name
-			final String uriString = "./" + uuid + ".xmi";
-			final URI resolved = resolveURI(uriString);
-
-			log.debug("Storing submodel into " + resolved);
-			try {
-				ScenarioServiceUtils.copyURIData(instanceResourceSet.getURIConverter(), sourceURI, resolved);
-			} catch (final IOException e) {
-				return null;
-			}
-			// Record new submodel URI
-			newInstance.setRootObjectURI(uriString);
-		}
-
+		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+		metadata.setContentType(sourceRecord.getManifest().getScenarioType());
 		// Update last modified date
 		metadata.setLastModified(new Date());
 
-		// Save the scenario instance to a file for recovery
-		saveManifest(newInstance);
+		newInstance.setMetadata(metadata);
 
-		if (customiser != null) {
-			customiser.accept(newInstance);
-		}
+		ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
+
+		modelRecord.setScenarioInstance(newInstance);
+		modelRecord.setName(newInstance.getName());
+		SSDataManager.Instance.register(newInstance, modelRecord);
 
 		// Finally add to node in the service model.
-		container.getElements().add(newInstance);
+		parent.getElements().add(newInstance);
 
 		return newInstance;
 	}
@@ -569,6 +474,16 @@ public class FileScenarioService extends AbstractScenarioService {
 		backupLock.acquireUninterruptibly();
 		// Unlock as we do not really need it
 		backupLock.release();
+
+		// HACk
+		while (!PlatformUI.isWorkbenchRunning()) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 
 		boolean attemptBackup = true;
 		boolean mainFileExists = false;
@@ -660,6 +575,45 @@ public class FileScenarioService extends AbstractScenarioService {
 		result.setSupportsForking(true);
 		result.setSupportsImport(true);
 
+		result.eAllContents().forEachRemaining(e -> {
+			if (e instanceof ScenarioInstance) {
+				ScenarioInstance scenarioInstance = (ScenarioInstance) e;
+				URI archiveURI = resolveURI(scenarioInstance.getUuid() + ".lingo");
+				if (!new File(archiveURI.toFileString()).exists()) {
+					// Maybe old style?
+					URI oldURI = resolveURI(scenarioInstance.getUuid() + ".xmi");
+					File oldScenarioFile = new File(oldURI.toFileString());
+					if (oldScenarioFile.exists()) {
+						Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+						manifest.setScenarioType(scenarioInstance.getMetadata().getContentType());
+						manifest.setVersionContext(scenarioInstance.getVersionContext());
+						manifest.setScenarioVersion(scenarioInstance.getScenarioVersion());
+						manifest.setClientVersionContext(scenarioInstance.getClientVersionContext());
+						manifest.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+						try {
+							ScenarioStorageUtil.storeToURI(scenarioInstance.getUuid(), oldURI, Collections.emptyMap(), manifest, archiveURI, getScenarioCipherProvider());
+
+							// Delete the old file.
+							FileDeleter.delete(oldScenarioFile, true);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+				try {
+					ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
+					if (modelRecord != null) {
+						modelRecord.setName(scenarioInstance.getName());
+						modelRecord.setScenarioInstance(scenarioInstance);
+						SSDataManager.Instance.register(scenarioInstance, modelRecord);
+						scenarioInstance.setRootObjectURI(archiveURI.toString());
+					}
+				} catch (Exception ex) {
+					// ex.printStackTrace();
+				}
+			}
+		});
+
 		return result;
 	}
 
@@ -750,7 +704,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public @NonNull URI resolveURI(final String uriString) {
+	public URI resolveURI(final String uriString) {
 		final URI uri = URI.createURI(uriString);
 		if (uri.isRelative()) {
 			return uri.resolve(storeURI);
@@ -762,80 +716,6 @@ public class FileScenarioService extends AbstractScenarioService {
 	@Override
 	public String getSerivceID() {
 		return "file-scenario-service";
-	}
-
-	@Override
-	public InstanceData load(final ScenarioInstance scenarioInstance, @NonNull IProgressMonitor parentMonitor) throws IOException {
-
-		SubMonitor subMonitor = SubMonitor.convert(parentMonitor, "Loading scenario", 100);
-		try {
-
-			@NonNull
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-			if (modelRecord.isLoaded()) {
-				throw new IllegalStateException();
-			}
-
-			log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
-
-			if (scenarioMigrationService != null) {
-				try {
-					scenarioMigrationService.migrateScenario(this, scenarioInstance, subMonitor.split(99));
-				} catch (final RuntimeException e) {
-					throw e;
-				} catch (final Exception e) {
-					throw new RuntimeException("Error migrating scenario", e);
-				}
-			}
-			subMonitor.setTaskName("Loading scenario");
-
-			log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
-
-			// create MMXRootObject and connect submodel instances into it.
-			final ResourceSet resourceSet = createResourceSet();
-
-			final String rooObjectURI = scenarioInstance.getRootObjectURI();
-			// acquire sub models
-			log.debug("Loading rootObject from " + rooObjectURI);
-			final URI uri = resolveURI(rooObjectURI);
-
-			final Resource resource = ResourceHelper.loadResource(resourceSet, uri);
-			final EObject implementation = resource.getContents().get(0);
-
-			if (implementation == null) {
-				throw new IOException("Null value for model instance " + rooObjectURI);
-			}
-
-			final Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> p = initEditingDomain(resourceSet, implementation, scenarioInstance);
-			final EditingDomain domain = p.getFirst();
-
-			final InstanceData data = new InstanceData(modelRecord, implementation, domain, p.getSecond(), (d) -> {
-				try (ModelReference ref = modelRecord.aquireReference("FileScenarioService:2")) {
-					try {
-						ResourceHelper.saveResource(resource);
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
-					execute(scenarioInstance, (si) -> {
-						// Update last modified date
-						final Metadata metadata = si.getMetadata();
-						if (metadata != null) {
-							metadata.setLastModified(new Date());
-						}
-					});
-					final BasicCommandStack commandStack = (BasicCommandStack) d.getCommandStack();
-					commandStack.saveIsDone();
-				}
-			}, d -> {
-				// Nothing to do
-			});
-			p.getSecond().setInstanceData(data);
-
-			subMonitor.worked(1);
-			return data;
-		} finally {
-			subMonitor.done();
-		}
 	}
 
 	@Override

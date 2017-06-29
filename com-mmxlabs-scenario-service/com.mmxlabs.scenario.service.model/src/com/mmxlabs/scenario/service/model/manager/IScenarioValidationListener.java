@@ -9,5 +9,5 @@ import org.eclipse.jdt.annotation.NonNull;
 
 public interface IScenarioValidationListener {
 
-	void validationChanged(@NonNull ModelRecord modelRecord, @NonNull IStatus status);
+	void validationChanged(@NonNull ScenarioModelRecord modelRecord, @NonNull IStatus status);
 }

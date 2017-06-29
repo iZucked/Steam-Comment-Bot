@@ -21,7 +21,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
@@ -78,13 +78,14 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 			if (object instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-				@NonNull
-				ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-				// We can be blocked on migration if we are loading when checking for a reference 
-				if (modelRecord.isLoaded()) {
-					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceLabelProvider")) {
-						if (ref != null && ref.isDirty()) {
-							text = "* " + text;
+				ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				if (modelRecord != null) {
+					// We can be blocked on migration if we are loading when checking for a reference
+					if (modelRecord.isLoaded()) {
+						try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceLabelProvider")) {
+							if (ref != null && ref.isDirty()) {
+								text = "* " + text;
+							}
 						}
 					}
 				}

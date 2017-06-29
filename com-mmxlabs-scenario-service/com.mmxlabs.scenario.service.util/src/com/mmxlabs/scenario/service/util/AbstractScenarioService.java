@@ -4,19 +4,13 @@
  */
 package com.mmxlabs.scenario.service.util;
 
-import java.util.EventObject;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectAttributeValueCondition;
 import org.eclipse.emf.query.conditions.strings.StringValue;
 import org.eclipse.emf.query.statements.FROM;
@@ -25,30 +19,24 @@ import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 /**
  * An abstract base class suitable for most scenario services.
  * 
- * @author hinton
- * 
  */
 public abstract class AbstractScenarioService extends AbstractScenarioServiceListenerHandler {
 
-	private final @NonNull String name;
-	private ScenarioService serviceModel;
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
 
-	protected IScenarioMigrationService scenarioMigrationService;
+	private final @NonNull String name;
+	private ScenarioService serviceModel;
+
 	protected IScenarioCipherProvider _scenarioCipherProvider;
 
 	private final Queue<Runnable> delayedRunWhenReadyRunnables = new ConcurrentLinkedQueue<>();
@@ -99,64 +87,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		return serviceModel;
 	}
 
-	/**
-	 * Create a {@link ResourceSet} for loading and saving
-	 * 
-	 */
-	protected @NonNull ResourceSet createResourceSet() {
-		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
-		return resourceSet;
-	}
-
-	protected Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> initEditingDomain(final ResourceSet resourceSet, final EObject rootObject,
-			final ScenarioInstance instance) {
-
-		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(instance);
-
-		commandStack.addCommandStackListener(new CommandStackListener() {
-
-			@Override
-			public void commandStackChanged(final EventObject event) {
-				// instance.setDirty(commandStack.isSaveNeeded());
-			}
-		});
-
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-
-		// Create the editing domain with a special command stack.
-		final MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
-
-		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, resourceSet);
-
-		commandStack.setEditingDomain(editingDomain);
-
-		return new Pair<>(editingDomain, commandStack);
-
-	}
-
-	/**
-	 */
-	public IScenarioMigrationService getScenarioMigrationService() {
-		return scenarioMigrationService;
-	}
-
-	/**
-	 */
-	public void setScenarioMigrationService(final IScenarioMigrationService scenarioMigrationHandler) {
-		this.scenarioMigrationService = scenarioMigrationHandler;
-	}
-
-	public IScenarioCipherProvider getScenarioCipherProvider() {
-		return _scenarioCipherProvider;
-	}
-
-	public void setScenarioCipherProvider(final IScenarioCipherProvider scenarioCipherProvider) {
-		this._scenarioCipherProvider = scenarioCipherProvider;
-	}
-
 	@Override
 	public void notifyReady(final Runnable r) {
 
@@ -202,5 +132,13 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			viewInstance.getElements().add(child);
 		});
 		return child;
+	}
+
+	public IScenarioCipherProvider getScenarioCipherProvider() {
+		return _scenarioCipherProvider;
+	}
+
+	public void setScenarioCipherProvider(final IScenarioCipherProvider scenarioCipherProvider) {
+		this._scenarioCipherProvider = scenarioCipherProvider;
 	}
 }

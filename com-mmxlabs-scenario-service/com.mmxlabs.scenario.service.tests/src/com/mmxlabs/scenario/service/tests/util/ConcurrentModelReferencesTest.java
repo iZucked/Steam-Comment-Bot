@@ -14,16 +14,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.manager.InstanceData;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
@@ -56,11 +56,18 @@ public class ConcurrentModelReferencesTest {
 
 		final List<Runnable> runnables = new LinkedList<>();
 		EditingDomain domain = Mockito.mock(EditingDomain.class);
-		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance, (r,m) -> {
+		ScenarioModelRecord modelRecord = new ScenarioModelRecord(ManifestFactory.eINSTANCE.createManifest(), (r, m) -> {
 			EObject eObject = EcoreFactory.eINSTANCE.createEObject();
-			return new InstanceData(r, eObject, domain, new BasicCommandStack(), (d)->{}, (d)->{});
+			return new InstanceData(r, eObject, domain, new BasicCommandStack(), (mr, d) -> {
+				// Save hook
+			}, (d) -> {
+				// Close hook
+			});
 		});
+		modelRecord.setScenarioInstance(instance);
+
+		SSDataManager.Instance.register(instance, modelRecord);
+
 		for (int i = 0; i < numRunnables; ++i) {
 			runnables.add(() -> {
 

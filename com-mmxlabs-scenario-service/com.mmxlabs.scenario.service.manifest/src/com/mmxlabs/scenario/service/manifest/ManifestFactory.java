@@ -33,6 +33,15 @@ public interface ManifestFactory extends EFactory {
 	Manifest createManifest();
 
 	/**
+	 * Returns a new object of class '<em>Model Artifact</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Model Artifact</em>'.
+	 * @generated
+	 */
+	ModelArtifact createModelArtifact();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

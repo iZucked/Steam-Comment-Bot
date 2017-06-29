@@ -16,32 +16,28 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager.PostChangeType;
 
-public final class ModelRecord {
+public class ModelRecord {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ModelRecord.class);
 
 	@NonNull
-	private final Lock referenceLock = new ReentrantLock();
+	protected final Lock referenceLock = new ReentrantLock();
 
-	private int referenceCount = 0;
+	protected int referenceCount = 0;
 
 	protected boolean readOnly = false;
 
 	@Nullable
-	private InstanceData data = null;
+	protected InstanceData data = null;
 
 	private Exception loadFailure;
 
@@ -51,27 +47,15 @@ public final class ModelRecord {
 	/**
 	 * List of model references used for debugging open references.
 	 */
-	private final List<WeakReference<ModelReference>> referencesList = new LinkedList<>();
+	protected final List<WeakReference<ModelReference>> referencesList = new LinkedList<>();
 
-	@NonNull
-	private IStatus validationStatus = Status.OK_STATUS;
+	final @NonNull protected ConcurrentLinkedQueue<IScenarioLockListener> lockListeners = new ConcurrentLinkedQueue<>();
+	final @NonNull protected ConcurrentLinkedQueue<IScenarioDirtyListener> dirtyListeners = new ConcurrentLinkedQueue<>();
 
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IScenarioValidationListener> validationListeners = new ConcurrentLinkedQueue<>();
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IScenarioLockListener> lockListeners = new ConcurrentLinkedQueue<>();
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IScenarioDirtyListener> dirtyListeners = new ConcurrentLinkedQueue<>();
+	protected ModelReference sharedReference = null;
 
-	private final @NonNull ScenarioInstance scenarioInstance;
-
-	private ModelReference sharedReference = null;
-
-	public ModelRecord(final @NonNull ScenarioInstance scenarioInstance, final BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction) {
-		this.scenarioInstance = scenarioInstance;
+	public ModelRecord(final @NonNull BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction) {
 		this.loadFunction = loadFunction;
-		if (scenarioInstance != null) {
-			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
-			setReadOnly(scenarioInstance.isReadonly());
-			scenarioInstance.eAdapters().add(readOnlyAdapter);
-		}
 	}
 
 	public boolean isLoaded() {
@@ -86,40 +70,50 @@ public final class ModelRecord {
 		try {
 			referenceLock.lock();
 			++referenceCount;
+			boolean triggerLoadCallback = false;
 			if (referenceCount == 1) {
 				assert data == null;
-				data = loadFunction.apply(this, monitor);
-				if (data == null) {
+				InstanceData pData = loadFunction.apply(this, monitor);
+				if (pData == null) {
 					throw new RuntimeException(loadFailure);
 				}
+				data = pData;
 
 				for (final IScenarioLockListener l : lockListeners) {
-
-					data.getLock().addLockListener(l);
+					pData.getLock().addLockListener(l);
 				}
 				for (final IScenarioDirtyListener l : dirtyListeners) {
-					data.addDirtyListener(l);
+					pData.addDirtyListener(l);
 				}
 				assert sharedReference == null;
-				sharedReference = ModelReference.createSharedReference(this, referenceID, data);
+				sharedReference = ModelReference.createSharedReference(this, referenceID, pData);
 
+				triggerLoadCallback = true;
+				
 				data.setReadOnly(readOnly);
 			}
 			if (loadFailure != null) {
 				throw new RuntimeException(loadFailure);
 			}
-			if (referenceCount > 0) {
-				assert data != null;
-			}
 
-			data.setReadOnly(readOnly);
+			assert data != null;
+
 
 			final ModelReference modelReference = new ModelReference(this, referenceID, data);
 			referencesList.add(new WeakReference<ModelReference>(modelReference));
+
+			if (triggerLoadCallback) {
+				runPostChangeHooks(PostChangeType.LOAD);
+			}
+
 			return modelReference;
 		} finally {
 			referenceLock.unlock();
 		}
+	}
+
+	public void runPostChangeHooks(PostChangeType type) {
+
 	}
 
 	public @Nullable ModelReference aquireReferenceIfLoaded(final @NonNull String referenceID) {
@@ -159,16 +153,15 @@ public final class ModelRecord {
 					for (final IScenarioDirtyListener l : dirtyListeners) {
 						data.removeDirtyListener(l);
 					}
-					SSDataManager.Instance.runPostChangeHooks(this, PostChangeType.UNLOAD);
+					runPostChangeHooks(PostChangeType.UNLOAD);
+
 					sharedReference.close();
 					sharedReference = null;
 					data.close();
 				}
 				data = null;
 				// Reset validation status
-				// validationStatus = Status.OK_STATUS;
-				validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
-
+				onPostUnload();
 			}
 			cleanupReferencesList();
 		} finally {
@@ -176,7 +169,11 @@ public final class ModelRecord {
 		}
 	}
 
-	private void cleanupReferencesList() {
+	protected void onPostUnload() {
+
+	}
+
+	protected void cleanupReferencesList() {
 		final Iterator<WeakReference<ModelReference>> itr = referencesList.iterator();
 		while (itr.hasNext()) {
 			final WeakReference<ModelReference> ref = itr.next();
@@ -190,48 +187,12 @@ public final class ModelRecord {
 		return loadFailure != null;
 	}
 
-	public void setValidationStatus(final @NonNull IStatus status) {
-		this.validationStatus = status;
-		if (scenarioInstance != null) {
-			scenarioInstance.setValidationStatusCode(status.getSeverity());
-		}
-		fireValidationStatusChanged(status);
-	}
-
 	public void setLoadFailure(final Exception loadFailure) {
 		this.loadFailure = loadFailure;
 	}
 
 	public Exception getLoadFailure() {
 		return loadFailure;
-	}
-
-	public int getValidationStatusSeverity() {
-		return validationStatus.getSeverity();
-	}
-
-	public @NonNull IStatus getValidationStatus() {
-		return validationStatus;
-	}
-
-	private void fireValidationStatusChanged(final @NonNull IStatus status) {
-
-		for (final IScenarioValidationListener l : validationListeners) {
-			// Safe loop
-			try {
-				l.validationChanged(this, status);
-			} catch (final Exception e) {
-				LOG.error("Error in validation listener", e);
-			}
-		}
-	}
-
-	public void addValidationListener(@NonNull final IScenarioValidationListener l) {
-		validationListeners.add(l);
-	}
-
-	public void removeValidationListener(@NonNull final IScenarioValidationListener l) {
-		validationListeners.remove(l);
 	}
 
 	public void addDirtyListener(@NonNull final IScenarioDirtyListener l) {
@@ -270,22 +231,10 @@ public final class ModelRecord {
 		lockListeners.remove(l);
 	}
 
-	// public ScenarioInstance getScenarioInstance() {
-	// return scenarioInstance;
-	// }
-
-	private final AdapterImpl readOnlyAdapter = new AdapterImpl() {
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
-			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
-				setReadOnly(msg.getNewBooleanValue());
-			}
-		};
-	};
-
 	/**
 	 * Execute some code within the context of a {@link ModelReference}
 	 */
-	public void execute(final @NonNull Consumer<@NonNull ModelReference> hook) {
+	public void execute(final @NonNull Consumer<ModelReference> hook) {
 		try (ModelReference ref = aquireReference("ModelRecord:1")) {
 			hook.accept(ref);
 		}
@@ -296,63 +245,9 @@ public final class ModelRecord {
 		if (data != null) {
 			LOG.error("ModelRecord #disposed before unloaded");
 		}
-		if (scenarioInstance != null) {
-			scenarioInstance.eAdapters().remove(readOnlyAdapter);
-		}
 		// assert data == null;
 		// assert lockListeners.isEmpty();
-		// assert validationListeners.isEmpty();
 		// assert dirtyListeners.isEmpty();
-	}
-
-	public String getName() {
-		return scenarioInstance.getName();
-	}
-
-	public void revert() {
-		// Wait a little for reference to get closed
-		for (int i = 0; i < 100; ++i) {
-			System.gc();
-			if (referencesList.isEmpty()) {
-				break;
-			} else {
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-				}
-			}
-		}
-		dumpReferences();
-
-		try {
-			referenceLock.lock();
-			referenceCount = 0;
-			if (referenceCount == 0) {
-				// Release strong reference
-				if (data != null) {
-					for (final IScenarioLockListener l : lockListeners) {
-						data.getLock().removeLockListener(l);
-					}
-					for (final IScenarioDirtyListener l : dirtyListeners) {
-						data.removeDirtyListener(l);
-					}
-					SSDataManager.Instance.runPostChangeHooks(this, PostChangeType.UNLOAD);
-					sharedReference.close();
-					sharedReference = null;
-					data.close();
-				}
-				data = null;
-				// Reset validation status
-				validationStatus = Status.OK_STATUS;
-			}
-			cleanupReferencesList();
-		} finally {
-			referenceLock.unlock();
-		}
-	}
-
-	public ScenarioInstance getScenarioInstance() {
-		return scenarioInstance;
 	}
 
 	/**

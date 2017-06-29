@@ -20,7 +20,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class DeleteScenarioFragmentCommandHandler extends AbstractHandler {
@@ -44,7 +44,7 @@ public class DeleteScenarioFragmentCommandHandler extends AbstractHandler {
 							final ScenarioFragment fragment = (ScenarioFragment) element;
 							final ScenarioInstance instance = fragment.getScenarioInstance();
 							assert instance != null;
-							final @NonNull ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+							final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 							modelRecord.execute(ref -> {
 								final EditingDomain domain = ref.getEditingDomain();
 								final EObject fragmentObject = fragment.getFragment();

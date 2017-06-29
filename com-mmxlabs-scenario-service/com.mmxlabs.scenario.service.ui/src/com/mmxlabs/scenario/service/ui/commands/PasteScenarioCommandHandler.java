@@ -38,13 +38,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 /**
  * @author hinton
@@ -242,8 +242,8 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 									final String scenarioName = ScenarioServiceUtils.stripFileExtension(f.getName());
 									final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(destinationContainer);
 
-									ScenarioStorageUtil.withExternalScenarioFromFile(f.getAbsolutePath(), (instance, modelReference) -> {
-										ScenarioServiceUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
+									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(f.toURL(), (modelRecord, modelReference) -> {
+										ScenarioServiceUtils.copyScenario(modelRecord, destinationContainer, scenarioName, existingNames);
 									}, m.split(5));
 
 									m.worked(1);

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.manifest.util;
 
+import com.mmxlabs.scenario.service.manifest.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -73,6 +74,10 @@ public class ManifestAdapterFactory extends AdapterFactoryImpl {
 				return createManifestAdapter();
 			}
 			@Override
+			public Adapter caseModelArtifact(ModelArtifact object) {
+				return createModelArtifactAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -103,6 +108,20 @@ public class ManifestAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createManifestAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.manifest.ModelArtifact <em>Model Artifact</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.scenario.service.manifest.ModelArtifact
+	 * @generated
+	 */
+	public Adapter createModelArtifactAdapter() {
 		return null;
 	}
 

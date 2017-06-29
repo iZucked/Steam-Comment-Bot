@@ -4,21 +4,18 @@
  */
 package com.mmxlabs.scenario.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.model.manager.InstanceData;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public interface IScenarioService {
 	/**
@@ -64,9 +61,11 @@ public interface IScenarioService {
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
 	 * @throws IOException
 	 */
-	ScenarioInstance insert(@NonNull Container container, @NonNull EObject rootObject, @Nullable Consumer<ScenarioInstance> customiser) throws Exception;
+//	ScenarioInstance insert(@NonNull Container container, @NonNull ModelRecord modelRecord, String name) throws Exception;
 
-	ScenarioInstance insert(@NonNull Container container, @NonNull URI rootObjectURI, @Nullable Consumer<ScenarioInstance> customiser) throws Exception;
+//	ScenarioInstance insert(@NonNull Container container, @NonNull EObject rootObject, @Nullable Consumer<ScenarioInstance> customiser) throws Exception;
+
+//	ScenarioInstance insert(@NonNull Container container, @NonNull URI rootObjectURI, @Nullable Consumer<ScenarioInstance> customiser) throws Exception;
 	//
 	// /**
 	// * Create a duplicate of the given scenario and place it in the destination. Any models owned by the original will be duplicated into new resources; dependencies of the original will not be
@@ -86,14 +85,14 @@ public interface IScenarioService {
 	 * @param container
 	 */
 	void delete(@NonNull Container container);
-
-	/**
-	 * Ensures that the given scenario instance's actual implementation (getInstance() method) is loaded and resolved.
-	 * 
-	 * @param instance
-	 * @throws IOException
-	 */
-	InstanceData load(@NonNull ScenarioInstance instance, @NonNull IProgressMonitor monitor) throws Exception;
+//
+//	/**
+//	 * Ensures that the given scenario instance's actual implementation (getInstance() method) is loaded and resolved.
+//	 * 
+//	 * @param instance
+//	 * @throws IOException
+//	 */
+//	InstanceData load(@NonNull ScenarioInstance instance, @NonNull IProgressMonitor monitor) throws Exception;
 
 	// /**
 	// * Cause the saving of the given instance.
@@ -158,5 +157,7 @@ public interface IScenarioService {
 	void notifyReady(Runnable r);
 
 	URI resolveURI(String uriString);
+
+	ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name) throws Exception;
 
 }

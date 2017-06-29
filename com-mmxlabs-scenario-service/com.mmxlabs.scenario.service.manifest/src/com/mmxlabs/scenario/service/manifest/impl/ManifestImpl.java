@@ -7,14 +7,19 @@ package com.mmxlabs.scenario.service.manifest.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
+import com.mmxlabs.scenario.service.manifest.ModelArtifact;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,13 +30,14 @@ import com.mmxlabs.scenario.service.manifest.ManifestPackage;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getModelURIs <em>Model UR Is</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getUUID <em>UUID</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getScenarioType <em>Scenario Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getVersionContext <em>Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getClientVersionContext <em>Client Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getModelDependencies <em>Model Dependencies</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getModelFragments <em>Model Fragments</em>}</li>
  * </ul>
  *
  * @generated
@@ -46,16 +52,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * @ordered
 	 */
 	protected EList<String> modelURIs;
-
-	/**
-	 * The cached value of the '{@link #getDependencyUUIDs() <em>Dependency UUI Ds</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDependencyUUIDs()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> dependencyUUIDs;
 
 	/**
 	 * The default value of the '{@link #getUUID() <em>UUID</em>}' attribute.
@@ -178,6 +174,26 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	protected String clientVersionContext = CLIENT_VERSION_CONTEXT_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getModelDependencies() <em>Model Dependencies</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModelDependencies()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ModelArtifact> modelDependencies;
+
+	/**
+	 * The cached value of the '{@link #getModelFragments() <em>Model Fragments</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModelFragments()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ModelArtifact> modelFragments;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -207,19 +223,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			modelURIs = new EDataTypeUniqueEList<String>(String.class, this, ManifestPackage.MANIFEST__MODEL_UR_IS);
 		}
 		return modelURIs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<String> getDependencyUUIDs() {
-		if (dependencyUUIDs == null) {
-			dependencyUUIDs = new EDataTypeUniqueEList<String>(String.class, this, ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS);
-		}
-		return dependencyUUIDs;
 	}
 
 	/**
@@ -366,12 +369,52 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * @generated
 	 */
 	@Override
+	public EList<ModelArtifact> getModelDependencies() {
+		if (modelDependencies == null) {
+			modelDependencies = new EObjectContainmentEList<ModelArtifact>(ModelArtifact.class, this, ManifestPackage.MANIFEST__MODEL_DEPENDENCIES);
+		}
+		return modelDependencies;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<ModelArtifact> getModelFragments() {
+		if (modelFragments == null) {
+			modelFragments = new EObjectContainmentEList<ModelArtifact>(ModelArtifact.class, this, ManifestPackage.MANIFEST__MODEL_FRAGMENTS);
+		}
+		return modelFragments;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ManifestPackage.MANIFEST__MODEL_DEPENDENCIES:
+				return ((InternalEList<?>)getModelDependencies()).basicRemove(otherEnd, msgs);
+			case ManifestPackage.MANIFEST__MODEL_FRAGMENTS:
+				return ((InternalEList<?>)getModelFragments()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ManifestPackage.MANIFEST__MODEL_UR_IS:
 				return getModelURIs();
-			case ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS:
-				return getDependencyUUIDs();
 			case ManifestPackage.MANIFEST__UUID:
 				return getUUID();
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
@@ -384,6 +427,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return getClientScenarioVersion();
 			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
 				return getClientVersionContext();
+			case ManifestPackage.MANIFEST__MODEL_DEPENDENCIES:
+				return getModelDependencies();
+			case ManifestPackage.MANIFEST__MODEL_FRAGMENTS:
+				return getModelFragments();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -400,10 +447,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__MODEL_UR_IS:
 				getModelURIs().clear();
 				getModelURIs().addAll((Collection<? extends String>)newValue);
-				return;
-			case ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS:
-				getDependencyUUIDs().clear();
-				getDependencyUUIDs().addAll((Collection<? extends String>)newValue);
 				return;
 			case ManifestPackage.MANIFEST__UUID:
 				setUUID((String)newValue);
@@ -423,6 +466,14 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
 				setClientVersionContext((String)newValue);
 				return;
+			case ManifestPackage.MANIFEST__MODEL_DEPENDENCIES:
+				getModelDependencies().clear();
+				getModelDependencies().addAll((Collection<? extends ModelArtifact>)newValue);
+				return;
+			case ManifestPackage.MANIFEST__MODEL_FRAGMENTS:
+				getModelFragments().clear();
+				getModelFragments().addAll((Collection<? extends ModelArtifact>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -437,9 +488,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 		switch (featureID) {
 			case ManifestPackage.MANIFEST__MODEL_UR_IS:
 				getModelURIs().clear();
-				return;
-			case ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS:
-				getDependencyUUIDs().clear();
 				return;
 			case ManifestPackage.MANIFEST__UUID:
 				setUUID(UUID_EDEFAULT);
@@ -459,6 +507,12 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
 				setClientVersionContext(CLIENT_VERSION_CONTEXT_EDEFAULT);
 				return;
+			case ManifestPackage.MANIFEST__MODEL_DEPENDENCIES:
+				getModelDependencies().clear();
+				return;
+			case ManifestPackage.MANIFEST__MODEL_FRAGMENTS:
+				getModelFragments().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -473,8 +527,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 		switch (featureID) {
 			case ManifestPackage.MANIFEST__MODEL_UR_IS:
 				return modelURIs != null && !modelURIs.isEmpty();
-			case ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS:
-				return dependencyUUIDs != null && !dependencyUUIDs.isEmpty();
 			case ManifestPackage.MANIFEST__UUID:
 				return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
@@ -487,6 +539,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return clientScenarioVersion != CLIENT_SCENARIO_VERSION_EDEFAULT;
 			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
 				return CLIENT_VERSION_CONTEXT_EDEFAULT == null ? clientVersionContext != null : !CLIENT_VERSION_CONTEXT_EDEFAULT.equals(clientVersionContext);
+			case ManifestPackage.MANIFEST__MODEL_DEPENDENCIES:
+				return modelDependencies != null && !modelDependencies.isEmpty();
+			case ManifestPackage.MANIFEST__MODEL_FRAGMENTS:
+				return modelFragments != null && !modelFragments.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -503,8 +559,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (modelURIs: ");
 		result.append(modelURIs);
-		result.append(", dependencyUUIDs: ");
-		result.append(dependencyUUIDs);
 		result.append(", UUID: ");
 		result.append(uuid);
 		result.append(", scenarioType: ");

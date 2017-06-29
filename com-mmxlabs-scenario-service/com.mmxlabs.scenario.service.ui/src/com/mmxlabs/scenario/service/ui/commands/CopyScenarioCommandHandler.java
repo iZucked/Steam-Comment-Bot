@@ -22,11 +22,11 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 /**
  * @author hinton
@@ -54,10 +54,8 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 							instances.add(instance);
 							try {
 								@NonNull
-								final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-								try (ModelReference modelReference = modelRecord.aquireReference("CopyScenarioCommandHandler")) {
-									tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(instance, modelReference.getInstance()));
-								}
+								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(modelRecord));
 							} catch (final IOException e) {
 								e.printStackTrace();
 							}

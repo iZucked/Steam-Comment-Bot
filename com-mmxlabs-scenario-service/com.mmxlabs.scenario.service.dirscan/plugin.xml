@@ -40,6 +40,13 @@
                type="com.mmxlabs.rcp.common.editors.IReasonProvider">
          </adapter>
       </factory>
+      <factory
+            adaptableType="com.mmxlabs.scenario.service.model.manager.MigrationForbiddenException"
+            class="com.mmxlabs.scenario.service.dirscan.internal.DirScanExceptionReasonProviderAdapterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
    </extension>
 
 </plugin>

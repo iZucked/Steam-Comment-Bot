@@ -17,13 +17,14 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getModelURIs <em>Model UR Is</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getUUID <em>UUID</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioType <em>Scenario Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext <em>Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getClientVersionContext <em>Client Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getModelDependencies <em>Model Dependencies</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getModelFragments <em>Model Fragments</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest()
@@ -46,22 +47,6 @@ public interface Manifest extends EObject {
 	 * @generated
 	 */
 	EList<String> getModelURIs();
-
-	/**
-	 * Returns the value of the '<em><b>Dependency UUI Ds</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dependency UUI Ds</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dependency UUI Ds</em>' attribute list.
-	 * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest_DependencyUUIDs()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getDependencyUUIDs();
 
 	/**
 	 * Returns the value of the '<em><b>UUID</b></em>' attribute.
@@ -218,5 +203,37 @@ public interface Manifest extends EObject {
 	 * @generated
 	 */
 	void setClientVersionContext(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Model Dependencies</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.scenario.service.manifest.ModelArtifact}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Model Dependencies</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Model Dependencies</em>' containment reference list.
+	 * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest_ModelDependencies()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ModelArtifact> getModelDependencies();
+
+	/**
+	 * Returns the value of the '<em><b>Model Fragments</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.scenario.service.manifest.ModelArtifact}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Model Fragments</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Model Fragments</em>' containment reference list.
+	 * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest_ModelFragments()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ModelArtifact> getModelFragments();
 
 } // Manifest

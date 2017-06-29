@@ -8,14 +8,15 @@ import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.dirscan.DirScanException;
+import com.mmxlabs.scenario.service.model.manager.MigrationForbiddenException;
 
 public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFactory {
 
 	@Override
 	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
-		if (adaptableObject instanceof DirScanException) {
+		if (adaptableObject instanceof DirScanException || adaptableObject instanceof MigrationForbiddenException) {
 
-			final DirScanException exception = (DirScanException) adaptableObject;
+			final Exception exception = (Exception) adaptableObject;
 			return adapterType.cast(new IReasonProvider() {
 
 				@Override
@@ -35,8 +36,12 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 
 				@Override
 				public String getDescription() {
-					return "There was an error loading the scenario from \"" + exception.getServiceName()
-							+ "\". This is often because a scenario needs to be migrated to the latest data model version.";
+					if (exception instanceof DirScanException) {
+						return "There was an error loading the scenario from \"" + ((DirScanException) exception).getServiceName()
+								+ "\". This is often because a scenario needs to be migrated to the latest data model version.";
+					} else {
+						return "There was an error loading the scenario . This is often because a scenario needs to be migrated to the latest data model version.";
+					}
 				}
 			});
 		}

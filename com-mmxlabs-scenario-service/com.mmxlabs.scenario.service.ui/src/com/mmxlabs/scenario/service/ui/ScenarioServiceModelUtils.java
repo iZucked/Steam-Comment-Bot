@@ -28,10 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
@@ -128,11 +127,15 @@ public final class ScenarioServiceModelUtils {
 		return true;
 	}
 
+	@Deprecated
 	@Nullable
 	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, @NonNull final Set<String> existingNames,
 			final IProgressMonitor monitor) throws Exception {
 		return copyScenario(scenario, destination, scenario.getName(), existingNames, monitor);
 	}
+
+	// FIXME: Duplicates API in ScenarioServiceUtils
+	@Deprecated
 
 	@Nullable
 	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, final String currentName, @NonNull final Set<String> existingNames,
@@ -142,38 +145,11 @@ public final class ScenarioServiceModelUtils {
 		final String namePrefix = (withinContainer ? "Copy of " : "") + currentName;
 		final String newName = ScenarioServiceUtils.getNextName(namePrefix, existingNames);
 
-		final ModelRecord record = SSDataManager.Instance.getModelRecord(scenario);
+		final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(scenario);
 
-		// This check forces a slow code path to copy data by loading, migrating, closing and then the user reloads.
-		// Previously we just copied the raw data and delayed load/migration until the user step
-		//
-		try (ModelReference ref = record.aquireReferenceIfLoaded("ScenarioServiceModelUtils#copyScenario")) {
-			if (ref != null) {
-				return ScenarioServiceCommandUtil.copyTo(scenario, destination, newName);
-			} else {
-				final IScenarioService sourceScenarioService = SSDataManager.Instance.findScenarioService(scenario);
-				final URI sourceURI = sourceScenarioService == null ? URI.createURI(scenario.getRootObjectURI()) : sourceScenarioService.resolveURI(scenario.getRootObjectURI());
-				assert sourceURI != null;
-				
-				final IScenarioService destinationScenarioService = SSDataManager.Instance.findScenarioService(destination);
+		final IScenarioService destinationScenarioService = SSDataManager.Instance.findScenarioService(destination);
 
-				return destinationScenarioService.insert(destination, sourceURI, dup -> {
-					dup.setName(newName);
-
-					// Copy across various bits of information
-					dup.getMetadata().setContentType(scenario.getMetadata().getContentType());
-					dup.getMetadata().setCreated(scenario.getMetadata().getCreated());
-					dup.getMetadata().setLastModified(new Date());
-
-					// Copy version context information
-					dup.setVersionContext(scenario.getVersionContext());
-					dup.setScenarioVersion(scenario.getScenarioVersion());
-
-					dup.setClientVersionContext(scenario.getClientVersionContext());
-					dup.setClientScenarioVersion(scenario.getClientScenarioVersion());
-				});
-			}
-		}
+		return destinationScenarioService.copyInto(destination, record, newName);
 	}
 
 	public static ScenarioInstance fork(@NonNull final ScenarioInstance instance, final String finalNewName, final IProgressMonitor monitor) throws Exception {

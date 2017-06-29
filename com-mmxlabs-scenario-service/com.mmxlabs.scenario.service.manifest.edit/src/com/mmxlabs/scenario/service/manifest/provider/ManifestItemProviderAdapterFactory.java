@@ -96,6 +96,29 @@ public class ManifestItemProviderAdapterFactory extends ManifestAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.manifest.ModelArtifact} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ModelArtifactItemProvider modelArtifactItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.manifest.ModelArtifact}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createModelArtifactAdapter() {
+		if (modelArtifactItemProvider == null) {
+			modelArtifactItemProvider = new ModelArtifactItemProvider(this);
+		}
+
+		return modelArtifactItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -201,6 +224,7 @@ public class ManifestItemProviderAdapterFactory extends ManifestAdapterFactory i
 	@Override
 	public void dispose() {
 		if (manifestItemProvider != null) manifestItemProvider.dispose();
+		if (modelArtifactItemProvider != null) modelArtifactItemProvider.dispose();
 	}
 
 }

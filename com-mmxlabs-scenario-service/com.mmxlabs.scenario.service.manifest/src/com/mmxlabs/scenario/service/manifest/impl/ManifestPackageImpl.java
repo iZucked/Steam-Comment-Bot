@@ -6,12 +6,16 @@ package com.mmxlabs.scenario.service.manifest.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
+import com.mmxlabs.scenario.service.manifest.ModelArtifact;
+import com.mmxlabs.scenario.service.manifest.StorageType;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,6 +30,19 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	private EClass manifestEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass modelArtifactEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum storageTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -114,7 +131,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_DependencyUUIDs() {
+	public EAttribute getManifest_UUID() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -124,7 +141,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_UUID() {
+	public EAttribute getManifest_ScenarioType() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -134,7 +151,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_ScenarioType() {
+	public EAttribute getManifest_ScenarioVersion() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -144,7 +161,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_ScenarioVersion() {
+	public EAttribute getManifest_VersionContext() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -154,7 +171,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_VersionContext() {
+	public EAttribute getManifest_ClientScenarioVersion() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -164,7 +181,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_ClientScenarioVersion() {
+	public EAttribute getManifest_ClientVersionContext() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -174,8 +191,88 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManifest_ClientVersionContext() {
-		return (EAttribute)manifestEClass.getEStructuralFeatures().get(7);
+	public EReference getManifest_ModelDependencies() {
+		return (EReference)manifestEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getManifest_ModelFragments() {
+		return (EReference)manifestEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getModelArtifact() {
+		return modelArtifactEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelArtifact_Key() {
+		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelArtifact_StorageType() {
+		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelArtifact_Type() {
+		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelArtifact_Path() {
+		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelArtifact_DataVersion() {
+		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getStorageType() {
+		return storageTypeEEnum;
 	}
 
 	/**
@@ -209,13 +306,24 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		// Create classes and their features
 		manifestEClass = createEClass(MANIFEST);
 		createEAttribute(manifestEClass, MANIFEST__MODEL_UR_IS);
-		createEAttribute(manifestEClass, MANIFEST__DEPENDENCY_UUI_DS);
 		createEAttribute(manifestEClass, MANIFEST__UUID);
 		createEAttribute(manifestEClass, MANIFEST__SCENARIO_TYPE);
 		createEAttribute(manifestEClass, MANIFEST__SCENARIO_VERSION);
 		createEAttribute(manifestEClass, MANIFEST__VERSION_CONTEXT);
 		createEAttribute(manifestEClass, MANIFEST__CLIENT_SCENARIO_VERSION);
 		createEAttribute(manifestEClass, MANIFEST__CLIENT_VERSION_CONTEXT);
+		createEReference(manifestEClass, MANIFEST__MODEL_DEPENDENCIES);
+		createEReference(manifestEClass, MANIFEST__MODEL_FRAGMENTS);
+
+		modelArtifactEClass = createEClass(MODEL_ARTIFACT);
+		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__KEY);
+		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__STORAGE_TYPE);
+		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__TYPE);
+		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__PATH);
+		createEAttribute(modelArtifactEClass, MODEL_ARTIFACT__DATA_VERSION);
+
+		// Create enums
+		storageTypeEEnum = createEEnum(STORAGE_TYPE);
 	}
 
 	/**
@@ -250,13 +358,26 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		// Initialize classes and features; add operations and parameters
 		initEClass(manifestEClass, Manifest.class, "Manifest", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getManifest_ModelURIs(), ecorePackage.getEString(), "modelURIs", null, 0, -1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getManifest_DependencyUUIDs(), ecorePackage.getEString(), "dependencyUUIDs", null, 0, -1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_UUID(), ecorePackage.getEString(), "UUID", null, 1, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_ScenarioType(), ecorePackage.getEString(), "scenarioType", null, 1, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_ScenarioVersion(), ecorePackage.getEInt(), "scenarioVersion", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_VersionContext(), ecorePackage.getEString(), "versionContext", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_ClientScenarioVersion(), ecorePackage.getEInt(), "clientScenarioVersion", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_ClientVersionContext(), ecorePackage.getEString(), "clientVersionContext", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getManifest_ModelDependencies(), this.getModelArtifact(), null, "modelDependencies", null, 0, -1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getManifest_ModelFragments(), this.getModelArtifact(), null, "modelFragments", null, 0, -1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(modelArtifactEClass, ModelArtifact.class, "ModelArtifact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getModelArtifact_Key(), ecorePackage.getEString(), "key", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelArtifact_StorageType(), this.getStorageType(), "storageType", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelArtifact_Type(), ecorePackage.getEString(), "type", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelArtifact_Path(), ecorePackage.getEString(), "path", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelArtifact_DataVersion(), ecorePackage.getEString(), "dataVersion", null, 0, 1, ModelArtifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(storageTypeEEnum, StorageType.class, "StorageType");
+		addEEnumLiteral(storageTypeEEnum, StorageType.COLOCATED);
+		addEEnumLiteral(storageTypeEEnum, StorageType.EXTERNAL);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider;
@@ -67,7 +67,7 @@ public class ScenarioInstanceSavable extends Saveable {
 					try {
 						// saving = true;
 						monitor.beginTask("Saving", 1);
-						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 						try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioinstanceSavable")) {
 							if (ref != null) {
 								try {

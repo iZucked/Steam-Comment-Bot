@@ -19,10 +19,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 /**
  * Command Handler to present an {@link InputDialog} to the user to rename a {@link Folder} or {@link ScenarioInstance}.
@@ -54,19 +56,23 @@ public class RenameElementHandler extends AbstractHandler {
 
 							final String newName = getNewName(instance.getName());
 							if (newName != null) {
-								ScenarioServiceCommandUtil.execute(instance, i -> i.setName(newName));
+								ScenarioServiceUtils.execute(instance, i -> {
+									i.setName(newName);
+									final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(i);
+									mr.setName(newName);
+								});
 							}
 						} else if (element instanceof Folder) {
 							final Folder folder = (Folder) element;
 							final String newName = getNewName(folder.getName());
 							if (newName != null) {
-								ScenarioServiceCommandUtil.execute(folder, f -> f.setName(newName));
+								ScenarioServiceUtils.execute(folder, f -> f.setName(newName));
 							}
 						} else if (element instanceof ScenarioFragment) {
-							ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+							final ScenarioFragment scenarioFragment = (ScenarioFragment) element;
 							final String newName = getNewName(scenarioFragment.getName());
 							if (newName != null) {
-								ScenarioServiceCommandUtil.execute(scenarioFragment, f -> f.setName(newName));
+								ScenarioServiceUtils.execute(scenarioFragment, f -> f.setName(newName));
 							}
 						}
 					}

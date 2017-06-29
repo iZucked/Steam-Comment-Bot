@@ -10,6 +10,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -41,15 +42,15 @@ public final class InstanceData {
 
 	private final @NonNull ModelRecord modelRecord;
 
-	private final Consumer<InstanceData> saveCallback;
+	private final BiConsumer<ModelRecord, InstanceData> saveCallback;
 	private final Consumer<InstanceData> closeCallback;
 
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IScenarioDirtyListener> dirtyListeners = new ConcurrentLinkedQueue<>();
+	private final @NonNull ConcurrentLinkedQueue<IScenarioDirtyListener> dirtyListeners = new ConcurrentLinkedQueue<>();
 
 	private boolean lastEvaluationFailed = false;
 
 	public InstanceData(@NonNull final ModelRecord modelRecord, @NonNull final EObject instance, @NonNull final EditingDomain editingDomain, @NonNull final BasicCommandStack commandStack,
-			final Consumer<InstanceData> saveCallback, final Consumer<InstanceData> closeCallback) {
+			final BiConsumer<ModelRecord, InstanceData> saveCallback, final Consumer<InstanceData> closeCallback) {
 		this.modelRecord = modelRecord;
 		this.instance = instance;
 		this.editingDomain = editingDomain;
@@ -68,11 +69,9 @@ public final class InstanceData {
 				if (fireEvent) {
 					fireDirtyEvent(isDirty);
 				}
-				SSDataManager.Instance.runPostChangeHooks(modelRecord, PostChangeType.EDIT);
+				modelRecord.runPostChangeHooks(PostChangeType.EDIT);
 			}
 		});
-		// Trigger initial hooks.
-		SSDataManager.Instance.runPostChangeHooks(modelRecord, PostChangeType.LOAD);
 	}
 
 	private void fireDirtyEvent(final boolean newDirty) {
@@ -95,7 +94,7 @@ public final class InstanceData {
 	}
 
 	public void save() throws IOException {
-		saveCallback.accept(this);
+		saveCallback.accept(modelRecord, this);
 		final boolean newDirty = commandStack.isSaveNeeded();
 		final boolean fireEvent = newDirty != isDirty;
 		isDirty = newDirty;
@@ -103,8 +102,8 @@ public final class InstanceData {
 			fireDirtyEvent(isDirty);
 		}
 	}
-	
-	public void setDirty(boolean newDirty) {
+
+	public void setDirty(final boolean newDirty) {
 		final boolean fireEvent = newDirty != isDirty;
 		isDirty = newDirty;
 		if (fireEvent) {
@@ -136,7 +135,7 @@ public final class InstanceData {
 		dirtyListeners.remove(l);
 	}
 
-	public void setLastEvaluationFailed(boolean lastEvaluationFailed) {
+	public void setLastEvaluationFailed(final boolean lastEvaluationFailed) {
 		this.lastEvaluationFailed = lastEvaluationFailed;
 	}
 

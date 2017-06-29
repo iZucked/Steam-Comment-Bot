@@ -26,7 +26,7 @@ public final class ScenarioLock {
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioLock.class);
 
 	private final @NonNull ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IScenarioLockListener> listeners = new ConcurrentLinkedQueue<>();
+	private final @NonNull ConcurrentLinkedQueue<com.mmxlabs.scenario.service.model.manager.IScenarioLockListener> listeners = new ConcurrentLinkedQueue<>();
 	private final @NonNull ModelRecord modelRecord;
 	private boolean lockState;
 

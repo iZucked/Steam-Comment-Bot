@@ -13,9 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.osgi.framework.Bundle;
@@ -39,11 +37,18 @@ import com.mmxlabs.scenario.service.model.ScenarioService;
  *
  */
 public class SSDataManager {
-
+	/**
+	 * List of enums we can register handlers for
+	 *
+	 */
 	public static enum PostChangeHookPhase {
 		ON_LOAD, ON_UNLOAD, VALIDATION, EVALUATION;
 	};
 
+	/**
+	 * Change events. These will trigger one or more {@link PostChangeHookPhase}s
+	 *
+	 */
 	public static enum PostChangeType {
 		LOAD, UNLOAD, EDIT, UNDO, REDO;
 	};
@@ -52,20 +57,20 @@ public class SSDataManager {
 
 	public static final SSDataManager Instance = new SSDataManager();
 
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IPostChangeHook> postChangeHooks_OnLoad = new ConcurrentLinkedQueue<>();
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IPostChangeHook> postChangeHooks_OnUnload = new ConcurrentLinkedQueue<>();
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IPostChangeHook> postChangeHooks_Validation = new ConcurrentLinkedQueue<>();
-	private final @NonNull ConcurrentLinkedQueue<@NonNull IPostChangeHook> postChangeHooks_Evaluation = new ConcurrentLinkedQueue<>();
+	private final @NonNull ConcurrentLinkedQueue<com.mmxlabs.scenario.service.model.manager.IPostChangeHook> postChangeHooks_OnLoad = new ConcurrentLinkedQueue<>();
+	private final @NonNull ConcurrentLinkedQueue<com.mmxlabs.scenario.service.model.manager.IPostChangeHook> postChangeHooks_OnUnload = new ConcurrentLinkedQueue<>();
+	private final @NonNull ConcurrentLinkedQueue<com.mmxlabs.scenario.service.model.manager.IPostChangeHook> postChangeHooks_Validation = new ConcurrentLinkedQueue<>();
+	private final @NonNull ConcurrentLinkedQueue<com.mmxlabs.scenario.service.model.manager.IPostChangeHook> postChangeHooks_Evaluation = new ConcurrentLinkedQueue<>();
 
 	// FIXME: Big memory leak - references are never (rarely) cleaned up -- more
 	// reference counting?
-	private final ConcurrentHashMap<ScenarioInstance, ModelRecord> lookup = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<ScenarioInstance, ScenarioModelRecord> lookup = new ConcurrentHashMap<>();
 
 	private final ExecutorService postChangeExecutor = Executors.newFixedThreadPool(1);
 
 	private final Map<String, IScenarioService> serviceMap = new HashMap<>();
 
-	private final Map<ModelRecord, CompletableFuture<Void>> futureMap = new ConcurrentHashMap<ModelRecord, CompletableFuture<Void>>();
+	private final Map<ScenarioModelRecord, CompletableFuture<Void>> futureMap = new ConcurrentHashMap<ScenarioModelRecord, CompletableFuture<Void>>();
 
 	private class Tracker implements ServiceTrackerCustomizer<IScenarioService, IScenarioService> {
 		private final BundleContext ctx;
@@ -96,45 +101,77 @@ public class SSDataManager {
 
 	public SSDataManager() {
 		final Bundle bundle = FrameworkUtil.getBundle(SSDataManager.class);
-		final BundleContext bundleContext = bundle.getBundleContext();
+		if (bundle != null) {
+			final BundleContext bundleContext = bundle.getBundleContext();
 
-		final ServiceTracker<IScenarioService, IScenarioService> tracker = new ServiceTracker<>(bundleContext, IScenarioService.class, new Tracker(bundleContext));
-		tracker.open();
-	}
-
-	public @NonNull ModelRecord getModelRecord(@NonNull final ScenarioInstance instance) {
-		return get(instance);
-	}
-
-	public @NonNull ModelRecord getModelRecord(@NonNull final ScenarioInstance instance, final BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction) {
-		if (lookup.containsKey(instance)) {
-			throw new IllegalStateException("Instance already in manager");
+			tracker = new ServiceTracker<>(bundleContext, IScenarioService.class, new Tracker(bundleContext));
+			tracker.open();
 		}
-		final ModelRecord record = new ModelRecord(instance, loadFunction);
+
+	}
+
+	public void dispose() {
+		if (tracker != null) {
+			tracker.close();
+			tracker = null;
+		}
+	}
+
+	// public @NonNull ModelRecord getModelRecord(@NonNull final ScenarioInstance instance) {
+	// return get(instance);
+	// }
+	//
+	// public @NonNull ModelRecord getModelRecord(@NonNull final ScenarioInstance instance, final BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction) {
+	// if (lookup.containsKey(instance)) {
+	// throw new IllegalStateException("Instance already in manager");
+	// }
+	// final ModelRecord record = new ModelRecord( loadFunction);
+	// lookup.put(instance, record);
+	// return record;
+	// }
+
+	public void register(@NonNull final ScenarioInstance instance, final ScenarioModelRecord record) {
+		assert instance != null;
+		assert record != null;
+
 		lookup.put(instance, record);
-		return record;
 	}
 
-	protected @NonNull ModelRecord get(@NonNull final ScenarioInstance instance) {
-		final boolean[] runPostLoadHook = new boolean[1];
-		final ModelRecord modelRecord = lookup.computeIfAbsent(instance, (_key) -> {
-			return new ModelRecord(instance, (r, m) -> {
-				try {
-					final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(instance);
-					InstanceData data = scenarioService.load(_key, m);
-					runPostLoadHook[0] = true;
-					return data;
-				} catch (final Exception e) {
-					r.setLoadFailure(e);
-					return null;
-				}
-			});
-		});
-		// We have this slight faff to ensure this gets call after the lookup map has been updated. Otherwise there is a race condition where the load callback could be called before the lookup map is
-		// populated.
-		if (runPostLoadHook[0]) {
-			CompletableFuture.runAsync(() -> runPostChangeHooks(modelRecord, PostChangeType.LOAD), postChangeExecutor);
-		}
+	public void remove(@NonNull final ScenarioInstance instance) {
+		lookup.remove(instance);
+	}
+
+	public @NonNull ScenarioModelRecord getModelRecord(@NonNull final ScenarioInstance instance) {
+		// final boolean[] runPostLoadHook = new boolean[1];
+		final ScenarioModelRecord modelRecord = lookup.get(instance);
+
+		// assert modelRecord != null;
+
+		// final ModelRecord modelRecord = lookup.computeIfAbsent(instance, (_key) -> {
+		//
+		// VersionData versionData = new VersionData();
+		// versionData.setContentType(instance.getMetadata().getContentType());
+		// versionData.setScenarioContext(instance.getVersionContext());
+		// versionData.setScenarioVersion(instance.getScenarioVersion());
+		// versionData.setClientContext(instance.getClientVersionContext());
+		// versionData.setClientVersion(instance.getClientScenarioVersion());
+		//
+		//// return new ModelRecord(versionData, (r, m) -> {
+		// // ServiceHelper.withOptionalService(IS)
+		// ModelRecord data = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(instance.getRootObjectURI()), false, true, null);
+		//
+		//// if (data != null) {
+		//// runPostLoadHook[0] = true;
+		//// }
+		// return data;
+		//// });
+		// });
+		// // We have this slight faff to ensure this gets call after the lookup map has been updated. Otherwise there is a race condition where the load callback could be called before the lookup map
+		// is
+		// // populated.
+		//// if (runPostLoadHook[0]) {
+		//// CompletableFuture.runAsync(() -> runPostChangeHooks(modelRecord, PostChangeType.LOAD), postChangeExecutor);
+		//// }
 		return modelRecord;
 	}
 
@@ -164,19 +201,17 @@ public class SSDataManager {
 			break;
 		case VALIDATION:
 			postChangeHooks_Validation.remove(hook);
-			break;
 		case ON_LOAD:
-			postChangeHooks_OnLoad.add(hook);
-			break;
+			postChangeHooks_OnLoad.remove(hook);
 		case ON_UNLOAD:
-			postChangeHooks_OnUnload.add(hook);
+			postChangeHooks_OnUnload.remove(hook);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported phase");
 		}
 	}
 
-	private static BiConsumer<@NonNull ModelRecord, @NonNull Collection<@NonNull IPostChangeHook>> runHooks = (modelRecord, postChangeHooks) -> {
+	private static BiConsumer<ScenarioModelRecord, @NonNull Collection<IPostChangeHook>> runHooks = (modelRecord, postChangeHooks) -> {
 		for (final IPostChangeHook hook : postChangeHooks) {
 			// Safe loop
 			try {
@@ -187,7 +222,9 @@ public class SSDataManager {
 		}
 	};
 
-	public void runPostChangeHooks(@NonNull final ModelRecord modelRecord, @NonNull final PostChangeType changeType) {
+	private ServiceTracker<IScenarioService, IScenarioService> tracker;
+
+	public void runPostChangeHooks(@NonNull final ScenarioModelRecord modelRecord, @NonNull final PostChangeType changeType) {
 
 		// Cancel existing requests
 		// FIXME: I am not sure if this really works. System.out.printlns seems

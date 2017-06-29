@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Consumer;
 
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -37,7 +36,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
@@ -50,19 +48,18 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.manifest.ManifestFactory;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.model.manager.InstanceData;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.ResourceHelper;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
-import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 public class DirScanScenarioService extends AbstractScenarioService {
 
@@ -131,24 +128,24 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance insert(final Container destination, final EObject rootObject, @Nullable final Consumer<ScenarioInstance> customiser) throws IOException {
-		// log.debug("Duplicating " + original.getUuid() + " into " + destination);
+	public ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name) throws Exception {
+
 		final String uuid = EcoreUtil.generateUUID();
 		final StringBuilder sb = new StringBuilder();
 		{
-			Container c = destination;
+			Container c = parent;
 			while (c != null && !(c instanceof ScenarioService)) {
 				sb.insert(0, File.separator + c.getName());
 				c = c.getParent();
 			}
 
 		}
-
+		//
 		lock.readLock().lock();
 		try {
+			final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
+			URI archiveURI = URI.createFileURI(target.getAbsolutePath());
 
-			final ResourceSet instanceResourceSet = createResourceSet();
-			final File target = new File(dataPath.toString() + sb.toString() + File.separator + uuid + ".lingo");
 			if (target.exists()) {
 				final boolean[] response = new boolean[1];
 				final Display display = PlatformUI.getWorkbench().getDisplay();
@@ -165,99 +162,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					return null;
 				}
 			}
+			tmpRecord.saveCopyTo(uuid, archiveURI);
 
-			log.debug("Inserting scenario into " + destination);
-
-			// Create new model nodes
-			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-
-			// Create a new UUID
-			newInstance.setUuid(uuid);
-			newInstance.setMetadata(metadata);
-
-			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
-
-			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
-			assert destURI != null;
-
-			final Resource instanceResource = instanceResourceSet.createResource(destURI);
-			instanceResource.getContents().add(EcoreUtil.copy(rootObject));
-			ResourceHelper.saveResource(instanceResource);
-
-			if (customiser != null) {
-				customiser.accept(newInstance);
-			}
-
-			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
-			manifest.setScenarioType(newInstance.getMetadata().getContentType());
-			manifest.setUUID(newInstance.getUuid());
-			manifest.setScenarioVersion(newInstance.getScenarioVersion());
-			manifest.setVersionContext(newInstance.getVersionContext());
-
-			manifest.setClientScenarioVersion(newInstance.getClientScenarioVersion());
-			manifest.setClientVersionContext(newInstance.getClientVersionContext());
-			// client version!
-
-			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
-			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
-
-			manifestResource.getContents().add(manifest);
-
-			manifest.getModelURIs().add("rootObject.xmi");
-			manifestResource.save(null);
-			if (!uuid.equals(newInstance.getName())) {
-				final File newTarget = new File(dataPath.toString() + sb.toString() + File.separator + newInstance.getName() + ".lingo");
-				if (!newTarget.exists()) {
-					target.renameTo(newTarget);
-				}
-			}
-
-		} finally {
-			lock.readLock().unlock();
-			pokeWatchThread();
-		}
-		return null;
-
-	}
-
-	@Override
-	public ScenarioInstance insert(final Container destination, final URI sourceURI, @Nullable final Consumer<ScenarioInstance> customiser) throws IOException {
-		// log.debug("Duplicating " + original.getUuid() + " into " + destination);
-		final String uuid = EcoreUtil.generateUUID();
-		final StringBuilder sb = new StringBuilder();
-		{
-			Container c = destination;
-			while (c != null && !(c instanceof ScenarioService)) {
-				sb.insert(0, File.separator + c.getName());
-				c = c.getParent();
-			}
-
-		}
-
-		lock.readLock().lock();
-		try {
-
-			final ResourceSet instanceResourceSet = createResourceSet();
-			final File target = new File(dataPath.toString() + sb.toString() + File.separator + uuid + ".lingo");
-			if (target.exists()) {
-				final boolean[] response = new boolean[1];
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				display.syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
-								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
-
-					}
-				});
-				if (!response[0]) {
-					return null;
-				}
-			}
-
-			log.debug("Inserting scenario into " + destination);
+			log.debug("Inserting scenario into " + parent);
 
 			// Create new model nodes
 			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -271,37 +178,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
 			assert destURI != null;
-
-			ScenarioServiceUtils.copyURIData(instanceResourceSet.getURIConverter(), sourceURI, destURI);
-
-			if (customiser != null) {
-				customiser.accept(newInstance);
-			}
-
-			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
-			manifest.setScenarioType(newInstance.getMetadata().getContentType());
-			manifest.setUUID(newInstance.getUuid());
-			manifest.setScenarioVersion(newInstance.getScenarioVersion());
-			manifest.setVersionContext(newInstance.getVersionContext());
-
-			manifest.setClientScenarioVersion(newInstance.getClientScenarioVersion());
-			manifest.setClientVersionContext(newInstance.getClientVersionContext());
-			// client version!
-
-			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
-			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
-
-			manifestResource.getContents().add(manifest);
-
-			manifest.getModelURIs().add("rootObject.xmi");
-			manifestResource.save(null);
-			if (!uuid.equals(newInstance.getName())) {
-				final File newTarget = new File(dataPath.toString() + sb.toString() + File.separator + newInstance.getName() + ".lingo");
-				if (!newTarget.exists()) {
-					target.renameTo(newTarget);
-				}
-			}
-
 		} finally {
 			lock.readLock().unlock();
 			pokeWatchThread();
@@ -370,7 +246,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	private Manifest loadManifest(final File scenario) {
 		final URI fileURI = URI.createFileURI(scenario.toString());
 
-		final URI manifestURI = URI.createURI("archive:" + fileURI.toString() + "!/MANIFEST.xmi");
+		final URI manifestURI = ScenarioStorageUtil.createArtifactURI(fileURI, ScenarioStorageUtil.PATH_MANIFEST_OBJECT);
+
 		assert manifestURI != null;
 		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
 		assert resourceSet != null;
@@ -621,6 +498,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (!scenarioMap.containsKey(pathKey)) {
 
 			final File f = file.toFile();
+			URI archiveURI = URI.createFileURI(f.getAbsolutePath());
 			final Manifest manifest = loadManifest(f);
 			if (manifest != null) {
 				final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -628,7 +506,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				scenarioInstance.setUuid(manifest.getUUID());
 
 				final URI fileURI = URI.createFileURI(f.getAbsolutePath());
-				scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
+				scenarioInstance.setRootObjectURI(archiveURI.toString());
+
 				final String scenarioname = f.getName().replaceFirst("\\.lingo$", "").replace("\\.scenario$", "");
 				scenarioInstance.setName(scenarioname);
 				scenarioInstance.setVersionContext(manifest.getVersionContext());
@@ -648,6 +527,13 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 					scenarioMap.put(pathKey, new WeakReference<ScenarioInstance>(scenarioInstance));
 					modelToFilesystemMap.put(scenarioInstance, file);
+				}
+				ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, false, getScenarioCipherProvider());
+				if (modelRecord != null) {
+					modelRecord.setName(scenarioInstance.getName());
+					modelRecord.setScenarioInstance(scenarioInstance);
+					SSDataManager.Instance.register(scenarioInstance, modelRecord);
+					scenarioInstance.setRootObjectURI(archiveURI.toString());
 				}
 			}
 		}
@@ -679,6 +565,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			if (container instanceof Container) {
 				((Container) container).getElements().remove(c);
 			}
+
+			SSDataManager.Instance.releaseModelRecord(c);
 		}
 
 	}
@@ -820,20 +708,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				return super.postVisitDirectory(dir, exc);
 			}
 		});
-
-	}
-
-	@Override
-	public InstanceData load(final @NonNull ScenarioInstance instance, @NonNull IProgressMonitor monitor) throws Exception {
-
-		// Make read-only...
-		execute(instance, i -> i.setReadonly(true));
-		try {
-			final InstanceData data = ScenarioStorageUtil.loadLocal(instance);
-			return data;
-		} catch (Exception e) {
-			throw new DirScanException(getName(), e);
-		}
 	}
 
 	@Override

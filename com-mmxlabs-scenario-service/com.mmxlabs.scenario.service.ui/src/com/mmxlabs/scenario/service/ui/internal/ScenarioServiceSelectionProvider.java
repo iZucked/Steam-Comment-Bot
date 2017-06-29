@@ -125,8 +125,8 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public boolean isSelected(@NonNull final ScenarioResult instance) {
-		return selection.contains(instance);
+	public boolean isSelected(@NonNull final ScenarioResult scenarioResult) {
+		return selection.contains(scenarioResult);
 	}
 
 	@Override
@@ -182,29 +182,29 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public void setPinnedInstance(final @Nullable ScenarioResult instance) {
-		setPinnedInstance(instance, false);
+	public void setPinnedInstance(final @Nullable ScenarioResult scenarioResult) {
+		setPinnedInstance(scenarioResult, false);
 	}
 
 	@Override
-	public void setPinnedPair(final @NonNull ScenarioResult pinInstance, final @NonNull ScenarioResult otherInstance, final boolean block) {
-		if (!Objects.equals(pin, pinInstance) || !selection.contains(otherInstance)) {
+	public void setPinnedPair(final @NonNull ScenarioResult pinResult, final @NonNull ScenarioResult otherResult, final boolean block) {
+		if (!Objects.equals(pin, pinResult) || !selection.contains(otherResult)) {
 
 			// Deselect results which are not part of the selection pair.
-			for (final ScenarioResult scenarioInstance : new ArrayList<>(selection)) {
-				assert scenarioInstance != null;
-				if (Objects.equals(scenarioInstance, pinInstance)) {
+			for (final ScenarioResult scenarioResult : new ArrayList<>(selection)) {
+				assert scenarioResult != null;
+				if (Objects.equals(scenarioResult, pinResult)) {
 					continue;
 				}
-				if (Objects.equals(scenarioInstance, otherInstance)) {
+				if (Objects.equals(scenarioResult, otherResult)) {
 					continue;
 				}
-				doDeselect(scenarioInstance, block);
+				doDeselect(scenarioResult, block);
 			}
 
-			doSetPinnedInstance(pinInstance, block);
-			doSelect(pinInstance, block);
-			doSelect(otherInstance, block);
+			doSetPinnedInstance(pinResult, block);
+			doSelect(pinResult, block);
+			doSelect(otherResult, block);
 
 			fireSelectionChangedEvent(block);
 		}

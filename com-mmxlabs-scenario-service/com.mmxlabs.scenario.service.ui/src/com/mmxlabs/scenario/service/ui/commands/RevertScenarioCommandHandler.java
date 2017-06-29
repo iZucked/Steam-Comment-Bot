@@ -10,14 +10,18 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
@@ -28,6 +32,8 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
  * 
  */
 public class RevertScenarioCommandHandler extends AbstractHandler {
+
+	private static final Logger log = LoggerFactory.getLogger(RevertScenarioCommandHandler.class);
 
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
@@ -47,7 +53,7 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 						final Object element = iterator.next();
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
-							final @NonNull ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+							final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 							ScenarioServiceModelUtils.closeReferences(scenarioInstance);
 							modelRecord.revert();
 						}
