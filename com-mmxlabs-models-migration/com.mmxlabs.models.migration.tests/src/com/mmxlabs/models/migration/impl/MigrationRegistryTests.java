@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.models.migration.DataManifest;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnitExtension;
@@ -145,7 +146,7 @@ public class MigrationRegistryTests {
 
 		final IMigrationUnitExtension ext1 = new AbstractMigrationUnitExtension() {
 			@Override
-			public void migrate(@NonNull final URI uri, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
+			public void migrate(@Nullable final Map<URI, PackageData> extraPackages, DataManifest dataManifest) throws Exception {
 				// TODO Auto-generated method stub
 
 			}
@@ -222,7 +223,7 @@ public class MigrationRegistryTests {
 
 		final IMigrationUnitExtension ext1 = new AbstractMigrationUnitExtension() {
 			@Override
-			public void migrate(@NonNull final URI uri, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
+			public void migrate(@Nullable final Map<URI, PackageData> extraPackages, DataManifest dataManifest) throws Exception {
 				// TODO Auto-generated method stub
 
 			}

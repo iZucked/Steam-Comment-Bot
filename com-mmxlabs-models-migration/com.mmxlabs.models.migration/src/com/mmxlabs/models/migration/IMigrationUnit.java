@@ -47,5 +47,5 @@ public interface IMigrationUnit {
 	 * @param extraPackages
 	 * @throws Exception
 	 */
-	void migrate(@NonNull URI uri, @Nullable Map<URI, PackageData> extraPackages) throws Exception;
+	void migrate(@Nullable Map<URI, PackageData> extraPackages, @NonNull DataManifest dataManifest) throws Exception;
 }

@@ -19,13 +19,14 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.migration.DataManifest;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.impl.MigrationRegistry;
 import com.mmxlabs.models.migration.scenario.ScenarioInstanceMigrator;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 @SuppressWarnings("null")
 public class ScenarioInstanceMigratorTest {
@@ -87,15 +88,17 @@ public class ScenarioInstanceMigratorTest {
 
 		when(migrationRegistry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion)).thenReturn(units);
 
+		DataManifest dataManifest = new DataManifest(tmpURI, tmpURI);
+
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry, scenarioCipherProvider);
-		migrator.applyMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion, tmpURI, new NullProgressMonitor());
+		migrator.applyMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion, dataManifest, new NullProgressMonitor());
 
 		final InOrder order = inOrder(clientUnit1, unit1, clientUnit2, clientUnit3, unit2);
-		order.verify(clientUnit1).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-		order.verify(unit1).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-		order.verify(clientUnit2).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-		order.verify(clientUnit3).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-		order.verify(unit2).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+		order.verify(clientUnit1).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+		order.verify(unit1).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+		order.verify(clientUnit2).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+		order.verify(clientUnit3).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+		order.verify(unit2).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
 
 	}
 
@@ -166,27 +169,28 @@ public class ScenarioInstanceMigratorTest {
 		assert tmpURI != null;
 
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(registry, scenarioCipherProvider);
+		DataManifest dataManifest = new DataManifest(tmpURI, tmpURI);
 
 		// TODO: Separate test cases
 		{
 			// Example case 1
 
 			// Apply Migration Chain
-			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 3, latestClientVersion, tmpURI, new NullProgressMonitor());
+			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 
 			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
 			Assert.assertEquals(latestClientVersion, migratedVersion[1]);
 
 			final InOrder order = inOrder(unit19to20, unit20to21, unit21to22, client3to5, client5to6, client6to7, unit23to24, client7to8, unit24to25);
-			order.verify(unit19to20).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit20to21).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit21to22).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client3to5).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client5to6).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client6to7).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit23to24).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client7to8).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit24to25).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+			order.verify(unit19to20).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit20to21).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit21to22).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client3to5).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client5to6).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client6to7).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit23to24).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client7to8).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit24to25).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
 		}
 		{
 			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion);
@@ -195,41 +199,41 @@ public class ScenarioInstanceMigratorTest {
 			// Example case 2
 
 			// Apply Migration Chain
-			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion, tmpURI, new NullProgressMonitor());
+			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 
 			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
 			Assert.assertEquals(latestClientVersion, migratedVersion[1]);
 
 			final InOrder order = inOrder(client3to5, client5to6, client6to7, unit23to24, client7to8, unit24to25);
-			order.verify(client3to5).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client5to6).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client6to7).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit23to24).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client7to8).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit24to25).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+			order.verify(client3to5).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client5to6).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client6to7).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit23to24).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client7to8).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit24to25).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
 		}
 		{
 
 			// Apply Migration Chain
-			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 18, latestScenarioVersion, clientContext, 3, latestClientVersion, tmpURI, new NullProgressMonitor());
+			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 18, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
 			Assert.assertEquals(latestClientVersion, migratedVersion[1]);
 
 			// Example case 1
 
 			final InOrder order = inOrder(client3to4, unit18to19, client4to5, unit19to20, unit20to21, unit21to22, client5to6, client6to7, unit22to23, unit23to24, client7to8, unit24to25);
-			order.verify(client3to4).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit18to19).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client4to5).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit19to20).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit20to21).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit21to22).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client5to6).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client6to7).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit22to23).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit23to24).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(client7to8).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
-			order.verify(unit24to25).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+			order.verify(client3to4).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit18to19).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client4to5).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit19to20).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit20to21).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit21to22).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client5to6).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client6to7).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit22to23).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit23to24).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(client7to8).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
+			order.verify(unit24to25).migrate(Collections.<URI, PackageData> emptyMap(), dataManifest);
 		}
 	}
 
@@ -293,6 +297,7 @@ public class ScenarioInstanceMigratorTest {
 
 		final URI tmpURI = URI.createURI("migration");
 		assert tmpURI != null;
+		DataManifest dataManifest = new DataManifest(tmpURI, tmpURI);
 
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(registry, scenarioCipherProvider);
 
@@ -301,7 +306,7 @@ public class ScenarioInstanceMigratorTest {
 			Assert.assertFalse(chain.isEmpty());
 
 			// Apply Migration Chain
-			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion, tmpURI, new NullProgressMonitor());
+			final int[] migratedVersion = migrator.applyMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion, dataManifest, new NullProgressMonitor());
 
 			Assert.assertEquals(latestScenarioVersion, migratedVersion[0]);
 			// Assert.assertEquals(latestClientVersion, migratedVersion[1]);

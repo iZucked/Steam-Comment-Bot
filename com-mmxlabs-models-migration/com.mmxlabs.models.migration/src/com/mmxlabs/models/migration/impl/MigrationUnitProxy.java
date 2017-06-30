@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.migration.DataManifest;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
@@ -48,12 +49,12 @@ class MigrationUnitProxy implements IMigrationUnit {
 	}
 
 	@Override
-	public void migrate(final @NonNull URI uri, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
+	public void migrate(@Nullable final Map<URI, PackageData> extraPackages, @NonNull DataManifest dataManifest) throws Exception {
 		final IMigrationUnit unit = ext.createMigrationUnit();
 		if (unit == null) {
 			throw new NullPointerException("Unable to create migration unit instance");
 		}
-		unit.migrate(uri, extraPackages);
+		unit.migrate(extraPackages, dataManifest);
 	}
 
 }

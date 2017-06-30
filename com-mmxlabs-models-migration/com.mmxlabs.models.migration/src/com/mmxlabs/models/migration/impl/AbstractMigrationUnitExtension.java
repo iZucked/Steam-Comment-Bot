@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.migration.DataManifest;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnitExtension;
 import com.mmxlabs.models.migration.PackageData;
@@ -32,7 +33,7 @@ public abstract class AbstractMigrationUnitExtension implements IMigrationUnitEx
 	}
 
 	@Override
-	public abstract void migrate(@NonNull URI uri, @Nullable Map<URI, PackageData> extraPackages) throws Exception;
+	public abstract void migrate(@Nullable Map<URI, PackageData> extraPackages, @NonNull DataManifest dataManifest) throws Exception;
 
 	@Override
 	public IMigrationUnit getMigrationUnit() {

@@ -36,9 +36,9 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.models.migration.PackageData;
-import com.mmxlabs.scenario.service.util.EncryptingXMIResourceFactory;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
+import com.mmxlabs.scenario.service.model.util.EncryptingXMIResourceFactory;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipherProvider;
 
 /**
  * A class to manage loading a set of ecore models into {@link EPackage} instances.
