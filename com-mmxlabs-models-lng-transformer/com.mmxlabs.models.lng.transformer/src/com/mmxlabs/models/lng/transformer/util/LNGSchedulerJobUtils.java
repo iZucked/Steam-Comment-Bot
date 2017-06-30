@@ -77,7 +77,7 @@ import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
+import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 
 /**

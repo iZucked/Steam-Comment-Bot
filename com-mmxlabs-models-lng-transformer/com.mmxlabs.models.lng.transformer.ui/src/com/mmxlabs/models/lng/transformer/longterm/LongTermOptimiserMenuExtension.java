@@ -22,8 +22,8 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class LongTermOptimiserMenuExtension implements ITradesTableContextMenuExtension {
 
@@ -65,7 +65,7 @@ public class LongTermOptimiserMenuExtension implements ITradesTableContextMenuEx
 
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> new LNGLongTermJobDescriptor(instance.getName(), instance, userSettings);
 
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			jobRunner.run("Long term optimiser", instance, modelRecord, null, createJobDescriptorCallback, null);
 		}
 	}

@@ -4,15 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
@@ -21,7 +17,10 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegis
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 public class LNGScenarioRunnerUtils {
 
@@ -45,7 +44,7 @@ public class LNGScenarioRunnerUtils {
 	 * @return
 	 */
 	@NonNull
-	public static OptimisationPlan createExtendedSettings(@NonNull final OptimisationPlan optimisationPlan, boolean extend, boolean customise) {
+	public static OptimisationPlan createExtendedSettings(@NonNull final OptimisationPlan optimisationPlan, final boolean extend, final boolean customise) {
 
 		if (!customise && !extend) {
 			return optimisationPlan;
@@ -80,42 +79,31 @@ public class LNGScenarioRunnerUtils {
 	}
 
 	@NonNull
-	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel,
-			@NonNull final String newName) throws Exception {
+	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target,
+			@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final String newName) throws Exception {
 
-		return saveNewScenario(originalScenarioInstance, target, EcoreUtil.copy(scenarioModel), newName);
-	}
-
-	/**
-	 * Same as {@link #saveScenarioAsChild(ScenarioInstance, Container, LNGScenarioModel, String)} but without a copy
-	 * 
-	 * @param originalScenarioInstance
-	 * @param target
-	 * @param scenarioModel
-	 * @param newName
-	 * @return
-	 * @throws IOException
-	 */
-	@NonNull
-	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel,
-			@NonNull final String newName) throws Exception {
+		
 		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(target);
-
-		return scenarioService.insert(target, scenarioModel, theDupe -> {
-
-			theDupe.setName(newName);
-
-			// Copy across various bits of information
-			theDupe.getMetadata().setContentType(originalScenarioInstance.getMetadata().getContentType());
-			theDupe.getMetadata().setCreated(originalScenarioInstance.getMetadata().getCreated());
-			theDupe.getMetadata().setLastModified(new Date());
-
-			// Copy version context information
-			theDupe.setVersionContext(originalScenarioInstance.getVersionContext());
-			theDupe.setScenarioVersion(originalScenarioInstance.getScenarioVersion());
-
-			theDupe.setClientVersionContext(originalScenarioInstance.getClientVersionContext());
-			theDupe.setClientScenarioVersion(originalScenarioInstance.getClientScenarioVersion());
-		});
+		final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(newName, scenarioDataProvider);
+		return scenarioService.copyInto(target, tmpRecord, newName);
 	}
+
+//	/**
+//	 * Same as {@link #saveScenarioAsChild(ScenarioInstance, Container, LNGScenarioModel, String)} but without a copy
+//	 * 
+//	 * @param originalScenarioInstance
+//	 * @param target
+//	 * @param scenarioModel
+//	 * @param newName
+//	 * @return
+//	 * @throws IOException
+//	 */
+//	@NonNull
+//	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final IScenarioDataProvider scenarioDataProvider,
+//			@NonNull final String newName) throws Exception {
+//		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(target);
+//		final ModelRecord tmpRecord = ScenarioStorageUtil.createFrom(newName, scenarioDataProvider);
+//		return scenarioService.copyInto(target, tmpRecord, newName);
+//
+//	}
 }

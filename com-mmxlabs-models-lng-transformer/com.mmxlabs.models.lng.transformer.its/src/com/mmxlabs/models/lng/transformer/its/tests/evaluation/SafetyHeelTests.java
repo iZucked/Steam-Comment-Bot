@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @RunWith(value = ShiroRunner.class)
 public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
@@ -41,7 +42,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 	public void testStartEventLimitedHeel() {
 		System.err.println("\n\n Limited Start Heel forces a cooldown");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, // start to load
 				SlotVisit.class, Journey.class, Idle.class, // load to discharge
@@ -60,7 +61,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.vc.setMinHeel(5000);
 
 		// Push up base fuel price for force NBO+FBO
-		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
@@ -161,7 +162,6 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.setExpectedValue(1, Expectations.MIN_HEEL_VIOLATIONS, StartEvent.class, 0);
 		checker.setExpectedValue(1, Expectations.COOLDOWN_VIOLATION, SlotVisit.class, 0);
 
-		
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
@@ -174,7 +174,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 	public void testStartEventExcessHeel() {
 		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage and LNG Rollover");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change from default scenario
 		final SequenceTester checker = getDefaultTester();
@@ -187,7 +187,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setPriceExpression("1");
 
 		// Push up base fuel price for force NBO+FBO
-		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
@@ -288,7 +288,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 	public void testStartEventHeelForcedToStayCold() {
 		System.err.println("\n\nPlenty of heel, but base fuel is cheaper, but we will warm up if we do not use NBO");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change from default scenario
 		final SequenceTester checker = getDefaultTester();
@@ -391,7 +391,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// create an additional cargo
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
@@ -407,7 +407,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		msc.vc.setMinHeel(500);
 
-		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
@@ -483,7 +483,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// create an additional cargo
 		@SuppressWarnings("unused")
@@ -503,7 +503,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.vessel.getVesselClass().setWarmingTime(0);
 		msc.vessel.getVesselClass().setCoolingVolume(500);
 
-		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
@@ -568,7 +568,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { firstLoad, -firstDischarge, secondLoad, -secondDischarges });
 
 		checker.setExpectedValue(1 * 21 * 500, Expectations.HEEL_COST, StartEvent.class, 0);
-		checker.setExpectedValue(1 , Expectations.COOLDOWN_VIOLATION, SlotVisit.class, 2);
+		checker.setExpectedValue(1, Expectations.COOLDOWN_VIOLATION, SlotVisit.class, 2);
 
 		// Min heel in m3
 		// checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
@@ -585,7 +585,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		System.err.println("\n\nTest min heel rollover for maintenance event: LNG travel due to expensive BF");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// create a maintenance event after the cargo
 		final Port eventPort = msc.loadPort;
@@ -599,7 +599,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// force a heel rollover at the maintenance port
 		msc.vc.setMinHeel(500);
 
-		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
@@ -638,7 +638,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		System.err.println("\n\nTest LNG heel from early charter out event is rolled over.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// add a charter out event prior to the first cargo.
 		final LocalDateTime startLoad = msc.getFirstAppointment().getSecond().withZoneSameInstant(ZoneId.of(msc.originPort.getTimeZone())).toLocalDateTime();
@@ -698,7 +698,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		System.err.println("\n\nTest regular charter out from load port to load port.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		@SuppressWarnings("unused")
 		final CharterOutEvent event = msc.makeCharterOut(msc.loadPort, msc.loadPort);
@@ -727,7 +727,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		System.err.println("\n\nTest regular charter out from load port to load port. LNG heel should be used for return journey");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		final CharterOutEvent event = msc.makeCharterOut(msc.loadPort, msc.loadPort);
 		event.setVesselAssignmentType(msc.vesselAvailability);

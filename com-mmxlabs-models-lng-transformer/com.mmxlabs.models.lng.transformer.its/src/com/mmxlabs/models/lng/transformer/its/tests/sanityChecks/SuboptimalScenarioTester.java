@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -37,6 +36,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AbstractPairwiseConstraintChecker;
 
 /**
@@ -60,7 +60,7 @@ public class SuboptimalScenarioTester {
 	public Cargo smallToLargeCargo;
 	public Cargo largeToSmallCargo;
 
-	public LNGScenarioModel scenario;
+	public IScenarioDataProvider scenarioDataProvider;
 
 	public SuboptimalScenarioTester() {
 		final CustomScenarioCreator csc = new CustomScenarioCreator(cscDischargePrice);
@@ -107,11 +107,11 @@ public class SuboptimalScenarioTester {
 
 		// the csc by default will initialise all cargoes with the same purchase and sales contracts
 		// we will give them separate contracts in case constraints are placed on the contracts
-		smallToLargeCargo.getSlots().get(0).setContract(csc.addPurchaseContract("Other Purchase Contract"));
+		smallToLargeCargo.getSlots().get(0).setContract(csc.addPurchaseContract("Other Purchase Contract", 0.0));
 		smallToLargeCargo.getSlots().get(1).setContract(csc.addSalesContract("Other Sales Contract", cscDischargePrice));
 
 		// build and run the scenario.
-		scenario = csc.buildScenario();
+		scenarioDataProvider = csc.getScenarioDataProvider();
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class SuboptimalScenarioTester {
 					lsoStage.getAnnealingSettings().setIterations(10_000);
 				}
 			}
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			runner.evaluateInitialState();
 			runner.run();
@@ -230,7 +230,7 @@ public class SuboptimalScenarioTester {
 
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		final Set<String> hints = LNGTransformerHelper.getHints(settings);
-		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, settings, ScenarioUtils.createDefaultSolutionBuilderSettings(), hints,
+		final LNGDataTransformer transformer = new LNGDataTransformer(scenarioDataProvider, settings, ScenarioUtils.createDefaultSolutionBuilderSettings(), hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		// final LNGDataTransformer transformer = new LNGDataTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule(), null);

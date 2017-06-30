@@ -15,12 +15,12 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?255">Case 255: Check constraints have not be violated</a><br>
@@ -86,8 +86,8 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		vesselClassFour.getInaccessiblePorts().add(portD);
 
 		// build and run the scenario.
-		final LNGScenarioModel scenario = csc.buildScenario();
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		// check constraints.
 

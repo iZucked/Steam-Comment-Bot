@@ -17,7 +17,6 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -74,8 +73,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
@@ -91,9 +90,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final ModelReference modelReference;
-
-	private final LNGScenarioModel originalScenario;
+	private final IScenarioDataProvider originalScenarioDataProvider;
 
 	private final LNGScenarioRunner scenarioRunner;
 
@@ -121,10 +118,9 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		this.modelReference = modelRecord.aquireReference("LNGSchedulerInsertSlotJobControl");
-		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		originalEditingDomain = modelReference.getEditingDomain();
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerInsertSlotJobControl");
+		originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
 		/*
 		 * Error checks
@@ -188,13 +184,13 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
 
 		if (userSettings.isSetPeriodStartDate() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario
 			targetOptimiserSlots = new LinkedList<>();
 			targetOptimiserEvents = new LinkedList<>();
-			CargoModelFinder finder = new CargoModelFinder(scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario().getCargoModel());
+			CargoModelFinder finder = new CargoModelFinder(((LNGScenarioModel) scenarioRunner.getScenarioToOptimiserBridge().getOptimiserScenario().getScenario()).getCargoModel());
 			for (Slot original : targetSlots) {
 				try {
 					if (original instanceof LoadSlot) {
@@ -263,7 +259,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				}
 			}
 
-			final Schedule schedule = scenarioToOptimiserBridge.getScenario().getScheduleModel().getSchedule();
+			final Schedule schedule = ((LNGScenarioModel) scenarioToOptimiserBridge.getScenarioDataProvider().getScenario()).getScheduleModel().getSchedule();
 			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
 
 			final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), constraintAndFitnessSettings,
@@ -279,7 +275,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				}
 				return newName;
 			};
-			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 1_000_000, new SubProgressMonitor(progressMonitor, 90));
+			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 50_000, new SubProgressMonitor(progressMonitor, 90));
 			if (progressMonitor.isCanceled()) {
 				return;
 			}
@@ -288,6 +284,9 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 				monitor.beginTask("Export", solutions.size());
 				System.out.printf("Found %d solutions\n", solutions.size() - 1);
+
+				@NonNull
+				LNGScenarioModel originalScenario = (LNGScenarioModel) originalScenarioDataProvider.getScenario();
 
 				final CompoundCommand cmd = new CompoundCommand("Generate insertion options");
 				AnalyticsModel analyticsModel = originalScenario.getAnalyticsModel();
@@ -393,8 +392,8 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	public void dispose() {
 		executorService.shutdownNow();
 
-		if (modelReference != null) {
-			modelReference.close();
+		if (originalScenarioDataProvider != null) {
+			originalScenarioDataProvider.close();
 		}
 
 		super.dispose();

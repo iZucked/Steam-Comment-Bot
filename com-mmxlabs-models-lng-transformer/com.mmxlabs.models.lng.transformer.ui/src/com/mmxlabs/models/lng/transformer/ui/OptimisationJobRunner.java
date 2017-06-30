@@ -27,22 +27,23 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.util.StringEscaper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
-import com.mmxlabs.scenario.service.model.util.ModelReferenceThread;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelReferenceThread;
 
 public class OptimisationJobRunner {
 
 	private static final Logger log = LoggerFactory.getLogger(OptimisationJobRunner.class);
 
-	public void run(@NonNull String taskName, @NonNull ScenarioInstance instance, @NonNull ModelRecord modelRecord, @Nullable BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback,
-			@NonNull Supplier<IJobDescriptor> createJobDescriptorCallback, @Nullable TriConsumer<IJobControl, EJobState, ModelReference> jobCompletedCallback) {
+	public void run(@NonNull String taskName, @NonNull ScenarioInstance instance, @NonNull ScenarioModelRecord modelRecord,
+			@Nullable BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback, @NonNull Supplier<IJobDescriptor> createJobDescriptorCallback,
+			@Nullable TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback) {
 		final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
 		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-		try (final ModelReference modelReference = modelRecord.aquireReference(String.format("%s:1", taskName))) {
-			final EObject object = modelReference.getInstance();
+		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider(String.format("%s:1", taskName))) {
+			final EObject object = scenarioDataProvider.getScenario();
 
 			if (object instanceof LNGScenarioModel) {
 				final LNGScenarioModel root = (LNGScenarioModel) object;
@@ -56,14 +57,14 @@ public class OptimisationJobRunner {
 					}
 				}
 				if (prepareCallback != null) {
-					Boolean b = prepareCallback.apply(modelReference, root);
+					Boolean b = prepareCallback.apply(scenarioDataProvider, root);
 					if (Boolean.FALSE.equals(b)) {
 						return;
 					}
 				}
 
-				new ModelReferenceThread(taskName, modelRecord, (ref) -> {
-					final ScenarioLock scenarioLock = ref.getLock();
+				new ScenarioModelReferenceThread(taskName, modelRecord, (sdp) -> {
+					final ScenarioLock scenarioLock = sdp.getModelReference().getLock();
 					scenarioLock.lock();
 					// Use a latch to trigger unlock in this thread
 					final CountDownLatch latch = new CountDownLatch(1);
@@ -75,7 +76,7 @@ public class OptimisationJobRunner {
 						job = createJobDescriptorCallback.get();
 
 						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root, false)) {
+						if (!validateScenario(sdp, false)) {
 							scenarioLock.unlock();
 							return;
 						}
@@ -93,7 +94,7 @@ public class OptimisationJobRunner {
 								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 
 									if (jobCompletedCallback != null) {
-										jobCompletedCallback.accept(jobControl, newState, ref);
+										jobCompletedCallback.accept(jobControl, newState, sdp);
 									}
 									latch.countDown();
 									jobManager.removeJob(finalJob);
@@ -141,7 +142,7 @@ public class OptimisationJobRunner {
 		}
 	}
 
-	protected boolean validateScenario(LNGScenarioModel root, boolean optimising) {
-		return OptimisationHelper.validateScenario(root, optimising);
+	protected boolean validateScenario(IScenarioDataProvider scenarioDataProvider, boolean optimising) {
+		return OptimisationHelper.validateScenario(scenarioDataProvider, optimising, true);
 	}
 }

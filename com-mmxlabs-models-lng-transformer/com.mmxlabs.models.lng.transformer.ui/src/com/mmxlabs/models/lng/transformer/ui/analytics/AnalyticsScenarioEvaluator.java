@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -72,19 +69,21 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	@Override
-	public void evaluate(@org.eclipse.jdt.annotation.NonNull final LNGScenarioModel lngScenarioModel, @org.eclipse.jdt.annotation.NonNull final UserSettings userSettings,
-			@Nullable final ScenarioInstance parentForFork, final boolean fork, final String forkName) {
+	public void evaluate(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final Container parentForFork, final boolean fork,
+			final String forkName) {
 
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, (LNGScenarioModel) scenarioDataProvider.getScenario());
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
 		// No optimisation going on, clear stages. Need better OptimisationHelper API?
@@ -94,28 +93,14 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, null, null,
-					false);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null,
+					null, false);
 
 			scenarioRunner.evaluateInitialState();
 			if (parentForFork != null && fork) {
 				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
-
-				scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel), dup -> {
-					dup.setName(forkName);
-
-					// Copy across various bits of information
-					dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
-					dup.getMetadata().setCreated(parentForFork.getMetadata().getCreated());
-					dup.getMetadata().setLastModified(new Date());
-
-					// Copy version context information
-					dup.setVersionContext(parentForFork.getVersionContext());
-					dup.setScenarioVersion(parentForFork.getScenarioVersion());
-
-					dup.setClientVersionContext(parentForFork.getClientVersionContext());
-					dup.setClientScenarioVersion(parentForFork.getClientScenarioVersion());
-				});
+				final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(forkName, scenarioDataProvider);
+				scenarioService.copyInto(parentForFork, tmpRecord, forkName);
 			}
 
 		} catch (final Exception e) {
@@ -127,9 +112,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void breakEvenEvaluate(@NonNull final LNGScenarioModel lngScenarioModel, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork,
+	public void breakEvenEvaluate(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final Container parentForFork,
 			final long targetProfitAndLoss, final BreakEvenMode breakEvenMode) {
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, (LNGScenarioModel) scenarioDataProvider.getScenario());
 		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
 			optimisationPlan.getStages().clear();
 			final BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
@@ -147,28 +132,16 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			} else {
 				hints = new String[] { LNGTransformerHelper.HINT_DISABLE_CACHES };
 			}
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, null, null,
-					false, hints);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null,
+					null, false, hints);
 
 			scenarioRunner.evaluateInitialState();
 			scenarioRunner.run();
+
 			if (parentForFork != null) {
-				IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
-				scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel), dup -> {
-					dup.setName("What if");
-
-					// Copy across various bits of information
-					dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
-					dup.getMetadata().setCreated(parentForFork.getMetadata().getCreated());
-					dup.getMetadata().setLastModified(new Date());
-
-					// Copy version context information
-					dup.setVersionContext(parentForFork.getVersionContext());
-					dup.setScenarioVersion(parentForFork.getScenarioVersion());
-
-					dup.setClientVersionContext(parentForFork.getClientVersionContext());
-					dup.setClientScenarioVersion(parentForFork.getClientScenarioVersion());
-				});
+				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
+				final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf("What if", scenarioDataProvider);
+				scenarioService.copyInto(parentForFork, tmpRecord, "What if");
 			}
 
 		} catch (final Exception e) {
@@ -180,10 +153,10 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void multiEvaluate(@NonNull final LNGScenarioModel lngScenarioModel, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork,
+	public void multiEvaluate(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @Nullable final Container parentForFork,
 			final long targetProfitAndLoss, final BreakEvenMode breakEvenMode, final List<BaseCase> baseCases, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap,
 			final BiConsumer<BaseCase, Schedule> resultHandler) {
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, (LNGScenarioModel) scenarioDataProvider.getScenario());
 		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
 			optimisationPlan.getStages().clear();
 			final BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
@@ -201,14 +174,14 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			} else {
 				hints = new String[] { LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN, LNGTransformerHelper.HINT_DISABLE_CACHES };
 			}
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, null, null,
-					false, hints);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null,
+					null, false, hints);
 
 			@NonNull
 			final LNGScenarioToOptimiserBridge bridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final ModelEntityMap modelEntityMap = bridge.getInjector().getInstance(ModelEntityMap.class);
-			final PortModel portModel = ScenarioModelUtil.getPortModel(bridge.getScenario());
+			final PortModel portModel = ScenarioModelUtil.getPortModel(bridge.getScenarioDataProvider());
 
 			final List<IPortSlot> unused = new LinkedList<>();
 			for (final BaseCase baseCase : baseCases) {

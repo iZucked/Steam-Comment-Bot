@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -33,7 +30,10 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -74,15 +74,11 @@ public class ExportScheduleHelper {
 		// Null mean original schedule model was not contained by the original scenario model
 		assert source_scheduleModel != null;
 
+		ClonedScenarioDataProvider dataProvider = ClonedScenarioDataProvider.make(scenarioModel, scenarioResult.getScenarioDataProvider());
+
 		@NonNull
-		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
-		// Contain new scenario in resource for Delete commands to work correctly.
-		final ResourceImpl r = new ResourceImpl();
-		r.getContents().add(scenarioModel);
+		final EditingDomain editingDomain = dataProvider.getEditingDomain();
 
-		editingDomain.getResourceSet().getResources().add(r);
-
-		final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 		final Schedule schedule = source_scheduleModel.getSchedule();
@@ -116,21 +112,9 @@ public class ExportScheduleHelper {
 			// Open but deleted scenario?
 			return null;
 		}
-		final ScenarioInstance theFork = scenarioService.insert(scenarioInstance, scenarioModel, fork -> {
-			fork.setName(newForkName);
+		ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(newForkName, dataProvider);
+		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, tmpRecord, newForkName);
 
-			// Copy across various bits of information
-			fork.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-			fork.getMetadata().setCreated(new Date());
-			fork.getMetadata().setLastModified(new Date());
-
-			// Copy version context information
-			fork.setVersionContext(scenarioInstance.getVersionContext());
-			fork.setScenarioVersion(scenarioInstance.getScenarioVersion());
-
-			fork.setClientVersionContext(scenarioInstance.getClientVersionContext());
-			fork.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-		});
 		if (openScenario) {
 			try {
 				OpenScenarioUtils.openScenarioInstance(theFork);

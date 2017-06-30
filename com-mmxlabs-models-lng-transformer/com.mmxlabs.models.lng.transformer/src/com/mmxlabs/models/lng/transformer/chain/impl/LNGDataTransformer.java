@@ -18,7 +18,6 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -36,9 +35,9 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
-import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 
 /**
  * The {@link LNGDataTransformer} is the main entry point for the {@link ILNGStateTransformerUnit} and {@link IChainRunner} APIs.
@@ -67,7 +66,7 @@ public class LNGDataTransformer {
 	private IMultiStateResult solutionBuilderResult;
 
 	@SuppressWarnings("null")
-	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final UserSettings userSettings, @NonNull SolutionBuilderSettings solutionBuilderSettings,
+	public LNGDataTransformer(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final UserSettings userSettings, @NonNull SolutionBuilderSettings solutionBuilderSettings,
 			@NonNull final Collection<@NonNull String> hints, @NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
 
 		this.userSettings = userSettings;
@@ -79,9 +78,9 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
-		modules.add(new LNGSharedDataTransformerModule(scenarioModel, new SharedDataTransformerService()));
+		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, userSettings, hints), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioDataProvider, userSettings, hints), services,
 				IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 		final Injector parentInjector = Guice.createInjector(modules);

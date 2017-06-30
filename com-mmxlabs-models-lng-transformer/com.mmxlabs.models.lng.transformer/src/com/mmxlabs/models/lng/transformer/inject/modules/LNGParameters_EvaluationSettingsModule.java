@@ -15,7 +15,6 @@ import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
@@ -33,7 +32,6 @@ import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstant
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.lso.SimilarityFitnessMode;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
@@ -43,7 +41,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentPara
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 
 /**

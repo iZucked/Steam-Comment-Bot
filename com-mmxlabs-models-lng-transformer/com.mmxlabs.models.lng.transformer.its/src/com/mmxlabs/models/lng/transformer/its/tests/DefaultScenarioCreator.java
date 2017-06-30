@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -44,6 +43,8 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -76,6 +77,8 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 /**
  * Class to create a scenario programmatically.
@@ -117,14 +120,22 @@ public class DefaultScenarioCreator {
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
-	private static final String timeZone = ZoneId.of("UTC").getId();
+	public final String timeZone;
 	protected final @NonNull CommercialModelBuilder commercialModelBuilder;
-	private SpotMarketsModelBuilder spotMarketsModelBuilder;
-	private CargoModelBuilder cargoModelBuilder;
+	private final SpotMarketsModelBuilder spotMarketsModelBuilder;
+	private final CargoModelBuilder cargoModelBuilder;
+
+	SimpleScenarioDataProvider dataProvider;
 
 	public DefaultScenarioCreator() {
-		scenario = ManifestJointModel.createEmptyInstance(null);
-		scenarioModelBuilder = new ScenarioModelBuilder(scenario);
+		this("UTC");
+
+	}
+
+	public DefaultScenarioCreator(final String timeZone) {
+		this.timeZone = timeZone;
+		scenarioModelBuilder = ScenarioModelBuilder.instantiate();
+		scenario = scenarioModelBuilder.getLNGScenarioModel();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
@@ -133,6 +144,12 @@ public class DefaultScenarioCreator {
 		contractEntity = addEntity("Third-parties");
 		// need to create a legal entity for shipping
 		shippingEntity = addEntity("Shipping");
+
+		dataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenario);
+	}
+
+	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+		return dataProvider;
 	}
 
 	/**
@@ -145,7 +162,6 @@ public class DefaultScenarioCreator {
 	/**
 	 */
 	public Route addRoute(final RouteOption option) {
-
 		return scenarioModelBuilder.getPortModelBuilder().createRoute(option.getName(), option);
 	}
 
@@ -328,7 +344,7 @@ public class DefaultScenarioCreator {
 			final CargoModel cargoModel = scenario.getCargoModel();
 
 			@NonNull
-			Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(name, vc);
+			final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(name, vc);
 
 			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder() //
 					.makeVesselAvailability(vessel, shippingEntity) //
@@ -490,8 +506,10 @@ public class DefaultScenarioCreator {
 				name = "Port " + n;
 			}
 
-			final Port result = PortFactory.eINSTANCE.createPort();
+			final Location location = PortFactory.eINSTANCE.createLocation();
 
+			final Port result = PortFactory.eINSTANCE.createPort();
+			result.setLocation(location);
 			result.setTimeZone(timeZone);
 			result.setName(name);
 			result.setCvValue(defaultCv);
@@ -505,6 +523,8 @@ public class DefaultScenarioCreator {
 			ports.add(result);
 
 			for (int i = 0; i < distances.length; i++) {
+				scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(ports.get(i), result, RouteOption.DIRECT, distances[i], true);
+
 				setDistance(ports.get(i), result, distances[i], null);
 			}
 
@@ -561,14 +581,14 @@ public class DefaultScenarioCreator {
 	public class DefaultCargoCreator {
 		int defaultWindowSize = 0;
 
-		public Cargo createDefaultCargo(String name, final Port loadPort, final Port dischargePort, LocalDateTime loadTime, final int travelTimeInHours) {
+		public Cargo createDefaultCargo(final String name, final Port loadPort, final Port dischargePort, LocalDateTime loadTime, final int travelTimeInHours) {
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
 				loadTime = LocalDateTime.of(2015, 5, 1, 0, 0);
 			}
 
-			LocalDateTime dischargeTime = loadTime.plusHours(travelTimeInHours);
+			final LocalDateTime dischargeTime = loadTime.plusHours(travelTimeInHours);
 			return scenarioModelBuilder.getCargoModelBuilder() //
 					.makeCargo()//
 					//
@@ -587,7 +607,7 @@ public class DefaultScenarioCreator {
 					.build();
 		}
 
-		public Cargo createDefaultLddCargo(String name, final Port loadPort, final Port dischargePort1, final Port dischargePort2, LocalDateTime loadTime, final int travelTimeInHours1,
+		public Cargo createDefaultLddCargo(final String name, final Port loadPort, final Port dischargePort1, final Port dischargePort2, LocalDateTime loadTime, final int travelTimeInHours1,
 				final int travelTimeInHours2) {
 
 			// if load time is not specified, set it to the current datetime
@@ -595,8 +615,8 @@ public class DefaultScenarioCreator {
 				loadTime = LocalDateTime.now();
 			}
 
-			LocalDateTime dischargeTime1 = loadTime.plusHours(travelTimeInHours1);
-			LocalDateTime dischargeTime2 = loadTime.plusHours(travelTimeInHours1 + defaultWindowSize + travelTimeInHours2);
+			final LocalDateTime dischargeTime1 = loadTime.plusHours(travelTimeInHours1);
+			final LocalDateTime dischargeTime2 = loadTime.plusHours(travelTimeInHours1 + defaultWindowSize + travelTimeInHours2);
 			return scenarioModelBuilder.getCargoModelBuilder() //
 					.makeCargo()//
 					//
@@ -662,8 +682,8 @@ public class DefaultScenarioCreator {
 
 			result.setCharterOutRate(Integer.toString(price));
 
-			EList<APortSet<Port>> cPorts = result.getAvailablePorts();
-			for (Port p : ports) {
+			final EList<APortSet<Port>> cPorts = result.getAvailablePorts();
+			for (final Port p : ports) {
 				if (p.getName().equals("Port 2"))
 					cPorts.add(p);
 			}
@@ -737,23 +757,27 @@ public class DefaultScenarioCreator {
 	}
 
 	public int getTravelTime(final Port p1, final Port p2, final Route r, final int speed) {
-		return getDistance(p1, p2, r) / speed;
+		return getDistance(p1, p2, r.getRouteOption()) / speed;
 	}
 
-	public int getDistance(final Port p1, final Port p2, Route r) {
+	public int getDistance(final Port p1, final Port p2, RouteOption routeOption) {
 
 		if (p1 == p2) {
 			return 0;
 		}
-
-		if (r == null) {
-			final PortModel portModel = scenario.getReferenceModel().getPortModel();
-			r = portModel.getRoutes().get(0);
+		Route r = null;
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
+		for (Route route : portModel.getRoutes()) {
+			if (route.getRouteOption() == routeOption) {
+				r = route;
+				break;
+			}
 		}
-
-		for (final RouteLine line : r.getLines()) {
-			if (line.getFrom() == p1 && line.getTo() == p2) {
-				return line.getFullDistance();
+		if (r != null) {
+			for (final RouteLine line : r.getLines()) {
+				if (line.getFrom() == p1 && line.getTo() == p2) {
+					return line.getFullDistance();
+				}
 			}
 		}
 
@@ -768,76 +792,30 @@ public class DefaultScenarioCreator {
 			portModel.getPorts().add(startPort);
 		}
 
-		final CargoModel cargoModel = scenario.getCargoModel();
-		// Set up dry dock.
-		final DryDockEvent dryDock = CargoFactory.eINSTANCE.createDryDockEvent();
-		dryDock.setName("Drydock");
-		dryDock.setDurationInDays(durationDays);
-		dryDock.setPort(startPort);
-		// add to scenario's fleet model
-		cargoModel.getVesselEvents().add(dryDock);
+		final DryDockEvent event = scenarioModelBuilder.getCargoModelBuilder()//
+				.makeDryDockEvent("Drydock", start, start, startPort) //
+				.withDurationInDays(durationDays) //
+				.build();
 
-		// define the start and end time
-		dryDock.setStartAfter(start);
-		dryDock.setStartBy(start);
-
-		return dryDock;
+		return event;
 	}
 
-	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final LocalDateTime startCharterOut, final int heelLimit, final int charterOutDurationDays,
-			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
+	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final LocalDateTime startCharterOut, final int minHeelLimit, final int maxHeelLimit,
+			final int charterOutDurationDays, final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
-		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
-		final CargoModel cargoModel = scenario.getCargoModel();
+		final CharterOutEvent event = scenarioModelBuilder.getCargoModelBuilder()//
+				.makeCharterOutEvent(id, startCharterOut, startCharterOut, startPort) //
+				.withDurationInDays(charterOutDurationDays) //
+				.withAvailableHeelOptions(minHeelLimit, maxHeelLimit, cvValue, Double.toString(dischargePrice)) //
+				.withRepositioningFee(repositioningFee) //
+				.withHireRate(dailyCharterOutPrice) //
+				.build();
 
-		// the start and end of the charter out starting-window is 0, for simplicity.
-		charterOut.setStartAfter(startCharterOut);
-		charterOut.setStartBy(startCharterOut);
-
-		charterOut.setPort(startPort);
-		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
-		if (!startPort.equals(endPort)) {
-			charterOut.setRelocateTo(endPort);
+		// // don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
+		if (endPort != null && !startPort.equals(endPort)) {
+			event.setRelocateTo(endPort);
 		}
-
-		charterOut.setName(id);
-		final StartHeelOptions heelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
-		heelOptions.setMinVolumeAvailable(0);
-		heelOptions.setMaxVolumeAvailable(heelLimit);
-		heelOptions.setCvValue(cvValue);
-		heelOptions.setPriceExpression(Double.toString(dischargePrice));
-		charterOut.setAvailableHeel(heelOptions);
-
-		charterOut.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
-
-		charterOut.setDurationInDays(charterOutDurationDays);
-
-		charterOut.setHireRate(dailyCharterOutPrice);
-		charterOut.setRepositioningFee(repositioningFee);
-		// add to the scenario's fleet model
-		cargoModel.getVesselEvents().add(charterOut);
-
-		return charterOut;
-	}
-
-	/**
-	 * Finish making the scenario by adding the canals to the vessel classes.
-	 * 
-	 * @return The finished scenario.
-	 */
-	@NonNull
-	public LNGScenarioModel buildScenario() {
-
-		// Add every canal to every vessel class.
-		// for (final VesselClassCost canalCost : this.canalCostsForAllVesselClasses) {
-		// for (final VesselClass vc : fleetModel.getVesselClasses()) {
-		// addCanal(vc, canalCost);
-		// }
-		// }
-
-		fixUUIDMisMatches(scenario);
-
-		return scenario;
+		return event;
 	}
 
 	/**
@@ -955,7 +933,7 @@ public class DefaultScenarioCreator {
 		Assert.assertEquals(journey.getPort(), from);
 		Assert.assertEquals(journey.getDestination(), to);
 		final Route route = journey.getRoute();
-		Assert.assertEquals(journey.getDistance(), (int) getDistance(from, to, route));
+		Assert.assertEquals(journey.getDistance(), (int) getDistance(from, to, route.getRouteOption()));
 	}
 
 	public RouteCost getRouteCost(final VesselClass vc, final Route route) {
@@ -975,5 +953,22 @@ public class DefaultScenarioCreator {
 			}
 		}
 		return null;
+	}
+
+	public LocalDate createLocalDate(final int year, final int month, final int day) {
+		return LocalDate.of(year, 1 + month, day);
+	}
+
+	public static LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {
+		return LocalDateTime.of(year, 1 + month, day, hourOfDay, 0);
+	}
+
+	public static YearMonth createYearMonth(final int year, final int month) {
+		return YearMonth.of(year, 1 + month);
+	}
+
+	public int getTravelTime(final @NonNull Port p1, final @NonNull Port p2, final @NonNull RouteOption r, final int speed) {
+
+		return getDistance(p1, p2, r) / speed;
 	}
 }

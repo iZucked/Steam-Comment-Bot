@@ -6,10 +6,10 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * This class contains some whole-system tests which check the fuel choices on a single cargo.
@@ -51,9 +52,9 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final LNGScenarioModel scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final IScenarioDataProvider scenarioDataProvider = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		CargoAllocation cargoAllocation = result.getCargoAllocations().get(0);
@@ -79,9 +80,9 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final LNGScenarioModel scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final IScenarioDataProvider scenarioDataProvider = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		CargoAllocation cargoAllocation = result.getCargoAllocations().get(0);
@@ -106,7 +107,7 @@ public class SimpleCalculationTest {
 	 * 
 	 * @return
 	 */
-	private LNGScenarioModel createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
+	private @NonNull IScenarioDataProvider createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class

@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -30,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?256">Case 256: Check charter-in rules respected</a>
@@ -189,9 +189,9 @@ public class VesselEventConstraintCheckTest {
 		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel, allowedDrydockVesselClass);
 		SanityCheckTools.addCharterOuts(csc, ports, allowedCharterOutVessel, allowedCharterOutVesselClass, cvValue, dischargePrice);
 
-		final LNGScenarioModel scenario = csc.buildScenario();
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		// print the legs to console
 		for (final CargoAllocation ca : result.getCargoAllocations()) {

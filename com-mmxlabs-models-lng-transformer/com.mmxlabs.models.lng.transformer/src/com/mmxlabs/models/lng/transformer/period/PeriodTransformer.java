@@ -22,9 +22,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -88,10 +86,11 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /***
  * TODO
@@ -143,9 +142,9 @@ public class PeriodTransformer {
 	private InclusionChecker inclusionChecker;
 
 	@NonNull
-	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final UserSettings userSettings,
+	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenario, @NonNull final UserSettings userSettings,
 			@NonNull final IScenarioEntityMapping mapping) {
-		final PeriodRecord periodRecord = createPeriodRecord(userSettings, wholeScenario);
+		final PeriodRecord periodRecord = createPeriodRecord(userSettings, wholeScenario.getTypedScenario(LNGScenarioModel.class));
 		return transform(wholeScenario, periodRecord, mapping);
 	}
 
@@ -185,13 +184,14 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final PeriodRecord periodRecord,
+	public NonNullPair<IScenarioDataProvider, EditingDomain> transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final PeriodRecord periodRecord,
 			@NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 
 		// Take a copy to manipulate.
-		final LNGScenarioModel output = copyScenario(wholeScenario, mapping);
+		final IScenarioDataProvider outputDataProvider = copyScenario(wholeScenarioDataProvider, mapping);
+		LNGScenarioModel output = outputDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Do not allow the prompt period to extend past the optimisation period
 		if (periodRecord.upperBoundary != null && periodRecord.promptEnd != null) {
@@ -201,7 +201,7 @@ public class PeriodTransformer {
 			}
 		}
 		// Evaluate copy!
-		final EditingDomain internalDomain = createEditingDomain(output);
+		final EditingDomain internalDomain = outputDataProvider.getEditingDomain();
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(output);
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(output);
@@ -300,8 +300,8 @@ public class PeriodTransformer {
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
 
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(),
-				objectToPortVisitMap, mapping);
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, startConditionMap, endConditionMap, eventDependencies.getFirst(),
+				eventDependencies.getSecond(), objectToPortVisitMap, mapping);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 
 		if (extensions != null) {
@@ -322,11 +322,13 @@ public class PeriodTransformer {
 
 		// TEMP HACK UNTIL MULTIPLE AVAILABILITES PROPERLY IN PLACE AND filterSlotsAndCargoes can properly handle this.
 		for (final VesselAvailability newVA : newVesselAvailabilities) {
-			for (final VesselAvailability vesselAvailability : wholeScenario.getCargoModel().getVesselAvailabilities()) {
+			for (final VesselAvailability vesselAvailability : ScenarioModelUtil.getCargoModel(wholeScenarioDataProvider).getVesselAvailabilities()) {
 				if (newVA.getVessel() == mapping.getCopyFromOriginal(vesselAvailability.getVessel())) {
-					newVA.setEntity(mapping.getCopyFromOriginal(vesselAvailability.getEntity()));
-					if (vesselAvailability.isSetTimeCharterRate()) {
-						newVA.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
+					if (newVA.getCharterNumber() == vesselAvailability.getCharterNumber()) {
+						newVA.setEntity(mapping.getCopyFromOriginal(vesselAvailability.getEntity()));
+						if (vesselAvailability.isSetTimeCharterRate()) {
+							newVA.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
+						}
 					}
 				}
 			}
@@ -347,7 +349,7 @@ public class PeriodTransformer {
 		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
 		output.unsetSchedulingEndDate();
 
-		return new NonNullPair<>(output, internalDomain);
+		return new NonNullPair<>(outputDataProvider, internalDomain);
 	}
 
 	/**
@@ -680,6 +682,7 @@ public class PeriodTransformer {
 							newVesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
 							newVesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 							newVesselAvailability.setVessel(vesselAvailability.getVessel());
+							newVesselAvailability.setCharterNumber(vesselAvailability.getCharterNumber());
 
 							// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
 							newVesselAvailability.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
@@ -864,8 +867,9 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
-			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
+			@NonNull final PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
+			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep,
+			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
 
@@ -1033,9 +1037,12 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public LNGScenarioModel copyScenario(@NonNull final LNGScenarioModel wholeScenario, @NonNull final IScenarioEntityMapping mapping) {
+	public IScenarioDataProvider copyScenario(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final IScenarioEntityMapping mapping) {
 		final Copier copier = new Copier();
-		final LNGScenarioModel output = (LNGScenarioModel) copier.copy(wholeScenario);
+
+		LNGScenarioModel wholeScenario = wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+
+		final LNGScenarioModel output = (LNGScenarioModel) copier.copy(wholeScenarioDataProvider.getScenario());
 		assert output != null;
 
 		copier.copyReferences();
@@ -1053,7 +1060,7 @@ public class PeriodTransformer {
 
 		mapping.createMappings(copier);
 
-		return output;
+		return ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider);
 	}
 
 	public void generateSlotAllocationMap(@NonNull final LNGScenarioModel output, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap) {
@@ -1062,40 +1069,6 @@ public class PeriodTransformer {
 		for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 			slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
 		}
-	}
-
-	@NonNull
-	public EditingDomain createEditingDomain(@NonNull final LNGScenarioModel output) {
-		//
-		// Set<String> hints = LNGTransformerHelper.getHints(optimiserSettings);
-		// final LNGDataTransformer transformer = new LNGDataTransformer(output, optimiserSettings, hints, services);
-		//
-		// final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
-
-		// Construct internal command stack to generate correct output schedule
-		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
-
-		// Delete commands need a resource set on the editing domain
-		final Resource r = new XMIResourceImpl();
-		r.getContents().add(output);
-		ed.getResourceSet().getResources().add(r);
-		//
-		// Injector evaluationInjector;
-		// {
-		// final List<Module> modules = new LinkedList<>();
-		// modules.add(new InputSequencesModule(transformer.getInitialSequences()));
-		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(transformer.getOptimiserSettings()), services,
-		// IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
-		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-		// evaluationInjector = transformer.getInjector().createChildInjector(modules);
-		// }
-		//
-		//
-		// final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, output, transformer.getOptimiserSettings(), ed, modelEntityMap,
-		// transformer.getInitialSequences(), null);
-		// ed.getCommandStack().execute(p.getFirst());
-
-		return ed;
 	}
 
 	/**

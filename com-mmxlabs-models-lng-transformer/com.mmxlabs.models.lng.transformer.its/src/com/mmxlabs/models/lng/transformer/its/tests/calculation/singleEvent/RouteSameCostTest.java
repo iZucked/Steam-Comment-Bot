@@ -10,13 +10,13 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?209">Case 209: Equally priced routes</a>
@@ -53,7 +53,7 @@ public class RouteSameCostTest {
 		final int expensiveDistance1 = 1100;
 		final int expensiveDistance2 = 1200;
 
-		final int[] portDistances = { cheapestDistance, expensiveDistance1, expensiveDistance2 };
+		final int[] portDistances = { cheapestDistance };//, expensiveDistance1, expensiveDistance2 };
 
 		CanalParameters params = new CanalParameters();
 		params.canalOption = RouteOption.SUEZ;
@@ -161,7 +161,7 @@ public class RouteSameCostTest {
 		final int minSpeed = speed;
 		final int maxSpeed = speed;
 		final int ballastMinSpeed = speed;
-		final int ballastMinConsumption = NBOTravelRatePerDay;
+		final int ballastMinConsumption = fuelTravelConsumptionPerDay;
 		final int ballastMaxSpeed = speed;
 		final int ballastMaxConsumption = fuelTravelConsumptionPerDay;
 		final int ballastIdleConsumptionRate = fuelIdleConsumptionPerDay;
@@ -175,7 +175,7 @@ public class RouteSameCostTest {
 		final int ladenIdleNBORate = NBOIdleRatePerDay;
 		final int ladenNBORate = NBOTravelRatePerDay;
 
-		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed,
+		final IScenarioDataProvider canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed,
 				maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
 				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume);
 
@@ -222,7 +222,7 @@ public class RouteSameCostTest {
 
 	}
 
-	private void addCanalParameters(CanalParameters canalParameters, LNGScenarioModel canalScenario) {
+	private void addCanalParameters(CanalParameters canalParameters, IScenarioDataProvider canalScenario) {
 		if (canalParameters != null) {
 			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalOption, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance,
 					canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay, canalParameters.canalTransitTime);

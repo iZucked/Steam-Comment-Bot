@@ -54,8 +54,8 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
@@ -69,9 +69,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final ModelReference modelReference;
-
-	private final LNGScenarioModel originalScenario;
+	private final IScenarioDataProvider originalScenarioDataProvider;
 
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
@@ -90,10 +88,9 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		this.modelReference = modelRecord.aquireReference("LNGActionPlanJobControl");
-		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		originalEditingDomain = modelReference.getEditingDomain();
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGActionPlanJobControl");
+		originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
@@ -104,7 +101,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, false, //
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, false, //
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
@@ -141,7 +138,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 			// }
 			ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 
-			final Schedule schedule = scenarioToOptimiserBridge.getScenario().getScheduleModel().getSchedule();
+			final Schedule schedule = ((LNGScenarioModel) scenarioToOptimiserBridge.getScenarioDataProvider().getScenario()).getScheduleModel().getSchedule();
 			ActionPlanOptimisationStage stageSettings = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
 			stageSettings.setName("actionplan");
 			stageSettings.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
@@ -167,10 +164,12 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 				System.out.printf("Found %d solutions\n", solutions.size() - 1);
 
 				final CompoundCommand cmd = new CompoundCommand("Generate action plan");
-				AnalyticsModel analyticsModel = originalScenario.getAnalyticsModel();
+				@NonNull
+				LNGScenarioModel lngScenarioModel = (@NonNull LNGScenarioModel) originalScenarioDataProvider.getScenario();
+				AnalyticsModel analyticsModel = lngScenarioModel.getAnalyticsModel();
 				if (analyticsModel == null) {
 					analyticsModel = AnalyticsFactory.eINSTANCE.createAnalyticsModel();
-					cmd.append(SetCommand.create(originalEditingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel(), analyticsModel));
+					cmd.append(SetCommand.create(originalEditingDomain, lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel(), analyticsModel));
 				}
 
 				final ActionableSetPlan plan = AnalyticsFactory.eINSTANCE.createActionableSetPlan();
@@ -277,8 +276,8 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 	public void dispose() {
 		executorService.shutdownNow();
 
-		if (modelReference != null) {
-			modelReference.close();
+		if (originalScenarioDataProvider != null) {
+			originalScenarioDataProvider.close();
 		}
 
 		// if (scenarioRunner != null) {

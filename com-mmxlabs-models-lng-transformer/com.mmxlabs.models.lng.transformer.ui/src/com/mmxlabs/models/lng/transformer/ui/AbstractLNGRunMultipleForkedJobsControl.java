@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -31,12 +30,13 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEclipseJobControl {
@@ -47,7 +47,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final ModelRecord modelRecord;
+	private final ScenarioModelRecord modelRecord;
 	private final ModelReference modelReference;
 
 	private final LNGScenarioModel originalScenario;
@@ -61,26 +61,24 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 	private class SimilarityFuture implements Runnable {
 
-		private final LNGScenarioModel scenarioModel;
+		private final IScenarioDataProvider forkScenarioDataProvider;
 		private IProgressMonitor monitor;
 		private final ScenarioInstance parent;
 		private final String name;
 		private final LNGScenarioRunner runner;
 		private final ScenarioLock lock;
 		private final ScenarioInstance fork;
-		private final ModelRecord forkRecord;
-		private final ModelReference forkRef;
+		private final ScenarioModelRecord forkRecord;
 
-		public SimilarityFuture(final ScenarioInstance parent, final LNGScenarioModel model, final String name, final OptimisationPlan optimisationPlan, final String... hints) throws Exception {
+		public SimilarityFuture(final ScenarioInstance parent, final String name, final OptimisationPlan optimisationPlan, final String... hints) throws Exception {
 
 			this.parent = parent;
 			this.name = name;
-			fork = ScenarioServiceCommandUtil.fork(parent, name);
+			fork = ScenarioServiceModelUtils.fork(parent, name, new NullProgressMonitor());
 			forkRecord = SSDataManager.Instance.getModelRecord(fork);
-			forkRef = forkRecord.aquireReference("AbstractLNGRunMultipleForkedJobsControl:1");
-			this.scenarioModel = (LNGScenarioModel) forkRef.getInstance();
-			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, optimisationPlan, forkRef.getEditingDomain(), null, false, hints);
-			this.lock = forkRef.getLock();
+			this.forkScenarioDataProvider = forkRecord.aquireScenarioDataProvider("AbstractLNGRunMultipleForkedJobsControl:1");
+			this.runner = new LNGScenarioRunner(runnerService, forkScenarioDataProvider, fork, optimisationPlan, forkScenarioDataProvider.getEditingDomain(), null, false, hints);
+			this.lock = forkScenarioDataProvider.getModelReference().getLock();
 			this.lock.lock();
 		}
 
@@ -109,8 +107,8 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			if (lock != null) {
 				lock.unlock();
 			}
-			if (forkRef != null) {
-				forkRef.close();
+			if (forkScenarioDataProvider != null) {
+				forkScenarioDataProvider.close();
 			}
 		}
 	}
@@ -127,7 +125,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 		this.jobs = new LinkedList<>();
 		CheckedBiConsumer<String, OptimisationPlan, Exception> factory = (name, optimisationPlan) -> {
-			jobs.add(new SimilarityFuture(scenarioInstance, originalScenario, name, optimisationPlan, LNGTransformerHelper.HINT_OPTIMISE_LSO));
+			jobs.add(new SimilarityFuture(scenarioInstance, name, optimisationPlan, LNGTransformerHelper.HINT_OPTIMISE_LSO));
 		};
 
 		jobFactory.accept(jobDescriptor.getOptimisationPlan(), factory);

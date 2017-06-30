@@ -12,7 +12,6 @@ import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,12 +27,15 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 @RunWith(value = ShiroRunner.class)
 public class PeriodOptimiserTest {
@@ -95,8 +97,8 @@ public class PeriodOptimiserTest {
 
 	@Test
 	public void testSimpleDischargeSwapPeriodMiddleOnly() throws Exception {
-		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester(CustomScenarioCreator.createLocalDateTime(2014, 7, 1, 0),
-				CustomScenarioCreator.createLocalDateTime(2014, 7, 30, 0), CustomScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
+		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester(DefaultScenarioCreator.createLocalDateTime(2014, 7, 1, 0),
+				DefaultScenarioCreator.createLocalDateTime(2014, 7, 30, 0), DefaultScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
 
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
@@ -210,10 +212,10 @@ public class PeriodOptimiserTest {
 		public Cargo cargoB1, cargoB2, cargoB3;
 
 		public final Vessel[] vessels;
-		public LNGScenarioModel scenario;
+		public IScenarioDataProvider scenarioDataProvider;
 
 		public PeriodOptimiserScenarioTester() {
-			this(CustomScenarioCreator.createLocalDateTime(2014, 7, 1, 0), CustomScenarioCreator.createLocalDateTime(2014, 8, 1, 0), CustomScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
+			this(DefaultScenarioCreator.createLocalDateTime(2014, 7, 1, 0), DefaultScenarioCreator.createLocalDateTime(2014, 8, 1, 0), DefaultScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
 		}
 
 		public PeriodOptimiserScenarioTester(LocalDateTime dateA, LocalDateTime dateB, LocalDateTime dateC) {
@@ -258,7 +260,7 @@ public class PeriodOptimiserTest {
 
 			final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
 			for (int i = 0; i < vessels.length; ++i) {
-				for (VesselAvailability vesselAvailability : csc.getScenario().getCargoModel().getVesselAvailabilities()) {
+				for (VesselAvailability vesselAvailability : csc.getScenarioDataProvider().getTypedScenario(LNGScenarioModel.class).getCargoModel().getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessels[i]) {
 						vesselAvailabilities[i] = vesselAvailability;
 					}
@@ -322,7 +324,7 @@ public class PeriodOptimiserTest {
 			csc.setupCooldown(20.0);
 
 			// build and run the scenario.
-			scenario = csc.buildScenario();
+			scenarioDataProvider = csc.getScenarioDataProvider();
 		}
 
 		public void setEquidistantDistances(final CustomScenarioCreator csc, final Port[] ports, int distance) {
@@ -342,15 +344,15 @@ public class PeriodOptimiserTest {
 
 				final OptimisationPlan plan = getPlan();
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
 						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenario(), "c:/temp/scenario1.lingo");
+					save(runner.getScenarioDataProvider(), "c:/temp/scenario1.lingo");
 				}
 				runner.run();
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenario(), "c:/temp/scenario2.lingo");
+					save(runner.getScenarioDataProvider(), "c:/temp/scenario2.lingo");
 				}
 			} catch (final Exception er) {
 				// this exception should not occur
@@ -382,16 +384,16 @@ public class PeriodOptimiserTest {
 				plan.getUserSettings().setPeriodStartDate(start);
 				plan.getUserSettings().setPeriodEnd(end);
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, plan, new TransformerExtensionTestBootstrapModule(), null, false,
 						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenario(), "c:/temp/scenario1p.lingo");
+					save(runner.getScenarioDataProvider(), "c:/temp/scenario1p.lingo");
 				}
 				runner.run();
 				if (OUTPUT_SCENARIOS) {
-					save(runner.getScenario(), "c:/temp/scenario2p.lingo");
+					save(runner.getScenarioDataProvider(), "c:/temp/scenario2p.lingo");
 				}
 			} catch (final Exception er) {
 				er.printStackTrace();
@@ -405,9 +407,7 @@ public class PeriodOptimiserTest {
 	}
 
 	@SuppressWarnings("unused")
-	private void save(final LNGScenarioModel scenario, final String path) throws IOException {
-		final String context = "com.mmxlabs.lingo";
-		final int version = 34;
-		ScenarioTools.storeToFile(EcoreUtil.copy(scenario), new File(path), context, version);
+	private void save(final IScenarioDataProvider scenarioDataProvider, final String path) throws IOException {
+		ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(path));
 	}
 }

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
@@ -17,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * From <a href="https://mmxlabs.fogbugz.com/default.asp?179">case 179</a>:
@@ -44,8 +44,8 @@ public class FuelChoiceBoundaryTest {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour,
-				NBORatePerHour));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(
+				testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour));
 
 		// need to check that FBO is never used on any leg or idle.
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.FBO);
@@ -67,8 +67,8 @@ public class FuelChoiceBoundaryTest {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour,
-				NBORatePerHour));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(
+				testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour));
 
 		// need to check that base fuel is never used on any leg or idle.
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.BASE_FUEL);
@@ -104,7 +104,7 @@ public class FuelChoiceBoundaryTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final LNGScenarioModel scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+		final IScenarioDataProvider scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
 				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
@@ -210,11 +210,11 @@ public class FuelChoiceBoundaryTest {
 		final int minHeelVolume = 0;
 		final boolean useDryDock = true;
 
-		final LNGScenarioModel scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				travelFuelConsumptionPerDay, speed, travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, speed, travelFuelConsumptionPerDay, speed,
+		final IScenarioDataProvider scenarioDataProvider = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
+				speed, travelFuelConsumptionPerDay, speed, travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, speed, travelFuelConsumptionPerDay, speed,
 				travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);

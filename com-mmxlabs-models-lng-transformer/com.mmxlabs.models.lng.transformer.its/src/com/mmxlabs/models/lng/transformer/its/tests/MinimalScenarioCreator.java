@@ -114,7 +114,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	}
 
 	public int getMarginHours(final Port startPort, final Port endPort) {
-		return 2 * getTravelTime(startPort, endPort, null, (int) vc.getMaxSpeed());
+		return 2 * getTravelTime(startPort, endPort, RouteOption.DIRECT, (int) vc.getMaxSpeed());
 	}
 
 	public VesselAvailability setDefaultAvailability(final Port startPort, final Port endPort) {

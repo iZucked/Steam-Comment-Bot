@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
-import java.io.IOException;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
@@ -20,8 +18,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -61,7 +59,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 			@NonNull
-			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			if (modelRecord.isLoadFailure()) {
 				action.setEnabled(false);
 				return;
@@ -87,8 +85,8 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				}
 			}
 
-			try (final ModelReference modelReference = modelRecord.aquireReference("ForkAndStartEditorActionDelegate")) {
-				final Object object = modelReference.getInstance();
+			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ForkAndStartEditorActionDelegate")) {
+				final Object object = scenarioDataProvider.getScenario();
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;
 					final String uuid = instance.getUuid();
@@ -106,7 +104,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 					} else {
 
 						// New optimisation, so check there are no validation errors.
-						if (!OptimisationHelper.validateScenario(root, optimising)) {
+						if (!OptimisationHelper.validateScenario(scenarioDataProvider, optimising, false)) {
 							action.setEnabled(false);
 							return;
 						}

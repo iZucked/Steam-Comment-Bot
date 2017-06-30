@@ -41,11 +41,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public class InsertEventContextMenuExtension implements IVesselEventsTableContextMenuExtension {
 
@@ -134,11 +135,11 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
 
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
+			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
 			UserSettings userSettings = null;
 			{
 
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
-				try (final ModelReference modelReference = modelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
+				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
 
 					final EObject object = modelReference.getInstance();
 
@@ -161,18 +162,19 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 			final ScenarioInstance duplicate;
 			try {
-				duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetEvents));
+				duplicate = ScenarioServiceUtils.copyScenario(originalModelRecord, original, generateActionName(originalTargetEvents));
 			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
+			assert duplicate != null;
 			final String taskName = "Insert " + generateActionName(originalTargetEvents);
 
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
 
 			final List<VesselEvent> targetEvents = new LinkedList<>();
 
 			// Map between original and fork
-			final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
+			final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
 				// Map between original and fork
 				final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
 				for (final VesselEvent originalEvent : originalTargetEvents) {
@@ -185,10 +187,10 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 				return new LNGSlotInsertionJobDescriptor(generateName(targetEvents), duplicate, pUserSettings, Collections.emptyList(), targetEvents);
 			};
 
-			final TriConsumer<IJobControl, EJobState, ModelReference> jobCompletedCallback = (jobControl, newState, ref) -> {
+			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {
 					try {
-						ref.save();
+						sdp.getModelReference().save();
 					} catch (final IOException e) {
 						e.printStackTrace();
 					}

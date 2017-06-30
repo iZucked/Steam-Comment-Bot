@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -31,6 +30,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @RunWith(value = ShiroRunner.class)
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
@@ -39,7 +39,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	public void testMinLoadGreaterThanVesselCapacity() {
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 
@@ -73,7 +73,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	public void testEndHeelGreaterThanVesselCapacity() {
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
@@ -109,7 +109,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	public void testVoyageRequirementsGreaterThanVesselCapacity() {
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.cargo.getSlots().get(0).setMaxQuantity(1000);
 
@@ -136,7 +136,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	public void testVoyageRequirementsViolateMaxLoad() {
 		System.err.println("\n\nMaximum Load Volume Violated due to voyage requirements");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 
@@ -165,7 +165,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin discharge violated due to fuel constraints.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 
@@ -196,7 +196,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin discharge violated due to fuel constraints inc min heel.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// Second cargo to force heel retention
 		Cargo cargo2 = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
@@ -252,7 +252,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin discharge violated due to max load constraint.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 
@@ -286,7 +286,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin discharge violated due to max load constraint.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 
@@ -320,7 +320,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin load violated due to max discharge constraint.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vesselAvailability.getStartHeel().setCvValue(21);
 		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
@@ -382,7 +382,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin load violated due to max discharge constraint.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vc.setMinHeel(0);
 
@@ -416,7 +416,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nMin load violated due to max discharge constraint.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vesselAvailability.getStartHeel().setCvValue(21);
 		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
@@ -481,14 +481,14 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nPrevious heel is larger than the max discharge causing roll over.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		msc.vesselAvailability.getStartHeel().setCvValue(21);
 		msc.vesselAvailability.getStartHeel().setPriceExpression("1");
 		int startHeelInM3 = 500;
 		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
 		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
-		
+
 		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(0);
 		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(0);
 		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
@@ -546,7 +546,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	public void testBOGCausesMaxLoadViolation() {
 		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenarioDataProvider = msc.getScenarioDataProvider();
 
 		// change from default scenario: add a maximum load volume
 		msc.cargo.getSlots().get(0).setMaxQuantity(20);
@@ -575,7 +575,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		checker.setExpectedValue(10, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
 
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		final Schedule schedule = ScenarioTools.evaluate(scenarioDataProvider);
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
@@ -588,7 +588,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nTest regular charter out from load port to origin port.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
 		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
@@ -677,7 +677,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		System.err.println("\n\nTest regular charter out from load port to origin port.");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
 		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
@@ -752,7 +752,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// End heel in m3 - Unable to meet end heel level
 		// Current check means if anything is left, then no violation.
-		 checker.setExpectedValue(1000, Expectations.MIN_HEEL_VIOLATIONS, EndEvent.class, 0);
+		checker.setExpectedValue(1000, Expectations.MIN_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		checker.setExpectedValue(1 * 21 * 1000, Expectations.HEEL_COST, VesselEventVisit.class, 0);
 
@@ -768,7 +768,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	public void testDryDock() {
 		System.err.println("\n\nDry dock event inserted correctly.");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 		msc.setupCooldown(30);
 
 		// Set a target end heel

@@ -20,7 +20,6 @@ import org.junit.Assert;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
@@ -28,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Creates a simple scenario for testing changes in price indexes and price dating
@@ -46,7 +46,7 @@ public class PricingTimesScenario {
 	public String dischargePriceIndexedB = "datedB";
 	public String dischargePriceNotIndexed = "5";
 
-	public LNGScenarioModel scenario;
+	public IScenarioDataProvider scenarioDataProvider;
 	public CustomScenarioCreator csc;
 
 	public PricingTimesScenario(final int numVessels, final String timeZone) {
@@ -76,7 +76,7 @@ public class PricingTimesScenario {
 	}
 
 	void setScenario() {
-		scenario = csc.buildScenario();
+		scenarioDataProvider = csc.getScenarioDataProvider();
 	}
 
 	void addTestCommodityIndexes() {
@@ -131,7 +131,7 @@ public class PricingTimesScenario {
 	 * Used to test timezone of pricingDate
 	 */
 	void initSingleCargoData(@NonNull final LocalDateTime cargoStart, @Nullable final LocalDate priceDate, @NonNull final String priceIndex) {
-		int travelTime = 48;
+		final int travelTime = 48;
 		final Cargo indexedCargoA = csc.addCargo("indexed-cargo-a", bigLoadPort, bigDischargePort, "1", priceIndex, 22, cargoStart.minusHours(travelTime), travelTime);
 		if (priceDate != null) {
 			setPriceDates(new Cargo[] { indexedCargoA }, priceDate);
@@ -141,11 +141,10 @@ public class PricingTimesScenario {
 	/*
 	 * Main testing methods to run the created scenario and compare the actual and expected price
 	 */
-	public void testSalesPrice(double... prices) {
-
+	public void testSalesPrice(final double... prices) {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) this.scenario, LNGScenarioRunnerUtils.createDefaultOptimisationPlan(),
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, LNGScenarioRunnerUtils.createDefaultOptimisationPlan(),
 					new TransformerExtensionTestBootstrapModule(), null, true);
 			runner.evaluateInitialState();
 
@@ -153,15 +152,15 @@ public class PricingTimesScenario {
 			Assert.assertNotNull(schedule);
 
 			// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
-			String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
+			final String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
 			for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
-				CargoAllocation ca = schedule.getCargoAllocations().get(i);
+				final CargoAllocation ca = schedule.getCargoAllocations().get(i);
 				if (i == 0) {
 					System.out.println("Discharge start:" + ca.getSlotAllocations().get(1).getSlotVisit().getStart().toString());
 					System.out.println("Discharge end:" + ca.getSlotAllocations().get(1).getSlotVisit().getEnd().toString());
 				}
-				double salePrice = ca.getSlotAllocations().get(1).getPrice();
-				double expectedPrice = prices[i];
+				final double salePrice = ca.getSlotAllocations().get(1).getPrice();
+				final double expectedPrice = prices[i];
 				System.out.println("Sale price: " + salePrice);
 				System.out.println("Expected price:" + expectedPrice);
 				Assert.assertEquals(String.format(errorMsg, i, expectedPrice, salePrice), expectedPrice, salePrice, 0.0001);

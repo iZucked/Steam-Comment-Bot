@@ -22,8 +22,8 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class LightWeightSchedulerMenuExtension implements ITradesTableContextMenuExtension {
 
@@ -64,7 +64,7 @@ public class LightWeightSchedulerMenuExtension implements ITradesTableContextMen
 
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> new LightWeightSchedulerJobDescriptor(instance.getName(), instance, userSettings);
 
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			jobRunner.run("LightWeight Scheduling", instance, modelRecord, null, createJobDescriptorCallback, null);
 		}
 	}

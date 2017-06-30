@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation;
 
-import java.util.List;
-
 import org.junit.Assert;
 
 import com.mmxlabs.models.lng.schedule.Fuel;

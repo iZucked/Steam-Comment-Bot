@@ -23,34 +23,28 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
-
-	// private static final int REPORT_PERCENTAGE = 1;
-	// private int currentProgress = 0;
 
 	private final LNGSchedulerJobDescriptor jobDescriptor;
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final ModelRecord modelRecord;
-	private final ModelReference modelReference;
+	private final ScenarioModelRecord modelRecord;
 
-	private final LNGScenarioModel originalScenario;
+	private final IScenarioDataProvider originalScenarioDataProvider;
 
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
@@ -71,9 +65,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		this.modelReference = modelRecord.aquireReference("LNGSchedulerOptimiserJobControl");
-		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		final EditingDomain originalEditingDomain = modelReference.getEditingDomain();
+		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerOptimiserJobControl");
+		final EditingDomain originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
@@ -143,7 +136,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				}
 			};
 		}
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), originalEditingDomain, runnerHook, false,
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenarioDataProvider, scenarioInstance, jobDescriptor.getOptimisationPlan(), originalEditingDomain, runnerHook, false,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
@@ -151,7 +144,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		modelReference.setLastEvaluationFailed(true);
+		originalScenarioDataProvider.setLastEvaluationFailed(true);
 		scenarioRunner.evaluateInitialState();
 	}
 
@@ -165,7 +158,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			}
 			scenarioRunner.runWithProgress(new SubProgressMonitor(progressMonitor, 100));
 			super.setProgress(100);
-			modelReference.setLastEvaluationFailed(false);
+			originalScenarioDataProvider.setLastEvaluationFailed(false);
 		} finally {
 			progressMonitor.done();
 			if (true) {
@@ -187,16 +180,16 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public void dispose() {
 		executorService.shutdownNow();
 
-		if (modelReference != null) {
-			modelReference.close();
+		if (originalScenarioDataProvider != null) {
+			originalScenarioDataProvider.close();
 		}
 
 		super.dispose();
 	}
 
 	@Override
-	public final MMXRootObject getJobOutput() {
-		return originalScenario;
+	public final Object getJobOutput() {
+		return null;
 	}
 
 	@Override

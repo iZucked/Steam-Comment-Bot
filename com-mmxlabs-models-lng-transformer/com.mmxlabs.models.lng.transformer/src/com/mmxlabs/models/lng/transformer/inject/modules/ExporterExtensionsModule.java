@@ -12,13 +12,11 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
-import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
 import com.mmxlabs.models.lng.transformer.export.PortSlotEventProvider;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IOutputScheduleProcessorFactory;
-import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
 
 /**
  * A {@link Module} implementation to instantiate {@link IExporterExtension}s from {@link IExporterExtensionFactory}

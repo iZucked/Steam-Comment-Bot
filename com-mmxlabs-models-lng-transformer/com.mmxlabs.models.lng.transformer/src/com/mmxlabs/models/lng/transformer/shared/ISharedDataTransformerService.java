@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.lng.transformer.shared;
 
-import com.mmxlabs.models.lng.port.PortModel;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public interface ISharedDataTransformerService {
 
-	IPortAndDistanceData getPortAndDistanceProvider(PortModel portModel);
+	IPortAndDistanceData getPortAndDistanceProvider(@NonNull IScenarioDataProvider dataProvider);
 
 }

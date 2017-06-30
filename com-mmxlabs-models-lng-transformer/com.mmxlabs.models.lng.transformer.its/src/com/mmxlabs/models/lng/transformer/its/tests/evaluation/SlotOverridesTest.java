@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.IRestrictedElementsProvider;
@@ -45,6 +44,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -72,11 +72,11 @@ public class SlotOverridesTest {
 		@NonNull
 		final ModelEntityMap modelEntityMap;
 
-		public SlotTester(@NonNull final LNGScenarioModel scenario) {
+		public SlotTester(@NonNull final IScenarioDataProvider scenario) {
 			this(scenario, false);
 		}
 
-		public SlotTester(@NonNull final LNGScenarioModel scenario, final boolean failSilently) {
+		public SlotTester(@NonNull final IScenarioDataProvider scenarioDataProvider, final boolean failSilently) {
 
 			final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 			final @NonNull Set<@NonNull String> hints = LNGTransformerHelper.getHints(settings);
@@ -85,10 +85,10 @@ public class SlotOverridesTest {
 
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new PerChainUnitScopeModule());
-			modules.add(new LNGSharedDataTransformerModule(scenario, new SharedDataTransformerService()));
+			modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, settings, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule,
-					hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioDataProvider, settings, hints), services,
+					IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 			parentInjector = Guice.createInjector(modules);
 
@@ -150,7 +150,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testOverrideEntity() {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// add a new legal entity
 		final LegalEntity eEntity = msc.addEntity("Override Entity");
@@ -174,7 +174,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testNoOverrideEntity() {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// add a new legal entity
 		final LegalEntity dummyEntity = msc.addEntity("Override Entity");
@@ -199,7 +199,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testOverrideCvValues() {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		final int CONTRACT_MIN_CV = 10;
 		final int CONTRACT_MAX_CV = 100;
@@ -231,7 +231,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testNoOverrideCvValues() {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		final int CONTRACT_MIN_CV = 10;
 		final int CONTRACT_MAX_CV = 100;
@@ -259,7 +259,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testDefaultCvValues() {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// override the discharge slot's min & max CV
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
@@ -329,7 +329,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testOverrideRestrictedPorts() {
 		final MultipleCargoCreator msc = new MultipleCargoCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// do override the contracts' restricted ports
 		msc.loadSlots[0].setOverrideRestrictions(true);
@@ -353,7 +353,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testOverrideRestrictedContracts() {
 		final MultipleCargoCreator msc = new MultipleCargoCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// set up a new contract on discharge slot 1
 		final Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
@@ -377,7 +377,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testNoOverrideRestrictedContracts() {
 		final MultipleCargoCreator msc = new MultipleCargoCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// set up a new contract on discharge slot 1
 		final Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
@@ -397,7 +397,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testNoOverrideRestrictedPorts() {
 		final MultipleCargoCreator msc = new MultipleCargoCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// don't override the contracts' restricted ports
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
@@ -416,7 +416,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testOverrideRestrictedPermissivity() {
 		final MultipleCargoCreator msc = new MultipleCargoCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// do override the contracts' restricted permissivity
 		msc.loadSlots[0].getRestrictedPorts().add(msc.dischargePorts[1]);
@@ -437,7 +437,7 @@ public class SlotOverridesTest {
 	@Test
 	public void testNoOverrideRestrictedPermissivity() {
 		final MultipleCargoCreator msc = new MultipleCargoCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// do override the contracts' restricted permissivity
 		msc.loadSlots[0].getRestrictedPorts().add(msc.dischargePorts[1]);
@@ -459,7 +459,7 @@ public class SlotOverridesTest {
 	// @Test
 	public void testOverrideShipmentType() {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
+		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// override the discharge slot's delivery type
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);

@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
@@ -39,7 +39,7 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService, IPos
 	}
 
 	@Override
-	public void changed(@NonNull final ModelRecord modelRecord) {
+	public void changed(@NonNull final ScenarioModelRecord modelRecord) {
 		if (!enabled) {
 			return;
 		}

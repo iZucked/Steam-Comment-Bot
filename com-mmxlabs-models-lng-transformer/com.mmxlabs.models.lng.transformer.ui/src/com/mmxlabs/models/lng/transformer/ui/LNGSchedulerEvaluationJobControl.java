@@ -17,11 +17,10 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
@@ -58,19 +57,17 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-		try (final ModelReference modelReference = modelRecord.aquireReference("LNGSchedulerEvaluationJobControl")) {
-			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
-			final EditingDomain editingDomain = modelReference.getEditingDomain();
+		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerEvaluationJobControl")) {
+			final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
 			// Hack: Add on shipping only hint to avoid generating spot markets during eval.
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
 					LNGTransformerHelper.HINT_SHIPPING_ONLY);
 			try {
-				modelReference.setLastEvaluationFailed(true);
+				scenarioDataProvider.setLastEvaluationFailed(true);
 				runner.evaluateInitialState();
-				modelReference.setLastEvaluationFailed(false);
+				scenarioDataProvider.setLastEvaluationFailed(false);
 			} finally {
 				// runner.dispose();
 			}

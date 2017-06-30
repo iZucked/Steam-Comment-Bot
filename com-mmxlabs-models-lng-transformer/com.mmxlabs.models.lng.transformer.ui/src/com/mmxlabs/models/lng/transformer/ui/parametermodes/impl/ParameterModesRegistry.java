@@ -11,9 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;

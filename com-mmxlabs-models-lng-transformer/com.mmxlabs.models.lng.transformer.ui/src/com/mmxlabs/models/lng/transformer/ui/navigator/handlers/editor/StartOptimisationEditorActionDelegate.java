@@ -17,8 +17,8 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -67,7 +67,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			}
 
 			@NonNull
-			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			if (instance.isReadonly()) {
 				action.setEnabled(false);
 				return;
@@ -78,8 +78,8 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				return;
 			}
 
-			try (final ModelReference modelReference = modelRecord.aquireReference("StartOptimisationEditorActionDelegate")) {
-				final Object object = modelReference.getInstance();
+			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("StartOptimisationEditorActionDelegate")) {
+				final Object object = scenarioDataProvider.getScenario();
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;
 					final String uuid = instance.getUuid();
@@ -97,13 +97,11 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 					} else {
 
 						// New optimisation, so check there are no validation errors.
-						if (!OptimisationHelper.validateScenario(root, optimising)) {
+						if (!OptimisationHelper.validateScenario(scenarioDataProvider, optimising, false)) {
 							action.setEnabled(false);
 							return;
 						}
-
 					}
-
 				}
 			}
 		}

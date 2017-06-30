@@ -82,9 +82,9 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
@@ -136,10 +136,10 @@ public final class OptimisationHelper {
 		if (service == null) {
 			return null;
 		}
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
 		final OptimisationPlan[] planRef = new OptimisationPlan[1];
-		final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
+		final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
 			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
 
 			if (optimisationPlan == null) {
@@ -986,7 +986,7 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -1009,8 +1009,9 @@ public final class OptimisationHelper {
 			}
 		});
 
+		MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false);
 			return helper.runValidation(validator, extraContext, Collections.singleton(root));
 		});
 
@@ -1021,23 +1022,30 @@ public final class OptimisationHelper {
 		if (status.isOK() == false) {
 
 			// See if this command was executed in the UI thread - if so fire up the dialog box.
-			if (Display.getCurrent() != null) {
+			if (displayErrors) {
+				final boolean[] res = new boolean[1];
+				Display.getDefault().syncExec(() -> {
+					final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getDefault().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
 
-				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
+					// Wait for use to press a button before continuing.
+					dialog.setBlockOnOpen(true);
 
-				// Wait for use to press a button before continuing.
-				dialog.setBlockOnOpen(true);
-
-				if (dialog.open() == Window.CANCEL) {
+					if (dialog.open() == Window.CANCEL) {
+						res[0] = false;
+					} else {
+						res[0] = true;
+					}
+				});
+				if (res[0] == false) {
 					return false;
 				}
 			}
 		}
-
 		if (status.getSeverity() == IStatus.ERROR) {
 			return false;
 		}
 
 		return true;
 	}
+
 }

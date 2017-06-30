@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
-
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;

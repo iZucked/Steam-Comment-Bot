@@ -24,7 +24,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -64,9 +64,9 @@ public class Activator extends ValidationPlugin {
 			if (jobManager != null) {
 
 				for (final ScenarioResult result : selected) {
-					ScenarioInstance instance = result.getScenarioInstance();
+					ScenarioModelRecord instance = result.getModelRecord();
 
-					final String uuid = instance.getUuid();
+					final String uuid = instance.getManifest().getUUID();
 
 					final IJobDescriptor job = jobManager.findJobForResource(uuid);
 					if (job == null) {

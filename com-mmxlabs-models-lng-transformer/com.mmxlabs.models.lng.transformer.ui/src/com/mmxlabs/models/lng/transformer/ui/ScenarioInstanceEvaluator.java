@@ -20,34 +20,37 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 	@Override
-	public void evaluate(final @NonNull ModelRecord modelRecord) {
+	public void evaluate(final @NonNull ScenarioModelRecord modelRecord) {
 
-		modelRecord.execute(modelReference -> {
+		modelRecord.executeWithProvider(scenarioDataProvider -> {
 
-			final EObject object = modelReference.getInstance();
+			final EObject object = scenarioDataProvider.getScenario();
 			if (object instanceof LNGScenarioModel) {
+
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) object;
 				final ExecutorService executorService = Executors.newSingleThreadExecutor();
 				try {
+					scenarioDataProvider.setLastEvaluationFailed(true);
+
 					final OptimisationPlan p = OptimisationHelper.getOptimiserSettings(scenarioModel, true, null, false, false);
 
 					if (p == null) {
 						return;
 					}
-					final EditingDomain editingDomain = modelReference.getEditingDomain();
+					final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 					final CompoundCommand cmd = new CompoundCommand("Update settings");
 					cmd.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(p.getUserSettings())));
 					RunnerHelper.syncExecDisplayOptional(() -> {
 						editingDomain.getCommandStack().execute(cmd);
 					});
 
-					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioModel, null, p, editingDomain, (IRunnerHook) null, true);
+					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, p, editingDomain, (IRunnerHook) null, true);
 					runner.evaluateInitialState();
-					modelReference.setLastEvaluationFailed(false);
+					scenarioDataProvider.setLastEvaluationFailed(false);
 				} finally {
 					executorService.shutdown();
 				}

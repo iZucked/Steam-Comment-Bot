@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -28,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Class for tests to do with multiple dry docks.
@@ -86,10 +86,10 @@ public class DryDockTest {
 		csc.addDryDock(portB, startSecondDryDock, dryDockDurationDays);
 		csc.addDryDock(portC, startThirdDryDock, dryDockDurationDays);
 
-		final LNGScenarioModel scenario = csc.buildScenario();
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
 
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		ScenarioTools.printSequences(result);
 

@@ -14,10 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?254">Case 254: Check input attributes have not unexpectedly changed</a>
@@ -71,10 +71,10 @@ public class InputAttributesCheckTest {
 		// create some cargoes.
 		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
-		final LNGScenarioModel scenario = csc.buildScenario();
-		final ChangeRecorder changeRecorder = new ChangeRecorder(scenario);
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
+		final ChangeRecorder changeRecorder = new ChangeRecorder(scenarioDataProvider.getScenario());
 
-		ScenarioTools.evaluate(scenario);
+		ScenarioTools.evaluate(scenarioDataProvider);
 
 		final ChangeDescription changeDescription = changeRecorder.endRecording();
 		Assert.assertTrue(changeDescription.getObjectChanges().isEmpty());

@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
@@ -121,10 +122,13 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private @NonNull UserSettings userSettings;
 
+	private @NonNull IScenarioDataProvider scenarioDataProvider;
+
 	/**
 	 */
-	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull UserSettings userSettings, @NonNull final Collection<@NonNull String> hints) {
-		this.scenario = scenario;
+	public LNGTransformerModule(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, @NonNull final Collection<@NonNull String> hints) {
+		this.scenarioDataProvider = scenarioDataProvider;
+		this.scenario = (LNGScenarioModel) scenarioDataProvider.getScenario();
 		this.userSettings = userSettings;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
 		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
@@ -151,6 +155,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(long.class).annotatedWith(Names.named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)).toInstance(OptimiserUnitConvertor.convertToInternalVolume(140_000));
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
+		bind(IScenarioDataProvider.class).toInstance(scenarioDataProvider);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
 
 		bind(LNGScenarioTransformer.class).in(Singleton.class);

@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -50,10 +49,10 @@ import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class CreateActionableSetPlanContextMenuExtension implements ITradesTableContextMenuExtension {
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
@@ -95,11 +94,12 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 			final ScenarioInstance instance = scenarioEditingLocation.getScenarioInstance();
 			// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 			@NonNull
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-			try (final ModelReference modelReference = modelRecord.aquireReference("ActionPlanContextMenuExtension")) {
-				final EObject object = modelReference.getInstance();
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ActionPlanContextMenuExtension")) {
+				final EObject object = scenarioDataProvider.getScenario();
 
 				if (object instanceof LNGScenarioModel) {
+
 					final LNGScenarioModel root = (LNGScenarioModel) object;
 
 					final String uuid = instance.getUuid();
@@ -114,7 +114,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 					new Thread("CreateActionableSetThread") {
 						@Override
 						public void run() {
-							final ScenarioLock scenarioLock = modelReference.getLock();
+							final ScenarioLock scenarioLock = scenarioDataProvider.getModelReference().getLock();
 
 							scenarioLock.lock();
 							// Use a latch to trigger unlock in this thread
@@ -127,7 +127,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 								job = new CreateActionableSetPlanJobDescriptor(instance.getName(), instance, userSettings);
 
 								// New optimisation, so check there are no validation errors.
-								if (!validateScenario(root, false)) {
+								if (!validateScenario(scenarioDataProvider, false)) {
 									scenarioLock.unlock();
 									return;
 								}
@@ -201,7 +201,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 		}
 	}
 
-	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -223,10 +223,10 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 				return false;
 			}
 		});
-
+		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
-			return helper.runValidation(validator, extraContext, Collections.singleton(root));
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false);
+			return helper.runValidation(validator, extraContext, Collections.singleton(rootObject));
 		});
 
 		if (status == null) {

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.entities;
 
-import java.util.Collection;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;

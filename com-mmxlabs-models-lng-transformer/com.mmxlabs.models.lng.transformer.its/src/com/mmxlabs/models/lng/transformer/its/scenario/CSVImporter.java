@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
@@ -84,6 +85,8 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class CSVImporter {
 
@@ -121,6 +124,7 @@ public class CSVImporter {
 		dataMap.put(PricingModelImporter.PRICE_CURVE_KEY, createURL(urlRoot, "Commodity Curves.csv"));
 		dataMap.put(PricingModelImporter.BASEFUEL_PRICING_KEY, createURL(urlRoot, "Base Fuel Curves.csv"));
 		dataMap.put(PricingModelImporter.CHARTER_CURVE_KEY, createURL(urlRoot, "Charter Curves.csv"));
+		dataMap.put(PricingModelImporter.CONVERSION_FACTORS_KEY, createURL(urlRoot, "Conversion Factors.csv"));
 	}
 
 	public void importCostData(@NonNull final String urlRoot) throws MalformedURLException {
@@ -176,7 +180,7 @@ public class CSVImporter {
 		return dataMap;
 	}
 
-	public static @NonNull LNGScenarioModel importCSVScenario(@NonNull final String urlRoot, final String... extraMapEntries) throws MalformedURLException {
+	public static @NonNull IScenarioDataProvider importCSVScenario(@NonNull final String urlRoot, final String... extraMapEntries) throws MalformedURLException {
 
 		final CSVImporter importer = new CSVImporter();
 
@@ -194,13 +198,13 @@ public class CSVImporter {
 		return importCSVScenario(importer.dataMap);
 	}
 
-	public static @NonNull LNGScenarioModel importCSVScenario(@NonNull final Map<String, URL> dataMap) {
+	public static @NonNull IScenarioDataProvider importCSVScenario(@NonNull final Map<String, URL> dataMap) {
 
 		final IImporterRegistry importerRegistry = getImporterRegistry();
 		return importCSVScenario(dataMap, importerRegistry);
 	}
 
-	public static @NonNull LNGScenarioModel importCSVScenario(@NonNull final Map<String, URL> dataMap, @NonNull final IImporterRegistry importerRegistry) {
+	public static @NonNull IScenarioDataProvider importCSVScenario(@NonNull final Map<String, URL> dataMap, @NonNull final IImporterRegistry importerRegistry) {
 
 		final DefaultImportContext context = new DefaultImportContext('.');
 
@@ -232,7 +236,9 @@ public class CSVImporter {
 			postModelImporter.onPostModelImport(context, scenarioModel);
 		}
 
-		return scenarioModel;
+		final SimpleScenarioDataProvider scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
+
+		return scenarioDataProvider;
 	}
 
 	@NonNull
@@ -262,7 +268,7 @@ public class CSVImporter {
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
 					// subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
-//					subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
+					// subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getCostModel(), new CostModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());
@@ -435,7 +441,7 @@ public class CSVImporter {
 	}
 
 	@NonNull
-	public LNGScenarioModel doImport() {
+	public IScenarioDataProvider doImport() {
 		return CSVImporter.importCSVScenario(getDataMap());
 	}
 }

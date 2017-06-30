@@ -46,11 +46,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 
 public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
 
@@ -200,10 +201,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
+			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
 			{
 
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
-				try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
+				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
 
 					final EObject object = modelReference.getInstance();
 
@@ -226,18 +227,19 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 			final ScenarioInstance duplicate;
 			try {
-				duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetSlots));
+				duplicate = ScenarioServiceUtils.copyScenario(originalModelRecord, original, generateActionName(originalTargetSlots));
 			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
+			assert duplicate != null;
 			final String taskName = "Insert " + generateActionName(originalTargetSlots);
 
-			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
 
 			final List<Slot> targetSlots = new LinkedList<Slot>();
 
 			// Map between original and fork
-			final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
+			final BiFunction<IScenarioDataProvider, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
 				// Map between original and fork
 				final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
 				for (final Slot originalSlot : originalTargetSlots) {
@@ -253,10 +255,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 				return new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, pUserSettings, targetSlots, Collections.emptyList());
 			};
 
-			final TriConsumer<IJobControl, EJobState, ModelReference> jobCompletedCallback = (jobControl, newState, ref) -> {
+			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
 				if (newState == EJobState.COMPLETED) {
 					try {
-						ref.save();
+						sdp.getModelReference().save();
 					} catch (final IOException e) {
 						e.printStackTrace();
 					}

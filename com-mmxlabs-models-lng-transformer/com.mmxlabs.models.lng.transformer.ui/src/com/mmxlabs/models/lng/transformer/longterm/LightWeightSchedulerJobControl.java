@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.transformer.longterm;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,57 +12,40 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
-import org.apache.shiro.authz.aop.UserAnnotationHandler;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.action.SubToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.progress.IProgressConstants;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
-import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
@@ -79,9 +60,7 @@ public class LightWeightSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final com.mmxlabs.scenario.service.model.manager.ModelReference modelReference;
-
-	private final LNGScenarioModel originalScenario;
+	private final IScenarioDataProvider originalScenarioDataProvider;
 	private final EditingDomain originalEditingDomain;
 
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
@@ -96,11 +75,10 @@ public class LightWeightSchedulerJobControl extends AbstractEclipseJobControl {
 
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
-		this.modelReference = modelRecord.aquireReference("LNGSchedulerInsertSlotJobControl");
-		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		originalEditingDomain = modelReference.getEditingDomain();
+		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerInsertSlotJobControl");
+		originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
 		/*
 		 * Error checks
@@ -124,7 +102,7 @@ public class LightWeightSchedulerJobControl extends AbstractEclipseJobControl {
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, false, //
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenarioDataProvider, scenarioInstance, plan, originalEditingDomain, null, false, //
 				LNGTransformerHelper.HINT_OPTIMISE_LSO, //
 				LNGTransformerHelper.HINT_DISABLE_CACHES, //
 				LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN);
@@ -163,10 +141,11 @@ public class LightWeightSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 			ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 
-			Schedule schedule = scenarioToOptimiserBridge.getScenario().getScheduleModel().getSchedule();
+			Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getScenarioDataProvider()).getSchedule();
 
-			final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), constraintAndFitnessSettings,
-					scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), scenarioToOptimiserBridge.getScenario(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+			final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(),
+					constraintAndFitnessSettings, scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), scenarioToOptimiserBridge.getScenarioDataProvider(),
+					dataTransformer.getInitialResult(), dataTransformer.getHints());
 
 			Function<Integer, String> nameFactory = changeSetIdx -> {
 				String newName;
@@ -235,8 +214,8 @@ public class LightWeightSchedulerJobControl extends AbstractEclipseJobControl {
 	public void dispose() {
 		executorService.shutdownNow();
 
-		if (modelReference != null) {
-			modelReference.close();
+		if (originalScenarioDataProvider != null) {
+			originalScenarioDataProvider.close();
 		}
 
 		// if (scenarioRunner != null) {
@@ -247,7 +226,7 @@ public class LightWeightSchedulerJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	public final MMXRootObject getJobOutput() {
-		return originalScenario;
+		return null;
 	}
 
 	@Override

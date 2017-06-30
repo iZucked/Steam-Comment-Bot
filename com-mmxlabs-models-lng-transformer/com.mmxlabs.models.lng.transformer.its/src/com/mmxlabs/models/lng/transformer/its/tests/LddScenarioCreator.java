@@ -84,8 +84,8 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		 * determine the time it will take the vessel to travel between load and discharge ports, and create a cargo with enough time to spare
 		 */
 
-		final int duration1 = 2 * getTravelTime(loadPort, dischargePort1, null, (int) maxSpeed);
-		final int duration2 = 2 * getTravelTime(loadPort, dischargePort2, null, (int) maxSpeed);
+		final int duration1 = 2 * getTravelTime(loadPort, dischargePort1, RouteOption.DIRECT, (int) maxSpeed);
+		final int duration2 = 2 * getTravelTime(loadPort, dischargePort2, RouteOption.DIRECT, (int) maxSpeed);
 
 		cargo = cargoCreator.createDefaultLddCargo(null, ports[1], ports[2], ports[3], null, duration1, duration2);
 
@@ -99,8 +99,8 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime loadDate = cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 		final ZonedDateTime lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
-		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
+		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, RouteOption.DIRECT, (int) maxSpeed));
+		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, RouteOption.DIRECT, (int) maxSpeed));
 
 		this.vesselAvailability = fleetCreator.setAvailability(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
 				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());

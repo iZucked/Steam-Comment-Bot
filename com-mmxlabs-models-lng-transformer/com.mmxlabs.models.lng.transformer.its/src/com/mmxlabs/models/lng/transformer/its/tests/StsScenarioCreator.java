@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.time.ZonedDateTime;
-import java.util.List;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -85,8 +83,8 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		 * determine the time it will take the vessel to travel between load and discharge ports, and create a cargo with enough time to spare
 		 */
 
-		final int loadTransferDuration = 2 * getTravelTime(loadPort, transferPort, null, (int) maxSpeed);
-		final int transferDischargeDuration = 2 * getTravelTime(transferPort, dischargePort, null, (int) maxSpeed);
+		final int loadTransferDuration = 2 * getTravelTime(loadPort, transferPort, RouteOption.DIRECT, (int) maxSpeed);
+		final int transferDischargeDuration = 2 * getTravelTime(transferPort, dischargePort, RouteOption.DIRECT, (int) maxSpeed);
 
 		loadCargo = cargoCreator.createDefaultCargo(null, loadPort, transferPort, null, loadTransferDuration);
 
@@ -110,7 +108,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		// final Date dischargeDate = dischargeCargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// vessel one will start before the load date and end before the discharge date
-		final ZonedDateTime preLoadDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+		final ZonedDateTime preLoadDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, RouteOption.DIRECT, (int) maxSpeed));
 		// final Date preDischargeDate = addHours(dischargeDate, -2);
 		// fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[0], originPort, preLoadDate, transferPort, preDischargeDate);
 

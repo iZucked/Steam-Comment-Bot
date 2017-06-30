@@ -36,7 +36,7 @@ public class LNGSharedDataTransformer {
 	@NonNull
 	private SharedPortDistanceDataBuilder portDistanceBuilder;
 
-	public void transform(@NonNull PortModel portModel) {
+	public void transform(@NonNull final PortModel portModel) {
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */

@@ -15,7 +15,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -118,7 +118,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 			}
 
 			@NonNull
-			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			if (modelRecord.isLoadFailure()) {
 				action.setEnabled(false);
 				return;

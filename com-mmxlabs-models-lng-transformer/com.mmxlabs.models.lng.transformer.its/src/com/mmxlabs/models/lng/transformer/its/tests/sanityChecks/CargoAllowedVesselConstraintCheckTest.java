@@ -16,13 +16,13 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?255">Case 255: Check constraints have not be violated</a><br>
@@ -75,8 +75,8 @@ public class CargoAllowedVesselConstraintCheckTest {
 		csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour);
 
 		// build and run the scenario.
-		final LNGScenarioModel scenario = csc.buildScenario();
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		// get the cargo that was constrained out of the results.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
@@ -141,8 +141,8 @@ public class CargoAllowedVesselConstraintCheckTest {
 		}
 
 		// build and run the scenario
-		final LNGScenarioModel scenario = csc.buildScenario();
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		// check that the vessel that carries every cargo matches the name of one in the allowed vessels list.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {

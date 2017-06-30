@@ -42,6 +42,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -65,6 +66,10 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	@Inject
 	@NonNull
 	private LNGScenarioModel scenarioModel;
+
+	@Inject
+	@NonNull
+	private IScenarioDataProvider scenarioDataProvider;
 
 	@Inject
 	@NonNull

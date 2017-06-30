@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -26,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?259">Case 259: Scenario with several cargoes</a>
@@ -85,10 +85,10 @@ public class MultipleCargoFuelConsumptionTest {
 		final LocalDateTime dryDockStart = cargoBStart.plusHours(2 * legDuration);
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final LNGScenarioModel scenario = csc.buildScenario();
+		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
 
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		Assert.assertNotNull(result);
 
@@ -254,7 +254,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final LocalDateTime dryDockStart = cargoBStart.plusHours(2 * legDuration);
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final LNGScenarioModel scenario = csc.buildScenario();
+		final IScenarioDataProvider scenario = csc.getScenarioDataProvider();
 		CustomScenarioCreator.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0,
 				0);
 

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -18,7 +17,6 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 /**

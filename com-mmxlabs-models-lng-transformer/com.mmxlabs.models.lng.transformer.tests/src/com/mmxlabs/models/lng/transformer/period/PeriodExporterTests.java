@@ -4,26 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
-import java.util.Calendar;
-
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-
 public class PeriodExporterTests {
 //
 //	/**

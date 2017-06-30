@@ -13,8 +13,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.shared.IPortAndDistanceData;
 import com.mmxlabs.models.lng.transformer.shared.ISharedDataTransformerService;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 
 public class SharedDataTransformerService implements ISharedDataTransformerService {
@@ -22,12 +24,12 @@ public class SharedDataTransformerService implements ISharedDataTransformerServi
 	private final ConcurrentHashMap<String, SoftReference<IPortAndDistanceData>> cache = new ConcurrentHashMap<>();
 
 	@Override
-	public IPortAndDistanceData getPortAndDistanceProvider(final PortModel portModel) {
+	public IPortAndDistanceData getPortAndDistanceProvider(@NonNull final IScenarioDataProvider dataProvider) {
 
+		final PortModel portModel = ScenarioModelUtil.getPortModel(dataProvider);
 		if (false) {
 
 			// Caching code path - assumes long running service
-
 			final String key = getKey(portModel);
 			final SoftReference<IPortAndDistanceData> ref = cache.get(key);
 			IPortAndDistanceData value = null;
