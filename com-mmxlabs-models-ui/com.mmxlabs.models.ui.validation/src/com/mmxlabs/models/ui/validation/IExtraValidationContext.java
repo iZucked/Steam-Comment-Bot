@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Additional context for validations; replaces the functionality of the validation support class
@@ -24,6 +25,8 @@ public interface IExtraValidationContext {
 	 * @return
 	 */
 	public MMXRootObject getRootObject();
+	
+	public IScenarioDataProvider getScenarioDataProvider();
 
 	/**
 	 * Get the intended container for the given object

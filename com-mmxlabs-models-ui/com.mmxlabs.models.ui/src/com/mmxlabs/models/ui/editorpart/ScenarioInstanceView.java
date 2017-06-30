@@ -41,16 +41,20 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider, IValidationStatusGoto {
 
 	private ScenarioInstance scenarioInstance;
-	private ModelRecord modelRecord;
+	private ScenarioModelRecord modelRecord;
+	private IScenarioDataProvider scenarioDataProvider;
 	private ModelReference modelReference;
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 	private ReferenceValueProviderCache valueProviderCache;
@@ -163,12 +167,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			this.scenarioInstance = instance;
 			this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			this.modelReference = modelRecord.aquireReference("ScenarioInstanceView:1");
+			this.scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
 			modelReference.getLock().addLockListener(lockListener);
 			setLocked(modelReference.isLocked() || instance.isReadonly());
 			MMXRootObject rootObject = getRootObject();
 
 			this.valueProviderCache = new ReferenceValueProviderCache(rootObject);
-			extraValidationContext.push(new DefaultExtraValidationContext(rootObject, false));
+			extraValidationContext.push(new DefaultExtraValidationContext(scenarioDataProvider, false));
 			doDisplayScenarioInstance(scenarioInstance, getRootObject());
 		} else {
 			scenarioInstanceStatusProvider = null;
@@ -185,6 +190,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 		if (scenarioInstanceStatusProvider != null) {
 			scenarioInstanceStatusProvider.dispose();
+		}
+
+		if (scenarioDataProvider != null) {
+			scenarioDataProvider.close();
+			scenarioDataProvider = null;
 		}
 
 		if (modelReference != null) {
@@ -319,6 +329,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	@Override
 	public ScenarioInstance getScenarioInstance() {
 		return scenarioInstance;
+	}
+
+	@Override
+	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+		return scenarioDataProvider;
 	}
 
 	@Override

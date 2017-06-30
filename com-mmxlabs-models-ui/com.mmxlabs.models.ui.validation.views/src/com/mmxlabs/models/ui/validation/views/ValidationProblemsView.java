@@ -53,7 +53,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
@@ -64,11 +64,11 @@ public class ValidationProblemsView extends ViewPart {
 	public static final String VIEW_ID = "com.mmxlabs.models.ui.validation.views.ValidationProblemsView";
 
 	private TreeViewer viewer;
-	private final Map<ModelRecord, ScenarioInstance> map = new ConcurrentHashMap<>();
+	private final Map<ScenarioModelRecord, ScenarioInstance> map = new ConcurrentHashMap<>();
 
-	private final Map<ModelRecord, IStatus> statusMap = new HashMap<>();
-	private final Set<ModelRecord> notifierInstances = new HashSet<>();
-	private ModelRecord currentRecord = null;
+	private final Map<ScenarioModelRecord, IStatus> statusMap = new HashMap<>();
+	private final Set<ScenarioModelRecord> notifierInstances = new HashSet<>();
+	private ScenarioModelRecord currentRecord = null;
 	private IEditorPart editorPart;
 	private final IPartListener partListener = new IPartListener() {
 
@@ -103,10 +103,12 @@ public class ValidationProblemsView extends ViewPart {
 				editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
-				ModelRecord modelRecord = null;
+				ScenarioModelRecord modelRecord = null;
 				if (scenarioInstance != null) {
 					modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					map.put(modelRecord, scenarioInstance);
+					if (modelRecord != null) {
+						map.put(modelRecord, scenarioInstance);
+					}
 				}
 
 				if (modelRecord != currentRecord) {
@@ -147,7 +149,7 @@ public class ValidationProblemsView extends ViewPart {
 					return;
 				}
 
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 				if (modelRecord == null) {
 					System.out.println("DEBUG: ValidationProblemsView: - model record is null");
@@ -179,7 +181,7 @@ public class ValidationProblemsView extends ViewPart {
 
 	private final @NonNull IScenarioValidationListener scenarioInstanceChangedListener = new IScenarioValidationListener() {
 		@Override
-		public void validationChanged(@NonNull final ModelRecord modelRecord, @NonNull final IStatus status) {
+		public void validationChanged(@NonNull final ScenarioModelRecord modelRecord, @NonNull final IStatus status) {
 			// final ScenarioInstance instance = (ScenarioInstance)
 			// notification.getNotifier();
 			if (modelRecord.getValidationStatusSeverity() == IStatus.OK) {
@@ -230,17 +232,17 @@ public class ValidationProblemsView extends ViewPart {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 
 					Object element = iStructuredSelection.getFirstElement();
-					while (element != null && !(element instanceof ModelRecord)) {
+					while (element != null && !(element instanceof ScenarioModelRecord)) {
 
 						element = contentProvider.getParent(element);
 						if (element instanceof Map.Entry) {
 							element = ((Map.Entry<?, ?>) element).getKey();
 						}
 					}
-					if (element instanceof ModelRecord) {
+					if (element instanceof ScenarioModelRecord) {
 						try {
 							final IStatus status = (IStatus) iStructuredSelection.getFirstElement();
-							final ModelRecord record = (ModelRecord) element;
+							final ScenarioModelRecord record = (ScenarioModelRecord) element;
 							openEditor(map.get(record), status);
 							openViews(map.get(record), status);
 						} catch (final PartInitException e) {
@@ -263,7 +265,7 @@ public class ValidationProblemsView extends ViewPart {
 	@Override
 	public void dispose() {
 		getSite().getPage().removePartListener(partListener);
-		for (final ModelRecord instance : notifierInstances) {
+		for (final ScenarioModelRecord instance : notifierInstances) {
 			instance.removeValidationListener(scenarioInstanceChangedListener);
 		}
 
@@ -275,7 +277,7 @@ public class ValidationProblemsView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	private void hookScenarioInstance(final ModelRecord modelRecord) {
+	private void hookScenarioInstance(final ScenarioModelRecord modelRecord) {
 
 		modelRecord.addValidationListener(scenarioInstanceChangedListener);
 		notifierInstances.add(modelRecord);
@@ -284,7 +286,7 @@ public class ValidationProblemsView extends ViewPart {
 		}
 	}
 
-	private void releaseScenarioInstance(final ModelRecord instance) {
+	private void releaseScenarioInstance(final ScenarioModelRecord instance) {
 		if (instance != null) {
 			instance.removeValidationListener(scenarioInstanceChangedListener);
 			notifierInstances.remove(instance);

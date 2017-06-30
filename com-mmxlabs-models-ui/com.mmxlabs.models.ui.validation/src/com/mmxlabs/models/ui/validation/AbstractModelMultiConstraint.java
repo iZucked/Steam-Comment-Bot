@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.internal.Activator;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * An abstract implementation of {@link AbstractModelConstraint} designed to allow multiple status messages to be reported.
@@ -47,7 +48,7 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 		final IExtraValidationContext extraValidationContext;
 		if (activator == null) {
 			// For unit tests outside of OSGi
-			extraValidationContext = new DefaultExtraValidationContext((MMXRootObject) null, false);
+			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider)null, false);
 		} else {
 			extraValidationContext = activator.getExtraValidationContext();
 		}

@@ -61,10 +61,12 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	public Color getBackground(final Object element) {
 		if (this.eObjectTableViewer.getValidationSupport().getValidationErrors().containsKey(element)) {
 			final IStatus s = this.eObjectTableViewer.getValidationSupport().getValidationErrors().get(element);
-			if (s.getSeverity() == IStatus.ERROR) {
-				return errorColour;
-			} else if (s.getSeverity() == IStatus.WARNING) {
-				return warningColour;
+			if (s != null) {
+				if (s.getSeverity() == IStatus.ERROR) {
+					return errorColour;
+				} else if (s.getSeverity() == IStatus.WARNING) {
+					return warningColour;
+				}
 			}
 		}
 

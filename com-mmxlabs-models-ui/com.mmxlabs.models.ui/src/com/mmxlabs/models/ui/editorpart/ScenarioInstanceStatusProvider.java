@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
@@ -19,11 +19,11 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
  * 
  */
 public class ScenarioInstanceStatusProvider extends DefaultStatusProvider {
-	private ModelRecord modelRecord;
+	private ScenarioModelRecord modelRecord;
 
 	private final @NonNull IScenarioValidationListener validationListener = new IScenarioValidationListener() {
 		@Override
-		public void validationChanged(@NonNull ModelRecord modelRecord, @NonNull IStatus status) {
+		public void validationChanged(@NonNull ScenarioModelRecord modelRecord, @NonNull IStatus status) {
 			fireStatusChanged(status);
 		}
 	};

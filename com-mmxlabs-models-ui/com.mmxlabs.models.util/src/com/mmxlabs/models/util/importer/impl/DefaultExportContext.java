@@ -6,6 +6,7 @@ package com.mmxlabs.models.util.importer.impl;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class DefaultExportContext implements IMMXExportContext {
 
@@ -13,10 +14,12 @@ public class DefaultExportContext implements IMMXExportContext {
 
 	private final char decimalSeparator;
 
-	public DefaultExportContext(final MMXRootObject rootObject, final char decimalSeparator) {
-		this.rootObject = rootObject;
-		this.decimalSeparator = decimalSeparator;
+	private IScenarioDataProvider scenarioDataProvider;
 
+	public DefaultExportContext(final MMXRootObject rootObject, IScenarioDataProvider scenarioDataProvider, final char decimalSeparator) {
+		this.rootObject = rootObject;
+		this.scenarioDataProvider = scenarioDataProvider;
+		this.decimalSeparator = decimalSeparator;
 	}
 
 	@Override
@@ -27,5 +30,10 @@ public class DefaultExportContext implements IMMXExportContext {
 	@Override
 	public char getDecimalSeparator() {
 		return decimalSeparator;
+	}
+
+	@Override
+	public IScenarioDataProvider getScenarioDataProvider() {
+		return scenarioDataProvider;
 	}
 }

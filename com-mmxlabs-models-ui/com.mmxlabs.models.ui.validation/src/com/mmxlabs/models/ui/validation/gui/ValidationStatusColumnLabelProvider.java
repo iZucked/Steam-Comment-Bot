@@ -13,7 +13,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.ui.validation.internal.Activator;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  * Simple label provider for {@link IStatus} objects showing the message and an icon based on severity.
@@ -69,8 +69,8 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 		if (element instanceof Map.Entry) {
 			Map.Entry entry = (Map.Entry) element;
 			Object key = entry.getKey();
-			if (key instanceof ModelRecord) {
-				ModelRecord modelRecord = (ModelRecord) key;
+			if (key instanceof ScenarioModelRecord) {
+				ScenarioModelRecord modelRecord = (ScenarioModelRecord) key;
 				return modelRecord.getName();
 			}
 		}

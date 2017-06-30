@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.editorpart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -59,7 +60,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -93,11 +93,13 @@ import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
@@ -180,13 +182,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private PropertySheetPage propertySheetPage;
 
 	private ScenarioInstance scenarioInstance;
-	private final @NonNull IScenarioLockListener lockedAdapter = new IScenarioLockListener() {
+	private IScenarioDataProvider scenarioDataProvider;
 
-		@Override
-		public void lockStateChanged(@NonNull final ModelRecord modelRecord, final boolean writeLocked) {
-			updateLocked();
-		}
-	};
+	private final @NonNull IScenarioLockListener lockedAdapter = (modelRecord, writeLocked) -> updateLocked();
+
 	private AdapterImpl scenarioNameAttributeAdapter;
 
 	private TreeViewer selectionViewer;
@@ -196,7 +195,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	// private ScenarioLock editorLock;
 
 	private ScenarioInstance referenceInstance;
-	private ModelRecord modelRecord;
+	private ScenarioModelRecord modelRecord;
 	private ModelReference modelReference;
 
 	/**
@@ -367,6 +366,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				throw new RuntimeException("Instance was not loaded");
 			}
 			scenarioInstance = instance;
+			scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
 			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
 
 			commandStack = (BasicCommandStack) modelReference.getCommandStack();
@@ -425,7 +425,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			site.setSelectionProvider(this);
 
 			validationContextStack.clear();
-			validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
+			validationContextStack.push(new DefaultExtraValidationContext(getScenarioDataProvider(), false));
 
 			updateLocked();
 
@@ -441,12 +441,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		}
 	}
 
-	protected void createErrorPage(final @NonNull Throwable t) {
+	protected void createErrorPage(@NonNull Throwable t) {
 		getContainer().setLayout(new FillLayout());
 
 		boolean expandTechnicalDetails = false;
 		IReasonProvider reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t, IReasonProvider.class.getCanonicalName());
 		if (reasonProvider == null) {
+			if (t instanceof InvocationTargetException) {
+				if (t.getCause() != null) {
+					t = t.getCause();
+					// reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t.getCause(), IReasonProvider.class.getCanonicalName());
+				}
+			}
 			if (t instanceof RuntimeException) {
 				if (t.getCause() != null) {
 					reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t.getCause(), IReasonProvider.class.getCanonicalName());
@@ -574,6 +580,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	}
 
 	protected void cleanup() {
+
+		if (scenarioDataProvider != null) {
+			scenarioDataProvider.close();
+			scenarioDataProvider = null;
+		}
 
 		if (modelReference != null) {
 			modelReference.getLock().removeLockListener(lockedAdapter);
@@ -870,6 +881,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	@Override
 	public ScenarioInstance getScenarioInstance() {
 		return scenarioInstance;
+	}
+
+	@Override
+	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+		return scenarioDataProvider;
 	}
 
 	/*

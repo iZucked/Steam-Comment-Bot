@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  * Flattened {@link ITreeContentProvider} for {@link IStatus} object hierarchies.
@@ -41,9 +41,9 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 
 		if (inputElement instanceof Map) {
 			@SuppressWarnings("unchecked")
-			final Map<ModelRecord, IStatus> map = (Map<ModelRecord, IStatus>) inputElement;
+			final Map<ScenarioModelRecord, IStatus> map = (Map<ScenarioModelRecord, IStatus>) inputElement;
 			final List<Object> values = new ArrayList<Object>(map.size());
-			for (final Map.Entry<ModelRecord, IStatus> entry : map.entrySet()) {
+			for (final Map.Entry<ScenarioModelRecord, IStatus> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
 					values.add(entry);
 					parentsMap.put(entry, inputElement);
@@ -79,9 +79,9 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof Map) {
 			@SuppressWarnings("unchecked")
-			final Map<ModelRecord, IStatus> map = (Map<ModelRecord, IStatus>) parentElement;
+			final Map<ScenarioModelRecord, IStatus> map = (Map<ScenarioModelRecord, IStatus>) parentElement;
 			final List<Object> values = new ArrayList<Object>(map.size());
-			for (final Map.Entry<ModelRecord, IStatus> entry : map.entrySet()) {
+			for (final Map.Entry<ScenarioModelRecord, IStatus> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
 					values.add(entry);
 					parentsMap.put(entry, parentElement);
@@ -91,7 +91,7 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 		}
 		if (parentElement instanceof Map.Entry) {
 			@SuppressWarnings("unchecked")
-			final Map.Entry<ModelRecord, IStatus> entry = (Map.Entry<ModelRecord, IStatus>) parentElement;
+			final Map.Entry<ScenarioModelRecord, IStatus> entry = (Map.Entry<ScenarioModelRecord, IStatus>) parentElement;
 			parentsMap.put(entry.getValue(), entry);
 			return getChildren(entry.getValue());
 		}

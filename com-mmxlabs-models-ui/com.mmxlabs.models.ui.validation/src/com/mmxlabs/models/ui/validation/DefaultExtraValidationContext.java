@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * A default extra validation context instance; allows overriding of container and containment, and can be stacked on top of other validation contexts.
@@ -25,6 +26,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class DefaultExtraValidationContext implements IExtraValidationContext {
 	private final MMXRootObject rootObject;
+	private final IScenarioDataProvider scenarioDataProvider;
 	private IExtraValidationContext outerContext;
 
 	private HashMap<EObject, EObject> containerOverrides = new HashMap<EObject, EObject>();
@@ -40,8 +42,9 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 
 	/**
 	 */
-	public DefaultExtraValidationContext(final MMXRootObject rootObject, boolean validatingClone) {
-		this.rootObject = rootObject;
+	public DefaultExtraValidationContext(IScenarioDataProvider scenarioDataProvider, boolean validatingClone) {
+		this.rootObject = scenarioDataProvider != null ? scenarioDataProvider.getTypedScenario(MMXRootObject.class) : null;
+		this.scenarioDataProvider = scenarioDataProvider;
 		this.validatingClone = validatingClone;
 	}
 
@@ -50,6 +53,7 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	public DefaultExtraValidationContext(final IExtraValidationContext outerContext, boolean validatingClone) {
 		this.outerContext = outerContext;
 		this.rootObject = outerContext.getRootObject();
+		this.scenarioDataProvider = outerContext.getScenarioDataProvider();
 		this.validatingClone = validatingClone;
 	}
 
@@ -183,4 +187,8 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 		return validatingClone;
 	}
 
+	@Override
+	public IScenarioDataProvider getScenarioDataProvider() {
+		return scenarioDataProvider;
+	}
 }
