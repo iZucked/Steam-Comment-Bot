@@ -101,7 +101,7 @@ public class TotalsReportView extends ViewPart {
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								pinnedData = transformer.transform(schedule, pinned.getScenarioInstance().getName(), null);
+								pinnedData = transformer.transform(schedule, pinned.getModelRecord().getName(), null);
 								rowElements.addAll(pinnedData);
 								numberOfSchedules++;
 							}
@@ -112,7 +112,7 @@ public class TotalsReportView extends ViewPart {
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								rowElements.addAll(transformer.transform(schedule, other.getScenarioInstance().getName(), pinnedData));
+								rowElements.addAll(transformer.transform(schedule, other.getModelRecord().getName(), pinnedData));
 								numberOfSchedules++;
 							}
 						}

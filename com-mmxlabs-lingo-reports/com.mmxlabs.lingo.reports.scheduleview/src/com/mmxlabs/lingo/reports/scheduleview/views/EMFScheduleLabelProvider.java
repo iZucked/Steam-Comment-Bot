@@ -159,9 +159,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						if (selectedScenariosService.getPinnedScenario() != null) {
 							// Do nothing now we have a pin icon
 						} else {
-							final ScenarioResult instance = selectedDataProvider.getScenarioResult(sequence);
-							if (instance != null) {
-								seqText += "\n" + instance.getScenarioInstance().getName();
+							final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(sequence);
+							if (scenarioResult != null) {
+								seqText += "\n" + scenarioResult.getModelRecord().getName();
 							}
 						}
 					}

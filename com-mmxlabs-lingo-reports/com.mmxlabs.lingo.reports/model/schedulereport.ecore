@@ -20,6 +20,7 @@
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroup" eType="#//CycleGroup"
@@ -43,7 +44,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhsLink" eType="#//Row"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroup" eType="#//RowGroup"
         eOpposite="#//RowGroup/rows"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
         eOpposite="#//Table/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequences" upperBound="-1"

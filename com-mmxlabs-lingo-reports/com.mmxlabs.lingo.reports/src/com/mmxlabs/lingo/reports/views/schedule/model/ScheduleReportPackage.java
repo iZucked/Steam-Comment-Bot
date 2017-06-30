@@ -172,13 +172,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW = 1;
 
 	/**
+	 * The feature id for the '<em><b>Scenario Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__SCENARIO_NAME = 0;
+
+	/**
 	 * The feature id for the '<em><b>Visible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__VISIBLE = 0;
+	int ROW__VISIBLE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Cycle Group</b></em>' reference.
@@ -187,7 +196,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__CYCLE_GROUP = 1;
+	int ROW__CYCLE_GROUP = 2;
 
 	/**
 	 * The feature id for the '<em><b>Input Equivalents</b></em>' reference list.
@@ -196,7 +205,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__INPUT_EQUIVALENTS = 2;
+	int ROW__INPUT_EQUIVALENTS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -205,7 +214,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__NAME = 3;
+	int ROW__NAME = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name2</b></em>' attribute.
@@ -214,7 +223,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__NAME2 = 4;
+	int ROW__NAME2 = 5;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -223,7 +232,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__TARGET = 5;
+	int ROW__TARGET = 6;
 
 	/**
 	 * The feature id for the '<em><b>Schedule</b></em>' reference.
@@ -232,7 +241,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SCHEDULE = 6;
+	int ROW__SCHEDULE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -241,7 +250,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SEQUENCE = 7;
+	int ROW__SEQUENCE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
@@ -250,7 +259,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__CARGO_ALLOCATION = 8;
+	int ROW__CARGO_ALLOCATION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
@@ -259,7 +268,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__LOAD_ALLOCATION = 9;
+	int ROW__LOAD_ALLOCATION = 10;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -268,7 +277,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__DISCHARGE_ALLOCATION = 10;
+	int ROW__DISCHARGE_ALLOCATION = 11;
 
 	/**
 	 * The feature id for the '<em><b>Open Load Slot Allocation</b></em>' reference.
@@ -277,7 +286,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__OPEN_LOAD_SLOT_ALLOCATION = 11;
+	int ROW__OPEN_LOAD_SLOT_ALLOCATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Open Discharge Slot Allocation</b></em>' reference.
@@ -286,7 +295,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__OPEN_DISCHARGE_SLOT_ALLOCATION = 12;
+	int ROW__OPEN_DISCHARGE_SLOT_ALLOCATION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' attribute.
@@ -295,7 +304,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERENCE = 13;
+	int ROW__REFERENCE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Link</b></em>' reference.
@@ -304,7 +313,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__LHS_LINK = 14;
+	int ROW__LHS_LINK = 15;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Link</b></em>' reference.
@@ -313,7 +322,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__RHS_LINK = 15;
+	int ROW__RHS_LINK = 16;
 
 	/**
 	 * The feature id for the '<em><b>Row Group</b></em>' reference.
@@ -322,16 +331,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__ROW_GROUP = 16;
-
-	/**
-	 * The feature id for the '<em><b>Scenario</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROW__SCENARIO = 17;
+	int ROW__ROW_GROUP = 17;
 
 	/**
 	 * The feature id for the '<em><b>Table</b></em>' container reference.
@@ -712,6 +712,17 @@ public interface ScheduleReportPackage extends EPackage {
 	EClass getRow();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioName <em>Scenario Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scenario Name</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioName()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EAttribute getRow_ScenarioName();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isVisible <em>Visible</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -897,17 +908,6 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRow_RowGroup();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario <em>Scenario</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Scenario</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario()
-	 * @see #getRow()
-	 * @generated
-	 */
-	EReference getRow_Scenario();
 
 	/**
 	 * Returns the meta object for the container reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}'.
@@ -1222,6 +1222,14 @@ public interface ScheduleReportPackage extends EPackage {
 		EClass ROW = eINSTANCE.getRow();
 
 		/**
+		 * The meta object literal for the '<em><b>Scenario Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROW__SCENARIO_NAME = eINSTANCE.getRow_ScenarioName();
+
+		/**
 		 * The meta object literal for the '<em><b>Visible</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1356,14 +1364,6 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROW__ROW_GROUP = eINSTANCE.getRow_RowGroup();
-
-		/**
-		 * The meta object literal for the '<em><b>Scenario</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROW__SCENARIO = eINSTANCE.getRow_Scenario();
 
 		/**
 		 * The meta object literal for the '<em><b>Table</b></em>' container reference feature.

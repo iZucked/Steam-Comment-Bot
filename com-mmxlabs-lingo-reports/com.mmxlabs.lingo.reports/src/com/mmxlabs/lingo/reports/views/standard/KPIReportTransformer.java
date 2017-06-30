@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -83,8 +84,8 @@ public class KPIReportTransformer {
 	}
 
 	public final List<RowData> transform(final Schedule schedule, final ScenarioResult scenarioResult, @Nullable final List<RowData> pinnedData) {
-		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-		
+		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+
 		final List<RowData> output = new LinkedList<>();
 		long totalCost = 0l;
 		long totalMtMPNL = 0l;
@@ -131,15 +132,15 @@ public class KPIReportTransformer {
 
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
-		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL + totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(modelRecord.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL + totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(modelRecord.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(modelRecord.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(modelRecord.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(modelRecord.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
 
-		output.add(createRow(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), LATENESS, TYPE_TIME, totalLatenessHoursExcludingFlex, LatenessReportView.ID, true, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true, pinnedData));
+		output.add(createRow(modelRecord.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));
+		output.add(createRow(modelRecord.getName(), LATENESS, TYPE_TIME, totalLatenessHoursExcludingFlex, LatenessReportView.ID, true, pinnedData));
+		output.add(createRow(modelRecord.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true, pinnedData));
 
 		return output;
 	}

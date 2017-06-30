@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioName <em>Scenario Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isVisible <em>Visible</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCycleGroup <em>Cycle Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getInputEquivalents <em>Input Equivalents</em>}</li>
@@ -41,7 +42,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLhsLink <em>Lhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRhsLink <em>Rhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario <em>Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences <em>Linked Sequences</em>}</li>
  * </ul>
@@ -51,6 +51,32 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * @generated
  */
 public interface Row extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Scenario Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scenario Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scenario Name</em>' attribute.
+	 * @see #setScenarioName(String)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_ScenarioName()
+	 * @model
+	 * @generated
+	 */
+	String getScenarioName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioName <em>Scenario Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scenario Name</em>' attribute.
+	 * @see #getScenarioName()
+	 * @generated
+	 */
+	void setScenarioName(String value);
+
 	/**
 	 * Returns the value of the '<em><b>Visible</b></em>' attribute.
 	 * The default value is <code>"true"</code>.
@@ -487,32 +513,6 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setRowGroup(RowGroup value);
-
-	/**
-	 * Returns the value of the '<em><b>Scenario</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Scenario</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Scenario</em>' reference.
-	 * @see #setScenario(EObject)
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_Scenario()
-	 * @model
-	 * @generated
-	 */
-	EObject getScenario();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario <em>Scenario</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Scenario</em>' reference.
-	 * @see #getScenario()
-	 * @generated
-	 */
-	void setScenario(EObject value);
 
 	/**
 	 * Returns the value of the '<em><b>Table</b></em>' container reference.

@@ -49,7 +49,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -112,9 +112,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						public String getColumnText(final IndexExposureData data) {
 							final ScenarioResult scenarioResult = data.scenarioResult;
 							if (scenarioResult != null) {
-								final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-								if (scenarioInstance != null) {
-									return scenarioInstance.getName();
+								final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+								if (modelRecord != null) {
+									return modelRecord.getName();
 								}
 							}
 							return null;
@@ -267,7 +267,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			public List<@NonNull IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
 				final List<@NonNull IndexExposureData> output = new LinkedList<>();
 
-				LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+				final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 				if (rootObject == null) {
 					return output;
 				}
@@ -337,9 +337,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					@NonNull
 					final Collection<@NonNull ScenarioResult> scenarioResults = currentSelectedDataProvider.getScenarioResults();
 					for (final ScenarioResult scenarioResult : scenarioResults) {
-						final ScenarioInstance instance = scenarioResult.getScenarioInstance();
 
-						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+						final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 						try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
 
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();

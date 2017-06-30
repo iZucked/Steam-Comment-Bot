@@ -50,7 +50,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -564,7 +564,7 @@ public class HeadlineReportView extends ViewPart {
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
 					@NonNull
-					ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 					if (!modelRecord.isLoadFailure()) {
 						this.modelReference = modelRecord.aquireReference("HeadlineReportView:1");
 						final EObject instance = modelReference.getInstance();
@@ -611,8 +611,7 @@ public class HeadlineReportView extends ViewPart {
 					ScheduleModel scheduleModel = null;
 
 					if (scenarioResult != null) {
-						ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 
 						if (!modelRecord.isLoadFailure()) {
 							HeadlineReportView.this.modelReference = modelRecord.aquireReference("HeadlineReportView:2");

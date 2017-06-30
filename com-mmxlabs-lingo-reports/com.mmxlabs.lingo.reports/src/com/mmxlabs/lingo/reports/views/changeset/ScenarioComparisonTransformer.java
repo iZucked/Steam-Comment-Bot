@@ -51,7 +51,6 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
@@ -62,9 +61,9 @@ public class ScenarioComparisonTransformer {
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
 
-		try (final ModelReference toRef = SSDataManager.Instance.getModelRecord(to.getScenarioInstance()).aquireReference("ScenarioComparisonTransformer:1")) {
+		try (final ModelReference toRef = to.getModelRecord().aquireReference("ScenarioComparisonTransformer:1")) {
 			toRef.getInstance();
-			try (final ModelReference fromRef = SSDataManager.Instance.getModelRecord(from.getScenarioInstance()).aquireReference("ScenarioComparisonTransformer:2")) {
+			try (final ModelReference fromRef = from.getModelRecord().aquireReference("ScenarioComparisonTransformer:2")) {
 				fromRef.getInstance();
 				final ScheduleModel toScheduleModel = to.getTypedResult(ScheduleModel.class);
 				final ScheduleModel fromScheduleModel = from.getTypedResult(ScheduleModel.class);

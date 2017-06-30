@@ -148,17 +148,17 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 				final EObject eObject = (EObject) object;
 				final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (selectedDataProvider != null) {
-					ScenarioResult instance = selectedDataProvider.getScenarioResult(eObject);
-					if (instance != null) {
-						return instance.getScenarioInstance().getName();
+					ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(eObject);
+					if (scenarioResult != null) {
+						return scenarioResult.getModelRecord().getName();
 					}
 					if (elementMapping.containsKey(eObject)) {
 						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
 						if (ref != null) {
-							instance = ref.get();
+							scenarioResult = ref.get();
 						}
-						if (instance != null) {
-							return instance.getScenarioInstance().getName();
+						if (scenarioResult != null) {
+							return scenarioResult.getModelRecord().getName();
 						}
 					}
 				}

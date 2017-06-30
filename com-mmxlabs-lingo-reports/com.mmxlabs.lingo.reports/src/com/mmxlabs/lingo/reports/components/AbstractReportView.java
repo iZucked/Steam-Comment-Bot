@@ -79,7 +79,7 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 				if (selectedDataProvider != null) {
 					ScenarioResult instance = selectedDataProvider.getScenarioResult(eObject);
 					if (instance != null) {
-						return instance.getScenarioInstance().getName();
+						return instance.getModelRecord().getName();
 					}
 					if (elementMapping.containsKey(eObject)) {
 						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
@@ -87,7 +87,7 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 							instance = ref.get();
 						}
 						if (instance != null) {
-							return instance.getScenarioInstance().getName();
+							return instance.getModelRecord().getName();
 						}
 					}
 				}

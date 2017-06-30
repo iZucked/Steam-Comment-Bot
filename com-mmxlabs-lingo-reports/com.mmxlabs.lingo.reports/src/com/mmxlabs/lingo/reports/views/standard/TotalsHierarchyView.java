@@ -122,7 +122,7 @@ public class TotalsHierarchyView extends ViewPart {
 							if (scheduleModel != null) {
 								final Schedule schedule = scheduleModel.getSchedule();
 								if (schedule != null) {
-									final String scheduleName = other.getScenarioInstance().getName();
+									final String scheduleName = other.getModelRecord().getName();
 
 									// final String scheduleName = schedule.getName();
 									// don't sum costs and profits, because it's meaningless

@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
@@ -54,7 +54,7 @@ public class OpenActionableSetsHandler extends AbstractHandler {
 				final Object o = ss.getFirstElement();
 				if (o instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-					final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("OpenNewActionPlansHandler:1")) {
 						if (ref == null) {
 							setBaseEnabled(false);
@@ -91,7 +91,7 @@ public class OpenActionableSetsHandler extends AbstractHandler {
 			final Object o = ss.getFirstElement();
 			if (o instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 				try (ModelReference ref = modelRecord.aquireReference("OpenNewActionPlansHandler:2")) {
 					final EObject rootObject = ref.getInstance();
 					if (!(rootObject instanceof LNGScenarioModel)) {

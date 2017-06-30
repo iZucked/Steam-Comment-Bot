@@ -112,7 +112,7 @@ import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
@@ -957,7 +957,7 @@ public class ChangeSetView implements IAdaptable {
 							helper.addAction(new ExportChangeAction(changeSetTableGroup));
 							showMenu = true;
 						}
-						// Experimental code to generate a sandbox scenario.						
+						// Experimental code to generate a sandbox scenario.
 						if (false && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
 							// This does not work as insertion scenario is read-only. Data model is also unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
@@ -996,11 +996,12 @@ public class ChangeSetView implements IAdaptable {
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
 		this.viewMode = ViewMode.OLD_ACTION_SET;
 		this.persistAnalyticsSolution = true;
-		
+
 		final ViewState viewState = new ViewState();
 		viewState.lastSolution = solution;
 
 		final ScenarioInstance target = solution.getScenarioInstance();
+
 		final EObject plan = solution.getSolution();
 		// Do something?
 		if (plan instanceof ActionableSetPlan) {
@@ -1104,7 +1105,7 @@ public class ChangeSetView implements IAdaptable {
 					});
 					if (instance[0] != null) {
 						@NonNull
-						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance[0]);
+						final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance[0]);
 						UUIDObject solution = null;
 						try (ModelReference ref = modelRecord.aquireReference("ChangeSetView:restore")) {
 							final EObject modelInstance = ref.getInstance();
@@ -1172,7 +1173,11 @@ public class ChangeSetView implements IAdaptable {
 	@Inject
 	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
-		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && sr.getScenarioInstance() == scenarioInstance;
+
+		@NonNull
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+
+		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		ViewState viewState = currentViewState;
 		if (viewState != null) {
 			final ChangeSetRoot pRoot = viewState.root;

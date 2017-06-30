@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -53,8 +54,8 @@ public class FitnessTransformer {
 	}
 
 	private RowData createRow(final ScenarioResult scenarioResult, final String f, final Long raw, final Long deltaFitness) {
-		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-		final String name = scenarioInstance == null ? "" : scenarioInstance.getName();
+		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+		final String name = modelRecord == null ? "" : modelRecord.getName();
 		return new RowData(name, f, raw, deltaFitness);
 	}
 

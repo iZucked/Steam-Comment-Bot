@@ -14,11 +14,12 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.ActionableSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ActionableSetPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance instance, final ActionableSetPlan plan, final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final ActionableSetPlan plan, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -26,7 +27,7 @@ public class ActionableSetPlanTransformer {
 
 		// Assuming first option is the base.
 		for (final ActionableSet option : plan.getActionSets()) {
-			stages.add(new ScenarioResult(instance, option.getScheduleModel()));
+			stages.add(new ScenarioResult(scenarioInstance, option.getScheduleModel()));
 		}
 
 		try {

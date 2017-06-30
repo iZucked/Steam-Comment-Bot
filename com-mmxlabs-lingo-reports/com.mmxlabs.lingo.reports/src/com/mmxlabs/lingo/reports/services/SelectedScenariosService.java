@@ -30,13 +30,11 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.IScenarioServiceListener;
-import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager.PostChangeHookPhase;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -55,7 +53,6 @@ public class SelectedScenariosService {
 	private ISelectedDataProvider currentSelectedDataProvider;
 
 	private final Set<ISelectedScenariosServiceListener> listeners = new HashSet<>();
-	private final Map<IScenarioService, IScenarioServiceListener> unloadlisteners = new HashMap<>();
 
 	/**
 	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
@@ -101,21 +98,6 @@ public class SelectedScenariosService {
 					}
 				}
 			}
-		}
-	};
-
-	private class OnUnloadScenarioServiceListener extends ScenarioServiceListener {
-
-		@Override
-		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			detachScenarioInstance(scenarioInstance);
-			updateSelectedScenarios(false);
-		}
-
-		@Override
-		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			detachScenarioInstance(scenarioInstance);
-			updateSelectedScenarios(false);
 		}
 	};
 
@@ -189,16 +171,23 @@ public class SelectedScenariosService {
 		assert commandStacks.isEmpty();
 	}
 
+	IPostChangeHook unloadHook = (modelRecord) -> {
+		detachScenarioInstance(modelRecord);
+		updateSelectedScenarios(false);
+	};
+
+	public void init() {
+		SSDataManager.Instance.registerChangeHook(unloadHook, PostChangeHookPhase.ON_UNLOAD);
+
+	}
+
 	public void dispose() {
 		if (this.selectionProvider != null) {
 			unbindScenarioServiceSelectionProvider(this.selectionProvider);
 		}
-		for (final Map.Entry<IScenarioService, IScenarioServiceListener> e : unloadlisteners.entrySet()) {
-			final IScenarioService key = e.getKey();
-			if (key != null) {
-				key.removeScenarioServiceListener(e.getValue());
-			}
-		}
+
+		SSDataManager.Instance.removeChangeHook(unloadHook, PostChangeHookPhase.ON_UNLOAD);
+
 		listeners.clear();
 	}
 
@@ -208,15 +197,8 @@ public class SelectedScenariosService {
 			return;
 		}
 
-		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(scenarioResult.getScenarioInstance());
-		if (scenarioService != null && !unloadlisteners.containsKey(scenarioService)) {
-			final IScenarioServiceListener l = new OnUnloadScenarioServiceListener();
-			scenarioService.addScenarioServiceListener(l);
-			unloadlisteners.put(scenarioService, l);
-		}
-
 		@NonNull
-		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioResult.getScenarioInstance());
+		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 		final ModelReference modelReference = modelRecord.aquireReference("SelectedScenariosService:1");
 
 		final CommandStack commandStack = modelReference.getCommandStack();
@@ -228,12 +210,12 @@ public class SelectedScenariosService {
 		this.scenarioReferences.put(scenarioResult, modelReference);
 	}
 
-	private void detachScenarioInstance(@NonNull final ScenarioInstance instance) {
+	private void detachScenarioInstance(@NonNull final ScenarioModelRecord modelRecord) {
 		{
 			final Iterator<Map.Entry<ScenarioResult, KeyValueRecord>> itr = scenarioRecords.entrySet().iterator();
 			while (itr.hasNext()) {
 				final Map.Entry<ScenarioResult, KeyValueRecord> e = itr.next();
-				if (e.getKey().getScenarioInstance() == instance) {
+				if (e.getKey().getModelRecord() == modelRecord) {
 					final KeyValueRecord record = e.getValue();
 					if (record != null) {
 						record.dispose();
@@ -246,7 +228,7 @@ public class SelectedScenariosService {
 			final Iterator<Map.Entry<ScenarioResult, ModelReference>> itr = scenarioReferences.entrySet().iterator();
 			while (itr.hasNext()) {
 				final Map.Entry<ScenarioResult, ModelReference> e = itr.next();
-				if (e.getKey().getScenarioInstance() == instance) {
+				if (e.getKey().getModelRecord() == modelRecord) {
 					final ModelReference ref = e.getValue();
 					if (ref != null) {
 						ref.close();
@@ -352,7 +334,7 @@ public class SelectedScenariosService {
 			this.scenarioModel = scenarioModel;
 			this.schedule = schedule;
 			this.children = children;
-			this.ref = SSDataManager.Instance.getModelRecord(scenarioResult.getScenarioInstance()).aquireReference("SelectedScenariosService:2");
+			this.ref = scenarioResult.getModelRecord().aquireReference("SelectedScenariosService:2");
 		}
 
 		public void dispose() {
@@ -396,7 +378,7 @@ public class SelectedScenariosService {
 	private KeyValueRecord createKeyValueRecord(@NonNull final ScenarioResult scenarioResult) {
 
 		@NonNull
-		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioResult.getScenarioInstance());
+		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 		try (ModelReference modelReference = modelRecord.aquireReference("SelectedScenarioService:3")) {
 			final EObject instance = modelReference.getInstance();
 

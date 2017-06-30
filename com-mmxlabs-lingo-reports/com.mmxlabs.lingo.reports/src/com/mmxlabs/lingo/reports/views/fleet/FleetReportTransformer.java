@@ -164,7 +164,7 @@ public class FleetReportTransformer {
 		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
 	}
 
-	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioInstance, final Schedule schedule, final List<EObject> interestingElements,
+	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final List<EObject> interestingElements,
 			final Set<EObject> allElements, final boolean isReferenceSchedule) {
 		final List<Row> rows = new ArrayList<>(interestingElements.size());
 
@@ -206,7 +206,7 @@ public class FleetReportTransformer {
 		}
 
 		for (final Row row : rows) {
-			row.setScenario(scenarioInstance.getScenarioInstance());
+			row.setScenarioName(scenarioResult.getModelRecord().getName());
 			row.setSchedule(schedule);
 		}
 

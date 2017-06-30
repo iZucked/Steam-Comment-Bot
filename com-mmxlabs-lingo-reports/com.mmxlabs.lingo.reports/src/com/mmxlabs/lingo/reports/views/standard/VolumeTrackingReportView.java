@@ -33,7 +33,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -62,7 +62,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		public final Schedule schedule;
 		private final boolean purchase;
 
-		public VolumeData(ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Map<Year, Long> volumes) {
+		public VolumeData(final ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Map<Year, Long> volumes) {
 			this.scenarioResult = scenarioResult;
 			this.schedule = schedule;
 			this.purchase = purchase;
@@ -249,9 +249,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						public String getColumnText(final VolumeData data) {
 							final ScenarioResult scenarioResult = data.scenarioResult;
 							if (scenarioResult != null) {
-								ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-								if (scenarioInstance != null) {
-									return scenarioInstance.getName();
+								final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+								if (modelRecord != null) {
+									return modelRecord.getName();
 								}
 							}
 							return null;

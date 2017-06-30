@@ -76,7 +76,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -521,7 +521,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
 				if (scenarioInstance != null) {
 					@NonNull
-					final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 					return modelRecord.aquireReference("CargoEconsReport");
 				}
 			}

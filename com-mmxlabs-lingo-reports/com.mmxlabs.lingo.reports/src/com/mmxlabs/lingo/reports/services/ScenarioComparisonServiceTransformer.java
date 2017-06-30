@@ -559,7 +559,7 @@ public class ScenarioComparisonServiceTransformer {
 		}
 
 		for (final Row row : rows) {
-			row.setScenario(scenarioResult.getScenarioInstance());
+			row.setScenarioName(scenarioResult.getModelRecord().getName());
 			row.setSchedule(schedule);
 		}
 

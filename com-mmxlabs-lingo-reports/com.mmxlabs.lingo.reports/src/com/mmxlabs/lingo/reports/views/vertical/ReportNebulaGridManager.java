@@ -126,13 +126,8 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		for (final GridColumn column : verticalReport.gridViewer.getGrid().getColumns()) {
 			column.dispose();
 		}
-		if (root != null) {
-			calendarColumns = verticalReport.createCalendarCols(data);
-		} else {
-			if (calendarColumns != null) {
-				calendarColumns.clear();
-			}
-		}
+		calendarColumns = verticalReport.createCalendarCols(data);
+
 		createNebulaColumns();
 	}
 

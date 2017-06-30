@@ -26,9 +26,8 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
-import com.mmxlabs.scheduler.optimiser.components.impl.RouteOptionBooking;
 
 /**
  * 
@@ -47,8 +46,8 @@ public class CanalBookingsReportTransformer {
 		public final CanalBookingSlot booking;
 		public final String period;
 
-		public RowData(final @NonNull String scheduleName, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period) {
+		public RowData(final @NonNull String scheduleName, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption, final @NonNull LocalDate bookingDate,
+				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, final String period) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
@@ -80,17 +79,17 @@ public class CanalBookingsReportTransformer {
 	@NonNull
 	public List<RowData> transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult) {
 
-		ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 
-		LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+		final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		assert scenarioModel != null;
 
-		LocalDate promptDate = scenarioModel.getPromptPeriodStart();
+		final LocalDate promptDate = scenarioModel.getPromptPeriodStart();
 		LocalDate strictDate;
 		LocalDate relaxedDate;
 
-		Set<CanalBookingSlot> existingBookings = new LinkedHashSet<>();
-		CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+		final Set<CanalBookingSlot> existingBookings = new LinkedHashSet<>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 		if (cargoModel.getCanalBookings() != null) {
 			cargoModel.getCanalBookings().getCanalBookingSlots().forEach(booking -> existingBookings.add(booking));
 			strictDate = promptDate.plusDays(cargoModel.getCanalBookings().getStrictBoundaryOffsetDays());
@@ -100,14 +99,14 @@ public class CanalBookingsReportTransformer {
 			relaxedDate = promptDate;
 		}
 
-		List<RowData> result = new LinkedList<>();
+		final List<RowData> result = new LinkedList<>();
 
 		for (final Sequence seq : schedule.getSequences()) {
 
 			for (final Event evt : seq.getEvents()) {
 
 				if (evt instanceof Journey) {
-					Journey journey = (Journey) evt;
+					final Journey journey = (Journey) evt;
 
 					String period = "";
 					
@@ -143,12 +142,12 @@ public class CanalBookingsReportTransformer {
 //					}
 
 					if (journey.getCanalBooking() != null) {
-						CanalBookingSlot booking = journey.getCanalBooking();
-						result.add(new RowData(scenarioInstance.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
+						final CanalBookingSlot booking = journey.getCanalBooking();
+						result.add(new RowData(modelRecord.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
 								(PortVisit) journey.getPreviousEvent(), period));
 						existingBookings.remove(booking);
 					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-						result.add(new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
+						result.add(new RowData(modelRecord.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
 								(PortVisit) journey.getPreviousEvent(), period));
 					}
 				}
@@ -156,8 +155,8 @@ public class CanalBookingsReportTransformer {
 		}
 
 		// unused options
-		for (CanalBookingSlot booking : existingBookings) {
-			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused"));
+		for (final CanalBookingSlot booking : existingBookings) {
+			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused"));
 		}
 
 		return result;

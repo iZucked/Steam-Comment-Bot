@@ -34,6 +34,11 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 	@Override
 	protected List<CalendarColumn> createCalendarCols(final ScheduleSequenceData data) {
 		final List<CalendarColumn> result = new LinkedList<>();
+
+		if (data == null || data.model == null) {
+			return result;
+		}
+
 		// add a FOB / DES column
 		final Sequence[] fobDesSequences = new Sequence[] { data.desPurchases, data.fobSales };
 		final CalendarColumn fobDesColumn = new CalendarColumn(verticalReportVisualiser.createDateFormat(), new SequenceEventProvider(fobDesSequences, null, verticalReportVisualiser),

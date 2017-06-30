@@ -49,10 +49,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class CreateSandboxAction extends Action {
@@ -65,6 +63,7 @@ public class CreateSandboxAction extends Action {
 		this.changeSetTableGroup = changeSetTableGroup;
 	}
 
+	@Override
 	public void run() {
 
 		final Map<EObject, EObject> childToBaseMapping = new HashMap<>();
@@ -363,10 +362,7 @@ public class CreateSandboxAction extends Action {
 			newModel.setPartialCase(partialCase);
 		}
 
-		final ScenarioInstance scenarioInstance = baseScenarioResult.getScenarioInstance();
-		@NonNull
-		final
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final ScenarioModelRecord modelRecord = baseScenarioResult.getModelRecord();
 		try (ModelReference ref = modelRecord.aquireReference("ChangeSetView:ContextMenuManager")) {
 			final EditingDomain ed = ref.getEditingDomain();
 			final CompoundCommand cmd = new CompoundCommand("Create sandbox");

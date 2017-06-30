@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class StandardPortRotationColumnFactory implements IPortRotationColumnFactory {
@@ -119,9 +120,9 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				public String render(final Object object) {
 					final ScenarioResult scenarioResult = builder.getReport().getScenarioInstance(object);
 					if (scenarioResult != null) {
-						final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-						if (scenarioInstance != null) {
-							return scenarioInstance.getName();
+						final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
+						if (modelRecord != null) {
+							return modelRecord.getName();
 						}
 					}
 					return null;
@@ -461,8 +462,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 						Route route = journey.getRoute();
 						if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
 							CanalBookingSlot canalBooking = journey.getCanalBooking();
-							
-							
+
 							if (canalBooking != null) {
 								return "Yes";
 							} else {
@@ -471,7 +471,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 								}
 								return "No";
 							}
-//							return canalBooking != null;
+							// return canalBooking != null;
 						}
 					}
 					return null;
@@ -481,7 +481,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				public @Nullable String render(Object object) {
 					String value = getValue(object);
 					if (value != null) {
-						return value ;//? "Yes" : "No";
+						return value;// ? "Yes" : "No";
 					}
 					return "";
 				}

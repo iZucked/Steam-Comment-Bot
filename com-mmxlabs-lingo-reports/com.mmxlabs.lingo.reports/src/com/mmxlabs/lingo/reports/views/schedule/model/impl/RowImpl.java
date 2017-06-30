@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenarioName <em>Scenario Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#isVisible <em>Visible</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getCycleGroup <em>Cycle Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getInputEquivalents <em>Input Equivalents</em>}</li>
@@ -54,7 +55,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLhsLink <em>Lhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRhsLink <em>Rhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRowGroup <em>Row Group</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenario <em>Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTable <em>Table</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLinkedSequences <em>Linked Sequences</em>}</li>
  * </ul>
@@ -62,6 +62,26 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * @generated
  */
 public class RowImpl extends MinimalEObjectImpl.Container implements Row {
+	/**
+	 * The default value of the '{@link #getScenarioName() <em>Scenario Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SCENARIO_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getScenarioName() <em>Scenario Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String scenarioName = SCENARIO_NAME_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #isVisible() <em>Visible</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -273,16 +293,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	protected RowGroup rowGroup;
 
 	/**
-	 * The cached value of the '{@link #getScenario() <em>Scenario</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getScenario()
-	 * @generated
-	 * @ordered
-	 */
-	protected EObject scenario;
-
-	/**
 	 * The cached value of the '{@link #getLinkedSequences() <em>Linked Sequences</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -309,6 +319,27 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	@Override
 	protected EClass eStaticClass() {
 		return ScheduleReportPackage.Literals.ROW;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getScenarioName() {
+		return scenarioName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScenarioName(String newScenarioName) {
+		String oldScenarioName = scenarioName;
+		scenarioName = newScenarioName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__SCENARIO_NAME, oldScenarioName, scenarioName));
 	}
 
 	/**
@@ -936,46 +967,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * @generated
 	 */
 	@Override
-	public EObject getScenario() {
-		if (scenario != null && scenario.eIsProxy()) {
-			InternalEObject oldScenario = (InternalEObject)scenario;
-			scenario = eResolveProxy(oldScenario);
-			if (scenario != oldScenario) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__SCENARIO, oldScenario, scenario));
-			}
-		}
-		return scenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EObject basicGetScenario() {
-		return scenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setScenario(EObject newScenario) {
-		EObject oldScenario = scenario;
-		scenario = newScenario;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__SCENARIO, oldScenario, scenario));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Table getTable() {
 		if (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE) return null;
 		return (Table)eInternalContainer();
@@ -1090,6 +1081,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ScheduleReportPackage.ROW__SCENARIO_NAME:
+				return getScenarioName();
 			case ScheduleReportPackage.ROW__VISIBLE:
 				return isVisible();
 			case ScheduleReportPackage.ROW__CYCLE_GROUP:
@@ -1136,9 +1129,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				if (resolve) return getRowGroup();
 				return basicGetRowGroup();
-			case ScheduleReportPackage.ROW__SCENARIO:
-				if (resolve) return getScenario();
-				return basicGetScenario();
 			case ScheduleReportPackage.ROW__TABLE:
 				return getTable();
 			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
@@ -1156,6 +1146,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ScheduleReportPackage.ROW__SCENARIO_NAME:
+				setScenarioName((String)newValue);
+				return;
 			case ScheduleReportPackage.ROW__VISIBLE:
 				setVisible((Boolean)newValue);
 				return;
@@ -1208,9 +1201,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				setRowGroup((RowGroup)newValue);
 				return;
-			case ScheduleReportPackage.ROW__SCENARIO:
-				setScenario((EObject)newValue);
-				return;
 			case ScheduleReportPackage.ROW__TABLE:
 				setTable((Table)newValue);
 				return;
@@ -1230,6 +1220,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ScheduleReportPackage.ROW__SCENARIO_NAME:
+				setScenarioName(SCENARIO_NAME_EDEFAULT);
+				return;
 			case ScheduleReportPackage.ROW__VISIBLE:
 				setVisible(VISIBLE_EDEFAULT);
 				return;
@@ -1281,9 +1274,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				setRowGroup((RowGroup)null);
 				return;
-			case ScheduleReportPackage.ROW__SCENARIO:
-				setScenario((EObject)null);
-				return;
 			case ScheduleReportPackage.ROW__TABLE:
 				setTable((Table)null);
 				return;
@@ -1302,6 +1292,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ScheduleReportPackage.ROW__SCENARIO_NAME:
+				return SCENARIO_NAME_EDEFAULT == null ? scenarioName != null : !SCENARIO_NAME_EDEFAULT.equals(scenarioName);
 			case ScheduleReportPackage.ROW__VISIBLE:
 				return visible != VISIBLE_EDEFAULT;
 			case ScheduleReportPackage.ROW__CYCLE_GROUP:
@@ -1336,8 +1328,6 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return rhsLink != null;
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				return rowGroup != null;
-			case ScheduleReportPackage.ROW__SCENARIO:
-				return scenario != null;
 			case ScheduleReportPackage.ROW__TABLE:
 				return getTable() != null;
 			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
@@ -1356,7 +1346,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (visible: ");
+		result.append(" (scenarioName: ");
+		result.append(scenarioName);
+		result.append(", visible: ");
 		result.append(visible);
 		result.append(", name: ");
 		result.append(name);

@@ -15,11 +15,12 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class InsertionPlanTransformer {
 
-	public ChangeSetRoot createDataModel(final ScenarioInstance instance, final SlotInsertionOptions plan, final IProgressMonitor monitor, NamedObject target) {
+	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final SlotInsertionOptions plan, final IProgressMonitor monitor, NamedObject target) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
@@ -27,7 +28,7 @@ public class InsertionPlanTransformer {
 
 		// Assuming first option is the base.
 		for (final SlotInsertionOption option : plan.getInsertionOptions()) {
-			stages.add(new ScenarioResult(instance, option.getScheduleModel()));
+			stages.add(new ScenarioResult(scenarioInstance, option.getScheduleModel()));
 		}
 
 		try {

@@ -198,8 +198,9 @@ public final class ChangeSetTransformerUtil {
 
 					if (i < loadAllocations.size()) {
 						final SlotAllocation loadAllocation = loadAllocations.get(i);
-						// We sometimes get class cast exceptions here. The SlotAllocation has the wrong SlotAllocationType?
-						// It would appear the generation code is incorrect, but that works on instanceof....
+						// We sometimes get class cast exceptions here. The SlotAllocation has the wrong SlotAllocationType.
+						// This is probably caused from schedule models pre-dating the SlotAllocationType. The purchase type appears to be used as default.
+						// We should add in migration into the relevant place to add it in (NOT CURRENT MIGRATION).
 						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
 
 						final String key = ChangeSetTransformerUtil.getKeyName(loadAllocation);

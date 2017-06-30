@@ -731,8 +731,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	@Override
 	public void dispose() {
 
-		Activator.getPlugin().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
-
+		if (propertyChangeListener != null) {
+			Activator.getPlugin().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+		}
 		if (handleSelections()) {
 			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 			service.removePostSelectionListener(this);

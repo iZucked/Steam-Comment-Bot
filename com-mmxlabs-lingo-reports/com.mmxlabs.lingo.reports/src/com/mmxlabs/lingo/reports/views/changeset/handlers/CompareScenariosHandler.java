@@ -28,6 +28,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -81,8 +82,9 @@ public class CompareScenariosHandler extends AbstractHandler {
 									viewPart = partService.showPart(viewPart, PartState.ACTIVATE); // Show part
 								}
 							}
-							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class,
-									(Consumer<IScenarioServiceSelectionProvider>) provider -> provider.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));
+
+							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, (Consumer<IScenarioServiceSelectionProvider>) provider -> provider
+									.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));
 						});
 					}
 				}
