@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.shared.impl;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,8 +21,8 @@ import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
@@ -36,7 +38,7 @@ public class LNGSharedDataTransformer {
 	@NonNull
 	private SharedPortDistanceDataBuilder portDistanceBuilder;
 
-	public void transform(@NonNull final PortModel portModel) {
+	public void transform(@NonNull final PortModel portModel, @NonNull final ModelDistanceProvider modelDistanceProvider) {
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
@@ -44,16 +46,14 @@ public class LNGSharedDataTransformer {
 
 		// Hint to pre-allocate ram
 		portDistanceBuilder.setExpectPortCount(portModel.getPorts().size());
+		final Map<String, IPort> portMap = new HashMap<>();
 
 		for (final Port ePort : portModel.getPorts()) {
 			final IPort port;
-			if (ePort.getLocation() != null) {
-				final Location loc = ePort.getLocation();
-				port = portDistanceBuilder.createPort(ePort.getName(), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
-			} else {
-				port = portDistanceBuilder.createPort(ePort.getName(), ePort.getTimeZone());
-			}
+			final Location loc = ePort.getLocation();
+			port = portDistanceBuilder.createPort(ePort.getName(), loc.getTempMMXID(), loc.getLat(), loc.getLon(), loc.getTimeZone());
 			portAssociation.add(ePort, port);
+			portMap.put(loc.getTempMMXID(), port);
 		}
 
 		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
@@ -68,18 +68,27 @@ public class LNGSharedDataTransformer {
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
-		for (final Route r : portModel.getRoutes()) {
-			seenRoutes.add(r.getRouteOption());
-			for (final RouteLine dl : r.getLines()) {
-				IPort from, to;
-				from = portAssociation.lookupNullChecked(dl.getFrom());
-				to = portAssociation.lookupNullChecked(dl.getTo());
 
-				final int distance = dl.getFullDistance();
+		for (final Port eFrom : portModel.getPorts()) {
+			for (final Port eTo : portModel.getPorts()) {
+				if (eFrom == eTo) {
+					continue;
+				}
+				for (final RouteOption routeOption : orderedKeys) {
+					final int distance = modelDistanceProvider.getDistance(eFrom, eTo, routeOption);
+					if (distance != Integer.MAX_VALUE) {
+						final @NonNull ERouteOption mapRouteOption = mapRouteOption(routeOption);
+						final IPort from = portMap.get(eFrom.getLocation().getTempMMXID());
+						final IPort to = portMap.get(eTo.getLocation().getTempMMXID());
 
-				portDistanceBuilder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
+						portDistanceBuilder.setPortToPortDistance(from, to, mapRouteOption, distance);
+
+						seenRoutes.add(routeOption);
+					}
+				}
 			}
 		}
+
 		// Filter out unused routes
 		orderedKeys.retainAll(seenRoutes);
 

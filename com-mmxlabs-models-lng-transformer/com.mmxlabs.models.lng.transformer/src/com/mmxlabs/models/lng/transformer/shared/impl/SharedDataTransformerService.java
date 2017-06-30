@@ -13,6 +13,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.shared.IPortAndDistanceData;
 import com.mmxlabs.models.lng.transformer.shared.ISharedDataTransformerService;
@@ -21,38 +23,42 @@ import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 
 public class SharedDataTransformerService implements ISharedDataTransformerService {
 
-	private final ConcurrentHashMap<String, SoftReference<IPortAndDistanceData>> cache = new ConcurrentHashMap<>();
+	// Using static to make it easier to re-use the cache. We should really make this class a OSGi service (or similar)
+	private static final ConcurrentHashMap<String, SoftReference<IPortAndDistanceData>> cache = new ConcurrentHashMap<>();
 
 	@Override
-	public IPortAndDistanceData getPortAndDistanceProvider(@NonNull final IScenarioDataProvider dataProvider) {
-
+	public IPortAndDistanceData getPortAndDistanceProvider(@NonNull IScenarioDataProvider dataProvider) {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(dataProvider);
-		if (false) {
+
+		ModelDistanceProvider modelDistanceProvder = dataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+		if (true) {
+			String distanceModelVersion = modelDistanceProvder.getVersion();
+			String portModelVersion = portModel.getPortDataVersion();
+
+			if (distanceModelVersion == null || portModelVersion == null) {
+				// Cannot create valid key, so avoid cache.
+				return createData(portModel, modelDistanceProvder);
+			}
+			final String cacheKey = String.format("%s-%s", portModelVersion, distanceModelVersion);
 
 			// Caching code path - assumes long running service
-			final String key = getKey(portModel);
-			final SoftReference<IPortAndDistanceData> ref = cache.get(key);
+			final SoftReference<IPortAndDistanceData> ref = cache.get(cacheKey);
 			IPortAndDistanceData value = null;
 			if (ref != null) {
 				value = ref.get();
+				System.out.println("Hit for " + cacheKey);
 			}
 			if (value == null) {
-				value = createData(portModel);
-				cache.put(key, new SoftReference<>(value));
+				value = createData(portModel, modelDistanceProvder);
+				cache.put(cacheKey, new SoftReference<>(value));
+				System.out.println("Miss for " + cacheKey);
 			}
 			return value;
 		}
-		return createData(portModel);
+		return createData(portModel, modelDistanceProvder);
 	}
 
-	private @NonNull String getKey(final @NonNull PortModel portModel) {
-
-		// return String.format("%s-%s", portModel.getPortDataVersion(), portModel.getDistanceDataVersion());
-
-		return portModel.getUuid();
-	}
-
-	private @NonNull IPortAndDistanceData createData(final @NonNull PortModel portModel) {
+	private @NonNull IPortAndDistanceData createData(final @NonNull PortModel portModel, final @NonNull ModelDistanceProvider modelDistanceProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -67,7 +73,7 @@ public class SharedDataTransformerService implements ISharedDataTransformerServi
 
 		final LNGSharedDataTransformer transformer = injector.getInstance(LNGSharedDataTransformer.class);
 
-		transformer.transform(portModel);
+		transformer.transform(portModel, modelDistanceProvider);
 
 		return injector.getInstance(PortAndDistanceData.class);
 	}

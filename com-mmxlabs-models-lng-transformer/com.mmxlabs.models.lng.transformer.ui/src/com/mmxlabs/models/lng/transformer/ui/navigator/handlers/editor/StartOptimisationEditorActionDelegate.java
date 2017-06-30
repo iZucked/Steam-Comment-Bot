@@ -19,6 +19,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 

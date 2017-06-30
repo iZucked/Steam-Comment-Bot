@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
@@ -86,8 +87,10 @@ public class ScenarioTools {
 		B.setName("B");
 		A.setLocation(PortFactory.eINSTANCE.createLocation());
 		B.setLocation(PortFactory.eINSTANCE.createLocation());
-		A.setTimeZone("UTC");
-		B.setTimeZone("UTC");
+		A.getLocation().setTimeZone("UTC");
+		B.getLocation().setTimeZone("UTC");
+		A.getLocation().setMmxId("A");
+		B.getLocation().setMmxId("B");
 		A.getCapabilities().add(PortCapability.LOAD);
 		B.getCapabilities().add(PortCapability.DISCHARGE);
 
@@ -213,10 +216,11 @@ public class ScenarioTools {
 		r.setName(RouteOption.DIRECT.getName());
 		portModel.getRoutes().add(r);
 		csc.getScenarioModelBuilder().getPortModelBuilder().createRoute(RouteOption.DIRECT.getName(), RouteOption.DIRECT);
+		csc.getScenarioModelBuilder().getDistanceModelBuilder().createDistanceMatrix(RouteOption.DIRECT);
 
 		// BUG! Overwrite data (old version just added duplicate values...)
 		for (final int distance : distancesBetweenPorts) {
-			csc.getScenarioModelBuilder().getPortModelBuilder().setPortToPortDistance(A, B, RouteOption.DIRECT, distance, true);
+			csc.getScenarioModelBuilder().getDistanceModelBuilder().setPortToPortDistance(A, B, RouteOption.DIRECT, distance, true);
 		}
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -241,8 +245,8 @@ public class ScenarioTools {
 		final int dischargeMaxQuantity = 100000;
 
 		final ZonedDateTime now = LocalDate.now().atStartOfDay(ZoneId.of("UTC"));
-		final ZoneId portAZone = ZoneId.of(A.getTimeZone());
-		final ZoneId portBZone = ZoneId.of(B.getTimeZone());
+		final ZoneId portAZone = A.getZoneId();
+		final ZoneId portBZone = B.getZoneId();
 
 		final ZonedDateTime loadDate = now.withZoneSameInstant(portAZone);
 		final ZonedDateTime dischargeDate = loadDate.withZoneSameInstant(portBZone).plusHours(travelTime);
@@ -296,7 +300,8 @@ public class ScenarioTools {
 		portModel.getPorts().add(B);
 
 		final Route r = csc.getScenarioModelBuilder().getPortModelBuilder().createRoute(RouteOption.DIRECT.getName(), RouteOption.DIRECT);
-		csc.getScenarioModelBuilder().getPortModelBuilder().setPortToPortDistance(A, B, RouteOption.DIRECT, distanceBetweenPorts, true);
+		csc.getScenarioModelBuilder().getDistanceModelBuilder().createDistanceMatrix(RouteOption.DIRECT);
+		csc.getScenarioModelBuilder().getDistanceModelBuilder().setPortToPortDistance(A, B, RouteOption.DIRECT, distanceBetweenPorts, true);
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -423,7 +428,8 @@ public class ScenarioTools {
 	private static void printJourney(final String journeyName, final Journey journey) {
 
 		System.err.println(journeyName + ":");
-		System.err.println("\tRoute: " + journey.getRoute().getName() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
+		System.err.println(
+				"\tRoute: " + PortModelLabeller.getName(journey.getRouteOption()) + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuels());
 		// FIXME: Update for API changes
 		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getCharterCost()));
@@ -587,6 +593,7 @@ public class ScenarioTools {
 		port.getCapabilities().add(PortCapability.MAINTENANCE);
 
 		port.setLocation(PortFactory.eINSTANCE.createLocation());
+		port.getLocation().setMmxId(name);
 
 		return port;
 	}
@@ -598,4 +605,48 @@ public class ScenarioTools {
 			return "Ballast";
 		}
 	}
+
+	// public static void storeToFile(final MMXRootObject instance, final File file, final String versionContext, final int scenarioVersion) throws IOException {
+	// final ResourceSetImpl resourceSet = new ResourceSetImpl();
+	// resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+	// final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+	//
+	// manifest.setScenarioType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
+	// manifest.setScenarioVersion(scenarioVersion);
+	// manifest.setVersionContext(versionContext);
+	// // manifest.setUUID(instance.getUuid());
+	// final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
+	// final Resource manifestResource = resourceSet.createResource(manifestURI);
+	//
+	// manifestResource.getContents().add(manifest);
+	//
+	// final URI relativeURI = URI.createURI("/rootObject.xmi");
+	//
+	// manifest.getModelURIs().add(relativeURI.toString());
+	// final URI resolved = relativeURI.resolve(manifestURI);
+	// final Resource r2 = resourceSet.createResource(resolved);
+	// r2.getContents().add(instance);
+	// r2.save(null);
+	// manifestResource.save(null);
+	// }
+
+	// public static BaseFuelCost createBaseFuelCost(final BaseFuel baseFuel, final double price) {
+	// final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
+	//
+	// final BaseFuelIndex bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
+	// bfi.setName(baseFuel.getName());
+	// final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
+	// bfi.setData(indexData);
+	// final IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
+	// point.setValue((double) price);
+	// point.setDate(YearMonth.now());
+	// indexData.getPoints().add(point);
+	// bfc.setIndex(bfi);
+	//
+	// bfc.setFuel(baseFuel);
+	// return bfc;
+	//
+	//
+	// }
+
 }

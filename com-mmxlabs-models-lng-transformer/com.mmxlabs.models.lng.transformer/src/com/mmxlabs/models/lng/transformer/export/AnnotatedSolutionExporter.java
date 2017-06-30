@@ -404,17 +404,17 @@ public class AnnotatedSolutionExporter {
 			for (final Event event : eSequence.getEvents()) {
 				final Port port = event.getPort();
 				if (port != null) {
-					final ZoneId zone = ZoneId.of(port.getTimeZone());
+					final ZoneId zone = port.getZoneId();
 					event.setStart(event.getStart().withZoneSameInstant(zone));
 					if (event instanceof Journey) {
 						final Journey journey = (Journey) event;
-						final ZoneId eZone = ZoneId.of(journey.getDestination().getTimeZone());
+						final ZoneId eZone = journey.getDestination().getZoneId();
 						journey.setEnd(journey.getEnd().withZoneSameInstant(eZone));
 					} else if (event instanceof VesselEventVisit) {
 						final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
 						final Port redeliveryPort = vesselEventVisit.getRedeliveryPort();
 						if (redeliveryPort != null) {
-							final ZoneId eZone = ZoneId.of(redeliveryPort.getTimeZone());
+							final ZoneId eZone = redeliveryPort.getZoneId();
 							vesselEventVisit.setEnd(vesselEventVisit.getEnd().withZoneSameInstant(eZone));
 						} else {
 							event.setEnd(event.getEnd().withZoneSameInstant(zone));

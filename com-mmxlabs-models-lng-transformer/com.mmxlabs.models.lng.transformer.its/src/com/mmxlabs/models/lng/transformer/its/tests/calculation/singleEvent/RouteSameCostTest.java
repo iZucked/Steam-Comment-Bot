@@ -76,8 +76,8 @@ public class RouteSameCostTest {
 		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
 
 		// check the vessel took either of the cheapest routes.
-		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().getRouteOption().equals(params.canalOption);
-		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().getRouteOption().equals(params.canalOption);
+		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRouteOption().equals(params.canalOption);
+		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRouteOption().equals(params.canalOption);
 
 		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
 	}
@@ -118,8 +118,8 @@ public class RouteSameCostTest {
 		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
 
 		// check the vessel took either of the cheapest routes.
-		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().getRouteOption().equals(params.canalOption);
-		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().getRouteOption().equals(params.canalOption);
+		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRouteOption().equals(params.canalOption);
+		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRouteOption().equals(params.canalOption);
 
 		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
 	}

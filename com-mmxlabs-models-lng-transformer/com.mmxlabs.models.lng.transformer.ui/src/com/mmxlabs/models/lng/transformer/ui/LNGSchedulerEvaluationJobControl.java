@@ -17,10 +17,13 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**

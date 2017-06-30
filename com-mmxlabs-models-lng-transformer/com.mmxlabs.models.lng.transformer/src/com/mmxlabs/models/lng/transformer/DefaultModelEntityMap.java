@@ -139,7 +139,7 @@ public class DefaultModelEntityMap implements ModelEntityMap {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
-		return getDateFromHours(hours, port.getTimeZone());
+		return getDateFromHours(hours, port.getLocation().getTimeZone());
 	}
 
 }

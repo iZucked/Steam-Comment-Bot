@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;

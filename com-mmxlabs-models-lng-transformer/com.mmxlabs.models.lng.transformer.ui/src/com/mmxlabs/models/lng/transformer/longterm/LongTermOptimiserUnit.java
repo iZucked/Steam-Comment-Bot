@@ -29,6 +29,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;

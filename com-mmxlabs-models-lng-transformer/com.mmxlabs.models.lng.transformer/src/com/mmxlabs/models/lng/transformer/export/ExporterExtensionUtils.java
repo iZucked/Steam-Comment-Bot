@@ -14,6 +14,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.port.CanalEntry;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
@@ -45,6 +47,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -314,4 +318,27 @@ public class ExporterExtensionUtils {
 		return startEvent;
 	}
 
+	@NonNull
+	public static RouteOption mapRouteOption(@NonNull final ERouteOption routeOption) {
+		switch (routeOption) {
+		case DIRECT:
+			return RouteOption.DIRECT;
+		case PANAMA:
+			return RouteOption.PANAMA;
+		case SUEZ:
+			return RouteOption.SUEZ;
+		}
+		throw new IllegalStateException();
+	}
+	
+	@NonNull
+	public static CanalEntry mapCanalEntry(@NonNull final ECanalEntry canalEntry) {
+		switch (canalEntry) {
+		case NorthSide:
+			return CanalEntry.NORTHSIDE;
+		case SouthSide:
+			return CanalEntry.SOUTHSIDE;
+		}
+		throw new IllegalStateException();
+	}
 }

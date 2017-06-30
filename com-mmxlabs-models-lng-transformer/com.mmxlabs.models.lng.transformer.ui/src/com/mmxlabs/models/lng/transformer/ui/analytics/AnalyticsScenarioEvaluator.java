@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -182,6 +183,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			final ModelEntityMap modelEntityMap = bridge.getInjector().getInstance(ModelEntityMap.class);
 			final PortModel portModel = ScenarioModelUtil.getPortModel(bridge.getScenarioDataProvider());
+			final ModelDistanceProvider modelDistanceProvider = ScenarioModelUtil.getModelDistanceProvider(bridge.getScenarioDataProvider());
 
 			final List<IPortSlot> unused = new LinkedList<>();
 			for (final BaseCase baseCase : baseCases) {
@@ -227,7 +229,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					final List<WrappedAssignableElement> sortableElements = m_ToGenerate.computeIfAbsent(key, k -> new LinkedList<>());
 					final List<Slot> sortedSlots = Lists.newArrayList(load, discharge);
 
-					final WrappedAssignableElement e = new WrappedAssignableElement(sortedSlots, vessel, portModel, null);
+					final WrappedAssignableElement e = new WrappedAssignableElement(sortedSlots, vessel, portModel, modelDistanceProvider, null);
 					sortableElements.add(e);
 
 					assignableMap.put(e, sortedSlots);

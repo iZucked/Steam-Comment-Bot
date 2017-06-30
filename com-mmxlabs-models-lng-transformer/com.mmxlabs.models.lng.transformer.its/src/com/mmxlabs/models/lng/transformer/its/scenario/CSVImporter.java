@@ -48,6 +48,8 @@ import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselImporter;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
@@ -65,6 +67,7 @@ import com.mmxlabs.models.lng.pricing.importers.PricingModelImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.ui.importers.PromptPeriodImporter;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -230,6 +233,29 @@ public class CSVImporter {
 		referenceModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
 		// scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
 
+		// Post import map port names to MMX ID
+		{
+			Map<String, String> portNameToID = new HashMap<>();
+			for (Port port : referenceModel.getPortModel().getPorts()) {
+				Location l = port.getLocation();
+				if (l.getName() == null) {
+					l.setName(port.getName());
+				}
+				String mmxId = l.getMmxId();
+				if (mmxId == null) {
+					mmxId = port.getName();
+					l.setMmxId(mmxId);
+				}
+				// Restores correct case
+				portNameToID.put(mmxId.toLowerCase(), mmxId);
+				
+				portNameToID.put(port.getName().toLowerCase(), mmxId);
+				portNameToID.put(l.getName().toLowerCase(), mmxId);
+				for (String other : l.getOtherNames()) {
+					portNameToID.put(other.toLowerCase(), mmxId);
+				}
+			}
+		}
 		importExtraModels(scenarioModel, importerRegistry, context, dataMap);
 
 		context.setRootObject(scenarioModel);

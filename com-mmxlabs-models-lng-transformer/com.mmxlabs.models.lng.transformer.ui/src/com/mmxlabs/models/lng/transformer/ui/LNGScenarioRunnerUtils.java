@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;

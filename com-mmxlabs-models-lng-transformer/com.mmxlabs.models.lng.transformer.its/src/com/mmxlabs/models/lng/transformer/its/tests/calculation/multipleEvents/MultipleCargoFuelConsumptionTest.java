@@ -51,8 +51,8 @@ public class MultipleCargoFuelConsumptionTest {
 
 		final PortModelBuilder portModelBuilder = csc.getScenarioModelBuilder().getPortModelBuilder();
 
-		final Port portA = portModelBuilder.createPort("portA", "UTC", 0, 0);
-		final Port portB = portModelBuilder.createPort("portB", "UTC", 0, 0);
+		final Port portA = portModelBuilder.createPort("portA", "portA", "UTC", 0, 0);
+		final Port portB = portModelBuilder.createPort("portB", "portB", "UTC", 0, 0);
 
 		final int distanceBetweenPorts = 90;
 		csc.addPorts(portA, portB, distanceBetweenPorts);
@@ -216,8 +216,8 @@ public class MultipleCargoFuelConsumptionTest {
 
 		final PortModelBuilder portModelBuilder = csc.getScenarioModelBuilder().getPortModelBuilder();
 
-		final Port portA = portModelBuilder.createPort("portA", "UTC", 0, 0);
-		final Port portB = portModelBuilder.createPort("portB", "UTC", 0, 0);
+		final Port portA = portModelBuilder.createPort("portA", "portA", "UTC", 0, 0);
+		final Port portB = portModelBuilder.createPort("portB", "portB", "UTC", 0, 0);
 
 		// add the ports
 		final int distanceBetweenPorts = 110;
@@ -253,12 +253,12 @@ public class MultipleCargoFuelConsumptionTest {
 		final LocalDateTime dryDockStart = cargoBStart.plusHours(2 * legDuration);
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final IScenarioDataProvider scenario = csc.getScenarioDataProvider();
-		CustomScenarioCreator.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0,
-				0);
+		IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
+		CustomScenarioCreator.createCanalAndCost(scenarioDataProvider, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts,
+				canalDistanceBetweenPorts, 0, 0, 0);
 
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 
 		// print the legs to console
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
@@ -273,8 +273,8 @@ public class MultipleCargoFuelConsumptionTest {
 		// add assertions on results
 		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
 			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute().getRouteOption());
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute().getRouteOption());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRouteOption());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRouteOption());
 
 			// expect only NBO to be used always
 

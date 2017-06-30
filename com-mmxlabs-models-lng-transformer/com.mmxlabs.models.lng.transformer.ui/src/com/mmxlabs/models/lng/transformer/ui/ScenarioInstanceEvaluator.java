@@ -20,7 +20,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 
 public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 	@Override

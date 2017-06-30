@@ -641,7 +641,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// add a charter out event prior to the first cargo.
-		final LocalDateTime startLoad = msc.getFirstAppointment().getSecond().withZoneSameInstant(ZoneId.of(msc.originPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime startLoad = msc.getFirstAppointment().getSecond().withZoneSameInstant(msc.originPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = startLoad.minusHours(25);
 		final LocalDateTime charterStartAfterDate = startLoad.minusHours(25);
 		final int charterOutRate = 24;

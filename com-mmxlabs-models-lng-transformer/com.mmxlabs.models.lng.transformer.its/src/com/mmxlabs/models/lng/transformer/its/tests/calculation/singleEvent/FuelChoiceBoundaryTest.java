@@ -104,11 +104,11 @@ public class FuelChoiceBoundaryTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final IScenarioDataProvider scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
-				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
+		final IScenarioDataProvider scenarioDataProvider = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
+				speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
 				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
-		final Schedule result = ScenarioTools.evaluate(scenario);
+		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
 		final CargoAllocation a = result.getCargoAllocations().get(0);

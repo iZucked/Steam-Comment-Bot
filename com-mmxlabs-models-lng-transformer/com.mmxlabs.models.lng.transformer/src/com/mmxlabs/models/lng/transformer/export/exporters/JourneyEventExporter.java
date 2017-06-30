@@ -10,17 +10,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
@@ -82,10 +83,7 @@ public class JourneyEventExporter {
 		journey.setDestination(eToPort);
 
 		journey.setDistance(options.getDistance());
-		final String name = options.getRoute().name();
-		@Nullable
-		final Route modelObject = modelEntityMap.getModelObject(name, Route.class);
-		journey.setRoute(modelObject);
+		journey.setRouteOption(ExporterExtensionUtils.mapRouteOption(options.getRoute()));
 		journey.setToll(OptimiserUnitConvertor.convertToExternalFixedCost(options.getRouteCost()));
 
 		journey.setLaden(VesselState.Laden.equals(options.getVesselState()));
@@ -96,10 +94,9 @@ public class JourneyEventExporter {
 
 		final IPortTimesRecord portTimesRecord = volumeAllocatedSequence.getPortTimesRecord(fromPortSlot);
 
-		final Route journeyRoute = journey.getRoute();
 		ZonedDateTime estimatedArrival = null;
-		if (journey.getRoute().isCanal()) {
-			if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+		if (journey.getRouteOption() != RouteOption.DIRECT) {
+			if (journey.getRouteOption() == RouteOption.PANAMA) {
 				PanamaBookingPeriod exportPeriod = PanamaBookingPeriod.BEYOND;
 				if (vesselProvider.getVesselAvailability(volumeAllocatedSequence.getResource()).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 					exportPeriod = PanamaBookingPeriod.NOMINAL;
@@ -127,7 +124,7 @@ public class JourneyEventExporter {
 
 			// set latest possible canal date
 			if (canalEntry != null) {
-
+				final Port eCanalPort = modelEntityMap.getModelObject(canalEntry, Port.class);
 				final int fromCanalEntry = distanceProvider.getTravelTime(options.getRoute(), //
 						voyageDetails.getOptions().getVessel(), //
 						canalEntry, //
@@ -137,7 +134,7 @@ public class JourneyEventExporter {
 				final ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
 				final int marginHours;
 				final int toCanalSpeed;
-				if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+				if (journey.getRouteOption() == RouteOption.PANAMA) {
 					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getMaxSpeed());
 					marginHours = panamaSlotsProvider.getMargin();
 				} else {
@@ -149,7 +146,7 @@ public class JourneyEventExporter {
 				ZonedDateTime latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
 				journey.setLatestPossibleCanalDate(latestCanalEntry.toLocalDate());
 
-				if (latestCanalEntry.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+				if (latestCanalEntry.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
 					// slot can't be reached that day, set to previous day
 					journey.setLatestPossibleCanalDate(latestCanalEntry.minusDays(1).toLocalDate());
 				}
@@ -164,6 +161,9 @@ public class JourneyEventExporter {
 				final int departureTime = portTimesRecord.getSlotTime(fromPortSlot) + portTimesRecord.getSlotDuration(fromPortSlot);
 				estimatedArrival = modelEntityMap.getDateFromHours(departureTime + toCanal, canalEntry);
 				journey.setCanalArrival(estimatedArrival.toLocalDate());
+
+				journey.setCanalEntrance(ExporterExtensionUtils.mapCanalEntry(distanceProvider.getRouteOptionCanalEntrance(options.getFromPortSlot().getPort(), options.getRoute())));
+				journey.setCanalEntrancePort(eCanalPort);
 			}
 
 		}
@@ -171,27 +171,30 @@ public class JourneyEventExporter {
 		// set canal booking if present
 		if (portTimesRecord.getRouteOptionBooking(fromPortSlot) != null) {
 			final CanalBookingSlot canalBookingSlot = modelEntityMap.getModelObject(portTimesRecord.getRouteOptionBooking(fromPortSlot), CanalBookingSlot.class);
+			final ECanalEntry canalEntry = distanceProvider.getRouteOptionCanalEntrance(fromPortSlot.getPort(), options.getRoute());
+
+			final IPort canalEntryPort = distanceProvider.getRouteOptionEntryPort(options.getRoute(), canalEntry);
+			assert canalEntryPort != null;
+			final Port eCanalPort = modelEntityMap.getModelObject(canalEntryPort, Port.class);
+
 			journey.setCanalBooking(canalBookingSlot);
-			journey.setCanalEntry(canalBookingSlot.getEntryPoint());
+			journey.setCanalEntrance(canalBookingSlot.getCanalEntrance());
+			journey.setCanalEntrancePort(eCanalPort);
 			journey.setCanalDate(canalBookingSlot.getBookingDate());
-		} else if (journeyRoute.isCanal()) {
-			final IPort canalEntry = distanceProvider.getRouteOptionEntryPort(fromPortSlot.getPort(), voyageDetails.getOptions().getRoute());
+		} else if (journey.getRouteOption() != RouteOption.DIRECT) {
+			final ECanalEntry canalEntry = distanceProvider.getRouteOptionCanalEntrance(fromPortSlot.getPort(), voyageDetails.getOptions().getRoute());
 			if (canalEntry != null) {
+
+				final IPort canalEntryPort = distanceProvider.getRouteOptionEntryPort(options.getRoute(), canalEntry);
+				assert canalEntryPort != null;
+				final Port eCanalPort = modelEntityMap.getModelObject(canalEntryPort, Port.class);
+
+				journey.setCanalEntrance(ExporterExtensionUtils.mapCanalEntry(canalEntry));
+				journey.setCanalEntrancePort(eCanalPort);
 				journey.setCanalDate(journey.getCanalArrival());
-				if (estimatedArrival != null && estimatedArrival.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+				if (estimatedArrival != null && estimatedArrival.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
 					// slot can't be reached that day, set arrival to next day
 					journey.setCanalDate(estimatedArrival.plusDays(1).toLocalDate());
-				}
-
-				if (canalEntry != null) {
-					@NonNull
-					final Port expectedEntryPort = modelEntityMap.getModelObjectNullChecked(canalEntry, Port.class);
-					if (journeyRoute.getNorthEntrance() != null && journeyRoute.getNorthEntrance().getPort() == expectedEntryPort) {
-						journey.setCanalEntry(journeyRoute.getNorthEntrance());
-					}
-					if (journeyRoute.getSouthEntrance() != null && journeyRoute.getSouthEntrance().getPort() == expectedEntryPort) {
-						journey.setCanalEntry(journeyRoute.getSouthEntrance());
-					}
 				}
 			}
 		}

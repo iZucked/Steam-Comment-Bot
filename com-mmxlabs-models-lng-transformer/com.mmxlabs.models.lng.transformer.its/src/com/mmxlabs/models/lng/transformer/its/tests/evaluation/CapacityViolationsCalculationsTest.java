@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import org.junit.Ignore;
@@ -592,8 +591,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
 		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
-		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 
 		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort) //
 				.withRelocatePort(msc.originPort) //
@@ -681,8 +680,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
 		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
-		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(msc.loadPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 
 		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort) //
 				.withRelocatePort(msc.originPort) //
@@ -781,10 +780,12 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
 
+		msc.scenarioModelBuilder.getPortModelBuilder().configureDrydockPort(msc.loadPort);
 		DryDockEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeDryDockEvent("DryDock", dryDockStartAfterDate, dryDockStartByDate, msc.loadPort) //
 				.withDurationInDays(1) //
 				.withVesselAssignment(msc.vesselAvailability, 0) //
 				.build();
+		
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);

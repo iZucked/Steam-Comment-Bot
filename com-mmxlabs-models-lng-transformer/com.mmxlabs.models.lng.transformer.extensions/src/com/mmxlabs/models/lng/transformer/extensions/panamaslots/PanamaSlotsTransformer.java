@@ -26,20 +26,26 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.port.CanalEntry;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
@@ -60,6 +66,9 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 	@Inject
 	private ModelEntityMap modelEntityMap;
+
+	@Inject
+	private IScenarioDataProvider scenarioDataProvider;
 
 	private final List<CanalBookingSlot> providedPanamaBookings = new ArrayList<>();
 	private int relaxedBoundaryOffsetDays;
@@ -92,21 +101,23 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 	@Override
 	public void finishTransforming() {
-		final Map<IPort, SortedSet<IRouteOptionBooking>> panamaSlots = new HashMap<>();
-		providedPanamaBookings.forEach(eBooking -> {
-			final IPort optPort = modelEntityMap.getOptimiserObject(eBooking.getEntryPoint().getPort(), IPort.class);
-			if (optPort == null) {
-				throw new IllegalStateException("No optimiser port found for: " + eBooking.getEntryPoint().getName());
-			}
+		ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDateAsDateTime());
+		final Map<ECanalEntry, SortedSet<IRouteOptionBooking>> panamaSlots = new HashMap<>();
+		providedPanamaBookings.forEach(eBooking -> {
+
+			Port port = modelDistanceProvider.getCanalPort(RouteOption.PANAMA, eBooking.getCanalEntrance());
+
+			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate().atStartOfDay(port.getZoneId()));
 			final IRouteOptionBooking oBooking;
+			@NonNull
+			ECanalEntry oCanalEntrance = mapCanalEntry(eBooking.getCanalEntrance());
 			if (eBooking.getSlot() != null) {
-				oBooking = IRouteOptionBooking.of(date, optPort, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
+				oBooking = IRouteOptionBooking.of(date, oCanalEntrance, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
 			} else {
-				oBooking = IRouteOptionBooking.of(date, optPort, ERouteOption.PANAMA);
+				oBooking = IRouteOptionBooking.of(date, oCanalEntrance, ERouteOption.PANAMA);
 			}
-			panamaSlots.computeIfAbsent(optPort, key -> new TreeSet<>()).add(oBooking);
+			panamaSlots.computeIfAbsent(oCanalEntrance, key -> new TreeSet<>()).add(oBooking);
 
 			modelEntityMap.addModelObject(eBooking, oBooking);
 		});
@@ -118,6 +129,16 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		panamaBookingsProviderEditor.setRelaxedBookingCountNorthbound(relaxedBookingsCountNorthbound);
 		panamaBookingsProviderEditor.setRelaxedBookingCountSouthbound(relaxedBookingsCountSouthbound);
 		panamaBookingsProviderEditor.setArrivalMargin(arrivalMargin);
+	}
+
+	private @NonNull ECanalEntry mapCanalEntry(CanalEntry canalEntrance) {
+		switch (canalEntrance) {
+		case NORTHSIDE:
+			return ECanalEntry.NorthSide;
+		case SOUTHSIDE:
+			return ECanalEntry.SouthSide;
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

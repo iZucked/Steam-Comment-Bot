@@ -697,7 +697,7 @@ public class LNGScenarioTransformer {
 		}
 
 		for (final Port ePort : portModel.getPorts()) {
-			final IPort port = portProvider.getPortForName(ePort.getName());
+			final IPort port = portProvider.getPortForMMXID(ePort.getLocation().getTempMMXID());
 			assert port != null;
 
 			final CooldownPrice eCooldownPrice = portToCooldownMap.get(ePort);
@@ -2259,7 +2259,7 @@ public class LNGScenarioTransformer {
 					// Get the YearMonth of the earliest date in the scenario.
 					final YearMonth initialYearMonth = YearMonth.from(earliestDate.withZoneSameLocal(ZoneId.of("UTC")).toLocalDate());
 					// Convert this to the 1st of the month in the notional port timezone.
-					ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(ZoneId.of(notionalAPort.getTimeZone()));
+					ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(notionalAPort.getZoneId());
 					// Loop!
 					while (!tzStartTime.isAfter(latestDate)) {
 
@@ -2401,7 +2401,7 @@ public class LNGScenarioTransformer {
 					final YearMonth initialYearMonth = YearMonth.from(earliestDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
 
 					// Convert this to the 1st of the month in the notional port timezone.
-					ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(ZoneId.of(notionalAPort.getTimeZone()));
+					ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(notionalAPort.getZoneId());
 
 					while (!tzStartTime.isAfter(latestDate)) {
 

@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementDateProviderFactory;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -232,11 +233,13 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		// Process initial vessel assignments list
 
+		ModelDistanceProvider modelDistanceProvider = ScenarioModelUtil.getModelDistanceProvider(scenarioDataProvider);
 		final List<CollectedAssignment> assignments;
 		if (assignableElementComparator != null) {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, assignableElementComparator.create(scenarioModel));
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, modelDistanceProvider,
+					assignableElementComparator.create(scenarioModel));
 		} else {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel);
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, modelDistanceProvider);
 		}
 		for (final CollectedAssignment seq : assignments) {
 

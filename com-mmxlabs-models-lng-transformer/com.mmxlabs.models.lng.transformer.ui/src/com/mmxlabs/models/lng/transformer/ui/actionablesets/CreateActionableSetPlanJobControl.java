@@ -56,6 +56,8 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;

@@ -17,7 +17,9 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -75,6 +77,8 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
@@ -275,7 +279,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				}
 				return newName;
 			};
-			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 50_000, new SubProgressMonitor(progressMonitor, 90));
+			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 1_000_000, new SubProgressMonitor(progressMonitor, 90));
 			if (progressMonitor.isCanceled()) {
 				return;
 			}

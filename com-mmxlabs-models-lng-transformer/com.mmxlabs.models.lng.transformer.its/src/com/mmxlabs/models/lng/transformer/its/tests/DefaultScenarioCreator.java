@@ -48,8 +48,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -128,6 +129,8 @@ public class DefaultScenarioCreator {
 
 	SimpleScenarioDataProvider dataProvider;
 
+	private final ModelDistanceProvider distanceProvider;
+
 	public DefaultScenarioCreator() {
 		this("UTC");
 
@@ -147,6 +150,7 @@ public class DefaultScenarioCreator {
 		shippingEntity = addEntity("Shipping");
 
 		dataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenario);
+		distanceProvider = new ModelDistanceProvider(scenarioModelBuilder.getPortModelBuilder().getPortModel());
 	}
 
 	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
@@ -163,6 +167,7 @@ public class DefaultScenarioCreator {
 	/**
 	 */
 	public Route addRoute(final RouteOption option) {
+		scenarioModelBuilder.getDistanceModelBuilder().createDistanceMatrix(option);
 		return scenarioModelBuilder.getPortModelBuilder().createRoute(option.getName(), option);
 	}
 
@@ -185,11 +190,12 @@ public class DefaultScenarioCreator {
 
 			final int n = (minSpeed == maxSpeed ? 1 : 2);
 
+			result.setFuelConsumptionOverride(true);
 			for (int i = 0; i < n; i++) {
 				final FuelConsumption fc = FleetFactory.eINSTANCE.createFuelConsumption();
 				fc.setConsumption(consumption);
 				fc.setSpeed(speeds[i]);
-				result.getVesselOrDelegateFuelConsumption().add(fc);
+				result.getFuelConsumption().add(fc);
 			}
 
 			result.setIdleBaseRate(fuelIdleConsumptionPerDay);
@@ -407,7 +413,8 @@ public class DefaultScenarioCreator {
 		 */
 		public VesselClassRouteParameters assignRouteParameters(final Vessel vc, final RouteOption routeOption) {
 			final VesselClassRouteParameters result = new DefaultVesselClassRouteParametersCreator().createVesselClassRouteParameters(routeOption);
-			vc.getVesselOrDelegateRouteParameters().add(result);
+			vc.setRouteParametersOverride(true);
+			vc.getRouteParameters().add(result);
 			return result;
 		}
 
@@ -451,41 +458,6 @@ public class DefaultScenarioCreator {
 		}
 
 		/**
-		 * Sets the distance between two ports via a specified route to be symmetrically equal to the specified value. If route == null, the default route is used.
-		 * 
-		 * @param p1
-		 * @param p2
-		 * @param distance
-		 * @param r
-		 */
-		public void setDistance(final Port p1, final Port p2, final int distance, final Route r) {
-			setOneWayDistance(p1, p2, distance, r);
-			setOneWayDistance(p2, p1, distance, r);
-		}
-
-		/**
-		 * Sets the distance from port p1 to p2 via a specified route to be equal to the specified value. If route == null, the default route is used. The distance from port p2 to p1 is not set.
-		 * 
-		 * @param p1
-		 * @param p2
-		 * @param distance
-		 * @param r
-		 */
-		public void setOneWayDistance(final Port p1, final Port p2, final int distance, Route r) {
-			// if not specified, set r to route 0 (hopefully the default one)
-			if (r == null) {
-				final PortModel portModel = scenario.getReferenceModel().getPortModel();
-				r = portModel.getRoutes().get(0);
-			}
-
-			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
-			distanceLine.setFrom(p1);
-			distanceLine.setTo(p2);
-			distanceLine.setDistance(distance);
-			r.getLines().add(distanceLine);
-		}
-
-		/**
 		 * Creates a new port and connects it to existing ports using the specified 1d array of distances (one for each existing port). If the name or distances parameters are left null, sensible
 		 * defaults will be chosen.
 		 * 
@@ -503,10 +475,12 @@ public class DefaultScenarioCreator {
 			}
 
 			final Location location = PortFactory.eINSTANCE.createLocation();
+			location.setTimeZone(timeZone);
+			location.setName(name);
+			location.setMmxId(name);
 
 			final Port result = PortFactory.eINSTANCE.createPort();
 			result.setLocation(location);
-			result.setTimeZone(timeZone);
 			result.setName(name);
 			result.setCvValue(defaultCv);
 			// TODO: initialise other parameters with explicit defaults
@@ -519,9 +493,8 @@ public class DefaultScenarioCreator {
 			ports.add(result);
 
 			for (int i = 0; i < distances.length; i++) {
-				scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(ports.get(i), result, RouteOption.DIRECT, distances[i], true);
-
-				setDistance(ports.get(i), result, distances[i], null);
+				scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(ports.get(i), result, RouteOption.DIRECT, distances[i], true);
+				// setDistance(ports.get(i), result, distances[i], null);
 			}
 
 			// Add in all capabilities by default
@@ -752,34 +725,6 @@ public class DefaultScenarioCreator {
 		}
 	}
 
-	public int getTravelTime(final Port p1, final Port p2, final Route r, final int speed) {
-		return getDistance(p1, p2, r.getRouteOption()) / speed;
-	}
-
-	public int getDistance(final Port p1, final Port p2, RouteOption routeOption) {
-
-		if (p1 == p2) {
-			return 0;
-		}
-		Route r = null;
-		final PortModel portModel = scenario.getReferenceModel().getPortModel();
-		for (Route route : portModel.getRoutes()) {
-			if (route.getRouteOption() == routeOption) {
-				r = route;
-				break;
-			}
-		}
-		if (r != null) {
-			for (final RouteLine line : r.getLines()) {
-				if (line.getFrom() == p1 && line.getTo() == p2) {
-					return line.getFullDistance();
-				}
-			}
-		}
-
-		throw new NullPointerException();
-	}
-
 	public DryDockEvent addDryDock(final Port startPort, final LocalDateTime start, final int durationDays) {
 
 		final PortModel portModel = scenario.getReferenceModel().getPortModel();
@@ -849,7 +794,8 @@ public class DefaultScenarioCreator {
 
 			for (final Vessel v : fleetModel.getVessels()) {
 				if (v.equals(vc)) {
-					v.getVesselOrDelegateInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
+					v.setInaccessiblePortsOverride(true);
+					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
 				}
 
 				return true;
@@ -928,8 +874,12 @@ public class DefaultScenarioCreator {
 	public void checkJourneyGeography(final Journey journey, final Port from, final Port to) {
 		Assert.assertEquals(journey.getPort(), from);
 		Assert.assertEquals(journey.getDestination(), to);
-		final Route route = journey.getRoute();
-		Assert.assertEquals(journey.getDistance(), (int) getDistance(from, to, route.getRouteOption()));
+		final RouteOption routeOption = journey.getRouteOption();
+		Assert.assertEquals(journey.getDistance(), getDistance(from, to, routeOption));
+	}
+
+	private int getDistance(final Port from, final Port to, final RouteOption routeOption) {
+		return distanceProvider.getDistance(from, to, routeOption);
 	}
 
 	public RouteCost getRouteCost(final Vessel vessel, final RouteOption routeOption) {

@@ -70,7 +70,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: add a canal
 
 		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
-		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
+		msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, canal.getRouteOption(), 10, true);
 		msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 
 		final SequenceTester checker = getDefaultTester();
@@ -124,7 +124,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: add a canal, but it is longer than the default route
 
 		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
-		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, canal);
+		msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, canal.getRouteOption(), 30, true);
 		msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 
 		final SequenceTester checker = getDefaultTester();
@@ -153,7 +153,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// but has a high usage cost
 
 		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
-		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
+		msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, canal.getRouteOption(), 10, true);
 		msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 		final RouteCost cost = msc.getRouteCost(msc.vessel, RouteOption.SUEZ);
 		cost.setLadenCost(500);
@@ -183,7 +183,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		{
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
-			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, suezCanal);
+			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, suezCanal.getRouteOption(), 10, true);
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
@@ -194,7 +194,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		{
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
-			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 20, panamaCanal);
+			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 20, true);
+			// FIXME: Should this really be suez data or copy/paste error?			
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.PANAMA);
 			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
@@ -256,7 +257,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		//
 		{
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
-			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, suezCanal);
+			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, suezCanal.getRouteOption(), 30, true);
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
@@ -267,7 +268,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		{
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
-			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, panamaCanal);
+			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 10, true);
 			msc.fleetCreator.assignDefaultPanamaCanalData(msc.vessel, RouteOption.PANAMA);
 			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
@@ -315,9 +316,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
-		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(1)).getRoute().getRouteOption());
-		Assert.assertEquals(RouteOption.PANAMA, ((Journey) sequence.getEvents().get(4)).getRoute().getRouteOption());
-		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(7)).getRoute().getRouteOption());
+		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(1)).getRouteOption());
+		Assert.assertEquals(RouteOption.PANAMA, ((Journey) sequence.getEvents().get(4)).getRouteOption());
+		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(7)).getRouteOption());
 
 		checker.check(sequence);
 

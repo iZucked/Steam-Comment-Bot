@@ -2288,7 +2288,7 @@ public class PeriodTransformerTests {
 		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, loadSlot1, dischargeSlot1);
 
 		final Port port = PeriodTestUtils.createPort(scenarioModel, "port");
-		port.setTimeZone("Etc/GMT-1");
+		port.getLocation().setTimeZone("Etc/GMT-1");
 
 		loadSlot1.setPort(port);
 		dischargeSlot1.setPort(port);

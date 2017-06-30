@@ -52,12 +52,9 @@ public class CharterOutTest {
 		// a leg between ports A and B will take 100 hours.
 		final int legDurationHours = 100;
 
-		final Port portA = PortFactory.eINSTANCE.createPort();
-		final Port portB = PortFactory.eINSTANCE.createPort();
-		final Port portC = PortFactory.eINSTANCE.createPort();
-		portA.setName("PortA");
-		portB.setName("PortB");
-		portC.setName("PortC");
+		final Port portA = ScenarioTools.createPort("PortA");
+		final Port portB = ScenarioTools.createPort("PortB");
+		final Port portC = ScenarioTools.createPort("PortC");
 		final int distanceBetweenPorts = 1000;
 		csc.addPorts(portA, portB, distanceBetweenPorts);
 		csc.addPorts(portB, portC, distanceBetweenPorts);

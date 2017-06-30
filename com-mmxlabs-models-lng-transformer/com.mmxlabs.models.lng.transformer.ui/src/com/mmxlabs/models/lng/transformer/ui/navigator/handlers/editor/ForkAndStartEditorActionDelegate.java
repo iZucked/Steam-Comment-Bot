@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import java.io.IOException;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
@@ -20,6 +22,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;

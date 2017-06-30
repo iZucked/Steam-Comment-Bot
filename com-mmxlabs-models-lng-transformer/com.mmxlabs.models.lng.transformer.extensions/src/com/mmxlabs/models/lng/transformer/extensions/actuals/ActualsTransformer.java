@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -94,7 +94,7 @@ public class ActualsTransformer implements ITransformerExtension {
 
 					final int distance = slotActuals.getDistance();
 					final long routeCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slotActuals.getRouteCosts());
-					final Route routeObject = slotActuals.getRoute();
+					final RouteOption routeObject = slotActuals.getRouteOption();
 					final ERouteOption route = routeObject == null ? ERouteOption.DIRECT : LNGScenarioTransformer.mapRouteOption(routeObject);
 
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);

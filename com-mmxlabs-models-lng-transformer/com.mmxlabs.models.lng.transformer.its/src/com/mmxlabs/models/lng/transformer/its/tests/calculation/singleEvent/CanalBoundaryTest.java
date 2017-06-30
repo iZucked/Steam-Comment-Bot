@@ -9,7 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
@@ -17,6 +19,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 /**
  * Tests for <a href="https://mmxlabs.fogbugz.com/default.asp?184">FogBugz: Case 184</a>
@@ -45,8 +48,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
-		Assert.assertTrue("Laden leg travels down canal", canalOption.equals(a.getLadenLeg().getRoute().getRouteOption()));
-		Assert.assertTrue("Ballast leg travels down canal", canalOption.equals(a.getBallastLeg().getRoute().getRouteOption()));
+		Assert.assertTrue("Laden leg travels down canal", canalOption.equals(a.getLadenLeg().getRouteOption()));
+		Assert.assertTrue("Ballast leg travels down canal", canalOption.equals(a.getBallastLeg().getRouteOption()));
 	}
 
 	/**
@@ -63,8 +66,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
-		Assert.assertTrue("Laden leg travels on open sea", RouteOption.DIRECT == a.getLadenLeg().getRoute().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on open sea", RouteOption.DIRECT == a.getBallastLeg().getRoute().getRouteOption());
+		Assert.assertTrue("Laden leg travels on open sea", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
+		Assert.assertTrue("Ballast leg travels on open sea", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
 	}
 
 	/**
@@ -81,8 +84,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
-		Assert.assertTrue("Laden leg travels on open sea", RouteOption.DIRECT == a.getLadenLeg().getRoute().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on open sea", RouteOption.DIRECT == a.getBallastLeg().getRoute().getRouteOption());
+		Assert.assertTrue("Laden leg travels on open sea", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
+		Assert.assertTrue("Ballast leg travels on open sea", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
 	}
 
 	/**
@@ -130,8 +133,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimePerHour));
 
-		Assert.assertTrue("Laden leg travels in canal", RouteOption.SUEZ == a.getLadenLeg().getRoute().getRouteOption());
-		Assert.assertTrue("Ballast leg travels in canal", RouteOption.SUEZ == a.getBallastLeg().getRoute().getRouteOption());
+		Assert.assertTrue("Laden leg travels in canal", RouteOption.SUEZ == a.getLadenLeg().getRouteOption());
+		Assert.assertTrue("Ballast leg travels in canal", RouteOption.SUEZ == a.getBallastLeg().getRouteOption());
 	}
 
 	/**
@@ -147,8 +150,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", RouteOption.DIRECT == a.getLadenLeg().getRoute().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on canal", RouteOption.DIRECT == a.getBallastLeg().getRoute().getRouteOption());
+		Assert.assertTrue("Laden leg travels on canal", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
+		Assert.assertTrue("Ballast leg travels on canal", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
 	}
 
 	/**
@@ -164,8 +167,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT == a.getLadenLeg().getRoute().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT == a.getBallastLeg().getRoute().getRouteOption());
+		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
+		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
 	}
 
 	/**
@@ -181,8 +184,8 @@ public class CanalBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT == a.getLadenLeg().getRoute().getRouteOption());
-		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT == a.getBallastLeg().getRoute().getRouteOption());
+		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT == a.getLadenLeg().getRouteOption());
+		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT == a.getBallastLeg().getRouteOption());
 	}
 
 	/**
@@ -253,12 +256,12 @@ public class CanalBoundaryTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final IScenarioDataProvider scenarioDataProvider = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed,
-				capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay,
-				speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
+		final IScenarioDataProvider scenarioDataProvider = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed,
+				speed, capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed,
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 
-		CustomScenarioCreator.createCanalAndCost(scenarioDataProvider, canalOption, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay,
-				NBOTravelRatePerDay, canalTransitTime);
+		CustomScenarioCreator.createCanalAndCost(scenarioDataProvider, canalOption, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost,
+				canalTransitFuelPerDay, NBOTravelRatePerDay, canalTransitTime);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenarioDataProvider);

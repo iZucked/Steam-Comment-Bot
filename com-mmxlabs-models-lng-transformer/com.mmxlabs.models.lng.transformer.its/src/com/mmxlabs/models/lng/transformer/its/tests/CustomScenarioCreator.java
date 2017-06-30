@@ -188,11 +188,11 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		PortModel portModel = scenarioModelBuilder.getPortModelBuilder().getPortModel();
 		if (!portModel.getPorts().contains(portA)) {
 			portModel.getPorts().add(portA);
-			portA.setTimeZone(timeZone);
+			portA.getLocation().setTimeZone(timeZone);
 		}
 		if (!portModel.getPorts().contains(portB)) {
 			portModel.getPorts().add(portB);
-			portB.setTimeZone(timeZone);
+			portB.getLocation().setTimeZone(timeZone);
 		}
 
 		if (!portA.getCapabilities().contains(PortCapability.LOAD)) {
@@ -212,8 +212,8 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		// Assuming we've created the default rout
 		final Route r = portModel.getRoutes().get(0);
 
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(portA, portB, r.getRouteOption(), AtoBDistances, false);
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(portB, portA, r.getRouteOption(), BtoADistances, false);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(portA, portB, r.getRouteOption(), AtoBDistances, false);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(portB, portA, r.getRouteOption(), BtoADistances, false);
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
 
-		final ZoneId dischargeZone = ZoneId.of(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
+		final ZoneId dischargeZone = dischargePort.getZoneId();
 
 		// Use load window for discharge as we will update it later once we have a fully built up load window start datetime
 		final Cargo cargo = scenarioModelBuilder.getCargoModelBuilder().makeCargo() //
@@ -303,9 +303,10 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final @NonNull Route canal = scenarioModelBuilder.getPortModelBuilder().createRoute(canalOption.getName(), canalOption);
+		scenarioModelBuilder.getDistanceModelBuilder().createDistanceMatrix(canalOption);
 
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(A, B, canalOption, distanceAToB, false);
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(B, A, canalOption, distanceBToA, false);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(A, B, canalOption, distanceAToB, false);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(B, A, canalOption, distanceBToA, false);
 
 		final FleetModel fleetModel = scenarioModelBuilder.getFleetModelBuilder().getFleetModel();
 		for (final Vessel vc : fleetModel.getVessels()) {

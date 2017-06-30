@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -194,9 +195,14 @@ public class PeriodTestUtils {
 	}
 
 	public static Port createPort(final LNGScenarioModel scenarioModel, final String name) {
+		final Location location= PortFactory.eINSTANCE.createLocation();
+		location.setName(name);
+		location.setMmxId(name);
+		location.setTimeZone("UTC");
+		
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);
-		port.setTimeZone("Etc/UTC");
+		port.setLocation(location);
 		scenarioModel.getReferenceModel().getPortModel().getPorts().add(port);
 		return port;
 	}
@@ -368,7 +374,7 @@ public class PeriodTestUtils {
 
 	public static CollectedAssignment createCollectedAssignment(final VesselAvailability vesselAvailability, final AssignableElement... elements) {
 
-		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability, null, null);
+		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability, null, null, null);
 	}
 
 	@NonNull
