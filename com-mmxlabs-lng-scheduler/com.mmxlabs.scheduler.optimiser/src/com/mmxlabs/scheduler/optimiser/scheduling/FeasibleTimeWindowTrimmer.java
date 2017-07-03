@@ -441,8 +441,9 @@ public class FeasibleTimeWindowTrimmer {
 								} else if (windowStartTime[index] > panamaBookingsProvider.getRelaxedBoundary()) {
 									// assume a Panama booking because it's far enough in the future
 									currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL);
-								} else if (windowStartTime[index - 1] + directTravelTime < windowEndTime[index] || windowStartTime[index - 1] + suezTravelTime < windowEndTime[index]
-										|| directTravelTime == panamaTravelTime) {
+								} else if (windowStartTime[index - 1] + directTravelTime < windowEndTime[index] || 
+										(windowStartTime[index - 1] + suezTravelTime < windowEndTime[index] && suezTravelTime != Integer.MAX_VALUE) || 
+										directTravelTime <= panamaTravelTime) {
 									// journey can be made direct (or it does not go across Panama)
 									travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
 									currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
