@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
@@ -88,6 +89,13 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	@Inject
 	private IOptimisationData optimisationData;
 
+	/**
+	 * Experimental parameter to limit the list of returned candidates.
+	 */
+	@com.google.inject.Inject(optional=true)
+	@Named("shuffleCutoff")
+	private int shuffleCutoff = 0;
+
 	@Inject
 	public void init() {
 		targetElements = new ArrayList<>(optimisationData.getSequenceElements().size());
@@ -110,7 +118,7 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	}
 
 	@Override
-	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
+	public IMove generateMove(@NonNull final ISequences rawSequences, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 
 		// TODO: Disable move generator completely in such cases
 		if (targetElements.isEmpty()) {
@@ -119,7 +127,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 
 		final ShuffleElementsBuilder builder = new ShuffleElementsBuilder();
 
-		// Set of elements already considered in our move. They should no longer be considered available or in the follower or preceders lists
+		// Set of elements already considered in our move. They should no longer
+		// be considered available or in the follower or preceders lists
 		final Set<@NonNull ISequenceElement> touchedElements = new HashSet<>();
 		final @NonNull ISequenceElement rawElement = RandomHelper.chooseElementFrom(random, targetElements);
 		final Pair<IResource, Integer> elementPosition = lookupManager.lookup(rawElement);
@@ -160,7 +169,9 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				// Element is also not used!
 				if (followerPosition.getFirst() == null) {
 
-					// If this is an unused FOB Sales , we can try to link the FOB sale to the purchase and remove the original discharge
+					// If this is an unused FOB Sales , we can try to link the
+					// FOB sale to the purchase and remove the original
+					// discharge
 					// TODO: Add similar case for FOB Sale
 					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(follower);
 					if (vesselAvailabilityForElement != null) {
@@ -170,7 +181,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 						if (!checkResource(element, precederResource)) {
 							continue;
 						}
-						// Use same offset (and insert in reverse order) as the builder code will correct for this.
+						// Use same offset (and insert in reverse order) as the
+						// builder code will correct for this.
 						builder.addFrom(null, followerPosition.getSecond(), follower);
 						builder.addTo(precederResource, 1, 1);
 						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
@@ -198,7 +210,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				final ISequenceElement followerMinus1 = followerSequence.get(followerPosition.getSecond() - 1);
 
 				if (followersAndPreceders.getValidFollowers(followerMinus1).contains(element)) {
-					// We can link the head and tail together directly - no need to do more.
+					// We can link the head and tail together directly - no need
+					// to do more.
 					builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 					builder.addTo(followerResource, followerPosition.getSecond(), 1);
 					foundMove = true;
@@ -231,7 +244,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 					{
 						final ISequenceElement candidate = l.get(random.nextInt(l.size()));
 						final Pair<IResource, Integer> candidatePosition = lookupManager.lookup(candidate);
-						// Finally! an element we can add to the sequence to make it valid.
+						// Finally! an element we can add to the sequence to
+						// make it valid.
 						builder.addFrom(null, candidatePosition.getSecond());
 						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 						builder.addTo(followerResource, followerPosition.getSecond(), 2);
@@ -257,7 +271,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				// Element is also not used!
 				if (precederPosition.getFirst() == null) {
 
-					// If this is an unused DES Purchase, we can try to link the DES purchase to the sale and remove the original load
+					// If this is an unused DES Purchase, we can try to link the
+					// DES purchase to the sale and remove the original load
 					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(preceder);
 					if (vesselAvailabilityForElement != null) {
 						// Should be an unused DES route
@@ -266,7 +281,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 						if (!checkResource(element, precederResource)) {
 							continue;
 						}
-						// Use same offset (and insert in reverse order) as the builder code will correct for this.
+						// Use same offset (and insert in reverse order) as the
+						// builder code will correct for this.
 						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 						builder.addTo(precederResource, 1, 1);
 						builder.addFrom(null, precederPosition.getSecond(), preceder);
@@ -296,7 +312,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				if (followersAndPreceders.getValidPreceders(precederPlus1).contains(element)) {
 					builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 					builder.addTo(precederResource, precederPosition.getSecond() + 1, 1);
-					// We can link the head and tail together directly - no need to do more.
+					// We can link the head and tail together directly - no need
+					// to do more.
 					foundMove = true;
 					break;
 				}
@@ -327,7 +344,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 					{
 						final ISequenceElement candidate = l.get(random.nextInt(l.size()));
 						final Pair<IResource, Integer> candidatePosition = lookupManager.lookup(candidate);
-						// Finally! an element we can add to the sequence to make it valid.
+						// Finally! an element we can add to the sequence to
+						// make it valid.
 						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 						builder.addFrom(null, candidatePosition.getSecond(), candidate);
 						builder.addTo(precederResource, precederPosition.getSecond() + 1, 2);
@@ -356,11 +374,14 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			final ISequenceElement elementPlus1 = elementSequence.get(elementPosition.getSecond() + 1);
 
 			if (followersAndPreceders.getValidFollowers(elementMinus1).contains(elementPlus1)) {
-				// We can link the head and tail together directly - no need to do more.
+				// We can link the head and tail together directly - no need to
+				// do more.
 				return builder.getMove();
 			}
 
-			// Head and tail cannot be joined together. We have three options. Find an unused element to insert into the gap, remove element - 1 or remove element + 1. If we remove the element,
+			// Head and tail cannot be joined together. We have three options.
+			// Find an unused element to insert into the gap, remove element - 1
+			// or remove element + 1. If we remove the element,
 			{
 				// Find optional element
 				final Set<@NonNull ISequenceElement> candidates = findPossibleUnusedElement(elementResource, followersAndPreceders.getValidFollowers(elementMinus1),
@@ -372,7 +393,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 					// pick random candidate
 					final ISequenceElement candidate = l.get(random.nextInt(l.size()));
 					final Pair<IResource, Integer> candidatePosition = lookupManager.lookup(candidate);
-					// Finally! an element we can add to the sequence to make it valid.
+					// Finally! an element we can add to the sequence to make it
+					// valid.
 					builder.addFrom(null, candidatePosition.getSecond(), candidate);
 					builder.addTo(elementResource, elementPosition.getSecond(), 1);
 
@@ -385,7 +407,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 			if (elementPosition.getSecond() >= 2) {
 				final ISequenceElement elementMinus2 = elementSequence.get(elementPosition.getSecond() - 2);
 				if (followersAndPreceders.getValidFollowers(elementMinus2).contains(elementPlus1)) {
-					// We can link the head and tail together directly - no need to do more.
+					// We can link the head and tail together directly - no need
+					// to do more.
 					if (removeOrBackfill(builder, elementMinus1, touchedElements, lookupManager, rawSequences, random)) {
 						touchedElements.add(elementMinus1);
 						return builder.getMove();
@@ -410,8 +433,9 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	}
 
 	private boolean removeOrBackfill(final ShuffleElementsBuilder builder, final @NonNull ISequenceElement target, final Set<@NonNull ISequenceElement> touchedElements,
-			final ILookupManager lookupManager, final ISequences rawSequences, Random random) {
-		// We can link the smaller head and tail together directly - need to do something the the extra element
+			final ILookupManager lookupManager, final ISequences rawSequences, final Random random) {
+		// We can link the smaller head and tail together directly - need to do
+		// something the the extra element
 		final Pair<IResource, Integer> targetPosition = lookupManager.lookup(target);
 		final IResource targetResource = targetPosition.getFirst();
 		if (optionalElementsProvider.isElementOptional(target) && random.nextBoolean()) {
@@ -451,7 +475,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				{
 					final ISequenceElement candidate = l.get(random.nextInt(l.size()));
 					final Pair<IResource, Integer> candidatePosition = lookupManager.lookup(candidate);
-					// Finally! an element we can add to the sequence to make it valid.
+					// Finally! an element we can add to the sequence to make it
+					// valid.
 					builder.addFrom(targetResource, targetPosition.getSecond(), target);
 					builder.addFrom(null, candidatePosition.getSecond(), candidate);
 					builder.addTo(resource, position.getSecond(), 2);
@@ -463,7 +488,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				}
 			}
 
-			// Did not find an option, so true to remove if optional (assumes the previous check resulted in false)
+			// Did not find an option, so true to remove if optional (assumes
+			// the previous check resulted in false)
 			if (optionalElementsProvider.isElementOptional(target)) {
 				// Can stick on unused elements list
 				builder.addFrom(targetResource, targetPosition.getSecond(), target);
@@ -502,7 +528,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				{
 					final ISequenceElement candidate = l.get(random.nextInt(l.size()));
 					final Pair<IResource, Integer> candidatePosition = lookupManager.lookup(candidate);
-					// Finally! an element we can add to the sequence to make it valid.
+					// Finally! an element we can add to the sequence to make it
+					// valid.
 					builder.addFrom(null, candidatePosition.getSecond(), candidate);
 					builder.addFrom(targetResource, targetPosition.getSecond(), target);
 					builder.addTo(resource, position.getSecond(), 2);
@@ -514,7 +541,8 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 				}
 			}
 
-			// Did not find an option, so true to remove if optional (assumes the previous check resulted in false)
+			// Did not find an option, so true to remove if optional (assumes
+			// the previous check resulted in false)
 			if (optionalElementsProvider.isElementOptional(target)) {
 				// Can stick on unused elements list
 				builder.addFrom(targetResource, targetPosition.getSecond(), target);
@@ -574,8 +602,11 @@ public class ShuffleElementsMoveHandler implements IMoveGenerator {
 	}
 
 	private List<@NonNull ISequenceElement> shuffleFollowers(final Followers<@NonNull ISequenceElement> followers, final Random random) {
-		final List<@NonNull ISequenceElement> l = Lists.newArrayList(followers);
+		List<@NonNull ISequenceElement> l = Lists.newArrayList(followers);
 		Collections.shuffle(l, random);
+		if (shuffleCutoff > 0) {
+			l = l.subList(0, Math.min(l.size(), shuffleCutoff));
+		}
 		return l;
 
 	}

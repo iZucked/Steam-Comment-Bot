@@ -24,10 +24,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -88,7 +85,7 @@ public class PriceIntervalProviderHelperTest {
 
 		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000 * 22.4));
-		final MutableTimeWindow loadSlotTimeWindow = new MutableTimeWindow(0,1);
+		final TimeWindow loadSlotTimeWindow = new TimeWindow(0,1);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
 		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
@@ -278,7 +275,7 @@ public class PriceIntervalProviderHelperTest {
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
-		portTimeWindowsRecord.setSlot(loadSlot, new MutableTimeWindow(0, 10), 24, 0);
+		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
@@ -330,7 +327,7 @@ public class PriceIntervalProviderHelperTest {
 		when(loadSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
-		portTimeWindowsRecord.setSlot(loadSlot, new MutableTimeWindow(0, 10), 24, 0);
+		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
 		portTimeWindowsRecord.setSlot(dischargeSlot, null, 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
@@ -397,8 +394,8 @@ public class PriceIntervalProviderHelperTest {
 		when(dischargeSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
 		when(dischargeSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
-		portTimeWindowsRecord.setSlot(loadSlot, new MutableTimeWindow(0, 10), 24, 0);
-		portTimeWindowsRecord.setSlot(dischargeSlot, new MutableTimeWindow(20, 30), 24, 0);
+		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
+		portTimeWindowsRecord.setSlot(dischargeSlot, new TimeWindow(20, 30), 24, 0);
 
 		final ILoadPriceCalculator loadPriceCalculator = Mockito.mock(ILoadPriceCalculator.class);
 		when(loadPriceCalculator.getEstimatedPurchasePrice(Matchers.<ILoadOption> any(), Matchers.<IDischargeOption> any(), Matchers.anyInt())).thenAnswer(new Answer<Integer>() {
@@ -488,8 +485,8 @@ public class PriceIntervalProviderHelperTest {
 		when(dischargeSlot.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
 		when(dischargeSlot.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 		final PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
-		portTimeWindowsRecord.setSlot(loadSlot, new MutableTimeWindow(0, 10), 24, 0);
-		portTimeWindowsRecord.setSlot(dischargeSlot, new MutableTimeWindow(20, 30), 24, 0);
+		portTimeWindowsRecord.setSlot(loadSlot, new TimeWindow(0, 10), 24, 0);
+		portTimeWindowsRecord.setSlot(dischargeSlot, new TimeWindow(20, 30), 24, 0);
 
 		final IPort portL = Mockito.mock(IPort.class);
 		final IPort portD = Mockito.mock(IPort.class);

@@ -72,7 +72,8 @@ public class RouletteWheelMoveGenerator implements IMoveGenerator {
 		final IMoveGenerator currentGenerator = moveMapper.getMoveHandler(rouletteWheel.spin(random));
 		if (!(currentGenerator instanceof ShuffleElementsMoveHandler)) {
 
-			int count = 1;
+			// Retry count. Experimental
+			int count = 0;
 			IMove move = currentGenerator.generateMove(rawSequences, stateManager, random);
 
 			while ((move instanceof NullMove || move == null) && count > 0) {
