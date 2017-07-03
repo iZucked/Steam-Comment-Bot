@@ -107,7 +107,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				.build();
 		return cargo;
 	}
-
+	
 	private VesselAvailability getDefaultVesselAvailability() {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
@@ -164,6 +164,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
 				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo));
+				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge), null);
 				assertTrue(checker.checkConstraints(manipulatedSequences, null));
 			}
 		});
@@ -587,7 +588,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-
+	
 	@Test
 	@Category({ MicroTest.class })
 	public void choosePanamaIfRelaxedTest() {
@@ -639,13 +640,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final IResource r0 = manipulatedSequences.getResources().get(0);
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
-
+				
 				assertEquals(AvailableRouteChoices.OPTIMAL, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
 				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
 			}
 		});
 	}
-
+	
 	@Test
 	@Category({ MicroTest.class })
 	public void marginTest() {
@@ -699,6 +700,183 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
+			}
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void windowEndTrimmingTest() {
+
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+
+		final Route panama = potentialPanama.get();
+
+		final EntryPoint colon = panama.getEntryA();
+
+		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Brownsville");
+		
+		@NonNull
+		final Port port3 = portFinder.findPort("Himeji");
+
+		// map into same timezone to make expectations easier
+		port1.setTimeZone("UTC");
+		port2.setTimeZone("UTC");
+
+		final LocalDateTime loadDate1 = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
+		final LocalDateTime dischargeDate1 = loadDate1.plusDays(2);
+		
+		final LocalDateTime loadDate2 = LocalDateTime.of(2017, Month.JUNE, 6, 0, 0, 0);
+		final LocalDateTime dischargeDate2 = loadDate2.plusDays(30);
+
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", loadDate1.toLocalDate(), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D1", dischargeDate1.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate1.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(5, TimePeriod.DAYS)//
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+		
+		final Cargo cargo2  =cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", loadDate2.toLocalDate(), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D2", dischargeDate2.toLocalDate(), port3, null, entity, "7") //
+				.withWindowStartTime(dischargeDate2.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS)//
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 2) //
+				.build(); 
+		
+		evaluateWithLSOTest(scenarioRunner -> {
+
+ 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+				@NonNull
+				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo, cargo2));
+//				SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
+				final IPortTimeWindowsRecord ptr_r0_cargo2 = records.get(r0).get(2);
+
+				assertEquals(76, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getSlots().get(1)).getExclusiveEnd());
+			}
+		});
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void noSuezDistanceAvailableTest() {
+
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		final Optional<Route> potentialSuez = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.SUEZ).findFirst();
+
+		final Route panama = potentialPanama.get();
+		final Route suez = potentialSuez.get();
+		
+		final EntryPoint colon = panama.getEntryA();
+
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
+
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Manzanillo");
+		
+		@NonNull
+		final Port portUnrelevant = portFinder.findPort("Brownsville");
+		
+		boolean removed = suez.getLines().removeIf(e -> e.getFrom().equals(port1) && e.getTo().equals(port2));
+		assert removed;
+		
+		boolean removed2 = suez.getLines().removeIf(e -> e.getFrom().equals(port2) && e.getTo().equals(port1));
+		assert removed2;
+
+		// map into same timezone to make expectations easier
+		port1.setTimeZone("UTC");
+		port2.setTimeZone("UTC");
+		
+		final LocalDateTime startDate = LocalDateTime.of(2017, Month.MAY, 15, 0, 0, 0);
+		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
+		final LocalDateTime dischargeDate = loadDate.plusDays(30);
+
+		final Cargo cargoUnrelevant = createFobDesCargo(vesselAvailability, port1, portUnrelevant, startDate, startDate.plusDays(6));
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", loadDate.toLocalDate(), port1, null, entity, "5") //
+				.withWindowStartTime(0) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.makeDESSale("D2", dischargeDate.toLocalDate(), port2, null, entity, "7") //
+				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
+				.withVisitDuration(24) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+ 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+				@NonNull
+				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargoUnrelevant, cargo));
+//				SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
+
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+				ScheduledTimeWindows schedule = scheduler.schedule(manipulatedSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = manipulatedSequences.getResources().get(0);
+
+				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(2);
+				assertNotNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
 			}
 		});
 	}
