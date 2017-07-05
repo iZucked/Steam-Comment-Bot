@@ -77,25 +77,39 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 					if (target instanceof LoadSlot) {
 
 						LoadSlot loadSlot = (LoadSlot) target;
+						Contract c = loadSlot.getContract();
+						boolean foundCurrent = false;
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
 							EObject second = value.getSecond();
+
 							if (((EReference) (second.eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getPurchaseContract())) {
 								ContractType contractType = ((Contract) second).getContractType();
 								if (loadSlot.isDESPurchase()) {
 									if (contractType == ContractType.DES || contractType == ContractType.BOTH) {
 										filteredList.add(value);
+										if (second == c) {
+											foundCurrent = true;
+										}
 									}
 								} else {
 									if (contractType == ContractType.FOB || contractType == ContractType.BOTH) {
 										filteredList.add(value);
+										if (second == c) {
+											foundCurrent = true;
+										}
 									}
 								}
 							}
 						}
+						if (c != null && !foundCurrent) {
+							filteredList.add(0, new Pair<>(c.getName(), c));
+						}
 						return addNullEntry(filteredList);
 					} else if (target instanceof DischargeSlot) {
 						DischargeSlot dischargeSlot = (DischargeSlot) target;
+						Contract c = dischargeSlot.getContract();
+						boolean foundCurrent = false;
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
 							EObject second = value.getSecond();
@@ -104,13 +118,22 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 								if (dischargeSlot.isFOBSale()) {
 									if (contractType == ContractType.FOB || contractType == ContractType.BOTH) {
 										filteredList.add(value);
+										if (second == c) {
+											foundCurrent = true;
+										}
 									}
 								} else {
 									if (contractType == ContractType.DES || contractType == ContractType.BOTH) {
 										filteredList.add(value);
+										if (second == c) {
+											foundCurrent = true;
+										}
 									}
 								}
 							}
+						}
+						if (c != null && !foundCurrent) {
+							filteredList.add(0, new Pair<>(c.getName(), c));
 						}
 						return addNullEntry(filteredList);
 					}
