@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -70,7 +71,12 @@ public final class ServiceHelper {
 
 	@SuppressWarnings("null")
 	public static <T, V, E extends Exception> V withOptionalService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
+		Bundle bundle = FrameworkUtil.getBundle(ServiceHelper.class);
+		if (bundle == null) {
+			// Non-OSGi codepath
+			return withFunc.apply((T) null);
+		}
+		final BundleContext bundleContext = bundle.getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {
 			final T service = bundleContext.getService(serviceReference);
