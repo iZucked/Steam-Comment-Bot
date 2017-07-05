@@ -106,7 +106,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
-	private final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
+	public final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
 
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		boolean ret = ((resources == null) || resources.contains(resource));
