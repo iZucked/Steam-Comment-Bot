@@ -10,6 +10,7 @@ Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-all;bundle-version="1.9.5",
  org.eclipse.swtbot.swt.finder,
  org.apache.log4j;bundle-version="1.2.15",
- org.eclipse.swtbot.junit4_x
+ org.eclipse.swtbot.junit4_x,
+ com.mmxlabs.models.lng.transformer.ui;bundle-version="[4.1.2,5.0.0)"
 Import-Package: com.mmxlabs.models.lng.pricing,
  com.mmxlabs.models.lng.spotmarkets

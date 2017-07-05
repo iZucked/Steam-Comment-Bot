@@ -100,7 +100,7 @@ public class LoadDischargePairValueCalculatorUnit {
 
 	@SuppressWarnings("null")
 	public LoadDischargePairValueCalculatorUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
@@ -111,7 +111,7 @@ public class LoadDischargePairValueCalculatorUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, constainAndFitnessSettings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, constraintAndFitnessSettings), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
@@ -143,19 +143,24 @@ public class LoadDischargePairValueCalculatorUnit {
 	}
 
 	public void run(final @NonNull CharterInMarket nominalMarket, @NonNull final IProgressMonitor monitor, final ProfitAndLossExtractor recorder) {
+		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+
+		final List<ILoadOption> loads = LoadDischargePairValueCalculator.findPurchases(optimisationData, portSlotProvider);
+		final List<IDischargeOption> discharges = LoadDischargePairValueCalculator.findSales(optimisationData, portSlotProvider);
+
+		run(nominalMarket, loads, discharges, monitor, recorder);
+	}
+	
+	public void run(final @NonNull CharterInMarket nominalMarket, final List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull final IProgressMonitor monitor, final ProfitAndLossExtractor recorder) {
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			try {
 				final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 				final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
-
-				final List<ILoadOption> loads = LoadDischargePairValueCalculator.findPurchases(optimisationData, portSlotProvider);
-				final List<IDischargeOption> discharges = LoadDischargePairValueCalculator.findSales(optimisationData, portSlotProvider);
 
 				// final CharterInMarket nominalMarket = stageSettings.getCharterInMarket();
 				final ISpotCharterInMarket o_nominalMarket = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(nominalMarket, ISpotCharterInMarket.class);
-				final Pair<CharterInMarket, Integer> key = new Pair<>(nominalMarket, -1);
 				for (final IResource resource : optimisationData.getResources()) {
 					final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 					if (vesselAvailability.getSpotCharterInMarket() == o_nominalMarket && vesselAvailability.getSpotIndex() == -1) {

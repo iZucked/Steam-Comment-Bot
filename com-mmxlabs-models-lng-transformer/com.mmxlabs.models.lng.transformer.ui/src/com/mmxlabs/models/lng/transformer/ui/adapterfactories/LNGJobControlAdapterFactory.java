@@ -7,6 +7,10 @@ package com.mmxlabs.models.lng.transformer.ui.adapterfactories;
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.models.lng.transformer.longterm.LNGLongTermJobDescriptor;
+import com.mmxlabs.models.lng.transformer.longterm.LNGSchedulerLongTermJobControl;
+import com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerJobControl;
+import com.mmxlabs.models.lng.transformer.longterm.LightWeightSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGRunAllSimilarityJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGRunMultipleSeedsJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerEvaluationJobControl;
@@ -67,6 +71,12 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 		} else if (adaptableObject instanceof CreateActionableSetPlanJobDescriptor) {
 			final CreateActionableSetPlanJobDescriptor descriptor = (CreateActionableSetPlanJobDescriptor) adaptableObject;
 			return (T) new CreateActionableSetPlanJobControl(descriptor);
+		} else if (adaptableObject instanceof LNGLongTermJobDescriptor) {
+			final LNGLongTermJobDescriptor descriptor = (LNGLongTermJobDescriptor) adaptableObject;
+			return (T) new LNGSchedulerLongTermJobControl(descriptor);
+		} else if (adaptableObject instanceof LightWeightSchedulerJobDescriptor) {
+			final LightWeightSchedulerJobDescriptor descriptor = (LightWeightSchedulerJobDescriptor) adaptableObject;
+			return (T) new LightWeightSchedulerJobControl(descriptor);
 		}
 		return (T) null;
 

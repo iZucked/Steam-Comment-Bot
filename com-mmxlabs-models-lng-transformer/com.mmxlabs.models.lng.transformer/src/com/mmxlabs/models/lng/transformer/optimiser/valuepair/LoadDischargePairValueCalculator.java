@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -77,6 +79,15 @@ public class LoadDischargePairValueCalculator {
 				constraintChecker.checkConstraints(initialRawSequences, null);
 			}
 		}
+		modifyConstraintCheckers(constraintCheckers);
+	}
+
+	private void modifyConstraintCheckers(@NonNull List<@NonNull IPairwiseConstraintChecker> constraints) {
+		for (IPairwiseConstraintChecker checker : constraints) {
+			if (checker instanceof TravelTimeConstraintChecker) {
+				((TravelTimeConstraintChecker) checker).setMaxLateness(0);
+			}
+		}
 	}
 
 	private boolean isValidPair(final ILoadOption load, final IDischargeOption discharge, final IVesselAvailability vessel) {
@@ -86,6 +97,7 @@ public class LoadDischargePairValueCalculator {
 		}
 		for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel))) {
+				checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel));
 				return false;
 			}
 		}
@@ -174,10 +186,10 @@ public class LoadDischargePairValueCalculator {
 			if (result != null) {
 				recorder.record(loadOption, dischargeOption, vesselAvailability, result);
 			} else {
-				System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
+//				System.out.printf("Failed Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
 			}
 		} else {
-			System.out.printf("Invalid Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
+//			System.out.printf("Invalid Pair %s -> %s\n", loadOption.getId(), dischargeOption.getId());
 		}
 	}
 }
