@@ -289,7 +289,45 @@ public final class ModelRecord {
 	}
 
 	public void revert() {
-		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
+		// Wait a little for reference to get closed
+		for (int i = 0; i < 100; ++i) {
+			System.gc();
+			if (referencesList.isEmpty()) {
+				break;
+			} else {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+		dumpReferences();
+
+		try {
+			referenceLock.lock();
+			referenceCount = 0;
+			if (referenceCount == 0) {
+				// Release strong reference
+				if (data != null) {
+					for (final IScenarioLockListener l : lockListeners) {
+						data.getLock().removeLockListener(l);
+					}
+					for (final IScenarioDirtyListener l : dirtyListeners) {
+						data.removeDirtyListener(l);
+					}
+					SSDataManager.Instance.runPostChangeHooks(this, PostChangeType.UNLOAD);
+					sharedReference.close();
+					sharedReference = null;
+					data.close();
+				}
+				data = null;
+				// Reset validation status
+				validationStatus = Status.OK_STATUS;
+			}
+			cleanupReferencesList();
+		} finally {
+			referenceLock.unlock();
+		}
 	}
 
 	public ScenarioInstance getScenarioInstance() {

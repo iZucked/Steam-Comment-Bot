@@ -57,23 +57,24 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 							@NonNull
 							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
-							@Nullable
-							ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("RevertScenarioCommandHandler");
-							if (modelReference != null) {
-								try {
-									modelReference.executeWithLock(() -> {
-
-										ScenarioServiceModelUtils.closeReferences(scenarioInstance);
-										modelRecord.revert();
-//										// Set to false
-//										scenarioInstance.setDirty(false);
-//										// Force unload.
-//										scenarioInstance.unload();
-									});
-								} finally {
-									modelReference.close();
-								}
-							}
+							ScenarioServiceModelUtils.closeReferences(scenarioInstance);
+							modelRecord.revert();
+							
+//							@Nullable
+//							ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("RevertScenarioCommandHandler");
+//							if (modelReference != null) {
+//								try {
+//									modelReference.executeWithLock(() -> {
+//
+////										// Set to false
+////										scenarioInstance.setDirty(false);
+////										// Force unload.
+////										scenarioInstance.unload();
+//									});
+//								} finally {
+//									modelReference.close();
+//								}
+//							}
 						}
 					}
 				}
