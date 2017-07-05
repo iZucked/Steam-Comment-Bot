@@ -4,12 +4,13 @@
  */
 package com.mmxlabs.lingo.its.uat.suite.cases;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public abstract class AbstractUATCase {
 
-	public String lingoFilePath;
-	
-	public AbstractUATCase(String lingoFilePath) {
+	public final @NonNull String lingoFilePath;
+
+	public AbstractUATCase(final @NonNull String lingoFilePath) {
 		this.lingoFilePath = lingoFilePath;
 	}
-
 }

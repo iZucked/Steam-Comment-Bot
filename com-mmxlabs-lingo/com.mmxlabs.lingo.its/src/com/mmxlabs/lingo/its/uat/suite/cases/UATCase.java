@@ -4,11 +4,13 @@
  */
 package com.mmxlabs.lingo.its.uat.suite.cases;
 
-public class UATCase extends AbstractUATCase{
+import org.eclipse.jdt.annotation.NonNull;
 
-	public String cargoName;
-	
-	public UATCase(String lingoFilePath, String cargoName) {
+public class UATCase extends AbstractUATCase {
+
+	public final @NonNull String cargoName;
+
+	public UATCase(final @NonNull String lingoFilePath, final @NonNull String cargoName) {
 		super(lingoFilePath);
 		this.cargoName = cargoName;
 	}
