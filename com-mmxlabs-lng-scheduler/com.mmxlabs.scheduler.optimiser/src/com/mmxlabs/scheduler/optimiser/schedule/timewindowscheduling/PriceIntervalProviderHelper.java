@@ -321,7 +321,7 @@ public class PriceIntervalProviderHelper {
 	 *            TODO
 	 * @return
 	 */
-	public long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor,
+	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor,
 			final int baseFuelPrice, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
 		final VesselState vesselState;
 		if (isLaden) {

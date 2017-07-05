@@ -20,6 +20,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -29,13 +32,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * Constraint checker to limit the length of laden legs to avoid excessively long voyages. This checks the the minimum travel time (based on end of load window to start of discharge window) does not
- * exceed a specified limit (e.g. 60 days). This value should be made large enough to cover the load duration, travel time and option to delay discharge until the next pricing month.
+ * Constraint checker to prevent min/max volume violations
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  *
  */
-public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecker {
+public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 
 	@NonNull
 	private final String name;
@@ -54,7 +56,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	private final int maxLadenDuration = 60 * 24;
 
-	public LadenLegLimitConstraintChecker(@NonNull final String name) {
+	public MinMaxVolumeChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -89,13 +91,12 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 		prev = cur = null;
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
 
 		while (iter.hasNext()) {
 			prev = cur;
 			cur = iter.next();
 			if (prev != null && cur != null) {
-				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed)) {
+				if (!checkPairwiseConstraint(prev, cur, resource)) {
 					return false;
 				}
 			}
@@ -113,23 +114,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	}
 
-	@Override
-	/**
-	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
-	 * 
-	 * @param e1
-	 * @param e2
-	 * @param resource
-	 *            the vessel in question
-	 * @return
-	 */
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
-	}
-
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -144,19 +129,23 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			return true;
 		}
 
-		if (slot1.getPortType() == PortType.Load && slot2.getPortType() == PortType.Discharge) {
-			final ITimeWindow tw1 = slot1.getTimeWindow();
-			final ITimeWindow tw2 = slot2.getTimeWindow();
-
-			if ((tw1 == null) || (tw2 == null)) {
-				return true; // if the time windows are null, there is no effective constraint
+		if (slot1 instanceof ILoadOption && slot2 instanceof IDischargeOption) {
+			ILoadOption load = (ILoadOption) slot1;
+			IDischargeOption discharge = (IDischargeOption) slot2;
+			if (load.getId().contains("SC_31") || discharge.getId().contains("ENARSA-T-Esc-1-1")) {
+				int z = 0;
 			}
-
-			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
+			long minLoadVolumeMMBTU = load.getMinLoadVolumeMMBTU();
+			long maxDischargeVolumeMMBTU = discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue());
+			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselAvailability.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
+				// min > max
+				return false;
+			}
+			if (load.getMaxLoadVolumeMMBTU() < discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue())) {
+				// max < max
 				return false;
 			}
 		}
-
 		return true;
 	}
 
