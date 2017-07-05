@@ -25,7 +25,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
@@ -65,10 +67,11 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
 
 		// This should get the cached loader instance
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		fixSpotMarketGroups(loader, model);
 
@@ -82,7 +85,7 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 	}
 
-	protected void fixSpotMarketGroups(MetamodelLoader loader, EObject model) {
+	protected void fixSpotMarketGroups(final MetamodelLoader loader, final EObject model) {
 
 		final EPackage scenarioModelPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EClass lngScenarioModel_Class = MetamodelUtils.getEClass(scenarioModelPackage, "LNGScenarioModel");
@@ -101,25 +104,25 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 		final EAttribute spotMarketsGroup_type = MetamodelUtils.getAttribute(SpotMarketGroup_Class, "type");
 
-		EObject spotMarketsModel = (EObject) model.eGet(lngScenarioModel_spotMarketsModel_Reference);
+		final EObject spotMarketsModel = (EObject) model.eGet(lngScenarioModel_spotMarketsModel_Reference);
 
 		if (spotMarketsModel.eGet(spotMarketsModel_desPurchases_group) == null) {
-			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			final EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
 			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESPurchase"));
 			spotMarketsModel.eSet(spotMarketsModel_desPurchases_group, group);
 		}
 		if (spotMarketsModel.eGet(spotMarketsModel_desSales_group) == null) {
-			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			final EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
 			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESSale"));
 			spotMarketsModel.eSet(spotMarketsModel_desSales_group, group);
 		}
 		if (spotMarketsModel.eGet(spotMarketsModel_fobPurchases_group) == null) {
-			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			final EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
 			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBPurchase"));
 			spotMarketsModel.eSet(spotMarketsModel_fobPurchases_group, group);
 		}
 		if (spotMarketsModel.eGet(spotMarketsModel_fobSales_group) == null) {
-			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			final EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
 			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBSale"));
 			spotMarketsModel.eSet(spotMarketsModel_fobSales_group, group);
 		}

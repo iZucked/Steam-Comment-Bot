@@ -4,24 +4,19 @@
  */
 package com.mmxlabs.models.lng.scenario.ui;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXResultRoot;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.IDefaultScenarioResultProvider;
 
 public class LNGScenarioResultProvider implements IDefaultScenarioResultProvider {
 
 	@Override
-	public @Nullable MMXResultRoot getDefaultResult(final ScenarioInstance scenarioInstance) {
-		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+	public @Nullable MMXResultRoot getDefaultResult(final ScenarioModelRecord modelRecord) {
 		try (ModelReference ref = modelRecord.aquireReference("LNGScenarioResultProvider")) {
 			final Object instance = ref.getInstance();
 			if (instance instanceof LNGScenarioModel) {

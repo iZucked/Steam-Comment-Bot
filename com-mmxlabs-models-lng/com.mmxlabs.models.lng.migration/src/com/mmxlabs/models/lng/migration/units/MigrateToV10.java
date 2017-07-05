@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -55,11 +56,11 @@ public class MigrateToV10 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(MigrationModelRecord modelRecord) {
 		// This should get the cached loader instance
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
 
-		migrateEntityBooksl(loader, model);
+		migrateEntityBooksl(loader, modelRecord.getModelRoot());
 	}
 
 	protected void migrateEntityBooksl(final MetamodelLoader loader, final EObject model) {

@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
-import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 
 /**
  * @author hinton
@@ -30,18 +30,12 @@ public class DuplicateAction extends ScenarioModifyingAction {
 	@Override
 	public void run() {
 		final IStructuredSelection selection = (IStructuredSelection) getLastSelection();
-		final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
-		dcd.setReturnDuplicates(true);
+		DetailCompositeDialogUtil.editInlock(part, () -> {
+			final DetailCompositeDialog dcd = new DetailCompositeDialog(part.getShell(), part.getDefaultCommandHandler());
+			dcd.setReturnDuplicates(true);
+			return dcd.open(part, part.getRootObject(), selection.toList());
 
-		final ScenarioLock editorLock = part.getEditorLock();
-		editorLock.lock();
-		try {
-			part.setDisableUpdates(true);
-			dcd.open(part, part.getRootObject(), selection.toList());
-		} finally {
-			part.setDisableUpdates(false);
-			editorLock.unlock();
-		}
+		});
 	}
 
 	@Override

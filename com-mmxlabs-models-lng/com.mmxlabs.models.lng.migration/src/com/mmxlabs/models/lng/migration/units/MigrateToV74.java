@@ -7,12 +7,10 @@ package com.mmxlabs.models.lng.migration.units;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
-import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 public class MigrateToV74 extends AbstractMigrationUnit {
 
@@ -32,7 +30,9 @@ public class MigrateToV74 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final EObjectWrapper model = modelRecord.getModelRoot();
+
 		final EObjectWrapper referenceModel = model.getRef("referenceModel");
 		final EObjectWrapper spotMarketsModel = referenceModel.getRef("spotMarketsModel");
 		if (spotMarketsModel == null) {

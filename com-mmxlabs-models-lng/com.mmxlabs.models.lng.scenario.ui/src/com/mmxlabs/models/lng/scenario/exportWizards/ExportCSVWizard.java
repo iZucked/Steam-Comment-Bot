@@ -15,7 +15,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -33,9 +32,9 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultExportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  * Export the selected scenario to the filesystem somehow.
@@ -43,7 +42,6 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
  * @author hinton
  * 
  */
-
 
 public class ExportCSVWizard extends Wizard implements IExportWizard {
 
@@ -53,12 +51,10 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
-	
+
 		setWindowTitle("CSV Export Wizard");
 		exportPage = new ExportCSVWizardPage(selection);
 	}
-	
-	
 
 	@Override
 	public boolean performFinish() {
@@ -66,67 +62,60 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		final Collection<ScenarioInstance> instances = exportPage.getScenarioInstance();
 		final char delimiter = exportPage.getCsvDelimiter();
 		final char decimalSeparator = exportPage.getDecimalSeparator();
-		
-		exportInformation info = new exportInformation();
+
+		final exportInformation info = new exportInformation();
 		info.outputDirectory = outputDirectory;
 		info.instances = instances;
 		info.delimiter = delimiter;
 		info.decimalSeparator = decimalSeparator;
-		
+
 		exportData(info);
 		return true;
 	}
-	
-	public class exportInformation{
+
+	public class exportInformation {
 		public File outputDirectory;
-		
+
 		public Collection<ScenarioInstance> instances;
 		public char delimiter;
 		public char decimalSeparator;
 	}
-		
-	public boolean exportData(exportInformation info){
-		
-		Collection<ScenarioInstance> instances = info.instances;
-		
+
+	public boolean exportData(final exportInformation info) {
+
+		final Collection<ScenarioInstance> instances = info.instances;
+
 		final boolean createExportDirectories = instances.size() > 1;
 		for (final ScenarioInstance instance : instances) {
 			// Release reference on block exit
 			@NonNull
-			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-			try (final ModelReference modelReference = modelRecord.aquireReference("ExportCSVWizard")) {
-
-				final EObject rootObject = modelReference.getInstance();
-				
-				String name = instance.getName();
-
-				if (rootObject instanceof LNGScenarioModel) {
-					System.out.println(instance);
-					exportScenario((LNGScenarioModel) rootObject,info, createExportDirectories, name );
-				}
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ExportCSVWizard")) {
+				final String name = instance.getName();
+				exportScenario(scenarioDataProvider, info, createExportDirectories, name);
 			}
 		}
 		exportPage.saveDirectorySetting();
 
 		return true;
 	}
-	
-	public void exportScenario(LNGScenarioModel rootObject, exportInformation info, boolean createExportDirectories, String name ){
-		
-		File outputDirectory = info.outputDirectory;
 
-//		Collection<ScenarioInstance> instances = info.instances;
-		char delimiter = info.delimiter;
-		char decimalSeparator = info.decimalSeparator;
-		
-		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-		final IMMXExportContext context = new DefaultExportContext(scenarioModel, decimalSeparator);
-		final File directory = createExportDirectories ? new File(outputDirectory, name ) : outputDirectory;
+	public void exportScenario(final IScenarioDataProvider scenarioDataProvider, final exportInformation info, final boolean createExportDirectories, final String name) {
+
+		final File outputDirectory = info.outputDirectory;
+
+		// Collection<ScenarioInstance> instances = info.instances;
+		final char delimiter = info.delimiter;
+		final char decimalSeparator = info.decimalSeparator;
+
+		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		final IMMXExportContext context = new DefaultExportContext(scenarioModel, scenarioDataProvider, decimalSeparator);
+		final File directory = createExportDirectories ? new File(outputDirectory, name) : outputDirectory;
 		if (!directory.exists()) {
 			if (!directory.mkdirs()) {
 				System.out.println("No Dir");
 				MessageDialog.openError(getShell(), "Export error", "Unable to create target directory");
-//				return false;
+				// return false;
 			}
 		}
 
@@ -165,7 +154,6 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		}
 	}
 
-	
 	private List<UUIDObject> getSubModels(final LNGScenarioModel scenarioModel) {
 		final List<UUIDObject> subModels = new ArrayList<UUIDObject>();
 

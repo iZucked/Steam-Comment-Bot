@@ -18,7 +18,9 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
@@ -56,7 +58,7 @@ public class MigrateToV24 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
 
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
 
@@ -102,6 +104,8 @@ public class MigrateToV24 extends AbstractMigrationUnit {
 
 		final List<EObject> charterInMarkets = new LinkedList<>();
 		final List<EObject> charterOutMarkets = new LinkedList<>();
+
+		EObjectWrapper model = modelRecord.getModelRoot();
 
 		final EObject spotMarketModel = (EObject) model.eGet(reference_LNGScenarioModel_spotMarketsModel);
 		if (spotMarketModel == null) {

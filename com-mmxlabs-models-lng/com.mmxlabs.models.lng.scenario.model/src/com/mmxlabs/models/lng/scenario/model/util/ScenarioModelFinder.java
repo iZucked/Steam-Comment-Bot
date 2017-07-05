@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.pricing.util.CostModelFinder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * 
@@ -32,6 +33,10 @@ public final class ScenarioModelFinder {
 	private final @NonNull SpotMarketsModelFinder spotMarketsModelFinder;
 	private final @NonNull CargoModelFinder cargoModelFinder;
 	// private final @NonNull ActualsModelFinder actualsModelFinder;
+
+	public ScenarioModelFinder(final @NonNull IScenarioDataProvider scenarioDataProvider) {
+		this(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+	}
 
 	public ScenarioModelFinder(final @NonNull LNGScenarioModel lngScenarioModel) {
 		this.lngScenarioModel = lngScenarioModel;

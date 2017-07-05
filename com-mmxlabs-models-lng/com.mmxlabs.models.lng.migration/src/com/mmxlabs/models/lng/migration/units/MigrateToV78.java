@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
-import com.mmxlabs.models.migration.utils.EObjectWrapper;
-import com.mmxlabs.models.migration.utils.MetamodelLoader;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 
 public class MigrateToV78 extends AbstractMigrationUnit {
 
@@ -27,7 +28,7 @@ public class MigrateToV78 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final @NonNull MigrationModelRecord modelRecord) {
 
 	}
 }

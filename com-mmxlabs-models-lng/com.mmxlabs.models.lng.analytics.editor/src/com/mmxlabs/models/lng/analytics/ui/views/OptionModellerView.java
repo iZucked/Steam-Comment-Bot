@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
@@ -119,34 +120,26 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private EmbeddedReportComponent econsComponent;
 	private EmbeddedReportComponent pnlDetailsComponent;
-	private WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>> navigationHistory = new WeakHashMap<>();
+	private final WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>> navigationHistory = new WeakHashMap<>();
 	private WeakReference<OptionAnalysisModel> currentRoot = null;
-	
+
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false));
 		validationSupport.setValidationTargets(Collections.singleton(getModel()));
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
-//		Composite dummy = new Composite(parent, SWT.BORDER);
-//		dummy.setLayoutData(GridDataFactory.swtDefaults()//
-//				.grab(false, true)//
-//				.span(0,1)
-//				.align(SWT.CENTER,SWT.TOP)
-//				.create());
+
 		mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
 				.grab(true, true)//
-				.align(SWT.CENTER,SWT.TOP)
-				.span(1,1)
-				.create());
+				.align(SWT.CENTER, SWT.TOP).span(1, 1).create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(5) //
 				.spacing(0, 0) //
-//				.margins(100, 0)//
 				.create());
 
 		{
@@ -225,7 +218,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.align(SWT.FILL, SWT.FILL) //
 					.span(1, 1) //
 					.create());
-//			centralScrolledComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 20).create());
+			// centralScrolledComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 20).create());
 			centralScrolledComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 			centralScrolledComposite.setLayout(new GridLayout());
@@ -242,13 +235,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.span(1, 1) //
 					.align(SWT.FILL, SWT.FILL).create());
 
-			centralComposite.setLayout(GridLayoutFactory.fillDefaults()
-					.equalWidth(true) //
+			centralComposite.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true) //
 					.numColumns(1) //
 					.spacing(0, 20) //
-//					.margins(100, 0)//
 					.create());
-			
+
 			final IExpansionListener centralExpansionListener = new ExpansionAdapter() {
 
 				@Override
@@ -258,7 +249,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			};
 
-//			centralComposite.setLayout(new GridLayout(1, true));
 			final BiConsumer<AbstractSandboxComponent, Boolean> hook = (component, expand) -> {
 				component.createControls(centralComposite, expand, centralExpansionListener, OptionModellerView.this);
 				inputWants.addAll(component.getInputWants());
@@ -321,18 +311,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			{
 
-//				pnlDetailsComponent = new EmbeddedReportComponent(OptionModellerView.this, validationErrors, () -> getModel(), "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "P&&L",
-//						getViewSite(), childContext -> {
-//							final Options options = new Options("pnl", null, false);
-//							childContext.set(Options.class, options);
-//						});
-//				pnlDetailsComponent.createControls(rhsComposite, false, rhsExpansionListener, OptionModellerView.this);
-//				inputWants.addAll(pnlDetailsComponent.getInputWants());
-//				disposables.add(() -> pnlDetailsComponent.dispose());
+				// pnlDetailsComponent = new EmbeddedReportComponent(OptionModellerView.this, validationErrors, () -> getModel(), "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport",
+				// "P&&L",
+				// getViewSite(), childContext -> {
+				// final Options options = new Options("pnl", null, false);
+				// childContext.set(Options.class, options);
+				// });
+				// pnlDetailsComponent.createControls(rhsComposite, false, rhsExpansionListener, OptionModellerView.this);
+				// inputWants.addAll(pnlDetailsComponent.getInputWants());
+				// disposables.add(() -> pnlDetailsComponent.dispose());
 
 			}
 		}
-	
 
 		final IActionBars actionBars = getViewSite().getActionBars();
 
@@ -346,7 +336,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 
 		updateActions(getEditingDomain());
-		
+
 		listenToScenarioSelection();
 
 		packAll(mainComposite);
@@ -360,7 +350,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		updateActions(getEditingDomain());
 	}
 
-	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable OptionAnalysisModel model) {
+	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable final OptionAnalysisModel model) {
 
 		if (errorLabel != null) {
 			errorLabel.dispose();
@@ -396,7 +386,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					setModel(null);
 					createNewLink = new Link(mainComposite.getParent(), SWT.NONE);
 					createNewLink.addListener(SWT.Selection, new Listener() {
-					      public void handleEvent(Event event) {
+
+						@Override
+						public void handleEvent(final Event event) {
 							final OptionAnalysisModel model = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
 
 							model.setName("New sandbox");
@@ -409,33 +401,21 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 							getEditingDomain().getCommandStack().execute(cmd);
 
 							doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), model);
-							
 						}
 					});
-//					createNewLink.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-//					createNewLink.setText("No sandbox selected");
 					createNewLink.setText("<A>Create new sandbox</A>");
 					createNewLink.setToolTipText("Create new sandbox");
-//					createNewLink.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-//
-//					createNewLink.addMouseListener(new MouseAdapter() {
-//						@Override
-//						public void mouseDown(MouseEvent e) {
-//
-//						
-//						}
-//					});
 
 					mainComposite.setVisible(false);
 					mainComposite.getParent().layout(true);
 					setInput(null);
 					return;
 				} else {
-					WeakReference<OptionAnalysisModel> root = getCurrentRoot();
+					final WeakReference<OptionAnalysisModel> root = getCurrentRoot();
 					if (root == null || (root != null && root.get() == null)) {
 						setCurrentRoot(new WeakReference<OptionAnalysisModel>(analyticsModel.getOptionModels().get(0)));
 					}
-					WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(getCurrentRoot().get());
+					final WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(getCurrentRoot().get());
 					setModel(modelToUse == null || (modelToUse != null && modelToUse.get() == null) ? rootOptionsModel : modelToUse.get());
 				}
 			}
@@ -445,6 +425,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private final EContentAdapter historyRenameAdaptor = new EContentAdapter() {
+		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME && notification.getNotifier() instanceof OptionAnalysisModel) {
@@ -457,6 +438,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	 * If the current model is deleted, then clear the input
 	 */
 	private final EContentAdapter deletedOptionModelAdapter = new EContentAdapter() {
+		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
@@ -505,6 +487,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		/**
 		 * @since 2.2
 		 */
+		@Override
 		protected void missedNotifications(final List<Notification> missed) {
 			doValidate();
 
@@ -606,7 +589,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		this.setModel(model);
 
-		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false));
 		if (model != null) {
 			validationSupport.setValidationTargets(Collections.singleton(model));
 		} else {
@@ -625,7 +608,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			rootOptionsModel.eAdapters().add(historyRenameAdaptor);
 			optionsModelComponent.setInput(Collections.singleton(rootOptionsModel));
 			// create a weak reference to avoid memory leaks
-			WeakReference<OptionAnalysisModel> weakReferenceToModel = new WeakReference<>(model);
+			final WeakReference<OptionAnalysisModel> weakReferenceToModel = new WeakReference<>(model);
 			navigationHistory.put(rootOptionsModel, weakReferenceToModel);
 		}
 
@@ -933,14 +916,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return currentRoot;
 	}
 
-	public void setCurrentRoot(WeakReference<OptionAnalysisModel> currentRoot) {
+	public void setCurrentRoot(final WeakReference<OptionAnalysisModel> currentRoot) {
 		this.currentRoot = currentRoot;
 	}
-	
-//	public WeakReference<OptionAnalysisModel> findReferenceToRoot(OptionAnalysisModel root) {
-//		for (OptionAnalysisModel optionAnalysisModel : navigationHistory.) {
-//			if (optionAnalysisModel == root) {
-//		}
-//	}
+
+	// public WeakReference<OptionAnalysisModel> findReferenceToRoot(OptionAnalysisModel root) {
+	// for (OptionAnalysisModel optionAnalysisModel : navigationHistory.) {
+	// if (optionAnalysisModel == root) {
+	// }
+	// }
 
 }

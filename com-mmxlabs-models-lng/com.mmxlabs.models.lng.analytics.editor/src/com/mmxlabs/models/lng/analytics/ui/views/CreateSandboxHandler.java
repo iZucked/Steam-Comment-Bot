@@ -40,7 +40,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
@@ -61,7 +61,7 @@ public class CreateSandboxHandler extends AbstractHandler {
 				if (obj instanceof ScenarioInstance) {
 
 					final ScenarioInstance instance = (ScenarioInstance) obj;
-					final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
 					try (ModelReference reference = modelRecord.aquireReference("CreateSandboxHandler")) {
 						final EObject rootObject = reference.getInstance();

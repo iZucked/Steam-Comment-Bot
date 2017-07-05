@@ -17,14 +17,15 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 /**
  */
 public class MigrateToV4 extends AbstractMigrationUnit {
-
 
 	@Override
 	public String getScenarioContext() {
@@ -58,7 +59,8 @@ public class MigrateToV4 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		// This should get the cached loader instance
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);

@@ -90,6 +90,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -905,6 +906,11 @@ public class CreateStripDialog extends FormDialog {
 			@Override
 			public AdapterFactory getAdapterFactory() {
 				return original.getAdapterFactory();
+			}
+
+			@Override
+			public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+				return original.getScenarioDataProvider();
 			}
 		};
 	}

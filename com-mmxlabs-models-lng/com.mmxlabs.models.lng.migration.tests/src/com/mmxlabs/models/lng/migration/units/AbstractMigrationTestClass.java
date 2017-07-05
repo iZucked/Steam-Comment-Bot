@@ -14,8 +14,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipherProvider;
 
 public abstract class AbstractMigrationTestClass {
 

@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * 
@@ -61,8 +62,12 @@ public final class ScenarioModelBuilder {
 		rootObject.setReferenceModel(referenceModel);
 
 		return new ScenarioModelBuilder(rootObject);
-
 	}
+	
+	public ScenarioModelBuilder(final @NonNull IScenarioDataProvider scenarioDataProvider) {
+		this(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+	}
+	
 
 	public ScenarioModelBuilder(final @NonNull LNGScenarioModel lngScenarioModel) {
 		this.lngScenarioModel = lngScenarioModel;

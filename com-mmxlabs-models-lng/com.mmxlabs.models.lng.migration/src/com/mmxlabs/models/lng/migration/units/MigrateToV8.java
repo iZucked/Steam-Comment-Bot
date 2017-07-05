@@ -25,14 +25,15 @@ import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 /**
  */
 public class MigrateToV8 extends AbstractMigrationUnit {
-
 
 	@Override
 	public String getScenarioContext() {
@@ -66,7 +67,9 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final EObjectWrapper model = modelRecord.getModelRoot();
+
 		// This should get the cached loader instance
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
 
@@ -157,14 +160,14 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		final EClass class_FleetModel = MetamodelUtils.getEClass(package_FleetModel, "FleetModel");
 		final EClass class_ScenarioFleetModel = MetamodelUtils.getEClass(package_FleetModel, "ScenarioFleetModel");
-//		final EClass class_fleet_VesselAvailability = MetamodelUtils.getEClass(package_FleetModel, "VesselAvailability");
-//		final EClass class_fleet_AssignableElement = MetamodelUtils.getEClass(package_FleetModel, "AssignableElement");
-//		final EClass class_fleet_VesselEvent = MetamodelUtils.getEClass(package_FleetModel, "VesselEvent");
+		// final EClass class_fleet_VesselAvailability = MetamodelUtils.getEClass(package_FleetModel, "VesselAvailability");
+		// final EClass class_fleet_AssignableElement = MetamodelUtils.getEClass(package_FleetModel, "AssignableElement");
+		// final EClass class_fleet_VesselEvent = MetamodelUtils.getEClass(package_FleetModel, "VesselEvent");
 		final EClass class_fleet_DryDockEvent = MetamodelUtils.getEClass(package_FleetModel, "DryDockEvent");
 		final EClass class_fleet_MaintenanceEvent = MetamodelUtils.getEClass(package_FleetModel, "MaintenanceEvent");
 		final EClass class_fleet_CharterOutEvent = MetamodelUtils.getEClass(package_FleetModel, "CharterOutEvent");
 
-//		final EEnum enum_fleet_VesselType = MetamodelUtils.getEEnum(package_FleetModel, "VesselType");
+		// final EEnum enum_fleet_VesselType = MetamodelUtils.getEEnum(package_FleetModel, "VesselType");
 		final EClass class_fleet_VesselTypeGroup = MetamodelUtils.getEClass(package_FleetModel, "VesselTypeGroup");
 
 		final EAttribute attribute_fleet_VesselTypeGroup_vesselType = MetamodelUtils.getAttribute(class_fleet_VesselTypeGroup, "vesselType");
@@ -177,8 +180,8 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		final EPackage package_CargoModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
 		final EClass class_CargoModel = MetamodelUtils.getEClass(package_CargoModel, "CargoModel");
 		final EClass class_cargo_VesselAvailability = MetamodelUtils.getEClass(package_CargoModel, "VesselAvailability");
-//		final EClass class_cargo_AssignableElement = MetamodelUtils.getEClass(package_CargoModel, "AssignableElement");
-//		final EClass class_cargo_VesselEvent = MetamodelUtils.getEClass(package_CargoModel, "VesselEvent");
+		// final EClass class_cargo_AssignableElement = MetamodelUtils.getEClass(package_CargoModel, "AssignableElement");
+		// final EClass class_cargo_VesselEvent = MetamodelUtils.getEClass(package_CargoModel, "VesselEvent");
 		final EClass class_cargo_DryDockEvent = MetamodelUtils.getEClass(package_CargoModel, "DryDockEvent");
 		final EClass class_cargo_MaintenanceEvent = MetamodelUtils.getEClass(package_CargoModel, "MaintenanceEvent");
 		final EClass class_cargo_CharterOutEvent = MetamodelUtils.getEClass(package_CargoModel, "CharterOutEvent");
@@ -310,7 +313,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
 
-//		final EReference reference_LNGPortfolioModel_scheduleModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "scheduleModel");
+		// final EReference reference_LNGPortfolioModel_scheduleModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "scheduleModel");
 		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 		final EClass class_VesselEventVisit = MetamodelUtils.getEClass(package_ScheduleModel, "VesselEventVisit");
 		final EClass class_Sequence = MetamodelUtils.getEClass(package_ScheduleModel, "Sequence");

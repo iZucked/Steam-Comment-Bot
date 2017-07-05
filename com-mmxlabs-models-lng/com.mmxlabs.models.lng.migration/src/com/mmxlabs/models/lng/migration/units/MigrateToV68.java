@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -35,7 +36,10 @@ public class MigrateToV68 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
+
 		final EObjectWrapper cargoModel = model.getRef("cargoModel");
 		EPackage commercial_package = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
 		EClass contract_class = MetamodelUtils.getEClass(commercial_package, "RuleBasedBallastBonusContract");
@@ -45,7 +49,7 @@ public class MigrateToV68 extends AbstractMigrationUnit {
 			return;
 		}
 		List<EObjectWrapper> vesselAvailabilities = cargoModel.getRefAsList("vesselAvailabilities");
-		for (EObjectWrapper va: vesselAvailabilities) {
+		for (EObjectWrapper va : vesselAvailabilities) {
 			String ballastBonus = va.getAttrib("ballastBonus");
 			if (ballastBonus != null && !ballastBonus.isEmpty()) {
 				// we have a ballast bonus
@@ -57,7 +61,7 @@ public class MigrateToV68 extends AbstractMigrationUnit {
 				rules.add(rule);
 				contract_instance.setRef("rules", rules);
 				va.setRef("ballastBonusContract", contract_instance);
- 
+
 			}
 		}
 	}

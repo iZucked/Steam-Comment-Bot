@@ -17,7 +17,9 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
@@ -55,9 +57,10 @@ public class MigrateToV17 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
 
-		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader modelLoader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
 		fixDivertibleFlagTypo(modelLoader, model);
 		removePNLNoTCFromScheduleModel(modelLoader, model);
 

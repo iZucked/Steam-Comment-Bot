@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -35,7 +36,9 @@ public class MigrateToV69 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		final EPackage cargoPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
 		final EEnum enum_VesselTankState = MetamodelUtils.getEEnum(cargoPackage, "EVesselTankState");
@@ -55,7 +58,7 @@ public class MigrateToV69 extends AbstractMigrationUnit {
 		if (vesselAvailabilities != null) {
 			for (final EObjectWrapper vesselAvailability : vesselAvailabilities) {
 				EObjectWrapper ref = vesselAvailability.getRef("vessel");
-				String name = ref.getAttrib("name");
+				ref.getAttrib("name");
 				final EObjectWrapper startHeel = vesselAvailability.getRef("startHeel");
 				final EObjectWrapper newStartHeel = (EObjectWrapper) cargoPackage.getEFactoryInstance().create(class_StartHeelOptions);
 				if (startHeel != null) {

@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EPackage;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
@@ -56,7 +57,10 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 		final EPackage package_CargoModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);

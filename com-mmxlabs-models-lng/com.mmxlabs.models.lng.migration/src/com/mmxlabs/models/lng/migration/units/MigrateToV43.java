@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -33,7 +34,9 @@ public class MigrateToV43 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		// Ensure all actuals items have a ReturnActuals instance.
 

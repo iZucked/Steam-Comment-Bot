@@ -56,7 +56,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.dnd.IScenarioFragmentCopyHandler;
@@ -72,7 +72,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 		}
 		
 		final ScenarioInstance source = scenarioFragment.getScenarioInstance();
-		final ModelRecord sourceRecord = SSDataManager.Instance.getModelRecord(source);
+		final ScenarioModelRecord sourceRecord = SSDataManager.Instance.getModelRecord(source);
 
 		try (ModelReference sourceReference = sourceRecord.aquireReference("FragmentCopyHandler:1")) {
 			final EObject fragment = scenarioFragment.getFragment();
@@ -88,7 +88,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 					return true;
 				} else {
 					//
-					ModelRecord targetRecord = SSDataManager.Instance.getModelRecord(target);
+					ScenarioModelRecord targetRecord = SSDataManager.Instance.getModelRecord(target);
 					try (ModelReference targetReference = targetRecord.aquireReference("FragmentCopyHandler:2")) {
 						final LNGScenarioModel targetModel = (LNGScenarioModel) targetReference.getInstance();
 

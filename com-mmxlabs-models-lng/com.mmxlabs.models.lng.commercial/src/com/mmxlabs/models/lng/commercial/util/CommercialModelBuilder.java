@@ -6,10 +6,12 @@ package com.mmxlabs.models.lng.commercial.util;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -73,6 +75,22 @@ public class CommercialModelBuilder {
 		commercialModel.getPurchaseContracts().add(contract);
 
 		return contract;
+	}
+
+	public void setTaxRates(@NonNull final BaseLegalEntity entity, @NonNull final LocalDate date, final float taxRate) {
+		final List<BaseEntityBook> books = CollectionsUtil.makeArrayList(entity.getTradingBook(), entity.getShippingBook(), entity.getUpstreamBook());
+		for (BaseEntityBook entityBook : books) {
+			if (entityBook != null) {
+				final @NonNull TaxRate tr = createTaxRate(date, taxRate);
+				entityBook.getTaxRates().add(tr);
+			}
+		}
+	}
+
+	public @NonNull TaxRate createTaxRate(@NonNull final BaseEntityBook entityBook, @NonNull final LocalDate date, final float taxRate) {
+		final @NonNull TaxRate tr = createTaxRate(date, taxRate);
+		entityBook.getTaxRates().add(tr);
+		return tr;
 	}
 
 	public @NonNull TaxRate createTaxRate(@NonNull final LocalDate date, final float taxRate) {

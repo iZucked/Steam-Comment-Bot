@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -31,14 +32,16 @@ public class MigrateToV39 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
-		EPackage pricingPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+		final EPackage pricingPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
 
-		EObjectWrapper pricingModel = model.getRef("pricingModel");
+		final EObjectWrapper pricingModel = model.getRef("pricingModel");
 
-		EClass class_CostModel = MetamodelUtils.getEClass(pricingPackage, "CostModel");
-		EObjectWrapper costModel = (EObjectWrapper)pricingPackage.getEFactoryInstance().create(class_CostModel);
+		final EClass class_CostModel = MetamodelUtils.getEClass(pricingPackage, "CostModel");
+		final EObjectWrapper costModel = (EObjectWrapper) pricingPackage.getEFactoryInstance().create(class_CostModel);
 
 		costModel.setRef("routeCosts", pricingModel.getRefAsList("routeCosts"));
 		costModel.setRef("portCosts", pricingModel.getRefAsList("portCosts"));
@@ -50,7 +53,7 @@ public class MigrateToV39 extends AbstractMigrationUnit {
 		pricingModel.unsetFeature("portCosts");
 		pricingModel.unsetFeature("cooldownPrices");
 		pricingModel.unsetFeature("fleetCost");
-		
+
 		model.setRef("costModel", costModel);
 	}
 

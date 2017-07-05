@@ -58,6 +58,8 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -130,15 +132,18 @@ public class ADPBindingPage extends WizardPage {
 	private ReferenceValueProviderCache referenceValueProviderCache;
 	private ComposedAdapterFactory adapterFactory;
 	private AdapterFactoryEditingDomain adapterFactoryEditingDomain;
+	private IScenarioDataProvider scenarioDataProvider;
 	private Composite parent;
 
-	protected ADPBindingPage(ModelReference modelReference, final ADPModel adpModel, final LNGScenarioModel scenarioModel) {
+	protected ADPBindingPage(ModelReference modelReference, IScenarioDataProvider scenarioDataProvider, final ADPModel adpModel, final LNGScenarioModel scenarioModel) {
 		super("ADP Model Bindings", "Create profile bindings", null);
 		this.adpModel = adpModel;
 		this.scenarioModel = scenarioModel;
 		adapterFactory = ADPModelUtil.createAdapterFactory();
 		adapterFactoryEditingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
 		referenceValueProviderCache = new ReferenceValueProviderCache(scenarioModel);
+		this.scenarioDataProvider = scenarioDataProvider;
+
 		this.commandHandler = new ICommandHandler() {
 
 			@Override
@@ -236,7 +241,7 @@ public class ADPBindingPage extends WizardPage {
 
 			@Override
 			public IExtraValidationContext getExtraValidationContext() {
-				return new DefaultExtraValidationContext(getRootObject(), false);
+				return new DefaultExtraValidationContext(getScenarioDataProvider(), false);
 			}
 
 			@Override
@@ -267,6 +272,12 @@ public class ADPBindingPage extends WizardPage {
 			public ScenarioLock getEditorLock() {
 				// TODO Auto-generated method stub
 				return modelReference.getLock();
+			}
+
+			@Override
+			public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+				// TODO Auto-generated method stub
+				return scenarioDataProvider;
 			}
 		};
 	}
@@ -334,11 +345,11 @@ public class ADPBindingPage extends WizardPage {
 								@Override
 								public void run() {
 									BindingRule bindingRule = ADPFactory.eINSTANCE.createBindingRule();
-									
+
 									// Set some defaults
 									bindingRule.setShippingOption(ADPFactory.eINSTANCE.createShippingOption());
 									bindingRule.setFlowType(ADPFactory.eINSTANCE.createDeliverToFlow());
-									
+
 									CompoundCommand cmd = new CompoundCommand();
 									cmd.append(AddCommand.create(location.getEditingDomain(), adpModel, ADPPackage.Literals.ADP_MODEL__BINDING_RULES, bindingRule));
 									// Disallow re-wiring

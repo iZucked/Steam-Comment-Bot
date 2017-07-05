@@ -14,13 +14,14 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ReadOnlyScenarioHook implements IPostChangeHook {
 	@Override
-	public void changed(@NonNull final ModelRecord modelRecord) {
+	public void changed(@NonNull final ScenarioModelRecord modelRecord) {
+
 		try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ReadOnlyScenarioHandler:1")) {
 			if (ref != null) {
 				@NonNull

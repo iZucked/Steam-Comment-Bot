@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.adp.presentation.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -19,12 +18,17 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 /**
@@ -45,6 +49,7 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 	private ScenarioInstance instance;
 	private ADPBindingPage bindingsPage;
 	private ModelReference modelReference;
+	private IScenarioDataProvider scenarioDataProvider;
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
@@ -74,24 +79,10 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 						ADPModelUtil.makeBindings(scenarioModel, adpModel);
 
 						try {
-
-							IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(instance);
-							fork[0] = scenarioService.insert(instance, scenarioModel, (f) -> {
-								f.setName("ADP Plan");
-
-								// Copy across various bits of information
-								f.getMetadata().setContentType(instance.getMetadata().getContentType());
-								f.getMetadata().setCreated(new Date());
-								f.getMetadata().setLastModified(new Date());
-
-								// Copy version context information
-								f.setVersionContext(instance.getVersionContext());
-								f.setScenarioVersion(instance.getScenarioVersion());
-
-								f.setClientVersionContext(instance.getClientVersionContext());
-								f.setClientScenarioVersion(instance.getClientScenarioVersion());
-
-							});
+							final SimpleScenarioDataProvider dataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
+							final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFrom("ADP Plan", dataProvider);
+							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(instance);
+							fork[0] = scenarioService.copyInto(instance, tmpRecord, "ADP Plan");
 						} catch (final Exception e) {
 							e.printStackTrace();
 						}
@@ -122,9 +113,9 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 				final Collection<ScenarioInstance> scenarioInstances = selectionPage.getScenarioInstance();
 				if (scenarioInstances.size() == 1) {
 					instance = scenarioInstances.iterator().next();
-					@NonNull
-					ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+					final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 					this.modelReference = modelRecord.aquireReference("ADPWizard");
+					this.scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
 					try {
 						getContainer().run(true, false, new IRunnableWithProgress() {
 
@@ -133,7 +124,7 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 
 								monitor.beginTask("Generate Model", IProgressMonitor.UNKNOWN);
 								@NonNull
-								final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 								try (ModelReference ref = modelRecord.aquireReference("ADPWizard")) {
 									final LNGScenarioModel parentModel = (LNGScenarioModel) ref.getInstance();
 									scenarioModel = ADPModelUtil.prepareModel(parentModel);
@@ -152,15 +143,15 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 					}
 
 					paramsPage = new ADPParametersPage(modelReference, adpModel);
-					contractsPurchasePage = new ADPContractsPage(modelReference, adpModel, scenarioModel, true);
-					contractsSalesPage = new ADPContractsPage(modelReference, adpModel, scenarioModel, false);
+					contractsPurchasePage = new ADPContractsPage(modelReference, scenarioDataProvider, adpModel, scenarioModel, true);
+					contractsSalesPage = new ADPContractsPage(modelReference, scenarioDataProvider, adpModel, scenarioModel, false);
 					ADPModelUtil.createBindings(scenarioModel, adpModel);
 
 					addPage(paramsPage);
 					addPage(contractsPurchasePage);
 					addPage(contractsSalesPage);
 
-					bindingsPage = new ADPBindingPage(modelReference, adpModel, scenarioModel);
+					bindingsPage = new ADPBindingPage(modelReference, scenarioDataProvider, adpModel, scenarioModel);
 					addPage(bindingsPage);
 					return paramsPage;
 					// getContainer().showPage(paramsPage);
@@ -202,6 +193,11 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 
 	@Override
 	public void dispose() {
+		if (scenarioDataProvider != null) {
+			scenarioDataProvider.close();
+			scenarioDataProvider = null;
+		}
+
 		if (modelReference != null) {
 			modelReference.close();
 		}

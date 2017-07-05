@@ -60,16 +60,19 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class WhatIfEvaluator {
 
@@ -215,17 +218,19 @@ public class WhatIfEvaluator {
 	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
 
 		final ResultSet[] ref = new ResultSet[1];
-		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
+		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (scenarioDataProvider, mapper) -> {
 
 			// DEBUG: Pass in the scenario instance
 			// final ScenarioInstance parentForFork = scenarioEditingLocation.getScenarioInstance();
 			final ScenarioInstance parentForFork = null;
-			evaluateScenario(lngScenarioModel, parentForFork, model.isUseTargetPNL(), targetPNL);
+			evaluateScenario(scenarioDataProvider, parentForFork, model.isUseTargetPNL(), targetPNL);
 
-			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
+			@NonNull
+			ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+			if (scheduleModel.getSchedule() == null) {
 				return;
 			}
-			Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
+			Schedule schedule =scheduleModel.getSchedule();
 
 			final ResultSet resultSet = AnalyticsFactory.eINSTANCE.createResultSet();
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
@@ -408,7 +413,7 @@ public class WhatIfEvaluator {
 	private static Collection<ResultSet> multiEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final List<BaseCase> baseCases) {
 
 		final ConcurrentLinkedQueue<ResultSet> ref = new ConcurrentLinkedQueue<>();
-		BaseCaseEvaluator.generateFullScenario(scenarioEditingLocation, model, (lngScenarioModel, shippingMap, mapper) -> {
+		BaseCaseEvaluator.generateFullScenario(scenarioEditingLocation, model, (scenarioDataProvider, shippingMap, mapper) -> {
 
 			// DEBUG: Pass in the scenario instance
 			final ScenarioInstance parentForFork = null;// scenarioEditingLocation.getScenarioInstance()
@@ -419,7 +424,7 @@ public class WhatIfEvaluator {
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 			ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class,
-					evaluator -> evaluator.multiEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
+					evaluator -> evaluator.multiEvaluate(scenarioDataProvider, userSettings, parentForFork, targetPNL,
 							model.isUseTargetPNL() ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT, baseCases, mapper, shippingMap,
 							(baseCase, schedule) -> {
 
@@ -751,7 +756,7 @@ public class WhatIfEvaluator {
 		}
 	}
 
-	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, @Nullable final ScenarioInstance parentForFork, final boolean useTargetPNL, final long targetPNL) {
+	private static void evaluateScenario(final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance parentForFork, final boolean useTargetPNL, final long targetPNL) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -759,8 +764,8 @@ public class WhatIfEvaluator {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
-				useTargetPNL ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(scenarioDataProvider, userSettings, parentForFork,
+				targetPNL, useTargetPNL ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {

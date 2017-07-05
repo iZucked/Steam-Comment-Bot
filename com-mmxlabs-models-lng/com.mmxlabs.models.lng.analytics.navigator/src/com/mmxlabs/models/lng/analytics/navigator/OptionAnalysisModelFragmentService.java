@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.emf.ecore.EObject;
@@ -32,18 +33,18 @@ import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.IPostChangeHook;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class OptionAnalysisModelFragmentService {
 
-	private final Map<ModelRecord, ModelAdapter> dataMap = new ConcurrentHashMap<>();
+	private final Map<ScenarioModelRecord, ModelAdapter> dataMap = new ConcurrentHashMap<>();
 
 	private final IPostChangeHook loadHook = new IPostChangeHook() {
 
 		@Override
-		public void changed(@NonNull final ModelRecord modelRecord) {
+		public void changed(@NonNull final ScenarioModelRecord modelRecord) {
 			synchronized (dataMap) {
 				dataMap.put(modelRecord, new ModelAdapter(modelRecord));
 			}
@@ -53,7 +54,7 @@ public class OptionAnalysisModelFragmentService {
 	private final IPostChangeHook unloadHook = new IPostChangeHook() {
 
 		@Override
-		public void changed(@NonNull final ModelRecord modelRecord) {
+		public void changed(@NonNull final ScenarioModelRecord modelRecord) {
 
 			synchronized (dataMap) {
 				final ModelAdapter adapter = dataMap.remove(modelRecord);
@@ -74,7 +75,7 @@ public class OptionAnalysisModelFragmentService {
 		SSDataManager.Instance.removeChangeHook(unloadHook, SSDataManager.PostChangeHookPhase.ON_UNLOAD);
 
 		while (!dataMap.isEmpty()) {
-			final Map.Entry<ModelRecord, ModelAdapter> e = dataMap.entrySet().iterator().next();
+			final Map.Entry<ScenarioModelRecord, ModelAdapter> e = dataMap.entrySet().iterator().next();
 			dataMap.remove(e.getKey());
 			final ModelAdapter adapter = e.getValue();
 			if (adapter != null) {
@@ -88,17 +89,23 @@ public class OptionAnalysisModelFragmentService {
 		private final EMFDataBindingContext dbc = new EMFDataBindingContext(DisplayRealm.getRealm(PlatformUI.getWorkbench().getDisplay()));
 
 		// private final ScenarioInstance scenarioInstance;
-		private final ModelRecord modelRecord;
+		private final ScenarioModelRecord modelRecord;
 		private LNGScenarioModel scenarioModel;
 		private final Map<EObject, ScenarioFragment> objectToFragmentMap = new HashMap<EObject, ScenarioFragment>();
 
-		public ModelAdapter(final ModelRecord modelRecord) {
+		public ModelAdapter(final ScenarioModelRecord modelRecord) {
 			this.modelRecord = modelRecord;
 			// Execute with reference to avoid unloading while processing
 			modelRecord.execute(modelReference -> {
 				processScenario();
 			});
 
+		}
+
+		@Override
+		public void setTarget(Notifier newTarget) {
+			// Do not store the target.
+			// TODO (SG) - Does this break anything or does this mean we should create a new instance each time it is used?
 		}
 
 		/**

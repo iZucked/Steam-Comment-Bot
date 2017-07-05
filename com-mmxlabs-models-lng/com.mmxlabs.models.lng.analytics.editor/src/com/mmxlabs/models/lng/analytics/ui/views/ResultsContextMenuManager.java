@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -46,7 +47,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -115,7 +115,7 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 							if (newForkName != null) {
 								final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parent);
 								// Create place-holder parent
-								ScenarioInstance fork = ScenarioServiceCommandUtil.copyTo(parent, parent, newForkName);
+								ScenarioInstance fork = ScenarioServiceModelUtils.fork(parent, newForkName, new NullProgressMonitor());
 								// Create a base case scenario
 								{
 									BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel, optionAnalysisModel.getBaseCase(), true, "InsertionPlan-base", fork);

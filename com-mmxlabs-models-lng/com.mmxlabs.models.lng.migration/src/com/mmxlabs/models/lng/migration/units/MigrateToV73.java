@@ -11,8 +11,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
-import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 public class MigrateToV73 extends AbstractMigrationUnit {
 
@@ -32,7 +32,8 @@ public class MigrateToV73 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		final EObjectWrapper analyticsModel = model.getRef("analyticsModel");
 		if (analyticsModel == null) {

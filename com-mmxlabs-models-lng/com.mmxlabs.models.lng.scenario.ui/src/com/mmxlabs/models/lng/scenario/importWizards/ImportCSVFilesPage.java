@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.scenario.importWizards;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,10 +41,12 @@ import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -57,7 +58,6 @@ import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.RadioSelectionGrou
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
@@ -65,9 +65,12 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class ImportCSVFilesPage extends WizardPage {
 
@@ -332,22 +335,23 @@ public class ImportCSVFilesPage extends WizardPage {
 		setControl(c1);
 	}
 
-	public LNGScenarioModel doImport(final DefaultImportContext context) {
+	public IScenarioDataProvider doImport(final DefaultImportContext context) {
 
 		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		scenarioModel.setReferenceModel(referenceModel);
+		scenarioModel.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 
 		final char delimiter = csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
 
 		context.setRootObject(scenarioModel);
+		final SimpleScenarioDataProvider scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
 
 		for (final SubModelChunk c : subModelChunks) {
 			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
 			try {
 				for (final String key : c.keys.keySet()) {
 					try {
-						@SuppressWarnings("resource")
 						final CSVReader r = new FileCSVReader(new File(c.keys.get(key)), delimiter);
 						readers.put(key, r);
 					} catch (final IOException e) {
@@ -376,7 +380,6 @@ public class ImportCSVFilesPage extends WizardPage {
 			try {
 				for (final String key : c.keys.keySet()) {
 					try {
-						@SuppressWarnings("resource")
 						final CSVReader r = new FileCSVReader(new File(c.keys.get(key)));
 						readers.put(key, r);
 					} catch (final IOException e) {
@@ -408,7 +411,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			postModelImporter.onPostModelImport(context, scenarioModel);
 		}
 
-		return scenarioModel;
+		return scenarioDataProvider;
 	}
 
 	private void setSubModel(final LNGScenarioModel scenarioModel, final EObject subModel) {
@@ -454,53 +457,21 @@ public class ImportCSVFilesPage extends WizardPage {
 					try {
 						final DefaultImportContext context = new DefaultImportContext(decimalSeparator);
 
-						final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
-
-						final LNGScenarioModel scenarioModel = doImport(context);
-						if (scenarioModel != null) {
+						final IScenarioDataProvider scenarioDataProvider = doImport(context);
+						if (scenarioDataProvider != null) {
 
 							monitor.worked(1);
 
 							ImportCSVFilesPage.this.importContext = context;
 							final Container container = mainPage.getScenarioContainer();
+							assert container != null;
+
 							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 							try {
-								final ScenarioInstance newInstance = scenarioService.insert(container, scenarioModel, instance -> {
+								final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFrom(mainPage.getFileName(), scenarioDataProvider);
 
-									try {
-										final String scenarioVersionContext = migrationRegistry.getDefaultMigrationContext();
-										final String clientVersionContext = migrationRegistry.getDefaultClientMigrationContext();
-										if (scenarioVersionContext != null) {
-											instance.setVersionContext(scenarioVersionContext);
-											int latestContextVersion = migrationRegistry.getLatestContextVersion(scenarioVersionContext);
-											// Snapshot version - so find last good version number
-											if (latestContextVersion < 0) {
-												latestContextVersion = migrationRegistry.getLastReleaseVersion(scenarioVersionContext);
-											}
-											instance.setScenarioVersion(latestContextVersion);
-										}
-										if (clientVersionContext != null) {
-											instance.setClientVersionContext(clientVersionContext);
-											int latestClientContextVersion = migrationRegistry.getLatestClientContextVersion(clientVersionContext);
-											// Snapshot version - so find last good version number
-											if (latestClientContextVersion < 0) {
-												latestClientContextVersion = migrationRegistry.getLastReleaseClientVersion(clientVersionContext);
-											}
-											instance.setClientScenarioVersion(latestClientContextVersion);
-										}
-									} catch (final IllegalArgumentException e) {
-										log.error(e.getMessage(), e);
-										setErrorMessage(e.getMessage());
-									}
-
-									instance.setName(mainPage.getFileName());
-
-									final Metadata metadata = instance.getMetadata();
-									metadata.setCreated(new Date());
-									metadata.setLastModified(new Date());
-									metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
-								});
+								final ScenarioInstance newInstance = scenarioService.copyInto(container, tmpRecord, mainPage.getFileName());
 								monitor.worked(1);
 
 								ImportCSVFilesPage.this.setScenarioInstance(newInstance);

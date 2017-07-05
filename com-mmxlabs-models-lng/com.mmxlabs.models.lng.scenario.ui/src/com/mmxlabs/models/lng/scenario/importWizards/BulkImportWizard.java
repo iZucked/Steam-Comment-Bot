@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
@@ -148,7 +148,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 					continue;
 				}
 
-				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 				modelRecord.execute(ref -> ref.executeWithLock(() -> {
 
 					if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
@@ -186,7 +186,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private void doImportAction(final FieldChoice importTarget, final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance,
 			final Set<String> uniqueProblems, final List<String> allProblems, final boolean multipleDetails) {
 		@NonNull
-		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
 		try (final ModelReference modelReference = modelRecord.aquireReference("BulkImportWizard")) {
 			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, getShell(), filename, listSeparator, decimalSeparator);
 

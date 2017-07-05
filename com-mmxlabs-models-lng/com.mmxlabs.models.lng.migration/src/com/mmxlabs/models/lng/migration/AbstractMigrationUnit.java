@@ -13,12 +13,18 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
+import com.mmxlabs.models.migration.DataManifest;
+import com.mmxlabs.models.migration.DataManifest.EObjectData;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
-import com.mmxlabs.scenario.service.util.ResourceHelper;
+import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.ResourceHelper;
 
 /**
  * Abstract implementation of {@link IMigrationUnit}. This class takes care of loading and saving the ecore model resources. Subclasses are provided with a Map of {@link ModelsLNGSet_v1} to root
@@ -69,14 +75,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @param models
 	 */
-	protected void doMigration(@NonNull final EObject model) {
-		// Throw some kind of exception if we get here. Sublcasses should override this method or doMigrationWithHelper
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
-
-	protected void doMigrationWithHelper(@NonNull final MetamodelLoader metamodelLoader, @NonNull final EObjectWrapper model) {
-		doMigration(model);
-	}
+	protected abstract void doMigration(@NonNull final MigrationModelRecord modelRecord);
 
 	/**
 	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
@@ -91,7 +90,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	/**
 	 */
 	@Override
-	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
+	public void migrate(@Nullable final Map<URI, PackageData> extraPackages, final @NonNull DataManifest dataManifest) throws Exception {
 
 		final MetamodelLoader metamodelLoader = getMigrationLoader(extraPackages);
 
@@ -99,27 +98,34 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		final ResourceSet resourceSet = metamodelLoader.getResourceSet();
 		assert resourceSet != null;
 
-		// // Standard options
-		// resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
-		//
-		// resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
-		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+		final Resource modelResource = ResourceHelper.loadResource(resourceSet, dataManifest.getRootObjectURI());
 
-		// final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
+		final EObjectWrapper modelRoot = (EObjectWrapper) modelResource.getContents().get(0);
+		assert modelRoot != null;
 
-		// Record features which have no meta-model equivalent so we can perform migration
-		// resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+		final MigrationModelRecord migrationModelRecord = new MigrationModelRecord(modelRoot, metamodelLoader);
 
-		final Resource modelResource = ResourceHelper.loadResource(resourceSet, baseURI);
-
-		final EObjectWrapper eObject = (EObjectWrapper) modelResource.getContents().get(0);
-		assert eObject != null;
+		for (final EObjectData data : dataManifest.getEObjectData()) {
+			Resource r = resourceSet.getResource(ScenarioStorageUtil.createArtifactURI(dataManifest.getArchiveURI(), data.getURIFragment()), true);
+			final EObjectWrapper model = (EObjectWrapper) r.getContents().get(0);
+			migrationModelRecord.setDataModelRoot(data.getKey(), model);
+		}
 
 		// Migrate!
-		doMigrationWithHelper(metamodelLoader, eObject);
+		doMigration(migrationModelRecord);
 
-		// Save the model.
+		for (final EObjectData data : dataManifest.getEObjectData()) {
+			Resource r = resourceSet.getResource(ScenarioStorageUtil.createArtifactURI(dataManifest.getArchiveURI(), data.getURIFragment()), false);
+			ResourceHelper.saveResource(r);
+		}
+		for (Triple<String, EObject, ISharedDataModelType<?>> newData : migrationModelRecord.getNewEObjectData()) {
+			Resource r = resourceSet.createResource(ScenarioStorageUtil.createArtifactURI(dataManifest.getArchiveURI(), newData.getFirst()));
+			r.getContents().add(newData.getSecond());
+			ResourceHelper.saveResource(r);
+			dataManifest.add(newData.getThird(), newData.getFirst(), "1");
+		}
+		// Save the root model.
 		ResourceHelper.saveResource(modelResource);
+
 	}
 }

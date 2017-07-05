@@ -4,10 +4,9 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 
 public class MigrateToV32 extends AbstractMigrationUnit {
 
@@ -27,7 +26,7 @@ public class MigrateToV32 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
 		// Do nothing -- introduce volume units
 	}
 }

@@ -60,6 +60,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
@@ -70,6 +71,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class BaseCaseEvaluator {
 
@@ -157,8 +160,8 @@ public class BaseCaseEvaluator {
 		}
 	}
 
-	public static LNGScenarioModel generateScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase,
-			final BiConsumer<LNGScenarioModel, IMapperClass> callback) {
+	public static IScenarioDataProvider generateScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase,
+			final BiConsumer<IScenarioDataProvider, IMapperClass> callback) {
 
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
@@ -182,15 +185,16 @@ public class BaseCaseEvaluator {
 			}
 			buildScenario(clone, clonedModel, clonedBaseCase, mapper);
 
-			callback.accept(clone, mapper);
+			ClonedScenarioDataProvider clonedDataProvider = ClonedScenarioDataProvider.make(clone, scenarioEditingLocation.getScenarioDataProvider());
+			callback.accept(clonedDataProvider, mapper);
 
-			return clone;
+			return clonedDataProvider;
 		}
 		return null;
 	}
 
-	public static LNGScenarioModel generateFullScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model,
-			final TriConsumer<LNGScenarioModel, Map<ShippingOption, VesselAssignmentType>, IMapperClass> callback) {
+	public static IScenarioDataProvider generateFullScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model,
+			final TriConsumer<IScenarioDataProvider, Map<ShippingOption, VesselAssignmentType>, IMapperClass> callback) {
 
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
@@ -206,9 +210,10 @@ public class BaseCaseEvaluator {
 			clearData(clone, clonedModel, null);
 			Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(clone, clonedModel, mapper);
 
-			callback.accept(clone, shippingMap, mapper);
+			ClonedScenarioDataProvider clonedDataProvider = ClonedScenarioDataProvider.make(clone, scenarioEditingLocation.getScenarioDataProvider());
+			callback.accept(clonedDataProvider, shippingMap, mapper);
 
-			return clone;
+			return clonedDataProvider;
 		}
 		return null;
 	}
@@ -226,15 +231,17 @@ public class BaseCaseEvaluator {
 
 	}
 
-	protected static void updateResults(final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel clone, final BaseCase baseCase) {
+	protected static void updateResults(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final @NonNull IScenarioDataProvider cloneDataProvider, final BaseCase baseCase) {
+		@NonNull
+		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(cloneDataProvider);
 
-		final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(clone.getScheduleModel().getSchedule());
+		final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(scheduleModel.getSchedule());
 		scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 				SetCommand.create(scenarioEditingLocation.getEditingDomain(), baseCase, AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS, pnl), baseCase,
 				AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS);
 	}
 
-	protected static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final ScenarioInstance scenarioInstance, final boolean fork, final String forkName) {
+	protected static void evaluateScenario(final @NonNull IScenarioDataProvider scenarioDatProvider, final ScenarioInstance scenarioInstance, final boolean fork, final String forkName) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -242,7 +249,8 @@ public class BaseCaseEvaluator {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class,
+				evaluator -> evaluator.evaluate(scenarioDatProvider, userSettings, scenarioInstance, fork, forkName));
 
 	}
 
@@ -467,7 +475,7 @@ public class BaseCaseEvaluator {
 						loadSlot.setWindowStartTime(0);
 					}
 				}
-			}	
+			}
 		} else if (shipping instanceof ExistingVesselAvailability) {
 			final ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability) shipping;
 			cargo.setVesselAssignmentType(existingVesselAvailability.getVesselAvailability());
@@ -475,8 +483,7 @@ public class BaseCaseEvaluator {
 			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shipping;
 			cargo.setVesselAssignmentType(existingCharterMarketOption.getCharterInMarket());
 			cargo.setSpotIndex(existingCharterMarketOption.getSpotIndex());
-				
-	
+
 		}
 	}
 

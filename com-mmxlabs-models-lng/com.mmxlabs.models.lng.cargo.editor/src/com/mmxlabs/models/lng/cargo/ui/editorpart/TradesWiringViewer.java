@@ -446,6 +446,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					protected void updateObject(final EObject object, final IStatus status, final boolean update) {
+						if (rootData == null) {
+							return;
+						}
 						if (object == null) {
 							return;
 						}

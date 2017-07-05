@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
@@ -44,7 +44,7 @@ public class AnalyticsSolution {
 		this.title = title;
 
 		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 		this.modelReference = modelRecord.aquireReference("AnalyticsSolution:1");
 	}
 

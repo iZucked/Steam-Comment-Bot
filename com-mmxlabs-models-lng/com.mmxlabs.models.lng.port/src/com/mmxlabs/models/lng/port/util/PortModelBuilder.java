@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -30,6 +31,10 @@ public class PortModelBuilder {
 		this.portModel = portModel;
 	}
 
+	public @NonNull PortModel getPortModel() {
+		return portModel;
+	}
+
 	/**
 	 * Make all existing ports use the UTC timezone. Useful in unit testing
 	 */
@@ -46,6 +51,45 @@ public class PortModelBuilder {
 
 		portModel.getRoutes().add(r);
 		return r;
+	}
+
+	public void setPortToPortDistance(final Port from, final Port to, final RouteOption routeOption, final int distance, final boolean biDirectional) {
+		for (final Route route : portModel.getRoutes()) {
+			if (route.getRouteOption() != routeOption) {
+				continue;
+			}
+			boolean foundForwardDistance = false;
+			boolean foundReverseDistance = false;
+			for (final RouteLine routeLine : route.getLines()) {
+				if (routeLine.getFrom() == from && routeLine.getTo() == to) {
+					foundForwardDistance = true;
+					routeLine.setDistance(distance);
+
+				}
+				if (biDirectional) {
+					if (routeLine.getFrom() == to && routeLine.getTo() == from) {
+						foundReverseDistance = true;
+						routeLine.setDistance(distance);
+					}
+				}
+			}
+			// Add missing distance lines if needed
+			if (!foundForwardDistance) {
+				final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
+				line.setFrom(from);
+				line.setTo(to);
+				line.setDistance(distance);
+				route.getLines().add(line);
+			}
+			if (biDirectional && !foundReverseDistance) {
+				final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
+				line.setFrom(to);
+				line.setTo(from);
+				line.setDistance(distance);
+				route.getLines().add(line);
+			}
+		}
+
 	}
 
 	public void setPortToPortDistance(@NonNull final Port from, @NonNull final Port to, final int directDistance, final int suezDistance, final int panamaDistance, final boolean biDirectional) {
@@ -101,6 +145,9 @@ public class PortModelBuilder {
 
 	@NonNull
 	public Port createPort(@NonNull final String name, @NonNull final String timezoneId, final int defaultWindowStartHourOfDay, final int defaultWindowSize) {
+
+		final Location location = PortFactory.eINSTANCE.createLocation();
+
 		final Port port = PortFactory.eINSTANCE.createPort();
 
 		port.setName(name);
@@ -110,6 +157,8 @@ public class PortModelBuilder {
 		port.setDefaultWindowSize(defaultWindowSize);
 
 		port.setBerths(1);
+
+		port.setLocation(location);
 
 		portModel.getPorts().add(port);
 
@@ -122,6 +171,18 @@ public class PortModelBuilder {
 		port.setLoadDuration(defaultLoadDurationInHours);
 
 		port.setCvValue(cv);
+	}
+
+	public void configureDrydockPort(@NonNull final Port port) {
+		port.getCapabilities().add(PortCapability.DRYDOCK);
+	}
+
+	public void configureMaintenancePort(@NonNull final Port port) {
+		port.getCapabilities().add(PortCapability.MAINTENANCE);
+	}
+
+	public void configureTransferPort(@NonNull final Port port) {
+		port.getCapabilities().add(PortCapability.TRANSFER);
 	}
 
 	public void configureDischargePort(@NonNull final Port port, final int defaultDischargeDurationInHours, @Nullable final Double minCV, @Nullable final Double maxCV) {
@@ -151,7 +212,7 @@ public class PortModelBuilder {
 	}
 
 	@NonNull
-	public PortGroup makePortGroup(@NonNull String name, @NonNull final Port... ports) {
+	public PortGroup makePortGroup(@NonNull final String name, @NonNull final Port... ports) {
 		final PortGroup portGroup = PortFactory.eINSTANCE.createPortGroup();
 		portGroup.setName(name);
 		for (final Port port : ports) {
@@ -160,5 +221,4 @@ public class PortModelBuilder {
 		portModel.getPortGroups().add(portGroup);
 		return portGroup;
 	}
-
 }

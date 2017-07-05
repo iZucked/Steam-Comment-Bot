@@ -46,6 +46,7 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -123,8 +124,9 @@ public class ADPContractsPage extends WizardPage {
 	private AdapterFactoryEditingDomain adapterFactoryEditingDomain;
 	private Composite parent;
 	private ModelReference modelReference;
+	private IScenarioDataProvider scenarioDataProvider;
 
-	protected ADPContractsPage(ModelReference modelReference, final ADPModel adpModel, final LNGScenarioModel scenarioModel, final boolean isPurchase) {
+	protected ADPContractsPage(ModelReference modelReference, IScenarioDataProvider scenarioDataProvider, final ADPModel adpModel, final LNGScenarioModel scenarioModel, final boolean isPurchase) {
 		super("ADP Model Contracts", isPurchase ? "Define purchase contracts profiles" : "Define sales contracts profiles", null);
 		this.modelReference = modelReference;
 		this.adpModel = adpModel;
@@ -133,6 +135,7 @@ public class ADPContractsPage extends WizardPage {
 		adapterFactory = ADPModelUtil.createAdapterFactory();
 		adapterFactoryEditingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
 		referenceValueProviderCache = new ReferenceValueProviderCache(scenarioModel);
+		this.scenarioDataProvider = scenarioDataProvider;
 		this.commandHandler = new ICommandHandler() {
 
 			@Override
@@ -263,6 +266,12 @@ public class ADPContractsPage extends WizardPage {
 			public @NonNull ModelReference getModelReference() {
 				// TODO Auto-generated method stub
 				return modelReference;
+			}
+
+			@Override
+			public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+				// TODO Auto-generated method stub
+				return scenarioDataProvider;
 			}
 
 		};

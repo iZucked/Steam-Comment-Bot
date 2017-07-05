@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -55,10 +56,10 @@ public class MigrateToV26 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
 
 		final MetamodelLoader modelLoader = getMigrationLoader(null);
-		unsetCargoID(modelLoader, model);
+		unsetCargoID(modelLoader, modelRecord.getModelRoot());
 
 	}
 

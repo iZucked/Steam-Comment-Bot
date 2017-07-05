@@ -17,6 +17,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -124,6 +125,12 @@ public class ADPScenarioEditingLocation implements IScenarioEditingLocation {
 	public ScenarioLock getEditorLock() {
 		// TODO Auto-generated method stub
 		return modelReference.getLock();
+	}
+
+	@Override
+	public @NonNull IScenarioDataProvider getScenarioDataProvider() {
+		// TODO Auto-generated method stub
+		return (@NonNull IScenarioDataProvider)null;
 	}
 
 }

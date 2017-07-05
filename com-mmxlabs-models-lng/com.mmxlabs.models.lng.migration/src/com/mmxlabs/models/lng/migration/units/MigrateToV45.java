@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
-import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 public class MigrateToV45 extends AbstractMigrationUnit {
 
@@ -36,7 +36,8 @@ public class MigrateToV45 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		final TreeIterator<EObject> eAllContents = model.eAllContents();
 		while (eAllContents.hasNext()) {

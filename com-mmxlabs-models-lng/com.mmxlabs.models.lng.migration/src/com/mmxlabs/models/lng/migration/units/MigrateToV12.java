@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -55,9 +56,9 @@ public class MigrateToV12 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final EObject model) {
-		// Nothing to do yet
-		migrateTimeCharterRate(model);
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+
+		migrateTimeCharterRate(modelRecord.getModelRoot());
 	}
 
 	private void migrateTimeCharterRate(final EObject model) {

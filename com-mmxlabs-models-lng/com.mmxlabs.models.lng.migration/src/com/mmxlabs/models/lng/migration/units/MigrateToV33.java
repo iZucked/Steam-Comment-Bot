@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -47,10 +48,13 @@ public class MigrateToV33 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		final EObjectWrapper model = modelRecord.getModelRoot();
+
 		final Map<EStructuralFeature, EStructuralFeature> timezoneMap = buildTimezoneMap(loader);
 
-		Set<EPackage> validPackages = createValidPackagesSet(loader);
+		final Set<EPackage> validPackages = createValidPackagesSet(loader);
 
 		final TreeIterator<EObject> itr = model.eAllContents();
 		while (itr.hasNext()) {
@@ -91,8 +95,8 @@ public class MigrateToV33 extends AbstractMigrationUnit {
 		}
 	}
 
-	private Set<EPackage> createValidPackagesSet(MetamodelLoader loader) {
-		Set<EPackage> validPackages = new HashSet<>();
+	private Set<EPackage> createValidPackagesSet(final MetamodelLoader loader) {
+		final Set<EPackage> validPackages = new HashSet<>();
 		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ActualsModel));
 		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_AnalyticsModel));
 		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel));

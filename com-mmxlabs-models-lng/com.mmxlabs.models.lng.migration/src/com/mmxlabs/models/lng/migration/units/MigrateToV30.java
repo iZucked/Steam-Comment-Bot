@@ -6,8 +6,7 @@ package com.mmxlabs.models.lng.migration.units;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
-import com.mmxlabs.models.migration.utils.EObjectWrapper;
-import com.mmxlabs.models.migration.utils.MetamodelLoader;
+import com.mmxlabs.models.migration.MigrationModelRecord;
 
 public class MigrateToV30 extends AbstractMigrationUnit {
 
@@ -27,8 +26,7 @@ public class MigrateToV30 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader metamodelLoader, final EObjectWrapper model) {
+	protected void doMigration(final MigrationModelRecord modelRecord) {
 
 	}
-
 }

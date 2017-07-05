@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Utility class to navigate the {@link LNGScenarioModel}
@@ -77,8 +79,33 @@ public final class ScenarioModelUtil {
 	}
 
 	@Nullable
+	public static LNGReferenceModel findReferenceModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			return ((LNGScenarioModel) scenario).getReferenceModel();
+		}
+		return null;
+	}
+
+	@Nullable
 	public static LNGReferenceModel findReferenceModel(@NonNull final LNGScenarioModel scenarioModel) {
 		return scenarioModel.getReferenceModel();
+	}
+
+	@Nullable
+	public static Schedule findSchedule(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
+			final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+			if (scheduleModel != null) {
+				return scheduleModel.getSchedule();
+			}
+		}
+		return null;
 	}
 
 	@Nullable
@@ -88,6 +115,19 @@ public final class ScenarioModelUtil {
 			return scheduleModel.getSchedule();
 		}
 		return null;
+	}
+
+	@NonNull
+	public static PricingModel getPricingModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final PricingModel pricingModel = referenceModel.getPricingModel();
+		if (pricingModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return pricingModel;
 	}
 
 	@NonNull
@@ -104,6 +144,19 @@ public final class ScenarioModelUtil {
 	}
 
 	@NonNull
+	public static CostModel getCostModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final CostModel costModel = referenceModel.getCostModel();
+		if (costModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return costModel;
+	}
+
+	@NonNull
 	public static CostModel getCostModel(@NonNull final LNGScenarioModel lngScenarioModel) {
 		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
 		if (referenceModel == null) {
@@ -117,6 +170,60 @@ public final class ScenarioModelUtil {
 	}
 
 	@NonNull
+	public static PortModel getPortModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final PortModel portModel = referenceModel.getPortModel();
+		if (portModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return portModel;
+	}
+
+	@NonNull
+	public static PortModel getPortModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final PortModel portModel = referenceModel.getPortModel();
+		if (portModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return portModel;
+	}
+
+	@NonNull
+	public static AnalyticsModel getAnalyticsModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+			final AnalyticsModel analyticsModel = lngScenarioModel.getAnalyticsModel();
+			if (analyticsModel == null) {
+				throw new IllegalArgumentException("Invalid scenario model");
+			}
+			return analyticsModel;
+		}
+		throw new IllegalArgumentException("Invalid scenario model");
+	}
+
+	@Nullable
+	public static ActualsModel getActualsModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+			final ActualsModel actualsModel = lngScenarioModel.getActualsModel();
+
+			return actualsModel;
+		}
+		return null;
+	}
+
+	@NonNull
 	public static AnalyticsModel getAnalyticsModel(@NonNull final LNGScenarioModel lngScenarioModel) {
 
 		final AnalyticsModel analyticsModel = lngScenarioModel.getAnalyticsModel();
@@ -124,6 +231,21 @@ public final class ScenarioModelUtil {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
 		return analyticsModel;
+	}
+
+	@NonNull
+	public static CargoModel getCargoModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
+			if (cargoModel == null) {
+				throw new IllegalArgumentException("Invalid scenario model");
+			}
+			return cargoModel;
+		}
+		throw new IllegalArgumentException("Invalid scenario model");
 	}
 
 	@NonNull
@@ -136,16 +258,16 @@ public final class ScenarioModelUtil {
 	}
 
 	@NonNull
-	public static PortModel getPortModel(@NonNull final LNGScenarioModel lngScenarioModel) {
-		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+	public static FleetModel getFleetModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
 		if (referenceModel == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
-		final PortModel portModel = referenceModel.getPortModel();
-		if (portModel == null) {
+		final FleetModel fleetModel = referenceModel.getFleetModel();
+		if (fleetModel == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
-		return portModel;
+		return fleetModel;
 	}
 
 	@NonNull
@@ -163,7 +285,40 @@ public final class ScenarioModelUtil {
 
 	@NonNull
 	public static ScheduleModel getScheduleModel(@NonNull final LNGScenarioModel lngScenarioModel) {
-		return lngScenarioModel.getScheduleModel();
+
+		final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+		if (scheduleModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return scheduleModel;
+	}
+
+	@NonNull
+	public static ScheduleModel getScheduleModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		final EObject scenario = scenarioDataProvider.getScenario();
+		if (scenario instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+			final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+			if (scheduleModel == null) {
+				throw new IllegalArgumentException("Invalid scenario model");
+			}
+			return scheduleModel;
+		}
+		throw new IllegalArgumentException("Invalid scenario model");
+	}
+
+	@NonNull
+	public static SpotMarketsModel getSpotMarketsModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final SpotMarketsModel spotMarketsModel = referenceModel.getSpotMarketsModel();
+		if (spotMarketsModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return spotMarketsModel;
 	}
 
 	@NonNull
@@ -177,6 +332,19 @@ public final class ScenarioModelUtil {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
 		return spotMarketsModel;
+	}
+
+	@NonNull
+	public static CommercialModel getCommercialModel(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		final LNGReferenceModel referenceModel = findReferenceModel(scenarioDataProvider);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final CommercialModel commercialModel = referenceModel.getCommercialModel();
+		if (commercialModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return commercialModel;
 	}
 
 	@NonNull

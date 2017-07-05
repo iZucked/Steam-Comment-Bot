@@ -33,7 +33,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
 import com.mmxlabs.models.ui.merge.IMappingDescriptor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
@@ -126,7 +126,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 				return;
 			}
 			@NonNull
-			ModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(sourceScenario);
+			ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(sourceScenario);
 			try (final ModelReference sourceModelRef = sourceModelRecord.aquireReference("SharedScenarioDataImportWizard:1")) {
 				final EObject sourceRoot = sourceModelRef.getInstance();
 
@@ -150,7 +150,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 							continue;
 						}
 						@NonNull
-						ModelRecord destModelRecord = SSDataManager.Instance.getModelRecord(destScenario);
+						ScenarioModelRecord destModelRecord = SSDataManager.Instance.getModelRecord(destScenario);
 						try (final ModelReference destModelRef = destModelRecord.aquireReference("SharedScenarioDataImportWizard:2")) {
 
 							final EObject destRoot = destModelRef.getInstance();
