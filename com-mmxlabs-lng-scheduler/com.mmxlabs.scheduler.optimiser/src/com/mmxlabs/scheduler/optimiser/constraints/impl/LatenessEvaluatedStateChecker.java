@@ -54,7 +54,7 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 		long promptLateness = 0;
 		long totalLateness = 0;
 
-		for (VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
+		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 
 			@NonNull
 			final Set<@NonNull IPortSlot> lateSlotsSet = volumeAllocatedSequence.getLateSlotsSet();
@@ -82,7 +82,7 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 		// If this is the first run, then set the initial state
 		if (lateSlots == null) {
 			lateSlots = new HashSet<>();
-			for (VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
+			for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 				lateSlots.addAll(volumeAllocatedSequence.getLateSlotsSet());
 			}
 			initialPromptLateness = promptLateness;
@@ -92,5 +92,11 @@ public final class LatenessEvaluatedStateChecker implements IEvaluatedStateConst
 		}
 
 		return true;
+	}
+
+	@Override
+	public void acceptSequences(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState) {
+		lateSlots = null;
+		checkConstraints(rawSequences, fullSequences, evaluationState);
 	}
 }

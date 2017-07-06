@@ -9,6 +9,11 @@ public class GuideMoveGeneratorOptions {
 	private boolean strictOptional = true;
 	private boolean checkingMove = false;
 	private boolean insertCanRemove = false;
+	private boolean checkEvaluatedState = false;
+
+	public boolean isCheckEvaluatedState() {
+		return checkEvaluatedState;
+	}
 
 	public boolean isInsertCanRemove() {
 		return insertCanRemove;
@@ -76,5 +81,10 @@ public class GuideMoveGeneratorOptions {
 
 	public static GuideMoveGeneratorOptions createDefault() {
 		return new GuideMoveGeneratorOptions();
+	}
+
+	public void setCheckEvaluatedState(boolean checkEvaluatedState) {
+		this.checkEvaluatedState = checkEvaluatedState;
+
 	}
 }

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.CycleDetectingLockFactory.PotentialDeadlockException;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
@@ -27,6 +29,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -63,7 +66,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	@Inject
 	private Provider<LookupManager> lookupManagerProvider;
 
-	private ISequences providedSequences;
+	private ISequences providedRawSequences;
 
 	@Inject
 	private EvaluationHelper evaluationHelper;
@@ -72,6 +75,9 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	private GuidedMoveMapper moveMapper;
+
+	@Inject
+	private ISequencesManipulator sequenceManipulator;
 
 	@Inject
 	private void findAllTargetElements(@NonNull final IOptimisationData optimisationData) {
@@ -95,8 +101,10 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	public IMove generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random) {
 
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
-		providedSequences = lookupManager.getRawSequences();
-		final long[] initialMetrics = evaluationHelper.evaluateState(new ModifiableSequences(providedSequences), null, null, null);
+		providedRawSequences = lookupManager.getRawSequences();
+
+		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, options.isCheckEvaluatedState(),
+				null, null);
 		final MoveResult p = generateMove(rawSequences, lookupManager, random, Collections.emptyList(), initialMetrics, options);
 		if (p != null) {
 			return p.move;
@@ -132,7 +140,7 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 	public MoveResult generateMove(final ISequences rawSequences, final ILookupManager lookupManager, final Random random, final List<ISequenceElement> forbidden, final long[] initialMetrics,
 			final GuideMoveGeneratorOptions options) {
 
-		this.providedSequences = rawSequences;
+		this.providedRawSequences = rawSequences;
 
 		final HintManager hintManager = hintManagerProvider.get();
 
@@ -144,27 +152,29 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		final List<IMove> discoveredMoves = new LinkedList<>();
 		int checkPointIndex = -1;
 		long[] checkPointMetrics = null;
-		final IModifiableSequences currentSequences = new ModifiableSequences(providedSequences);
 
-		final long existingUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
+		// final IModifiableSequences currentFullSequences = sequenceManipulator.createManipulatedSequences((providedRawSequences);
+		final IModifiableSequences currentRawSequences = new ModifiableSequences(providedRawSequences);
+
+		final long existingUnusedCompulsarySlotCount = currentRawSequences.getUnusedElements().stream() //
 				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 				.count();
 		MoveResult checkPointResult = null;
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
-			final Pair<IMove, Hints> moveData = getNextMove(currentSequences, random, options, hintManager);
+			final Pair<IMove, Hints> moveData = getNextMove(currentRawSequences, random, options, hintManager);
 			if (moveData == null) {
 				continue;
 			}
 
 			final IMove move = moveData.getFirst();
-			move.apply(currentSequences);
+			move.apply(currentRawSequences);
 
 			discoveredMoves.add(move);
 			hintManager.chain(moveData.getSecond());
 
-			if (currentSequences.equals(providedSequences)) {
+			if (currentRawSequences.equals(providedRawSequences)) {
 				// Circular move, give up
 				return null;
 			}
@@ -172,19 +182,20 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 			// "swimming" slot violations.
 
 			// FIXME: This check does not work properly -- maybe soft required is kicking in?
-			final long newUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
+			final long newUnusedCompulsarySlotCount = currentRawSequences.getUnusedElements().stream() //
 					.filter(e -> optionalElementsProvider.isElementRequired(e)) //
 					.count();
 			// If the current state passes the constraint checkers, then maybe return it.
 			if (
 			// hintManager.getOpenCompulsarySlots().isEmpty() && //
 			newUnusedCompulsarySlotCount <= existingUnusedCompulsarySlotCount //
-					&& evaluationHelper.doesMovePassConstraints(currentSequences)) {
+					&& evaluationHelper.doesMovePassConstraints(currentRawSequences)) {
 
 				long[] moveMetrics = null;
 				if (options.isCheckingMove()) {
 					// Check metrics - this return null if we increase lateness, capacity etc (but loss of P&L is ok)
-					moveMetrics = evaluationHelper.evaluateState(currentSequences, null, initialMetrics, null);
+					moveMetrics = evaluationHelper.evaluateState(currentRawSequences, sequenceManipulator.createManipulatedSequences(currentRawSequences), null, options.isCheckEvaluatedState(),
+							initialMetrics, null);
 					if (moveMetrics == null) {
 						continue;
 					}
@@ -230,13 +241,13 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		return null;
 	}
 
-	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences, final @NonNull Random random, final @NonNull GuideMoveGeneratorOptions options, final HintManager hintManager) {
+	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences rawSequences, final @NonNull Random random, final @NonNull GuideMoveGeneratorOptions options, final HintManager hintManager) {
 
 		final List<@NonNull ISequenceElement> targetElements = getNextElements(options, hintManager);
 
 		Collections.shuffle(targetElements, random);
 		final LookupManager lookupManager = lookupManagerProvider.get();
-		lookupManager.createLookup(sequences);
+		lookupManager.createLookup(rawSequences);
 
 		for (final ISequenceElement element : targetElements) {
 

@@ -141,4 +141,10 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 		return initialTriggeredViolations;
 	}
 
+	@Override
+	public void acceptSequences(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState) {
+		initialViolatedSlots = null;
+		checkConstraints(rawSequences, fullSequences, evaluationState);
+	}
+
 }
