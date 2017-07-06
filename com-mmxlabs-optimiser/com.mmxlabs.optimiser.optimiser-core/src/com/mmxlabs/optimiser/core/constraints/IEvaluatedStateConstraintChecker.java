@@ -4,14 +4,10 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * {@link IEvaluatedStateConstraintChecker} implementations check {@link ISequences} for constraint violations. For example this could be to ensure sequence elements are assigned to particular
@@ -38,4 +34,6 @@ public interface IEvaluatedStateConstraintChecker {
 	 * @return Returns true if all constraints are satisfied.
 	 */
 	boolean checkConstraints(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState);
+
+	void acceptSequences(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState);
 }
