@@ -18,12 +18,15 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * An abstract class which provides most of what you want for any job.
@@ -72,6 +75,20 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				kill();
 				setJobState(EJobState.CANCELLED);
 				return Status.CANCEL_STATUS;
+			} catch (final UserFeedbackException e) {
+				LOG.error(e.getMessage(), e);
+				kill();
+				setJobState(EJobState.CANCELLED);
+
+				if (System.getProperty("lingo.suppress.dialogs") == null) {
+					RunnerHelper.asyncExec((display) -> {
+						MessageDialog.openError(display.getActiveShell(), "Error", e.getMessage());
+					});
+				} else {
+					throw e;
+				}
+				return Status.CANCEL_STATUS;
+
 			} catch (final Exception | AssertionError e) {
 				LOG.error(e.getMessage(), e);
 				kill();
@@ -81,7 +98,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} finally {
 				monitor.done();
 			}
-//			return Status.OK_STATUS;
+			// return Status.OK_STATUS;
 		}
 
 		@Override
