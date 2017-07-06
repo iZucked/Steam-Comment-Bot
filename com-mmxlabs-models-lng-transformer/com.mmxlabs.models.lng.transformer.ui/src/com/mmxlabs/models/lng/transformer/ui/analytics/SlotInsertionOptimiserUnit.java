@@ -179,7 +179,7 @@ public class SlotInsertionOptimiserUnit {
 						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences), null, true, null, null);
 						if (state.initialMetrics == null) {
 							throw new UserFeedbackException(
-									"Unable to perform insertation as there is a problem with the scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
+									"Unable to perform insertion on this scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
 						}
 						state.originalRawSequences = initialRawSequences;
 					}
