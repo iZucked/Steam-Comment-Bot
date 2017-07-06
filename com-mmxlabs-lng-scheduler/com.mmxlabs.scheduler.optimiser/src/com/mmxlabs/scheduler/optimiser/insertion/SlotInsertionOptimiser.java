@@ -213,7 +213,10 @@ public class SlotInsertionOptimiser {
 			final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
 
 			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, null, null);
-
+			if (metrics == null) {
+				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
+				return new Pair<>(currentSequences, currentPNL);
+			}
 			return new Pair<>(simpleSeq, metrics[MetricType.PNL.ordinal()]);
 
 		} else {
