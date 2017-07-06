@@ -1,6 +1,7 @@
 package com.mmxlabs.scenario.service.model.manager;
 
 import java.lang.ref.WeakReference;
+import java.rmi.activation.Activator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +60,9 @@ public final class ModelRecord {
 	public ModelRecord(final @NonNull ScenarioInstance scenarioInstance, final BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunction) {
 		this.scenarioInstance = scenarioInstance;
 		this.loadFunction = loadFunction;
+		if (scenarioInstance != null) {
+			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "Previous validation status");
+		}
 	}
 
 	public boolean isLoaded() {
@@ -153,7 +157,7 @@ public final class ModelRecord {
 				}
 				data = null;
 				// Reset validation status
-				validationStatus = Status.OK_STATUS;
+//				validationStatus = Status.OK_STATUS;
 			}
 			cleanupReferencesList();
 		} finally {
@@ -177,6 +181,9 @@ public final class ModelRecord {
 
 	public void setValidationStatus(final @NonNull IStatus status) {
 		this.validationStatus = status;
+		if (scenarioInstance != null) {
+			scenarioInstance.setValidationStatusCode(status.getSeverity());
+		}
 		fireValidationStatusChanged(status);
 	}
 

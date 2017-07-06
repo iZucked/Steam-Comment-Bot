@@ -216,7 +216,7 @@ public interface ScenarioInstance extends Container {
 	 * @return the value of the '<em>Validation Status Code</em>' attribute.
 	 * @see #setValidationStatusCode(int)
 	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ValidationStatusCode()
-	 * @model transient="true"
+	 * @model
 	 * @generated
 	 */
 	int getValidationStatusCode();
