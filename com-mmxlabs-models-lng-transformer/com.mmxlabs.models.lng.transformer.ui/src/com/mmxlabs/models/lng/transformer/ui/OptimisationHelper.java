@@ -9,7 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -43,10 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -76,7 +73,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.models.util.StringEscaper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -84,8 +80,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
-import com.mmxlabs.scenario.service.model.util.ModelReferenceThread;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
@@ -138,163 +132,36 @@ public final class OptimisationHelper {
 			return null;
 		}
 		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-		try (final ModelReference modelReference = modelRecord.aquireReference("OptimisationHelper")) {
-			final EObject object = modelReference.getInstance();
 
-			if (object instanceof LNGScenarioModel) {
-				final LNGScenarioModel root = (LNGScenarioModel) object;
+		final OptimisationPlan[] planRef = new OptimisationPlan[1];
+		final BiFunction<ModelReference, LNGScenarioModel, Boolean> prepareCallback = (ref, root) -> {
+			final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
 
-				final String uuid = instance.getUuid();
-				// Check for existing job and return if there is one.
-				{
-					final IJobDescriptor job = jobManager.findJobForResource(uuid);
-					if (job != null) {
-						return null;
-					}
-				}
-				final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
-
-				if (optimisationPlan == null) {
-					return null;
-				}
-				final EditingDomain editingDomain = modelReference.getEditingDomain();
-				if (editingDomain != null) {
-					final CompoundCommand cmd = new CompoundCommand("Update settings");
-					cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(optimisationPlan.getUserSettings())));
-					RunnerHelper.syncExecDisplayOptional(() -> {
-						editingDomain.getCommandStack().execute(cmd);
-					});
-				}
-
-				new ModelReferenceThread("Optimise " + instance.getName(), modelRecord, (ref) -> {
-					final ScenarioLock scenarioLock = ref.getLock();
-
-					scenarioLock.lock();
-					// Use a latch to trigger unlock in this thread
-					CountDownLatch latch = new CountDownLatch(1);
-					IJobControl control = null;
-					IJobDescriptor job = null;
-					try {
-						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimisationPlan, optimising);
-
-						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root, optimising)) {
-							scenarioLock.unlock();
-							return;
-						}
-
-						// Automatically clean up job when removed from manager
-						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-						control = jobManager.submitJob(job, uuid);
-						// Add listener to clean up job when it finishes or has an exception.
-						final IJobDescriptor finalJob = job;
-						control.addListener(new IJobControlListener() {
-
-							@Override
-							public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
-
-								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-									latch.countDown();
-									jobManager.removeJob(finalJob);
-									return false;
-								}
-								return true;
-							}
-
-							@Override
-							public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-								return true;
-							}
-						});
-						// Start the job!
-						control.prepare();
-						control.start();
-
-						latch.await();
-						scenarioLock.unlock();
-
-					} catch (final Throwable ex) {
-						log.error(ex.getMessage(), ex);
-						if (control != null) {
-							control.cancel();
-						}
-						// Manual clean up incase the control listener doesn't fire
-						if (job != null) {
-							jobManager.removeJob(job);
-						}
-						// instance.setLocked(false);
-						scenarioLock.unlock();
-
-						final Display display = Display.getDefault();
-						if (display != null) {
-							display.asyncExec(() -> {
-								final String message = StringEscaper.escapeUIString(ex.getMessage());
-								MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + message);
-							});
-						}
-					}
-				}).start();
-			}
-		}
-
-		return null;
-	}
-
-	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
-		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-
-		validator.addConstraintFilter(new IConstraintFilter() {
-
-			@Override
-			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
-
-				for (final Category cat : constraint.getCategories()) {
-					if (cat.getId().endsWith(".base")) {
-						return true;
-					} else if (optimising && cat.getId().endsWith(".optimisation")) {
-						return true;
-					} else if (!optimising && cat.getId().endsWith(".evaluation")) {
-						return true;
-					}
-				}
-
+			if (optimisationPlan == null) {
 				return false;
 			}
-		});
-
-		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
-			return helper.runValidation(validator, extraContext, Collections.singleton(root));
-		});
-
-		if (status == null) {
-			return false;
-		}
-
-		if (status.isOK() == false) {
-
-			// See if this command was executed in the UI thread - if so fire up the dialog box.
-			if (Display.getCurrent() != null) {
-
-				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
-
-				// Wait for use to press a button before continuing.
-				dialog.setBlockOnOpen(true);
-
-				if (dialog.open() == Window.CANCEL) {
-					return false;
-				}
+			final EditingDomain editingDomain = ref.getEditingDomain();
+			if (editingDomain != null) {
+				final CompoundCommand cmd = new CompoundCommand("Update settings");
+				cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(optimisationPlan.getUserSettings())));
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					editingDomain.getCommandStack().execute(cmd);
+				});
 			}
-		}
 
-		if (status.getSeverity() == IStatus.ERROR) {
-			return false;
-		}
+			planRef[0] = optimisationPlan;
+			return true;
+		};
 
-		return true;
+		final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
+			return new LNGSchedulerJobDescriptor(instance.getName(), instance, planRef[0], optimising);
+		};
+		String taskName = "Optimise " + instance.getName();
+
+		final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
+		jobRunner.run(taskName, instance, modelRecord, prepareCallback, createJobDescriptorCallback, null);
+
+		return null;
 	}
 
 	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
@@ -1113,4 +980,58 @@ public final class OptimisationHelper {
 		return false;
 	}
 
+	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter(new IConstraintFilter() {
+
+			@Override
+			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
+
+				for (final Category cat : constraint.getCategories()) {
+					if (cat.getId().endsWith(".base")) {
+						return true;
+					} else if (optimising && cat.getId().endsWith(".optimisation")) {
+						return true;
+					} else if (!optimising && cat.getId().endsWith(".evaluation")) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+		});
+
+		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
+			return helper.runValidation(validator, extraContext, Collections.singleton(root));
+		});
+
+		if (status == null) {
+			return false;
+		}
+
+		if (status.isOK() == false) {
+
+			// See if this command was executed in the UI thread - if so fire up the dialog box.
+			if (Display.getCurrent() != null) {
+
+				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
+
+				// Wait for use to press a button before continuing.
+				dialog.setBlockOnOpen(true);
+
+				if (dialog.open() == Window.CANCEL) {
+					return false;
+				}
+			}
+		}
+
+		if (status.getSeverity() == IStatus.ERROR) {
+			return false;
+		}
+
+		return true;
+	}
 }
