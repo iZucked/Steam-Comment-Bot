@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.rcp.common;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
@@ -112,6 +114,21 @@ public final class RunnerHelper {
 			return false;
 		}
 		display.asyncExec(runnable);
+		return true;
+	}
+
+	/**
+	 * Run the task asynchronously.
+	 * 
+	 * @return Returns false if we were unable to find a {@link Display} thread to execute the task on.
+	 */
+	public static boolean asyncExec(@NonNull final Consumer<@NonNull Display> consumer) {
+
+		final Display display = getWorkbenchDisplay();
+		if (display == null) {
+			return false;
+		}
+		display.asyncExec(() -> consumer.accept(display));
 		return true;
 	}
 
