@@ -19,14 +19,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 
@@ -357,12 +356,12 @@ public class LSOLogger implements ILoggingDataStore {
 		return failedEvaluatedConstraintsMovesMap.get(constraint).get(move).get();
 	}
 
-	public void logSequence(@NonNull IModifiableSequences sequence) {
+	public void logSequence(@NonNull ISequences sequence) {
 		SequencesCounts count = seenSequencesCount.get(sequence);
 		if (count == null) {
 			count = new SequencesCounts(0);
 			count.total.set(1);
-			seenSequencesCount.put(new ModifiableSequences(sequence), count);
+			seenSequencesCount.put(new Sequences(sequence), count);
 		} else {
 			count.total.incrementAndGet();
 		}
@@ -380,13 +379,13 @@ public class LSOLogger implements ILoggingDataStore {
 		return frequencies;
 	}
 
-	public void logSequenceFailedConstraint(IConstraintChecker checker, ModifiableSequences pinnedPotentialRawSequences) {
+	public void logSequenceFailedConstraint(IConstraintChecker checker, @NonNull ISequences pinnedPotentialRawSequences) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.constraints.incrementAndGet();
 	}
 
 	// REPLICATED FROM FAILEDCONSTRAINT
-	public void logSequenceFailedEvaluatedStateConstraint(IEvaluatedStateConstraintChecker checker, ModifiableSequences pinnedPotentialRawSequences) {
+	public void logSequenceFailedEvaluatedStateConstraint(IEvaluatedStateConstraintChecker checker, @NonNull ISequences pinnedPotentialRawSequences) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.constraints.incrementAndGet();
 	}
@@ -406,7 +405,7 @@ public class LSOLogger implements ILoggingDataStore {
 		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.CONSTRAINTS);
 	}
 
-	public void logSequenceAccepted(ModifiableSequences pinnedPotentialRawSequences, long currentFitness) {
+	public void logSequenceAccepted(ISequences pinnedPotentialRawSequences, long currentFitness) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.accepted.incrementAndGet();
 	}
@@ -415,7 +414,7 @@ public class LSOLogger implements ILoggingDataStore {
 		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.ACCEPTED);
 	}
 
-	public void logSequenceRejected(ModifiableSequences pinnedPotentialRawSequences, long currentFitness) {
+	public void logSequenceRejected(ISequences pinnedPotentialRawSequences, long currentFitness) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.rejected.incrementAndGet();
 	}

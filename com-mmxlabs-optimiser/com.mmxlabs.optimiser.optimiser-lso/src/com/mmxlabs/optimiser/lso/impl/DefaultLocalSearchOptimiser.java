@@ -54,7 +54,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	protected int numberOfFailedToValidate;
 
 	protected ModifiableSequences initialRawSequences;
-	
+
 	protected ModifiableSequences currentRawSequences;
 
 	protected ModifiableSequences potentialRawSequences;
@@ -208,8 +208,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return iterationsThisStep;
 	}
 
-	protected void acceptOrRejectMove(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
-			final IModifiableSequences potentialFullSequences, final IEvaluationState evaluationState) {
+	protected void acceptOrRejectMove(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull IModifiableSequences pinnedCurrentRawSequences, final IMove move,
+			final @NonNull ISequences potentialFullSequences, final @NonNull IEvaluationState evaluationState) {
 		if (getFitnessEvaluator().evaluateSequences(potentialRawSequences, potentialFullSequences, evaluationState, move.getAffectedResources())) {
 
 			// Update IReducingConstraintCheckers with new state
@@ -255,8 +255,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		}
 	}
 
-	protected boolean evaluateOnEvaluationProcesses(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
-			final IModifiableSequences potentialFullSequences, final IEvaluationState evaluationState) {
+	protected boolean evaluateOnEvaluationProcesses(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
+			final @NonNull ISequences potentialFullSequences, final @NonNull IEvaluationState evaluationState) {
 		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 			if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
 				// Problem evaluating, reject move
@@ -269,8 +269,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return true;
 	}
 
-	protected boolean applyHardEvaluatedConstraintCheckers(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
-			final IModifiableSequences potentialFullSequences, final IEvaluationState evaluationState) {
+	protected boolean applyHardEvaluatedConstraintCheckers(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
+			final @NonNull ISequences potentialFullSequences, final @NonNull IEvaluationState evaluationState) {
 		for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
 			if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
 				// Problem evaluating, reject move
@@ -290,8 +290,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return true;
 	}
 
-	protected IEvaluationState getEvaluationState(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
-			final IModifiableSequences potentialFullSequences) {
+	protected IEvaluationState getEvaluationState(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
+			final @NonNull ISequences potentialFullSequences) {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
@@ -305,8 +305,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return evaluationState;
 	}
 
-	protected boolean applyHardConstraints(final ModifiableSequences pinnedPotentialRawSequences, final ModifiableSequences pinnedCurrentRawSequences, final IMove move,
-			final IModifiableSequences potentialFullSequences) {
+	protected boolean applyHardConstraints(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
+			final @NonNull ISequences potentialFullSequences) {
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
@@ -329,7 +329,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return true;
 	}
 
-	protected void applyNewMove(final ModifiableSequences pinnedPotentialRawSequences, final IMove move) {
+	protected void applyNewMove(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final IMove move) {
 		move.apply(pinnedPotentialRawSequences);
 		final String moveName = move.getClass().getName();
 		if (loggingDataStore != null) {
