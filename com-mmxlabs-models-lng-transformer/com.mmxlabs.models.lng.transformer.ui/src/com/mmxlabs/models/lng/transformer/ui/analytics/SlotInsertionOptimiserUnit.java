@@ -30,6 +30,7 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -153,7 +154,7 @@ public class SlotInsertionOptimiserUnit {
 			List<IPortSlot> optionElements = new ArrayList<IPortSlot>(slotElements.size() + eventElements.size());
 			optionElements.addAll(slotElements);
 			optionElements.addAll(eventElements);
-			
+
 			monitor.beginTask("Generate solutions", tries);
 
 			final SlotInsertionOptimiserInitialState state = new SlotInsertionOptimiserInitialState();
@@ -166,36 +167,40 @@ public class SlotInsertionOptimiserUnit {
 					// Calculate the initial metrics
 					try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 						scope.enter();
+						ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 						final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 						final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
-						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, null, null, null);
+						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences), null, true, null, null);
+						if (state.initialMetrics == null) {
+							throw new UserFeedbackException(
+									"Unable to perform insertation as there is a problem with the scenario. This is most likely caused by late and overlapping cargoes. Please check validation messages.");
+						}
 						state.originalRawSequences = initialRawSequences;
 					}
 				}
 				{
-					final IModifiableSequences tmp = new ModifiableSequences(state.originalRawSequences);
+					final IModifiableSequences tmpRawSequences = new ModifiableSequences(state.originalRawSequences);
 
-					for (ISequenceElement e : tmp.getUnusedElements()) {
+					for (ISequenceElement e : tmpRawSequences.getUnusedElements()) {
 						if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
 							state.initiallyUnused.add(e);
 						}
-
 					}
 
 					// Makes sure target slots are not contained in the solution.
 					for (final IPortSlot portSlot : optionElements) {
 						final ISequenceElement element = portSlotProvider.getElement(portSlot);
 
-						final LookupManager lookupManager = new LookupManager(tmp);
+						final LookupManager lookupManager = new LookupManager(tmpRawSequences);
 						final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(element);
 						if (lookup != null && lookup.getFirst() != null) {
 							@NonNull
-							final IModifiableSequence modifiableSequence = tmp.getModifiableSequence(lookup.getFirst());
+							final IModifiableSequence modifiableSequence = tmpRawSequences.getModifiableSequence(lookup.getFirst());
 							@NonNull
 							final List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, element);
 							for (final ISequenceElement e : segment) {
 								modifiableSequence.remove(e);
-								tmp.getModifiableUnusedElements().add(e);
+								tmpRawSequences.getModifiableUnusedElements().add(e);
 							}
 
 							// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots at once.
@@ -204,7 +209,7 @@ public class SlotInsertionOptimiserUnit {
 							}
 						}
 					}
-					state.startingPointRawSequences = tmp;
+					state.startingPointRawSequences = tmpRawSequences;
 				}
 			}
 
