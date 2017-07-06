@@ -18,6 +18,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -43,6 +45,9 @@ public class EvaluationHelper {
 	@Inject
 	@NonNull
 	private List<IEvaluationProcess> evaluationProcesses;
+	@Inject
+	@NonNull
+	private List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers;
 
 	@Inject
 	@NonNull
@@ -70,6 +75,35 @@ public class EvaluationHelper {
 
 	public EvaluationHelper(boolean isReevaluating) {
 		this.isReevaluating = isReevaluating;
+	}
+
+	/**
+	 * Instruct the constraint checkers to accept the given sequence as the valid starting state.
+	 * 
+	 * @param currentRawSequences
+	 * @param currentFullSequences
+	 * @return
+	 */
+	public boolean acceptSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences) {
+
+		for (final IConstraintChecker checker : constraintCheckers) {
+			if (checker instanceof IInitialSequencesConstraintChecker) {
+				IInitialSequencesConstraintChecker initialSequencesConstraintChecker = (IInitialSequencesConstraintChecker) checker;
+				initialSequencesConstraintChecker.sequencesAccepted(currentRawSequences, currentFullSequences);
+			}
+		}
+
+		final IEvaluationState evaluationState = new EvaluationState();
+		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
+				return false;
+			}
+		}
+
+		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
+			checker.acceptSequences(currentRawSequences, currentFullSequences, evaluationState);
+		}
+		return true;
 	}
 
 	public boolean checkConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
@@ -121,11 +155,20 @@ public class EvaluationHelper {
 		return thisUnusedCompulsarySlotCount;
 	}
 
-	public @Nullable Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentFullSequences) {
+	public @Nullable Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences,
+			boolean checkEvaluatedStateCheckers) {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
 				return null;
+			}
+		}
+
+		if (checkEvaluatedStateCheckers) {
+			for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
+				if (checker.checkConstraints(currentRawSequences, currentFullSequences, evaluationState) == false) {
+					return null;
+				}
 			}
 		}
 
@@ -203,17 +246,18 @@ public class EvaluationHelper {
 		return evaluationState;
 	}
 
-	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources,
+	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources, boolean checkEvaluatedStateCheckers,
 			final long @Nullable [] referenceMetrics, @Nullable ISearchStatisticsLogger logger) {
 
 		// Do normal manipulation
 		final @NonNull ISequences currentFullSequences = sequenceManipulator.createManipulatedSequences(currentRawSequences);
 
-		return evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, referenceMetrics, logger);
+		return evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, checkEvaluatedStateCheckers, referenceMetrics, logger);
 	}
 
 	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, final @NonNull ISequences currentFullSequences,
-			@Nullable final Collection<@NonNull IResource> currentChangedResources, final long @Nullable [] referenceMetrics, @Nullable ISearchStatisticsLogger logger) {
+			@Nullable final Collection<@NonNull IResource> currentChangedResources, boolean checkEvaluatedStateCheckers, final long @Nullable [] referenceMetrics,
+			@Nullable ISearchStatisticsLogger logger) {
 		// Apply hard constraint checkers
 		if (!checkConstraints(currentFullSequences, currentChangedResources)) {
 			if (logger != null) {
@@ -226,11 +270,11 @@ public class EvaluationHelper {
 			return null;
 		}
 
-		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p1 = evaluateSequences(currentFullSequences);
+		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p1 = evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers);
 		/*
 		 * This is to increase runtime temporarily
 		 */
-		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p2 = isReevaluating ? evaluateSequences(currentFullSequences) : null;
+		final Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> p2 = isReevaluating ? evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers) : null;
 		if (p1 == null) {
 			return null;
 		}

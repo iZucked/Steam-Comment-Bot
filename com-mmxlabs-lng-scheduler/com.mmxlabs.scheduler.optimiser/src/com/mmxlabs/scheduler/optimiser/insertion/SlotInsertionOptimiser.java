@@ -46,7 +46,7 @@ public class SlotInsertionOptimiser {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(SlotInsertionOptimiser.class);
 
-	private List<IPairwiseConstraintChecker> constraintCheckers = new LinkedList<>();
+//	private List<IPairwiseConstraintChecker> constraintCheckers = new LinkedList<>();
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -60,24 +60,27 @@ public class SlotInsertionOptimiser {
 	@Inject
 	private SequencesHitchHikerHelper sequencesHelper;
 
-	@Inject
-	private IMoveHandlerHelper moveHandlerHelper;
+//	@Inject
+//	private IMoveHandlerHelper moveHandlerHelper;
+
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
 
-	@Inject
-	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
-		this.constraintCheckers = new LinkedList<>();
-		for (final IConstraintChecker checker : injectedConstraintCheckers) {
-			if (checker instanceof IPairwiseConstraintChecker) {
-				final IPairwiseConstraintChecker constraintChecker = (IPairwiseConstraintChecker) checker;
-				constraintCheckers.add(constraintChecker);
-
-				// Prep with initial sequences.
-				constraintChecker.checkConstraints(initialRawSequences, null);
-			}
-		}
-	}
+//	@Inject
+//	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
+//		this.constraintCheckers = new LinkedList<>();
+//		for (final IConstraintChecker checker : injectedConstraintCheckers) {
+//			if (checker instanceof IPairwiseConstraintChecker) {
+//				final IPairwiseConstraintChecker constraintChecker = (IPairwiseConstraintChecker) checker;
+//				constraintCheckers.add(constraintChecker);
+//
+//				// Prep with initial sequences.
+//				constraintChecker.checkConstraints(initialRawSequences, null);
+//			}
+//		}
+//		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+//		evaluationHelper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
+//	}
 
 	private @Nullable Pair<ISequences, Long> insert(SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> slots) {
 
@@ -116,10 +119,10 @@ public class SlotInsertionOptimiser {
 		// }
 
 		final long[] initialMetrics = state.initialMetrics;
-		{
-			// Prepare the initial constraint state.
-			evaluationHelper.checkConstraints(manipulator.createManipulatedSequences(currentSequences), null);
-		}
+//		{
+//			// Prepare the initial constraint state.
+//			evaluationHelper.checkConstraints(manipulator.createManipulatedSequences(currentSequences), null);
+//		}
 
 		long currentPNL = 0L;
 		for (final ISequenceElement slot : slots) {
@@ -145,6 +148,7 @@ public class SlotInsertionOptimiser {
 			options.setExtendSearch(false);
 			// options.setStrictOptional(true);
 			options.setStrictOptional(optionsRnd.nextBoolean());
+			options.setCheckEvaluatedState(optionsRnd.nextBoolean());
 			options.setIgnoreUsedElements(false);
 			options.setInsertCanRemove(true);
 			options.setNum_tries(10);
@@ -205,14 +209,13 @@ public class SlotInsertionOptimiser {
 							return null;
 						}
 					}
-
 				}
 			}
 
 			@NonNull
 			final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
 
-			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, null, null);
+			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, null, null);
 			if (metrics == null) {
 				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
 				return new Pair<>(currentSequences, currentPNL);

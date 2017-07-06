@@ -33,25 +33,25 @@ public class LookupManager implements ILookupManager {
 	 */
 	private final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
 
-	private ISequences sequences;
+	private ISequences rawSequences;
 
 	public LookupManager() {
 
 	}
 
-	public LookupManager(final @NonNull ISequences sequences) {
-		createLookup(sequences);
+	public LookupManager(final @NonNull ISequences rawSequences) {
+		createLookup(rawSequences);
 	}
 
 	@Override
-	public void createLookup(final @NonNull ISequences sequences) {
+	public void createLookup(final @NonNull ISequences rawSequences) {
 
-		this.sequences = sequences;
+		this.rawSequences = rawSequences;
 		this.reverseLookup.clear();
 
 		// build table for elements in conventional sequences
-		for (final IResource resource : sequences.getResources()) {
-			final ISequence sequence = sequences.getSequence(resource);
+		for (final IResource resource : rawSequences.getResources()) {
+			final ISequence sequence = rawSequences.getSequence(resource);
 			for (int j = 0; j < sequence.size(); j++) {
 				final ISequenceElement element = sequence.get(j);
 				reverseLookup.put(element, new Pair<>(resource, j));
@@ -67,7 +67,7 @@ public class LookupManager implements ILookupManager {
 		// build table for excluded elements
 		if (alternativeElementProvider != null) {
 			int x = 0;
-			for (final ISequenceElement element : sequences.getUnusedElements()) {
+			for (final ISequenceElement element : rawSequences.getUnusedElements()) {
 				reverseLookup.put(element, new Pair<>(null, x));
 				if (alternativeElementProvider.hasAlternativeElement(element)) {
 					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
@@ -80,7 +80,7 @@ public class LookupManager implements ILookupManager {
 
 	@Override
 	public ISequences getRawSequences() {
-		final ISequences pSsequences = sequences;
+		final ISequences pSsequences = rawSequences;
 		if (pSsequences == null) {
 			throw new IllegalStateException();
 		}
