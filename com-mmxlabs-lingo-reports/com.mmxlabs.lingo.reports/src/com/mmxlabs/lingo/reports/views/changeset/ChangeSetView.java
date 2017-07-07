@@ -1994,7 +1994,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
 			showNonStructuralChanges = !showNonStructuralChanges;
-			ViewerHelper.refresh(viewer, true);
+			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 		}
 	}
 
@@ -2003,7 +2003,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleToggleInsertionPlanDuplicates(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
 			insertionPlanFilter.toggleFilter();
-			ViewerHelper.refresh(viewer, true);
+			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 		}
 	}
 
