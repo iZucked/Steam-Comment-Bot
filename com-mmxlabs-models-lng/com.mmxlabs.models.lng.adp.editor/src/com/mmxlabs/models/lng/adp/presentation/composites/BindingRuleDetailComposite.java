@@ -93,7 +93,7 @@ public class BindingRuleDetailComposite extends Composite implements IDisplayCom
 						final IFlowTypeFactory factory = (IFlowTypeFactory) firstElement;
 
 						bindingRule.setFlowType(factory.createInstance());
-						dialogContext.getDialogController().relayout();
+						dialogContext.getDialogController().rebuild(false);
 					}
 				}
 			}
@@ -138,7 +138,10 @@ public class BindingRuleDetailComposite extends Composite implements IDisplayCom
 		if (value instanceof BindingRule) {
 			bindingRule = (BindingRule) value;
 			flowTypeSelector.setInput(getFactoriesFor(bindingRule));
-			flowTypeSelector.setSelection(new StructuredSelection(getCurrentFactory((BindingRule) value)));
+			IFlowTypeFactory currentFactory = getCurrentFactory((BindingRule) value);
+			if (currentFactory != null) {
+				flowTypeSelector.setSelection(new StructuredSelection(currentFactory));
+			}
 
 			bindingRule.eAdapters().add(adapter);
 		}
@@ -220,7 +223,10 @@ public class BindingRuleDetailComposite extends Composite implements IDisplayCom
 						if (notification.getNotifier() instanceof BindingRule) {
 							final BindingRule bindingRule = (BindingRule) notification.getNotifier();
 							flowTypeSelector.setInput(getFactoriesFor(bindingRule));
-							flowTypeSelector.setSelection(new StructuredSelection(getCurrentFactory(bindingRule)));
+							IFlowTypeFactory currentFactory = getCurrentFactory(bindingRule);
+							if (currentFactory != null) {
+								flowTypeSelector.setSelection(new StructuredSelection(currentFactory));
+							}
 						}
 
 					flowTypeSelector.refresh();

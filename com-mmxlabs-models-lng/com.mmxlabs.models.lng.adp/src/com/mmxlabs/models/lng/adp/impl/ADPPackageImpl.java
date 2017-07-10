@@ -509,8 +509,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSubContractProfile_DistributionModel() {
-		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(1);
+	public EAttribute getSubContractProfile_ContractType() {
+		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -518,7 +518,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSubContractProfile_SlotTemplateId() {
+	public EAttribute getSubContractProfile_TotalVolume() {
 		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -527,8 +527,53 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSubContractProfile_VolumeUnit() {
+		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSubContractProfile_DistributionModel() {
+		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSubContractProfile_SlotTemplateId() {
+		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSubContractProfile_CustomAttribs() {
-		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(3);
+		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSubContractProfile_NominatedVessel() {
+		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSubContractProfile_ShippingDays() {
+		return (EAttribute)subContractProfileEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -537,7 +582,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	public EReference getSubContractProfile_Slots() {
-		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(4);
+		return (EReference)subContractProfileEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -897,8 +942,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		subContractProfileEClass = createEClass(SUB_CONTRACT_PROFILE);
 		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__NAME);
+		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__CONTRACT_TYPE);
+		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__TOTAL_VOLUME);
+		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__VOLUME_UNIT);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL);
 		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID);
+		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__NOMINATED_VESSEL);
+		createEAttribute(subContractProfileEClass, SUB_CONTRACT_PROFILE__SHIPPING_DAYS);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS);
 		createEReference(subContractProfileEClass, SUB_CONTRACT_PROFILE__SLOTS);
 
@@ -988,8 +1038,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
-		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter contractProfileEClass_T = addETypeParameter(contractProfileEClass, "T");
@@ -1047,8 +1097,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 
 		initEClass(subContractProfileEClass, SubContractProfile.class, "SubContractProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSubContractProfile_Name(), ecorePackage.getEString(), "name", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubContractProfile_ContractType(), theCommercialPackage.getContractType(), "contractType", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubContractProfile_TotalVolume(), ecorePackage.getEInt(), "totalVolume", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubContractProfile_VolumeUnit(), theTypesPackage.getVolumeUnits(), "volumeUnit", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSubContractProfile_DistributionModel(), this.getDistributionModel(), null, "distributionModel", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSubContractProfile_SlotTemplateId(), ecorePackage.getEString(), "slotTemplateId", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSubContractProfile_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubContractProfile_ShippingDays(), ecorePackage.getEInt(), "shippingDays", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSubContractProfile_CustomAttribs(), this.getCustomSubProfileAttributes(), null, "customAttribs", null, 0, 1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(subContractProfileEClass_T);
 		initEReference(getSubContractProfile_Slots(), g1, null, "slots", null, 0, -1, SubContractProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

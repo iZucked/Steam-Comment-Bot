@@ -32,14 +32,14 @@ public class ShippingOptionConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof ShippingOption) {
 			ShippingOption shippingOption = (ShippingOption) target;
 
-			if (shippingOption.getVessel() == null && shippingOption.getVesselAssignmentType() == null) {
-				createSimpleStatus(ctx, statuses, "Missing default vessel allocation", shippingOption, ADPPackage.Literals.SHIPPING_OPTION__VESSEL,
-						ADPPackage.Literals.SHIPPING_OPTION__VESSEL_ASSIGNMENT_TYPE);
-			}
-			if (shippingOption.getVessel() != null && shippingOption.getVesselAssignmentType() != null) {
-				createSimpleStatus(ctx, statuses, "Choose nominated vessel or vessel assignment type", shippingOption, ADPPackage.Literals.SHIPPING_OPTION__VESSEL,
-						ADPPackage.Literals.SHIPPING_OPTION__VESSEL_ASSIGNMENT_TYPE);
-			}
+//			if (shippingOption.getVessel() == null && shippingOption.getVesselAssignmentType() == null) {
+//				createSimpleStatus(ctx, statuses, "Missing default vessel allocation", shippingOption, ADPPackage.Literals.SHIPPING_OPTION__VESSEL,
+//						ADPPackage.Literals.SHIPPING_OPTION__VESSEL_ASSIGNMENT_TYPE);
+//			}
+//			if (shippingOption.getVessel() != null && shippingOption.getVesselAssignmentType() != null) {
+//				createSimpleStatus(ctx, statuses, "Choose nominated vessel or vessel assignment type", shippingOption, ADPPackage.Literals.SHIPPING_OPTION__VESSEL,
+//						ADPPackage.Literals.SHIPPING_OPTION__VESSEL_ASSIGNMENT_TYPE);
+//			}
 
 		}
 

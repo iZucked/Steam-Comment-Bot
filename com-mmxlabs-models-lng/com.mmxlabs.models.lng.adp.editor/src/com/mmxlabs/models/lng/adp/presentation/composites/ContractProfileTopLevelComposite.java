@@ -36,6 +36,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.CustomSubProfileAttributes;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -279,7 +280,11 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 			} else {
 				final Group g2 = new Group(parent, SWT.NONE);
 				toolkit.adapt(g2);
-				g2.setText(EditorUtils.unmangle(ref.getName()));
+				if (value instanceof CustomSubProfileAttributes) {
+					g2.setText("Options");
+				} else {
+					g2.setText(EditorUtils.unmangle(ref.getName()));
+				}
 				g2.setLayout(new FillLayout());
 				g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 				sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), dialogContext, toolkit);

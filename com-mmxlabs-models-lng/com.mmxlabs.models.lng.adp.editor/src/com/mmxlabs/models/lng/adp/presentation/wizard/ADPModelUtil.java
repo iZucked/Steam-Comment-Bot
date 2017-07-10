@@ -27,12 +27,12 @@ import org.osgi.framework.ServiceReference;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.BindingRule;
+import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
 import com.mmxlabs.models.lng.adp.FlowType;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
-import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
 import com.mmxlabs.models.lng.adp.ext.IADPBindingRuleProvider;
 import com.mmxlabs.models.lng.adp.ext.IADPProfileProvider;
 import com.mmxlabs.models.lng.adp.ext.IProfileGenerator;
@@ -64,6 +64,16 @@ public class ADPModelUtil {
 		copy.getCargoModel().getVesselAvailabilities().addAll(copier.copyAll(scenarioModel.getCargoModel().getVesselAvailabilities()));
 
 		copy.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
+
+		if (scenarioModel.isSetPromptPeriodStart()) {
+			copy.setPromptPeriodStart(scenarioModel.getPromptPeriodStart());
+		}
+		if (scenarioModel.isSetPromptPeriodEnd()) {
+			copy.setPromptPeriodEnd(scenarioModel.getPromptPeriodEnd());
+		}
+		if (scenarioModel.isSetSchedulingEndDate()) {
+			copy.setSchedulingEndDate(scenarioModel.getSchedulingEndDate());
+		}
 		// Copy existing model?
 		// for (EObject eObject : scenarioModel.getExtensions()) {
 		// if (eObject instanceof ADPModel) {
@@ -100,7 +110,7 @@ public class ADPModelUtil {
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
 		try {
 			final IADPProfileProvider profileProvider = bundleContext.getService(serviceReference);
-			profileProvider.createProfiles(commercialModel, adpModel);
+			profileProvider.createProfiles(scenarioModel, commercialModel, adpModel);
 
 		} finally {
 			bundleContext.ungetService(serviceReference);
@@ -182,7 +192,7 @@ public class ADPModelUtil {
 		}
 		try {
 			final IADPBindingRuleProvider provider = bundleContext.getService(serviceReference);
-			provider.generateBindingRules(adpModel);
+			provider.generateBindingRules(adpModel, scenarioModel);
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
@@ -226,8 +236,45 @@ public class ADPModelUtil {
 							break;
 						}
 					}
+					if (bestOption != null) {
+						createCargo(usedSlots, cargoModel, rule, discharge, bestOption);
+					}
+				}
+			}
+			if (flowType instanceof DeliverToProfileFlow) {
+				final DeliverToProfileFlow flow = (DeliverToProfileFlow) flowType;
 
-					createCargo(usedSlots, cargoModel, rule, discharge, bestOption);
+				final Iterator<LoadSlot> loadItr = new SeenCargoIterator<>((Iterator<LoadSlot>) rule.getSubProfile().getSlots().iterator(), usedSlots);
+				while (loadItr.hasNext()) {
+					final LoadSlot load = loadItr.next();
+
+					DischargeSlot bestOption = null;
+					final Iterator<DischargeSlot> dischargeItr = new SeenCargoIterator<>(flow.getSubProfile().getSlots().iterator(), usedSlots);
+					while (dischargeItr.hasNext()) {
+						final DischargeSlot discharge = dischargeItr.next();
+						if (discharge == null) {
+							continue;
+						}
+
+						// Simple year/month match (Must be same year)
+						if (load.getWindowStart().getYear() != discharge.getWindowStart().getYear()) {
+							continue;
+						}
+						// Allow this month
+						if (load.getWindowStart().getMonthValue() != discharge.getWindowStart().getMonthValue()) {
+							continue;
+						}
+
+						if (bestOption == null) {
+							bestOption = discharge;
+						} else {
+							// TODO: Find better option
+							break;
+						}
+					}
+					if (bestOption != null) {
+						createCargo(usedSlots, cargoModel, rule, bestOption, load);
+					}
 				}
 			}
 			// if (flowType instanceof SupplyFromSpotFlow) {

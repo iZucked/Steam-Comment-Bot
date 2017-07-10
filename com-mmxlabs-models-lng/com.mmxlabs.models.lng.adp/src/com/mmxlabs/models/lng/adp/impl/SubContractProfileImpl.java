@@ -13,6 +13,9 @@ import com.mmxlabs.models.lng.adp.SubContractProfile;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -34,8 +37,13 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getContractType <em>Contract Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getTotalVolume <em>Total Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getDistributionModel <em>Distribution Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getSlotTemplateId <em>Slot Template Id</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getShippingDays <em>Shipping Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getCustomAttribs <em>Custom Attribs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.SubContractProfileImpl#getSlots <em>Slots</em>}</li>
  * </ul>
@@ -62,6 +70,66 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ContractType CONTRACT_TYPE_EDEFAULT = ContractType.BOTH;
+
+	/**
+	 * The cached value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ContractType contractType = CONTRACT_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getTotalVolume() <em>Total Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int TOTAL_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getTotalVolume() <em>Total Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int totalVolume = TOTAL_VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits VOLUME_UNIT_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits volumeUnit = VOLUME_UNIT_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getDistributionModel() <em>Distribution Model</em>}' containment reference.
@@ -91,6 +159,36 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 	 * @ordered
 	 */
 	protected String slotTemplateId = SLOT_TEMPLATE_ID_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getNominatedVessel() <em>Nominated Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNominatedVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected Vessel nominatedVessel;
+
+	/**
+	 * The default value of the '{@link #getShippingDays() <em>Shipping Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SHIPPING_DAYS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getShippingDays() <em>Shipping Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected int shippingDays = SHIPPING_DAYS_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getCustomAttribs() <em>Custom Attribs</em>}' containment reference.
@@ -150,6 +248,69 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ContractType getContractType() {
+		return contractType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContractType(ContractType newContractType) {
+		ContractType oldContractType = contractType;
+		contractType = newContractType == null ? CONTRACT_TYPE_EDEFAULT : newContractType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE, oldContractType, contractType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getTotalVolume() {
+		return totalVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTotalVolume(int newTotalVolume) {
+		int oldTotalVolume = totalVolume;
+		totalVolume = newTotalVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME, oldTotalVolume, totalVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VolumeUnits getVolumeUnit() {
+		return volumeUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeUnit(VolumeUnits newVolumeUnit) {
+		VolumeUnits oldVolumeUnit = volumeUnit;
+		volumeUnit = newVolumeUnit == null ? VOLUME_UNIT_EDEFAULT : newVolumeUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT, oldVolumeUnit, volumeUnit));
 	}
 
 	/**
@@ -311,6 +472,65 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Vessel getNominatedVessel() {
+		if (nominatedVessel != null && nominatedVessel.eIsProxy()) {
+			InternalEObject oldNominatedVessel = (InternalEObject)nominatedVessel;
+			nominatedVessel = (Vessel)eResolveProxy(oldNominatedVessel);
+			if (nominatedVessel != oldNominatedVessel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL, oldNominatedVessel, nominatedVessel));
+			}
+		}
+		return nominatedVessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vessel basicGetNominatedVessel() {
+		return nominatedVessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNominatedVessel(Vessel newNominatedVessel) {
+		Vessel oldNominatedVessel = nominatedVessel;
+		nominatedVessel = newNominatedVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL, oldNominatedVessel, nominatedVessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getShippingDays() {
+		return shippingDays;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShippingDays(int newShippingDays) {
+		int oldShippingDays = shippingDays;
+		shippingDays = newShippingDays;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS, oldShippingDays, shippingDays));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<T> getSlots() {
 		if (slots == null) {
 			slots = new EObjectResolvingEList<T>(Slot.class, this, ADPPackage.SUB_CONTRACT_PROFILE__SLOTS);
@@ -344,11 +564,22 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 		switch (featureID) {
 			case ADPPackage.SUB_CONTRACT_PROFILE__NAME:
 				return getName();
+			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
+				return getContractType();
+			case ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME:
+				return getTotalVolume();
+			case ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT:
+				return getVolumeUnit();
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 				if (resolve) return getDistributionModel();
 				return basicGetDistributionModel();
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
 				return getSlotTemplateId();
+			case ADPPackage.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL:
+				if (resolve) return getNominatedVessel();
+				return basicGetNominatedVessel();
+			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
+				return getShippingDays();
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				if (resolve) return getCustomAttribs();
 				return basicGetCustomAttribs();
@@ -370,11 +601,26 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 			case ADPPackage.SUB_CONTRACT_PROFILE__NAME:
 				setName((String)newValue);
 				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
+				setContractType((ContractType)newValue);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME:
+				setTotalVolume((Integer)newValue);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT:
+				setVolumeUnit((VolumeUnits)newValue);
+				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 				setDistributionModel((DistributionModel)newValue);
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
 				setSlotTemplateId((String)newValue);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL:
+				setNominatedVessel((Vessel)newValue);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
+				setShippingDays((Integer)newValue);
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				setCustomAttribs((CustomSubProfileAttributes)newValue);
@@ -398,11 +644,26 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 			case ADPPackage.SUB_CONTRACT_PROFILE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
+				setContractType(CONTRACT_TYPE_EDEFAULT);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME:
+				setTotalVolume(TOTAL_VOLUME_EDEFAULT);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT:
+				setVolumeUnit(VOLUME_UNIT_EDEFAULT);
+				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 				setDistributionModel((DistributionModel)null);
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
 				setSlotTemplateId(SLOT_TEMPLATE_ID_EDEFAULT);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL:
+				setNominatedVessel((Vessel)null);
+				return;
+			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
+				setShippingDays(SHIPPING_DAYS_EDEFAULT);
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				setCustomAttribs((CustomSubProfileAttributes)null);
@@ -424,10 +685,20 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 		switch (featureID) {
 			case ADPPackage.SUB_CONTRACT_PROFILE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
+				return contractType != CONTRACT_TYPE_EDEFAULT;
+			case ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME:
+				return totalVolume != TOTAL_VOLUME_EDEFAULT;
+			case ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT:
+				return volumeUnit != VOLUME_UNIT_EDEFAULT;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:
 				return distributionModel != null;
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
 				return SLOT_TEMPLATE_ID_EDEFAULT == null ? slotTemplateId != null : !SLOT_TEMPLATE_ID_EDEFAULT.equals(slotTemplateId);
+			case ADPPackage.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL:
+				return nominatedVessel != null;
+			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
+				return shippingDays != SHIPPING_DAYS_EDEFAULT;
 			case ADPPackage.SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS:
 				return customAttribs != null;
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOTS:
@@ -448,8 +719,16 @@ public class SubContractProfileImpl<T extends Slot> extends EObjectImpl implemen
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", contractType: ");
+		result.append(contractType);
+		result.append(", totalVolume: ");
+		result.append(totalVolume);
+		result.append(", volumeUnit: ");
+		result.append(volumeUnit);
 		result.append(", slotTemplateId: ");
 		result.append(slotTemplateId);
+		result.append(", shippingDays: ");
+		result.append(shippingDays);
 		result.append(')');
 		return result.toString();
 	}

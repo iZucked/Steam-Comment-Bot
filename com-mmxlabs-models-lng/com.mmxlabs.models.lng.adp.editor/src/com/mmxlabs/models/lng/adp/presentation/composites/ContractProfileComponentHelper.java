@@ -12,7 +12,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -79,10 +79,13 @@ public class ContractProfileComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the contract feature on ContractProfile
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT);
+		editor.setEditorLocked(true);
+		editor.setEditorEnabled(false);
+		detailComposite.addInlineEditor(editor);
 	}
 	/**
 	 * Create the editor for the contractCode feature on ContractProfile

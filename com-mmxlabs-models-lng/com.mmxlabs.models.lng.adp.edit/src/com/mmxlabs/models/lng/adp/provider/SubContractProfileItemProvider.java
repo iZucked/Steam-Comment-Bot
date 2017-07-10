@@ -69,7 +69,12 @@ public class SubContractProfileItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addContractTypePropertyDescriptor(object);
+			addTotalVolumePropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 			addSlotTemplateIdPropertyDescriptor(object);
+			addNominatedVesselPropertyDescriptor(object);
+			addShippingDaysPropertyDescriptor(object);
 			addSlotsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -98,6 +103,72 @@ public class SubContractProfileItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Contract Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_contractType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_contractType_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONTRACT_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Total Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTotalVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_totalVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_totalVolume_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__TOTAL_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_volumeUnit_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Slot Template Id feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -115,6 +186,50 @@ public class SubContractProfileItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Nominated Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNominatedVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_nominatedVessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_nominatedVessel_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Shipping Days feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShippingDaysPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SubContractProfile_shippingDays_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SubContractProfile_shippingDays_feature", "_UI_SubContractProfile_type"),
+				 ADPPackage.Literals.SUB_CONTRACT_PROFILE__SHIPPING_DAYS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -211,7 +326,11 @@ public class SubContractProfileItemProvider
 
 		switch (notification.getFeatureID(SubContractProfile.class)) {
 			case ADPPackage.SUB_CONTRACT_PROFILE__NAME:
+			case ADPPackage.SUB_CONTRACT_PROFILE__CONTRACT_TYPE:
+			case ADPPackage.SUB_CONTRACT_PROFILE__TOTAL_VOLUME:
+			case ADPPackage.SUB_CONTRACT_PROFILE__VOLUME_UNIT:
 			case ADPPackage.SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID:
+			case ADPPackage.SUB_CONTRACT_PROFILE__SHIPPING_DAYS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ADPPackage.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL:

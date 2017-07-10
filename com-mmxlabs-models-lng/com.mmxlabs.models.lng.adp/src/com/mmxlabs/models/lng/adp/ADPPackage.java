@@ -477,13 +477,40 @@ public interface ADPPackage extends EPackage {
 	int SUB_CONTRACT_PROFILE__NAME = 0;
 
 	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__CONTRACT_TYPE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Total Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__TOTAL_VOLUME = 2;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__VOLUME_UNIT = 3;
+
+	/**
 	 * The feature id for the '<em><b>Distribution Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL = 1;
+	int SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL = 4;
 
 	/**
 	 * The feature id for the '<em><b>Slot Template Id</b></em>' attribute.
@@ -492,7 +519,25 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID = 2;
+	int SUB_CONTRACT_PROFILE__SLOT_TEMPLATE_ID = 5;
+
+	/**
+	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__NOMINATED_VESSEL = 6;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_CONTRACT_PROFILE__SHIPPING_DAYS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Custom Attribs</b></em>' containment reference.
@@ -501,7 +546,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS = 3;
+	int SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS = 8;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -510,7 +555,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE__SLOTS = 4;
+	int SUB_CONTRACT_PROFILE__SLOTS = 9;
 
 	/**
 	 * The number of structural features of the '<em>Sub Contract Profile</em>' class.
@@ -519,7 +564,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 5;
+	int SUB_CONTRACT_PROFILE_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Sub Contract Profile</em>' class.
@@ -1407,6 +1452,39 @@ public interface ADPPackage extends EPackage {
 	EAttribute getSubContractProfile_Name();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getContractType <em>Contract Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Contract Type</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getContractType()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EAttribute getSubContractProfile_ContractType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getTotalVolume <em>Total Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total Volume</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getTotalVolume()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EAttribute getSubContractProfile_TotalVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getVolumeUnit <em>Volume Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Unit</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getVolumeUnit()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EAttribute getSubContractProfile_VolumeUnit();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getDistributionModel <em>Distribution Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1438,6 +1516,28 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSubContractProfile_CustomAttribs();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getNominatedVessel <em>Nominated Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Nominated Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getNominatedVessel()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EReference getSubContractProfile_NominatedVessel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getShippingDays <em>Shipping Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Shipping Days</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SubContractProfile#getShippingDays()
+	 * @see #getSubContractProfile()
+	 * @generated
+	 */
+	EAttribute getSubContractProfile_ShippingDays();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.SubContractProfile#getSlots <em>Slots</em>}'.
@@ -2043,6 +2143,30 @@ public interface ADPPackage extends EPackage {
 		EAttribute SUB_CONTRACT_PROFILE__NAME = eINSTANCE.getSubContractProfile_Name();
 
 		/**
+		 * The meta object literal for the '<em><b>Contract Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_CONTRACT_PROFILE__CONTRACT_TYPE = eINSTANCE.getSubContractProfile_ContractType();
+
+		/**
+		 * The meta object literal for the '<em><b>Total Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_CONTRACT_PROFILE__TOTAL_VOLUME = eINSTANCE.getSubContractProfile_TotalVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_CONTRACT_PROFILE__VOLUME_UNIT = eINSTANCE.getSubContractProfile_VolumeUnit();
+
+		/**
 		 * The meta object literal for the '<em><b>Distribution Model</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2065,6 +2189,22 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SUB_CONTRACT_PROFILE__CUSTOM_ATTRIBS = eINSTANCE.getSubContractProfile_CustomAttribs();
+
+		/**
+		 * The meta object literal for the '<em><b>Nominated Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUB_CONTRACT_PROFILE__NOMINATED_VESSEL = eINSTANCE.getSubContractProfile_NominatedVessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_CONTRACT_PROFILE__SHIPPING_DAYS = eINSTANCE.getSubContractProfile_ShippingDays();
 
 		/**
 		 * The meta object literal for the '<em><b>Slots</b></em>' reference list feature.

@@ -60,8 +60,8 @@ public class BindingRuleLabelProvider implements ILabelProvider {
 			final BindingRule bindingRule = (BindingRule) element;
 			final ContractProfile<?> profile = bindingRule.getProfile();
 			final SubContractProfile<?> subProfile = bindingRule.getSubProfile();
-			final String profileName = profile.getContract().getName();
-			final String subProfileName = subProfile.getName();
+			final String profileName = (profile == null) ? "<Not specified>" : profile.getContract().getName();
+			final String subProfileName = (subProfile == null) ? "<Not specified>" : subProfile.getName();
 
 			final FlowType flowType = bindingRule.getFlowType();
 			String flowStr = "";
@@ -88,17 +88,19 @@ public class BindingRuleLabelProvider implements ILabelProvider {
 			}
 			final ShippingOption option = bindingRule.getShippingOption();
 			String vesselStr = "";
-			if (option.getVessel() != null) {
-				vesselStr = option.getVessel().getName();
-			} else if (option.getVesselAssignmentType() instanceof VesselAvailability) {
-				final VesselAvailability vesselAvailability = (VesselAvailability) option.getVesselAssignmentType();
-				vesselStr = vesselAvailability.getVessel().getName();
-			} else if (option.getVesselAssignmentType() instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) option.getVesselAssignmentType();
-				if (option.getSpotIndex() == -1) {
-					vesselStr = String.format("Nominal - %s", charterInMarket.getName());
-				} else {
-					vesselStr = String.format("Market - %s", charterInMarket.getName());
+			if (option != null) {
+				if (option.getVessel() != null) {
+					vesselStr = option.getVessel().getName();
+				} else if (option.getVesselAssignmentType() instanceof VesselAvailability) {
+					final VesselAvailability vesselAvailability = (VesselAvailability) option.getVesselAssignmentType();
+					vesselStr = vesselAvailability.getVessel().getName();
+				} else if (option.getVesselAssignmentType() instanceof CharterInMarket) {
+					final CharterInMarket charterInMarket = (CharterInMarket) option.getVesselAssignmentType();
+					if (option.getSpotIndex() == -1) {
+						vesselStr = String.format("Nominal - %s", charterInMarket.getName());
+					} else {
+						vesselStr = String.format("Market - %s", charterInMarket.getName());
+					}
 				}
 			}
 

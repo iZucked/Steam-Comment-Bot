@@ -9,6 +9,7 @@ import java.util.Collections;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -26,6 +27,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -41,12 +43,14 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.BindingRule;
+import com.mmxlabs.models.lng.adp.ShippingOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -139,10 +143,7 @@ public class ADPBindingPage extends WizardPage {
 
 			@Override
 			public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
-
-				// TODO Auto-generated method stub
 				return referenceValueProviderCache;
-
 			}
 
 			@Override
@@ -153,13 +154,12 @@ public class ADPBindingPage extends WizardPage {
 
 			@Override
 			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-				// TODO Auto-generated method stub
 				command.execute();
 			}
 
 			@Override
 			public ModelReference getModelReference() {
-				return location.getModelReference();
+				return modelReference;
 			}
 
 		};
@@ -199,6 +199,8 @@ public class ADPBindingPage extends WizardPage {
 			@Override
 			public boolean isLocked() {
 				// TODO Auto-generated method stub
+				// return location.isLocked();
+
 				return false;
 			}
 
@@ -217,7 +219,7 @@ public class ADPBindingPage extends WizardPage {
 			@Override
 			public ScenarioInstance getScenarioInstance() {
 				// TODO Auto-generated method stub
-				throw new UnsupportedOperationException();
+				return null;// location.getScenarioInstance();
 			}
 
 			@Override
@@ -331,14 +333,21 @@ public class ADPBindingPage extends WizardPage {
 							final Action action = new Action("New") {
 								@Override
 								public void run() {
-
 									BindingRule bindingRule = ADPFactory.eINSTANCE.createBindingRule();
+									
+									// Set some defaults
+									bindingRule.setShippingOption(ADPFactory.eINSTANCE.createShippingOption());
+									bindingRule.setFlowType(ADPFactory.eINSTANCE.createDeliverToFlow());
+									
 									CompoundCommand cmd = new CompoundCommand();
 									cmd.append(AddCommand.create(location.getEditingDomain(), adpModel, ADPPackage.Literals.ADP_MODEL__BINDING_RULES, bindingRule));
 									// Disallow re-wiring
 
+									CommandStack commandStack = location.getEditingDomain().getCommandStack();
 									if (cmd.canExecute()) {
-										location.getEditingDomain().getCommandStack().execute(cmd);
+										commandStack.execute(cmd);
+									} else {
+										assert false;
 									}
 
 									final DetailCompositeDialog dcd = new DetailCompositeDialog(viewer.getControl().getShell(), location.getDefaultCommandHandler(), ~SWT.MAX) {
@@ -348,8 +357,11 @@ public class ADPBindingPage extends WizardPage {
 											super.configureShell(newShell);
 										}
 									};
-									dcd.open(location, location.getRootObject(), Collections.singletonList(bindingRule), location.isLocked());
-
+									if (dcd.open(location, location.getRootObject(), Collections.singletonList(bindingRule), location.isLocked()) != Window.OK) {
+										// Revert state
+										assert commandStack.getUndoCommand() == cmd;
+										commandStack.undo();
+									}
 									viewer.refresh();
 								}
 							};

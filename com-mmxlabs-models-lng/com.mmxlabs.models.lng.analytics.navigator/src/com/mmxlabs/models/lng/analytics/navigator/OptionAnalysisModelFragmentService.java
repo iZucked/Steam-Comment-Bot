@@ -36,7 +36,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
-
 public class OptionAnalysisModelFragmentService {
 
 	private final Map<ModelRecord, ModelAdapter> dataMap = new ConcurrentHashMap<>();
@@ -109,12 +108,13 @@ public class OptionAnalysisModelFragmentService {
 			final ModelReference modelReference = modelRecord.getSharedReference();
 			assert modelReference != null;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
-			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-			for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
-				createFragment(plan);
+			if (scenarioModel.getAnalyticsModel() != null) {
+				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+				for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
+					createFragment(plan);
+				}
+				analyticsModel.eAdapters().add(ModelAdapter.this);
 			}
-
-			analyticsModel.eAdapters().add(ModelAdapter.this);
 			this.scenarioModel = scenarioModel;
 		}
 
@@ -123,15 +123,18 @@ public class OptionAnalysisModelFragmentService {
 			manager.dispose();
 			try (final ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("OptionAnalysisModelFragmentService:dispose")) {
 				if (scenarioModel != null) {
-					final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
-					analyticsModel.eAdapters().remove(ModelAdapter.this);
-					for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
-						removeFragment(plan);
-					}
+					if (scenarioModel.getAnalyticsModel() != null) {
 
-					// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
-					for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
-						removeFragment(plan);
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+						analyticsModel.eAdapters().remove(ModelAdapter.this);
+						for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
+							removeFragment(plan);
+						}
+
+						// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
+						for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
+							removeFragment(plan);
+						}
 					}
 				}
 			}

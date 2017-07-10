@@ -6,9 +6,9 @@ package com.mmxlabs.models.lng.adp.presentation.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -20,12 +20,12 @@ import org.eclipse.ui.PartInitException;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
-import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 /**
  * Export the selected scenario to the filesystem somehow.
@@ -74,10 +74,25 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 						ADPModelUtil.makeBindings(scenarioModel, adpModel);
 
 						try {
-							fork[0] = ScenarioServiceModelUtils.fork(instance, "ADP Plan", SubMonitor.convert(monitor, 100));
 
+							IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(instance);
+							fork[0] = scenarioService.insert(instance, scenarioModel, (f) -> {
+								f.setName("ADP Plan");
+
+								// Copy across various bits of information
+								f.getMetadata().setContentType(instance.getMetadata().getContentType());
+								f.getMetadata().setCreated(new Date());
+								f.getMetadata().setLastModified(new Date());
+
+								// Copy version context information
+								f.setVersionContext(instance.getVersionContext());
+								f.setScenarioVersion(instance.getScenarioVersion());
+
+								f.setClientVersionContext(instance.getClientVersionContext());
+								f.setClientScenarioVersion(instance.getClientScenarioVersion());
+
+							});
 						} catch (final Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					} finally {
