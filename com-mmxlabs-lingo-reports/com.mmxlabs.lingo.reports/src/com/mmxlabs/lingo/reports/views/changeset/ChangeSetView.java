@@ -736,16 +736,12 @@ public class ChangeSetView implements IAdaptable {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
-		columnHelper.getDiagram().setChangeSetRoot(newTableRoot);
-		ViewerHelper.setInput(viewer, true, newTableRoot);
-
-		final ViewState oldViewState = currentViewState;
 		final ViewState newViewState = new ViewState();
 		newViewState.root = newRoot;
 		newViewState.tableRootToBase = newTableRoot;
 		newViewState.tableRootToPrevious = newTableRoot;
 
-		cleanUp(oldViewState);
+		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
 	}
 
 	public void cleanUp(final ViewState viewState) {
