@@ -98,8 +98,9 @@ public class Application implements IApplication {
 					}
 				}
 			}
-
 		}
+
+		initAccessControl();
 
 		final Display display = PlatformUI.createDisplay();
 
@@ -114,7 +115,6 @@ public class Application implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		initAccessControl();
 
 		cleanupP2();
 
@@ -197,13 +197,6 @@ public class Application implements IApplication {
 	}
 
 	private void initAccessControl() {
-		// Initialise feature enablements
-		LicenseFeatures.initialiseFeatureEnablements();
-
-		// Login our default user
-		final Subject subject = SecurityUtils.getSubject();
-		subject.login(new UsernamePasswordToken("user", "password"));
-
 		PluginRegistryHook.initialisePluginXMLEnablements();
 
 		ReplaceableViewManager.initialiseReplaceableViews();
