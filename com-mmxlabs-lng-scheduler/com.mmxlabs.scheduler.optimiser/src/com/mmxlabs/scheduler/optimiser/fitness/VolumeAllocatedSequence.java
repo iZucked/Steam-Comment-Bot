@@ -104,7 +104,6 @@ public class VolumeAllocatedSequence {
 		public IPortTimesRecord portTimesRecord;
 		public int violatingIdleHours;
 		public long weightedIdleCost;
-		public long capacityViolationSum;
 		public boolean forcedCooldown;
 		public List<@NonNull CapacityViolationType> capacityViolations = new ArrayList<>();
 		public Map<@NonNull CapacityViolationType, Long> capacityViolationVolumes = new EnumMap<>(CapacityViolationType.class);
@@ -220,7 +219,6 @@ public class VolumeAllocatedSequence {
 
 		@NonNull
 		final SlotRecord record = getOrExceptionSlotRecord(portSlot);
-		record.capacityViolationSum += 1;
 		record.capacityViolations.add(cvt);
 		record.capacityViolationVolumes.put(cvt, volume);
 	}
@@ -229,10 +227,6 @@ public class VolumeAllocatedSequence {
 		final SlotRecord record = getOrExceptionSlotRecord(portSlot);
 
 		return record.capacityViolationVolumes.getOrDefault(violation, 0L);
-	}
-
-	public long getCapacityViolationCount(final @NonNull IPortSlot portSlot) {
-		return getOrExceptionSlotRecord(portSlot).capacityViolationSum;
 	}
 
 	/**

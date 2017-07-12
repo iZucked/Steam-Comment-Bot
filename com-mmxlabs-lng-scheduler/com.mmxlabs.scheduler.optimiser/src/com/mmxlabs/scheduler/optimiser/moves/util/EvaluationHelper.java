@@ -26,13 +26,16 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @PerChainUnitScope
@@ -65,16 +68,29 @@ public class EvaluationHelper {
 	@NonNull
 	private IOptionalElementsProvider optionalElementsProvider;
 
-	private boolean isReevaluating;
+	private final boolean isReevaluating;
 
 	private boolean strictChecking = false;
+
+	private int flexibleViolationCount;
 
 	public EvaluationHelper() {
 		this.isReevaluating = false;
 	}
 
-	public EvaluationHelper(boolean isReevaluating) {
+	public EvaluationHelper(final boolean isReevaluating) {
 		this.isReevaluating = isReevaluating;
+	}
+
+	public void setFlexibleViolationCount(final int flexibleSoftViolations) {
+
+		flexibleViolationCount = flexibleSoftViolations;
+		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
+			if (checker instanceof CapacityEvaluatedStateChecker) {
+				final CapacityEvaluatedStateChecker capacityEvaluatedStateChecker = (CapacityEvaluatedStateChecker) checker;
+				capacityEvaluatedStateChecker.setFlexibleSoftViolations(flexibleSoftViolations);
+			}
+		}
 	}
 
 	/**
@@ -88,7 +104,7 @@ public class EvaluationHelper {
 
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker instanceof IInitialSequencesConstraintChecker) {
-				IInitialSequencesConstraintChecker initialSequencesConstraintChecker = (IInitialSequencesConstraintChecker) checker;
+				final IInitialSequencesConstraintChecker initialSequencesConstraintChecker = (IInitialSequencesConstraintChecker) checker;
 				initialSequencesConstraintChecker.sequencesAccepted(currentRawSequences, currentFullSequences);
 			}
 		}
@@ -156,7 +172,7 @@ public class EvaluationHelper {
 	}
 
 	public @Nullable Pair<@NonNull VolumeAllocatedSequences, @NonNull IEvaluationState> evaluateSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences,
-			boolean checkEvaluatedStateCheckers) {
+			final boolean checkEvaluatedStateCheckers) {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
@@ -223,9 +239,24 @@ public class EvaluationHelper {
 
 	public long calculateScheduleCapacity(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
 		long sumCost = 0;
+		int flexAvail = this.flexibleViolationCount;
 		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
 			for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
-				sumCost += volumeAllocatedSequence.getCapacityViolationCount(portSlot);
+				final List<CapacityViolationType> violations = volumeAllocatedSequence.getCapacityViolations(portSlot);
+				for (@NonNull
+				final CapacityViolationType violation : violations) {
+					if (CapacityViolationChecker.isHardViolation(violation)) {
+						++sumCost;
+					} else {
+						if (flexAvail <= 0) {
+							++sumCost;
+						} else {
+							if (flexAvail != Integer.MAX_VALUE) {
+								--flexAvail;
+							}
+						}
+					}
+				}
 			}
 		}
 		return sumCost;
@@ -246,8 +277,8 @@ public class EvaluationHelper {
 		return evaluationState;
 	}
 
-	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources, boolean checkEvaluatedStateCheckers,
-			final long @Nullable [] referenceMetrics, @Nullable ISearchStatisticsLogger logger) {
+	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources,
+			final boolean checkEvaluatedStateCheckers, final long @Nullable [] referenceMetrics, @Nullable final ISearchStatisticsLogger logger) {
 
 		// Do normal manipulation
 		final @NonNull ISequences currentFullSequences = sequenceManipulator.createManipulatedSequences(currentRawSequences);
@@ -256,8 +287,8 @@ public class EvaluationHelper {
 	}
 
 	public long @Nullable [] evaluateState(@NonNull final ISequences currentRawSequences, final @NonNull ISequences currentFullSequences,
-			@Nullable final Collection<@NonNull IResource> currentChangedResources, boolean checkEvaluatedStateCheckers, final long @Nullable [] referenceMetrics,
-			@Nullable ISearchStatisticsLogger logger) {
+			@Nullable final Collection<@NonNull IResource> currentChangedResources, final boolean checkEvaluatedStateCheckers, final long @Nullable [] referenceMetrics,
+			@Nullable final ISearchStatisticsLogger logger) {
 		// Apply hard constraint checkers
 		if (!checkConstraints(currentFullSequences, currentChangedResources)) {
 			if (logger != null) {
@@ -329,7 +360,7 @@ public class EvaluationHelper {
 		return strictChecking;
 	}
 
-	public void setStrictChecking(boolean strictChecking) {
+	public void setStrictChecking(final boolean strictChecking) {
 		this.strictChecking = strictChecking;
 	}
 

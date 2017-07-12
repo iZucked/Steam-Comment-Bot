@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 /**
@@ -31,25 +31,20 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
  */
 public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConstraintChecker {
 
-	private long initialTotalViolations = 0;
+	private long initialSoftTotalViolations = 0;
 	private List<CapacityViolationType> initialTriggeredViolations;
 
 	public List<CapacityViolationType> allViolations;
 	public List<CapacityViolationType> initialAllViolations;
 
-	private long totalViolations = 0;
+	private int totalSoftViolations = 0;
 	private final @NonNull String name;
 	private boolean initialised;
 	private Set<IPortSlot> initialViolatedSlots = null;
 	private Set<IPortSlot> currentViolatedSlots;
 	private List<CapacityViolationType> triggeredViolations;
 
-	private final Set<CapacityViolationType> targetViolations = EnumSet.of(//
-			CapacityViolationType.MIN_DISCHARGE, //
-			CapacityViolationType.MAX_DISCHARGE, //
-			CapacityViolationType.MIN_LOAD, //
-			CapacityViolationType.MAX_LOAD, //
-			CapacityViolationType.VESSEL_CAPACITY);
+	private int flexibleSoftViolations = 0;
 
 	public CapacityEvaluatedStateChecker(@NonNull final String name) {
 		this.name = name;
@@ -64,11 +59,8 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 			return true;
 		}
 
-		totalViolations = volumeAllocatedSequences.stream()//
-				.mapToLong(seq -> seq.getSequenceSlots().stream() //
-						.mapToLong(slot -> seq.getCapacityViolationCount(slot)).sum())
-				.sum();
-
+		// State does not need to be kept, but needed for unit testing
+		totalSoftViolations = 0;
 		currentViolatedSlots = new HashSet<IPortSlot>();
 		triggeredViolations = new ArrayList<CapacityViolationType>();
 		allViolations = new ArrayList<CapacityViolationType>();
@@ -81,25 +73,34 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 
 				for (@NonNull
 				final CapacityViolationType violation : violations) {
-					allViolations.add(violation);
-					if (targetViolations.contains(violation)) {
+					if (CapacityViolationChecker.isHardViolation(violation)) {
 						triggeredViolations.add(violation);
 						currentViolatedSlots.add(slot);
+						allViolations.add(violation);
+					} else {
+						allViolations.add(violation);
+						++totalSoftViolations;
 					}
 				}
-
 			}
 		}
 
 		if (initialViolatedSlots != null) {
+			// Take flex into account before checks
+			if (flexibleSoftViolations == Integer.MAX_VALUE) {
+				totalSoftViolations = 0;
+			} else {
+				totalSoftViolations = Math.max(0, totalSoftViolations - flexibleSoftViolations);
+			}
+
 			currentViolatedSlots.removeAll(initialViolatedSlots);
-			if (totalViolations > initialTotalViolations || currentViolatedSlots.size() > 0) {
+			if (currentViolatedSlots.size() > 0 || totalSoftViolations > initialSoftTotalViolations) {
 				return false;
 			}
 		} // If this is the first run, then set the initial state
 		else {
 			initialViolatedSlots = currentViolatedSlots;
-			initialTotalViolations = totalViolations;
+			initialSoftTotalViolations = totalSoftViolations;
 			initialAllViolations = allViolations;
 			initialised = true;
 			return true;
@@ -121,19 +122,19 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 		return currentViolatedSlots;
 	}
 
-	public long getTotalViolations() {
-		return totalViolations;
+	public long getCurrentSoftViolations() {
+		return totalSoftViolations;
 	}
 
-	public long getInitialViolations() {
-		return initialTotalViolations;
+	public long getInitialSoftViolations() {
+		return initialSoftTotalViolations;
 	}
 
 	public boolean isInitialised() {
 		return initialised;
 	}
 
-	public Set<IPortSlot> getViolatedSlots() {
+	public Set<IPortSlot> getInitialViolatedSlots() {
 		return initialViolatedSlots;
 	}
 
@@ -147,4 +148,17 @@ public final class CapacityEvaluatedStateChecker implements IEvaluatedStateConst
 		checkConstraints(rawSequences, fullSequences, evaluationState);
 	}
 
+	public int getFlexibleSoftViolations() {
+		return flexibleSoftViolations;
+	}
+
+	/**
+	 * Set the number of flexible slot violations permitted. Integer.MAX_VALUE allows any soft violations. 0 disallows any soft violation (over and above the initial level)
+	 * 
+	 * @param flexibleSoftViolations
+	 */
+
+	public void setFlexibleSoftViolations(int flexibleSoftViolations) {
+		this.flexibleSoftViolations = flexibleSoftViolations;
+	}
 }
