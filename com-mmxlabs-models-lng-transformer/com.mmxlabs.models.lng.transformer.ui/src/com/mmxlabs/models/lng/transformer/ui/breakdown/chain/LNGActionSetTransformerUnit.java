@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -47,6 +46,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
@@ -212,8 +212,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Provides
 			@Named("MAIN_MOVER")
-			private ActionSetEvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
-				final ActionSetEvaluationHelper bagMover = injector.getInstance(ActionSetEvaluationHelper.class);
+			private EvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
+				final EvaluationHelper bagMover = injector.getInstance(EvaluationHelper.class);
 				bagMover.setStrictChecking(true);
 				return bagMover;
 			}

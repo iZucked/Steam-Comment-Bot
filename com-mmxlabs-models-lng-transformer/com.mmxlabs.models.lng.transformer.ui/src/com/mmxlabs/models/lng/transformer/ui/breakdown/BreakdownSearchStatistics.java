@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
-public class BreakdownSearchStatistics {
+import com.mmxlabs.scheduler.optimiser.moves.util.ISearchStatisticsLogger;
+
+public class BreakdownSearchStatistics implements ISearchStatisticsLogger{
 
 	private int statesSeen = 0;
 	private int evaluationsPassed = 0;
