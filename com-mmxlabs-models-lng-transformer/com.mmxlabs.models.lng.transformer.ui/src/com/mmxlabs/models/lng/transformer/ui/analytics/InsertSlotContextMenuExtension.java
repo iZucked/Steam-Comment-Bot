@@ -237,6 +237,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
 
+						if (userSettings == null) {
+							return;
+						}
+						
 						// Reset settings not supplied to the user
 						userSettings.setShippingOnly(false);
 						userSettings.setBuildActionSets(false);
