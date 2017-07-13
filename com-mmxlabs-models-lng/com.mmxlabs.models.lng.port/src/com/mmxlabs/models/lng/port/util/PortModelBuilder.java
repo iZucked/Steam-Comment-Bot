@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 
 public class PortModelBuilder {
 
-	public static final String TIMEZONE_UTC = "Etc/Utc";
+	public static final String TIMEZONE_UTC = "UTC";
 
 	private final @NonNull PortModel portModel;
 
