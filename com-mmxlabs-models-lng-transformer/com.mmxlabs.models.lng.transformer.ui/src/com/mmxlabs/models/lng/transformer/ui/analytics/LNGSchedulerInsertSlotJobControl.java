@@ -273,7 +273,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 				}
 				return newName;
 			};
-			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 5_000, new SubProgressMonitor(progressMonitor, 90));
+			final IMultiStateResult results = slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, 50_000, new SubProgressMonitor(progressMonitor, 90));
 			if (progressMonitor.isCanceled()) {
 				return;
 			}
