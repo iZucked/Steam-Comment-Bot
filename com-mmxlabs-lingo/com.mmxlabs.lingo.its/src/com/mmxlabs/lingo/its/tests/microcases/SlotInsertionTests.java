@@ -470,7 +470,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 			final SlotInsertionOptimiserUnit slotInserter = getSlotInserter(scenarioRunner);
 
-			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 5, new NullProgressMonitor());
+			final IMultiStateResult result1 = slotInserter.run(Collections.singletonList(load_FOB2), Collections.emptyList(), 20, new NullProgressMonitor());
 			Assert.assertNotNull(result1);
 
 			final AtomicBoolean bool = new AtomicBoolean(false);

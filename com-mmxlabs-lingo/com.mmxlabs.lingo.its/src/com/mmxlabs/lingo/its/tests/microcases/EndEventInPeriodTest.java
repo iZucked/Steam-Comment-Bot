@@ -104,7 +104,7 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 
 		// Check the period scenario has been updated correctly.
 		evaluateWithLSOTest(false, plan -> {
-			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 12));
+			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 12, 1));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 6));
 
 			ScenarioUtils.setLSOStageIterations(plan, 1_000);

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -23,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
  */
 public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimisationTester {
 
-	public AbstractOptimiserCacheTests(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable YearMonth periodStart, @Nullable YearMonth periodEnd) {
+	public AbstractOptimiserCacheTests(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd) {
 		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, true);
 
 	}

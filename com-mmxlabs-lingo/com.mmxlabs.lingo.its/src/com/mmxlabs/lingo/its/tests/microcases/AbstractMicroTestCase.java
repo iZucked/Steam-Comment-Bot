@@ -5,18 +5,17 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 
-import com.google.inject.Module;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
@@ -33,8 +32,8 @@ import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
@@ -44,7 +43,6 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public abstract class AbstractMicroTestCase {
@@ -98,7 +96,7 @@ public abstract class AbstractMicroTestCase {
 		portModelBuilder = scenarioModelBuilder.getPortModelBuilder();
 		portFinder = scenarioModelFinder.getPortModelFinder();
 		spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
-		
+
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
@@ -107,6 +105,16 @@ public abstract class AbstractMicroTestCase {
 
 		entity = importDefaultEntity();
 
+		setPromptDates();
+	}
+
+	/**
+	 * Set a default prompt date
+	 */
+	protected void setPromptDates() {
+		if (lngScenarioModel.getPromptPeriodStart() == null) {
+			lngScenarioModel.setPromptPeriodStart(LocalDate.of(2016, 1, 1));
+		}
 	}
 
 	protected BaseLegalEntity importDefaultEntity() {
@@ -131,6 +139,10 @@ public abstract class AbstractMicroTestCase {
 
 	public void evaluateWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker) {
 		evaluateWithLSOTest(false, null, null, checker, null);
+	}
+
+	public void evaluateWithLSOTest(@Nullable final Consumer<OptimisationPlan> tweaker, final @NonNull Consumer<LNGScenarioRunner> checker) {
+		evaluateWithLSOTest(false, tweaker, null, checker, null);
 	}
 
 	public void evaluateWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {

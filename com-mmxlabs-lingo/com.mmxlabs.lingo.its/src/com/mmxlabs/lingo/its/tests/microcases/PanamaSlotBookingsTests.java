@@ -86,6 +86,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		model.getCargoModel().getCanalBookings().setRelaxedBoundaryOffsetDays(90);
 		model.getCargoModel().getCanalBookings().setFlexibleBookingAmount(0);
 
+		model.setPromptPeriodStart(LocalDate.of(2017, 6, 1));
+		model.setPromptPeriodEnd(LocalDate.of(2017, 9, 1));
+		
 		return model;
 	}
 
@@ -107,7 +110,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				.build();
 		return cargo;
 	}
-	
+
 	private VesselAvailability getDefaultVesselAvailability() {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
@@ -585,7 +588,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void choosePanamaIfRelaxedTest() {
@@ -637,13 +640,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				final IResource r0 = manipulatedSequences.getResources().get(0);
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
-				
+
 				assertEquals(AvailableRouteChoices.OPTIMAL, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
 				assertNull(ptr_r0_cargo.getRouteOptionBooking(ptr_r0_cargo.getFirstSlot()));
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void marginTest() {
@@ -700,7 +703,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void windowEndTrimmingTest() {
@@ -721,7 +724,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Brownsville");
-		
+
 		@NonNull
 		final Port port3 = portFinder.findPort("Himeji");
 
@@ -731,7 +734,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final LocalDateTime loadDate1 = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate1 = loadDate1.plusDays(2);
-		
+
 		final LocalDateTime loadDate2 = LocalDateTime.of(2017, Month.JUNE, 6, 0, 0, 0);
 		final LocalDateTime dischargeDate2 = loadDate2.plusDays(30);
 
@@ -750,8 +753,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
-		
-		final Cargo cargo2  =cargoModelBuilder.makeCargo() //
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", loadDate2.toLocalDate(), port1, null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
@@ -765,19 +768,20 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 2) //
-				.build(); 
-		
+				.build();
+
 		evaluateWithLSOTest(scenarioRunner -> {
 
- 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
 			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo, cargo2));
-//				SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargo, cargo2));
+				// SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);
@@ -794,7 +798,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void noSuezDistanceAvailableTest() {
@@ -805,7 +809,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final Route panama = potentialPanama.get();
 		final Route suez = potentialSuez.get();
-		
+
 		final EntryPoint colon = panama.getEntryA();
 
 		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
@@ -817,20 +821,20 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Manzanillo");
-		
+
 		@NonNull
 		final Port portUnrelevant = portFinder.findPort("Brownsville");
-		
+
 		boolean removed = suez.getLines().removeIf(e -> e.getFrom().equals(port1) && e.getTo().equals(port2));
 		assert removed;
-		
+
 		boolean removed2 = suez.getLines().removeIf(e -> e.getFrom().equals(port2) && e.getTo().equals(port1));
 		assert removed2;
 
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-		
+
 		final LocalDateTime startDate = LocalDateTime.of(2017, Month.MAY, 15, 0, 0, 0);
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(30);
@@ -854,15 +858,16 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
- 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
 			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargoUnrelevant, cargo));
-//				SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
+				final IModifiableSequences manipulatedSequences = sequencesManipulator
+						.createManipulatedSequences(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, cargoUnrelevant, cargo));
+				// SequenceHelper.addSequence(manipulatedSequences, scenarioToOptimiserBridge, vesselAvailability, cargo2);
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
 				scheduler.setUseCanalBasedWindowTrimming(true);

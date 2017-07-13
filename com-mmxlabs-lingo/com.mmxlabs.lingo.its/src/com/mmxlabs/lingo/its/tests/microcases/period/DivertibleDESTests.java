@@ -101,7 +101,7 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);

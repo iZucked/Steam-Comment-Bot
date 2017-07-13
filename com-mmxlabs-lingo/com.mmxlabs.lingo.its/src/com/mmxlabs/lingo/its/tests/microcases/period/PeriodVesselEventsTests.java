@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
@@ -109,7 +110,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 1));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 1, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 10));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -201,7 +202,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 10));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -227,7 +228,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			Assert.assertFalse(period_event.isLocked());
 			Assert.assertFalse(period_event.getAllowedVessels().isEmpty());
 			Assert.assertEquals(1, period_event.getAllowedVessels().size());
-			Assert.assertTrue(period_event.getAllowedVessels().contains( period_vessel_1));
+			Assert.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
 
 			scenarioRunner.run();
 			Assert.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());

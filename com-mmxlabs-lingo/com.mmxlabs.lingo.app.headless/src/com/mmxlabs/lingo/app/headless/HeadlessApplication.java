@@ -624,12 +624,12 @@ public class HeadlessApplication implements IApplication {
 		if (promptStart != null) {
 			rootObject.setPromptPeriodStart(promptStart);
 		} else {
-			rootObject.unsetPromptPeriodStart();
+			rootObject.setPromptPeriodStart(null);
 		}
 		if (promptEnd != null) {
 			rootObject.setPromptPeriodEnd(promptEnd);
 		} else {
-			rootObject.unsetPromptPeriodEnd();
+			rootObject.setPromptPeriodEnd(null);
 		}
 	}
 
@@ -657,7 +657,7 @@ public class HeadlessApplication implements IApplication {
 		SimilarityMode mode = getSimilarityModeFromParameters(headlessParameters.getParameterValue("similarity-mode", String.class));
 		if (mode != null) {
 			settings.setSimilarityMode(mode);
-			return OptimisationHelper.createSimilaritySettings(mode, settings.getPeriodStart(), settings.getPeriodEnd());
+			return OptimisationHelper.createSimilaritySettings(mode, settings.getPeriodStartDate(), settings.getPeriodEnd());
 		} else {
 			final JMap similarity = headlessParameters.getParameterValue("similarity", JMap.class);
 			final Map<String, Integer> similarityMap = new HashMap<>();
@@ -676,12 +676,12 @@ public class HeadlessApplication implements IApplication {
 	private void createDateRanges(final OptimisationPlan plan, final HeadlessParameters headlessParameters) {
 		final JMap periodSettings = headlessParameters.getParameterValue("period-data", JMap.class);
 		final YearMonth dateBefore = periodSettings.getValue("period-optimisation-date-before", YearMonth.class);
-		final YearMonth dateAfter = periodSettings.getValue("period-optimisation-date-after", YearMonth.class);
+		final LocalDate dateAfter = periodSettings.getValue("period-optimisation-date-after", LocalDate.class);
 		if (dateBefore != null) {
 			plan.getUserSettings().setPeriodEnd(dateBefore);
 		}
 		if (dateAfter != null) {
-			plan.getUserSettings().setPeriodStart(dateAfter);
+			plan.getUserSettings().setPeriodStartDate(dateAfter);
 		}
 	}
 

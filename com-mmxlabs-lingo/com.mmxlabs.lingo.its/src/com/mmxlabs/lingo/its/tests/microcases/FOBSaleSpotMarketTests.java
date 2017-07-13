@@ -287,6 +287,9 @@ public class FOBSaleSpotMarketTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testUnrestrictedOptimisation_GeneratedSlot() throws Exception {
 
+		
+		lngScenarioModel.setPromptPeriodStart( LocalDate.of(2015, 6, 1));
+		
 		final FOBSalesMarket market = spotMarketsModelBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
 				.withAvailabilityConstant(1)//
 				.build();

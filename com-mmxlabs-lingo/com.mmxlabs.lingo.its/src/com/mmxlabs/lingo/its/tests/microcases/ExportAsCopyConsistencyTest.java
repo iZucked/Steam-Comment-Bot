@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 
@@ -84,7 +85,7 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	public void testExportAsCopyExportsBaseFuelCostsCorrectlyInPeriod() throws Exception {
 
 		evaluateWithLSOTest(false, plan -> {
-			plan.getUserSettings().setPeriodStart(YearMonth.of(2016, 5));
+			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2016, 5,1));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 6));
 		}, null, scenarioRunner -> {
 

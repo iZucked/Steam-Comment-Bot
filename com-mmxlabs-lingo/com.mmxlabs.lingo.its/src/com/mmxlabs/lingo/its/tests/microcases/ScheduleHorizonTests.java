@@ -326,9 +326,10 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //
 				.build();
-
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 10, 1));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2016, 8, 1));
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 7));
 		}, null, scenarioRunner -> {
 
@@ -413,7 +414,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 		}, null, scenarioRunner -> {
 
@@ -500,7 +501,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 		}, null, scenarioRunner -> {
 
@@ -512,7 +513,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);
-			
+
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
 
@@ -586,7 +587,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		// .build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 		}, null, scenarioRunner -> {
 
@@ -671,8 +672,11 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		// .withAssignmentFlags(false, false) //
 		// .build();
 
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 10, 1));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2015, 11, 1));
+
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 2));
 		}, null, scenarioRunner -> {
 
@@ -747,16 +751,17 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
-
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 2, 1));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2017, 3, 1));
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2017, 2));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2017, 2, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2017, 5));
 		}, null, scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-	
+
 			@Nullable
 			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
 			Assert.assertNotNull(schedule);

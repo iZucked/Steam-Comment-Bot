@@ -39,10 +39,9 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 
 	/**
-	  
-
-	/**
-	 * Cargo and vessel lower bound are before schedule horizon date, should have no impact
+	 * 
+	 * 
+	 * /** Cargo and vessel lower bound are before schedule horizon date, should have no impact
 	 */
 	@Test
 	public void testVesselWithEndAfterDate() {
@@ -242,9 +241,10 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 2) //
 				.withAssignmentFlags(false, false) //
 				.build();
-
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 10, 1));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2017, 8, 1));
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 7));
 		}, null, scenarioRunner -> {
 
@@ -329,7 +329,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 		}, null, scenarioRunner -> {
 
@@ -416,7 +416,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 		}, null, scenarioRunner -> {
 
@@ -502,7 +502,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		// .build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 		}, null, scenarioRunner -> {
 
@@ -586,9 +586,11 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		// .withVesselAssignment(vesselAvailability, 2) //
 		// .withAssignmentFlags(false, false) //
 		// .build();
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2015, 10, 1));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2015, 11, 1));
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 2));
 		}, null, scenarioRunner -> {
 
@@ -663,9 +665,10 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
-
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 2, 1));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2017, 3, 1));
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2017, 2));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2017, 2, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2017, 5));
 		}, null, scenarioRunner -> {
 
