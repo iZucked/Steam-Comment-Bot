@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToIntBiFunction;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -90,6 +92,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.base.Joiner;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -121,6 +124,7 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -1546,6 +1550,60 @@ public class ChangeSetView implements IAdaptable {
 
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
+			@Override
+			public String getToolTipText(Object element) {
+
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+
+					final Set<CapacityViolationType> beforeViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
+					final Set<CapacityViolationType> afterViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
+
+					Set<CapacityViolationType> tmp = new HashSet<>(afterViolatios);
+					tmp.removeAll(beforeViolatios);
+					StringBuilder sb = new StringBuilder();
+					boolean newLine = false;
+					if (!tmp.isEmpty()) {
+						sb.append(String.format("Caused %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
+						newLine = true;
+					}
+					tmp.clear();
+					tmp.addAll(beforeViolatios);
+					tmp.removeAll(afterViolatios);
+					if (!tmp.isEmpty()) {
+						if (newLine) {
+							sb.append("\n");
+						}
+						sb.append(String.format("Resolved %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
+					}
+					return sb.toString();
+
+				}
+
+				return super.getToolTipText(element);
+			}
+
+			private Map<CapacityViolationType, String> nameMap = new HashMap<>();
+			{
+				nameMap.put(CapacityViolationType.FORCED_COOLDOWN, "forced cooldown");
+				nameMap.put(CapacityViolationType.LOST_HEEL, "lost heel");
+				nameMap.put(CapacityViolationType.MAX_DISCHARGE, "max discharge");
+				nameMap.put(CapacityViolationType.MAX_HEEL, "max heel");
+				nameMap.put(CapacityViolationType.MAX_LOAD, "max load");
+				nameMap.put(CapacityViolationType.MIN_DISCHARGE, "min discharge");
+				nameMap.put(CapacityViolationType.MIN_HEEL, "min heel");
+				nameMap.put(CapacityViolationType.MIN_LOAD, "min load");
+				nameMap.put(CapacityViolationType.VESSEL_CAPACITY, "vessel capacity");
+			}
+
+			private String generateDisplayString(Set<CapacityViolationType> tmp) {
+				List<String> sorted = tmp.stream() //
+						.map(cvt -> nameMap.get(cvt)) //
+						.sorted() // .
+						.collect(Collectors.toList());
+
+				return Joiner.on(", ").join(sorted);
+			}
 
 			@Override
 			public void update(final ViewerCell cell) {

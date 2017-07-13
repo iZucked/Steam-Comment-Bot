@@ -162,7 +162,7 @@ public class ChangeSetKPIUtil {
 		return 0L;
 	}
 
-	private static @Nullable EventGrouping getEventGrouping(final ChangeSetTableRow tableRow, final ResultType type) {
+	public static @Nullable EventGrouping getEventGrouping(final ChangeSetTableRow tableRow, final ResultType type) {
 
 		EventGrouping eventGrouping = null;
 
