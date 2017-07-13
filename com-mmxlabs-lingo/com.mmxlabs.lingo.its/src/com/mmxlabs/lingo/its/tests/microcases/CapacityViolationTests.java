@@ -298,10 +298,10 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			// Cast to CESC
 			final CapacityEvaluatedStateChecker castedCon = (CapacityEvaluatedStateChecker) con;
 			// Check that there was a single initial violation
-			Assert.assertEquals(1, castedCon.getInitialViolations());
+			Assert.assertEquals(1, castedCon.getInitialSoftViolations());
 
 			final Set<IPortSlot> slots = castedCon.getCurrentViolatedSlots();
-			final long violations = castedCon.getTotalViolations();
+			final long violations = castedCon.getCurrentSoftViolations();
 			// Check that there is only a singular violated slot and a singular violation.
 			Assert.assertEquals(1, violations);
 			Assert.assertEquals(1, slots.size());
