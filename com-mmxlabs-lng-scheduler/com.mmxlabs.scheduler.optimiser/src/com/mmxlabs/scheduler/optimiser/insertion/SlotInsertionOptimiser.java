@@ -143,7 +143,7 @@ public class SlotInsertionOptimiser {
 			// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
 			optionsRnd.nextBoolean();
 
-			// Set to true to do lateness, P&L checks etc before returning a valid move.
+			// Set to true to do lateness and violation checks etc before returning a valid move.
 			options.setCheckingMove(true);
 			options.setExtendSearch(false);
 			// options.setStrictOptional(true);
