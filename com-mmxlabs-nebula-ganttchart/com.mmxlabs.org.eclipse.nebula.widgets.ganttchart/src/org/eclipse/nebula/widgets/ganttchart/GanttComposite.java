@@ -18,6 +18,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntConsumer;
+import java.util.function.Supplier;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
@@ -1757,7 +1759,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			break;
 		}
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		// fill all of it first, then do weekends
@@ -2141,7 +2143,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				gc.setAdvanced(false);
 			}
 
-			final Calendar today = Calendar.getInstance(_defaultLocale);
+			final Calendar today = getToday();
 			drawTodayLine(gc, bounds, getStartingXFor(today), today.get(Calendar.DAY_OF_WEEK));
 		} else if (_currentView == ISettings.VIEW_YEAR) {
 			for (int i = 0; i < _verticalLineLocations.size(); i++) {
@@ -2151,9 +2153,18 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				gc.drawLine(x, yStart, x, height);
 			}
 
-			final Calendar today = Calendar.getInstance(_defaultLocale);
+			final Calendar today = getToday();
 			drawTodayLine(gc, bounds, getStartingXFor(today), today.get(Calendar.DAY_OF_WEEK));
 		}
+	}
+
+	protected Supplier<Calendar> todaySupplier;
+
+	protected Calendar getToday() {
+		if (todaySupplier != null) {
+			return todaySupplier.get();
+		}
+		return Calendar.getInstance(_defaultLocale);
 	}
 
 	// year
@@ -2164,7 +2175,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int heightY = _settings.getHeaderDayHeight();
 		_daysVisible = 0;
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		temp.set(Calendar.DAY_OF_MONTH, 1);
@@ -2205,7 +2216,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int topY = bounds.y;
 		final int bottomY = _settings.getHeaderMonthHeight();
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		temp.set(Calendar.DAY_OF_MONTH, 1);
@@ -2245,9 +2256,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int heightY = _settings.getHeaderDayHeight();
 
 		// get the offset to draw things at
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
-		final Calendar temp2 = Calendar.getInstance(_defaultLocale);
+		final Calendar temp2 = getToday();
 		temp2.setTime(_mainCalendar.getTime());
 		temp2.set(Calendar.DAY_OF_WEEK, temp.getFirstDayOfWeek());
 		final int days = (int) DateHelper.daysBetween(temp, temp2);
@@ -2299,9 +2310,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		gc.fillGradientRectangle(current, topY + 1, xMax, bottomY - 1, true);
 
 		// get the offset to draw things at
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
-		final Calendar temp2 = Calendar.getInstance(_defaultLocale);
+		final Calendar temp2 = getToday();
 		temp2.setTime(_mainCalendar.getTime());
 		temp2.set(Calendar.DAY_OF_WEEK, temp.getFirstDayOfWeek());
 		final int days = (int) DateHelper.daysBetween(temp, temp2);
@@ -2337,7 +2348,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int topY = bounds.y;
 		final int bottomY = _settings.getHeaderMonthHeight();
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		// if we're not on a sunday, the weekbox will be shorter, so check how
@@ -2403,7 +2414,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		int day = _mainCalendar.get(Calendar.DAY_OF_WEEK);
 		_daysVisible = 0;
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		while (true) {
@@ -2506,7 +2517,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int bottomY = _settings.getHeaderMonthHeight();
 		final int splitEvery = _settings.getDDaySplitCount();
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 		final int startX = getXForDate(_dDayCalendar);
 		final int daysFromStartOffset = startX / _dayWidth;
@@ -2584,7 +2595,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		_daysVisible = 0;
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		while (true) {
@@ -2679,7 +2690,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int topY = bounds.y;
 		final int bottomY = _settings.getHeaderMonthHeight();
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		// if we're not on hour zero, the box will be shorter, so check how much
@@ -2736,7 +2747,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int topY = bounds.y + _settings.getHeaderMonthHeight();
 		final int heightY = _settings.getHeaderDayHeight();
 
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		boolean first = true;
@@ -2810,7 +2821,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int totalMinutes = (int) (((float) total + (float) extra) * ppm);
 
 		// set our temporary end calendar to the start date of the calendar
-		final Calendar fakeEnd = Calendar.getInstance(_defaultLocale);
+		final Calendar fakeEnd = getToday();
 		fakeEnd.setTime(_mainCalendar.getTime());
 
 		// loop it, but take work days/hours into account as usual
@@ -4447,7 +4458,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	public void jumpToToday(final int side) {
 		checkWidget();
 
-		final Calendar cal = Calendar.getInstance(_defaultLocale);
+		final Calendar cal = getToday();
 
 		if (_currentView == ISettings.VIEW_DAY) {
 			// round it down
@@ -4480,7 +4491,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	private void jumpToEvent(final boolean earliestEvent) {
-		final Calendar cal = Calendar.getInstance(_defaultLocale);
+		final Calendar cal = getToday();
 		final Date earliest = getEventDate(earliestEvent);
 		if (earliest == null) {
 			return;
@@ -4508,7 +4519,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 *            one of <code>SWT.LEFT</code>, <code>SWT.CENTER</code>, <code>SWT.RIGHT</code>
 	 */
 	public void jumpToEvent(final GanttEvent event, final boolean start, final int side) {
-		final Calendar cal = Calendar.getInstance(_defaultLocale);
+		final Calendar cal = getToday();
 
 		if (start) {
 			cal.setTime(event.getActualStartDate().getTime());
@@ -5248,7 +5259,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		int dw = getDayWidth();
 		if (_currentView == ISettings.VIEW_YEAR) {
-			final Calendar temp = Calendar.getInstance(_defaultLocale);
+			final Calendar temp = getToday();
 			temp.setTime(_mainCalendar.getTime());
 			temp.add(Calendar.MONTH, positive ? 1 : -1);
 
@@ -5396,7 +5407,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (event.getWidthWithText() == 0) {
 			final Date eventStart = sCal.getTime();
 			final Date eventEnd = eCal.getTime();
-			final Calendar temp = Calendar.getInstance(_defaultLocale);
+			final Calendar temp = getToday();
 			temp.setTime(_mainCalendar.getTime());
 
 			final long viewPortStart = temp.getTimeInMillis();
@@ -5489,7 +5500,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	private int getStartingXForEventHours(final Calendar start) {
-		final Calendar temp = Calendar.getInstance(_defaultLocale);
+		final Calendar temp = getToday();
 		temp.setTime(_mainCalendar.getTime());
 
 		// some stuff we know, (to help program this)
@@ -5736,11 +5747,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 							}
 
 							// all dates
-							final Calendar temp = Calendar.getInstance(_defaultLocale);
+							final Calendar temp = getToday();
 							temp.setTime(last.getTime());
 							for (int i = 0; i < (int) days; i++) {
 								temp.add(Calendar.DATE, reverse ? -1 : 1);
-								final Calendar temp2 = Calendar.getInstance(_defaultLocale);
+								final Calendar temp2 = getToday();
 								temp2.setTime(temp.getTime());
 								_selHeaderDates.add(temp2);
 							}
@@ -6827,7 +6838,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				// we move horizontally month-wise, so it doesn't quite make
 				// sense.
 				if (_zoomLevel >= ISettings.ZOOM_YEAR_MAX) {
-					final Calendar temp = Calendar.getInstance(_defaultLocale);
+					final Calendar temp = getToday();
 					temp.setTime(_mainCalendar.getTime());
 					temp.set(Calendar.DAY_OF_MONTH, 1);
 					GanttDateTip.makeDialog(_colorManager, DateHelper.getDate(temp, dateFormat), toDisplay(loc), _mainBounds.y);
@@ -6975,7 +6986,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 */
 	public int getXForDate(final Date date) {
 		checkWidget();
-		final Calendar cal = Calendar.getInstance(_defaultLocale);
+		final Calendar cal = getToday();
 		cal.setTime(date);
 
 		return getXForDate(cal);
@@ -7048,7 +7059,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			final int totalMinutes = (int) (xPosition * ppm);
 
 			// set our temporary end calendar to the start date of the calendar
-			final Calendar fakeEnd = Calendar.getInstance(_defaultLocale);
+			final Calendar fakeEnd = getToday();
 			fakeEnd.setTime(temp.getTime());
 
 			for (int i = 0; i < totalMinutes; i++) {
@@ -7115,7 +7126,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 */
 	public void drawMarker(final Date date) {
 		checkWidget();
-		final Calendar cal = Calendar.getInstance(_defaultLocale);
+		final Calendar cal = getToday();
 		cal.setTime(date);
 
 		final int x = getXForDate(cal);
@@ -7699,8 +7710,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		for (int x = 0; x < toMove.size(); x++) {
 			final GanttEvent event = (GanttEvent) toMove.get(x);
 
-			final Calendar cal1 = Calendar.getInstance(_defaultLocale);
-			final Calendar cal2 = Calendar.getInstance(_defaultLocale);
+			final Calendar cal1 = getToday();
+			final Calendar cal2 = getToday();
 			cal1.setTime(event.getActualStartDate().getTime());
 			cal2.setTime(event.getActualEndDate().getTime());
 
@@ -8005,7 +8016,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 	}
 
-	private String fixTooltipString(final String input, final String name, final String startDate, final String endDate, final String plannedStart, final String plannedEnd, final long days, final long plannedDays, final int percentageComplete) {
+	private String fixTooltipString(final String input, final String name, final String startDate, final String endDate, final String plannedStart, final String plannedEnd, final long days,
+			final long plannedDays, final int percentageComplete) {
 		String str = input;
 		if (str != null) {
 			str = str.replaceAll("#name#", name);
@@ -8775,5 +8787,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	public int getLastSectionColumnWidth() {
 		return _lastSectionColumnWidth;
+	}
+
+	public Supplier<Calendar> getTodaySupplier() {
+		return todaySupplier;
+	}
+
+	public void setTodaySupplier(Supplier<Calendar> todaySupplier) {
+		this.todaySupplier = todaySupplier;
 	}
 }
