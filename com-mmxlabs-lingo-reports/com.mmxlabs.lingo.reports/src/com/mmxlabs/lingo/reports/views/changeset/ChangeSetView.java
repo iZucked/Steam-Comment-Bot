@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
@@ -1265,12 +1266,60 @@ public class ChangeSetView implements IAdaptable {
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
 			@Override
+			public String getToolTipText(Object element) {
+
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
+
+					StringBuilder sb = new StringBuilder();
+					sb.append("Scheduled dates:\n");
+
+					final SlotAllocation originalAllocation;
+					final SlotAllocation newAllocation;
+					if (isLoadSide) {
+						originalAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
+						newAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
+					} else {
+						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+					}
+
+					boolean hasDate = false;
+					boolean newLine = false;
+					if (newAllocation != null) {
+						final ZonedDateTime slotDate = newAllocation.getSlotVisit().getStart();
+						if (slotDate != null) {
+							sb.append(String.format("Before: %s ", slotDate.format(formatter)));
+							newLine = true;
+							hasDate = true;
+						}
+					}
+					if (originalAllocation != null) {
+						final ZonedDateTime slotDate = originalAllocation.getSlotVisit().getStart();
+						if (slotDate != null) {
+							if (newLine) {
+								sb.append("\n");
+							}
+							sb.append(String.format("After: %s ", slotDate.format(formatter)));
+							hasDate = true;
+						}
+					}
+					if (hasDate) {
+						return sb.toString();
+					}
+				}
+				return super.getToolTipText(element);
+			}
+
+			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
 
+					boolean isSpot = false;
 					LocalDate windowStart = null;
 					boolean isDelta = false;
 					int deltaHours = 0;
@@ -1279,6 +1328,7 @@ public class ChangeSetView implements IAdaptable {
 						final SlotAllocation originalLoadAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 						final SlotAllocation newLoadAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
 
+						isSpot = tableRow.isLhsSpot();
 						if (newLoadAllocation != null) {
 							final Slot slot = newLoadAllocation.getSlot();
 							if (slot != null) {
@@ -1299,10 +1349,18 @@ public class ChangeSetView implements IAdaptable {
 						}
 
 						if (windowStart != null) {
-							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+
+							final String windowDate;
+							if (isSpot) {
+								windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
 							} else {
-								cell.setText(windowStart.format(formatter));
+								windowDate = windowStart.format(formatter);
+							}
+
+							if (isDelta) {
+								cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+							} else {
+								cell.setText(windowDate);
 							}
 						}
 
@@ -1310,6 +1368,7 @@ public class ChangeSetView implements IAdaptable {
 						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
 						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+						isSpot = tableRow.isRhsSpot();
 
 						if (newDischargeAllocation != null) {
 							final Slot slot = newDischargeAllocation.getSlot();
@@ -1331,15 +1390,24 @@ public class ChangeSetView implements IAdaptable {
 						}
 
 						if (windowStart != null) {
-							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+
+							final String windowDate;
+							if (isSpot) {
+								windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
 							} else {
-								cell.setText(windowStart.format(formatter));
+								windowDate = windowStart.format(formatter);
+							}
+
+							if (isDelta) {
+								cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+							} else {
+								cell.setText(windowDate);
 							}
 						}
 					}
 				}
 			}
+
 		};
 	}
 
