@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -27,7 +28,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodStart <em>Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodStartDate <em>Period Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
@@ -42,33 +43,33 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	/**
-	 * The default value of the '{@link #getPeriodStart() <em>Period Start</em>}' attribute.
+	 * The default value of the '{@link #getPeriodStartDate() <em>Period Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPeriodStart()
+	 * @see #getPeriodStartDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final YearMonth PERIOD_START_EDEFAULT = null;
+	protected static final LocalDate PERIOD_START_DATE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getPeriodStart() <em>Period Start</em>}' attribute.
+	 * The cached value of the '{@link #getPeriodStartDate() <em>Period Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPeriodStart()
+	 * @see #getPeriodStartDate()
 	 * @generated
 	 * @ordered
 	 */
-	protected YearMonth periodStart = PERIOD_START_EDEFAULT;
+	protected LocalDate periodStartDate = PERIOD_START_DATE_EDEFAULT;
 
 	/**
-	 * This is true if the Period Start attribute has been set.
+	 * This is true if the Period Start Date attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean periodStartESet;
+	protected boolean periodStartDateESet;
 
 	/**
 	 * The default value of the '{@link #getPeriodEnd() <em>Period End</em>}' attribute.
@@ -263,9 +264,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public YearMonth getPeriodStart() {
-		return periodStart;
+	public LocalDate getPeriodStartDate() {
+		return periodStartDate;
 	}
 
 	/**
@@ -273,14 +273,13 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setPeriodStart(YearMonth newPeriodStart) {
-		YearMonth oldPeriodStart = periodStart;
-		periodStart = newPeriodStart;
-		boolean oldPeriodStartESet = periodStartESet;
-		periodStartESet = true;
+	public void setPeriodStartDate(LocalDate newPeriodStartDate) {
+		LocalDate oldPeriodStartDate = periodStartDate;
+		periodStartDate = newPeriodStartDate;
+		boolean oldPeriodStartDateESet = periodStartDateESet;
+		periodStartDateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__PERIOD_START, oldPeriodStart, periodStart, !oldPeriodStartESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__PERIOD_START_DATE, oldPeriodStartDate, periodStartDate, !oldPeriodStartDateESet));
 	}
 
 	/**
@@ -288,14 +287,13 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void unsetPeriodStart() {
-		YearMonth oldPeriodStart = periodStart;
-		boolean oldPeriodStartESet = periodStartESet;
-		periodStart = PERIOD_START_EDEFAULT;
-		periodStartESet = false;
+	public void unsetPeriodStartDate() {
+		LocalDate oldPeriodStartDate = periodStartDate;
+		boolean oldPeriodStartDateESet = periodStartDateESet;
+		periodStartDate = PERIOD_START_DATE_EDEFAULT;
+		periodStartDateESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, ParametersPackage.USER_SETTINGS__PERIOD_START, oldPeriodStart, PERIOD_START_EDEFAULT, oldPeriodStartESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ParametersPackage.USER_SETTINGS__PERIOD_START_DATE, oldPeriodStartDate, PERIOD_START_DATE_EDEFAULT, oldPeriodStartDateESet));
 	}
 
 	/**
@@ -303,9 +301,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public boolean isSetPeriodStart() {
-		return periodStartESet;
+	public boolean isSetPeriodStartDate() {
+		return periodStartDateESet;
 	}
 
 	/**
@@ -521,8 +518,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ParametersPackage.USER_SETTINGS__PERIOD_START:
-				return getPeriodStart();
+			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
+				return getPeriodStartDate();
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				return getPeriodEnd();
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
@@ -551,8 +548,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ParametersPackage.USER_SETTINGS__PERIOD_START:
-				setPeriodStart((YearMonth)newValue);
+			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
+				setPeriodStartDate((LocalDate)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				setPeriodEnd((YearMonth)newValue);
@@ -590,8 +587,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.USER_SETTINGS__PERIOD_START:
-				unsetPeriodStart();
+			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
+				unsetPeriodStartDate();
 				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				unsetPeriodEnd();
@@ -629,8 +626,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.USER_SETTINGS__PERIOD_START:
-				return isSetPeriodStart();
+			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
+				return isSetPeriodStartDate();
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 				return isSetPeriodEnd();
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
@@ -661,8 +658,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (periodStart: ");
-		if (periodStartESet) result.append(periodStart); else result.append("<unset>");
+		result.append(" (periodStartDate: ");
+		if (periodStartDateESet) result.append(periodStartDate); else result.append("<unset>");
 		result.append(", periodEnd: ");
 		if (periodEndESet) result.append(periodEnd); else result.append("<unset>");
 		result.append(", shippingOnly: ");

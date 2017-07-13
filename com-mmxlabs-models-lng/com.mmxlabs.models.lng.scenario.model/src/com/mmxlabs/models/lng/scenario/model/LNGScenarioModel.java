@@ -129,11 +129,9 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Prompt Period Start</em>' attribute.
-	 * @see #isSetPromptPeriodStart()
-	 * @see #unsetPromptPeriodStart()
 	 * @see #setPromptPeriodStart(LocalDate)
 	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PromptPeriodStart()
-	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
 	LocalDate getPromptPeriodStart();
@@ -143,35 +141,10 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Prompt Period Start</em>' attribute.
-	 * @see #isSetPromptPeriodStart()
-	 * @see #unsetPromptPeriodStart()
 	 * @see #getPromptPeriodStart()
 	 * @generated
 	 */
 	void setPromptPeriodStart(LocalDate value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetPromptPeriodStart()
-	 * @see #getPromptPeriodStart()
-	 * @see #setPromptPeriodStart(LocalDate)
-	 * @generated
-	 */
-	void unsetPromptPeriodStart();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Prompt Period Start</em>' attribute is set.
-	 * @see #unsetPromptPeriodStart()
-	 * @see #getPromptPeriodStart()
-	 * @see #setPromptPeriodStart(LocalDate)
-	 * @generated
-	 */
-	boolean isSetPromptPeriodStart();
 
 	/**
 	 * Returns the value of the '<em><b>Prompt Period End</b></em>' attribute.
@@ -182,11 +155,9 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Prompt Period End</em>' attribute.
-	 * @see #isSetPromptPeriodEnd()
-	 * @see #unsetPromptPeriodEnd()
 	 * @see #setPromptPeriodEnd(LocalDate)
 	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PromptPeriodEnd()
-	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
 	LocalDate getPromptPeriodEnd();
@@ -196,35 +167,10 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Prompt Period End</em>' attribute.
-	 * @see #isSetPromptPeriodEnd()
-	 * @see #unsetPromptPeriodEnd()
 	 * @see #getPromptPeriodEnd()
 	 * @generated
 	 */
 	void setPromptPeriodEnd(LocalDate value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetPromptPeriodEnd()
-	 * @see #getPromptPeriodEnd()
-	 * @see #setPromptPeriodEnd(LocalDate)
-	 * @generated
-	 */
-	void unsetPromptPeriodEnd();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Prompt Period End</em>' attribute is set.
-	 * @see #unsetPromptPeriodEnd()
-	 * @see #getPromptPeriodEnd()
-	 * @see #setPromptPeriodEnd(LocalDate)
-	 * @generated
-	 */
-	boolean isSetPromptPeriodEnd();
 
 	/**
 	 * Returns the value of the '<em><b>Scheduling End Date</b></em>' attribute.

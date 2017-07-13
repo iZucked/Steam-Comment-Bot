@@ -103,15 +103,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	protected LocalDate promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
 
 	/**
-	 * This is true if the Prompt Period Start attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean promptPeriodStartESet;
-
-	/**
 	 * The default value of the '{@link #getPromptPeriodEnd() <em>Prompt Period End</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -130,15 +121,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected LocalDate promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
-
-	/**
-	 * This is true if the Prompt Period End attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean promptPeriodEndESet;
 
 	/**
 	 * The default value of the '{@link #getSchedulingEndDate() <em>Scheduling End Date</em>}' attribute.
@@ -433,33 +415,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	public void setPromptPeriodStart(LocalDate newPromptPeriodStart) {
 		LocalDate oldPromptPeriodStart = promptPeriodStart;
 		promptPeriodStart = newPromptPeriodStart;
-		boolean oldPromptPeriodStartESet = promptPeriodStartESet;
-		promptPeriodStartESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START, oldPromptPeriodStart, promptPeriodStart, !oldPromptPeriodStartESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetPromptPeriodStart() {
-		LocalDate oldPromptPeriodStart = promptPeriodStart;
-		boolean oldPromptPeriodStartESet = promptPeriodStartESet;
-		promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
-		promptPeriodStartESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START, oldPromptPeriodStart, PROMPT_PERIOD_START_EDEFAULT, oldPromptPeriodStartESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetPromptPeriodStart() {
-		return promptPeriodStartESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START, oldPromptPeriodStart, promptPeriodStart));
 	}
 
 	/**
@@ -479,33 +436,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	public void setPromptPeriodEnd(LocalDate newPromptPeriodEnd) {
 		LocalDate oldPromptPeriodEnd = promptPeriodEnd;
 		promptPeriodEnd = newPromptPeriodEnd;
-		boolean oldPromptPeriodEndESet = promptPeriodEndESet;
-		promptPeriodEndESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END, oldPromptPeriodEnd, promptPeriodEnd, !oldPromptPeriodEndESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetPromptPeriodEnd() {
-		LocalDate oldPromptPeriodEnd = promptPeriodEnd;
-		boolean oldPromptPeriodEndESet = promptPeriodEndESet;
-		promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
-		promptPeriodEndESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END, oldPromptPeriodEnd, PROMPT_PERIOD_END_EDEFAULT, oldPromptPeriodEndESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetPromptPeriodEnd() {
-		return promptPeriodEndESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END, oldPromptPeriodEnd, promptPeriodEnd));
 	}
 
 	/**
@@ -870,10 +802,10 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				setActualsModel((ActualsModel)null);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
-				unsetPromptPeriodStart();
+				setPromptPeriodStart(PROMPT_PERIOD_START_EDEFAULT);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
-				unsetPromptPeriodEnd();
+				setPromptPeriodEnd(PROMPT_PERIOD_END_EDEFAULT);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
 				unsetSchedulingEndDate();
@@ -906,9 +838,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 				return actualsModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
-				return isSetPromptPeriodStart();
+				return PROMPT_PERIOD_START_EDEFAULT == null ? promptPeriodStart != null : !PROMPT_PERIOD_START_EDEFAULT.equals(promptPeriodStart);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
-				return isSetPromptPeriodEnd();
+				return PROMPT_PERIOD_END_EDEFAULT == null ? promptPeriodEnd != null : !PROMPT_PERIOD_END_EDEFAULT.equals(promptPeriodEnd);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
 				return isSetSchedulingEndDate();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
@@ -932,9 +864,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (promptPeriodStart: ");
-		if (promptPeriodStartESet) result.append(promptPeriodStart); else result.append("<unset>");
+		result.append(promptPeriodStart);
 		result.append(", promptPeriodEnd: ");
-		if (promptPeriodEndESet) result.append(promptPeriodEnd); else result.append("<unset>");
+		result.append(promptPeriodEnd);
 		result.append(", schedulingEndDate: ");
 		if (schedulingEndDateESet) result.append(schedulingEndDate); else result.append("<unset>");
 		result.append(')');

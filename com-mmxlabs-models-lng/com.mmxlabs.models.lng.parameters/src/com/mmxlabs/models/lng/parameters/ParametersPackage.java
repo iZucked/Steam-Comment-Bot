@@ -71,13 +71,13 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Period Start</b></em>' attribute.
+	 * The feature id for the '<em><b>Period Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__PERIOD_START = 0;
+	int USER_SETTINGS__PERIOD_START_DATE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Period End</b></em>' attribute.
@@ -1012,15 +1012,15 @@ public interface ParametersPackage extends EPackage {
 	EClass getUserSettings();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart <em>Period Start</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Period Start</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart()
+	 * @return the meta object for the attribute '<em>Period Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate()
 	 * @see #getUserSettings()
 	 * @generated
 	 */
-	EAttribute getUserSettings_PeriodStart();
+	EAttribute getUserSettings_PeriodStartDate();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd <em>Period End</em>}'.
@@ -1740,12 +1740,12 @@ public interface ParametersPackage extends EPackage {
 		EClass USER_SETTINGS = eINSTANCE.getUserSettings();
 
 		/**
-		 * The meta object literal for the '<em><b>Period Start</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Period Start Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute USER_SETTINGS__PERIOD_START = eINSTANCE.getUserSettings_PeriodStart();
+		EAttribute USER_SETTINGS__PERIOD_START_DATE = eINSTANCE.getUserSettings_PeriodStartDate();
 
 		/**
 		 * The meta object literal for the '<em><b>Period End</b></em>' attribute feature.

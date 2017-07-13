@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.parameters;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.EObject;
@@ -19,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart <em>Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
@@ -36,57 +37,57 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface UserSettings extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Period Start</b></em>' attribute.
+	 * Returns the value of the '<em><b>Period Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Period Start</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Period Start Date</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Period Start</em>' attribute.
-	 * @see #isSetPeriodStart()
-	 * @see #unsetPeriodStart()
-	 * @see #setPeriodStart(YearMonth)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_PeriodStart()
-	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.YearMonth"
+	 * @return the value of the '<em>Period Start Date</em>' attribute.
+	 * @see #isSetPeriodStartDate()
+	 * @see #unsetPeriodStartDate()
+	 * @see #setPeriodStartDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_PeriodStartDate()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	YearMonth getPeriodStart();
+	LocalDate getPeriodStartDate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart <em>Period Start</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Period Start</em>' attribute.
-	 * @see #isSetPeriodStart()
-	 * @see #unsetPeriodStart()
-	 * @see #getPeriodStart()
+	 * @param value the new value of the '<em>Period Start Date</em>' attribute.
+	 * @see #isSetPeriodStartDate()
+	 * @see #unsetPeriodStartDate()
+	 * @see #getPeriodStartDate()
 	 * @generated
 	 */
-	void setPeriodStart(YearMonth value);
+	void setPeriodStartDate(LocalDate value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart <em>Period Start</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetPeriodStart()
-	 * @see #getPeriodStart()
-	 * @see #setPeriodStart(YearMonth)
+	 * @see #isSetPeriodStartDate()
+	 * @see #getPeriodStartDate()
+	 * @see #setPeriodStartDate(LocalDate)
 	 * @generated
 	 */
-	void unsetPeriodStart();
+	void unsetPeriodStartDate();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart <em>Period Start</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStartDate <em>Period Start Date</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Period Start</em>' attribute is set.
-	 * @see #unsetPeriodStart()
-	 * @see #getPeriodStart()
-	 * @see #setPeriodStart(YearMonth)
+	 * @return whether the value of the '<em>Period Start Date</em>' attribute is set.
+	 * @see #unsetPeriodStartDate()
+	 * @see #getPeriodStartDate()
+	 * @see #setPeriodStartDate(LocalDate)
 	 * @generated
 	 */
-	boolean isSetPeriodStart();
+	boolean isSetPeriodStartDate();
 
 	/**
 	 * Returns the value of the '<em><b>Period End</b></em>' attribute.
