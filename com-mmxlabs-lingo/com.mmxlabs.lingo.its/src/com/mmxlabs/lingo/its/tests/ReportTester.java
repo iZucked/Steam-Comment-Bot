@@ -106,10 +106,10 @@ public class ReportTester {
 			ScenarioResult scenarioResult = new ScenarioResult(instance, ScenarioModelUtil.getScheduleModel(scenarioModel));
 			final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
-		Assert.assertNotNull(reportContents);
-		final String actualContents = reportContents.getStringContents();
-		Assert.assertNotNull(actualContents);
-		if (storeReports == TestMode.Generate) {
+			Assert.assertNotNull(reportContents);
+			final String actualContents = reportContents.getStringContents();
+			Assert.assertNotNull(actualContents);
+			if (storeReports == TestMode.Generate) {
 
 				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 

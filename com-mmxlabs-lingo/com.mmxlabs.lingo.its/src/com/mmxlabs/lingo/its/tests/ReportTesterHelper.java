@@ -109,7 +109,6 @@ public class ReportTesterHelper {
 				handler.displayActionPlan(scenarios);
 			}
 		}, (v, p) -> {
-
 			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
 			if (handler == null) {
 				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
@@ -134,12 +133,10 @@ public class ReportTesterHelper {
 			p.deselectAll(true);
 			p.select(scenario, true);
 		}, (v, p) -> {
-
 			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
 			if (scenarioInputProvider != null) {
 				scenarioInputProvider.provideScenarioInstance(null);
 			}
-
 			p.deselectAll(true);
 		});
 	}
@@ -165,74 +162,75 @@ public class ReportTesterHelper {
 
 			final IViewPart[] view = new IViewPart[1];
 			final IReportContents[] contents = new IReportContents[1];
+			try {
+				// Step 1 open the view, release UI thread
+				Display.getDefault().syncExec(new Runnable() {
 
-			// Step 1 open the view, release UI thread
-			Display.getDefault().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					Assert.assertNotNull(activePage);
-					try {
-						// Close the existing view reference. E.g. because we have changed the license features.
-						final IViewReference ref = activePage.findViewReference(reportID);
-						if (ref != null) {
-							// This will dispose the view
-							activePage.hideView(ref);
-						}
-
-						// Clear existing selection so newly opened view does not pick up any prior data.
-						provider.deselectAll(true);
-
-						view[0] = activePage.showView(reportID);
-						Assert.assertNotNull(view[0]);
-						activePage.activate(view[0]);
-
-					} catch (final PartInitException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-			// Step two set the new selection, release UI thread
-			Thread.sleep(1000);
-			Thread.yield();
-
-			RunnerHelper.exec(() -> {
-				callable.updateSelection(view[0], provider);
-			}, true);
-			Thread.yield();
-			Thread.sleep(1000);
-
-			// Step 3, obtain report contents
-			Display.getDefault().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
-					if (contents[0] == null) {
-						if (view[0] instanceof E4PartWrapper) {
-							final E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
-							final IViewSite viewSite = view[0].getViewSite();
-							final EPartService service = (EPartService) viewSite.getService(EPartService.class);
-							final MPart p = service.findPart(reportID);
-							if (p != null) {
-								final Object o = p.getObject();
-								if (o instanceof IAdaptable) {
-									final IAdaptable adaptable = (IAdaptable) o;
-									contents[0] = (IReportContents) adaptable.getAdapter(IReportContents.class);
-								}
+					@Override
+					public void run() {
+						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						Assert.assertNotNull(activePage);
+						try {
+							// Close the existing view reference. E.g. because we have changed the license features.
+							final IViewReference ref = activePage.findViewReference(reportID);
+							if (ref != null) {
+								// This will dispose the view
+								activePage.hideView(ref);
 							}
-							// EModelService
-							// EPartService
+
+							// Clear existing selection so newly opened view does not pick up any prior data.
+							provider.deselectAll(true);
+
+							view[0] = activePage.showView(reportID);
+							Assert.assertNotNull(view[0]);
+							activePage.activate(view[0]);
+
+						} catch (final PartInitException e) {
+							e.printStackTrace();
 						}
 					}
-				}
-			});
+				});
 
-			RunnerHelper.exec(() -> {
-				cleanUp.updateSelection(view[0], provider);
-			}, true);
+				// Step two set the new selection, release UI thread
+				Thread.sleep(1000);
+				Thread.yield();
+	
+				RunnerHelper.exec(() -> {
+					callable.updateSelection(view[0], provider);
+				}, true);
+				Thread.yield();
+				Thread.sleep(1000);
+
+				// Step 3, obtain report contents
+				Display.getDefault().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
+						if (contents[0] == null) {
+							if (view[0] instanceof E4PartWrapper) {
+								final E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
+								final IViewSite viewSite = view[0].getViewSite();
+								final EPartService service = (EPartService) viewSite.getService(EPartService.class);
+								final MPart p = service.findPart(reportID);
+								if (p != null) {
+									final Object o = p.getObject();
+									if (o instanceof IAdaptable) {
+										final IAdaptable adaptable = (IAdaptable) o;
+										contents[0] = (IReportContents) adaptable.getAdapter(IReportContents.class);
+									}
+								}
+								// EModelService
+								// EPartService
+							}
+						}
+					}
+				});
+			} finally {
+				RunnerHelper.exec(() -> {
+					cleanUp.updateSelection(view[0], provider);
+				}, true);
+			}
 
 			return contents[0];
 		});
