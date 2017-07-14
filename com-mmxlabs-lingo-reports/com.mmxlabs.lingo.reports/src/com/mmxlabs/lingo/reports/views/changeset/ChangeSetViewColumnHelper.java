@@ -1,15 +1,20 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToIntBiFunction;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -37,6 +42,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.base.Joiner;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
@@ -49,8 +55,10 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -669,12 +677,60 @@ public class ChangeSetViewColumnHelper {
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
 			@Override
+			public String getToolTipText(Object element) {
+
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
+
+					StringBuilder sb = new StringBuilder();
+					sb.append("Scheduled dates:\n");
+
+					final SlotAllocation originalAllocation;
+					final SlotAllocation newAllocation;
+					if (isLoadSide) {
+						originalAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
+						newAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
+					} else {
+						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+					}
+
+					boolean hasDate = false;
+					boolean newLine = false;
+					if (newAllocation != null) {
+						final ZonedDateTime slotDate = newAllocation.getSlotVisit().getStart();
+						if (slotDate != null) {
+							sb.append(String.format("Before: %s ", slotDate.format(formatter)));
+							newLine = true;
+							hasDate = true;
+						}
+					}
+					if (originalAllocation != null) {
+						final ZonedDateTime slotDate = originalAllocation.getSlotVisit().getStart();
+						if (slotDate != null) {
+							if (newLine) {
+								sb.append("\n");
+							}
+							sb.append(String.format("After: %s ", slotDate.format(formatter)));
+							hasDate = true;
+						}
+					}
+					if (hasDate) {
+						return sb.toString();
+					}
+				}
+				return super.getToolTipText(element);
+			}
+
+			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
 
+					boolean isSpot = false;
 					LocalDate windowStart = null;
 					boolean isDelta = false;
 					int deltaHours = 0;
@@ -683,6 +739,7 @@ public class ChangeSetViewColumnHelper {
 						final SlotAllocation originalLoadAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 						final SlotAllocation newLoadAllocation = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLoadAllocation() : null;
 
+						isSpot = tableRow.isLhsSpot();
 						if (newLoadAllocation != null) {
 							final Slot slot = newLoadAllocation.getSlot();
 							if (slot != null) {
@@ -703,17 +760,26 @@ public class ChangeSetViewColumnHelper {
 						}
 
 						if (windowStart != null) {
-							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+
+							final String windowDate;
+							if (isSpot) {
+								windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
 							} else {
-								cell.setText(windowStart.format(formatter));
+								windowDate = windowStart.format(formatter);
+							}
+
+							if (isDelta) {
+								cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+							} else {
+								cell.setText(windowDate);
 							}
 						}
 
 					} else {
-						// Unlike other RHS columns where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
 						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+						isSpot = tableRow.isRhsSpot();
 
 						if (newDischargeAllocation != null) {
 							final Slot slot = newDischargeAllocation.getSlot();
@@ -735,10 +801,18 @@ public class ChangeSetViewColumnHelper {
 						}
 
 						if (windowStart != null) {
-							if (isDelta) {
-								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+
+							final String windowDate;
+							if (isSpot) {
+								windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
 							} else {
-								cell.setText(windowStart.format(formatter));
+								windowDate = windowStart.format(formatter);
+							}
+
+							if (isDelta) {
+								cell.setText(String.format("%s (%s%.1f)", windowDate, deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+							} else {
+								cell.setText(windowDate);
 							}
 						}
 					}
@@ -954,6 +1028,61 @@ public class ChangeSetViewColumnHelper {
 
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
 		return new CellLabelProvider() {
+
+			@Override
+			public String getToolTipText(Object element) {
+
+				if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+
+					final Set<CapacityViolationType> beforeViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
+					final Set<CapacityViolationType> afterViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
+
+					Set<CapacityViolationType> tmp = new HashSet<>(afterViolatios);
+					tmp.removeAll(beforeViolatios);
+					StringBuilder sb = new StringBuilder();
+					boolean newLine = false;
+					if (!tmp.isEmpty()) {
+						sb.append(String.format("Caused %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
+						newLine = true;
+					}
+					tmp.clear();
+					tmp.addAll(beforeViolatios);
+					tmp.removeAll(afterViolatios);
+					if (!tmp.isEmpty()) {
+						if (newLine) {
+							sb.append("\n");
+						}
+						sb.append(String.format("Resolved %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
+					}
+					return sb.toString();
+
+				}
+
+				return super.getToolTipText(element);
+			}
+
+			private Map<CapacityViolationType, String> nameMap = new HashMap<>();
+			{
+				nameMap.put(CapacityViolationType.FORCED_COOLDOWN, "forced cooldown");
+				nameMap.put(CapacityViolationType.LOST_HEEL, "lost heel");
+				nameMap.put(CapacityViolationType.MAX_DISCHARGE, "max discharge");
+				nameMap.put(CapacityViolationType.MAX_HEEL, "max heel");
+				nameMap.put(CapacityViolationType.MAX_LOAD, "max load");
+				nameMap.put(CapacityViolationType.MIN_DISCHARGE, "min discharge");
+				nameMap.put(CapacityViolationType.MIN_HEEL, "min heel");
+				nameMap.put(CapacityViolationType.MIN_LOAD, "min load");
+				nameMap.put(CapacityViolationType.VESSEL_CAPACITY, "vessel capacity");
+			}
+
+			private String generateDisplayString(Set<CapacityViolationType> tmp) {
+				List<String> sorted = tmp.stream() //
+						.map(cvt -> nameMap.get(cvt)) //
+						.sorted() // .
+						.collect(Collectors.toList());
+
+				return Joiner.on(", ").join(sorted);
+			}
 
 			@Override
 			public void update(final ViewerCell cell) {

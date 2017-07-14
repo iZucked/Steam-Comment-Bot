@@ -8,6 +8,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -33,6 +33,7 @@ import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -256,6 +257,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
 	}
 
+	private String dateToString(final LocalDate date) {
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
+	}
+
 	@Override
 	public String getToolTipText(final Object element) {
 
@@ -296,6 +301,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 				if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
 					eventText.append(" | " + route + "\n");
+					if (route.getRouteOption() == RouteOption.PANAMA) {
+						final CanalBookingSlot canalBooking = journey.getCanalBooking();
+						if (canalBooking != null) {
+							eventText.append(String.format("Canal booking: %s\n", dateToString(journey.getCanalDate())));
+						} else {
+							eventText.append(String.format("Booking required: %s\n", dateToString(journey.getCanalDate())));
+						}
+					}
 				}
 
 			} else if (element instanceof SlotVisit) {

@@ -320,7 +320,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 
 		for (final Map.Entry<ChangeSetMetadata, List<ChangeSet>> e : grouper.entrySet()) {
-			double bestDelta = Double.MIN_VALUE;
+			// NOTE: Double.MIN_VALUE != -Double.MAX_VALUE. Min value is smallest possible positive number....
+			double bestDelta = -Double.MAX_VALUE;
 			ChangeSet bestChangeSet = null;
 			String dest = "";
 			final ChangeSetMetadata m = e.getKey();
