@@ -31,12 +31,23 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.license.features.internal.FeatureEnablementExtension;
 import com.mmxlabs.license.features.internal.FeatureEnablementModule;
+import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 
 public class LicenseFeatures {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LoggerFactory.class);
 
 	private static Set<String> extraEnablementsSet = new HashSet<>();
+
+	// On class-load run this stuff so it is ready when we try to use the class. The Application is too late....
+	static {
+		// Initialise feature enablements
+		LicenseFeatures.initialiseFeatureEnablements();
+
+		// Login our default user
+		final Subject subject = SecurityUtils.getSubject();
+		subject.login(new UsernamePasswordToken("user", "password"));
+	}
 
 	public static void initialiseFeatureEnablements(final String... extraEnablements) {
 		for (final String s : extraEnablements) {
