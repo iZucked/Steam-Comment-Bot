@@ -613,7 +613,7 @@ public class HeadlineReportView extends ViewPart {
 					if (scenarioResult != null) {
 						ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-						
+
 						if (!modelRecord.isLoadFailure()) {
 							HeadlineReportView.this.modelReference = modelRecord.aquireReference("HeadlineReportView:2");
 							final EObject instance = modelReference.getInstance();
@@ -630,9 +630,7 @@ public class HeadlineReportView extends ViewPart {
 			};
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter))
-
-		{
+		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
