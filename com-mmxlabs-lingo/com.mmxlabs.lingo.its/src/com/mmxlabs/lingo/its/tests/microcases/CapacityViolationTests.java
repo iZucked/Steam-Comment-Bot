@@ -300,9 +300,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, castedCon.getInitialSoftViolations());
 
 			final Set<IPortSlot> slots = castedCon.getCurrentViolatedSlots();
-			final long violations = castedCon.getCurrentSoftViolations();
-			// Check that there is only a singular violated slot and a singular violation.
-			Assert.assertEquals(1, violations);
+			final long softViolations = castedCon.getCurrentSoftViolations();
+			// Check that there is only a singular violated slot and no soft violations.
+			Assert.assertEquals(0, softViolations);
 			Assert.assertEquals(1, slots.size());
 			// Check that the violation is a MIN_DISCHARGE
 			Assert.assertEquals(CapacityViolationType.MIN_DISCHARGE, castedCon.getTriggeredViolations().get(0));
