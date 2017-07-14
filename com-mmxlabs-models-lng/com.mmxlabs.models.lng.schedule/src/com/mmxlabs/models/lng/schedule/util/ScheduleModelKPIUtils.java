@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -360,6 +362,20 @@ public class ScheduleModelKPIUtils {
 					if (evt instanceof CapacityViolationsHolder) {
 						final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) evt;
 						violations += capacityViolationsHolder.getViolations().size();
+					}
+				}
+			}
+		}
+		return violations;
+	}
+	public static Set<CapacityViolationType> getCapacityViolations(@Nullable final EventGrouping eventGrouping) {
+		Set<CapacityViolationType> violations =  new HashSet<CapacityViolationType>();
+		if (eventGrouping != null) {
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof SlotVisit) {
+					if (evt instanceof CapacityViolationsHolder) {
+						final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) evt;
+						violations.addAll(capacityViolationsHolder.getViolations().keySet());
 					}
 				}
 			}
