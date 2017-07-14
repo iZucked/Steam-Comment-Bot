@@ -158,6 +158,8 @@ public final class ModelRecord {
 				data = null;
 				// Reset validation status
 //				validationStatus = Status.OK_STATUS;
+				validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "Previous validation status");
+
 			}
 			cleanupReferencesList();
 		} finally {
