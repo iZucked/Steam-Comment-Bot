@@ -50,6 +50,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -102,7 +103,7 @@ public class BagMover {
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private ActionSetEvaluationHelper evaluationHelper;
+	private EvaluationHelper evaluationHelper;
 
 	@Inject
 	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
@@ -176,7 +177,8 @@ public class BagMover {
 		if (tryDepth == 0 || differencesList.size() == 0) {
 			boolean failedEvaluation = false;
 
-			final long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, similarityState, searchStatistics);
+			final long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, /* run evaluated state checkers */ false,
+					similarityState.getBaseMetrics(), searchStatistics);
 			if (thisMetrics != null) {
 				final long thisLateness = thisMetrics[MetricType.LATENESS.ordinal()];
 				final long thisPNL = thisMetrics[MetricType.PNL.ordinal()];

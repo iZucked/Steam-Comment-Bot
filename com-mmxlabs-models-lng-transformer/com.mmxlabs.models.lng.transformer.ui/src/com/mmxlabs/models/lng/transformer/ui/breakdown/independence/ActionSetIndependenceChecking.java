@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
@@ -33,6 +32,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
@@ -69,7 +69,7 @@ public class ActionSetIndependenceChecking {
 	private IOptionalElementsProvider optionalElementsProvider;
 
 	@Inject
-	protected ActionSetEvaluationHelper evaluationHelper;
+	protected EvaluationHelper evaluationHelper;
 
 	private final boolean DEBUG = true;
 
@@ -466,7 +466,7 @@ public class ActionSetIndependenceChecking {
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
 		sequencesManipulator.manipulate(currentFullSequences);
 
-		long[] metrics = evaluationHelper.evaluateState(currentSequences, currentFullSequences, null, similarityState, null);
+		long[] metrics = evaluationHelper.evaluateState(currentSequences, currentFullSequences, null, /* evaluated state checkers */ false, similarityState.getBaseMetrics(), null);
 		if (metrics == null) {
 			return null;
 		}

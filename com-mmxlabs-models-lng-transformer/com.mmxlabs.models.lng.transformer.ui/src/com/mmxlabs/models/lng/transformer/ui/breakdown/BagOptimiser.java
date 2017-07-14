@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -39,6 +40,9 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.ActionSetInd
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -55,6 +59,9 @@ import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
@@ -91,6 +98,10 @@ public class BagOptimiser {
 	ExecutorService executorService;
 
 	@Inject
+	@NonNull
+	private IPortTypeProvider portTypeProvider;
+
+	@Inject
 	private List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
@@ -104,7 +115,7 @@ public class BagOptimiser {
 	@NonNull
 	@Inject
 	@Named("MAIN_MOVER")
-	protected ActionSetEvaluationHelper evaluationHelper;
+	protected EvaluationHelper evaluationHelper;
 
 	protected static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
@@ -189,7 +200,7 @@ public class BagOptimiser {
 			// Prepare initial solution state
 			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
-			final int changesCount = evaluationHelper.getChangedElements(targetSimilarityState, initialRawSequences).size();
+			final int changesCount = getChangedElements(targetSimilarityState, initialRawSequences).size();
 			if (DEBUG) {
 				// Debugging -- get initial change count
 				System.out.println("Initial changes " + changesCount);
@@ -222,7 +233,7 @@ public class BagOptimiser {
 			final List<ChangeSet> changeSets = new LinkedList<>();
 			final List<Change> changes = new LinkedList<>();
 			final long time2 = System.currentTimeMillis();
-			
+
 			if (actionSetLogger != null) {
 				actionSetLogger.setInitialPnL(initialPNL / Calculator.ScaleFactor);
 			}
@@ -1166,6 +1177,73 @@ public class BagOptimiser {
 		public int getNumberOfLeafs() {
 			return numberOfLeafs;
 		}
+	}
+
+	private List<ISequenceElement> getChangedElements(final SimilarityState similarityState, final ISequences rawSequences) {
+
+		final List<ISequenceElement> changedElements = new LinkedList<>();
+
+		for (final IResource resource : rawSequences.getResources()) {
+			assert resource != null;
+
+			final ISequence sequence = rawSequences.getSequence(resource);
+			assert sequence != null;
+
+			ISequenceElement prev = null;
+			for (final ISequenceElement current : sequence) {
+				assert current != null;
+				if (prev != null) {
+					// Currently only looking at LD style cargoes
+					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
+						// Wiring Change
+						boolean wiringChange = false;
+						final ISequenceElement matchedDischargeElement = similarityState.getDischargeElementForLoad(prev);
+						final ISequenceElement matchedLoadElement = similarityState.getLoadElementForDischarge(current);
+
+						final IResource resourceForElement = similarityState.getResourceForElement(prev);
+						if (matchedDischargeElement == null && matchedLoadElement == null) {
+							wiringChange = true;
+							changedElements.add(prev);
+							changedElements.add(current);
+						} else if (matchedDischargeElement != current) {
+							wiringChange = true;
+							changedElements.add(prev);
+							changedElements.add(current);
+						}
+
+						// Vessel Change
+						if (!wiringChange) {
+							assert prev != null;
+							if (resourceForElement != resource) {
+								changedElements.add(prev);
+								changedElements.add(current);
+							}
+						}
+
+					} else {
+						if (portTypeProvider.getPortType(current) == PortType.CharterOut || portTypeProvider.getPortType(current) == PortType.DryDock
+								|| portTypeProvider.getPortType(current) == PortType.Maintenance) {
+
+							if (similarityState.getResourceForElement(current) != resource) {
+								changedElements.add(current);
+							}
+						}
+					}
+				}
+				prev = current;
+			}
+		}
+
+		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
+		while (unusedElements.size() > 0) {
+			final ISequenceElement element = unusedElements.pop();
+			assert element != null;
+			// Currently unused element needs to be placed onto a resource
+			if (similarityState.getResourceForElement(element) != null) {
+				changedElements.add(element);
+			}
+		}
+		return changedElements;
 	}
 
 }

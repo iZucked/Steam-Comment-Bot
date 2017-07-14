@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -48,6 +47,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -142,7 +142,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parent);
 			for (final Container c : elementsToRemove) {
 				scenarioService.delete(c);
-
 			}
 		}, changeSetIdx -> {
 			String newName;
@@ -215,8 +214,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Provides
 			@Named("MAIN_MOVER")
-			private ActionSetEvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
-				final ActionSetEvaluationHelper bagMover = injector.getInstance(ActionSetEvaluationHelper.class);
+			private EvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
+				final EvaluationHelper bagMover = injector.getInstance(EvaluationHelper.class);
 				bagMover.setStrictChecking(true);
 				return bagMover;
 			}
@@ -236,7 +235,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
-		
 
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();

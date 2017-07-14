@@ -114,6 +114,9 @@ public class SlotInsertionOptimiserUnit {
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating) {
 				final EvaluationHelper helper = new EvaluationHelper(isReevaluating);
 				injector.injectMembers(helper);
+				
+				helper.setFlexibleViolationCount(Integer.MAX_VALUE);
+				
 				return helper;
 			}
 
