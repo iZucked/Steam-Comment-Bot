@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -30,7 +33,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence.HeelRecor
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
@@ -49,6 +51,21 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  * 
  */
 public class CapacityViolationChecker {
+
+	public static final Set<CapacityViolationType> HARD_CAPACITY_VIOLATIONS = EnumSet.of(//
+			CapacityViolationType.MIN_DISCHARGE, //
+			CapacityViolationType.MAX_DISCHARGE, //
+			CapacityViolationType.MIN_LOAD, //
+			CapacityViolationType.MAX_LOAD, //
+			CapacityViolationType.VESSEL_CAPACITY);
+
+	public static boolean isHardViolation(CapacityViolationType cvt) {
+		return HARD_CAPACITY_VIOLATIONS.contains(cvt);
+	}
+
+	public static boolean isSoftViolation(CapacityViolationType cvt) {
+		return !HARD_CAPACITY_VIOLATIONS.contains(cvt);
+	}
 
 	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
