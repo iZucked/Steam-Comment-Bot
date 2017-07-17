@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.Callable;
@@ -171,14 +172,14 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testSetPeriodStart() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
-		executeValidTest(settings, b -> b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("02/2015"), u -> {
-			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodStart()); //
+		executeValidTest(settings, b -> b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("05/02/2015"), u -> {
+			Assert.assertEquals(LocalDate.of(2015, 2, 5), u.getPeriodStartDate()); //
 			Assert.assertFalse(u.isSetPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
-			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 2, 5), settings.getPeriodStartDate()); //
 			Assert.assertFalse(settings.isSetPeriodEnd()); //
 
 		});
@@ -187,16 +188,16 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testSetPeriodEnd() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
 		executeValidTest(settings, b -> {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
-			Assert.assertFalse(u.isSetPeriodStart()); //
+			Assert.assertFalse(u.isSetPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
-			Assert.assertFalse(settings.isSetPeriodStart()); //
+			Assert.assertFalse(settings.isSetPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
 		});
@@ -205,17 +206,17 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testSetPeriodStartEnd() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
 		executeValidTest(settings, b -> {
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("02/2015");//
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
-			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
-			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 2, 1), settings.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
 		});
@@ -224,7 +225,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_Off_NoPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -239,7 +240,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_Low_1mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -252,12 +253,12 @@ public class ParameterModesDialogTest {
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertTrue(settings.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 2), settings.getPeriodEnd()); //
 
 		});
@@ -266,7 +267,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_Low_3mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -279,12 +280,12 @@ public class ParameterModesDialogTest {
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertTrue(settings.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
 		});
@@ -293,7 +294,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_Medium_6mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -306,12 +307,12 @@ public class ParameterModesDialogTest {
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertTrue(settings.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
 
 		});
@@ -320,7 +321,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_High_6mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -333,12 +334,12 @@ public class ParameterModesDialogTest {
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertTrue(settings.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStart()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
 
 		});
@@ -347,7 +348,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_Low_4mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -365,7 +366,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_Med_7mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
@@ -383,7 +384,7 @@ public class ParameterModesDialogTest {
 	@Test
 	public void testActionSet_High_7mPeriod() throws Exception {
 		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
-		settings.unsetPeriodStart();
+		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);

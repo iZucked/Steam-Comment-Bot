@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.security.cert.LDAPCertStoreParameters;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
@@ -125,10 +127,10 @@ public class LNGScenarioChainUnitFactory {
 			return false;
 		}
 		boolean over3Months = false;
-		if (!userSettings.isSetPeriodStart() || !userSettings.isSetPeriodEnd()) {
+		if (!userSettings.isSetPeriodStartDate() || !userSettings.isSetPeriodEnd()) {
 			over3Months = true;
 		} else {
-			final YearMonth after = userSettings.getPeriodStart();
+			final LocalDate after = userSettings.getPeriodStartDate();
 			final YearMonth before = userSettings.getPeriodEnd();
 			if (after == null || before == null) {
 				over3Months = true;

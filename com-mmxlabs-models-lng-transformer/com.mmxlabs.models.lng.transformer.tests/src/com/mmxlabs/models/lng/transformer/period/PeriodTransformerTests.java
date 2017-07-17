@@ -93,7 +93,7 @@ public class PeriodTransformerTests {
 
 		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		settings.setPeriodStart(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
+		settings.setPeriodStartDate(PeriodTestUtils.createLocalDate(2014, Calendar.FEBRUARY, 1));
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
@@ -133,7 +133,7 @@ public class PeriodTransformerTests {
 
 		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		settings.setPeriodStart(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
+		settings.setPeriodStartDate(PeriodTestUtils.createLocalDate(2014, Calendar.FEBRUARY, 1));
 		settings.setPeriodEnd(PeriodTestUtils.createYearMonth(2014, Calendar.JULY));
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);

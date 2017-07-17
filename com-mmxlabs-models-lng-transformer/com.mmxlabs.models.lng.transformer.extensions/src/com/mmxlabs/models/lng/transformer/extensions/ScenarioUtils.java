@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +32,6 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
@@ -41,7 +41,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -222,7 +221,7 @@ public class ScenarioUtils {
 		return params;
 	}
 
-	public static ActionPlanOptimisationStage getActionPlanSettings(@NonNull final SimilarityMode similarityMode, @NonNull final YearMonth start, @NonNull final YearMonth end,
+	public static ActionPlanOptimisationStage getActionPlanSettings(@NonNull final SimilarityMode similarityMode, @NonNull final LocalDate start, @NonNull final YearMonth end,
 			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
 		final int monthsInPeriod = Months.between(start, end);
 		final ActionPlanOptimisationStage actionPlanSettings;

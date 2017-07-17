@@ -267,7 +267,7 @@ public class DateAndCurveHelper {
 	public static ZonedDateTime createDate(final int year, final int month, final int dayOfMonth, final int hourOfDay, final String newTimeZone) {
 		return ZonedDateTime.of(year, month, dayOfMonth, hourOfDay, 0, 0, 0, ZoneId.of(newTimeZone));
 	}
-
+ 
 	public static YearMonth createYearMonth(final int year, final int month) {
 		return YearMonth.of(year, month);
 	}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.junit.Assert;
@@ -103,7 +104,7 @@ public class OptimisationHelperTest {
 	public void testTransformUserSettings_ActionSet_disabled_3m_SimOff() {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(true);
-		userSettings.setPeriodStart(YearMonth.of(2015, 2));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
@@ -117,7 +118,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(true);
 		userSettings.setSimilarityMode(SimilarityMode.LOW);
-		userSettings.setPeriodStart(YearMonth.of(2015, 2));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 6));
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
@@ -131,7 +132,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(true);
 		userSettings.setSimilarityMode(SimilarityMode.MEDIUM);
-		userSettings.setPeriodStart(YearMonth.of(2015, 2));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 8));
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
@@ -145,7 +146,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(true);
 		userSettings.setSimilarityMode(SimilarityMode.MEDIUM);
-		userSettings.setPeriodStart(YearMonth.of(2015, 2));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 9));
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
@@ -159,7 +160,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(true);
 		userSettings.setSimilarityMode(SimilarityMode.HIGH);
-		userSettings.setPeriodStart(YearMonth.of(2015, 2));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 8));
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);
@@ -173,7 +174,7 @@ public class OptimisationHelperTest {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(true);
 		userSettings.setSimilarityMode(SimilarityMode.HIGH);
-		userSettings.setPeriodStart(YearMonth.of(2015, 2));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 2, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 9));
 
 		final OptimisationPlan plan = OptimisationHelper.transformUserSettings(userSettings, null, null);

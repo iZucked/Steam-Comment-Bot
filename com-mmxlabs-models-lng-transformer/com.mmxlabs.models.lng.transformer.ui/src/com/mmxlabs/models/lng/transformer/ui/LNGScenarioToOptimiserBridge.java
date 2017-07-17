@@ -170,7 +170,7 @@ public class LNGScenarioToOptimiserBridge {
 
 		IScenarioEntityMapping periodMapping = null;
 		{
-			if (userSettings.getPeriodStart() != null || userSettings.getPeriodEnd() != null) {
+			if (userSettings.getPeriodStartDate() != null || userSettings.getPeriodEnd() != null) {
 				periodMapping = new ScenarioEntityMapping();
 			}
 		}
