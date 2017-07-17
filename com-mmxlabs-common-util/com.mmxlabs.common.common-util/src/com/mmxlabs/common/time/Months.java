@@ -21,6 +21,20 @@ import com.mmxlabs.common.NonNullPair;
  */
 public final class Months {
 
+	/**
+	 * Equivalent to {@link #between(YearMonth, YearMonth)} by ignoring day of month.
+	 * 
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static int between(@NonNull final LocalDate start, @NonNull final YearMonth end) {
+
+		final int endMonths = end.getYear() * 12 + end.getMonthValue();
+		final int startMonths = start.getYear() * 12 + start.getMonthValue();
+		return endMonths - startMonths;
+	}
+
 	public static int between(@NonNull final YearMonth start, @NonNull final YearMonth end) {
 
 		final int endMonths = end.getYear() * 12 + end.getMonthValue();
