@@ -72,11 +72,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lingo.reports.verticalreport";
 
-	/**
-	 * Property used in combination with unit tests so copy/paste to clipboard returns a constant date rather than the current date.
-	 */
-	public static final String PROPERTY_RUNNING_ITS = "com.mmxlabs.lingo.reports.verticalreport.running.its";
-
 	private SelectedScenariosService selectedScenariosService;
 
 	@NonNull
