@@ -32,7 +32,6 @@ import org.osgi.framework.ServiceRegistration;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -49,6 +48,7 @@ import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.rcp.common.Constants;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -91,12 +91,6 @@ public class AbstractOptimisationResultTester {
 		instance = SchedulePackage.eINSTANCE;
 		instance = SpotMarketsPackage.eINSTANCE;
 		// Add other packages?
-
-		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
-		Locale.setDefault(Locale.UK);
-
-		// The vertical report can have some current time based properties which break the ITS comparison
-		System.setProperty(AbstractVerticalCalendarReportView.PROPERTY_RUNNING_ITS, Boolean.TRUE.toString());
 
 		// Enable "license" features
 		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation");
