@@ -8,6 +8,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourS
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
@@ -116,6 +118,15 @@ public class VesselStateColourScheme extends ColourScheme {
 			final Event event = (Event) element;
 			if (isLocked(event, viewer)) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Locked, ColourElements.Border);
+			}
+			if (event instanceof CanalBookingEvent) {
+				CanalBookingEvent canalBookingEvent = (CanalBookingEvent) event;
+				Journey linkedJourney = canalBookingEvent.getLinkedJourney();
+				if (linkedJourney.getCanalBooking() == null) {
+					if (linkedJourney.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT || linkedJourney.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
+						return ColourPalette.getInstance().getColour(new RGB(255, 0, 0));
+					}
+				}
 			}
 			if (event instanceof SlotVisit) {
 				SlotVisit sv = (SlotVisit) event;
