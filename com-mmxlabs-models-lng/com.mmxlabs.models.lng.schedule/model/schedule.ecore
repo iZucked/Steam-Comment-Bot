@@ -118,10 +118,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer #//EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer #//EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Journey" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"

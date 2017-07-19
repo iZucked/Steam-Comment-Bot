@@ -68,6 +68,7 @@ public class EndEventComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotAllocationEditor(detailComposite, topClass);
+		add_ballastBonusFeeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slotAllocation feature on EndEvent
@@ -76,5 +77,14 @@ public class EndEventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.END_EVENT__SLOT_ALLOCATION));
+	}
+
+	/**
+	 * Create the editor for the ballastBonusFee feature on EndEvent
+	 *
+	 * @generated
+	 */
+	protected void add_ballastBonusFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.END_EVENT__BALLAST_BONUS_FEE));
 	}
 }

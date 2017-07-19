@@ -1366,6 +1366,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getStartEvent_RepositioningFee() {
+		return (EAttribute)startEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getEndEvent() {
 		return endEventEClass;
 	}
@@ -1377,6 +1386,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EReference getEndEvent_SlotAllocation() {
 		return (EReference)endEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEndEvent_BallastBonusFee() {
+		return (EAttribute)endEventEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2297,9 +2315,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		startEventEClass = createEClass(START_EVENT);
 		createEReference(startEventEClass, START_EVENT__SLOT_ALLOCATION);
+		createEAttribute(startEventEClass, START_EVENT__REPOSITIONING_FEE);
 
 		endEventEClass = createEClass(END_EVENT);
 		createEReference(endEventEClass, END_EVENT__SLOT_ALLOCATION);
+		createEAttribute(endEventEClass, END_EVENT__BALLAST_BONUS_FEE);
 
 		journeyEClass = createEClass(JOURNEY);
 		createEReference(journeyEClass, JOURNEY__DESTINATION);
@@ -2634,9 +2654,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getStartEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartEvent_RepositioningFee(), ecorePackage.getELong(), "repositioningFee", null, 0, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEndEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndEvent_BallastBonusFee(), ecorePackage.getELong(), "ballastBonusFee", null, 0, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJourney_Destination(), thePortPackage.getPort(), null, "destination", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

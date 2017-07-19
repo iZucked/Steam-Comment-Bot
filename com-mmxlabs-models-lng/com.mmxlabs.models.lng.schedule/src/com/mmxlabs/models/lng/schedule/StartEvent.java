@@ -14,6 +14,7 @@ package com.mmxlabs.models.lng.schedule;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.StartEvent#getSlotAllocation <em>Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.StartEvent#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getStartEvent()
@@ -46,6 +47,32 @@ public interface StartEvent extends Event, FuelUsage, PortVisit, ProfitAndLossCo
 	 * @generated
 	 */
 	void setSlotAllocation(SlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #setRepositioningFee(long)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getStartEvent_RepositioningFee()
+	 * @model
+	 * @generated
+	 */
+	long getRepositioningFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.StartEvent#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #getRepositioningFee()
+	 * @generated
+	 */
+	void setRepositioningFee(long value);
 
 } // end of  StartEvent
 

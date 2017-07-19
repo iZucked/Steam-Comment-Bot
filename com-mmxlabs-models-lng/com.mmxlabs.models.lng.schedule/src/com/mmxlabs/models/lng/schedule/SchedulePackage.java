@@ -1652,13 +1652,22 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__REPOSITIONING_FEE = EVENT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1922,13 +1931,22 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Ballast Bonus Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__BALLAST_BONUS_FEE = EVENT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 10;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6220,6 +6238,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getStartEvent_SlotAllocation();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.StartEvent#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.StartEvent#getRepositioningFee()
+	 * @see #getStartEvent()
+	 * @generated
+	 */
+	EAttribute getStartEvent_RepositioningFee();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EndEvent <em>End Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6239,6 +6268,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEndEvent_SlotAllocation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EndEvent#getBallastBonusFee <em>Ballast Bonus Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus Fee</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EndEvent#getBallastBonusFee()
+	 * @see #getEndEvent()
+	 * @generated
+	 */
+	EAttribute getEndEvent_BallastBonusFee();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Journey <em>Journey</em>}'.
@@ -8052,6 +8092,14 @@ public interface SchedulePackage extends EPackage {
 		EReference START_EVENT__SLOT_ALLOCATION = eINSTANCE.getStartEvent_SlotAllocation();
 
 		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute START_EVENT__REPOSITIONING_FEE = eINSTANCE.getStartEvent_RepositioningFee();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl <em>End Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8068,6 +8116,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference END_EVENT__SLOT_ALLOCATION = eINSTANCE.getEndEvent_SlotAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_EVENT__BALLAST_BONUS_FEE = eINSTANCE.getEndEvent_BallastBonusFee();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.

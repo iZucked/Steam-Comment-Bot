@@ -68,6 +68,7 @@ public class StartEventComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotAllocationEditor(detailComposite, topClass);
+		add_repositioningFeeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slotAllocation feature on StartEvent
@@ -76,5 +77,14 @@ public class StartEventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.START_EVENT__SLOT_ALLOCATION));
+	}
+
+	/**
+	 * Create the editor for the repositioningFee feature on StartEvent
+	 *
+	 * @generated
+	 */
+	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.START_EVENT__REPOSITIONING_FEE));
 	}
 }
