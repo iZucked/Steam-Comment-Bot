@@ -122,7 +122,7 @@ public class ExporterExtensionUtils {
 			}
 
 		} else if (slot.getPortType() == PortType.Start) {
-			final StartEvent startEvent = findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution);
+			final StartEvent startEvent = findStartEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
 			return startEvent;
 		} else if (slot.getPortType() == PortType.End) {
 			final EndEvent endEvent = findEndEvent(element, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
@@ -191,7 +191,8 @@ public class ExporterExtensionUtils {
 		entityDetails.getGeneralPNLDetails().add(details);
 	}
 
-	public static EndEvent findEndEvent(final ISequenceElement element, @NonNull ModelEntityMap modelEntityMap, @NonNull Schedule outputSchedule, @NonNull IAnnotatedSolution annotatedSolution, IVesselProvider vesselProvider) {
+	public static EndEvent findEndEvent(final ISequenceElement element, @NonNull ModelEntityMap modelEntityMap, @NonNull Schedule outputSchedule, @NonNull IAnnotatedSolution annotatedSolution,
+			IVesselProvider vesselProvider) {
 		EndEvent endEvent = null;
 		//
 		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
@@ -201,14 +202,16 @@ public class ExporterExtensionUtils {
 			if (seq.size() == 0) {
 				continue;
 			}
-			if (seq.get(seq.size() - 1) == element) {
+			@NonNull
+			final ISequenceElement endElement = seq.get(seq.size() - 1);
+			if (endElement == element) {
 				for (final Sequence sequence : outputSchedule.getSequences()) {
 					CharterInMarket charterInMarket = sequence.getCharterInMarket();
 					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
 					if (charterInMarket == null && vesselAvailability == null) {
 						continue;
 					}
-					
+
 					boolean correctVessel = false;
 					if (charterInMarket != null) {
 						@Nullable
@@ -245,8 +248,9 @@ public class ExporterExtensionUtils {
 		}
 		return endEvent;
 	}
-	private StartEvent findStartEvent(final ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
-			@NonNull final IAnnotatedSolution annotatedSolution) {
+
+	public static StartEvent findStartEvent(final ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
+			@NonNull final IAnnotatedSolution annotatedSolution, IVesselProvider vesselProvider) {
 		StartEvent startEvent = null;
 		//
 		// Find the optimiser sequence for the start element
@@ -256,19 +260,46 @@ public class ExporterExtensionUtils {
 			if (seq.size() == 0) {
 				continue;
 			}
-			if (seq.get(0) == element) {
+			@NonNull
+			ISequenceElement startElement = seq.get(0);
+			if (startElement == element) {
 				// Found the sequence, so no find the matching EMF sequence
 				for (final Sequence sequence : outputSchedule.getSequences()) {
-					// Get the EMF Vessel
+					CharterInMarket charterInMarket = sequence.getCharterInMarket();
 					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (vesselAvailability == null) {
+					if (charterInMarket == null && vesselAvailability == null) {
 						continue;
 					}
-					// Find the matching
-					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
+					boolean correctVessel = false;
+					if (charterInMarket != null) {
+						// Spot market vessels have no start event.
+						if (false) {
+							@Nullable
+							ISpotCharterInMarket iSpotCharterInMarket = modelEntityMap.getOptimiserObject(charterInMarket, ISpotCharterInMarket.class);
+							if (iSpotCharterInMarket == null) {
+								continue;
+							}
+							IVesselAvailability iVesselAvailability = vesselProvider.getVesselAvailability(res);
+							@Nullable
+							ISpotCharterInMarket oSpotCharterInMarket = iVesselAvailability.getSpotCharterInMarket();
+							if (oSpotCharterInMarket == iSpotCharterInMarket && iVesselAvailability.getSpotIndex() == sequence.getSpotIndex()) {
+								correctVessel = true;
+							}
+						}
+
+						return null;
+
+					} else {
+						// non-spot case
+						// Find the matching
+						final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
+						if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
+							correctVessel = true;
+						}
+					}
 
 					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-					if (iVesselAvailability == vesselProvider.getVesselAvailability(res)) {
+					if (correctVessel) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(0);
 							if (evt instanceof StartEvent) {
