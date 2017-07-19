@@ -81,7 +81,7 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 			if (routes != null) {
 				for (final EObjectWrapper route : routes) {
 					final EObjectWrapper entryA = route.getRef("entryA");
-					final EObjectWrapper entryB = route.getRef("entryA");
+					final EObjectWrapper entryB = route.getRef("entryB");
 					route.unsetFeature("entryA");
 					route.unsetFeature("entryB");
 
@@ -123,6 +123,9 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 					}
 					route.setRef("northEntrance", northEntrance);
 					route.setRef("southEntrance", southEntrance);
+					
+					assert entryA == null || (entryA == northEntrance || entryA == southEntrance);
+					assert entryB == null || (entryB == northEntrance || entryB == southEntrance);
 				}
 			}
 		}
