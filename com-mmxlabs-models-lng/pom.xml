@@ -98,6 +98,7 @@
 		<module>com.mmxlabs.models.lng.scenario.model</module>
 		<module>com.mmxlabs.models.lng.scenario.model.edit</module>
 		<module>com.mmxlabs.models.lng.scenario.ui</module>
+		<module>com.mmxlabs.models.lng.scenario.model.validation</module>
 
 		<module>com.mmxlabs.models.lng.migration</module>
 		<module>com.mmxlabs.models.lng.migration.tests</module>
