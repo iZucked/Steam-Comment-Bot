@@ -467,12 +467,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			if (firstPortSlot.getPortType() == PortType.Start) {
 				final long fee = shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, vesselStartTime);
-				
+
 				additionalCost += fee;
-				
-				final RepositioningFeeAnnotation annotation = new RepositioningFeeAnnotation();
-				annotation.repositioningFee = fee;
-				shippingDetails.addChild(RepositioningFeeAnnotation.ANNOTATION_KEY, annotation);
+				if (shippingDetails != null) {
+					final RepositioningFeeAnnotation annotation = new RepositioningFeeAnnotation();
+					annotation.repositioningFee = fee;
+					shippingDetails.addChild(RepositioningFeeAnnotation.ANNOTATION_KEY, annotation);
+				}
 			}
 			if (firstPortSlot.getPortType() == PortType.End) {
 				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
