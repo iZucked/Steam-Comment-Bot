@@ -460,7 +460,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final ICharterOutVesselEventPortSlot vesselEventPortSlot = (ICharterOutVesselEventPortSlot) firstPortSlot;
 				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() //
 						+ vesselEventPortSlot.getVesselEvent().getRepositioning() //
-						- vesselEventPortSlot.getVesselEvent().getBallastBonus();
+						+ vesselEventPortSlot.getVesselEvent().getBallastBonus();
 			} else {
 				revenue = 0;
 			}
