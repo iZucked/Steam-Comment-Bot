@@ -110,17 +110,37 @@ public class CanalBookingsReportTransformer {
 					Journey journey = (Journey) evt;
 
 					String period = "";
-					if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
+					
+					switch (journey.getCanalBookingPeriod()) {
+					case BEYOND:
+						period = "Open";
+						break;
+					case NOMINAL:
 						period = "Nominal";
-					} else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
-						period = "Open";
-					} else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
-						period = "Open";
-					} else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
+						break;
+					case RELAXED:
 						period = "Relaxed";
-					} else {
+						break;
+					case STRICT:
 						period = "Strict";
+						break;
+					default:
+						period = "Open";
+						break;
+					
 					}
+//					
+//					if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
+//						period = "Nominal";
+//					} else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
+//						period = "Open";
+//					} else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
+//						period = "Open";
+//					} else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
+//						period = "Relaxed";
+//					} else {
+//						period = "Strict";
+//					}
 
 					if (journey.getCanalBooking() != null) {
 						CanalBookingSlot booking = journey.getCanalBooking();
