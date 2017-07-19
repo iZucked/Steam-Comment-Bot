@@ -112,18 +112,10 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 						} else if (isPanamaSouth(entryB)) {
 							southEntrance = entryB;
 						}
-						// Update names
-						if (northEntrance != null && northEntrance.<String> getAttrib("name").toLowerCase().endsWith("east")) {
-							northEntrance.setAttrib("name", "Panama North");
-						}
-						if (southEntrance != null && southEntrance.<String> getAttrib("name").toLowerCase().endsWith("west")) {
-							southEntrance.setAttrib("name", "Panama South");
-						}
-
 					}
 					route.setRef("northEntrance", northEntrance);
 					route.setRef("southEntrance", southEntrance);
-					
+
 					assert entryA == null || (entryA == northEntrance || entryA == southEntrance);
 					assert entryB == null || (entryB == northEntrance || entryB == southEntrance);
 				}
@@ -158,9 +150,18 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 
 	private boolean isPanamaNorth(final EObjectWrapper entryPoint) {
 		if (entryPoint != null) {
+
+			EObjectWrapper port = entryPoint.getRef("port");
+			if (port != null) {
+				return port.<String> getAttrib("name").toLowerCase().contains("colon");
+			}
+
 			final String name = entryPoint.getAttrib("name");
 			if (name != null) {
 				if (name.toLowerCase().endsWith("north")) {
+					return true;
+				}
+				if (name.toLowerCase().endsWith("northside")) {
 					return true;
 				}
 				if (name.toLowerCase().endsWith("east")) {
@@ -173,9 +174,18 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 
 	private boolean isPanamaSouth(final EObjectWrapper entryPoint) {
 		if (entryPoint != null) {
+
+			EObjectWrapper port = entryPoint.getRef("port");
+			if (port != null) {
+				return port.<String> getAttrib("name").toLowerCase().contains("balboa");
+			}
+
 			final String name = entryPoint.getAttrib("name");
 			if (name != null) {
 				if (name.toLowerCase().endsWith("south")) {
+					return true;
+				}
+				if (name.toLowerCase().endsWith("southside")) {
 					return true;
 				}
 				if (name.toLowerCase().endsWith("west")) {

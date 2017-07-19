@@ -254,24 +254,24 @@ public class PortModelImporter implements ISubmodelImporter {
 				if (route.getRouteOption() == RouteOption.PANAMA) {
 					if (route.getNorthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Panama North");
+						entryPoint.setName("Panama Northside");
 						route.setNorthEntrance(entryPoint);
 					}
 					if (route.getSouthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Panama South");
+						entryPoint.setName("Panama Southside");
 						route.setSouthEntrance(entryPoint);
 					}
 				}
 				if (route.getRouteOption() == RouteOption.SUEZ) {
 					if (route.getNorthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Suez North");
+						entryPoint.setName("Suez Northside");
 						route.setNorthEntrance(entryPoint);
 					}
 					if (route.getSouthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Suez South");
+						entryPoint.setName("Suez Southside");
 						route.setSouthEntrance(entryPoint);
 					}
 				}
