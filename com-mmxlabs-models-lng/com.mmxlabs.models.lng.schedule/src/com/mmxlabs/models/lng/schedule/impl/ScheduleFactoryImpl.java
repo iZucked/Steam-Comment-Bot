@@ -142,6 +142,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS: return createBallastBonusFeeDetails();
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
+			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -561,6 +562,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public NotionalJourneyContractDetails createNotionalJourneyContractDetails() {
 		NotionalJourneyContractDetailsImpl notionalJourneyContractDetails = new NotionalJourneyContractDetailsImpl();
 		return notionalJourneyContractDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalBookingEvent createCanalBookingEvent() {
+		CanalBookingEventImpl canalBookingEvent = new CanalBookingEventImpl();
+		return canalBookingEvent;
 	}
 
 	/**

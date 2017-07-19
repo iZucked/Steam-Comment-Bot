@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -336,6 +337,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass notionalJourneyContractDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass canalBookingEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2070,6 +2078,33 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCanalBookingEvent() {
+		return canalBookingEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingEvent_LinkedSequence() {
+		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingEvent_LinkedJourney() {
+		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -2397,6 +2432,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN);
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST);
 
+		canalBookingEventEClass = createEClass(CANAL_BOOKING_EVENT);
+		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_SEQUENCE);
+		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_JOURNEY);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -2502,6 +2541,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		matchingContractDetailsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		lumpSumContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		notionalJourneyContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
+		canalBookingEventEClass.getESuperTypes().add(this.getEvent());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2729,6 +2769,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getNotionalJourneyContractDetails_HireCost(), ecorePackage.getEInt(), "hireCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyContractDetails_RouteTaken(), ecorePackage.getEString(), "routeTaken", "", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyContractDetails_CanalCost(), ecorePackage.getEInt(), "canalCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(canalBookingEventEClass, CanalBookingEvent.class, "CanalBookingEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCanalBookingEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalBookingEvent_LinkedJourney(), this.getJourney(), null, "linkedJourney", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");

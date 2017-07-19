@@ -4870,6 +4870,205 @@ public interface SchedulePackage extends EPackage {
 	int NOTIONAL_JOURNEY_CONTRACT_DETAILS_OPERATION_COUNT = MATCHING_CONTRACT_DETAILS_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CanalBookingEventImpl <em>Canal Booking Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.CanalBookingEventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCanalBookingEvent()
+	 * @generated
+	 */
+	int CANAL_BOOKING_EVENT = 37;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Linked Sequence</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__LINKED_SEQUENCE = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Linked Journey</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT__LINKED_JOURNEY = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Canal Booking Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT___NAME = EVENT___NAME;
+
+	/**
+	 * The number of operations of the '<em>Canal Booking Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4877,7 +5076,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 39;
+	int FUEL_UNIT = 40;
 
 
 	/**
@@ -4888,7 +5087,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 38;
+	int FUEL = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4898,7 +5097,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 37;
+	int SEQUENCE_TYPE = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4908,7 +5107,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 40;
+	int CAPACITY_VIOLATION_TYPE = 41;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -4918,7 +5117,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 41;
+	int PORT_VISIT_LATENESS_TYPE = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -4928,7 +5127,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 42;
+	int SLOT_ALLOCATION_TYPE = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -4938,7 +5137,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 43;
+	int PANAMA_BOOKING_PERIOD = 44;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4948,7 +5147,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 44;
+	int CALENDAR = 45;
 
 
 	/**
@@ -4959,7 +5158,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 45;
+	int ITERABLE = 46;
 
 
 	/**
@@ -4970,7 +5169,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 46;
+	int OBJECT = 47;
 
 
 	/**
@@ -6874,6 +7073,38 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getNotionalJourneyContractDetails_CanalCost();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CanalBookingEvent <em>Canal Booking Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Canal Booking Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CanalBookingEvent
+	 * @generated
+	 */
+	EClass getCanalBookingEvent();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CanalBookingEvent#getLinkedSequence <em>Linked Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Linked Sequence</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CanalBookingEvent#getLinkedSequence()
+	 * @see #getCanalBookingEvent()
+	 * @generated
+	 */
+	EReference getCanalBookingEvent_LinkedSequence();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CanalBookingEvent#getLinkedJourney <em>Linked Journey</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Linked Journey</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CanalBookingEvent#getLinkedJourney()
+	 * @see #getCanalBookingEvent()
+	 * @generated
+	 */
+	EReference getCanalBookingEvent_LinkedJourney();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8487,6 +8718,32 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST = eINSTANCE.getNotionalJourneyContractDetails_CanalCost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CanalBookingEventImpl <em>Canal Booking Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.CanalBookingEventImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCanalBookingEvent()
+		 * @generated
+		 */
+		EClass CANAL_BOOKING_EVENT = eINSTANCE.getCanalBookingEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Linked Sequence</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_EVENT__LINKED_SEQUENCE = eINSTANCE.getCanalBookingEvent_LinkedSequence();
+
+		/**
+		 * The meta object literal for the '<em><b>Linked Journey</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_EVENT__LINKED_JOURNEY = eINSTANCE.getCanalBookingEvent_LinkedJourney();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

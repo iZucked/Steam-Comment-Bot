@@ -257,6 +257,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createNotionalJourneyContractDetailsAdapter();
 			}
 			@Override
+			public Adapter caseCanalBookingEvent(CanalBookingEvent object) {
+				return createCanalBookingEventAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -811,6 +815,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNotionalJourneyContractDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CanalBookingEvent <em>Canal Booking Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.CanalBookingEvent
+	 * @generated
+	 */
+	public Adapter createCanalBookingEventAdapter() {
 		return null;
 	}
 

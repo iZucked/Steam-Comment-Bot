@@ -365,4 +365,8 @@
     <eLiterals name="BEYOND" value="2"/>
     <eLiterals name="NOMINAL" value="3"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CanalBookingEvent" eSuperTypes="#//Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedJourney" eType="#//Journey"/>
+  </eClassifiers>
 </ecore:EPackage>
