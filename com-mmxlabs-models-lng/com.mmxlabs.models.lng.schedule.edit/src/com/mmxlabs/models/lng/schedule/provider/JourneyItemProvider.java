@@ -61,6 +61,7 @@ public class JourneyItemProvider
 			addCanalBookingPropertyDescriptor(object);
 			addLatestPossibleCanalDatePropertyDescriptor(object);
 			addCanalArrivalPropertyDescriptor(object);
+			addCanalBookingPeriodPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -308,6 +309,28 @@ public class JourneyItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Canal Booking Period feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalBookingPeriodPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_canalBookingPeriod_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalBookingPeriod_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_BOOKING_PERIOD,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -383,6 +406,7 @@ public class JourneyItemProvider
 			case SchedulePackage.JOURNEY__CANAL_DATE:
 			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
+			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.JOURNEY__FUELS:

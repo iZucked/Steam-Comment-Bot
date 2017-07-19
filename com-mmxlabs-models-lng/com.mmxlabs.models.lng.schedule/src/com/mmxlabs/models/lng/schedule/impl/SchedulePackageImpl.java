@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
@@ -377,6 +378,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EEnum slotAllocationTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum panamaBookingPeriodEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1476,6 +1484,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getJourney_CanalBookingPeriod() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCapacityViolationsHolder() {
 		return capacityViolationsHolderEClass;
 	}
@@ -2107,6 +2124,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getPanamaBookingPeriod() {
+		return panamaBookingPeriodEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getCalendar() {
 		return calendarEDataType;
 	}
@@ -2252,6 +2278,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(journeyEClass, JOURNEY__CANAL_BOOKING);
 		createEAttribute(journeyEClass, JOURNEY__LATEST_POSSIBLE_CANAL_DATE);
 		createEAttribute(journeyEClass, JOURNEY__CANAL_ARRIVAL);
+		createEAttribute(journeyEClass, JOURNEY__CANAL_BOOKING_PERIOD);
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
@@ -2377,6 +2404,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		capacityViolationTypeEEnum = createEEnum(CAPACITY_VIOLATION_TYPE);
 		portVisitLatenessTypeEEnum = createEEnum(PORT_VISIT_LATENESS_TYPE);
 		slotAllocationTypeEEnum = createEEnum(SLOT_ALLOCATION_TYPE);
+		panamaBookingPeriodEEnum = createEEnum(PANAMA_BOOKING_PERIOD);
 
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
@@ -2582,6 +2610,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getJourney_CanalBooking(), theCargoPackage.getCanalBookingSlot(), null, "canalBooking", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_LatestPossibleCanalDate(), theDateTimePackage.getLocalDate(), "latestPossibleCanalDate", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_CanalArrival(), theDateTimePackage.getLocalDate(), "canalArrival", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_CanalBookingPeriod(), this.getPanamaBookingPeriod(), "canalBookingPeriod", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2739,6 +2768,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEEnum(slotAllocationTypeEEnum, SlotAllocationType.class, "SlotAllocationType");
 		addEEnumLiteral(slotAllocationTypeEEnum, SlotAllocationType.PURCHASE);
 		addEEnumLiteral(slotAllocationTypeEEnum, SlotAllocationType.SALE);
+
+		initEEnum(panamaBookingPeriodEEnum, PanamaBookingPeriod.class, "PanamaBookingPeriod");
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.STRICT);
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.RELAXED);
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.BEYOND);
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.NOMINAL);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

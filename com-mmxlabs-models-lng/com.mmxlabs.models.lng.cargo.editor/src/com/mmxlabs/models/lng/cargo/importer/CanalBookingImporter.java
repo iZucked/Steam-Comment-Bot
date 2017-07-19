@@ -25,7 +25,8 @@ public class CanalBookingImporter extends DefaultClassImporter {
 
 	private static final String KEY_STRICT_DAYS = "strictdays";
 	private static final String KEY_RELAXED_DAYS = "relaxeddays";
-	private static final String KEY_FLEX_COUNT = "flexibility";
+	private static final String KEY_FLEX_COUNT_NORTHBOUND = "flexibilitynorthbound";
+	private static final String KEY_FLEX_COUNT_SOUTHBOUND = "flexibilitysouthbound";
 	private static final String KEY_MARGIN = "margin";
 
 	private final DefaultAttributeImporter attributeImporter = new DefaultAttributeImporter();
@@ -43,9 +44,13 @@ public class CanalBookingImporter extends DefaultClassImporter {
 				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS, relaxedDaysValue, context);
 			}
 
-			final String flexCountValue = row.get(KEY_FLEX_COUNT);
-			if (flexCountValue != null && !flexCountValue.trim().isEmpty()) {
-				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT, flexCountValue, context);
+			final String flexCountValueA = row.get(KEY_FLEX_COUNT_NORTHBOUND);
+			if (flexCountValueA != null && !flexCountValueA.trim().isEmpty()) {
+				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND, flexCountValueA, context);
+			}
+			final String flexCountValueB = row.get(KEY_FLEX_COUNT_SOUTHBOUND);
+			if (flexCountValueB != null && !flexCountValueB.trim().isEmpty()) {
+				attributeImporter.setAttribute(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND, flexCountValueB, context);
 			}
 
 			final String marginValue = row.get(KEY_MARGIN);
@@ -73,7 +78,8 @@ public class CanalBookingImporter extends DefaultClassImporter {
 				final Map<String, String> rowData = new LinkedHashMap<String, String>();
 				rowData.put(KEY_STRICT_DAYS, Integer.toString(canalBookings.getStrictBoundaryOffsetDays()));
 				rowData.put(KEY_RELAXED_DAYS, Integer.toString(canalBookings.getRelaxedBoundaryOffsetDays()));
-				rowData.put(KEY_FLEX_COUNT, Integer.toString(canalBookings.getFlexibleBookingAmount()));
+				rowData.put(KEY_FLEX_COUNT_NORTHBOUND, Integer.toString(canalBookings.getFlexibleBookingAmountNorthbound()));
+				rowData.put(KEY_FLEX_COUNT_SOUTHBOUND, Integer.toString(canalBookings.getFlexibleBookingAmountSouthbound()));
 				rowData.put(KEY_MARGIN, Integer.toString(canalBookings.getArrivalMarginHours()));
 				exportedObjects.add(rowData);
 			} else {

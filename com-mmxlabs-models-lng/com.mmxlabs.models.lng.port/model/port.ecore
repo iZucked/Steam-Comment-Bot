@@ -83,9 +83,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canal" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routingOptions" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entryA" eType="#//EntryPoint"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="northEntrance" eType="#//EntryPoint"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entryB" eType="#//EntryPoint"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="southEntrance" eType="#//EntryPoint"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortGroup">

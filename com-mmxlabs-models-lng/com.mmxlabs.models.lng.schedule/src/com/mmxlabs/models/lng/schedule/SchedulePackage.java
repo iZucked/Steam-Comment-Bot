@@ -2220,13 +2220,22 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__CANAL_ARRIVAL = EVENT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Canal Booking Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CANAL_BOOKING_PERIOD = EVENT_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Journey</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 12;
+	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4922,6 +4931,16 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION_TYPE = 42;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.PanamaBookingPeriod
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
+	 * @generated
+	 */
+	int PANAMA_BOOKING_PERIOD = 43;
+
+	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4929,7 +4948,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 43;
+	int CALENDAR = 44;
 
 
 	/**
@@ -4940,7 +4959,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 44;
+	int ITERABLE = 45;
 
 
 	/**
@@ -4951,7 +4970,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 45;
+	int OBJECT = 46;
 
 
 	/**
@@ -6154,6 +6173,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_CanalArrival();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Canal Booking Period</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EAttribute getJourney_CanalBookingPeriod();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6902,6 +6932,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getSlotAllocationType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Panama Booking Period</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PanamaBookingPeriod
+	 * @generated
+	 */
+	EEnum getPanamaBookingPeriod();
 
 	/**
 	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
@@ -7897,6 +7937,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute JOURNEY__CANAL_ARRIVAL = eINSTANCE.getJourney_CanalArrival();
 
 		/**
+		 * The meta object literal for the '<em><b>Canal Booking Period</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOURNEY__CANAL_BOOKING_PERIOD = eINSTANCE.getJourney_CanalBookingPeriod();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8499,6 +8547,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum SLOT_ALLOCATION_TYPE = eINSTANCE.getSlotAllocationType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.PanamaBookingPeriod
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
+		 * @generated
+		 */
+		EEnum PANAMA_BOOKING_PERIOD = eINSTANCE.getPanamaBookingPeriod();
 
 		/**
 		 * The meta object literal for the '<em>Calendar</em>' data type.

@@ -40,8 +40,8 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getEntryA <em>Entry A</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getEntryB <em>Entry B</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getNorthEntrance <em>North Entrance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getSouthEntrance <em>South Entrance</em>}</li>
  * </ul>
  *
  * @generated
@@ -128,24 +128,24 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	protected EList<String> routingOptions;
 
 	/**
-	 * The cached value of the '{@link #getEntryA() <em>Entry A</em>}' containment reference.
+	 * The cached value of the '{@link #getNorthEntrance() <em>North Entrance</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEntryA()
+	 * @see #getNorthEntrance()
 	 * @generated
 	 * @ordered
 	 */
-	protected EntryPoint entryA;
+	protected EntryPoint northEntrance;
 
 	/**
-	 * The cached value of the '{@link #getEntryB() <em>Entry B</em>}' containment reference.
+	 * The cached value of the '{@link #getSouthEntrance() <em>South Entrance</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEntryB()
+	 * @see #getSouthEntrance()
 	 * @generated
 	 * @ordered
 	 */
-	protected EntryPoint entryB;
+	protected EntryPoint southEntrance;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -258,8 +258,8 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntryPoint getEntryA() {
-		return entryA;
+	public EntryPoint getNorthEntrance() {
+		return northEntrance;
 	}
 
 	/**
@@ -267,11 +267,11 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetEntryA(EntryPoint newEntryA, NotificationChain msgs) {
-		EntryPoint oldEntryA = entryA;
-		entryA = newEntryA;
+	public NotificationChain basicSetNorthEntrance(EntryPoint newNorthEntrance, NotificationChain msgs) {
+		EntryPoint oldNorthEntrance = northEntrance;
+		northEntrance = newNorthEntrance;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_A, oldEntryA, newEntryA);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__NORTH_ENTRANCE, oldNorthEntrance, newNorthEntrance);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -282,18 +282,18 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntryA(EntryPoint newEntryA) {
-		if (newEntryA != entryA) {
+	public void setNorthEntrance(EntryPoint newNorthEntrance) {
+		if (newNorthEntrance != northEntrance) {
 			NotificationChain msgs = null;
-			if (entryA != null)
-				msgs = ((InternalEObject)entryA).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_A, null, msgs);
-			if (newEntryA != null)
-				msgs = ((InternalEObject)newEntryA).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_A, null, msgs);
-			msgs = basicSetEntryA(newEntryA, msgs);
+			if (northEntrance != null)
+				msgs = ((InternalEObject)northEntrance).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__NORTH_ENTRANCE, null, msgs);
+			if (newNorthEntrance != null)
+				msgs = ((InternalEObject)newNorthEntrance).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__NORTH_ENTRANCE, null, msgs);
+			msgs = basicSetNorthEntrance(newNorthEntrance, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_A, newEntryA, newEntryA));
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__NORTH_ENTRANCE, newNorthEntrance, newNorthEntrance));
 	}
 
 	/**
@@ -301,8 +301,8 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntryPoint getEntryB() {
-		return entryB;
+	public EntryPoint getSouthEntrance() {
+		return southEntrance;
 	}
 
 	/**
@@ -310,11 +310,11 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetEntryB(EntryPoint newEntryB, NotificationChain msgs) {
-		EntryPoint oldEntryB = entryB;
-		entryB = newEntryB;
+	public NotificationChain basicSetSouthEntrance(EntryPoint newSouthEntrance, NotificationChain msgs) {
+		EntryPoint oldSouthEntrance = southEntrance;
+		southEntrance = newSouthEntrance;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_B, oldEntryB, newEntryB);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__SOUTH_ENTRANCE, oldSouthEntrance, newSouthEntrance);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -325,18 +325,18 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntryB(EntryPoint newEntryB) {
-		if (newEntryB != entryB) {
+	public void setSouthEntrance(EntryPoint newSouthEntrance) {
+		if (newSouthEntrance != southEntrance) {
 			NotificationChain msgs = null;
-			if (entryB != null)
-				msgs = ((InternalEObject)entryB).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_B, null, msgs);
-			if (newEntryB != null)
-				msgs = ((InternalEObject)newEntryB).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__ENTRY_B, null, msgs);
-			msgs = basicSetEntryB(newEntryB, msgs);
+			if (southEntrance != null)
+				msgs = ((InternalEObject)southEntrance).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__SOUTH_ENTRANCE, null, msgs);
+			if (newSouthEntrance != null)
+				msgs = ((InternalEObject)newSouthEntrance).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PortPackage.ROUTE__SOUTH_ENTRANCE, null, msgs);
+			msgs = basicSetSouthEntrance(newSouthEntrance, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ENTRY_B, newEntryB, newEntryB));
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__SOUTH_ENTRANCE, newSouthEntrance, newSouthEntrance));
 	}
 
 	/**
@@ -349,10 +349,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 		switch (featureID) {
 			case PortPackage.ROUTE__LINES:
 				return ((InternalEList<?>)getLines()).basicRemove(otherEnd, msgs);
-			case PortPackage.ROUTE__ENTRY_A:
-				return basicSetEntryA(null, msgs);
-			case PortPackage.ROUTE__ENTRY_B:
-				return basicSetEntryB(null, msgs);
+			case PortPackage.ROUTE__NORTH_ENTRANCE:
+				return basicSetNorthEntrance(null, msgs);
+			case PortPackage.ROUTE__SOUTH_ENTRANCE:
+				return basicSetSouthEntrance(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -375,10 +375,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return isCanal();
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				return getRoutingOptions();
-			case PortPackage.ROUTE__ENTRY_A:
-				return getEntryA();
-			case PortPackage.ROUTE__ENTRY_B:
-				return getEntryB();
+			case PortPackage.ROUTE__NORTH_ENTRANCE:
+				return getNorthEntrance();
+			case PortPackage.ROUTE__SOUTH_ENTRANCE:
+				return getSouthEntrance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -409,11 +409,11 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				getRoutingOptions().clear();
 				getRoutingOptions().addAll((Collection<? extends String>)newValue);
 				return;
-			case PortPackage.ROUTE__ENTRY_A:
-				setEntryA((EntryPoint)newValue);
+			case PortPackage.ROUTE__NORTH_ENTRANCE:
+				setNorthEntrance((EntryPoint)newValue);
 				return;
-			case PortPackage.ROUTE__ENTRY_B:
-				setEntryB((EntryPoint)newValue);
+			case PortPackage.ROUTE__SOUTH_ENTRANCE:
+				setSouthEntrance((EntryPoint)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -442,11 +442,11 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				getRoutingOptions().clear();
 				return;
-			case PortPackage.ROUTE__ENTRY_A:
-				setEntryA((EntryPoint)null);
+			case PortPackage.ROUTE__NORTH_ENTRANCE:
+				setNorthEntrance((EntryPoint)null);
 				return;
-			case PortPackage.ROUTE__ENTRY_B:
-				setEntryB((EntryPoint)null);
+			case PortPackage.ROUTE__SOUTH_ENTRANCE:
+				setSouthEntrance((EntryPoint)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -470,10 +470,10 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return canal != CANAL_EDEFAULT;
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				return routingOptions != null && !routingOptions.isEmpty();
-			case PortPackage.ROUTE__ENTRY_A:
-				return entryA != null;
-			case PortPackage.ROUTE__ENTRY_B:
-				return entryB != null;
+			case PortPackage.ROUTE__NORTH_ENTRANCE:
+				return northEntrance != null;
+			case PortPackage.ROUTE__SOUTH_ENTRANCE:
+				return southEntrance != null;
 		}
 		return super.eIsSet(featureID);
 	}

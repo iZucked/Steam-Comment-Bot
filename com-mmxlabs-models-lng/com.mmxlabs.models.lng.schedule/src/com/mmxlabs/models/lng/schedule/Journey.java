@@ -29,6 +29,7 @@ import java.time.LocalDate;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrival <em>Canal Arrival</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney()
@@ -321,6 +322,35 @@ public interface Journey extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setCanalArrival(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Booking Period</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Booking Period</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Booking Period</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.PanamaBookingPeriod
+	 * @see #setCanalBookingPeriod(PanamaBookingPeriod)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalBookingPeriod()
+	 * @model
+	 * @generated
+	 */
+	PanamaBookingPeriod getCanalBookingPeriod();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Booking Period</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.PanamaBookingPeriod
+	 * @see #getCanalBookingPeriod()
+	 * @generated
+	 */
+	void setCanalBookingPeriod(PanamaBookingPeriod value);
 
 } // end of  Journey
 

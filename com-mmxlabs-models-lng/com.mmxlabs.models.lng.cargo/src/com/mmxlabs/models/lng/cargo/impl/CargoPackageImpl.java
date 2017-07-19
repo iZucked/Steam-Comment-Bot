@@ -1926,7 +1926,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCanalBookings_FlexibleBookingAmount() {
+	public EAttribute getCanalBookings_ArrivalMarginHours() {
 		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1935,8 +1935,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCanalBookings_ArrivalMarginHours() {
+	public EAttribute getCanalBookings_FlexibleBookingAmountNorthbound() {
 		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCanalBookings_FlexibleBookingAmountSouthbound() {
+		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -2204,8 +2213,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
@@ -2531,8 +2541,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCanalBookings_CanalBookingSlots(), this.getCanalBookingSlot(), null, "canalBookingSlots", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_StrictBoundaryOffsetDays(), ecorePackage.getEInt(), "strictBoundaryOffsetDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_RelaxedBoundaryOffsetDays(), ecorePackage.getEInt(), "relaxedBoundaryOffsetDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_FlexibleBookingAmount(), ecorePackage.getEInt(), "flexibleBookingAmount", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_ArrivalMarginHours(), ecorePackage.getEInt(), "arrivalMarginHours", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_FlexibleBookingAmountNorthbound(), ecorePackage.getEInt(), "flexibleBookingAmountNorthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_FlexibleBookingAmountSouthbound(), ecorePackage.getEInt(), "flexibleBookingAmountSouthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");

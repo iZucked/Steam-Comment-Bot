@@ -87,6 +87,10 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entryB" eType="#//EntryPoint"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="northEntrance" eType="#//EntryPoint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="southEntrance" eType="#//EntryPoint"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortGroup">
     <eAnnotations source="http://www.mmxlabs.com/models/csv">

@@ -138,6 +138,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestPossibleCanalDate"
         eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalArrival" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalBookingPeriod" eType="#//PanamaBookingPeriod"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="laden" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -357,5 +358,11 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PanamaBookingPeriod">
+    <eLiterals name="STRICT"/>
+    <eLiterals name="RELAXED" value="1"/>
+    <eLiterals name="BEYOND" value="2"/>
+    <eLiterals name="NOMINAL" value="3"/>
   </eClassifiers>
 </ecore:EPackage>

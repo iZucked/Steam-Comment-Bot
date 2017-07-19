@@ -69,8 +69,8 @@ public class RouteComponentHelper extends BaseComponentHelper {
 		add_routeOptionEditor(detailComposite, topClass);
 		add_canalEditor(detailComposite, topClass);
 		add_routingOptionsEditor(detailComposite, topClass);
-		add_entryAEditor(detailComposite, topClass);
-		add_entryBEditor(detailComposite, topClass);
+		add_northEntranceEditor(detailComposite, topClass);
+		add_southEntranceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the lines feature on Route
@@ -108,20 +108,20 @@ public class RouteComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the entryA feature on Route
+	 * Create the editor for the northEntrance feature on Route
 	 *
 	 * @generated
 	 */
-	protected void add_entryAEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__ENTRY_A));
+	protected void add_northEntranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__NORTH_ENTRANCE));
 	}
 
 	/**
-	 * Create the editor for the entryB feature on Route
+	 * Create the editor for the southEntrance feature on Route
 	 *
 	 * @generated
 	 */
-	protected void add_entryBEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__ENTRY_B));
+	protected void add_southEntranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE));
 	}
 }

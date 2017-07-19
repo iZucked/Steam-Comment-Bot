@@ -9,7 +9,6 @@ import java.util.Objects;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -22,24 +21,26 @@ import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
@@ -48,8 +49,14 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	private static final Logger log = LoggerFactory.getLogger(RouteOptionEditorPane.class);
 	private FormattedText strictEditor;
 	private FormattedText relaxedEditor;
-	private FormattedText flexEditor;
+	private FormattedText flexEditorNorthbound;
+	private FormattedText flexEditorSouthbound;
 	private FormattedText marginEditor;
+
+	private Label todayLabel_Strict;
+	private Label todayLabel_Relaxed;
+
+	private LNGScenarioModel scenarioModel;
 	private CanalBookings canalBookingsModel;
 
 	private AdapterImpl changeListener = new AdapterImpl() {
@@ -59,8 +66,12 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			if (msg.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}
-			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT) {
-				flexEditor.setValue(msg.getNewValue());
+			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND) {
+				flexEditorNorthbound.setValue(msg.getNewValue());
+				return;
+			}
+			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) {
+				flexEditorSouthbound.setValue(msg.getNewValue());
 				return;
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS) {
@@ -75,6 +86,14 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				marginEditor.setValue(msg.getNewValue());
 				return;
 			}
+			if (msg.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) {
+				final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
+				formatter.setValue(msg.getNewValue());
+				String dateStr = formatter.getDisplayString();
+				todayLabel_Relaxed.setText(dateStr);
+				todayLabel_Strict.setText(dateStr);
+				return;
+			}
 		};
 	};
 
@@ -87,95 +106,173 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 
 		{
 
-			final Composite pparent = new Composite(parent, SWT.NONE);
-			pparent.setLayout(GridLayoutFactory.fillDefaults().numColumns(8).equalWidth(false).spacing(3, 0).margins(0, 7).create());
+			ExpandableComposite parametersExpandable = new ExpandableComposite(parent, ExpandableComposite.TWISTIE);
+			parametersExpandable.setExpanded(false);
+			parametersExpandable.setText("Panama bookings parameters");
 
-			final Label lbl = new Label(pparent, SWT.NONE);
-			lbl.setText("Panama booking period : Strict +");
-			lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+			// final Group parametersParent = new Group(parent, SWT.NONE);
+			final Composite parametersParent = new Composite(parametersExpandable, SWT.NONE);
 
-			strictEditor = new FormattedText(pparent);
-			strictEditor.setFormatter(new IntegerFormatter());
-			strictEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(30, SWT.DEFAULT).create());
-
-			strictEditor.getControl().addModifyListener(new ModifyListener() {
-
+			parametersExpandable.setClient(parametersParent);
+			parametersExpandable.addExpansionListener(new ExpansionAdapter() {
 				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = strictEditor.getValue();
-					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getStrictBoundaryOffsetDays())) {
-						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_StrictBoundaryOffsetDays(), newValue);
-						getEditingDomain().getCommandStack().execute(cmd);
-					}
+				public void expansionStateChanged(final ExpansionEvent e) {
+					parametersParent.layout(true);
+					parent.layout(true);
 				}
-
 			});
-			strictEditor.getControl().setToolTipText("Bookings must exist for the panama canal up to n days from the prompt start date.");
+			parametersParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).equalWidth(true).spacing(0, 0).margins(0, 0).create());
+			{
+			}
+			// Strict editor
+			{
+				final Composite strictParent = new Composite(parametersParent, SWT.NONE);
+				strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
-			final Label lbl2 = new Label(pparent, SWT.NONE);
-			lbl2.setText("days, relaxed +");
-			lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				final Label lbl = new Label(strictParent, SWT.NONE);
+				lbl.setText("Strict from ");
+				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
-			relaxedEditor = new FormattedText(pparent);
-			relaxedEditor.setFormatter(new IntegerFormatter());
-			relaxedEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+				todayLabel_Strict = new Label(strictParent, SWT.NONE);
+				todayLabel_Strict.setText("XX/XX/XXXX");
+				todayLabel_Strict.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
-			relaxedEditor.getControl().addModifyListener(new ModifyListener() {
+				final Label lbl_b = new Label(strictParent, SWT.NONE);
+				lbl_b.setText(" for ");
+				lbl_b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
-				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = relaxedEditor.getValue();
-					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getRelaxedBoundaryOffsetDays())) {
-						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_RelaxedBoundaryOffsetDays(), newValue);
-						getEditingDomain().getCommandStack().execute(cmd);
+				strictEditor = new FormattedText(strictParent);
+				strictEditor.setFormatter(new IntegerFormatter());
+				strictEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().hint(30, SWT.DEFAULT).create());
+
+				strictEditor.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = strictEditor.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getStrictBoundaryOffsetDays())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_StrictBoundaryOffsetDays(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
 					}
-				}
 
-			});
-			relaxedEditor.getControl().setToolTipText("Bookings should exist for the panama canal up to n days from the prompt start date.");
+				});
+				strictEditor.getControl().setToolTipText("Bookings must exist for the panama canal up to n days from the prompt start date.");
+				final Label lbl2 = new Label(strictParent, SWT.NONE);
+				lbl2.setText("days.");
+				lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+			}
+			{
 
-			
-			final Label lbl3 = new Label(pparent, SWT.NONE);
-			lbl3.setText("days from prompt. Flexible bookings ");
-			lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
-			flexEditor = new FormattedText(pparent);
-			flexEditor.setFormatter(new IntegerFormatter());
-			// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-			flexEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
-			flexEditor.getControl().addModifyListener(new ModifyListener() {
+				final Composite relaxParent = new Composite(parametersParent, SWT.NONE);
+				relaxParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
-				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = flexEditor.getValue();
-					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleBookingAmount())) {
-						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleBookingAmount(), newValue);
-						getEditingDomain().getCommandStack().execute(cmd);
+				final Label lbl = new Label(relaxParent, SWT.NONE);
+				lbl.setText("Relaxed from ");
+				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+
+				todayLabel_Relaxed = new Label(relaxParent, SWT.NONE);
+				todayLabel_Relaxed.setText("XX/XX/XXXX");
+				todayLabel_Relaxed.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+
+				final Label lbl_b = new Label(relaxParent, SWT.NONE);
+				lbl_b.setText(" for ");
+				lbl_b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+
+				relaxedEditor = new FormattedText(relaxParent);
+				relaxedEditor.setFormatter(new IntegerFormatter());
+				relaxedEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+
+				relaxedEditor.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = relaxedEditor.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getRelaxedBoundaryOffsetDays())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_RelaxedBoundaryOffsetDays(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
 					}
-				}
 
-			});
-			flexEditor.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
-			
-			final Label lbl4 = new Label(pparent, SWT.NONE);
-			lbl4.setText(". Arrival margin in hours ");
-			lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
-			marginEditor = new FormattedText(pparent);
-			marginEditor.setFormatter(new IntegerFormatter());
-			// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-			marginEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
-			marginEditor.getControl().addModifyListener(new ModifyListener() {
+				});
+				relaxedEditor.getControl().setToolTipText("Bookings should exist for the panama canal up to n days from the prompt start date.");
 
-				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = marginEditor.getValue();
-					if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getArrivalMarginHours())) {
-						final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_ArrivalMarginHours(), newValue);
-						getEditingDomain().getCommandStack().execute(cmd);
+				final Label lbl3 = new Label(relaxParent, SWT.NONE);
+				lbl3.setText("days.");
+				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+			}
+			{
+
+				final Composite flexParent = new Composite(parametersParent, SWT.NONE);
+				flexParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
+
+				final Label lbl3 = new Label(flexParent, SWT.NONE);
+				lbl3.setText("Flexible bookings northbound ");
+				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				flexEditorNorthbound = new FormattedText(flexParent);
+				flexEditorNorthbound.setFormatter(new IntegerFormatter());
+				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+				flexEditorNorthbound.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+				flexEditorNorthbound.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = flexEditorNorthbound.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleBookingAmountNorthbound())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleBookingAmountNorthbound(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
 					}
-				}
 
-			});
-			marginEditor.getControl().setToolTipText("The time in hours to arrive prior to 00:00 of the day of the slot.");
+				});
+				flexEditorNorthbound.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
+
+				final Label lbl3b = new Label(flexParent, SWT.NONE);
+				lbl3b.setText(" southbound ");
+				lbl3b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				flexEditorSouthbound = new FormattedText(flexParent);
+				flexEditorSouthbound.setFormatter(new IntegerFormatter());
+				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+				flexEditorSouthbound.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+				flexEditorSouthbound.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = flexEditorSouthbound.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleBookingAmountSouthbound())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleBookingAmountSouthbound(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					}
+
+				});
+				flexEditorSouthbound.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
+			}
+			{
+				final Composite marginParent = new Composite(parametersParent, SWT.NONE);
+				marginParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
+
+				final Label lbl4 = new Label(marginParent, SWT.NONE);
+				lbl4.setText("Arrival margin in hours ");
+				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				marginEditor = new FormattedText(marginParent);
+				marginEditor.setFormatter(new IntegerFormatter());
+				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+				marginEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+				marginEditor.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = marginEditor.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getArrivalMarginHours())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_ArrivalMarginHours(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					}
+
+				});
+				marginEditor.getControl().setToolTipText("The time in hours to arrive prior to 00:00 of the day of the slot.");
+			}
 		}
 
 		return super.createViewer(parent);
@@ -196,28 +293,44 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_CanalBookings");
 	}
 
-	public void setInput(CanalBookings canalBookingsModel) {
+	public void setInput(LNGScenarioModel scenarioModel, CanalBookings canalBookingsModel) {
 
+		if (this.scenarioModel != null) {
+			this.scenarioModel.eAdapters().remove(changeListener);
+		}
 		if (this.canalBookingsModel != null) {
 			this.canalBookingsModel.eAdapters().remove(changeListener);
 		}
 
+		this.scenarioModel = scenarioModel;
 		this.canalBookingsModel = canalBookingsModel;
 		getViewer().setInput(canalBookingsModel);
 		if (canalBookingsModel != null) {
 			strictEditor.setValue(canalBookingsModel.getStrictBoundaryOffsetDays());
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
-			flexEditor.setValue(canalBookingsModel.getFlexibleBookingAmount());
+			flexEditorNorthbound.setValue(canalBookingsModel.getFlexibleBookingAmountNorthbound());
+			flexEditorSouthbound.setValue(canalBookingsModel.getFlexibleBookingAmountSouthbound());
 			marginEditor.setValue(canalBookingsModel.getArrivalMarginHours());
+			{
+				final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
+				formatter.setValue(scenarioModel.getPromptPeriodStart());
+				String dateStr = formatter.getDisplayString();
+				todayLabel_Relaxed.setText(dateStr);
+				todayLabel_Strict.setText(dateStr);
+			}
 		} else {
 			strictEditor.setValue(0);
 			relaxedEditor.setValue(0);
-			flexEditor.setValue(0);
+			flexEditorNorthbound.setValue(0);
+			flexEditorSouthbound.setValue(0);
 			marginEditor.setValue(0);
 		}
 
 		if (this.canalBookingsModel != null) {
 			this.canalBookingsModel.eAdapters().add(changeListener);
+		}
+		if (this.scenarioModel != null) {
+			this.scenarioModel.eAdapters().add(changeListener);
 		}
 
 	}
@@ -229,6 +342,12 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			this.canalBookingsModel.eAdapters().remove(changeListener);
 		}
 		this.canalBookingsModel = null;
+
+		if (this.scenarioModel != null) {
+			this.scenarioModel.eAdapters().add(changeListener);
+		}
+		this.scenarioModel = null;
+
 		super.dispose();
 	}
 }

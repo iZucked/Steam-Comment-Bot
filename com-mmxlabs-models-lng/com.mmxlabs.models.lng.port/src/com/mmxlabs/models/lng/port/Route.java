@@ -22,8 +22,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRoutingOptions <em>Routing Options</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Route#getEntryA <em>Entry A</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Route#getEntryB <em>Entry B</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getNorthEntrance <em>North Entrance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getSouthEntrance <em>South Entrance</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getRoute()
@@ -119,55 +119,55 @@ public interface Route extends NamedObject, UUIDObject {
 	EList<String> getRoutingOptions();
 
 	/**
-	 * Returns the value of the '<em><b>Entry A</b></em>' containment reference.
+	 * Returns the value of the '<em><b>North Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Entry A</em>' reference isn't clear,
+	 * If the meaning of the '<em>North Entrance</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Entry A</em>' containment reference.
-	 * @see #setEntryA(EntryPoint)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_EntryA()
+	 * @return the value of the '<em>North Entrance</em>' containment reference.
+	 * @see #setNorthEntrance(EntryPoint)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_NorthEntrance()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EntryPoint getEntryA();
+	EntryPoint getNorthEntrance();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getEntryA <em>Entry A</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getNorthEntrance <em>North Entrance</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Entry A</em>' containment reference.
-	 * @see #getEntryA()
+	 * @param value the new value of the '<em>North Entrance</em>' containment reference.
+	 * @see #getNorthEntrance()
 	 * @generated
 	 */
-	void setEntryA(EntryPoint value);
+	void setNorthEntrance(EntryPoint value);
 
 	/**
-	 * Returns the value of the '<em><b>Entry B</b></em>' containment reference.
+	 * Returns the value of the '<em><b>South Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Entry B</em>' reference isn't clear,
+	 * If the meaning of the '<em>South Entrance</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Entry B</em>' containment reference.
-	 * @see #setEntryB(EntryPoint)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_EntryB()
+	 * @return the value of the '<em>South Entrance</em>' containment reference.
+	 * @see #setSouthEntrance(EntryPoint)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_SouthEntrance()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EntryPoint getEntryB();
+	EntryPoint getSouthEntrance();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getEntryB <em>Entry B</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getSouthEntrance <em>South Entrance</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Entry B</em>' containment reference.
-	 * @see #getEntryB()
+	 * @param value the new value of the '<em>South Entrance</em>' containment reference.
+	 * @see #getSouthEntrance()
 	 * @generated
 	 */
-	void setEntryB(EntryPoint value);
+	void setSouthEntrance(EntryPoint value);
 
 } // Route

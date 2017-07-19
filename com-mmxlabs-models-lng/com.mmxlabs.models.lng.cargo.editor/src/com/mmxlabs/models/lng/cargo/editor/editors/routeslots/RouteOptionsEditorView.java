@@ -55,9 +55,9 @@ public class RouteOptionsEditorView extends ScenarioTableViewerView<RouteOptionE
 					canalBookingsModel = CargoFactory.eINSTANCE.createCanalBookings();
 					domain.getCommandStack().execute(SetCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_CanalBookings(), canalBookingsModel));
 				}
+				pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCanalBookings_CanalBookingSlots() }), null, domain.getCommandStack());
+				pane.setInput(lngScenarioModel, canalBookingsModel);
 			}
-			pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCanalBookings_CanalBookingSlots() }), null, domain.getCommandStack());
-			pane. setInput(canalBookingsModel);
 		}
 	}
 

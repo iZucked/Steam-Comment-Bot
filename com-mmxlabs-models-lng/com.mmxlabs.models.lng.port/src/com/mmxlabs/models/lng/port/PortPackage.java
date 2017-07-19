@@ -361,22 +361,22 @@ public interface PortPackage extends EPackage {
 	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Entry A</b></em>' containment reference.
+	 * The feature id for the '<em><b>North Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__ENTRY_A = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int ROUTE__NORTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Entry B</b></em>' containment reference.
+	 * The feature id for the '<em><b>South Entrance</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__ENTRY_B = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int ROUTE__SOUTH_ENTRANCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Route</em>' class.
@@ -1066,26 +1066,26 @@ public interface PortPackage extends EPackage {
 	EAttribute getRoute_RoutingOptions();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getEntryA <em>Entry A</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getNorthEntrance <em>North Entrance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Entry A</em>'.
-	 * @see com.mmxlabs.models.lng.port.Route#getEntryA()
+	 * @return the meta object for the containment reference '<em>North Entrance</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getNorthEntrance()
 	 * @see #getRoute()
 	 * @generated
 	 */
-	EReference getRoute_EntryA();
+	EReference getRoute_NorthEntrance();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getEntryB <em>Entry B</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Route#getSouthEntrance <em>South Entrance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Entry B</em>'.
-	 * @see com.mmxlabs.models.lng.port.Route#getEntryB()
+	 * @return the meta object for the containment reference '<em>South Entrance</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getSouthEntrance()
 	 * @see #getRoute()
 	 * @generated
 	 */
-	EReference getRoute_EntryB();
+	EReference getRoute_SouthEntrance();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortGroup <em>Group</em>}'.
@@ -1559,20 +1559,20 @@ public interface PortPackage extends EPackage {
 		EAttribute ROUTE__ROUTING_OPTIONS = eINSTANCE.getRoute_RoutingOptions();
 
 		/**
-		 * The meta object literal for the '<em><b>Entry A</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>North Entrance</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROUTE__ENTRY_A = eINSTANCE.getRoute_EntryA();
+		EReference ROUTE__NORTH_ENTRANCE = eINSTANCE.getRoute_NorthEntrance();
 
 		/**
-		 * The meta object literal for the '<em><b>Entry B</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>South Entrance</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROUTE__ENTRY_B = eINSTANCE.getRoute_EntryB();
+		EReference ROUTE__SOUTH_ENTRANCE = eINSTANCE.getRoute_SouthEntrance();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.

@@ -11,15 +11,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -58,19 +55,19 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 			containerComposite.setLayout(new GridLayout(2, true));
 			containerComposite.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, true));
 
-			IDisplayComposite entryAComposite = null;
-			IDisplayComposite entryBComposite = null;
+			IDisplayComposite northEntranceComposite = null;
+			IDisplayComposite southEntranceComposite = null;
 			if (route.isCanal()) {
-				entryAComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__ENTRY_A, route.getEntryA());
-				entryBComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__ENTRY_B, route.getEntryB());
+				northEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__NORTH_ENTRANCE, route.getNorthEntrance());
+				southEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE, route.getSouthEntrance());
 			}
 
 			if (route.isCanal()) {
-				if (entryAComposite != null) {
-					entryAComposite.display(dialogContext, root, route.getEntryA(), range, dbc);
+				if (northEntranceComposite != null) {
+					northEntranceComposite.display(dialogContext, root, route.getNorthEntrance(), range, dbc);
 				}
-				if (entryBComposite != null) {
-					entryBComposite.display(dialogContext, root, route.getEntryB(), range, dbc);
+				if (southEntranceComposite != null) {
+					southEntranceComposite.display(dialogContext, root, route.getSouthEntrance(), range, dbc);
 				}
 			}
 

@@ -23,8 +23,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getCanalBookingSlots <em>Canal Booking Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -101,32 +102,6 @@ public interface CanalBookings extends MMXObject {
 	void setRelaxedBoundaryOffsetDays(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Flexible Booking Amount</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Flexible Booking Amount</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Flexible Booking Amount</em>' attribute.
-	 * @see #setFlexibleBookingAmount(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_FlexibleBookingAmount()
-	 * @model
-	 * @generated
-	 */
-	int getFlexibleBookingAmount();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Flexible Booking Amount</em>' attribute.
-	 * @see #getFlexibleBookingAmount()
-	 * @generated
-	 */
-	void setFlexibleBookingAmount(int value);
-
-	/**
 	 * Returns the value of the '<em><b>Arrival Margin Hours</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -151,5 +126,57 @@ public interface CanalBookings extends MMXObject {
 	 * @generated
 	 */
 	void setArrivalMarginHours(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Flexible Booking Amount Northbound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Flexible Booking Amount Northbound</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Flexible Booking Amount Northbound</em>' attribute.
+	 * @see #setFlexibleBookingAmountNorthbound(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_FlexibleBookingAmountNorthbound()
+	 * @model
+	 * @generated
+	 */
+	int getFlexibleBookingAmountNorthbound();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Flexible Booking Amount Northbound</em>' attribute.
+	 * @see #getFlexibleBookingAmountNorthbound()
+	 * @generated
+	 */
+	void setFlexibleBookingAmountNorthbound(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Flexible Booking Amount Southbound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Flexible Booking Amount Southbound</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Flexible Booking Amount Southbound</em>' attribute.
+	 * @see #setFlexibleBookingAmountSouthbound(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_FlexibleBookingAmountSouthbound()
+	 * @model
+	 * @generated
+	 */
+	int getFlexibleBookingAmountSouthbound();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Flexible Booking Amount Southbound</em>' attribute.
+	 * @see #getFlexibleBookingAmountSouthbound()
+	 * @generated
+	 */
+	void setFlexibleBookingAmountSouthbound(int value);
 
 } // CanalBookings
