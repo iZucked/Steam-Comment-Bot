@@ -14,6 +14,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
  * A similar class to {@link IPortTimesRecord}, created before arrival times have been scheduled. TODO: Replace {@link IPortTimesRecord} with this
@@ -63,9 +64,11 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
-	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
+	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod);
 
 	void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionSlot);
 
 	IRouteOptionBooking getRouteOptionBooking(IPortSlot slot);
+
+	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot);
 }

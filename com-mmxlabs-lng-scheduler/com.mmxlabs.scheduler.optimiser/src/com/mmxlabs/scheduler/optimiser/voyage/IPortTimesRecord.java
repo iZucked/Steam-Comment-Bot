@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -32,7 +33,8 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
-	@NonNull List<@NonNull IPortSlot> getSlots();
+	@NonNull
+	List<@NonNull IPortSlot> getSlots();
 
 	int getSlotTime(@NonNull IPortSlot slot);
 
@@ -49,7 +51,8 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 */
 	int getFirstSlotTime();
 
-	@NonNull IPortSlot getFirstSlot();
+	@NonNull
+	IPortSlot getFirstSlot();
 
 	/**
 	 * Returns the final slot in the slots list
@@ -63,8 +66,11 @@ public interface IPortTimesRecord extends IElementAnnotation {
 
 	void setRouteOptionBooking(@NonNull IPortSlot slot, @Nullable IRouteOptionBooking routeOptionSlot);
 
-	void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute);
+	void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod);
 
-	@NonNull AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot);
+	@NonNull
+	AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot);
+
+	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot portSlot);
 
 }

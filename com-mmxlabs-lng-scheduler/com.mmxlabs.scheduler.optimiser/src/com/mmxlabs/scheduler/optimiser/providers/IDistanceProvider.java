@@ -90,5 +90,11 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	@Nullable
-	IPort getRouteOptionEntry(IPort port, ERouteOption routeOption);
+	IPort getRouteOptionEntryPort(IPort port, ERouteOption routeOption);
+
+	public enum RouteOptionDirection {
+		NORTHBOUND, SOUTHBOUND
+	};
+
+	RouteOptionDirection getRouteOptionDirection(IPort port, ERouteOption routeOption);
 }

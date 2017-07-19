@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
  * @author hinton
@@ -38,6 +39,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int duration;
 		public IRouteOptionBooking routeOptionBooking;
 		public AvailableRouteChoices nextVoyageRouteChoice;
+		public PanamaPeriod panamaPeriod;
 
 		@Override
 		public boolean equals(Object obj) {
@@ -84,7 +86,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			setSlotTime(portSlot, portTimesRecord.getSlotTime(portSlot));
 			setSlotDuration(portSlot, portTimesRecord.getSlotDuration(portSlot));
 			setRouteOptionBooking(portSlot, portTimesRecord.getRouteOptionBooking(portSlot));
-			setSlotNextVoyageOptions(portSlot, portTimesRecord.getSlotNextVoyageOptions(portSlot));
+			setSlotNextVoyageOptions(portSlot, portTimesRecord.getSlotNextVoyageOptions(portSlot), portTimesRecord.getSlotNextVoyagePanamaPeriod(portSlot));
 		}
 		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
 		if (returnSlot != null) {
@@ -348,8 +350,9 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
 		getOrCreateSlotAllocation(slot).nextVoyageRouteChoice = nextVoyageRoute;
+		getOrCreateSlotAllocation(slot).panamaPeriod = panamaPeriod;
 	}
 
 	@Override
@@ -357,6 +360,15 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
 			return allocation.nextVoyageRouteChoice;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.panamaPeriod;
 		}
 		throw new IllegalArgumentException("Unknown port slot");
 	}
