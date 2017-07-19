@@ -3528,10 +3528,9 @@ public class LNGScenarioTransformer {
 
 	private void buildRouteEntryPoints(final PortModel portModel, final Association<Port, IPort> portAssociation) {
 		portModel.getRoutes().forEach(r -> {
-			if (r.getEntryA() != null && r.getEntryB() != null) {
-				if (r.getEntryA().getPort() != null && r.getEntryB().getPort() != null) {
-					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r),
-							ImmutableSet.of(portAssociation.lookup(r.getEntryA().getPort()), portAssociation.lookup(r.getEntryB().getPort())));
+			if (r.getNorthEntrance() != null && r.getSouthEntrance() != null) {
+				if (r.getNorthEntrance().getPort() != null && r.getSouthEntrance().getPort() != null) {
+					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookup(r.getNorthEntrance().getPort()), portAssociation.lookup(r.getSouthEntrance().getPort()));
 				}
 			}
 		});

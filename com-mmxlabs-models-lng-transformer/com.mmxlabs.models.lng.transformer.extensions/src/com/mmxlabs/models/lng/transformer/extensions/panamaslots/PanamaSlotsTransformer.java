@@ -49,7 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
  * @author robert
  */
 public class PanamaSlotsTransformer implements IContractTransformer {
-	
+
 	@Inject
 	private IPanamaBookingsProviderEditor panamaBookingsProviderEditor;
 
@@ -64,7 +64,8 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 	private final List<CanalBookingSlot> providedPanamaBookings = new ArrayList<>();
 	private int relaxedBoundaryOffsetDays;
-	private int relaxedBookingsCount;
+	private int relaxedBookingsCountNorthbound;
+	private int relaxedBookingsCountSouthbound;
 	private int strictBoundaryOffsetDays;
 	private int arrivalMargin;
 
@@ -85,7 +86,8 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 		strictBoundaryOffsetDays = canalBookings.getStrictBoundaryOffsetDays();
 		relaxedBoundaryOffsetDays = canalBookings.getRelaxedBoundaryOffsetDays();
-		relaxedBookingsCount = canalBookings.getFlexibleBookingAmount();
+		relaxedBookingsCountNorthbound = canalBookings.getFlexibleBookingAmountNorthbound();
+		relaxedBookingsCountSouthbound = canalBookings.getFlexibleBookingAmountSouthbound();
 		arrivalMargin = canalBookings.getArrivalMarginHours();
 	}
 
@@ -97,7 +99,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 			if (optPort == null) {
 				throw new IllegalStateException("No optimiser port found for: " + eBooking.getEntryPoint().getName());
 			}
-			
+
 			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDateAsDateTime());
 			final IRouteOptionBooking oBooking;
 			if (eBooking.getSlot() != null) {
@@ -114,7 +116,8 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 
 		panamaBookingsProviderEditor.setStrictBoundary(promptPeriodProvider.getStartOfPromptPeriod() + strictBoundaryOffsetDays * 24);
 		panamaBookingsProviderEditor.setRelaxedBoundary(promptPeriodProvider.getStartOfPromptPeriod() + relaxedBoundaryOffsetDays * 24);
-		panamaBookingsProviderEditor.setRelaxedBookingCount(relaxedBookingsCount);
+		panamaBookingsProviderEditor.setRelaxedBookingCountNorthbound(relaxedBookingsCountNorthbound);
+		panamaBookingsProviderEditor.setRelaxedBookingCountSouthbound(relaxedBookingsCountSouthbound);
 		panamaBookingsProviderEditor.setArrivalMargin(arrivalMargin);
 	}
 
