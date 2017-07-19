@@ -115,6 +115,9 @@ public class ColourSchemeUtil {
 	public static boolean isLocked(final Event event, final GanttChartViewer viewer) {
 		// Stage 1: Find the cargo
 		final Sequence sequence = event.getSequence();
+		if (sequence == null) {
+			return false;
+		}
 		int index = sequence.getEvents().indexOf(event);
 		Cargo cargo = null;
 		while (cargo == null && index >= 0) {

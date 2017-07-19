@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -63,6 +64,15 @@ public class VesselStateColourScheme extends ColourScheme {
 			}
 		} else if (element instanceof GeneratedCharterOut) {
 			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
+
+		} else if (element instanceof CanalBookingEvent) {
+			CanalBookingEvent canalBookingEvent = (CanalBookingEvent) element;
+			final Journey journey = canalBookingEvent.getLinkedJourney();
+			if (journey.isLaden()) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
+			} else {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
+			}
 		}
 
 		// else if (mode == Mode.Lateness) {

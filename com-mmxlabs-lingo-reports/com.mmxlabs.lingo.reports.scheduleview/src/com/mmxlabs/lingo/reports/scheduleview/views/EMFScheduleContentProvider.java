@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,8 +26,13 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -61,8 +67,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					// find multiple availabilities
 					final Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
 					final List<Sequence> unassigned = sequences.stream() //
-							.filter(s -> s.getSequenceType() == SequenceType.VESSEL)
-							.filter(s -> s.getVesselAvailability() != null) //
+							.filter(s -> s.getSequenceType() == SequenceType.VESSEL).filter(s -> s.getVesselAvailability() != null) //
 							.sorted((a, b) -> a.getVesselAvailability().getStartBy() == null ? -1
 									: b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy()))
 							.collect(Collectors.toList());
@@ -111,26 +116,60 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		} else if (parent instanceof Sequence) {
 			final Sequence sequence = (Sequence) parent;
 			final EList<Event> events = sequence.getEvents();
+
+			final List<Event> newEvents = new LinkedList<>();
 			for (final Event event : events) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
 					cachedElements.put(slotVisit.getSlotAllocation().getSlot(), slotVisit);
 				}
+				newEvents.add(event);
+				if (event instanceof Journey) {
+					Journey journey = (Journey) event;
+					if (journey.getCanalDate() != null) {
+						if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+
+							CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+							canal.setLinkedSequence(journey.getSequence());
+							canal.setLinkedJourney(journey);
+							canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+							canal.setEnd(canal.getStart().plusDays(1));
+							canal.setPort(journey.getCanalEntry().getPort());
+							newEvents.add(canal);
+						}
+					}
+				}
 			}
-			return events.toArray();
+			return newEvents.toArray();
 		} else if (parent instanceof CombinedSequence) {
 			final CombinedSequence combinedSequence = (CombinedSequence) parent;
-			final List<Event> events = new LinkedList<>();
+			final List<Event> newEvents = new LinkedList<>();
 			for (final Sequence sequence : combinedSequence.getSequences()) {
-				events.addAll(sequence.getEvents());
+				// events.addAll(sequence.getEvents());
 				for (final Event event : sequence.getEvents()) {
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
 						cachedElements.put(slotVisit.getSlotAllocation().getSlot(), slotVisit);
 					}
+					newEvents.add(event);
+					if (event instanceof Journey) {
+						Journey journey = (Journey) event;
+						if (journey.getCanalDate() != null) {
+							if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+
+								CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+								canal.setLinkedSequence(journey.getSequence());
+								canal.setLinkedJourney(journey);
+								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+								canal.setEnd(canal.getStart().plusDays(1));
+								canal.setPort(journey.getCanalEntry().getPort());
+								newEvents.add(canal);
+							}
+						}
+					}
 				}
 			}
-			return events.toArray();
+			return newEvents.toArray();
 		}
 		return null;
 	}
@@ -213,8 +252,14 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 		if (element instanceof Event) {
 			final Event event = (Event) element;
+			final Sequence sequence;
+			if (event instanceof CanalBookingEvent) {
+				sequence = ((CanalBookingEvent) event).getLinkedSequence();
+			} else {
+				sequence = event.getSequence();
+			}
 			// Special case for cargo shorts - group items separately
-			if (event.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
+			if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
 				final Event start = ScheduleModelUtils.getSegmentStart(event);
 
 				if (start != null) {
@@ -257,7 +302,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	@Override
 	public boolean isVisibleByDefault(final Object resource) {
 		if (resource instanceof Sequence) {
-			final Sequence sequence = (Sequence)resource;
+			final Sequence sequence = (Sequence) resource;
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
 		}
 		return true;
