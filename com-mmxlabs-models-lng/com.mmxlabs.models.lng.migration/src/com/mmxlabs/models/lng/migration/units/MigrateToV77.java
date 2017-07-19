@@ -64,7 +64,7 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 				final int flex = canalBookings.getAttrib("flexibleBookingAmount");
 				canalBookings.unsetFeature("flexibleBookingAmount");
 
-				canalBookings.setAttrib("flexibleBookingAmountNoruthbound", flex);
+				canalBookings.setAttrib("flexibleBookingAmountNorthbound", flex);
 				canalBookings.setAttrib("flexibleBookingAmountSouthbound", flex);
 			}
 		}
