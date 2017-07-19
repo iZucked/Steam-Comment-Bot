@@ -257,7 +257,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
 	}
 
-	private String dateToString(final LocalDate date) {
+	private String dateToString(final LocalDate date, String defaultString) {
+		if (date == null) {
+			return defaultString;
+		}
 		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
 	}
 
@@ -304,9 +307,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					if (route.getRouteOption() == RouteOption.PANAMA) {
 						final CanalBookingSlot canalBooking = journey.getCanalBooking();
 						if (canalBooking != null) {
-							eventText.append(String.format("Canal booking: %s\n", dateToString(journey.getCanalDate())));
+							eventText.append(String.format("Canal booking: %s\n", dateToString(journey.getCanalDate(), "<date unknown>")));
 						} else {
-							eventText.append(String.format("Booking required: %s\n", dateToString(journey.getCanalDate())));
+							eventText.append(String.format("Booking required: %s\n", dateToString(journey.getCanalDate(), "<date unknown>")));
 						}
 					}
 				}
