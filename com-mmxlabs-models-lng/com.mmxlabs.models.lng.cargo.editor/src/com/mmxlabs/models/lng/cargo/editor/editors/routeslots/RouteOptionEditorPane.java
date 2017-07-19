@@ -121,25 +121,18 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 					parent.layout(true);
 				}
 			});
-			parametersParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).equalWidth(true).spacing(0, 0).margins(0, 0).create());
+			parametersParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).spacing(0, 0).margins(0, 0).create());
 			{
 			}
 			// Strict editor
 			{
+
+				final Label lbl = new Label(parametersParent, SWT.NONE);
+				lbl.setText("Strict booking period ends ");
+				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).minSize(1000, -1).create());
+				
 				final Composite strictParent = new Composite(parametersParent, SWT.NONE);
 				strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
-
-				final Label lbl = new Label(strictParent, SWT.NONE);
-				lbl.setText("Strict from ");
-				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
-
-				todayLabel_Strict = new Label(strictParent, SWT.NONE);
-				todayLabel_Strict.setText("XX/XX/XXXX");
-				todayLabel_Strict.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
-
-				final Label lbl_b = new Label(strictParent, SWT.NONE);
-				lbl_b.setText(" for ");
-				lbl_b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
 				strictEditor = new FormattedText(strictParent);
 				strictEditor.setFormatter(new IntegerFormatter());
@@ -159,25 +152,22 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				});
 				strictEditor.getControl().setToolTipText("Bookings must exist for the panama canal up to n days from the prompt start date.");
 				final Label lbl2 = new Label(strictParent, SWT.NONE);
-				lbl2.setText("days.");
+				lbl2.setText(" days after");
 				lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+
+				todayLabel_Strict = new Label(strictParent, SWT.NONE);
+				todayLabel_Strict.setText("XX/XX/XXXX");
+				todayLabel_Strict.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 			}
 			{
 
+
+				final Label lbl = new Label(parametersParent, SWT.NONE);
+				lbl.setText("Relaxed booking period ends ");
+				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).minSize(1000, -1).create());
+				
 				final Composite relaxParent = new Composite(parametersParent, SWT.NONE);
 				relaxParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
-
-				final Label lbl = new Label(relaxParent, SWT.NONE);
-				lbl.setText("Relaxed from ");
-				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
-
-				todayLabel_Relaxed = new Label(relaxParent, SWT.NONE);
-				todayLabel_Relaxed.setText("XX/XX/XXXX");
-				todayLabel_Relaxed.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
-
-				final Label lbl_b = new Label(relaxParent, SWT.NONE);
-				lbl_b.setText(" for ");
-				lbl_b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 
 				relaxedEditor = new FormattedText(relaxParent);
 				relaxedEditor.setFormatter(new IntegerFormatter());
@@ -195,20 +185,26 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 					}
 
 				});
-				relaxedEditor.getControl().setToolTipText("Bookings should exist for the panama canal up to n days from the prompt start date.");
+				relaxedEditor.getControl().setToolTipText("Bookings should exist for the panama canal up to n days from the prompt start date and after the strict period.");
 
 				final Label lbl3 = new Label(relaxParent, SWT.NONE);
-				lbl3.setText("days.");
+				lbl3.setText(" days after");
 				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+
+				todayLabel_Relaxed = new Label(relaxParent, SWT.NONE);
+				todayLabel_Relaxed.setText("XX/XX/XXXX");
+				todayLabel_Relaxed.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 			}
 			{
 
+
+				final Label lbl3 = new Label(parametersParent, SWT.NONE);
+				lbl3.setText("Flexible bookings northbound ");
+				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+				
 				final Composite flexParent = new Composite(parametersParent, SWT.NONE);
 				flexParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
-
-				final Label lbl3 = new Label(flexParent, SWT.NONE);
-				lbl3.setText("Flexible bookings northbound ");
-				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				
 				flexEditorNorthbound = new FormattedText(flexParent);
 				flexEditorNorthbound.setFormatter(new IntegerFormatter());
 				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
@@ -249,12 +245,14 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				flexEditorSouthbound.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
 			}
 			{
+
+				final Label lbl4 = new Label(parametersParent, SWT.NONE);
+				lbl4.setText("Arrival margin in hours ");
+				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+				
 				final Composite marginParent = new Composite(parametersParent, SWT.NONE);
 				marginParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
-
-				final Label lbl4 = new Label(marginParent, SWT.NONE);
-				lbl4.setText("Arrival margin in hours ");
-				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+				
 				marginEditor = new FormattedText(marginParent);
 				marginEditor.setFormatter(new IntegerFormatter());
 				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
