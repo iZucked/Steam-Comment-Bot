@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -83,7 +84,7 @@ public class ReportTesterHelper {
 
 	public static final String CARGO_ECONS_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	public static final String CARGO_ECONS_REPORT_SHORTNAME = "CargoEcons";
-	
+
 	public static final String CANAL_BOOKINGS_REPORT_ID = "com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport";
 	public static final String CANAL_BOOKINGS_REPORT_SHORTNAME = "CanalBookings";
 
@@ -107,6 +108,17 @@ public class ReportTesterHelper {
 			if (handler != null) {
 				handler.displayActionPlan(scenarios);
 			}
+		}, (v, p) -> {
+
+			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
+			if (handler == null) {
+				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
+				final MPart part = partService.findPart(reportID);
+				handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+			}
+			if (handler != null) {
+				handler.displayActionPlan(Collections.emptyList());
+			}
 		});
 	}
 
@@ -121,6 +133,14 @@ public class ReportTesterHelper {
 
 			p.deselectAll(true);
 			p.select(scenario, true);
+		}, (v, p) -> {
+
+			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
+			if (scenarioInputProvider != null) {
+				scenarioInputProvider.provideScenarioInstance(null);
+			}
+
+			p.deselectAll(true);
 		});
 	}
 
@@ -131,11 +151,13 @@ public class ReportTesterHelper {
 			p.select(pinScenario, true);
 			p.setPinnedInstance(pinScenario, true);
 			p.select(ref, true);
+		}, (v, p) -> {
+			p.deselectAll(true);
 		});
 	}
 
 	@Nullable
-	public IReportContents getReportContents(final String reportID, final @NonNull IScenarioSelection callable) throws InterruptedException {
+	public IReportContents getReportContents(final String reportID, final @NonNull IScenarioSelection callable, final @NonNull IScenarioSelection cleanUp) throws InterruptedException {
 
 		// Get reference to the selection provider service
 
@@ -207,6 +229,10 @@ public class ReportTesterHelper {
 					}
 				}
 			});
+
+			RunnerHelper.exec(() -> {
+				cleanUp.updateSelection(view[0], provider);
+			}, true);
 
 			return contents[0];
 		});

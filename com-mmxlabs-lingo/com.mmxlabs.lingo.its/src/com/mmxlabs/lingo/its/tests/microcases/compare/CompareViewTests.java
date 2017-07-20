@@ -1,13 +1,11 @@
 /**
- * Copyright (C) Minsimax Labs Ltd., 2010 - 2017
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.microcases.compare;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
@@ -799,50 +797,57 @@ public class CompareViewTests {
 
 		final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
 		final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
+		try {
+			//
+			try (ModelReference fromRef = pinnedRecord.aquireReference("CompareViewTests:1")) {
+				try (ModelReference toRef = otherRecord.aquireReference("CompareViewTests:2")) {
 
-		//
-		try (ModelReference fromRef = pinnedRecord.aquireReference("CompareViewTests:1")) {
-			try (ModelReference toRef = otherRecord.aquireReference("CompareViewTests:2")) {
+					final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers = new LinkedList<>();
+					// if (customRelatedSlotHandlerExtensions != null) {
+					// for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlerExtensions) {
+					// customRelatedSlotHandlers.add(h.getInstance());
+					// }
+					// }
 
-				final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers = new LinkedList<>();
-				// if (customRelatedSlotHandlerExtensions != null) {
-				// for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlerExtensions) {
-				// customRelatedSlotHandlers.add(h.getInstance());
-				// }
-				// }
+					final SelectedDataProviderImpl selectedDataProvider = new SelectedDataProviderImpl();
+					final Function<EObject, Collection<EObject>> getChildren = (scenarioModel) -> {
+						final Collection<EObject> children = new HashSet<>();
+						final Iterator<EObject> itr = scenarioModel.eAllContents();
+						while (itr.hasNext()) {
+							children.add(itr.next());
+						}
+						children.add(scenarioModel);
+						return children;
+					};
+					final ScenarioResult pinnedResult = new ScenarioResult(pinned);
+					final ScenarioResult otherResult = new ScenarioResult(other);
+					selectedDataProvider.addScenario(pinnedResult, ScenarioModelUtil.getScheduleModel(from).getSchedule(), getChildren.apply(from));
+					selectedDataProvider.addScenario(otherResult, ScenarioModelUtil.getScheduleModel(to).getSchedule(), getChildren.apply(to));
+					selectedDataProvider.setPinnedScenarioInstance(pinnedResult);
 
-				final SelectedDataProviderImpl selectedDataProvider = new SelectedDataProviderImpl();
-				final Function<EObject, Collection<EObject>> getChildren = (scenarioModel) -> {
-					final Collection<EObject> children = new HashSet<>();
-					final Iterator<EObject> itr = scenarioModel.eAllContents();
-					while (itr.hasNext()) {
-						children.add(itr.next());
-					}
-					children.add(scenarioModel);
-					return children;
-				};
-				final ScenarioResult pinnedResult = new ScenarioResult(pinned);
-				final ScenarioResult otherResult = new ScenarioResult(other);
-				selectedDataProvider.addScenario(pinnedResult, ScenarioModelUtil.getScheduleModel(from).getSchedule(), getChildren.apply(from));
-				selectedDataProvider.addScenario(otherResult, ScenarioModelUtil.getScheduleModel(to).getSchedule(), getChildren.apply(to));
-				selectedDataProvider.setPinnedScenarioInstance(pinnedResult);
+					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+					final Collection<ScenarioResult> others = Collections.singleton(otherResult);
+					final ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pinnedResult, others, selectedDataProvider, scheduleDiffUtils,
+							customRelatedSlotHandlers);
+					final Table table = result.table;
+					table.setOptions(ScheduleReportFactory.eINSTANCE.createDiffOptions());
 
-				final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-				final Collection<ScenarioResult> others = Collections.singleton(otherResult);
-				final ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pinnedResult, others, selectedDataProvider, scheduleDiffUtils,
-						customRelatedSlotHandlers);
-				final Table table = result.table;
-				table.setOptions(ScheduleReportFactory.eINSTANCE.createDiffOptions());
+					// Take a copy of current diff options
+					// table.setOptions(EcoreUtil.copy(diffOptions));
+					// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
+					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
+					final ChangeSetRoot root = transformer.createDataModel(selectedDataProvider, result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
 
-				// Take a copy of current diff options
-				// table.setOptions(EcoreUtil.copy(diffOptions));
-				// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
-				final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
-				final ChangeSetRoot root = transformer.createDataModel(selectedDataProvider, result.equivalancesMap, table, pinnedResult, otherResult, new NullProgressMonitor());
+					resultChecker.accept(root);
 
-				resultChecker.accept(root);
-
+				}
 			}
+		} finally {
+			System.gc();
+			System.gc();
+			System.gc();
+			SSDataManager.Instance.releaseModelRecord(pinned);
+			SSDataManager.Instance.releaseModelRecord(other);
 		}
 
 	}

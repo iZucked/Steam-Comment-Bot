@@ -43,7 +43,6 @@ public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 		addedFeatures.clear();
 	}
 
-	
 	@Test
 	public void testBonnyProblemsDiff() throws Exception {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.lingo");
