@@ -157,7 +157,7 @@ public final class ModelRecord {
 				}
 				data = null;
 				// Reset validation status
-//				validationStatus = Status.OK_STATUS;
+				// validationStatus = Status.OK_STATUS;
 				validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "Previous validation status");
 
 			}
@@ -287,10 +287,13 @@ public final class ModelRecord {
 
 	public void dispose() {
 		// Right now we are asserting that we have been cleaned-up properly
-		assert data == null;
-		assert lockListeners.isEmpty();
-		assert validationListeners.isEmpty();
-		assert dirtyListeners.isEmpty();
+		if (data != null) {
+			LOG.error("ModelRecord #disposed before unloaded");
+		}
+//		assert data == null;
+//		assert lockListeners.isEmpty();
+//		assert validationListeners.isEmpty();
+//		assert dirtyListeners.isEmpty();
 	}
 
 	public String getName() {
