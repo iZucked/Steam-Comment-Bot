@@ -210,10 +210,10 @@ public class ParameterModesDialogTest {
 		settings.unsetPeriodEnd();
 
 		executeValidTest(settings, b -> {
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("02/2015");//
+			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/02/2015");//
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
-			Assert.assertEquals(YearMonth.of(2015, 2), u.getPeriodStartDate()); //
+			Assert.assertEquals(LocalDate.of(2015, 2, 1), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings); //
 			Assert.assertEquals(LocalDate.of(2015, 2, 1), settings.getPeriodStartDate()); //
@@ -248,7 +248,7 @@ public class ParameterModesDialogTest {
 		executeValidTest(settings, b -> {
 			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
 			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("02/2015"); //
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
@@ -275,7 +275,7 @@ public class ParameterModesDialogTest {
 		executeValidTest(settings, b -> {
 			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
 			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
@@ -302,17 +302,17 @@ public class ParameterModesDialogTest {
 		executeValidTest(settings, b -> {
 			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
 			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), u.getPeriodStartDate()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
 			OptimisationHelper.mergeFields(u, settings);
 			Assert.assertTrue(settings.isBuildActionSets());//
 			Assert.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
-			Assert.assertEquals(YearMonth.of(2015, 1), settings.getPeriodStartDate()); //
+			Assert.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
 			Assert.assertEquals(YearMonth.of(2015, 7), settings.getPeriodEnd()); //
 
 		});
@@ -329,7 +329,7 @@ public class ParameterModesDialogTest {
 		executeValidTest(settings, b -> {
 			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
 			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
 			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
 		}, u -> {
 			Assert.assertTrue(u.isBuildActionSets());//
