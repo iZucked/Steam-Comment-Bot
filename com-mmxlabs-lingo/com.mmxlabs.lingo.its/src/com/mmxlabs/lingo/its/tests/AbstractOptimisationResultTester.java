@@ -73,6 +73,11 @@ public class AbstractOptimisationResultTester {
 	 */
 	protected static final TestMode storeFitnessMap = TestMode.Run;
 
+	/**
+	 * Subclasses can set to false to disable properties file generation for test cases which check other things.
+	 */
+	protected boolean doPropertiesChecks = true;
+
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
 		@SuppressWarnings("unused")
@@ -156,79 +161,86 @@ public class AbstractOptimisationResultTester {
 		});
 	}
 
-	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
+	public void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
 		scenarioRunner.evaluateInitialState();
 		optimiseScenario(scenarioRunner, testDataProvider);
 	}
 
-	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
+	public IMultiStateResult optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
 		Assume.assumeTrue(storeFitnessMap != TestMode.Skip);
 
 		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
 
-		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
-		final Properties props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap == TestMode.Generate);
-		if (storeFitnessMap == TestMode.Generate) {
-			TesterUtil.storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
-		} else {
-			// Assert old and new are equal
-			TesterUtil.testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+		Properties props = null;
+		if (doPropertiesChecks) {
+			final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
+			props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap == TestMode.Generate);
+			if (storeFitnessMap == TestMode.Generate) {
+				TesterUtil.storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+			} else {
+				// Assert old and new are equal
+				TesterUtil.testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+			}
 		}
 
 		final IMultiStateResult result = scenarioRunner.run();
 
-		boolean checkSolutions = true;
-		// Store the number of extra solutions so we can verify we get the same amount back out
-		if (storeFitnessMap == TestMode.Generate) {
-			// FIXME: Constant
-			props.put("solution-count", Integer.toString(result.getSolutions().size()));
-		} else {
-			int solutionCount = 0;
-			if (props.contains("solution-count")) {
-				solutionCount = Integer.valueOf(props.getProperty("solution-count")).intValue();
-				Assert.assertEquals(solutionCount, result.getSolutions().size());
-			} else {
-				checkSolutions = false;
-			}
-		}
+		if (doPropertiesChecks) {
+			boolean checkSolutions = true;
 
-		if (!result.getSolutions().isEmpty()) {
-			int i = 0;
-			for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
-				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(p.getSecond());
-				final String mapName = String.format("solution-%d", i++);
-				if (storeFitnessMap == TestMode.Generate) {
-					TesterUtil.storeFitnesses(props, mapName, currentEndFitnesses);
+			// Store the number of extra solutions so we can verify we get the same amount back out
+			if (storeFitnessMap == TestMode.Generate) {
+				// FIXME: Constant
+				props.put("solution-count", Integer.toString(result.getSolutions().size()));
+			} else {
+				int solutionCount = 0;
+				if (props.contains("solution-count")) {
+					solutionCount = Integer.valueOf(props.getProperty("solution-count")).intValue();
+					Assert.assertEquals(solutionCount, result.getSolutions().size());
 				} else {
-					// Check for old test cases where we do not have this data stored, we do not want to abort here.
-					if (checkSolutions) {
-						// Assert old and new are equal
-						TesterUtil.testOriginalAndCurrentFitnesses(props, mapName, currentEndFitnesses);
+					checkSolutions = false;
+				}
+			}
+
+			if (!result.getSolutions().isEmpty()) {
+				int i = 0;
+				for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
+					final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(p.getSecond());
+					final String mapName = String.format("solution-%d", i++);
+					if (storeFitnessMap == TestMode.Generate) {
+						TesterUtil.storeFitnesses(props, mapName, currentEndFitnesses);
+					} else {
+						// Check for old test cases where we do not have this data stored, we do not want to abort here.
+						if (checkSolutions) {
+							// Assert old and new are equal
+							TesterUtil.testOriginalAndCurrentFitnesses(props, mapName, currentEndFitnesses);
+						}
 					}
 				}
 			}
-		}
 
-		// Check final optimised result
-		{
-			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
+			// Check final optimised result
+			{
+				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
+				if (storeFitnessMap == TestMode.Generate) {
+					TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+				} else {
+					// Assert old and new are equal
+					TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+				}
+			}
+
 			if (storeFitnessMap == TestMode.Generate) {
-				TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
-			} else {
-				// Assert old and new are equal
-				TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+				try {
+					TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
+				} catch (final URISyntaxException e) {
+					e.printStackTrace();
+					Assert.fail();
+				}
 			}
 		}
-
-		if (storeFitnessMap == TestMode.Generate) {
-			try {
-				TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
-			} catch (final URISyntaxException e) {
-				e.printStackTrace();
-				Assert.fail();
-			}
-		}
+		return result;
 	}
 
 	/**

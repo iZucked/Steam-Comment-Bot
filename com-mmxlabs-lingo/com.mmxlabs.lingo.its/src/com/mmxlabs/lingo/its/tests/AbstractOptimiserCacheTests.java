@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 
 /**
  * Test class base for running cache verification tests.
+ * 
  * @author Simon Goodall
  *
  */
@@ -26,7 +27,8 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 
 	public AbstractOptimiserCacheTests(@Nullable String _unused_method_prefix_, @NonNull String scenarioURL, @Nullable LocalDate periodStart, @Nullable YearMonth periodEnd) {
 		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, true);
-
+		// Do not bother with properties file checks. Other tests should cover repeatability.
+		doPropertiesChecks = false;
 	}
 
 	@Test
