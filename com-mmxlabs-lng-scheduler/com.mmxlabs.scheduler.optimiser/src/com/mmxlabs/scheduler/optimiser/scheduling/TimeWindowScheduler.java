@@ -231,7 +231,7 @@ public class TimeWindowScheduler {
 				}
 				travelTimeDataMap.put(resource, minTimeData);
 			}
-			// Copy list incase externaly modified
+			// Copy list incase externally modified
 			trimmedWindows.put(resource, new ArrayList<>(list));
 
 			// We copy the booking data as we don't know whether or not cache will hit or miss.

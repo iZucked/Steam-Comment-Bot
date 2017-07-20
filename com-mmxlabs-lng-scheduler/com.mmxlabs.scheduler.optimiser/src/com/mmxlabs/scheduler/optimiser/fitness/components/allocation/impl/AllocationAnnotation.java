@@ -42,7 +42,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public PanamaPeriod panamaPeriod;
 
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(final Object obj) {
 
 			if (obj == this) {
 				return true;
@@ -56,7 +56,6 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 						&& duration == other.duration //
 						&& nextVoyageRouteChoice == other.nextVoyageRouteChoice //
 						&& Objects.equal(routeOptionBooking, other.routeOptionBooking);
-
 			}
 
 			return false;
@@ -74,25 +73,6 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	private int firstSlotTime = Integer.MAX_VALUE;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnPortSlot = null;
-
-	public AllocationAnnotation() {
-
-	}
-
-	public AllocationAnnotation(@NonNull final IPortTimesRecord portTimesRecord) {
-		for (final IPortSlot portSlot : portTimesRecord.getSlots()) {
-			assert portSlot != null;
-			getSlots().add(portSlot);
-			setSlotTime(portSlot, portTimesRecord.getSlotTime(portSlot));
-			setSlotDuration(portSlot, portTimesRecord.getSlotDuration(portSlot));
-			setRouteOptionBooking(portSlot, portTimesRecord.getRouteOptionBooking(portSlot));
-			setSlotNextVoyageOptions(portSlot, portTimesRecord.getSlotNextVoyageOptions(portSlot), portTimesRecord.getSlotNextVoyagePanamaPeriod(portSlot));
-		}
-		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
-		if (returnSlot != null) {
-			setReturnSlotTime(returnSlot, portTimesRecord.getSlotDuration(returnSlot));
-		}
-	}
 
 	@Override
 	public long getFuelVolumeInM3() {
@@ -304,13 +284,13 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}
 
 		if (obj instanceof AllocationAnnotation) {
-			AllocationAnnotation other = (AllocationAnnotation) obj;
+			final AllocationAnnotation other = (AllocationAnnotation) obj;
 			return this.firstSlotTime == other.firstSlotTime //
 					&& this.startHeelVolumeInM3 == other.startHeelVolumeInM3 //
 					&& this.fuelVolumeInM3 == other.fuelVolumeInM3 //
@@ -329,13 +309,13 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public void setCacheLocked(boolean locked) {
+	public void setCacheLocked(final boolean locked) {
 		assert !this.locked;
 		this.locked = locked;
 	}
 
 	@Override
-	public @Nullable IRouteOptionBooking getRouteOptionBooking(IPortSlot slot) {
+	public @Nullable IRouteOptionBooking getRouteOptionBooking(final IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
 			return allocation.routeOptionBooking;
@@ -344,13 +324,13 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
+	public void setRouteOptionBooking(final IPortSlot slot, final IRouteOptionBooking routeOptionBooking) {
 		getOrCreateSlotAllocation(slot).routeOptionBooking = routeOptionBooking;
 
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute, final PanamaPeriod panamaPeriod) {
 		getOrCreateSlotAllocation(slot).nextVoyageRouteChoice = nextVoyageRoute;
 		getOrCreateSlotAllocation(slot).panamaPeriod = panamaPeriod;
 	}
@@ -365,7 +345,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
+	public PanamaPeriod getSlotNextVoyagePanamaPeriod(final IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
 			return allocation.panamaPeriod;

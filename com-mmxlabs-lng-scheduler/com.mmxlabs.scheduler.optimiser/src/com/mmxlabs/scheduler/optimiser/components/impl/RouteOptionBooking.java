@@ -7,26 +7,28 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
+@NonNullByDefault
 public class RouteOptionBooking implements IRouteOptionBooking {
-	
-	private int bookingDate;
-	private IPort entryPoint;
-	private ERouteOption routeOption;
+
+	private final int bookingDate;
+	private final IPort entryPoint;
+	private final ERouteOption routeOption;
 	private Optional<IPortSlot> portSlot = Optional.empty();
-	
-	public RouteOptionBooking(int slotDate, IPort entryPoint, ERouteOption routeOption) {
+
+	public RouteOptionBooking(final int slotDate, final IPort entryPoint, final ERouteOption routeOption) {
 		this.bookingDate = slotDate;
 		this.entryPoint = entryPoint;
 		this.routeOption = routeOption;
 	}
-	
-	public RouteOptionBooking(int slotDate, IPort entryPoint, ERouteOption routeOption, IPortSlot slot) {
+
+	public RouteOptionBooking(final int slotDate, final IPort entryPoint, final ERouteOption routeOption, final IPortSlot slot) {
 		this.bookingDate = slotDate;
 		this.entryPoint = entryPoint;
 		this.routeOption = routeOption;
@@ -54,7 +56,7 @@ public class RouteOptionBooking implements IRouteOptionBooking {
 	}
 
 	@Override
-	public int compareTo(@NonNull IRouteOptionBooking o) {
-		return Integer.valueOf(this.getBookingDate()).compareTo(((IRouteOptionBooking)o).getBookingDate());
+	public int compareTo(@NonNull final IRouteOptionBooking o) {
+		return Integer.valueOf(this.getBookingDate()).compareTo(((IRouteOptionBooking) o).getBookingDate());
 	}
 }
