@@ -35,6 +35,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 		private IRouteOptionBooking routeOptionBooking;
 
 		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
+		public PanamaPeriod panamaPeriod;
 
 		@Override
 		public boolean equals(final Object obj) {
@@ -170,8 +171,9 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
 		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
+		getOrCreateSlotRecord(slot).panamaPeriod = panamaPeriod;
 	}
 
 	@Override
@@ -231,5 +233,14 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	@Override
 	public void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
 		getOrCreateSlotRecord(slot).routeOptionBooking = routeOptionBooking;
+	}
+
+	@Override
+	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
+		final SlotVoyageRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.panamaPeriod;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 }

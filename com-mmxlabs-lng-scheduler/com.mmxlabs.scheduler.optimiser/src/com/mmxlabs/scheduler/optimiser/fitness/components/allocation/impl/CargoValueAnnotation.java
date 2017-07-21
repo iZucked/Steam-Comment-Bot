@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
  * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing {@link IAllocationAnnotation} instance adding on the {@link ICargoValueAnnotation} specific data items. Internally very
@@ -313,8 +314,12 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute) {
-		allocationAnnotation.setSlotNextVoyageOptions(slot, nextVoyageRoute);
+	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
+		allocationAnnotation.setSlotNextVoyageOptions(slot, nextVoyageRoute, panamaPeriod);
+	}
 
+	@Override
+	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
+		return allocationAnnotation.getSlotNextVoyagePanamaPeriod(slot);
 	}
 }

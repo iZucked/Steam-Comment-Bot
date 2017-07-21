@@ -30,6 +30,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		public int index;
 		private IRouteOptionBooking routeOptionBooking = null;
 		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
+		public PanamaPeriod panamaPeriod = PanamaPeriod.Beyond;
 
 		@Override
 		public boolean equals(final Object obj) {
@@ -224,8 +225,9 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
 		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
+		getOrCreateSlotRecord(slot).panamaPeriod = panamaPeriod;
 	}
 
 	@Override
@@ -233,6 +235,15 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.nextVoyageRoute;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.panamaPeriod;
 		}
 		throw new IllegalArgumentException("Unknown port slot");
 	}

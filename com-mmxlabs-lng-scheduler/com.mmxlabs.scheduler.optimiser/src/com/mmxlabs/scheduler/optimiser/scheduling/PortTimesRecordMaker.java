@@ -211,7 +211,7 @@ public class PortTimesRecordMaker {
 
 			for (IPortSlot slot : record.getSlots()) {
 				portTimesRecord.setRouteOptionBooking(slot, record.getRouteOptionBooking(slot));
-				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot));
+				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot), record.getSlotNextVoyagePanamaPeriod(slot));
 
 				final ITimeWindow window = record.getSlotFeasibleTimeWindow(slot);
 				int visitDuration = record.getSlotDuration(slot);

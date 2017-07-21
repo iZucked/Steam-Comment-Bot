@@ -47,12 +47,12 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
 
-	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
-
-	private final Map<ERouteOption, Set<IPort>> routeOptionEntryPoints = new HashMap<>();
+	// Pair<North Entrance, South entrance>
+	private final Map<ERouteOption, Pair<IPort, IPort>> routeOptionEntryPoints = new HashMap<>();
 
 	// cache
 	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntry = new ConcurrentHashMap();
+	private final Map<Pair<IPort, ERouteOption>, RouteOptionDirection> nearestRouteOptionDirection = new ConcurrentHashMap();
 
 	@Override
 	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final IVessel vessel, AvailableRouteChoices availableRouteChoices) {
@@ -153,18 +153,41 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public void setEntryPointsForRouteOption(ERouteOption route, Set<IPort> entryPoints) {
-		routeOptionEntryPoints.put(route, entryPoints);
+	public void setEntryPointsForRouteOption(ERouteOption route, IPort northEntrance, IPort southEntrance) {
+		routeOptionEntryPoints.put(route, new Pair<>(northEntrance, southEntrance));
 	}
 
 	@Override
-	public IPort getRouteOptionEntry(IPort port, ERouteOption routeOption) {
+	public IPort getRouteOptionEntryPort(IPort port, ERouteOption routeOption) {
 		return nearestRouteOptionEntry.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
-			Set<IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
+			Pair<IPort, IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
 			if (entryPoints != null) {
-				return entryPoints.stream().min((p1, p2) -> {
-					return Integer.compare(getDistance(ERouteOption.DIRECT, port, p1, null), getDistance(ERouteOption.DIRECT, port, p2, null));
-				}).get();
+
+				int distanceToNorthEntrance = getDistance(ERouteOption.DIRECT, port, entryPoints.getFirst(), null);
+				int distanceToSouthEntrance = getDistance(ERouteOption.DIRECT, port, entryPoints.getSecond(), null);
+				if (distanceToNorthEntrance < distanceToSouthEntrance) {
+					return entryPoints.getFirst();
+				} else {
+					return entryPoints.getSecond();
+				}
+			}
+			return null;
+		});
+	}
+
+	@Override
+	public RouteOptionDirection getRouteOptionDirection(IPort port, ERouteOption routeOption) {
+		return nearestRouteOptionDirection.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
+			Pair<IPort, IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
+			if (entryPoints != null) {
+
+				int distanceToNorthEntrance = getDistance(ERouteOption.DIRECT, port, entryPoints.getFirst(), null);
+				int distanceToSouthEntrance = getDistance(ERouteOption.DIRECT, port, entryPoints.getSecond(), null);
+				if (distanceToNorthEntrance < distanceToSouthEntrance) {
+					return RouteOptionDirection.SOUTHBOUND;
+				} else {
+					return RouteOptionDirection.NORTHBOUND;
+				}
 			}
 			return null;
 		});

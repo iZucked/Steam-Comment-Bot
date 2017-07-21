@@ -18,20 +18,21 @@ import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
  * 
  */
 public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEditor {
-	
+
 	// make client configurable
 	private static final int MAX_SPEED_TO_CANAL = Integer.MAX_VALUE;
 
 	private ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> panamaBookings;
 	private int strictBoundary;
 	private int relaxedBoundary;
-	private int relaxedBookingsCount;
+	private int relaxedBookingsCountAtEntryA;
+	private int relaxedBookingsCountAtEntryB;
 	private int arrivalMargin;
-	
+
 	@Override
 	public void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> bookings) {
 		ImmutableMap.Builder<IPort, ImmutableSortedSet<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
-		bookings.forEach((k,v) -> {
+		bookings.forEach((k, v) -> {
 			builder.put(k, ImmutableSortedSet.copyOf(v));
 		});
 		panamaBookings = builder.build();
@@ -39,7 +40,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 
 	@Override
 	public ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings() {
-		if (panamaBookings == null){
+		if (panamaBookings == null) {
 			throw new IllegalStateException("Panama booking not set");
 		}
 		return panamaBookings;
@@ -51,8 +52,13 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public int getRelaxedBookingCount() {
-		return relaxedBookingsCount;
+	public int getRelaxedBookingCountNorthbound() {
+		return relaxedBookingsCountAtEntryA;
+	}
+
+	@Override
+	public int getRelaxedBookingCountSouthbound() {
+		return relaxedBookingsCountAtEntryB;
 	}
 
 	@Override
@@ -66,8 +72,13 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public void setRelaxedBookingCount(int bookingCount) {
-		relaxedBookingsCount = bookingCount;
+	public void setRelaxedBookingCountNorthbound(int bookingCount) {
+		relaxedBookingsCountAtEntryA = bookingCount;
+	}
+
+	@Override
+	public void setRelaxedBookingCountSouthbound(int bookingCount) {
+		relaxedBookingsCountAtEntryB = bookingCount;
 	}
 
 	@Override

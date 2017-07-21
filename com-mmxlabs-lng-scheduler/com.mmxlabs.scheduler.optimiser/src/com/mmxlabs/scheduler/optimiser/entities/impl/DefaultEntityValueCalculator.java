@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.RepositioningFeeAnnotation;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -459,13 +460,20 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final ICharterOutVesselEventPortSlot vesselEventPortSlot = (ICharterOutVesselEventPortSlot) firstPortSlot;
 				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() //
 						+ vesselEventPortSlot.getVesselEvent().getRepositioning() //
-						- vesselEventPortSlot.getVesselEvent().getBallastBonus();
+						+ vesselEventPortSlot.getVesselEvent().getBallastBonus();
 			} else {
 				revenue = 0;
 			}
 
 			if (firstPortSlot.getPortType() == PortType.Start) {
-				additionalCost += shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, vesselStartTime);
+				final long fee = shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, vesselStartTime);
+
+				additionalCost += fee;
+				if (shippingDetails != null) {
+					final RepositioningFeeAnnotation annotation = new RepositioningFeeAnnotation();
+					annotation.repositioningFee = fee;
+					shippingDetails.addChild(RepositioningFeeAnnotation.ANNOTATION_KEY, annotation);
+				}
 			}
 			if (firstPortSlot.getPortType() == PortType.End) {
 				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
@@ -500,7 +508,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, value, planStartTime, exportElement, true);
+			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingDetails, shippingEntity, preTaxValue, value, planStartTime, exportElement,
+					true);
 
 		}
 
