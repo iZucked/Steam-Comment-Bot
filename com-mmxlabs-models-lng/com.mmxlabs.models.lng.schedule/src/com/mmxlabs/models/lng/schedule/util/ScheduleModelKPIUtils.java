@@ -439,10 +439,12 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public enum ShippingCostType {
-		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE
+		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE, //
+		HOURS // Not included in all
 	}
 
 	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, ShippingCostType costType) {
+		long hours = 0;
 		if (grouping != null) {
 			boolean priceBOG = false;
 			if (grouping instanceof CargoAllocation) {
@@ -451,7 +453,7 @@ public class ScheduleModelKPIUtils {
 			// boolean collecting = false;
 			long total = 0L;
 			for (final Event event : grouping.getEvents()) {
-
+				hours += event.getDuration();
 				if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
 					total += event.getCharterCost();
 				}
@@ -531,7 +533,9 @@ public class ScheduleModelKPIUtils {
 					}
 				}
 			}
-
+			if (costType == ShippingCostType.HOURS) {
+				return hours;
+			}
 			return total;
 
 		}
