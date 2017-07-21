@@ -273,14 +273,14 @@ public final class VerticalReportUtils {
 
 	}
 
-	public static List<Event> getCanalBookingsForEntryA(final ScheduleSequenceData data) {
+	public static List<Event> getCanalBookingsNorthEntrance(final ScheduleSequenceData data) {
 
 		final List<Event> events = new LinkedList<Event>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
-				if (slot.getRoute().getEntryA() == slot.getEntryPoint()) {
+				if (slot.getRoute().getNorthEntrance() == slot.getEntryPoint()) {
 					events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
 				}
 			}
@@ -288,14 +288,14 @@ public final class VerticalReportUtils {
 		return events;
 	}
 
-	public static List<Event> getCanalBookingsForEntryB(final ScheduleSequenceData data) {
+	public static List<Event> getCanalBookingsForSouthEntrance(final ScheduleSequenceData data) {
 
 		final List<Event> events = new LinkedList<Event>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
-				if (slot.getRoute().getEntryB() == slot.getEntryPoint()) {
+				if (slot.getRoute().getSouthEntrance() == slot.getEntryPoint()) {
 					events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
 				}
 			}

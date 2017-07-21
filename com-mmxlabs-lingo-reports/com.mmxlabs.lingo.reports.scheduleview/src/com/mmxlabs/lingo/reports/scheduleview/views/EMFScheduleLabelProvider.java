@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -257,7 +258,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
 	}
 
-	private String dateToString(final LocalDate date) {
+	private String dateToString(final LocalDate date, String defaultString) {
+		if (date == null) {
+			return defaultString;
+		}
 		return DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(date);
 	}
 
@@ -303,14 +307,37 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					eventText.append(" | " + route + "\n");
 					if (route.getRouteOption() == RouteOption.PANAMA) {
 						final CanalBookingSlot canalBooking = journey.getCanalBooking();
+						String direction = "";
+						if (journey.getCanalEntry() == journey.getRoute().getNorthEntrance()) {
+							direction = "southbound";
+						}
+						if (journey.getCanalEntry() == journey.getRoute().getSouthEntrance()) {
+							direction = "northbound";
+						}
 						if (canalBooking != null) {
-							eventText.append(String.format("Canal booking: %s\n", dateToString(journey.getCanalDate())));
+							eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
 						} else {
-							eventText.append(String.format("Booking required: %s\n", dateToString(journey.getCanalDate())));
+							eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
 						}
 					}
 				}
+			} else if (element instanceof CanalBookingEvent) {
+				CanalBookingEvent canalBookingEvent = (CanalBookingEvent) element;
+				final Journey journey = canalBookingEvent.getLinkedJourney();
 
+				final CanalBookingSlot canalBooking = journey.getCanalBooking();
+				String direction = "";
+				if (journey.getCanalEntry() == journey.getRoute().getNorthEntrance()) {
+					direction = "southbound";
+				}
+				if (journey.getCanalEntry() == journey.getRoute().getSouthEntrance()) {
+					direction = "northbound";
+				}
+				if (canalBooking != null) {
+					eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
+				} else {
+					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
+				}
 			} else if (element instanceof SlotVisit) {
 				eventText.append("Time in port: " + durationTime + " \n");
 				eventText.append(" \n");
@@ -378,6 +405,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return tt.toString();
 		}
 		return null;
+
 	}
 
 	@Override

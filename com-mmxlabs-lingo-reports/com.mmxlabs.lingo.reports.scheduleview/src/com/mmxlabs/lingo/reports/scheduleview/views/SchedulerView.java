@@ -8,8 +8,12 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.function.BiFunction;
 
 import javax.inject.Inject;
@@ -530,8 +535,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 								}
 								// TODO: Test this still works!
 								{
-//									ChangeSetTableRow rhsWiringLink = csRow.getPreviousRHS();
-//									if (rhsWiringLink != null) 
+									// ChangeSetTableRow rhsWiringLink = csRow.getPreviousRHS();
+									// if (rhsWiringLink != null)
 									{
 										final SlotAllocation oldAllocation = csRow.getRhsBefore() != null ? csRow.getRhsBefore().getDischargeAllocation() : null;
 										final SlotAllocation newAllocation = csRow.getRhsAfter() != null ? csRow.getRhsAfter().getDischargeAllocation() : null;
@@ -548,23 +553,23 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 											}
 										}
 									}
-//									ChangeSetTableRow lhsWiringLink = csRow.getNextLHS();
-//									if (lhsWiringLink != null) {
-//										final SlotAllocation newAllocation = lhsWiringLink.getNewDischargeAllocation();
-//										final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
-//
-//										if (oldAllocation != null && newAllocation != null) {
-//											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
-//
-//												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
-//												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
-//
-//												if (oldEvent != null && newEvent != null) {
-//													ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
-//												}
-//											}
-//										}
-//									}
+									// ChangeSetTableRow lhsWiringLink = csRow.getNextLHS();
+									// if (lhsWiringLink != null) {
+									// final SlotAllocation newAllocation = lhsWiringLink.getNewDischargeAllocation();
+									// final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
+									//
+									// if (oldAllocation != null && newAllocation != null) {
+									// if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
+									//
+									// final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+									// final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+									//
+									// if (oldEvent != null && newEvent != null) {
+									// ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+									// }
+									// }
+									// }
+									// }
 								}
 							}
 						}
@@ -1284,12 +1289,41 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		@Override
 		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pin, final ScenarioResult other, final Table table,
 				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
+			viewer.getGanttChart().getGanttComposite().setTodaySupplier(null);
+			if (pin != null) {
+				final LNGScenarioModel scenarioModel = pin.getTypedRoot(LNGScenarioModel.class);
+				if (scenarioModel != null) {
+					final LocalDate today = scenarioModel.getPromptPeriodStart();
+					if (today != null) {
+						viewer.getGanttChart().getGanttComposite().setTodaySupplier(() -> {
+							final Calendar cal = Calendar.getInstance();
+							cal.setTimeInMillis(today.atStartOfDay().toEpochSecond(ZoneOffset.UTC) * 1000L);
+							return cal;
+						});
+					}
+				}
+			}
 			// Do Nothing
 			SchedulerView.this.table = table;
 		}
 
 		@Override
 		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioResult> others, final Table table, final List<LNGScenarioModel> rootObjects) {
+			viewer.getGanttChart().getGanttComposite().setTodaySupplier(null);
+			for (final ScenarioResult pin : others) {
+				final LNGScenarioModel scenarioModel = pin.getTypedRoot(LNGScenarioModel.class);
+				if (scenarioModel != null) {
+					final LocalDate today = scenarioModel.getPromptPeriodStart();
+					if (today != null) {
+						viewer.getGanttChart().getGanttComposite().setTodaySupplier(() -> {
+							final Calendar cal = Calendar.getInstance();
+							cal.setTimeInMillis(today.atStartOfDay().toEpochSecond(ZoneOffset.UTC) * 1000L);
+							return cal;
+						});
+						break;
+					}
+				}
+			}
 			// Do Nothing
 			SchedulerView.this.table = table;
 		}

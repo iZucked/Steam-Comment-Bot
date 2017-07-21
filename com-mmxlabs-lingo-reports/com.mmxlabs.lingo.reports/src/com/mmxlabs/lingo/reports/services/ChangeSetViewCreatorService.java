@@ -109,7 +109,12 @@ public class ChangeSetViewCreatorService {
 			final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 			for (final MPerspective p : perspectives) {
 				if (p.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective")) {
-					partService.switchPerspective(p);
+					try {
+						partService.switchPerspective(p);
+					} catch (final IllegalStateException e) {
+						// SG: I have seen this happen when we have a modal dialog open (it was the optimisation params).
+						log.error("Unable to open compare perspective", e);
+					}
 					foundPerspective = true;
 					break;
 				}
