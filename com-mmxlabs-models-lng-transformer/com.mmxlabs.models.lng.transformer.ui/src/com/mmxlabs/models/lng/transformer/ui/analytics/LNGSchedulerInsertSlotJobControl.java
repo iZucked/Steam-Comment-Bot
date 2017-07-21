@@ -190,7 +190,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
 		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, plan, originalEditingDomain, null, extraService, null, false, hints);
 
-		if (userSettings.isSetPeriodStart() || userSettings.isSetPeriodEnd()) {
+		if (userSettings.isSetPeriodStartDate() || userSettings.isSetPeriodEnd()) {
 			// Map between original and possible period scenario
 			targetOptimiserSlots = new LinkedList<>();
 			targetOptimiserEvents = new LinkedList<>();

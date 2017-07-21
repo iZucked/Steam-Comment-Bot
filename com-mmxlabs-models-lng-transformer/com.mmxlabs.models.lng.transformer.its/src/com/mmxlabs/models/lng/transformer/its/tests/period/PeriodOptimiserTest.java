@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.period;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.concurrent.ExecutorService;
@@ -81,7 +82,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2013, 6), DateAndCurveHelper.createYearMonth(2015, 10));
+		tester.periodOptimise(LocalDate.of(2013, 6, 1), DateAndCurveHelper.createYearMonth(2015, 10));
 
 		Assert.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -107,7 +108,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 9), DateAndCurveHelper.createYearMonth(2014, 10));
+		tester.periodOptimise(LocalDate.of(2014, 9, 1), DateAndCurveHelper.createYearMonth(2014, 10));
 
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -137,7 +138,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 9), DateAndCurveHelper.createYearMonth(2014, 10));
+		tester.periodOptimise(LocalDate.of(2014, 9, 1), DateAndCurveHelper.createYearMonth(2014, 10));
 
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -184,7 +185,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 8), DateAndCurveHelper.createYearMonth(2014, 9));
+		tester.periodOptimise(LocalDate.of(2014, 8, 1), DateAndCurveHelper.createYearMonth(2014, 9));
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
@@ -371,14 +372,14 @@ public class PeriodOptimiserTest {
 			return plan;
 		}
 
-		public void periodOptimise(final YearMonth start, final YearMonth end) throws Exception {
+		public void periodOptimise(final LocalDate start, final YearMonth end) throws Exception {
 			ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 			try {
 
 				final OptimisationPlan plan = getPlan();
 
-				plan.getUserSettings().setPeriodStart(start);
+				plan.getUserSettings().setPeriodStartDate(start);
 				plan.getUserSettings().setPeriodEnd(end);
 
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,

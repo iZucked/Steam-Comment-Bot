@@ -18,15 +18,15 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
 
-					<dependency-resolution>
-						<extraRequirements>
-							<requirement>
-								<type>eclipse-plugin</type>
-								<id>org.hamcrest</id>
-								<versionRange>0.0.0</versionRange>
-							</requirement>
-						</extraRequirements>
-					</dependency-resolution>
+<!-- 					<dependency-resolution> -->
+<!-- 						<extraRequirements> -->
+<!-- 							<requirement> -->
+<!-- 								<type>eclipse-plugin</type> -->
+<!-- 								<id>org.hamcrest</id> -->
+<!-- 								<versionRange>0.0.0</versionRange> -->
+<!-- 							</requirement> -->
+<!-- 						</extraRequirements> -->
+<!-- 					</dependency-resolution> -->
 					
 				</configuration>
 			</plugin>

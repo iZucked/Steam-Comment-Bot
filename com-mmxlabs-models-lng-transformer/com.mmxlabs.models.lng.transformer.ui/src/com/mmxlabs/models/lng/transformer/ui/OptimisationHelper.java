@@ -3,6 +3,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
@@ -268,8 +269,8 @@ public final class OptimisationHelper {
 			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
 			{
 				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
 				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
@@ -396,7 +397,7 @@ public final class OptimisationHelper {
 								if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
 									return ValidationStatus.error("Similarity must be enabled to use action sets");
 								}
-								final YearMonth periodStart = userSettings.getPeriodStart();
+								final LocalDate periodStart = userSettings.getPeriodStartDate();
 								final YearMonth periodEnd = userSettings.getPeriodEnd();
 								if (periodStart != null && periodEnd != null) {
 									// 3 month window?
@@ -505,8 +506,8 @@ public final class OptimisationHelper {
 			// Check period optimisation is permitted
 			if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
 				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_START,
-						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (dd/mm/yyyy)", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
 				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
@@ -692,10 +693,10 @@ public final class OptimisationHelper {
 		similarityObjective.setEnabled(true);
 		similarityObjective.setWeight(1.0);
 
-		final YearMonth periodStart = userSettings.getPeriodStart();
-		final YearMonth periodEnd = userSettings.getPeriodEnd();
+		final @Nullable LocalDate periodStart = userSettings.getPeriodStartDate();
+		final @Nullable YearMonth periodEnd = userSettings.getPeriodEnd();
 
-		final YearMonth periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
+		final LocalDate periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
 		final YearMonth periodEndOrDefault = getPeriodEndOrDefault(periodEnd, lngScenarioModel);
 
 		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
@@ -739,7 +740,7 @@ public final class OptimisationHelper {
 
 		int epochLength;
 		// TODO: make this better!
-		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
+		if (userSettings.isSetPeriodStartDate() && userSettings.isSetPeriodEnd()) {
 			epochLength = EPOCH_LENGTH_PERIOD;
 		} else {
 			epochLength = EPOCH_LENGTH_FULL;
@@ -773,7 +774,7 @@ public final class OptimisationHelper {
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 	}
 
-	private static boolean shouldDisableActionSets(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
+	private static boolean shouldDisableActionSets(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
 		if (periodStart == null || periodEnd == null) {
 			return true;
 		}
@@ -789,7 +790,7 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
+	public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
 		if (periodStart == null || periodEnd == null || mode == null || mode == SimilarityMode.OFF) {
 			return ScenarioUtils.createOffSimilaritySettings();
 		} else {
@@ -802,7 +803,7 @@ public final class OptimisationHelper {
 			copy.setBuildActionSets(false);
 		}
 		if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
-			copy.unsetPeriodStart();
+			copy.unsetPeriodStartDate();
 			copy.unsetPeriodEnd();
 		}
 		if (!LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
@@ -830,10 +831,10 @@ public final class OptimisationHelper {
 		}
 		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
 		// them doing the right thing
-		if (from.isSetPeriodStart() == false || from.getPeriodStart() == null) {
-			to.unsetPeriodStart();
+		if (from.isSetPeriodStartDate() == false || from.getPeriodStartDate() == null) {
+			to.unsetPeriodStartDate();
 		} else {
-			to.setPeriodStart(from.getPeriodStart());
+			to.setPeriodStartDate(from.getPeriodStartDate());
 		}
 		if (from.isSetPeriodEnd() == false || from.getPeriodEnd() == null) {
 			to.unsetPeriodEnd();
@@ -866,11 +867,11 @@ public final class OptimisationHelper {
 				actionSetErrorMessage = "Unable to run with Action Sets as similarity is turned off";
 			}
 			if (to.isBuildActionSets()) {
-				if (to.getPeriodStart() == null && to.getPeriodEnd() == null) {
+				if (to.getPeriodStartDate() == null && to.getPeriodEnd() == null) {
 					actionSetErrorMessage = "Unable to run with Action Sets as there is no period range set";
 					to.setBuildActionSets(false);
 				} else {
-					final YearMonth periodStart = to.getPeriodStart();
+					final LocalDate periodStart = to.getPeriodStartDate();
 					final YearMonth periodEnd = to.getPeriodEnd();
 					if (periodStart != null && periodEnd != null) {
 						// 3 month window?
@@ -940,7 +941,7 @@ public final class OptimisationHelper {
 		}
 	}
 
-	private static YearMonth getPeriodStartOrDefault(final YearMonth periodStart, final LNGScenarioModel scenario) {
+	private static LocalDate getPeriodStartOrDefault(final LocalDate periodStart, final LNGScenarioModel scenario) {
 		if (periodStart != null) {
 			return periodStart;
 		} else if (scenario == null) {
@@ -955,9 +956,10 @@ public final class OptimisationHelper {
 				}
 			});
 			if (loadSlots.isEmpty()) {
-				return YearMonth.of(2000, 1);
+				// FIXME: (SG) This is not always a good idea... I have seen arrays created to hold data from 2000 to now - and this can take a long time.
+				return LocalDate.of(2000, 1, 1);
 			}
-			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
+			return loadSlots.get(0).getWindowStartWithSlotOrPortTime().toLocalDate();
 		}
 	}
 

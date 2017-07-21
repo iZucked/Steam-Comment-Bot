@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,7 +22,7 @@ public class SimilarityUIParameters {
 	private static final double highW = 32.0 / 3.0;
 	private static final double topW = 64.0 / 3.0;
 
-	public static SimilaritySettings getSimilaritySettings(@NonNull final SimilarityMode similarityMode, @NonNull final YearMonth start, @NonNull final YearMonth end) {
+	public static SimilaritySettings getSimilaritySettings(@NonNull final SimilarityMode similarityMode, @NonNull final LocalDate start, @NonNull final YearMonth end) {
 		final int monthsInPeriod = Months.between(start, end);
 		final SimilaritySettings similaritySettings;
 

@@ -416,7 +416,7 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private final Map<IVesselAvailability, BallastBonusContract> oVesselAvailabilityToEBallastBonusContractMap = new HashMap<>();
 
-	private Set<ISlotTransformer> slotTransformers = new LinkedHashSet<>();
+	private final Set<ISlotTransformer> slotTransformers = new LinkedHashSet<>();
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -476,7 +476,7 @@ public class LNGScenarioTransformer {
 		allTransformerExtensions.add(extension);
 	}
 
-	private void addSlotTransformer(ISlotTransformer slotTransformer) {
+	private void addSlotTransformer(final ISlotTransformer slotTransformer) {
 		slotTransformers.add(slotTransformer);
 	}
 
@@ -517,10 +517,10 @@ public class LNGScenarioTransformer {
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(Instant.from(dateHelper.getEarliestTime()).toEpochMilli());
 
-		if (rootObject.isSetPromptPeriodStart()) {
+		if (rootObject.getPromptPeriodStart() != null) {
 			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodStart()));
 		}
-		if (rootObject.isSetPromptPeriodEnd()) {
+		if (rootObject.getPromptPeriodEnd() != null) {
 			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodEnd()));
 		}
 
@@ -528,9 +528,9 @@ public class LNGScenarioTransformer {
 			promptPeriodProviderEditor.setEndOfSchedulingPeriod(dateHelper.convertTime(rootObject.getSchedulingEndDate()));
 		}
 
-		if (userSettings.isSetPeriodStart() && userSettings.getPeriodStart() != null) {
+		if (userSettings.isSetPeriodStartDate() && userSettings.getPeriodStartDate() != null) {
 			promptPeriodProviderEditor.setPeriodOptimisation(true);
-			promptPeriodProviderEditor.setStartOfOptimisationPeriod(dateHelper.convertTime(userSettings.getPeriodStart()));
+			promptPeriodProviderEditor.setStartOfOptimisationPeriod(dateHelper.convertTime(userSettings.getPeriodStartDate()));
 		}
 		if (userSettings.isSetPeriodEnd() && userSettings.getPeriodEnd() != null) {
 			promptPeriodProviderEditor.setPeriodOptimisation(true);
@@ -853,23 +853,23 @@ public class LNGScenarioTransformer {
 		return optimisationData;
 	}
 
-	private void transformBallastBonusContract(final IVesselAvailability vesselAvailability, BallastBonusContract eBallastBonusContract) {
+	private void transformBallastBonusContract(final IVesselAvailability vesselAvailability, final BallastBonusContract eBallastBonusContract) {
 		if (eBallastBonusContract != null) {
 			for (final IBallastBonusContractTransformer ballastBonusContractTransformer : ballastBonusContractTransformers) {
 				// This can be null if the availability is generated from a Spot option
 				@Nullable
-				IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
+				final IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
 				vesselAvailability.setBallastBonusContract(ballastBonusContract);
 			}
 		}
 	}
 
-	private @Nullable IBallastBonusContract createAndGetBallastBonusContract(BallastBonusContract eBallastBonusContract) {
+	private @Nullable IBallastBonusContract createAndGetBallastBonusContract(final BallastBonusContract eBallastBonusContract) {
 		if (eBallastBonusContract != null) {
 			for (final IBallastBonusContractTransformer ballastBonusContractTransformer : ballastBonusContractTransformers) {
 				// This can be null if the availability is generated from a Spot option
 				@Nullable
-				IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
+				final IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
 				if (ballastBonusContract != null) {
 					return ballastBonusContract;
 				}
@@ -986,7 +986,7 @@ public class LNGScenarioTransformer {
 
 			if (assignableElement instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignableElement;
-				List<IPortSlot> allOptimiserSlots = new LinkedList<>();
+				final List<IPortSlot> allOptimiserSlots = new LinkedList<>();
 				IPortSlot prevSlot = null;
 				for (final Slot slot : cargo.getSortedSlots()) {
 
@@ -1917,6 +1917,16 @@ public class LNGScenarioTransformer {
 				// Calculate timezone end date for time window
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
+				// Should this market month be included?
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+					tzStartTime = tzStartTime.plusMonths(1);
+					continue;
+				}
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+					tzStartTime = tzStartTime.plusMonths(1);
+					continue;
+				}
+
 				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
 				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
@@ -1956,11 +1966,15 @@ public class LNGScenarioTransformer {
 								// As we have no port we create two timewindows. One is pure UTC which we base the EMF Slot date on and shift for the slot binding. The second is UTC with a -12/+14
 								// flex for timezones passed into the optimiser slot. This combination allows the slot to be matched against any slot in the same month in any timezone, but be
 								// restricted to match the month boundary in that timezone.
+								final int trimmedStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+										Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(tzStartTime)));
+								final int end = dateHelper.convertTime(tzEndTime);
+								assert end > trimmedStart;
 
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
-								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
+								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
+								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(trimmedStart, end);
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
@@ -2059,6 +2073,16 @@ public class LNGScenarioTransformer {
 				// Calculate timezone end date for time window
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
+				// Should this market month be included?
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+					tzStartTime = tzStartTime.plusMonths(1);
+					continue;
+				}
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+					tzStartTime = tzStartTime.plusMonths(1);
+					continue;
+				}
+
 				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
@@ -2098,10 +2122,15 @@ public class LNGScenarioTransformer {
 								// for timezones passed into the optimiser slot. This combination allows the slot to be matched against any slot in the same month in any timezone, but be restricted to
 								// match the month boundary in that timezone.
 
+								final int trimmedStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+										Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(tzStartTime)));
+								final int end = dateHelper.convertTime(tzEndTime);
+								assert end > trimmedStart;
+
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
-								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
+								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
+								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(trimmedStart, end);
 
 								final String typePrefix = "FS-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
@@ -2232,6 +2261,16 @@ public class LNGScenarioTransformer {
 						// Calculate timezone end date for time window
 						final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
+						// Should this market month be included?
+						if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+							tzStartTime = tzStartTime.plusMonths(1);
+							continue;
+						}
+						if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+							tzStartTime = tzStartTime.plusMonths(1);
+							continue;
+						}
+
 						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
@@ -2241,13 +2280,17 @@ public class LNGScenarioTransformer {
 							marketSlots.add(portSlot);
 							marketGroupSlots.add(portSlot);
 						}
+						final int trimmedStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+								Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(tzStartTime)));
+						final int end = dateHelper.convertTime(tzEndTime);
+						assert end > trimmedStart;
 
 						final int remaining = getCappedRemainingSpotOptions(count - existing.size());
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
+								final ITimeWindow tw = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
 
 								final String typePrefix = "DS-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
@@ -2360,6 +2403,16 @@ public class LNGScenarioTransformer {
 						// Calculate timezone end date for time window
 						final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
+						// Should this market month be included?
+						if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+							tzStartTime = tzStartTime.plusMonths(1);
+							continue;
+						}
+						if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+							tzStartTime = tzStartTime.plusMonths(1);
+							continue;
+						}
+
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
 						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
@@ -2371,13 +2424,17 @@ public class LNGScenarioTransformer {
 							marketSlots.add(portSlot);
 							marketGroupSlots.add(portSlot);
 						}
+						final int trimmedStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+								Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(tzStartTime)));
+						final int end = dateHelper.convertTime(tzEndTime);
+						assert end > trimmedStart;
 
 						final int remaining = getCappedRemainingSpotOptions(count - existing.size());
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
+								final ITimeWindow tw = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
 								final String typePrefix = "FP-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -3010,8 +3067,8 @@ public class LNGScenarioTransformer {
 
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
-			BallastBonusContract eBallastBonusContract = eVesselAvailability.getAvailabilityOrCharterContractBallastBonusContract();
-			IBallastBonusContract ballastBonusContract = createAndGetBallastBonusContract(eBallastBonusContract);
+			final BallastBonusContract eBallastBonusContract = eVesselAvailability.getAvailabilityOrCharterContractBallastBonusContract();
+			final IBallastBonusContract ballastBonusContract = createAndGetBallastBonusContract(eBallastBonusContract);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
 					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, ballastBonusContract,
@@ -3023,7 +3080,7 @@ public class LNGScenarioTransformer {
 			allVesselAvailabilities.add(vesselAvailability);
 
 			vesselToAvailabilities.get(vessel).add(vesselAvailability);
-			for (IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
+			for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 				vesselAvailabilityTransformer.vesselAvailabilityTransformed(eVesselAvailability, vesselAvailability);
 			}
 		}
@@ -3063,7 +3120,7 @@ public class LNGScenarioTransformer {
 				IEndRequirement charterInEndRule = null;
 				if (charterInMarket.getCharterContract() != null) {
 					if (charterInMarket.getCharterContract() instanceof BallastBonusCharterContract) {
-						BallastBonusCharterContract charterContract = (BallastBonusCharterContract) charterInMarket.getCharterContract();
+						final BallastBonusCharterContract charterContract = (BallastBonusCharterContract) charterInMarket.getCharterContract();
 						if (charterContract.getBallastBonusContract() != null) {
 							ballastBonusContract = createAndGetBallastBonusContract(charterContract.getBallastBonusContract());
 							if (ballastBonusContract != null) {
@@ -3104,7 +3161,7 @@ public class LNGScenarioTransformer {
 						 * set up inaccessible routes
 						 */
 						getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, spotAvailability.getVessel());
-						for (IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
+						for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 							vesselAvailabilityTransformer.charterInVesselAvailabilityTransformed(charterInMarket, spotAvailability);
 						}
 					}
@@ -3155,7 +3212,7 @@ public class LNGScenarioTransformer {
 	private IEndRequirement createDefaultCharterInEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap,
 			final IVesselClass oVesselClass) {
 		@NonNull
-		IEndRequirement allDischargeCharterInEndRequirement = createEndRequirement(builder, portAssociation, null, null,
+		final IEndRequirement allDischargeCharterInEndRequirement = createEndRequirement(builder, portAssociation, null, null,
 				modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()),
 				new HeelOptionConsumer(oVesselClass.getSafetyHeel(), oVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 		return allDischargeCharterInEndRequirement;
@@ -3469,12 +3526,11 @@ public class LNGScenarioTransformer {
 		return builder.createHeelSupplier(minimumHeelInM3, maximumHeelInM3, cargoCV, heelPriceCalculator);
 	}
 
-	private void buildRouteEntryPoints(PortModel portModel, Association<Port, IPort> portAssociation) {
+	private void buildRouteEntryPoints(final PortModel portModel, final Association<Port, IPort> portAssociation) {
 		portModel.getRoutes().forEach(r -> {
-			if (r.getEntryA() != null && r.getEntryB() != null) {
-				if (r.getEntryA().getPort() != null && r.getEntryB().getPort() != null) {
-					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r),
-							ImmutableSet.of(portAssociation.lookup(r.getEntryA().getPort()), portAssociation.lookup(r.getEntryB().getPort())));
+			if (r.getNorthEntrance() != null && r.getSouthEntrance() != null) {
+				if (r.getNorthEntrance().getPort() != null && r.getSouthEntrance().getPort() != null) {
+					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookup(r.getNorthEntrance().getPort()), portAssociation.lookup(r.getSouthEntrance().getPort()));
 				}
 			}
 		});

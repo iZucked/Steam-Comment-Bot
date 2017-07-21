@@ -4,20 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus;
 
-import java.util.Map;
-
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.EndEvent;
-import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.LumpSumContractDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
@@ -30,12 +24,10 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.BallastBonusAnnotation;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.LumpSumBallastBonusRuleAnnotation;
 import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.NotionalJourneyBallastBonusRuleAnnotation;
+import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.RepositioningFeeAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -70,45 +62,63 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 		for (final IResource resource : optimisationData.getResources()) {
 			final ISequence sequence = annotatedSolution.getFullSequences().getSequences().get(resource);
 			if (sequence != null && sequence.size() > 1) {
-				final ISequenceElement endElement = sequence.get(sequence.size() - 1);
 
-				final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
-				final BallastBonusAnnotation annotation = SlotContractHelper.findDetailsAnnotation(profitAndLoss, BallastBonusAnnotation.ANNOTATION_KEY, BallastBonusAnnotation.class);
-				if (annotation != null) {
-					final EndEvent profitAndLossContainer = findEndEvent(endElement);
-					if (profitAndLossContainer != null) {
-						final BallastBonusFeeDetails details = ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails();
-						details.setFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
-						if (annotation.ballastBonusRuleAnnotation != null) {
-							if (annotation.ballastBonusRuleAnnotation instanceof LumpSumBallastBonusRuleAnnotation) {
-								final LumpSumBallastBonusRuleAnnotation ruleA = (LumpSumBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
-								final LumpSumContractDetails lumpSumContractDetails = ScheduleFactory.eINSTANCE.createLumpSumContractDetails();
-								lumpSumContractDetails.setMatchedPort(annotation.matchedPort.getName());
-								lumpSumContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
-								details.setMatchingBallastBonusContractDetails(lumpSumContractDetails);
-							} else if (annotation.ballastBonusRuleAnnotation instanceof NotionalJourneyBallastBonusRuleAnnotation) {
-								final NotionalJourneyBallastBonusRuleAnnotation ruleA = (NotionalJourneyBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
-								final NotionalJourneyContractDetails notionalJourneyContractDetails = ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails();
-								notionalJourneyContractDetails.setMatchedPort(annotation.matchedPort.getName());
+				{
+					final ISequenceElement startElement = sequence.get(0);
 
-								notionalJourneyContractDetails.setReturnPort(ruleA.returnPort.getName());
-								notionalJourneyContractDetails.setDistance(ruleA.distance);
-
-								notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
-								notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
-								notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));
-
-								notionalJourneyContractDetails.setTotalTimeInDays(((double) ruleA.totalTimeInHours) / 24.0);
-								notionalJourneyContractDetails.setHireRate(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.hireRate));
-								notionalJourneyContractDetails.setHireCost(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.totalHireCost));
-
-								notionalJourneyContractDetails.setRouteTaken(ruleA.route.name());
-								notionalJourneyContractDetails.setCanalCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.canalCost));
-								details.setMatchingBallastBonusContractDetails(notionalJourneyContractDetails);
-							}
+					final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_profitAndLoss,
+							IProfitAndLossAnnotation.class);
+					final RepositioningFeeAnnotation annotation = SlotContractHelper.findDetailsAnnotation(profitAndLoss, RepositioningFeeAnnotation.ANNOTATION_KEY, RepositioningFeeAnnotation.class);
+					if (annotation != null) {
+						final StartEvent profitAndLossContainer = ExporterExtensionUtils.findStartEvent(startElement, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
+						if (profitAndLossContainer != null) {
+							profitAndLossContainer.setRepositioningFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.repositioningFee));
 						}
-						// ExporterExtensionUtils.addSlotPNLDetails(profitAndLossContainer, modelSlot, details);
-						profitAndLossContainer.getGeneralPNLDetails().add(details);
+					}
+				}
+				{
+					final ISequenceElement endElement = sequence.get(sequence.size() - 1);
+
+					final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(endElement, SchedulerConstants.AI_profitAndLoss,
+							IProfitAndLossAnnotation.class);
+					final BallastBonusAnnotation annotation = SlotContractHelper.findDetailsAnnotation(profitAndLoss, BallastBonusAnnotation.ANNOTATION_KEY, BallastBonusAnnotation.class);
+					if (annotation != null) {
+						final EndEvent profitAndLossContainer = ExporterExtensionUtils.findEndEvent(endElement, modelEntityMap, outputSchedule, annotatedSolution, vesselProvider);
+						if (profitAndLossContainer != null) {
+							final BallastBonusFeeDetails details = ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails();
+							details.setFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
+							profitAndLossContainer.setBallastBonusFee((int) OptimiserUnitConvertor.convertToExternalFixedCost(annotation.ballastBonusFee));
+							if (annotation.ballastBonusRuleAnnotation != null) {
+								if (annotation.ballastBonusRuleAnnotation instanceof LumpSumBallastBonusRuleAnnotation) {
+									final LumpSumBallastBonusRuleAnnotation ruleA = (LumpSumBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
+									final LumpSumContractDetails lumpSumContractDetails = ScheduleFactory.eINSTANCE.createLumpSumContractDetails();
+									lumpSumContractDetails.setMatchedPort(annotation.matchedPort.getName());
+									lumpSumContractDetails.setLumpSum((int) OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
+									details.setMatchingBallastBonusContractDetails(lumpSumContractDetails);
+								} else if (annotation.ballastBonusRuleAnnotation instanceof NotionalJourneyBallastBonusRuleAnnotation) {
+									final NotionalJourneyBallastBonusRuleAnnotation ruleA = (NotionalJourneyBallastBonusRuleAnnotation) annotation.ballastBonusRuleAnnotation;
+									final NotionalJourneyContractDetails notionalJourneyContractDetails = ScheduleFactory.eINSTANCE.createNotionalJourneyContractDetails();
+									notionalJourneyContractDetails.setMatchedPort(annotation.matchedPort.getName());
+
+									notionalJourneyContractDetails.setReturnPort(ruleA.returnPort.getName());
+									notionalJourneyContractDetails.setDistance(ruleA.distance);
+
+									notionalJourneyContractDetails.setFuelPrice(OptimiserUnitConvertor.convertToExternalPrice(ruleA.fuelPrice));
+									notionalJourneyContractDetails.setTotalFuelUsed(OptimiserUnitConvertor.convertToExternalVolume(ruleA.totalFuelUsed));
+									notionalJourneyContractDetails.setTotalFuelCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.totalFuelCost));
+
+									notionalJourneyContractDetails.setTotalTimeInDays(((double) ruleA.totalTimeInHours) / 24.0);
+									notionalJourneyContractDetails.setHireRate(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.hireRate));
+									notionalJourneyContractDetails.setHireCost(OptimiserUnitConvertor.convertToExternalDailyCost(ruleA.totalHireCost));
+
+									notionalJourneyContractDetails.setRouteTaken(ruleA.route.name());
+									notionalJourneyContractDetails.setCanalCost(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.canalCost));
+									details.setMatchingBallastBonusContractDetails(notionalJourneyContractDetails);
+								}
+							}
+							// ExporterExtensionUtils.addSlotPNLDetails(profitAndLossContainer, modelSlot, details);
+							profitAndLossContainer.getGeneralPNLDetails().add(details);
+						}
 					}
 				}
 			}
@@ -173,44 +183,6 @@ public class BallastBonusContractExtensionExporter implements IExporterExtension
 		modelEntityMap = null;
 		outputSchedule = null;
 		annotatedSolution = null;
-	}
-
-	private EndEvent findEndEvent(final ISequenceElement element) {
-		EndEvent endEvent = null;
-		//
-		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
-			final IResource res = e.getKey();
-			final ISequence seq = e.getValue();
-			if (seq.size() == 0) {
-				continue;
-			}
-			@NonNull
-			final ISequenceElement endElement = seq.get(seq.size() - 1);
-			if (endElement == element) {
-				for (final Sequence sequence : outputSchedule.getSequences()) {
-					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-					if (vesselAvailability == null) {
-						continue;
-					}
-					// Find the matching
-					final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
-
-					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-					if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
-						if (sequence.getEvents().size() > 0) {
-							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
-							if (evt instanceof EndEvent) {
-								endEvent = (EndEvent) evt;
-								break LOOP_OUTER;
-							}
-						}
-					}
-
-				}
-			}
-		}
-		return endEvent;
 	}
 
 }

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
@@ -14,7 +16,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
  */
 public final class PanamaSlotsConstraintCheckerFactory implements IConstraintCheckerFactory {
 
-	public static final String NAME = "PanamaSlotConstraintChecker";
+	public static final @NonNull String NAME = "PanamaSlotConstraintChecker";
 
 	@Override
 	public String getName() {

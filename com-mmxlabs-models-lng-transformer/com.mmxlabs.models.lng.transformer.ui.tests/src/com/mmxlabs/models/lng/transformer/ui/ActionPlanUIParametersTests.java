@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 public class ActionPlanUIParametersTests {
 	@Test
 	public void testLow3Month() {
-		YearMonth start = YearMonth.parse("2015-09");
+		LocalDate start = LocalDate.parse("2015-09-01");
 		YearMonth end = YearMonth.parse("2015-12");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.LOW, start, end, s);
@@ -30,7 +30,7 @@ public class ActionPlanUIParametersTests {
 
 	@Test
 	public void testMed3Month() {
-		YearMonth start = YearMonth.parse("2015-09");
+		LocalDate start = LocalDate.parse("2015-09-01");
 		YearMonth end = YearMonth.parse("2015-12");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.MEDIUM, start, end, s);
@@ -42,7 +42,7 @@ public class ActionPlanUIParametersTests {
 
 	@Test
 	public void testHigh3Month() {
-		YearMonth start = YearMonth.parse("2015-09");
+		LocalDate start = LocalDate.parse("2015-09-01");
 		YearMonth end = YearMonth.parse("2015-12");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.HIGH, start, end, s);
@@ -54,7 +54,7 @@ public class ActionPlanUIParametersTests {
 
 	@Test
 	public void testLow6Month() {
-		YearMonth start = YearMonth.parse("2015-09");
+		LocalDate start = LocalDate.parse("2015-09-01");
 		YearMonth end = YearMonth.parse("2016-03");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 
@@ -67,7 +67,7 @@ public class ActionPlanUIParametersTests {
 
 	@Test
 	public void testMed6Month() {
-		YearMonth start = YearMonth.parse("2015-09");
+		LocalDate start = LocalDate.parse("2015-09-01");
 		YearMonth end = YearMonth.parse("2016-03");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.MEDIUM, start, end, s);
@@ -79,7 +79,7 @@ public class ActionPlanUIParametersTests {
 
 	@Test
 	public void testHigh6Month() {
-		YearMonth start = YearMonth.parse("2015-09");
+		LocalDate start = LocalDate.parse("2015-09-01");
 		YearMonth end = YearMonth.parse("2016-03");
 		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.HIGH, start, end, s);
