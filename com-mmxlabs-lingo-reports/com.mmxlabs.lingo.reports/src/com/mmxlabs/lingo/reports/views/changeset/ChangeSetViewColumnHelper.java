@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -289,6 +290,45 @@ public class ChangeSetViewColumnHelper {
 
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
+
+		// Add total days
+		if (false) {
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setText("Days");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createShippingDaysDeltaLabelProvider(ShippingCostType.HOURS));
+			createWordWrapRenderer(gvc);
+			gvc.getColumn().setCellRenderer(createCellRenderer());
+			gvc.getColumn().setDetail(true);
+			gvc.getColumn().setSummary(false);
+		}
+		if (false) {
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setText("- Hire");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createShippingCostDeltaLabelProvider(ShippingCostType.HIRE_COSTS));
+			createWordWrapRenderer(gvc);
+			gvc.getColumn().setCellRenderer(createCellRenderer());
+			gvc.getColumn().setDetail(true);
+			gvc.getColumn().setSummary(false);
+		}
+		if (false) {
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setText("- Misc");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createShippingCostDeltaLabelProvider(ShippingCostType.COOLDOWN_COSTS, ShippingCostType.HEEL_COST, ShippingCostType.HEEL_REVENUE, ShippingCostType.OTHER_COSTS));
+			createWordWrapRenderer(gvc);
+			gvc.getColumn().setCellRenderer(createCellRenderer());
+			gvc.getColumn().setDetail(true);
+			gvc.getColumn().setSummary(false);
+		}
+
 		// Space col
 		createSpacerColumn();
 		{
@@ -1146,6 +1186,32 @@ public class ChangeSetViewColumnHelper {
 		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before), change -> ChangeSetKPIUtil.getShipping(change, ResultType.After));
 	}
 
+	private CellLabelProvider createShippingDaysDeltaLabelProvider(ShippingCostType shippingCostType) {
+		return createLambdaDaysLabelProvider(change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
+				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
+	}
+
+	private CellLabelProvider createShippingCostDeltaLabelProvider(ShippingCostType shippingCostType) {
+		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
+				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
+	}
+
+	private CellLabelProvider createShippingCostDeltaLabelProvider(ShippingCostType... shippingCostTypes) {
+		return createLambdaLabelProvider(true, false, change -> {
+			long sum = 0L;
+			for (ShippingCostType shippingCostType : shippingCostTypes) {
+				sum += ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType);
+			}
+			return (Number) Long.valueOf(sum);
+		}, change -> {
+			long sum = 0L;
+			for (ShippingCostType shippingCostType : shippingCostTypes) {
+				sum += ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType);
+			}
+			return (Number) Long.valueOf(sum);
+		});
+	}
+
 	private CellLabelProvider createCSLabelProvider() {
 
 		return new CellLabelProvider() {
@@ -1374,6 +1440,52 @@ public class ChangeSetViewColumnHelper {
 							cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 						}
 					}
+				}
+			}
+		};
+	}
+
+	private CellLabelProvider createLambdaDaysLabelProvider(final Function<ChangeSetTableRow, Number> calcF, final Function<ChangeSetTableRow, Number> calcT) {
+
+		final ToIntBiFunction<Number, Number> deltaIntegerUpdater = (f, t) -> {
+			int delta = 0;
+			if (f != null) {
+				delta -= f.intValue();
+			}
+			if (t != null) {
+				delta += t.intValue();
+			}
+			return delta;
+		};
+
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				cell.setFont(null);
+				long delta = 0;
+				if (element instanceof ChangeSetTableGroup) {
+					cell.setFont(boldFont);
+					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+					final List<ChangeSetTableRow> rows = group.getRows();
+					if (rows != null) {
+						for (final ChangeSetTableRow change : rows) {
+							delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
+						}
+					}
+				} else if (element instanceof ChangeSetTableRow) {
+					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+					delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
+				}
+
+				final long originalDelta = delta;
+				delta = (int) Math.round((double) delta / 24.0);
+				if (delta != 0L) {
+					cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+				} else if (originalDelta != 0L) {
+					cell.setText(String.format("%s %s", originalDelta < 0 ? "↓" : "↑", "<1"));
 				}
 			}
 		};

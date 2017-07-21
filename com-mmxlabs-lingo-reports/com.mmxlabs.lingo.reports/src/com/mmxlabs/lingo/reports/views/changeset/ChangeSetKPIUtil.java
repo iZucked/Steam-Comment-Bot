@@ -161,6 +161,14 @@ public class ChangeSetKPIUtil {
 		}
 		return 0L;
 	}
+	public static long getShipping(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, ShippingCostType shippingCostType) {
+		
+		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
+		if (eventGrouping != null) {
+			return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true, shippingCostType);
+		}
+		return 0L;
+	}
 
 	public static @Nullable EventGrouping getEventGrouping(final ChangeSetTableRow tableRow, final ResultType type) {
 
