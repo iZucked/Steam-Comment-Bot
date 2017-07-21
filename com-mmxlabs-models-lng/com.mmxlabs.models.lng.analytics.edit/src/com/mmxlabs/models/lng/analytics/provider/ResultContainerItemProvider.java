@@ -224,6 +224,11 @@ public class ResultContainerItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
 				 ScheduleFactory.eINSTANCE.createCooldown()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createCanalBookingEvent()));
 	}
 
 	/**

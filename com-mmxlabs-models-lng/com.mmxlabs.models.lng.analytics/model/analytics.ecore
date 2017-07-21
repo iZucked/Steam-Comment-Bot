@@ -438,7 +438,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ExistingCharterMarketOption" eSuperTypes="#//ShippingOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>  
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ActionableSetPlan" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
       <details key="nonUniqueChildren" value="true"/>
