@@ -51,6 +51,10 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) extraContext.getRootObject();
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			final CanalBookings canalBookings = cargoModel.getCanalBookings();
+			if (canalBookings == null) {
+				return Activator.PLUGIN_ID;
+			}
+			
 			// if (scenarioModel.getPromptPeriodStart() != null && canalBookings != null) {
 			// final LocalDate date = scenarioModel.getPromptPeriodStart();
 			// final LocalDate strictBound = date.plusDays(canalBookings.getStrictBoundaryOffsetDays());
