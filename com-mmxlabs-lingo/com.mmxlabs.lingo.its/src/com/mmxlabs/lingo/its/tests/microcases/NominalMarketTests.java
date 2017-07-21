@@ -619,7 +619,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 11, 1));
 
 		evaluateWithLSOTest(true, plan -> {
-			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 1));
 
 			plan.getUserSettings().setShippingOnly(true);
@@ -671,7 +671,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 1, 1));
 
 		evaluateWithLSOTest(true, plan -> {
-			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2015, 10, 1));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
 			plan.getUserSettings().setShippingOnly(true);
 			ScenarioUtils.setLSOStageIterations(plan, 10_000);

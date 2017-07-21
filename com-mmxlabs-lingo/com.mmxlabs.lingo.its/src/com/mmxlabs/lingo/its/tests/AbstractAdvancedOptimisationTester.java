@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
@@ -59,17 +60,17 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	private static final boolean RUN_LIMITED_ITERATION_CASES = true;
 
 	private @NonNull final String scenarioURL;
-	private @Nullable final YearMonth periodStart;
+	private @Nullable final LocalDate periodStart;
 	private @Nullable final YearMonth periodEnd;
 	private final boolean runGCO;
 
-	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart,
+	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart,
 			@Nullable final YearMonth periodEnd) {
 		this(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, false);
 
 	}
 
-	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart,
+	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart,
 			@Nullable final YearMonth periodEnd, final boolean runGCO) {
 		this.scenarioURL = scenarioURL;
 		this.periodStart = periodStart;
@@ -151,7 +152,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 
 			if (periodStart != null) {
-				userSettings.setPeriodStart(periodStart);
+				userSettings.setPeriodStartDate(periodStart);
 			}
 			if (periodEnd != null) {
 				userSettings.setPeriodEnd(periodEnd);
@@ -177,7 +178,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			Assert.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
 			Assert.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
 			Assert.assertFalse(planUserSettings.isShippingOnly());
-			Assert.assertEquals(periodStart, planUserSettings.getPeriodStart());
+			Assert.assertEquals(periodStart, planUserSettings.getPeriodStartDate());
 			Assert.assertEquals(periodEnd, planUserSettings.getPeriodEnd());
 
 			// scenarioRunner.initAndEval();

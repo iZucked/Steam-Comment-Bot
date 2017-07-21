@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesE
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.rcp.common.Constants;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -60,8 +61,11 @@ public class Activator extends AbstractUIPlugin {
 		injector.injectMembers(this);
 
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
-		// Also in the AbstractOptimisationResultTester, but does not seem to always work...
+
 		Locale.setDefault(Locale.UK);
+
+		// The vertical report can have some current time based properties which break the ITS comparison
+		System.setProperty(Constants.PROPERTY_RUNNING_ITS, Boolean.TRUE.toString());
 	}
 
 	/*

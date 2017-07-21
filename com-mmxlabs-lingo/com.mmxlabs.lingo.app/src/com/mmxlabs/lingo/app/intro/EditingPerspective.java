@@ -18,7 +18,11 @@ public class EditingPerspective implements IPerspectiveFactory {
 
 		// final IFolderLayout costsFolder = layout.createFolder("costsFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
 
-		layout.addView(CostsRoot + "CanalCostsView", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout canalFolder = layout.createFolder("canalFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
+
+		canalFolder.addView(CostsRoot + "CanalCostsView");
+		canalFolder.addView("com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView");
+
 		layout.addView(CostsRoot + "PortCostsView", IPageLayout.BOTTOM, 0.60f, CostsRoot + "CanalCostsView");
 		layout.addView(CostsRoot + "CooldownCostsView", IPageLayout.BOTTOM, 0.5f, CostsRoot + "PortCostsView");
 
@@ -44,10 +48,11 @@ public class EditingPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.PortCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.CooldownCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
+		layout.addShowViewShortcut("com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView");
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
-//		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView");
-//		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView");
+		// layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView");
+		// layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView");
 
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 	}

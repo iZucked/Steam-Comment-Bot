@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,12 +25,12 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 @RunWith(value = Parameterized.class)
 public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimisationTester {
 
-	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart, @Nullable final YearMonth periodEnd) {
+	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd) {
 		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, false);
 
 	}
 
-	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart, @Nullable final YearMonth periodEnd,
+	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd,
 			boolean runGCO) {
 		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, runGCO);
 	}

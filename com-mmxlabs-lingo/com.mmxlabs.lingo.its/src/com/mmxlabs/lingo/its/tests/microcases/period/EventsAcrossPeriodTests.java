@@ -116,7 +116,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 3));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 3, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -215,7 +215,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 3));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 3, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -314,7 +314,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 3));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 3, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -441,7 +441,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 3));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 3, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);

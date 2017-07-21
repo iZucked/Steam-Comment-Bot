@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -46,7 +45,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -105,7 +103,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -191,7 +189,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -275,7 +273,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -384,7 +382,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -488,7 +486,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2017, 1));
+		userSettings.setPeriodStartDate(LocalDate.of(2017, 1, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2017, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -588,7 +586,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 4));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 4, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);

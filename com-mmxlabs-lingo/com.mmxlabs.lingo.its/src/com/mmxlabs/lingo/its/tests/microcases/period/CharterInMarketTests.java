@@ -124,7 +124,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 11));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 11, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -241,7 +241,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		userSettings.setPeriodStart(YearMonth.of(2015, 11));
+		userSettings.setPeriodStartDate(LocalDate.of(2015, 11, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
 
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);

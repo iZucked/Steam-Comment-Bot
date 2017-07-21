@@ -73,7 +73,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2017, 1));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2017, 1, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2017, 7));
 		}, null, scenarioRunner -> {
 
@@ -146,7 +146,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2017, 1));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2017, 1, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2017, 5));
 		}, null, scenarioRunner -> {
 
@@ -220,7 +220,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2017, 5));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2017, 5, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2017, 7));
 		}, null, scenarioRunner -> {
 
@@ -243,7 +243,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 			// TODO: Decide what this should be! Is it previous heel or next heel?
 			// TODO: (Add another trimmed cargo with another CV value to test the correct one has been picked up)
 			// TODO: The period transformer hard codes 22.8!
-			 Assert.assertEquals(22.3, va.getStartHeel().getCvValue(), 0.0);
+			Assert.assertEquals(22.3, va.getStartHeel().getCvValue(), 0.0);
 
 			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assert.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
@@ -297,7 +297,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		evaluateWithLSOTest(false, optimisationPlan -> {
-			optimisationPlan.getUserSettings().setPeriodStart(YearMonth.of(2017, 1));
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2017, 1, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2017, 2));
 		}, null, scenarioRunner -> {
 
