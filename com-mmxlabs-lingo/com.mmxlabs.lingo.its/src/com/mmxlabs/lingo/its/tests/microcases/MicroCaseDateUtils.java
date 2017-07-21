@@ -13,6 +13,10 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 
 public class MicroCaseDateUtils {
 	
+	public static ZonedDateTime getDateTimeFromHour(LNGScenarioToOptimiserBridge bridge, int hours, ZoneId tz) {
+		return getDateTimeFromHour(bridge.getDataTransformer().getModelEntityMap(), hours, tz.getId());
+	}
+	
 	public static ZonedDateTime getDateTimeFromHour(LNGScenarioToOptimiserBridge bridge, int hours, String tz) {
 		return getDateTimeFromHour(bridge.getDataTransformer().getModelEntityMap(), hours, tz);
 	}
@@ -22,7 +26,7 @@ public class MicroCaseDateUtils {
 	}
 	
 	public static ZonedDateTime getZonedDateTime(int year, int month, int day, int hour, Port port) {
-		return getZonedDateTime(year, month, day, hour, port.getTimeZone());
+		return getZonedDateTime(year, month, day, hour, port.getZoneId());
 	}
 
 	public static ZonedDateTime getZonedDateTime(int year, int month, int day, int hour, String tz) {

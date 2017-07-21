@@ -62,8 +62,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -180,8 +180,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();

@@ -81,8 +81,8 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();

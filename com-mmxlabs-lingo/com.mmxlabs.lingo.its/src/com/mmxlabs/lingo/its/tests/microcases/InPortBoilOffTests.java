@@ -119,6 +119,9 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	public void constructor() throws Exception {
 
 		super.constructor();
+		
+		portModelBuilder.setAllExistingPortsToUTC();
+		
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 		// Create the required basic elements
@@ -129,10 +132,8 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0)).build();
 
 		portA = portFinder.findPort("Point Fortin");
-		portA.setTimeZone("UTC");
 
 		portB = portFinder.findPort("Dominion Cove Point LNG");
-		portB.setTimeZone("UTC");
 		portB.setDefaultStartTime(4);
 		portB.setDefaultWindowSize(0);
 	}

@@ -72,7 +72,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 			final SimpleCargoAllocation sca = new SimpleCargoAllocation(cargoAllocation);
 
-			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, ZoneId.of(dischargePort.getTimeZone()));
+			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, dischargePort.getZoneId());
 
 			Assert.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
 			Assert.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
@@ -114,7 +114,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 			final SimpleCargoAllocation sca = new SimpleCargoAllocation(cargoAllocation);
 
-			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, ZoneId.of(dischargePort.getTimeZone()));
+			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, dischargePort.getZoneId());
 
 			Assert.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
 			Assert.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());
@@ -155,7 +155,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 			final SimpleCargoAllocation sca = new SimpleCargoAllocation(cargoAllocation);
 
-			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, ZoneId.of(dischargePort.getTimeZone()));
+			final ZonedDateTime transferTime = ZonedDateTime.of(2015, 12, 11, 0, 0, 0, 0, dischargePort.getZoneId());
 
 			Assert.assertEquals(transferTime, sca.getLoadAllocation().getSlotVisit().getStart());
 			Assert.assertEquals(transferTime, sca.getDischargeAllocation().getSlotVisit().getStart());

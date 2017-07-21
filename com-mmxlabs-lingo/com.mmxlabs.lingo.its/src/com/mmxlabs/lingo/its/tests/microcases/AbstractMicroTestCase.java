@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.util.DistanceModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
@@ -60,6 +61,8 @@ public abstract class AbstractMicroTestCase {
 	protected SpotMarketsModelBuilder spotMarketsModelBuilder;
 	protected SpotMarketsModelFinder spotMarketsModelFinder;
 	protected PricingModelBuilder pricingModelBuilder;
+	protected DistanceModelBuilder distanceModelBuilder;
+
 	protected BaseLegalEntity entity;
 	protected IScenarioDataProvider scenarioDataProvider;
 
@@ -90,12 +93,13 @@ public abstract class AbstractMicroTestCase {
 		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = (LNGScenarioModel) scenarioDataProvider.getScenario();
 
-		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
 		portModelBuilder = scenarioModelBuilder.getPortModelBuilder();
+		distanceModelBuilder = scenarioModelBuilder.getDistanceModelBuilder();
 		portFinder = scenarioModelFinder.getPortModelFinder();
 		spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
 
@@ -137,7 +141,7 @@ public abstract class AbstractMicroTestCase {
 		spotMarketsModelBuilder = null;
 		pricingModelBuilder = null;
 		entity = null;
-		
+
 		if (scenarioDataProvider != null) {
 			scenarioDataProvider.close();
 		}

@@ -34,13 +34,13 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.pricing.util.CostModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
@@ -134,15 +134,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void panamaSlotAvailableTest_Constraint() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -151,10 +146,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -187,14 +178,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void panamaSlotNoDoubleAssignmentTest() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 6), null);
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -210,10 +197,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -255,15 +238,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void panamaSlotUnavailableTest() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -272,10 +250,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
@@ -311,15 +285,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void bookingButNoVoyageTest() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -328,10 +297,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Barcelona");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -369,13 +334,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void nonMatchingBookingTest() {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 10), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 10), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -384,10 +346,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -424,12 +382,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void bookingAssignedToSlotTest() {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -439,16 +393,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
 
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
-
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
 		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
 
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -478,12 +428,9 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void asssignedBookingNotUsedTest() {
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
@@ -501,17 +448,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
 
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
-
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
 
 		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
 		final Cargo cargo2 = createFobDesCargo(vesselAvailability2, port1, port2, loadDate, dischargeDate);
 
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), cargo2.getSortedSlots().get(0));
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), cargo2.getSortedSlots().get(0));
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -547,13 +490,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void journeyCanBeMadeDirectTest() {
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -562,10 +502,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Chita");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(25);
@@ -603,16 +539,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void choosePanamaIfRelaxedTest() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 		lngScenarioModel.getCargoModel().getCanalBookings().setStrictBoundaryOffsetDays(0);
 		lngScenarioModel.getCargoModel().getCanalBookings().setRelaxedBoundaryOffsetDays(0);
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
 
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -620,10 +553,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final Port port1 = portFinder.findPort("Sabine Pass");
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.AUGUST, 1, 0, 0, 0);
 		// journey could be made direct
@@ -662,15 +591,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void marginTest() {
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		lngScenarioModel.getCargoModel().getCanalBookings().setArrivalMarginHours(4);
 
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 6), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -679,10 +605,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port2 = portFinder.findPort("Quintero");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("America/Panama");
-		port2.setTimeZone("America/Panama");
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(10);
@@ -719,14 +641,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void windowEndTrimmingTest() {
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
 
-		final Route panama = potentialPanama.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -738,10 +656,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port port3 = portFinder.findPort("Himeji");
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime loadDate1 = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate1 = loadDate1.plusDays(2);
@@ -814,16 +728,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void noSuezDistanceAvailableTest() {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
-		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
-		final Optional<Route> potentialSuez = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.SUEZ).findFirst();
 
-		final Route panama = potentialPanama.get();
-		final Route suez = potentialSuez.get();
-
-		final EntryPoint colon = panama.getNorthEntrance();
-
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 7), null);
+		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 
@@ -836,15 +746,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		@NonNull
 		final Port portUnrelevant = portFinder.findPort("Brownsville");
 
-		final boolean removed = suez.getLines().removeIf(e -> e.getFrom().equals(port1) && e.getTo().equals(port2));
+		final boolean removed = distanceModelBuilder.setPortToPortDistance(port1, port2, RouteOption.SUEZ, Integer.MAX_VALUE, true);
 		assert removed;
-
-		final boolean removed2 = suez.getLines().removeIf(e -> e.getFrom().equals(port2) && e.getTo().equals(port1));
-		assert removed2;
-
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
 
 		final LocalDateTime startDate = LocalDateTime.of(2017, Month.MAY, 15, 0, 0, 0);
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
@@ -924,7 +827,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime dischargeDate = loadDate.plusDays(11);
 
 		// Direct is twice as far as panama
-		portModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -1002,7 +905,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime dischargeDate = loadDate.plusDays(11);
 
 		// Direct is twice as far as panama
-		portModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -1080,7 +983,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime dischargeDate = loadDate.plusDays(11);
 
 		// Direct is twice as far as panama
-		portModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -1157,7 +1060,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		final LocalDateTime dischargeDate = loadDate.plusDays(11);
 
 		// Direct is twice as far as panama
-		portModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //

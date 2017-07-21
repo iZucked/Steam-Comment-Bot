@@ -280,6 +280,10 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 	 */
 	@Test
 	public void test_Period_WithNoVesselDates_PeriodTrimmed() {
+
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		@NonNull
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
@@ -295,9 +299,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		@NonNull
 		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
 
-		loadPort.setTimeZone("UTC");
 		loadPort.setDefaultStartTime(0);
-		dischargePort.setTimeZone("UTC");
 		dischargePort.setDefaultStartTime(0);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -365,6 +367,10 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 	 */
 	@Test
 	public void test_Period_WithVesselDates_PeriodTrimmed() {
+
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		@NonNull
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
@@ -381,9 +387,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		@NonNull
 		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
 
-		loadPort.setTimeZone("UTC");
 		loadPort.setDefaultStartTime(0);
-		dischargePort.setTimeZone("UTC");
 		dischargePort.setDefaultStartTime(0);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -450,6 +454,9 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 	 */
 	@Test
 	public void test_Period_WithVesselDates_Retain_vessel_dates() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		@NonNull
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
@@ -466,9 +473,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		@NonNull
 		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
 
-		loadPort.setTimeZone("UTC");
 		loadPort.setDefaultStartTime(0);
-		dischargePort.setTimeZone("UTC");
 		dischargePort.setDefaultStartTime(0);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -535,6 +540,10 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 	 */
 	@Test
 	public void test_Period_WithVesselDates_HorizonInPeriod() {
+
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		@NonNull
 		LocalDate horizon = LocalDate.of(2016, 1, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
@@ -551,9 +560,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		@NonNull
 		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
 
-		loadPort.setTimeZone("UTC");
 		loadPort.setDefaultStartTime(0);
-		dischargePort.setTimeZone("UTC");
 		dischargePort.setDefaultStartTime(0);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -622,6 +629,9 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 	 */
 	@Test
 	public void test_Period_FB_2372() {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		@NonNull
 		LocalDate horizon = LocalDate.of(2017, 6, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
@@ -640,9 +650,7 @@ public class VesselAvailabiltyStateInPeriodTests extends AbstractMicroTestCase {
 		@NonNull
 		Port dischargePort = portFinder.findPort("Dominion Cove Point LNG");
 
-		loadPort.setTimeZone("UTC");
 		loadPort.setDefaultStartTime(0);
-		dischargePort.setTimeZone("UTC");
 		dischargePort.setDefaultStartTime(0);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //

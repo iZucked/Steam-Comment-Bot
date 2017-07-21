@@ -154,13 +154,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_Exact() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
-
-		// map into same timezone to make expectations easier
-		portFinder.findPort("Point Fortin").setTimeZone("UTC");
-		portFinder.findPort("Dominion Cove Point LNG").setTimeZone("UTC");
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
@@ -211,13 +210,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_SpotCreated() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
-
-		// map into same timezone to make expectations easier
-		portFinder.findPort("Point Fortin").setTimeZone("UTC");
-		portFinder.findPort("Dominion Cove Point LNG").setTimeZone("UTC");
 
 		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8); //
 		loadSlot.setWindowStartTime(0);
@@ -250,13 +248,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_OneDay() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
-
-		// map into same timezone to make expectations easier
-		portFinder.findPort("Point Fortin").setTimeZone("UTC");
-		portFinder.findPort("Dominion Cove Point LNG").setTimeZone("UTC");
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
@@ -306,13 +303,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_OneDay_PlusFlex() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
-
-		// map into same timezone to make expectations easier
-		portFinder.findPort("Point Fortin").setTimeZone("UTC");
-		portFinder.findPort("Dominion Cove Point LNG").setTimeZone("UTC");
 
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
@@ -363,15 +359,14 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testVesselAvailability_Specified() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), LocalDateTime.of(2016, 1, 1, 23, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 2, 1, 0, 0, 0), LocalDateTime.of(2016, 2, 1, 23, 0, 0)) //
 				.build();
-
-		// map into same timezone to make expectations easier
-		portFinder.findPort("Point Fortin").setTimeZone("UTC");
-		portFinder.findPort("Dominion Cove Point LNG").setTimeZone("UTC");
 
 		evaluateWithLSOTest(scenarioRunner -> {
 
@@ -402,7 +397,9 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testCargo_SlotWindowEnd() throws Exception {
-		portFinder.findPort("Point Fortin").setTimeZone("UTC");
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8); //
 		loadSlot.setWindowStartTime(0);
 

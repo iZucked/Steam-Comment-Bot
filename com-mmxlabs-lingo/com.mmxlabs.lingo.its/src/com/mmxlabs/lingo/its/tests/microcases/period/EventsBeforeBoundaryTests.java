@@ -59,8 +59,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -122,7 +122,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			final Port startAt = vesselAvailability.getStartAt();
 			Assert.assertNotNull(startAt);
 			Assert.assertEquals("Ras Laffan", startAt.getName());
-			final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
+			final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
 			final ZoneId utcTimeZone = ZoneId.of("UTC");
 			// Vessel availabilities always in UTC
 			Assert.assertEquals(ZonedDateTime.of(2015, 3, 30, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -146,8 +146,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -208,7 +208,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			final Port startAt = vesselAvailability.getStartAt();
 			Assert.assertNotNull(startAt);
 			Assert.assertEquals("Ras Laffan", startAt.getName());
-			final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
+			final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
 			final ZoneId utcTimeZone = ZoneId.of("UTC");
 			// Vessel availabilities always in UTC
 			Assert.assertEquals(ZonedDateTime.of(2015, 3, 30, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -232,8 +232,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -290,7 +290,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			final Port startAt = vesselAvailability.getStartAt();
 			Assert.assertNotNull(startAt);
 			Assert.assertEquals("Ras Laffan", startAt.getName());
-			final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
+			final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
 			final ZoneId utcTimeZone = ZoneId.of("UTC");
 			// Vessel availabilities always in UTC
 			Assert.assertEquals(ZonedDateTime.of(2015, 3, 30, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -314,8 +314,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -397,7 +397,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			final Port startAt = vesselAvailability.getStartAt();
 			Assert.assertNotNull(startAt);
 			Assert.assertEquals("Ras Laffan", startAt.getName());
-			final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Ras Laffan").getTimeZone());
+			final ZoneId rasLaffanTimeZone = portFinder.findPort("Ras Laffan").getZoneId();
 			final ZoneId utcTimeZone = ZoneId.of("UTC");
 			// Vessel availabilities always in UTC
 			Assert.assertEquals(ZonedDateTime.of(2015, 3, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -433,8 +433,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -499,7 +499,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			final Port startAt = vesselAvailability.getStartAt();
 			Assert.assertNotNull(startAt);
 			Assert.assertEquals("Point Fortin", startAt.getName());
-			final ZoneId rasLaffanTimeZone = ZoneId.of(portFinder.findPort("Point Fortin").getTimeZone());
+			final ZoneId rasLaffanTimeZone = portFinder.findPort("Point Fortin").getZoneId();
 			final ZoneId utcTimeZone = ZoneId.of("UTC");
 			// Vessel availabilities always in UTC
 			Assert.assertEquals(ZonedDateTime.of(2016, 8, 1, 0, 0, 0, 0, utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
@@ -536,8 +536,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();

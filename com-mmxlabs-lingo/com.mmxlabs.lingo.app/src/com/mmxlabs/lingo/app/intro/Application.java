@@ -32,9 +32,12 @@ import org.osgi.framework.ServiceReference;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.common.application.WorkbenchStateManager;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
+import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
 
 /**
  * This class controls all aspects of the application's execution
@@ -51,6 +54,10 @@ public class Application implements IApplication {
 	public Object start(final IApplicationContext context) {
 		final String[] appLineArgs = Platform.getApplicationArgs();
 
+		// HAK
+		@NonNull
+		ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
+		
 		if (appLineArgs != null && appLineArgs.length > 0) {
 			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g. could get here through a relaunch)
 			boolean skipAutoMemory = false;

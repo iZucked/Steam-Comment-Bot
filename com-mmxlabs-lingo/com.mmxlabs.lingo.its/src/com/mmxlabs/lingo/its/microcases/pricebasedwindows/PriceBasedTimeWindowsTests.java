@@ -95,8 +95,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+		scenarioModelFinder = new ScenarioModelFinder(scenarioDataProvider);
+		scenarioModelBuilder = new ScenarioModelBuilder(scenarioDataProvider);
 
 		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
@@ -522,7 +522,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 				Assert.assertEquals(13.5, ScheduleTools.getPrice(optimiserScenario, cargo1.getSortedSlots().get(1)), 0.0001);
 				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()),
 						MicroCaseDateUtils.getZonedDateTime(2016, 9, 01, 0, getDefaultEMFDischargeSlot().getPort()));
 			});
 		},
@@ -603,7 +603,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 				Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()),
 						MicroCaseDateUtils.getZonedDateTime(2016, 9, 1, 0, getDefaultEMFDischargeSlot().getPort()));
 
 			});
@@ -682,7 +682,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()),
 						MicroCaseDateUtils.getZonedDateTime(2016, 8, 1, 0, getDefaultEMFDischargeSlot().getPort()));
 			});
 		},
@@ -761,10 +761,10 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
-				Assert.assertEquals(MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, loadFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFLoadSlot().getPort().getTimeZone()),
+				Assert.assertEquals(MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, loadFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFLoadSlot().getPort().getZoneId()),
 						MicroCaseDateUtils.getZonedDateTime(2016, 07, 01, 0, getDefaultEMFLoadSlot().getPort()));
 				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()),
 						MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()));
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 			});

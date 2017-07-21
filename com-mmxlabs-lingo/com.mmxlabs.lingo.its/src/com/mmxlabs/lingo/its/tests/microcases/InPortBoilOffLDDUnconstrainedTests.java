@@ -86,11 +86,12 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 	@Category({ MicroTest.class })
 	public void LDBoilOffTest() throws Exception {
 
+		portModelBuilder.setAllExistingPortsToUTC();
+		
 		vessel.setCapacity(vesselCapacity);
 		vessel.setFillCapacity(1.0);
 
 		final Port portC = portFinder.findPort("Petrobras Pecem LNG");
-		portC.setTimeZone("UTC");
 
 		cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //

@@ -35,6 +35,9 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testEventOrder_ExactTravel() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -45,12 +48,8 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
 
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
-
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vessel.setMaxSpeed(15.0);
 
 		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
@@ -79,6 +78,9 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testEventOrder_WithLateness() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -89,12 +91,8 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
 
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
-
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vessel.setMaxSpeed(15.0);
 
 		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
@@ -125,6 +123,9 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testEventOrder_WithLateness_WithCanal() throws Exception {
 
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -135,12 +136,8 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
 
-		// map into same timezone to make expectations easier
-		port1.setTimeZone("UTC");
-		port2.setTimeZone("UTC");
-
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours ( + 36 transit time)
-		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 3000, 1500, 3000, true);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 3000, 1500, 3000, true);
 		vessel.setMaxSpeed(15.0);
 		for (VesselClassRouteParameters p : vessel.getVesselOrDelegateRouteParameters()) {
 			p.setExtraTransitTime(36);
