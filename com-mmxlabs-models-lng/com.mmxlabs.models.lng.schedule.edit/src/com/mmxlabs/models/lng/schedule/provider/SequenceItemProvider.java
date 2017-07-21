@@ -288,6 +288,11 @@ public class SequenceItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createCanalBookingEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__FITNESSES,
 				 ScheduleFactory.eINSTANCE.createFitness()));
 	}

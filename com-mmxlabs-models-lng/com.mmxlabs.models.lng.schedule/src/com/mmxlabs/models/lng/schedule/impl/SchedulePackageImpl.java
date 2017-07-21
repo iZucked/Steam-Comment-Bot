@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -49,6 +50,7 @@ import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
@@ -341,6 +343,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass canalBookingEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum fuelUnitEEnum = null;
 
 	/**
@@ -377,6 +386,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EEnum slotAllocationTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum panamaBookingPeriodEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1350,6 +1366,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getStartEvent_RepositioningFee() {
+		return (EAttribute)startEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getEndEvent() {
 		return endEventEClass;
 	}
@@ -1361,6 +1386,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EReference getEndEvent_SlotAllocation() {
 		return (EReference)endEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEndEvent_BallastBonusFee() {
+		return (EAttribute)endEventEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1469,6 +1503,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getJourney_CanalArrival() {
 		return (EAttribute)journeyEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getJourney_CanalBookingPeriod() {
+		return (EAttribute)journeyEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -2053,6 +2096,33 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCanalBookingEvent() {
+		return canalBookingEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingEvent_LinkedSequence() {
+		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCanalBookingEvent_LinkedJourney() {
+		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -2100,6 +2170,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EEnum getSlotAllocationType() {
 		return slotAllocationTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getPanamaBookingPeriod() {
+		return panamaBookingPeriodEEnum;
 	}
 
 	/**
@@ -2236,9 +2315,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		startEventEClass = createEClass(START_EVENT);
 		createEReference(startEventEClass, START_EVENT__SLOT_ALLOCATION);
+		createEAttribute(startEventEClass, START_EVENT__REPOSITIONING_FEE);
 
 		endEventEClass = createEClass(END_EVENT);
 		createEReference(endEventEClass, END_EVENT__SLOT_ALLOCATION);
+		createEAttribute(endEventEClass, END_EVENT__BALLAST_BONUS_FEE);
 
 		journeyEClass = createEClass(JOURNEY);
 		createEReference(journeyEClass, JOURNEY__DESTINATION);
@@ -2252,6 +2333,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(journeyEClass, JOURNEY__CANAL_BOOKING);
 		createEAttribute(journeyEClass, JOURNEY__LATEST_POSSIBLE_CANAL_DATE);
 		createEAttribute(journeyEClass, JOURNEY__CANAL_ARRIVAL);
+		createEAttribute(journeyEClass, JOURNEY__CANAL_BOOKING_PERIOD);
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
@@ -2370,6 +2452,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__ROUTE_TAKEN);
 		createEAttribute(notionalJourneyContractDetailsEClass, NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST);
 
+		canalBookingEventEClass = createEClass(CANAL_BOOKING_EVENT);
+		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_SEQUENCE);
+		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_JOURNEY);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -2377,6 +2463,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		capacityViolationTypeEEnum = createEEnum(CAPACITY_VIOLATION_TYPE);
 		portVisitLatenessTypeEEnum = createEEnum(PORT_VISIT_LATENESS_TYPE);
 		slotAllocationTypeEEnum = createEEnum(SLOT_ALLOCATION_TYPE);
+		panamaBookingPeriodEEnum = createEEnum(PANAMA_BOOKING_PERIOD);
 
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
@@ -2474,6 +2561,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		matchingContractDetailsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		lumpSumContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		notionalJourneyContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
+		canalBookingEventEClass.getESuperTypes().add(this.getEvent());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2566,9 +2654,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getStartEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartEvent_RepositioningFee(), ecorePackage.getELong(), "repositioningFee", null, 0, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEndEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndEvent_BallastBonusFee(), ecorePackage.getELong(), "ballastBonusFee", null, 0, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJourney_Destination(), thePortPackage.getPort(), null, "destination", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2582,6 +2672,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getJourney_CanalBooking(), theCargoPackage.getCanalBookingSlot(), null, "canalBooking", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_LatestPossibleCanalDate(), theDateTimePackage.getLocalDate(), "latestPossibleCanalDate", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_CanalArrival(), theDateTimePackage.getLocalDate(), "canalArrival", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getJourney_CanalBookingPeriod(), this.getPanamaBookingPeriod(), "canalBookingPeriod", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2701,6 +2792,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getNotionalJourneyContractDetails_RouteTaken(), ecorePackage.getEString(), "routeTaken", "", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyContractDetails_CanalCost(), ecorePackage.getEInt(), "canalCost", "0", 1, 1, NotionalJourneyContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(canalBookingEventEClass, CanalBookingEvent.class, "CanalBookingEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCanalBookingEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalBookingEvent_LinkedJourney(), this.getJourney(), null, "linkedJourney", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.VESSEL);
@@ -2739,6 +2834,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEEnum(slotAllocationTypeEEnum, SlotAllocationType.class, "SlotAllocationType");
 		addEEnumLiteral(slotAllocationTypeEEnum, SlotAllocationType.PURCHASE);
 		addEEnumLiteral(slotAllocationTypeEEnum, SlotAllocationType.SALE);
+
+		initEEnum(panamaBookingPeriodEEnum, PanamaBookingPeriod.class, "PanamaBookingPeriod");
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.STRICT);
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.RELAXED);
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.BEYOND);
+		addEEnumLiteral(panamaBookingPeriodEEnum, PanamaBookingPeriod.NOMINAL);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -142,6 +142,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS: return createBallastBonusFeeDetails();
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
+			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -167,6 +168,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return createPortVisitLatenessTypeFromString(eDataType, initialValue);
 			case SchedulePackage.SLOT_ALLOCATION_TYPE:
 				return createSlotAllocationTypeFromString(eDataType, initialValue);
+			case SchedulePackage.PANAMA_BOOKING_PERIOD:
+				return createPanamaBookingPeriodFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
 				return createCalendarFromString(eDataType, initialValue);
 			case SchedulePackage.ITERABLE:
@@ -198,6 +201,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return convertPortVisitLatenessTypeToString(eDataType, instanceValue);
 			case SchedulePackage.SLOT_ALLOCATION_TYPE:
 				return convertSlotAllocationTypeToString(eDataType, instanceValue);
+			case SchedulePackage.PANAMA_BOOKING_PERIOD:
+				return convertPanamaBookingPeriodToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
 				return convertCalendarToString(eDataType, instanceValue);
 			case SchedulePackage.ITERABLE:
@@ -564,6 +569,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CanalBookingEvent createCanalBookingEvent() {
+		CanalBookingEventImpl canalBookingEvent = new CanalBookingEventImpl();
+		return canalBookingEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FuelUnit createFuelUnitFromString(EDataType eDataType, String initialValue) {
 		FuelUnit result = FuelUnit.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -676,6 +691,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	public String convertSlotAllocationTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PanamaBookingPeriod createPanamaBookingPeriodFromString(EDataType eDataType, String initialValue) {
+		PanamaBookingPeriod result = PanamaBookingPeriod.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPanamaBookingPeriodToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

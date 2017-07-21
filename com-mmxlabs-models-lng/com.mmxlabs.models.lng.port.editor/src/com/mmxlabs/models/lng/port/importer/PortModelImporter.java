@@ -237,14 +237,14 @@ public class PortModelImporter implements ISubmodelImporter {
 						if (!tmpRoute.getName().toLowerCase().contains("direct")) {
 
 							// Move data to real route
-							route.setEntryA(tmpRoute.getEntryA());
-							route.setEntryB(tmpRoute.getEntryB());
+							route.setNorthEntrance(tmpRoute.getNorthEntrance());
+							route.setSouthEntrance(tmpRoute.getSouthEntrance());
 
-							if (route.getEntryA() != null) {
-								context.registerNamedObject(route.getEntryA());
+							if (route.getNorthEntrance() != null) {
+								context.registerNamedObject(route.getNorthEntrance());
 							}
-							if (route.getEntryB() != null) {
-								context.registerNamedObject(route.getEntryB());
+							if (route.getSouthEntrance() != null) {
+								context.registerNamedObject(route.getSouthEntrance());
 							}
 						}
 					}
@@ -252,27 +252,27 @@ public class PortModelImporter implements ISubmodelImporter {
 			}
 			for (Route route : portModel.getRoutes()) {
 				if (route.getRouteOption() == RouteOption.PANAMA) {
-					if (route.getEntryA() == null) {
+					if (route.getNorthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Panama East");
-						route.setEntryA(entryPoint);
+						entryPoint.setName("Panama Northside");
+						route.setNorthEntrance(entryPoint);
 					}
-					if (route.getEntryB() == null) {
+					if (route.getSouthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Panama West");
-						route.setEntryB(entryPoint);
+						entryPoint.setName("Panama Southside");
+						route.setSouthEntrance(entryPoint);
 					}
 				}
 				if (route.getRouteOption() == RouteOption.SUEZ) {
-					if (route.getEntryA() == null) {
+					if (route.getNorthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Suez North");
-						route.setEntryA(entryPoint);
+						entryPoint.setName("Suez Northside");
+						route.setNorthEntrance(entryPoint);
 					}
-					if (route.getEntryB() == null) {
+					if (route.getSouthEntrance() == null) {
 						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
-						entryPoint.setName("Suez South");
-						route.setEntryB(entryPoint);
+						entryPoint.setName("Suez Southside");
+						route.setSouthEntrance(entryPoint);
 					}
 				}
 			}

@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.scenario.ui.importers;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -21,6 +23,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
+import com.mmxlabs.rcp.common.Constants;
 
 public class PromptPeriodImporter implements IExtraModelImporter {
 
@@ -50,8 +53,16 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 
 			// Always set a default period. Then overwrite with values from the CSV file.
-			lngScenarioModel.setPromptPeriodStart(LocalDate.now());
-			lngScenarioModel.setPromptPeriodEnd(LocalDate.now().plusDays(90));
+			final String prop = System.getProperty(Constants.PROPERTY_RUNNING_ITS);
+			if (prop != null && prop.equals(Boolean.TRUE.toString())) {
+				// Leave unset - unit tests should set required value
+			} else {
+				lngScenarioModel.setPromptPeriodStart(LocalDate.now());
+				lngScenarioModel.setPromptPeriodEnd(LocalDate.now().plusDays(90));
+			}
+
+			
+			
 
 			final CSVReader reader = inputs.get(PROMPT_PERIOD_KEY);
 			if (reader != null) {

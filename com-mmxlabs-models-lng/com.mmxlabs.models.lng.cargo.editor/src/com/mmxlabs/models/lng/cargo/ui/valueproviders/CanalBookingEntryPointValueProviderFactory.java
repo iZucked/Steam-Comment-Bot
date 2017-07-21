@@ -32,66 +32,65 @@ public class CanalBookingEntryPointValueProviderFactory implements IReferenceVal
 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
-			return new IReferenceValueProvider() {
-				@Override
-				public boolean updateOnChangeToFeature(final Object changedFeature) {
+		return new IReferenceValueProvider() {
+			@Override
+			public boolean updateOnChangeToFeature(final Object changedFeature) {
 
-					// ??
-					if (changedFeature == CargoPackage.eINSTANCE.getCanalBookingSlot_Route()) {
-						return true;
-					} else if (changedFeature == CargoPackage.eINSTANCE.getCanalBookingSlot_EntryPoint()) {
-						return true;
+				// ??
+				if (changedFeature == CargoPackage.eINSTANCE.getCanalBookingSlot_Route()) {
+					return true;
+				} else if (changedFeature == CargoPackage.eINSTANCE.getCanalBookingSlot_EntryPoint()) {
+					return true;
+				}
+
+				return false;
+			}
+
+			@Override
+			public Iterable<Pair<Notifier, List<Object>>> getNotifiers(final EObject referer, final EReference feature, final EObject referenceValue) {
+				if (referenceValue == null)
+					return Collections.emptySet();
+				return Collections.singleton(new Pair<Notifier, List<Object>>(referenceValue, Collections.singletonList((Object) feature)));
+			}
+
+			@Override
+			public String getName(final EObject referer, final EReference feature, final EObject referenceValue) {
+				if (referenceValue instanceof EntryPoint) {
+					EntryPoint entryPoint = (EntryPoint) referenceValue;
+					if (entryPoint.getName() != null) {
+						return entryPoint.getName();
+					} else {
+						return "";
 					}
-
-					return false;
 				}
+				return "<Not set>";
+			}
 
-				@Override
-				public Iterable<Pair<Notifier, List<Object>>> getNotifiers(final EObject referer, final EReference feature, final EObject referenceValue) {
-					if (referenceValue == null)
-						return Collections.emptySet();
-					return Collections.singleton(new Pair<Notifier, List<Object>>(referenceValue, Collections.singletonList((Object) feature)));
-				}
+			@Override
+			public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+				final List<Pair<String, EObject>> delegateValue = new LinkedList<>();
 
-				@Override
-				public String getName(final EObject referer, final EReference feature, final EObject referenceValue) {
-					if (referenceValue instanceof EntryPoint){
-						EntryPoint entryPoint = (EntryPoint)referenceValue;
-						if (entryPoint.getName() != null){
-							return entryPoint.getName();
-						}else {
-							return "";
-						}
+				delegateValue.add(new Pair("<Not set>", null));
+
+				// I assume delegateValue is list of all ports??
+
+				if (target instanceof CanalBookingSlot) {
+					CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
+
+					if (canalBookingSlot.getRoute() != null && canalBookingSlot.getRoute().getNorthEntrance() != null) {
+						delegateValue.add(new Pair<String, EObject>(canalBookingSlot.getRoute().getNorthEntrance().getName(), canalBookingSlot.getRoute().getNorthEntrance()));
 					}
-					return "<Not set>";
-				}
-
-				@Override
-				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
-					final List<Pair<String, EObject>> delegateValue = new LinkedList<>();
-					
-					delegateValue.add(new Pair("<Not set>", null));
-					
-
-					// I assume delegateValue is list of all ports??
-
-					if (target instanceof CanalBookingSlot) {
-						CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
-						
-							if (canalBookingSlot.getRoute() != null && canalBookingSlot.getRoute().getEntryA() != null){
-								delegateValue.add(new Pair<String, EObject>(canalBookingSlot.getRoute().getEntryA().getName(), canalBookingSlot.getRoute().getEntryA()));
-							}
-							if (canalBookingSlot.getRoute() != null && canalBookingSlot.getRoute().getEntryB() != null){
-								delegateValue.add(new Pair<String, EObject>(canalBookingSlot.getRoute().getEntryB().getName(), canalBookingSlot.getRoute().getEntryB()));
-							}
+					if (canalBookingSlot.getRoute() != null && canalBookingSlot.getRoute().getSouthEntrance() != null) {
+						delegateValue.add(new Pair<String, EObject>(canalBookingSlot.getRoute().getSouthEntrance().getName(), canalBookingSlot.getRoute().getSouthEntrance()));
 					}
-					return delegateValue;
 				}
+				return delegateValue;
+			}
 
-				@Override
-				public void dispose() {
-				}
-			};
+			@Override
+			public void dispose() {
+			}
+		};
 	}
 
 	private boolean contains(final EList<APortSet<Port>> ips, final EObject value) {

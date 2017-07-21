@@ -5,20 +5,19 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -26,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -34,14 +34,16 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class MarketSlotConstraint extends AbstractModelConstraint {
+public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
-
-		final List<IStatus> failures = new LinkedList<IStatus>();
+	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> failures) {
 
 		final EObject object = ctx.getTarget();
 		if (object instanceof SpotSlot) {
@@ -139,12 +141,12 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 				}
 
 				boolean foundAltWindowSize = false;
-				int actual = slot.getWindowSize();
-				Port port = slot.getPort();
+				final int actual = slot.getWindowSize();
+				final Port port = slot.getPort();
 				if (slot.isSetWindowSizeUnits() && slot.getWindowSizeUnits() == TimePeriod.HOURS || (port != null && port.getDefaultWindowSizeUnits() == TimePeriod.HOURS)) {
 					if (slot.isSetWindowSize()) {
-						LocalDate windowStart = slot.getWindowStart();
-						int expected = Hours.between(windowStart, windowStart.plusMonths(1)) - 1;
+						final LocalDate windowStart = slot.getWindowStart();
+						final int expected = Hours.between(windowStart, windowStart.plusMonths(1)) - 1;
 						if (expected == actual) {
 							foundAltWindowSize = true;
 						}
@@ -152,14 +154,13 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 				}
 
 				if (!slot.isSetWindowSizeUnits() || slot.getWindowSizeUnits() != TimePeriod.MONTHS) {
-					int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
+					final int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have a one month window"), eType);
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSizeUnits());
 					failures.add(dsd);
-				}
-				if (!slot.isSetWindowSize() || actual != 1) {
-					int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
+				} else if (!slot.isSetWindowSize() || actual != 1) {
+					final int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have a one month window"), eType);
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSize());
@@ -237,19 +238,26 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 				}
 
 			}
+			final MMXRootObject rootObject = extraContext.getRootObject();
+			if (rootObject instanceof LNGScenarioModel) {
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				if (lngScenarioModel.getPromptPeriodStart() != null) {
+					final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+					if (windowEndWithSlotOrPortTime.isBefore(lngScenarioModel.getPromptPeriodStart().atStartOfDay(ZoneId.from(windowEndWithSlotOrPortTime)))) {
 
-		}
-		
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] Spot slot is in the past"), IStatus.WARNING);
+						dsd.addEObjectAndFeature(slot, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+						failures.add(dsd);
+
+					}
+				}
+
 			}
-			return multi;
 		}
+
+		return Activator.PLUGIN_ID;
 	}
+
 }

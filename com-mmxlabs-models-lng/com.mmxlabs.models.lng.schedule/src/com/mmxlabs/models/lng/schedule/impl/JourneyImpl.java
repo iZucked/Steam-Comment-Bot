@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -52,6 +53,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBooking <em>Canal Booking</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalArrival <em>Canal Arrival</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
  * </ul>
  *
  * @generated
@@ -246,6 +248,26 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @ordered
 	 */
 	protected LocalDate canalArrival = CANAL_ARRIVAL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCanalBookingPeriod() <em>Canal Booking Period</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalBookingPeriod()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final PanamaBookingPeriod CANAL_BOOKING_PERIOD_EDEFAULT = PanamaBookingPeriod.STRICT;
+
+	/**
+	 * The cached value of the '{@link #getCanalBookingPeriod() <em>Canal Booking Period</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalBookingPeriod()
+	 * @generated
+	 * @ordered
+	 */
+	protected PanamaBookingPeriod canalBookingPeriod = CANAL_BOOKING_PERIOD_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -580,6 +602,27 @@ public class JourneyImpl extends EventImpl implements Journey {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PanamaBookingPeriod getCanalBookingPeriod() {
+		return canalBookingPeriod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalBookingPeriod(PanamaBookingPeriod newCanalBookingPeriod) {
+		PanamaBookingPeriod oldCanalBookingPeriod = canalBookingPeriod;
+		canalBookingPeriod = newCanalBookingPeriod == null ? CANAL_BOOKING_PERIOD_EDEFAULT : newCanalBookingPeriod;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD, oldCanalBookingPeriod, canalBookingPeriod));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getFuelCost() {
@@ -640,6 +683,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return getLatestPossibleCanalDate();
 			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
 				return getCanalArrival();
+			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
+				return getCanalBookingPeriod();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -690,6 +735,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
 				setCanalArrival((LocalDate)newValue);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
+				setCanalBookingPeriod((PanamaBookingPeriod)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -738,6 +786,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
 				setCanalArrival(CANAL_ARRIVAL_EDEFAULT);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
+				setCanalBookingPeriod(CANAL_BOOKING_PERIOD_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -774,6 +825,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return LATEST_POSSIBLE_CANAL_DATE_EDEFAULT == null ? latestPossibleCanalDate != null : !LATEST_POSSIBLE_CANAL_DATE_EDEFAULT.equals(latestPossibleCanalDate);
 			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:
 				return CANAL_ARRIVAL_EDEFAULT == null ? canalArrival != null : !CANAL_ARRIVAL_EDEFAULT.equals(canalArrival);
+			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
+				return canalBookingPeriod != CANAL_BOOKING_PERIOD_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -864,6 +917,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(latestPossibleCanalDate);
 		result.append(", canalArrival: ");
 		result.append(canalArrival);
+		result.append(", canalBookingPeriod: ");
+		result.append(canalBookingPeriod);
 		result.append(')');
 		return result.toString();
 	}

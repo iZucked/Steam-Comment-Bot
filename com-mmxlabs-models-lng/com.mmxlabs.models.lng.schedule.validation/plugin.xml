@@ -119,6 +119,9 @@
                            <target
                                  class="Journey">
                            </target>
+                           <target
+                                 class="Schedule">
+                           </target>
                         </constraint>
          </constraints>
          <constraints></constraints>

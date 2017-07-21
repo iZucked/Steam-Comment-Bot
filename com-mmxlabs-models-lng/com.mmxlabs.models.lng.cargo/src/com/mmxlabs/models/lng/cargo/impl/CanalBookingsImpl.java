@@ -38,8 +38,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getCanalBookingSlots <em>Canal Booking Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getStrictBoundaryOffsetDays <em>Strict Boundary Offset Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getRelaxedBoundaryOffsetDays <em>Relaxed Boundary Offset Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
  * </ul>
  *
  * @generated
@@ -96,26 +97,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	protected int relaxedBoundaryOffsetDays = RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getFlexibleBookingAmount() <em>Flexible Booking Amount</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFlexibleBookingAmount()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int FLEXIBLE_BOOKING_AMOUNT_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getFlexibleBookingAmount() <em>Flexible Booking Amount</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFlexibleBookingAmount()
-	 * @generated
-	 * @ordered
-	 */
-	protected int flexibleBookingAmount = FLEXIBLE_BOOKING_AMOUNT_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getArrivalMarginHours() <em>Arrival Margin Hours</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -134,6 +115,46 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected int arrivalMarginHours = ARRIVAL_MARGIN_HOURS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFlexibleBookingAmountNorthbound() <em>Flexible Booking Amount Northbound</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFlexibleBookingAmountNorthbound()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getFlexibleBookingAmountNorthbound() <em>Flexible Booking Amount Northbound</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFlexibleBookingAmountNorthbound()
+	 * @generated
+	 * @ordered
+	 */
+	protected int flexibleBookingAmountNorthbound = FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFlexibleBookingAmountSouthbound() <em>Flexible Booking Amount Southbound</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFlexibleBookingAmountSouthbound()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getFlexibleBookingAmountSouthbound() <em>Flexible Booking Amount Southbound</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFlexibleBookingAmountSouthbound()
+	 * @generated
+	 * @ordered
+	 */
+	protected int flexibleBookingAmountSouthbound = FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -213,27 +234,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getFlexibleBookingAmount() {
-		return flexibleBookingAmount;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFlexibleBookingAmount(int newFlexibleBookingAmount) {
-		int oldFlexibleBookingAmount = flexibleBookingAmount;
-		flexibleBookingAmount = newFlexibleBookingAmount;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT, oldFlexibleBookingAmount, flexibleBookingAmount));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getArrivalMarginHours() {
 		return arrivalMarginHours;
 	}
@@ -248,6 +248,48 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		arrivalMarginHours = newArrivalMarginHours;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS, oldArrivalMarginHours, arrivalMarginHours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFlexibleBookingAmountNorthbound() {
+		return flexibleBookingAmountNorthbound;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFlexibleBookingAmountNorthbound(int newFlexibleBookingAmountNorthbound) {
+		int oldFlexibleBookingAmountNorthbound = flexibleBookingAmountNorthbound;
+		flexibleBookingAmountNorthbound = newFlexibleBookingAmountNorthbound;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND, oldFlexibleBookingAmountNorthbound, flexibleBookingAmountNorthbound));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFlexibleBookingAmountSouthbound() {
+		return flexibleBookingAmountSouthbound;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFlexibleBookingAmountSouthbound(int newFlexibleBookingAmountSouthbound) {
+		int oldFlexibleBookingAmountSouthbound = flexibleBookingAmountSouthbound;
+		flexibleBookingAmountSouthbound = newFlexibleBookingAmountSouthbound;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND, oldFlexibleBookingAmountSouthbound, flexibleBookingAmountSouthbound));
 	}
 
 	/**
@@ -278,10 +320,12 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return getStrictBoundaryOffsetDays();
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				return getRelaxedBoundaryOffsetDays();
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
-				return getFlexibleBookingAmount();
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				return getArrivalMarginHours();
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
+				return getFlexibleBookingAmountNorthbound();
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
+				return getFlexibleBookingAmountSouthbound();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -305,11 +349,14 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				setRelaxedBoundaryOffsetDays((Integer)newValue);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
-				setFlexibleBookingAmount((Integer)newValue);
-				return;
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				setArrivalMarginHours((Integer)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
+				setFlexibleBookingAmountNorthbound((Integer)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
+				setFlexibleBookingAmountSouthbound((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -332,11 +379,14 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				setRelaxedBoundaryOffsetDays(RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
-				setFlexibleBookingAmount(FLEXIBLE_BOOKING_AMOUNT_EDEFAULT);
-				return;
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				setArrivalMarginHours(ARRIVAL_MARGIN_HOURS_EDEFAULT);
+				return;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
+				setFlexibleBookingAmountNorthbound(FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT);
+				return;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
+				setFlexibleBookingAmountSouthbound(FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -356,10 +406,12 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return strictBoundaryOffsetDays != STRICT_BOUNDARY_OFFSET_DAYS_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS:
 				return relaxedBoundaryOffsetDays != RELAXED_BOUNDARY_OFFSET_DAYS_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT:
-				return flexibleBookingAmount != FLEXIBLE_BOOKING_AMOUNT_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 				return arrivalMarginHours != ARRIVAL_MARGIN_HOURS_EDEFAULT;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
+				return flexibleBookingAmountNorthbound != FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT;
+			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
+				return flexibleBookingAmountSouthbound != FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -378,10 +430,12 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		result.append(strictBoundaryOffsetDays);
 		result.append(", relaxedBoundaryOffsetDays: ");
 		result.append(relaxedBoundaryOffsetDays);
-		result.append(", flexibleBookingAmount: ");
-		result.append(flexibleBookingAmount);
 		result.append(", arrivalMarginHours: ");
 		result.append(arrivalMarginHours);
+		result.append(", flexibleBookingAmountNorthbound: ");
+		result.append(flexibleBookingAmountNorthbound);
+		result.append(", flexibleBookingAmountSouthbound: ");
+		result.append(flexibleBookingAmountSouthbound);
 		result.append(')');
 		return result.toString();
 	}

@@ -9,23 +9,22 @@ import java.util.Collection;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorComposite;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
@@ -58,19 +57,19 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 			containerComposite.setLayout(new GridLayout(2, true));
 			containerComposite.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, true));
 
-			IDisplayComposite entryAComposite = null;
-			IDisplayComposite entryBComposite = null;
+			IDisplayComposite northEntranceComposite = null;
+			IDisplayComposite southEntranceComposite = null;
 			if (route.isCanal()) {
-				entryAComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__ENTRY_A, route.getEntryA());
-				entryBComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__ENTRY_B, route.getEntryB());
+				northEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__NORTH_ENTRANCE, route.getNorthEntrance(), "Northern Entrance");
+				southEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE, route.getSouthEntrance(), "Southern Entrance");
 			}
 
 			if (route.isCanal()) {
-				if (entryAComposite != null) {
-					entryAComposite.display(dialogContext, root, route.getEntryA(), range, dbc);
+				if (northEntranceComposite != null) {
+					northEntranceComposite.display(dialogContext, root, route.getNorthEntrance(), range, dbc);
 				}
-				if (entryBComposite != null) {
-					entryBComposite.display(dialogContext, root, route.getEntryB(), range, dbc);
+				if (southEntranceComposite != null) {
+					southEntranceComposite.display(dialogContext, root, route.getSouthEntrance(), range, dbc);
 				}
 			}
 
@@ -92,5 +91,27 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 			assert false;
 			super.display(dialogContext, root, object, range, dbc);
 		}
+	}
+	
+	protected IDisplayComposite createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, String groupName) {
+		if (value != null) {
+			final Group g2 = new Group(parent, SWT.NONE);
+			toolkit.adapt(g2);
+			g2.setText(groupName);
+			g2.setLayout(new FillLayout());
+			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
+
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
+					dialogContext, toolkit);
+
+			sub.setCommandHandler(commandHandler);
+			sub.setEditorWrapper(editorWrapper);
+			childReferences.add(ref);
+			childComposites.add(sub);
+			childObjects.add(value);
+
+			return sub;
+		}
+		return null;
 	}
 }

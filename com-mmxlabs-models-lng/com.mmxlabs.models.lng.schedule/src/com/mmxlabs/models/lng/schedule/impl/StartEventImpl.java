@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @generated
@@ -186,6 +187,26 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * @ordered
 	 */
 	protected SlotAllocation slotAllocation;
+
+	/**
+	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long REPOSITIONING_FEE_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected long repositioningFee = REPOSITIONING_FEE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -446,6 +467,27 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getRepositioningFee() {
+		return repositioningFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRepositioningFee(long newRepositioningFee) {
+		long oldRepositioningFee = repositioningFee;
+		repositioningFee = newRepositioningFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
@@ -506,6 +548,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
+			case SchedulePackage.START_EVENT__REPOSITIONING_FEE:
+				return getRepositioningFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -552,6 +596,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
+			case SchedulePackage.START_EVENT__REPOSITIONING_FEE:
+				setRepositioningFee((Long)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -594,6 +641,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
+			case SchedulePackage.START_EVENT__REPOSITIONING_FEE:
+				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -626,6 +676,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return events != null && !events.isEmpty();
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
+			case SchedulePackage.START_EVENT__REPOSITIONING_FEE:
+				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -785,6 +837,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		result.append(heelCost);
 		result.append(", heelRevenue: ");
 		result.append(heelRevenue);
+		result.append(", repositioningFee: ");
+		result.append(repositioningFee);
 		result.append(')');
 		return result.toString();
 	}

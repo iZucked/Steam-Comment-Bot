@@ -267,8 +267,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EAttribute getUserSettings_PeriodStart() {
+	public EAttribute getUserSettings_PeriodStartDate() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -904,7 +903,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Create classes and their features
 		userSettingsEClass = createEClass(USER_SETTINGS);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_START);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_START_DATE);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_END);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SHIPPING_ONLY);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATE_CHARTER_OUTS);
@@ -1043,7 +1042,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getUserSettings_PeriodStart(), theDateTimePackage.getYearMonth(), "periodStart", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_PeriodStartDate(), theDateTimePackage.getLocalDate(), "periodStartDate", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_PeriodEnd(), theDateTimePackage.getYearMonth(), "periodEnd", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_ShippingOnly(), ecorePackage.getEBoolean(), "shippingOnly", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

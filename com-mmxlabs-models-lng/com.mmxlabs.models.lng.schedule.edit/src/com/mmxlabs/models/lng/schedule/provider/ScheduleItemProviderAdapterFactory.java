@@ -893,6 +893,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CanalBookingEventItemProvider canalBookingEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCanalBookingEventAdapter() {
+		if (canalBookingEventItemProvider == null) {
+			canalBookingEventItemProvider = new CanalBookingEventItemProvider(this);
+		}
+
+		return canalBookingEventItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1053,6 +1076,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (ballastBonusFeeDetailsItemProvider != null) ballastBonusFeeDetailsItemProvider.dispose();
 		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
 		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
+		if (canalBookingEventItemProvider != null) canalBookingEventItemProvider.dispose();
 	}
 
 }

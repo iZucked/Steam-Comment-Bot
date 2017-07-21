@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.parameters.provider;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import java.util.Collection;
@@ -67,7 +68,7 @@ public class UserSettingsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPeriodStartPropertyDescriptor(object);
+			addPeriodStartDatePropertyDescriptor(object);
 			addPeriodEndPropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
 			addGenerateCharterOutsPropertyDescriptor(object);
@@ -81,19 +82,19 @@ public class UserSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Period Start feature.
+	 * This adds a property descriptor for the Period Start Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPeriodStartPropertyDescriptor(Object object) {
+	protected void addPeriodStartDatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_UserSettings_periodStart_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_periodStart_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__PERIOD_START,
+				 getString("_UI_UserSettings_periodStartDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_periodStartDate_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__PERIOD_START_DATE,
 				 true,
 				 false,
 				 false,
@@ -297,7 +298,7 @@ public class UserSettingsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		YearMonth labelValue = ((UserSettings)object).getPeriodStart();
+		LocalDate labelValue = ((UserSettings)object).getPeriodStartDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_UserSettings_type") :
@@ -317,7 +318,7 @@ public class UserSettingsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(UserSettings.class)) {
-			case ParametersPackage.USER_SETTINGS__PERIOD_START:
+			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:

@@ -160,8 +160,8 @@ public class RouteItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PortPackage.Literals.ROUTE__LINES);
-			childrenFeatures.add(PortPackage.Literals.ROUTE__ENTRY_A);
-			childrenFeatures.add(PortPackage.Literals.ROUTE__ENTRY_B);
+			childrenFeatures.add(PortPackage.Literals.ROUTE__NORTH_ENTRANCE);
+			childrenFeatures.add(PortPackage.Literals.ROUTE__SOUTH_ENTRANCE);
 		}
 		return childrenFeatures;
 	}
@@ -223,8 +223,8 @@ public class RouteItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.ROUTE__LINES:
-			case PortPackage.ROUTE__ENTRY_A:
-			case PortPackage.ROUTE__ENTRY_B:
+			case PortPackage.ROUTE__NORTH_ENTRANCE:
+			case PortPackage.ROUTE__SOUTH_ENTRANCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -249,12 +249,12 @@ public class RouteItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.ROUTE__ENTRY_A,
+				(PortPackage.Literals.ROUTE__NORTH_ENTRANCE,
 				 PortFactory.eINSTANCE.createEntryPoint()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PortPackage.Literals.ROUTE__ENTRY_B,
+				(PortPackage.Literals.ROUTE__SOUTH_ENTRANCE,
 				 PortFactory.eINSTANCE.createEntryPoint()));
 	}
 
@@ -270,8 +270,8 @@ public class RouteItemProvider
 		Object childObject = child;
 
 		boolean qualify =
-			childFeature == PortPackage.Literals.ROUTE__ENTRY_A ||
-			childFeature == PortPackage.Literals.ROUTE__ENTRY_B;
+			childFeature == PortPackage.Literals.ROUTE__NORTH_ENTRANCE ||
+			childFeature == PortPackage.Literals.ROUTE__SOUTH_ENTRANCE;
 
 		if (qualify) {
 			return getString

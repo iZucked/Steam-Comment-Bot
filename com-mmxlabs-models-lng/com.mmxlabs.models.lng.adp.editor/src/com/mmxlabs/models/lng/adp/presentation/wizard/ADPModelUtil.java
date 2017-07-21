@@ -65,10 +65,10 @@ public class ADPModelUtil {
 
 		copy.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 
-		if (scenarioModel.isSetPromptPeriodStart()) {
+		if (scenarioModel.getPromptPeriodStart() != null) {
 			copy.setPromptPeriodStart(scenarioModel.getPromptPeriodStart());
 		}
-		if (scenarioModel.isSetPromptPeriodEnd()) {
+		if (scenarioModel.getPromptPeriodEnd() != null) {
 			copy.setPromptPeriodEnd(scenarioModel.getPromptPeriodEnd());
 		}
 		if (scenarioModel.isSetSchedulingEndDate()) {

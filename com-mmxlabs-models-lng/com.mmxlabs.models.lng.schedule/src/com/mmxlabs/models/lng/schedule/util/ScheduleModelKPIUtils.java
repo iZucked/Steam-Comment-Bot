@@ -368,8 +368,9 @@ public class ScheduleModelKPIUtils {
 		}
 		return violations;
 	}
+
 	public static Set<CapacityViolationType> getCapacityViolations(@Nullable final EventGrouping eventGrouping) {
-		Set<CapacityViolationType> violations =  new HashSet<CapacityViolationType>();
+		Set<CapacityViolationType> violations = new HashSet<CapacityViolationType>();
 		if (eventGrouping != null) {
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof SlotVisit) {
@@ -438,7 +439,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public enum ShippingCostType {
-		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE,
+		ALL, LNG_COSTS, PORT_COSTS, BUNKER_COSTS, CANAL_COSTS, COOLDOWN_COSTS, HIRE_COSTS, OTHER_COSTS, HEEL_COST, HEEL_REVENUE
 	}
 
 	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue, ShippingCostType costType) {
@@ -453,6 +454,16 @@ public class ScheduleModelKPIUtils {
 
 				if (costType == ShippingCostType.ALL || costType == ShippingCostType.HIRE_COSTS) {
 					total += event.getCharterCost();
+				}
+				if (event instanceof StartEvent) {
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.OTHER_COSTS) {
+						total += ((StartEvent) event).getRepositioningFee();
+					}
+				}
+				if (event instanceof EndEvent) {
+					if (costType == ShippingCostType.ALL || costType == ShippingCostType.OTHER_COSTS) {
+						total += ((EndEvent) event).getBallastBonusFee();
+					}
 				}
 
 				if (event instanceof Journey) {

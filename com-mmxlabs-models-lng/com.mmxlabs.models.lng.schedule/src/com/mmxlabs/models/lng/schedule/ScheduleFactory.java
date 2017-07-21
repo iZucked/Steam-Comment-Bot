@@ -330,6 +330,15 @@ public interface ScheduleFactory extends EFactory {
 	NotionalJourneyContractDetails createNotionalJourneyContractDetails();
 
 	/**
+	 * Returns a new object of class '<em>Canal Booking Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal Booking Event</em>'.
+	 * @generated
+	 */
+	CanalBookingEvent createCanalBookingEvent();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -72,8 +72,9 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		add_canalBookingSlotsEditor(detailComposite, topClass);
 		add_strictBoundaryOffsetDaysEditor(detailComposite, topClass);
 		add_relaxedBoundaryOffsetDaysEditor(detailComposite, topClass);
-		add_flexibleBookingAmountEditor(detailComposite, topClass);
 		add_arrivalMarginHoursEditor(detailComposite, topClass);
+		add_flexibleBookingAmountNorthboundEditor(detailComposite, topClass);
+		add_flexibleBookingAmountSouthboundEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the canalBookingSlots feature on CanalBookings
@@ -100,20 +101,29 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS));
 	}
 	/**
-	 * Create the editor for the flexibleBookingAmount feature on CanalBookings
-	 *
-	 * @generated
-	 */
-	protected void add_flexibleBookingAmountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT));
-	}
-
-	/**
 	 * Create the editor for the arrivalMarginHours feature on CanalBookings
 	 *
 	 * @generated
 	 */
 	protected void add_arrivalMarginHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS));
+	}
+
+	/**
+	 * Create the editor for the flexibleBookingAmountNorthbound feature on CanalBookings
+	 *
+	 * @generated
+	 */
+	protected void add_flexibleBookingAmountNorthboundEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND));
+	}
+
+	/**
+	 * Create the editor for the flexibleBookingAmountSouthbound feature on CanalBookings
+	 *
+	 * @generated
+	 */
+	protected void add_flexibleBookingAmountSouthboundEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND));
 	}
 }

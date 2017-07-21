@@ -19,7 +19,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="custom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="distributionModel" eType="#//DistributionModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subProfiles" upperBound="-1"
@@ -44,14 +44,9 @@
       <eBounds eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//ContractType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="distributionModel" eType="#//DistributionModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotTemplateId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nominatedVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="customAttribs" eType="#//CustomSubProfileAttributes"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1">

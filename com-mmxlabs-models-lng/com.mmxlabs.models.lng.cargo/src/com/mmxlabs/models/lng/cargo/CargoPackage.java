@@ -5424,22 +5424,31 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Flexible Booking Amount</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Arrival Margin Hours</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Flexible Booking Amount Northbound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Flexible Booking Amount Southbound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
@@ -5448,7 +5457,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7451,17 +7460,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_RelaxedBoundaryOffsetDays();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount <em>Flexible Booking Amount</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Flexible Booking Amount</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmount()
-	 * @see #getCanalBookings()
-	 * @generated
-	 */
-	EAttribute getCanalBookings_FlexibleBookingAmount();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7471,6 +7469,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCanalBookings_ArrivalMarginHours();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Flexible Booking Amount Northbound</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_FlexibleBookingAmountNorthbound();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Flexible Booking Amount Southbound</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_FlexibleBookingAmountSouthbound();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
@@ -9013,20 +9033,28 @@ public interface CargoPackage extends EPackage {
 		EAttribute CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS = eINSTANCE.getCanalBookings_RelaxedBoundaryOffsetDays();
 
 		/**
-		 * The meta object literal for the '<em><b>Flexible Booking Amount</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT = eINSTANCE.getCanalBookings_FlexibleBookingAmount();
-
-		/**
 		 * The meta object literal for the '<em><b>Arrival Margin Hours</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS = eINSTANCE.getCanalBookings_ArrivalMarginHours();
+
+		/**
+		 * The meta object literal for the '<em><b>Flexible Booking Amount Northbound</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND = eINSTANCE.getCanalBookings_FlexibleBookingAmountNorthbound();
+
+		/**
+		 * The meta object literal for the '<em><b>Flexible Booking Amount Southbound</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND = eINSTANCE.getCanalBookings_FlexibleBookingAmountSouthbound();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

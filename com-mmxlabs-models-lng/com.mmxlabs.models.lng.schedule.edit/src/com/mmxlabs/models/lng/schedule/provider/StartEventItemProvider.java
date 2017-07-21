@@ -56,6 +56,7 @@ public class StartEventItemProvider
 			addGroupProfitAndLossPropertyDescriptor(object);
 			addEventsPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -193,6 +194,28 @@ public class StartEventItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Repositioning Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRepositioningFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_StartEvent_repositioningFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StartEvent_repositioningFee_feature", "_UI_StartEvent_type"),
+				 SchedulePackage.Literals.START_EVENT__REPOSITIONING_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -267,6 +290,7 @@ public class StartEventItemProvider
 			case SchedulePackage.START_EVENT__PORT_COST:
 			case SchedulePackage.START_EVENT__HEEL_COST:
 			case SchedulePackage.START_EVENT__HEEL_REVENUE:
+			case SchedulePackage.START_EVENT__REPOSITIONING_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.START_EVENT__FUELS:

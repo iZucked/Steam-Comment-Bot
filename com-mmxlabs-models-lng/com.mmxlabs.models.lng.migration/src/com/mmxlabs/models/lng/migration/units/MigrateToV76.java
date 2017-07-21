@@ -59,7 +59,7 @@ public class MigrateToV76 extends AbstractMigrationUnit {
 						entryPoint.setAttrib("name", "Suez North");
 						route.setRef("entryA", entryPoint);
 					} else if (route.getAttrib("routeOption") == enum_RouteOption_PANAMA) {
-						entryPoint.setAttrib("name", "Panama East");
+						entryPoint.setAttrib("name", "Panama Northside");
 						route.setRef("entryA", entryPoint);
 					}
 				}
@@ -69,7 +69,7 @@ public class MigrateToV76 extends AbstractMigrationUnit {
 						entryPoint.setAttrib("name", "Suez South");
 						route.setRef("entryB", entryPoint);
 					} else if (route.getAttrib("routeOption") == enum_RouteOption_PANAMA) {
-						entryPoint.setAttrib("name", "Panama West");
+						entryPoint.setAttrib("name", "Panama Southside");
 						route.setRef("entryB", entryPoint);
 					}
 				}

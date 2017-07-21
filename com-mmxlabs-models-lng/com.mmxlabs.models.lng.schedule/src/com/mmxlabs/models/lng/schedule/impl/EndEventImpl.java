@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getBallastBonusFee <em>Ballast Bonus Fee</em>}</li>
  * </ul>
  *
  * @generated
@@ -186,6 +187,26 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * @ordered
 	 */
 	protected SlotAllocation slotAllocation;
+
+	/**
+	 * The default value of the '{@link #getBallastBonusFee() <em>Ballast Bonus Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonusFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long BALLAST_BONUS_FEE_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getBallastBonusFee() <em>Ballast Bonus Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonusFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected long ballastBonusFee = BALLAST_BONUS_FEE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -446,6 +467,27 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getBallastBonusFee() {
+		return ballastBonusFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastBonusFee(long newBallastBonusFee) {
+		long oldBallastBonusFee = ballastBonusFee;
+		ballastBonusFee = newBallastBonusFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__BALLAST_BONUS_FEE, oldBallastBonusFee, ballastBonusFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
@@ -506,6 +548,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
+			case SchedulePackage.END_EVENT__BALLAST_BONUS_FEE:
+				return getBallastBonusFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -552,6 +596,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
+			case SchedulePackage.END_EVENT__BALLAST_BONUS_FEE:
+				setBallastBonusFee((Long)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -594,6 +641,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
+			case SchedulePackage.END_EVENT__BALLAST_BONUS_FEE:
+				setBallastBonusFee(BALLAST_BONUS_FEE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -626,6 +676,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return events != null && !events.isEmpty();
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
+			case SchedulePackage.END_EVENT__BALLAST_BONUS_FEE:
+				return ballastBonusFee != BALLAST_BONUS_FEE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -784,6 +836,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 		result.append(heelCost);
 		result.append(", heelRevenue: ");
 		result.append(heelRevenue);
+		result.append(", ballastBonusFee: ");
+		result.append(ballastBonusFee);
 		result.append(')');
 		return result.toString();
 	}

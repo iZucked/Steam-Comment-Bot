@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="parameters" nsURI="http://www.mmxlabs.com/models/lng/parameters/1/"
     nsPrefix="lng.parameters">
   <eClassifiers xsi:type="ecore:EClass" name="UserSettings">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodStart" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"
         unsettable="true"/>
