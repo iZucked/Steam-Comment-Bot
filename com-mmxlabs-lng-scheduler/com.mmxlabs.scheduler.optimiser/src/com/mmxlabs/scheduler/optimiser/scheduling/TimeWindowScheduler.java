@@ -10,9 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,7 +17,6 @@ import javax.inject.Named;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IResource;
@@ -65,7 +61,7 @@ public class TimeWindowScheduler {
 		private final IResource resource;
 		private final ISequence sequence;
 		// This data is used as the key
-		private final Map<IPort, Set<IRouteOptionBooking>> unassignedBookings;
+		private final Map<IPort, List<IRouteOptionBooking>> unassignedBookings;
 		// This data will be modified by the scheduler
 		private transient CurrentBookingData currentBookingData;
 
@@ -75,8 +71,8 @@ public class TimeWindowScheduler {
 			// Copy unassigned elements for use in key
 			this.unassignedBookings = new HashMap<>();
 			if (_currentBookingData.unassignedBookings != null) {
-				for (final Map.Entry<IPort, TreeSet<IRouteOptionBooking>> e : _currentBookingData.unassignedBookings.entrySet()) {
-					this.unassignedBookings.put(e.getKey(), new TreeSet<>(e.getValue()));
+				for (final Map.Entry<IPort, List<IRouteOptionBooking>> e : _currentBookingData.unassignedBookings.entrySet()) {
+					this.unassignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
 				}
 			}
 			// used to evaluate
@@ -128,14 +124,15 @@ public class TimeWindowScheduler {
 
 		// Construct new bookings data object
 		final CurrentBookingData data = new CurrentBookingData();
-		data.assignedBookings = new HashMap<IPort, Set<IRouteOptionBooking>>();
-		data.unassignedBookings = new HashMap<IPort, TreeSet<IRouteOptionBooking>>();
+		data.assignedBookings = new HashMap<IPort, List<IRouteOptionBooking>>();
+		data.unassignedBookings = new HashMap<IPort, List<IRouteOptionBooking>>();
 
 		if (useCanalBasedWindowTrimming) {
-			panamaSlotsProvider.getBookings().entrySet().forEach(e -> {
-				final Set<IRouteOptionBooking> assigned = e.getValue().stream().filter(j -> j.getPortSlot().isPresent()).collect(Collectors.toSet());
-				data.assignedBookings.put(e.getKey(), new TreeSet<>(assigned));
-				data.unassignedBookings.put(e.getKey(), new TreeSet<>(Sets.difference(e.getValue(), assigned)));
+			panamaSlotsProvider.getAssignedBookings().entrySet().forEach(e -> {
+				data.assignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
+			});
+			panamaSlotsProvider.getUnassignedBookings().entrySet().forEach(e -> {
+				data.unassignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
 			});
 		}
 
@@ -175,7 +172,7 @@ public class TimeWindowScheduler {
 									if (booking != null) {
 										l1.add(booking);
 
-										final TreeSet<IRouteOptionBooking> treeSet = data.unassignedBookings.get(booking.getEntryPoint());
+										final List<IRouteOptionBooking> treeSet = data.unassignedBookings.get(booking.getEntryPoint());
 										if (!treeSet.contains(booking)) {
 											final int ii = 0;
 										}

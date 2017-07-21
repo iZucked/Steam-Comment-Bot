@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -16,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
  */
 public interface IPanamaBookingsProvider extends IDataComponentProvider {
 
-	ImmutableMap<IPort, ImmutableSortedSet<IRouteOptionBooking>> getBookings();
+	ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getAllBookings();
 
 	/**
 	 * All dates before this boundary strictly need a Panama booking. Exclusive
@@ -59,4 +60,10 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getMargin();
+
+	// Sorted
+	ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getAssignedBookings();
+
+	// Sorted
+	ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getUnassignedBookings();
 }

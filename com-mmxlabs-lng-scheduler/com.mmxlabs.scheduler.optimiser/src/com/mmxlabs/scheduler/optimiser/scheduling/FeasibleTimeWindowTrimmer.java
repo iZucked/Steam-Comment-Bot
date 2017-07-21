@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -492,7 +493,7 @@ public class FeasibleTimeWindowTrimmer {
 						}
 
 						final IPort panamaEntry = routeOptionEntry;
-						final Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new TreeSet()).stream().filter(e -> {
+						final Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new ArrayList<>()).stream().filter(e -> {
 							return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot);
 						}).findFirst();
 
@@ -545,7 +546,7 @@ public class FeasibleTimeWindowTrimmer {
 
 							boolean foundBooking = false;
 							assert prevElement != null;
-							final Set<IRouteOptionBooking> set = currentBookings.unassignedBookings.get(panamaEntry);
+							final List<IRouteOptionBooking> set = currentBookings.unassignedBookings.get(panamaEntry);
 							if (set != null) {
 								for (final IRouteOptionBooking booking : set) {
 									final int canalTime = windowStartTime[index - 1] + toCanal;
