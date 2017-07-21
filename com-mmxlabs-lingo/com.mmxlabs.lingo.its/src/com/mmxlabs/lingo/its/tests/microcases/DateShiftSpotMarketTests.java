@@ -99,7 +99,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -154,7 +154,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -210,7 +210,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -266,7 +266,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -321,7 +321,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -376,7 +376,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -431,7 +431,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -486,7 +486,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -541,7 +541,7 @@ public class DateShiftSpotMarketTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 

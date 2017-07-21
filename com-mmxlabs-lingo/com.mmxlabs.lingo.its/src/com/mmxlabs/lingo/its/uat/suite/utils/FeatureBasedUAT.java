@@ -54,7 +54,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 /**
  * Abstract class with methods to extract features from given EMF models for use in producing test files and comparisons for clients. Expected to be subclassed on a per client, per contract basis.

@@ -12,9 +12,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -22,7 +19,6 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -32,7 +28,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 /**
  * These test the AssignableElementCommandProvider to ensure the SequenceHint is reset to 0 when data that could influence it's value has changed.
@@ -234,24 +230,14 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 	}
 
 	private EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {
-		final Object lockObject = new Object();
-		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(null, lockObject);
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the editing domain with a special command stack.
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		final Resource r = new ResourceImpl();
 		r.getContents().add(scenarioModel);
 		resourceSet.getResources().add(r);
-		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, scenarioModel, resourceSet);
 
-		commandStack.setEditingDomain(editingDomain);
-
-		return editingDomain;
-
+		return ScenarioStorageUtil.initEditingDomain(resourceSet, scenarioModel).getFirst();
 	}
 
 }

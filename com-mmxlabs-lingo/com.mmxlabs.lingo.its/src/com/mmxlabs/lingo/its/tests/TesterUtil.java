@@ -45,8 +45,9 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.util.ResourceHelper;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.util.ResourceHelper;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 public class TesterUtil {
 
@@ -166,7 +167,7 @@ public class TesterUtil {
 		}
 	}
 
-	public static boolean validateReloadedState(final LNGScenarioModel original) throws Exception {
+	public static boolean validateReloadedState(final IScenarioDataProvider original) throws Exception {
 
 		final File f = File.createTempFile("TesterUtil", ".xmi");
 		f.deleteOnExit();
@@ -175,7 +176,7 @@ public class TesterUtil {
 
 				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 				final Resource resource = resourceSet.createResource(URI.createFileURI(f.getAbsolutePath()));
-				resource.getContents().add(EcoreUtil.copy(original));
+				resource.getContents().add(EcoreUtil.copy(original.getScenario()));
 				ResourceHelper.saveResource(resource);
 			});
 			return ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
@@ -184,7 +185,7 @@ public class TesterUtil {
 				final Resource resource = ResourceHelper.loadResource(resourceSet, URI.createFileURI(f.getAbsolutePath()));
 				final EObject loadedCopy = resource.getContents().get(0);
 
-				final Comparison comparison = compareModels(original, loadedCopy);
+				final Comparison comparison = compareModels(original.getScenario(), loadedCopy);
 				return comparison.getDifferences().isEmpty();
 			});
 		} finally {

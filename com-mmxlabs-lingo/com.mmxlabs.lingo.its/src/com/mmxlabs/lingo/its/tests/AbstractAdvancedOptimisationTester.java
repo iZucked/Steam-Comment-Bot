@@ -34,6 +34,7 @@ import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
@@ -147,7 +148,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 				return propertiesFile;
 			};
 		};
-		provider.execute(originalScenario -> {
+		provider.execute(originalScenarioDataProvider -> {
 
 			final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 
@@ -163,7 +164,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			userSettings.setShippingOnly(false);
 			userSettings.setSimilarityMode(mode);
 
-			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
+			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 			Assert.assertNotNull(optimisationPlan);
 
 			if (limitedIterations) {
@@ -255,10 +256,10 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			} else {
 				runnerHook = null;
 			}
-			LNGScenarioRunnerCreator.withOptimisationRunner(originalScenario, optimisationPlan, scenarioRunner -> {
+			LNGScenarioRunnerCreator.withOptimisationRunner(originalScenarioDataProvider, optimisationPlan, scenarioRunner -> {
 
 				// After initial evaluation, save, reload and compare models.
-				Assert.assertTrue("Validate reloaded model is identical", TesterUtil.validateReloadedState(originalScenario));
+				Assert.assertTrue("Validate reloaded model is identical", TesterUtil.validateReloadedState(originalScenarioDataProvider));
 				if (runnerHook != null) {
 					scenarioRunner.setRunnerHook(runnerHook);
 				}

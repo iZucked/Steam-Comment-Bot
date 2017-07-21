@@ -19,10 +19,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
@@ -45,7 +43,7 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 		testReports(reportID, shortName, extension, null);
 	}
 
-	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception;
+	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception;
 
 	@Test
 	@Category(ReportTest.class)
@@ -111,8 +109,7 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 	@Category(ReportTest.class)
 	public void testExposuresReport() throws Exception {
 		Assume.assumeTrue(LicenseFeatures.isPermitted("features:exposures"));
-		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html", instance -> {
-			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		testReports(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, "html", modelRecord -> {
 			try (ModelReference ref = modelRecord.aquireReference("ExposuresReportView")) {
 
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) ref.getInstance();

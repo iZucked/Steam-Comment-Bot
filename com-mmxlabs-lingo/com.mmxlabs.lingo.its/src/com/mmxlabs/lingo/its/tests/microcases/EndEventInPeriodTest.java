@@ -82,7 +82,7 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			final LNGScenarioModel periodScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel periodScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final VesselAvailability vesselAvailability = periodScenario.getCargoModel().getVesselAvailabilities().get(0);
 			Assert.assertFalse(vesselAvailability.isForceHireCostOnlyEndRule());
@@ -111,7 +111,7 @@ public class EndEventInPeriodTest extends AbstractMicroTestCase {
 		}, null, scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			final LNGScenarioModel periodScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel periodScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final VesselAvailability vesselAvailability = periodScenario.getCargoModel().getVesselAvailabilities().get(0);
 			Assert.assertTrue(vesselAvailability.isForceHireCostOnlyEndRule());

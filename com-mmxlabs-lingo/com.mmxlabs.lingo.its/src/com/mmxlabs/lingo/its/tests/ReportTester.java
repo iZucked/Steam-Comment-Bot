@@ -30,13 +30,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -52,12 +54,12 @@ public class ReportTester {
 	// Never commit as true
 	private static final TestMode storeReports = TestMode.Run;
 
-	public static void testReportsWithElement(final ScenarioInstance instance, @NonNull LNGScenarioModel scenarioModel, final URL scenarioURL, final String reportID, final String shortName,
-			final String extension, String elementID, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
-		testReports(instance, scenarioModel, scenarioURL, reportID, shortName, extension, (t) -> {
+	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+			final String shortName, final String extension, String elementID, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
+		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, extension, (t) -> {
 
 			Object target = null;
-			ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+			ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
 			Schedule schedule = scheduleModel.getSchedule();
 			if (schedule != null) {
 				for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
@@ -89,21 +91,20 @@ public class ReportTester {
 		});
 	}
 
-	public static void testReports(final @NonNull ScenarioInstance instance, @NonNull LNGScenarioModel scenarioModel, final URL scenarioURL, final String reportID, final String shortName,
-			final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
+	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+			final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
 
 		Assume.assumeTrue(storeReports != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
-		// A side-effect is the initial evaluation.
-		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioModel, true, runner -> {
+		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
 
 			if (preAction != null) {
-				preAction.accept(instance);
+				preAction.accept(modelRecord);
 			}
 
 			final ReportTesterHelper reportTester = new ReportTesterHelper();
-			ScenarioResult scenarioResult = new ScenarioResult(instance, ScenarioModelUtil.getScheduleModel(scenarioModel));
+			ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 			final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 			Assert.assertNotNull(reportContents);
@@ -146,16 +147,27 @@ public class ReportTester {
 		});
 	}
 
-	public static void testPinDiffReports(final ScenarioInstance pinInstance, ModelReference pinModelReference, ScenarioInstance refInstance, ModelReference refModelReference, final URL scenarioURL,
-			final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testPinDiffReports(final URL pinScenarioURL, URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+
+		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
+			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {
+				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, pinScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID,
+						ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
+
+			});
+		});
+	}
+
+	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, IScenarioDataProvider pinModelDataProvider, ScenarioModelRecord refInstance,
+			IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 		Assume.assumeTrue(storeReports != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 
-		LNGScenarioRunnerCreator.withLegacyEvaluationRunner((LNGScenarioModel) pinModelReference.getInstance(), true, pinRunner -> {
-			ScenarioResult pinResult = new ScenarioResult(pinInstance, ScenarioModelUtil.getScheduleModel(pinRunner.getScenario()));
-			LNGScenarioRunnerCreator.withLegacyEvaluationRunner((LNGScenarioModel) refModelReference.getInstance(), true, refRunner -> {
-				ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenario()));
+		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(pinModelDataProvider, true, pinRunner -> {
+			ScenarioResult pinResult = new ScenarioResult(pinInstance, ScenarioModelUtil.getScheduleModel(pinRunner.getScenarioDataProvider()));
+			LNGScenarioRunnerCreator.withLegacyEvaluationRunner(refModelDataProvider, true, refRunner -> {
+				ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
 
 				final ReportTesterHelper reportTester = new ReportTesterHelper();
 				final IReportContents reportContents = reportTester.getReportContents(pinResult, refResult, reportID);
@@ -202,7 +214,29 @@ public class ReportTester {
 		});
 	}
 
-	public static void testActionPlanReport(final List<Pair<ScenarioInstance, ModelReference>> orderedInstances, final URL scenarioURL, final String reportID, final String shortName,
+	public static void testActionPlanReport(final URL baseScenarioURL, List<URL> scenarioURLs, final String reportID, final String shortName, final String extension) throws Exception {
+
+		CheckedConsumer<List<Pair<ScenarioModelRecord, IScenarioDataProvider>>, Exception> executeTestConsumer = orderedInstances -> {
+
+			ReportTester.testActionPlanReport(orderedInstances, baseScenarioURL, ReportTesterHelper.ACTIONPLAN_REPORT_ID, ReportTesterHelper.ACTIONPLAN_REPORT_SHORTNAME, "html");
+		};
+
+		List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances = new LinkedList<>();
+		final CheckedBiConsumer<Integer, CheckedBiConsumer, Exception> generateDataConsumer = (index, action) -> {
+			if (index == scenarioURLs.size()) {
+				executeTestConsumer.accept(orderedInstances);
+				return;
+			}
+			URL url = scenarioURLs.get(index);
+			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (instance, scenarioDataProvider) -> {
+				orderedInstances.add(new Pair<>(instance, scenarioDataProvider));
+				action.accept(index + 1, action);
+			});
+		};
+		generateDataConsumer.accept(0, generateDataConsumer);
+	}
+
+	public static void testActionPlanReport(final List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances, final URL scenarioURL, final String reportID, final String shortName,
 			final String extension) throws Exception {
 		Assume.assumeTrue(storeReports != TestMode.Skip);
 
@@ -258,16 +292,16 @@ public class ReportTester {
 				return;
 			}
 
-			Pair<ScenarioInstance, ModelReference> p = orderedInstances.get(a);
-			LNGScenarioModel scenarioModel = (LNGScenarioModel) p.getSecond().getInstance();
+			Pair<ScenarioModelRecord, IScenarioDataProvider> p = orderedInstances.get(a);
+			IScenarioDataProvider scenarioDataProvider = p.getSecond();
 			try {
-				LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioModel, false, pinRunner -> {
+				LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, false, pinRunner -> {
 					// Perform eval
 				});
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			ScenarioResult result = new ScenarioResult(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioModel));
+			ScenarioResult result = new ScenarioResult(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 			orderedResults.add(result);
 
 			b.accept(a + 1, b);

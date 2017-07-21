@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Some test cases around period optimisation with vessel events (specifically charter out events which can move between vessels). Original period transformer locks down all vessel events.
@@ -60,7 +61,8 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 	public void testCharterOutEvent_In() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -121,12 +123,12 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check locked flags
 			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
@@ -152,7 +154,8 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 	public void testCharterOutEvent_Boundary() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -213,12 +216,12 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			// Check locked flags
 			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);

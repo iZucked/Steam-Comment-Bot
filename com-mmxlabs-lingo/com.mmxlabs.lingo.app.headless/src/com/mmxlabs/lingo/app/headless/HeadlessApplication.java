@@ -34,6 +34,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
@@ -77,8 +78,10 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
@@ -145,15 +148,13 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		// Get the root object
-		return ScenarioStorageUtil.withExternalScenarioFromFile(scenarioFile, (instance, modelReference) -> {
-			if (instance == null) {
+		return ScenarioStorageUtil.withExternalScenarioFromResourceURL(new File(scenarioFile).toURL(), (modelRecord, scenarioDataProvider) -> {
+			if (modelRecord == null) {
 				System.err.println("Unable to load scenario");
 				return Integer.valueOf(IApplication.EXIT_OK);
 			}
 
-			final LNGScenarioModel rootObject = (LNGScenarioModel) modelReference.getInstance();
-
-			if (rootObject == null) {
+			if (scenarioDataProvider.getScenario() == null) {
 				System.err.println("Unable to load scenario");
 				return Integer.valueOf(IApplication.EXIT_OK);
 			}
@@ -164,7 +165,7 @@ public class HeadlessApplication implements IApplication {
 			assert optimisationPlan != null;
 			optimisationPlan.getStages().clear();
 
-			updateOptimiserSettings(rootObject, optimisationPlan, overrideSettings, headlessParameters);
+			updateOptimiserSettings((LNGScenarioModel) scenarioDataProvider.getScenario(), optimisationPlan, overrideSettings, headlessParameters);
 
 			// Add in required extensions, but do not run custom hooks.
 			optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false);
@@ -294,7 +295,7 @@ public class HeadlessApplication implements IApplication {
 				hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 				try {
-					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides,
+					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, localOverrides,
 							runnerHook, false, hints.toArray(new String[hints.size()]));
 
 					// FIXME
@@ -328,7 +329,7 @@ public class HeadlessApplication implements IApplication {
 					System.err.println("Optimised!");
 
 					if (outputFile != null) {
-						saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
+						saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), modelRecord);
 					}
 
 					exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
@@ -342,7 +343,7 @@ public class HeadlessApplication implements IApplication {
 				executorService.shutdownNow();
 			}
 			return Integer.valueOf(IApplication.EXIT_OK);
-		}, new NullProgressMonitor());
+		});
 	}
 
 	/**
@@ -409,9 +410,9 @@ public class HeadlessApplication implements IApplication {
 		return new Pair<>(result, headlessParameters);
 	}
 
-	private void saveScenario(final String outputFile, final ScenarioInstance instance) throws IOException {
+	private void saveScenario(final String outputFile, final ScenarioModelRecord modelRecord) throws IOException {
 
-		ScenarioStorageUtil.storeToFile(instance, new File(outputFile));
+		ScenarioStorageUtil.storeToFile(modelRecord, new File(outputFile));
 	}
 
 	@Override
@@ -541,7 +542,7 @@ public class HeadlessApplication implements IApplication {
 
 			// Similarity
 			stage.getConstraintAndFitnessSettings().setSimilaritySettings(createSimilaritySettings(settingsOverride, headlessParameters, plan.getUserSettings()));
-			
+
 			final ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
 			pStage.setJobCount(headlessParameters.getParameterValue("lso-jobs", Integer.class));
@@ -652,7 +653,8 @@ public class HeadlessApplication implements IApplication {
 				similarityMap.put(key, similarity.getValue(key, Integer.class));
 			}
 			// TODO: not sure why we need to put things into JMAPS?
-			return ScenarioUtils.createSimilaritySettings(similarityMap.get("low-thresh"), similarityMap.get("low-weight"), similarityMap.get("med-thresh"), similarityMap.get("med-weight"), similarityMap.get("high-thresh"), similarityMap.get("high-weight"), similarityMap.get("out-of-bounds-weight"));
+			return ScenarioUtils.createSimilaritySettings(similarityMap.get("low-thresh"), similarityMap.get("low-weight"), similarityMap.get("med-thresh"), similarityMap.get("med-weight"),
+					similarityMap.get("high-thresh"), similarityMap.get("high-weight"), similarityMap.get("out-of-bounds-weight"));
 		}
 	}
 
@@ -681,7 +683,7 @@ public class HeadlessApplication implements IApplication {
 					settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Double.class)));
 				} else {
 					settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, jMap.getValue(objectiveName, Integer.class)));
-	
+
 				}
 			}
 		}

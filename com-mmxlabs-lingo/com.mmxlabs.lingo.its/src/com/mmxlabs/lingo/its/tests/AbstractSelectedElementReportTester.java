@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.category.ReportTest;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
@@ -34,7 +34,7 @@ public abstract class AbstractSelectedElementReportTester extends AbstractOptimi
 		testReports(reportID, shortName, extension, null);
 	}
 
-	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception;
+	protected abstract void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception;
 
 	@Test
 	@Category(ReportTest.class)

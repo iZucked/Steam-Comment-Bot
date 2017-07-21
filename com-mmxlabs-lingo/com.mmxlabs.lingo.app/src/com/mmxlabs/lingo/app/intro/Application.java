@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.app.intro;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.util.Arrays;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;

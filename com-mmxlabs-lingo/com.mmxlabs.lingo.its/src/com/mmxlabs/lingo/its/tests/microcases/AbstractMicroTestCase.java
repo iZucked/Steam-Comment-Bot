@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public abstract class AbstractMicroTestCase {
@@ -61,14 +62,15 @@ public abstract class AbstractMicroTestCase {
 	protected SpotMarketsModelFinder spotMarketsModelFinder;
 	protected PricingModelBuilder pricingModelBuilder;
 	protected BaseLegalEntity entity;
+	protected IScenarioDataProvider scenarioDataProvider;
 
 	@NonNull
-	public LNGScenarioModel importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
 		return importReferenceData("/referencedata/reference-data-1/");
 	}
 
 	@NonNull
-	public static LNGScenarioModel importReferenceData(final String url) throws MalformedURLException {
+	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 
 		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
 		final CSVImporter importer = new CSVImporter();
@@ -86,7 +88,8 @@ public abstract class AbstractMicroTestCase {
 	@Before
 	public void constructor() throws Exception {
 
-		lngScenarioModel = importReferenceData();
+		scenarioDataProvider = importReferenceData();
+		lngScenarioModel = (LNGScenarioModel) scenarioDataProvider.getScenario();
 
 		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -135,6 +138,10 @@ public abstract class AbstractMicroTestCase {
 		spotMarketsModelBuilder = null;
 		pricingModelBuilder = null;
 		entity = null;
+		
+		if (scenarioDataProvider != null) {
+			scenarioDataProvider.close();
+		}
 	}
 
 	public void evaluateWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker) {
@@ -180,7 +187,7 @@ public abstract class AbstractMicroTestCase {
 		final ExecutorService executorService = createExecutorService();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(),
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(),
 					new TransformerExtensionTestBootstrapModule(), overrides, null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
@@ -224,7 +231,7 @@ public abstract class AbstractMicroTestCase {
 		final ExecutorService executorService = createExecutorService();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
 
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
@@ -258,7 +265,7 @@ public abstract class AbstractMicroTestCase {
 		// Generate internal data
 		final ExecutorService executorService = createExecutorService();
 		try {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimiserPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimiserPlan, scenarioDataProvider.getEditingDomain(), null,
 					localOverrides, null, true);
 
 			// final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);

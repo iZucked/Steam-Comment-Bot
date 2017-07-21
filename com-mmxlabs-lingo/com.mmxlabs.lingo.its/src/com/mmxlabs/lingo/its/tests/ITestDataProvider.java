@@ -13,16 +13,14 @@ import java.net.URL;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.util.CheckedConsumer;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public interface ITestDataProvider {
-
-	// LNGScenarioModel getScenarioModel();
 
 	File getFitnessDataAsFile() throws URISyntaxException, IOException;
 
 	URL getFitnessDataAsURL() throws MalformedURLException, IOException;
 
-	<E extends Exception> void execute(CheckedConsumer<@NonNull LNGScenarioModel, E> testRunner) throws Exception, E;
+	<E extends Exception> void execute(CheckedConsumer<@NonNull IScenarioDataProvider, E> testRunner) throws Exception, E;
 
 }

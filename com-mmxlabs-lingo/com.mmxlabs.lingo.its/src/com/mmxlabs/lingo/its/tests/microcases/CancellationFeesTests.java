@@ -41,7 +41,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 
@@ -72,7 +72,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
 			Assert.assertNotNull(schedule);
@@ -103,7 +103,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check single cargo
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 
@@ -136,7 +136,7 @@ public class CancellationFeesTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			final Schedule schedule = optimiserScenario.getScheduleModel().getSchedule();
 			Assert.assertNotNull(schedule);

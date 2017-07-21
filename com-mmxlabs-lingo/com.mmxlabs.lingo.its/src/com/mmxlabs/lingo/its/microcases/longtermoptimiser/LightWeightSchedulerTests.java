@@ -158,7 +158,7 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 
 		final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), constraintAndFitnessSettings,
-				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), scenarioRunner.getScenario(), dataTransformer.getInitialResult(), Collections.emptyList());
+				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), scenarioRunner.getScenarioDataProvider(), dataTransformer.getInitialResult(), Collections.emptyList());
 		return slotInserter;
 	}
 

@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @RunWith(value = ShiroRunner.class)
 public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
@@ -56,7 +57,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 	public void checkCharterOutEventBeforeBoundary() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -112,12 +114,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Assert.assertTrue(optimiserScenario.getCargoModel().getVesselEvents().isEmpty());
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
@@ -144,7 +146,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 	public void checkDryDockEventBeforeBoundary() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -198,12 +201,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
 			Assert.assertEquals("drydock-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
 
@@ -231,7 +234,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 	public void checkMaintenceEventBeforeBoundary() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -282,12 +286,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
@@ -314,7 +318,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 	public void checkCargoBeforeBoundary() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -391,12 +396,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
@@ -435,7 +440,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 	public void checkCargoBeforeBoundaryAndVesselEndDate() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -495,12 +501,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
@@ -540,7 +546,8 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 	public void checkCharterOutEventBeforeBoundaryRetained() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -595,12 +602,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Assert.assertTrue(optimiserScenario.getCargoModel().getVesselEvents().isEmpty());
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);

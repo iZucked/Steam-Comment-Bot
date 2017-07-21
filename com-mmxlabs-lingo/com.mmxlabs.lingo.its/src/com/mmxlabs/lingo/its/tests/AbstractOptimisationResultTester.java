@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.tests;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
@@ -14,9 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Consumer;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
@@ -46,12 +43,9 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipherProvider;
 
 /**
  * 

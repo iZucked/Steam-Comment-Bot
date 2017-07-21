@@ -79,7 +79,8 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	@Before
 	public void constructor() throws MalformedURLException {
 
-		lngScenarioModel = importReferenceData();
+		scenarioDataProvider = importReferenceData();
+		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -380,7 +381,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			@NonNull
 			ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 

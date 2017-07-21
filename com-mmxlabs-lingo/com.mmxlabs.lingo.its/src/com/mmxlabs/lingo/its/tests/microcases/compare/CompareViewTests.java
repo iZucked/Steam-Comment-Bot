@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,16 +17,10 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -39,7 +32,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -57,7 +49,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -85,15 +76,11 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.manager.InstanceData;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
-import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 
 @RunWith(value = ShiroRunner.class)
 public class CompareViewTests {
@@ -776,27 +763,32 @@ public class CompareViewTests {
 	public void runTest(final Consumer<ScenarioMaker> fromBuilder, final Consumer<ScenarioMaker> toBuilder, final Consumer<ChangeSetRoot> resultChecker) throws Exception {
 
 		LNGScenarioModel from;
+		IScenarioDataProvider fromDP;
 		{
 			final ScenarioMaker maker = new ScenarioMaker();
 			maker.constructor();
 			maker.buildIt(fromBuilder);
 			from = maker.lngScenarioModel;
+			fromDP = maker.scenarioDataProvider;
 		}
-		evaluate(from);
+		evaluate(fromDP, from);
+
 		LNGScenarioModel to;
+		IScenarioDataProvider toDP;
 		{
 			final ScenarioMaker maker = new ScenarioMaker();
 			maker.constructor();
 			maker.buildIt(toBuilder);
 			to = maker.lngScenarioModel;
+			toDP = maker.scenarioDataProvider;
 		}
-		evaluate(to);
+		evaluate(toDP, to);
 
-		final ScenarioInstance pinned = makeScenarioInstance("from", from);
-		final ScenarioInstance other = makeScenarioInstance("to", to);
-
-		final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
-		final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
+		final ScenarioModelRecord pinnedRecord = ScenarioStorageUtil.createFrom("from", fromDP);
+		final ScenarioModelRecord otherRecord = ScenarioStorageUtil.createFrom("to", toDP);
+//
+//		final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
+//		final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
 		try {
 			//
 			try (ModelReference fromRef = pinnedRecord.aquireReference("CompareViewTests:1")) {
@@ -819,8 +811,8 @@ public class CompareViewTests {
 						children.add(scenarioModel);
 						return children;
 					};
-					final ScenarioResult pinnedResult = new ScenarioResult(pinned);
-					final ScenarioResult otherResult = new ScenarioResult(other);
+					final ScenarioResult pinnedResult = new ScenarioResult(pinnedRecord);
+					final ScenarioResult otherResult = new ScenarioResult(otherRecord);
 					selectedDataProvider.addScenario(pinnedResult, ScenarioModelUtil.getScheduleModel(from).getSchedule(), getChildren.apply(from));
 					selectedDataProvider.addScenario(otherResult, ScenarioModelUtil.getScheduleModel(to).getSchedule(), getChildren.apply(to));
 					selectedDataProvider.setPinnedScenarioInstance(pinnedResult);
@@ -843,73 +835,14 @@ public class CompareViewTests {
 				}
 			}
 		} finally {
-			System.gc();
-			System.gc();
-			System.gc();
-			SSDataManager.Instance.releaseModelRecord(pinned);
-			SSDataManager.Instance.releaseModelRecord(other);
+			pinnedRecord.dispose();
+			otherRecord.dispose();
+//			System.gc();
+//			System.gc();
+//			System.gc();
+//			SSDataManager.Instance.releaseModelRecord(pinned);
+//			SSDataManager.Instance.releaseModelRecord(other);
 		}
-
-	}
-
-	private ScenarioInstance makeScenarioInstance(final String name, final LNGScenarioModel from) {
-
-		final ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		instance.setName(name);
-		// instance.setInstance(from);
-
-		SSDataManager.Instance.getModelRecord(instance, (record, monitor) -> {
-			try {
-
-				final ResourceSet resourceSet = new ResourceSetImpl();
-				final Resource r = new ResourceImpl();
-				r.getContents().add(from);
-				resourceSet.getResources().add(r);
-				final Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> p = initEditingDomain(resourceSet, from, instance);
-				final InstanceData data = new InstanceData(record, from, p.getFirst(), p.getSecond(), (d) -> {
-					throw new UnsupportedOperationException();
-				}, (d) -> {
-					// Nothing to do
-				});
-				p.getSecond().setInstanceData(data);
-
-				return data;
-			} catch (final Exception e) {
-				record.setLoadFailure(e);
-				return null;
-			}
-		});
-
-		// TODO: NEED fix
-
-		return instance;
-	}
-
-	public static Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> initEditingDomain(final ResourceSet resourceSet, final EObject rootObject, final ScenarioInstance instance) {
-
-		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(instance);
-
-		commandStack.addCommandStackListener(new CommandStackListener() {
-
-			@Override
-			public void commandStackChanged(final EventObject event) {
-				// instance.setDirty(commandStack.isSaveNeeded());
-			}
-		});
-
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-
-		// Create the editing domain with a special command stack.
-		final MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
-
-		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, resourceSet);
-
-		commandStack.setEditingDomain(editingDomain);
-
-		return new Pair<>(editingDomain, commandStack);
 
 	}
 
@@ -928,14 +861,15 @@ public class CompareViewTests {
 		protected SpotMarketsModelFinder spotMarketsModelFinder;
 		protected PricingModelBuilder pricingModelBuilder;
 		protected BaseLegalEntity entity;
+		private IScenarioDataProvider scenarioDataProvider;
 
 		@NonNull
-		public LNGScenarioModel importReferenceData() throws MalformedURLException {
+		public IScenarioDataProvider importReferenceData() throws MalformedURLException {
 			return importReferenceData("/referencedata/reference-data-1/");
 		}
 
 		@NonNull
-		public LNGScenarioModel importReferenceData(final String url) throws MalformedURLException {
+		public IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 
 			final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
 			final CSVImporter importer = new CSVImporter();
@@ -953,7 +887,8 @@ public class CompareViewTests {
 		@Before
 		public void constructor() throws MalformedURLException {
 
-			lngScenarioModel = importReferenceData();
+			scenarioDataProvider = importReferenceData();
+			lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 			scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 			scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -1003,7 +938,7 @@ public class CompareViewTests {
 		return Executors.newSingleThreadExecutor();
 	}
 
-	public void evaluate(final LNGScenarioModel lngScenarioModel) {
+	public void evaluate(IScenarioDataProvider scenarioDataProvider, final LNGScenarioModel lngScenarioModel) {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -1017,7 +952,7 @@ public class CompareViewTests {
 		// Generate internal data
 		final ExecutorService executorService = createExecutorService();
 		try {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
 			scenarioRunner.evaluateInitialState();
 		} finally {
 			executorService.shutdownNow();

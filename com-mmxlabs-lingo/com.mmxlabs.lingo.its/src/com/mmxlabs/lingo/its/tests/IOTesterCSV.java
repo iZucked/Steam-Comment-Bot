@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 
 @RunWith(Parameterized.class)
@@ -51,27 +52,24 @@ public class IOTesterCSV {
 
 		final ITestDataProvider testCaseProvider = new CSVTestDataProvider(url);
 		testCaseProvider.execute(testCase -> {
-			EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
-			long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
-			File restoredFile = IOTestUtil.exportTestCase(testCase);
+			final EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+			final long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
+			final File restoredFile = IOTestUtil.exportTestCase(testCase);
 
 			try {
 
-				URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
+				final URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
 
 				final ITestDataProvider restoredCaseProvider = new CSVTestDataProvider(restoredURL);
 				restoredCaseProvider.execute(restoredCase -> {
-					EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
-					long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
+					final EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
+					final long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
 					Assert.assertArrayEquals(originalArray, restoredArray);
 				});
 			} finally {
 				// Delete temporary directory
 				IOTestUtil.tempDirectoryTeardown(restoredFile);
 			}
-
 		});
-
 	}
-
 }

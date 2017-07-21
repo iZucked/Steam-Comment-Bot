@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 public class CharterOutTests extends AbstractOptimisationResultTester {
 

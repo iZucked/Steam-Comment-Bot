@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class LiNGOTestDataProvider implements ITestDataProvider {
 
@@ -38,8 +39,8 @@ public class LiNGOTestDataProvider implements ITestDataProvider {
 	}
 
 	@Override
-	public <E extends Exception> void execute(CheckedConsumer<@NonNull LNGScenarioModel, E> testRunner) throws E, Exception {
+	public <E extends Exception> void execute(CheckedConsumer<@NonNull IScenarioDataProvider, E> testRunner) throws E, Exception {
 		URL fileURL = new URL(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
-		LNGScenarioRunnerCreator.withLiNGOFileEvaluationRunner(fileURL, runner -> testRunner.accept(runner.getScenario()));
+		LNGScenarioRunnerCreator.withLiNGOFileEvaluationRunner(fileURL, runner -> testRunner.accept(runner.getScenarioDataProvider()));
 	}
 }

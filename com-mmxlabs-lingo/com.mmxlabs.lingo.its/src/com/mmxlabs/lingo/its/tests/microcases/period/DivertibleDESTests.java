@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Some test cases around divertible DES cargoes.
@@ -61,8 +62,9 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 	public void testDivertableDES() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -110,12 +112,12 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());

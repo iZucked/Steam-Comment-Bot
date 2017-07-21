@@ -93,7 +93,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	@Before
 	public void constructor() throws MalformedURLException {
 
-		lngScenarioModel = importReferenceData();
+		scenarioDataProvider = importReferenceData();
+		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -173,7 +174,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				// Check spot index has been updated
-				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 				final PriceIntervalProviderHelper priceIntervalProviderHelper = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, PriceIntervalProviderHelper.class);
 				/*
 				 * Load data and set up model
@@ -263,7 +264,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
 				// Check spot index has been updated
-				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
@@ -338,7 +339,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
@@ -417,7 +418,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
@@ -492,7 +493,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
@@ -576,7 +577,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
@@ -659,7 +660,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 
-				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+				final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 				@NonNull
 				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 				final TimeWindowScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromChildInjector(scenarioToOptimiserBridge, TimeWindowScheduler.class);
@@ -736,7 +737,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
 

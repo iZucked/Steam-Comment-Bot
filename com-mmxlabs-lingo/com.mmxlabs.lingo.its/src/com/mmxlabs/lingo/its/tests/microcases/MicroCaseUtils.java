@@ -8,11 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -20,16 +18,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.Metadata;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -39,44 +32,8 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 
 public class MicroCaseUtils {
 
-	public static void storeToFile(final LNGScenarioModel lngScenarioModel, final String name) throws IOException {
-		ServiceHelper.withCheckedServiceConsumer(IMigrationRegistry.class, migrationRegistry -> {
-			storeToFile(lngScenarioModel, migrationRegistry, new File(String.format("C://temp//%s.lingo", name)));
-		});
-	}
-
-	public static void storeToFile(final LNGScenarioModel lngScenarioModel, final IMigrationRegistry migrationRegistry, final File output) throws IOException {
-		final ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-
-		final String scenarioVersionContext = migrationRegistry.getDefaultMigrationContext();
-		final String clientVersionContext = migrationRegistry.getDefaultClientMigrationContext();
-		if (scenarioVersionContext != null) {
-			instance.setVersionContext(scenarioVersionContext);
-			int latestContextVersion = migrationRegistry.getLatestContextVersion(scenarioVersionContext);
-			// Snapshot version - so find last good version number
-			if (latestContextVersion < 0) {
-				latestContextVersion = migrationRegistry.getLastReleaseVersion(scenarioVersionContext);
-			}
-			instance.setScenarioVersion(latestContextVersion);
-		}
-		if (clientVersionContext != null) {
-			instance.setClientVersionContext(clientVersionContext);
-			int latestClientContextVersion = migrationRegistry.getLatestClientContextVersion(clientVersionContext);
-			// Snapshot version - so find last good version number
-			if (latestClientContextVersion < 0) {
-				latestClientContextVersion = migrationRegistry.getLastReleaseClientVersion(clientVersionContext);
-			}
-			instance.setClientScenarioVersion(latestClientContextVersion);
-		}
-
-		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-		metadata.setCreated(new Date());
-		metadata.setLastModified(new Date());
-		metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
-
-		instance.setMetadata(metadata);
-
-		ScenarioStorageUtil.storeToFile(instance, EcoreUtil.copy(lngScenarioModel), output);
+	public static void storeToFile(final @NonNull IScenarioDataProvider scenarioDataProvider, final String name) throws IOException {
+		ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(String.format("C://temp//%s.lingo", name)));
 	}
 
 	public static void withInjectorPerChainScope(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Runnable r) {

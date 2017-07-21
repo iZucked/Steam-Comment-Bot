@@ -14,20 +14,23 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.util.CheckedConsumer;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class CSVTestDataProvider implements ITestDataProvider {
 
-	private URL scenarioURL;
+	private final URL scenarioURL;
 
-	public CSVTestDataProvider(URL scenarioURL) throws MalformedURLException {
+	public CSVTestDataProvider(final URL scenarioURL) throws MalformedURLException {
 		this.scenarioURL = scenarioURL;
 	}
 
 	@Override
 	public File getFitnessDataAsFile() throws IOException, URISyntaxException {
-		URL fileURL = FileLocator.toFileURL(scenarioURL);
+		final URL fileURL = FileLocator.toFileURL(scenarioURL);
 		final URL propertiesFile = new URL(fileURL.toString().replaceAll(" ", "%20") + "fitness.properties");
 		return new File(propertiesFile.toURI());
 	}
@@ -39,9 +42,8 @@ public class CSVTestDataProvider implements ITestDataProvider {
 	}
 
 	@Override
-	public <E extends Exception> void execute(CheckedConsumer<@NonNull LNGScenarioModel, E> testRunner) throws E, MalformedURLException {
-		@NonNull
-		LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(scenarioURL.toString());
-		testRunner.accept(scenarioModel);
+	public <E extends Exception> void execute(final CheckedConsumer<@NonNull IScenarioDataProvider, E> testRunner) throws E, MalformedURLException {
+		final @NonNull IScenarioDataProvider scenarioDataProvider = CSVImporter.importCSVScenario(scenarioURL.toString());
+		testRunner.accept(scenarioDataProvider);
 	}
 }

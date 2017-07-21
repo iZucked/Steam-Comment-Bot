@@ -53,6 +53,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -62,15 +63,17 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 	@Override
-	public LNGScenarioModel importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
 
 		@NonNull
-		final LNGScenarioModel model = importReferenceData("/referencedata/reference-data-2/");
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData("/referencedata/reference-data-2/");
 
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
-		model.getCargoModel().setCanalBookings(canalBookings);
+		@NonNull
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+		cargoModel.setCanalBookings(canalBookings);
 
-		final PortModel portModel = ScenarioModelUtil.getPortModel(model);
+		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 
 		final Optional<Route> potentialPanama = portModel.getRoutes().stream().filter(r -> r.getRouteOption() == RouteOption.PANAMA).findFirst();
 		final Route panama = potentialPanama.get();
@@ -89,15 +92,16 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 			}
 		});
 
-		model.getCargoModel().getCanalBookings().setStrictBoundaryOffsetDays(30);
-		model.getCargoModel().getCanalBookings().setRelaxedBoundaryOffsetDays(90);
-		model.getCargoModel().getCanalBookings().setFlexibleBookingAmountNorthbound(0);
-		model.getCargoModel().getCanalBookings().setFlexibleBookingAmountSouthbound(0);
+		canalBookings.setStrictBoundaryOffsetDays(30);
+		canalBookings.setRelaxedBoundaryOffsetDays(90);
+		canalBookings.setFlexibleBookingAmountNorthbound(0);
+		canalBookings.setFlexibleBookingAmountSouthbound(0);
 
-		model.setPromptPeriodStart(LocalDate.of(2017, 6, 1));
-		model.setPromptPeriodEnd(LocalDate.of(2017, 9, 1));
+		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		scenarioModel.setPromptPeriodStart(LocalDate.of(2017, 6, 1));
+		scenarioModel.setPromptPeriodEnd(LocalDate.of(2017, 9, 1));
 
-		return model;
+		return scenarioDataProvider;
 	}
 
 	private Cargo createFobDesCargo(final VesselAvailability vesselAvailability, final Port loadPort, final Port dischargePort, final LocalDateTime loadDate, final LocalDateTime dischargeDate) {

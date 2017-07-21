@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class IOTestUtil {
 
@@ -136,14 +137,14 @@ public class IOTestUtil {
 	 *            - LNGScenarioModel to acquire fitnesses of
 	 * @return - EList<Fitness> of the associated fitnesses.
 	 */
-	public static EList<Fitness> ScenarioModeltoFitnessList(@NonNull final LNGScenarioModel model) {
+	public static EList<Fitness> ScenarioModeltoFitnessList(@NonNull final IScenarioDataProvider scenarioDataProvider) {
 
 		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 
-		LNGScenarioRunnerCreator.withOptimisationRunner(model, optimisationPlan, runner -> {
+		LNGScenarioRunnerCreator.withOptimisationRunner(scenarioDataProvider, optimisationPlan, runner -> {
 			// We just want to evaluate with fitnesses...
 		});
-		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(model);
+		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
 		final Schedule schedule = scheduleModel.getSchedule();
 
 		Assert.assertNotNull(schedule);
@@ -153,13 +154,13 @@ public class IOTestUtil {
 		return fitnesses;
 	}
 
-	public static Schedule ScenarioModeltoSchedule(final LNGScenarioModel model) {
+	public static Schedule ScenarioModeltoSchedule(final IScenarioDataProvider scenarioDataProvider) {
 
 		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
-		LNGScenarioRunnerCreator.withOptimisationRunner(model, optimisationPlan, runner -> {
+		LNGScenarioRunnerCreator.withOptimisationRunner(scenarioDataProvider, optimisationPlan, runner -> {
 			// We just want to evaluate with fitnesses...
 		});
-		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(model);
+		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
 
 		final Schedule schedule = scheduleModel.getSchedule();
 
@@ -174,7 +175,7 @@ public class IOTestUtil {
 	 * @return - URL by which to locate the temporary directory
 	 * @throws MalformedURLException
 	 */
-	public static File exportTestCase(final LNGScenarioModel model) throws MalformedURLException {
+	public static File exportTestCase(final IScenarioDataProvider model) throws MalformedURLException {
 
 		final ExportCSVWizard ECSVW = new ExportCSVWizard();
 

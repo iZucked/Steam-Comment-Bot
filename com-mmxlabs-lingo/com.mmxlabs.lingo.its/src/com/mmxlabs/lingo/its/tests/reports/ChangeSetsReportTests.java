@@ -17,7 +17,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 
@@ -47,25 +47,14 @@ public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 	public void testBonnyProblemsDiff() throws Exception {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.lingo");
 		final URL refScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/2 -O- late and lost-DES backfill -F- Bonny.lingo");
-		ScenarioStorageUtil.withExternalScenarioFromResourceURL(pinScenarioURL, (pinInstance, pinModelReference) -> {
-			ScenarioStorageUtil.withExternalScenarioFromResourceURL(refScenarioURL, (refInstance, refModelReference) -> {
-				ReportTester.testPinDiffReports(pinInstance, pinModelReference, refInstance, refModelReference, pinScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID,
-						ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
 
-			});
-		});
+		ReportTester.testPinDiffReports(pinScenarioURL, refScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID, ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	public void testDrydockDiff() throws Exception {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/0 base.lingo");
 		final URL refScenarioURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/5 charter-in generated - rewire for shorter one -O- -F- -F- base.lingo");
-		ScenarioStorageUtil.withExternalScenarioFromResourceURL(pinScenarioURL, (pinInstance, pinModelReference) -> {
-			ScenarioStorageUtil.withExternalScenarioFromResourceURL(refScenarioURL, (refInstance, refModelReference) -> {
-				ReportTester.testPinDiffReports(pinInstance, pinModelReference, refInstance, refModelReference, pinScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID,
-						ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
-
-			});
-		});
+		ReportTester.testPinDiffReports(pinScenarioURL, refScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID, ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
 	}
 }

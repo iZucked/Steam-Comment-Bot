@@ -30,8 +30,6 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
@@ -44,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @RunWith(value = ShiroRunner.class)
 public class CharterInMarketTests extends AbstractMicroTestCase {
@@ -59,8 +58,9 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 	public void testSpotCharterInMarketReduction_After() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -133,13 +133,13 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
@@ -176,7 +176,8 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 	public void testSpotCharterInMarketReduction_Before() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -250,13 +251,13 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			// Check cargoes removed
 			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 

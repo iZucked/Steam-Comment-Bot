@@ -79,7 +79,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
 
@@ -152,7 +152,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
 
@@ -226,7 +226,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();
@@ -303,7 +303,7 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			EList<VesselAvailability> vesselAvailabilities = optimiserScenario.getCargoModel().getVesselAvailabilities();

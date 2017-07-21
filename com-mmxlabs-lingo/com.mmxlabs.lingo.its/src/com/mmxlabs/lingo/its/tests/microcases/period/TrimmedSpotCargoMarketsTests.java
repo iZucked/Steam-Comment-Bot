@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @RunWith(value = ShiroRunner.class)
 public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
@@ -54,7 +55,8 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 	public void basicMarketTrim() throws Exception {
 
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -113,12 +115,12 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
 
 			SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
@@ -155,85 +157,87 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 			executorService.shutdownNow();
 		}
 	}
-	
+
 	/**
 	 * Expect same result as for {@link #basicMarketTrim()}
+	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Category({ QuickTest.class, MicroTest.class })
 	public void basicMarketTrim_PartMonth() throws Exception {
-		
+
 		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-		
+		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-		
+
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-		
+
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-		
+
 		SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-		
+
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		
+
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		
+
 		// Build some data to evaluate the scenario with
 		// FIXME: Fix issue to avoid needing this.
 		{
 			final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
-			
+
 			final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					.build();
-			
+
 			// Create a single charter out event
 			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPort("Point Fortin")) //
-			.withRelocatePort(portFinder.findPort("Isle of Grain")) //
-			.withDurationInDays(10) //
-			.withVesselAssignment(vesselAvailability_1, 0) //
-			.build(); //
-			
+					.withRelocatePort(portFinder.findPort("Isle of Grain")) //
+					.withDurationInDays(10) //
+					.withVesselAssignment(vesselAvailability_1, 0) //
+					.build(); //
+
 		}
 		SpotMarket market = spotMarketsBuilder.makeDESSaleMarket("DES-SaleMarket", portFinder.findPort("Point Fortin"), entity, "5") //
 				.withAvailabilityConstant(5)//
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();
-		
+
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setWithSpotCargoMarkets(true);
-		
+
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
-		
+
 		userSettings.setPeriodStartDate(LocalDate.of(2015, 1, 30));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 2));
-		
+
 		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		
+
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
+
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
-			
+
 			SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
-			
+
 			// Constant should be zero, and instead new options created
 			Assert.assertEquals(0, opt_market.getAvailability().getConstant());
 			// Expect 1 (this should be the newly created entry)
@@ -246,7 +250,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				} else {
 					Assert.assertEquals(0, pt.getValue().intValue());
 				}
-				
+
 				if (pt.getDate().equals(YearMonth.of(2015, 1))) {
 					// A new entry should have been created
 					foundNewOne = true;
@@ -257,7 +261,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				}
 			}
 			Assert.assertTrue(foundNewOne);
-			
+
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid

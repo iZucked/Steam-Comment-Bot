@@ -159,11 +159,11 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
 			if (writeScenario) {
 				try {
-					MicroCaseUtils.storeToFile(optimiserScenario, "Trips");
+					MicroCaseUtils.storeToFile(scenarioToOptimiserBridge.getOptimiserScenario(), "Trips");
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}

@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -86,33 +88,32 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 			Assert.assertNull(lateness2);
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void testCargo_CargoOnOptionalVessel() throws Exception {
-		
+
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true)
-				.build();
-		
+				.withOptionality(true).build();
+
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
-		
+
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
-		
+
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-		
+
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vesselClass.setMaxSpeed(15.0);
-		
+
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
-		
+
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
 				.withWindowStartTime(0) //
@@ -128,48 +129,47 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
-		
+
 		evaluateTest(null, null, scenarioRunner -> {
-			
+
 			final SlotVisit visit1 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(0), lngScenarioModel);
 			final PortVisitLateness lateness1 = visit1.getLateness();
 			Assert.assertNull(lateness1);
-			
+
 			final SlotVisit visit2 = MicroTestUtils.findSlotVisit(cargo.getSlots().get(1), lngScenarioModel);
 			final PortVisitLateness lateness2 = visit2.getLateness();
 			Assert.assertNull(lateness2);
 		});
 	}
-	
+
 	@Test
 	@Category({ MicroTest.class })
 	public void testCargo_NoCargoOnNonOptionalVessel() throws Exception {
-		
+
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(false)
-				.build();
-		
+				.withOptionality(false).build();
+
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
-		
+
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
-		
+
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-		
+
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vesselClass.setMaxSpeed(15.0);
-		
+
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
-		
+
 		evaluateTest(null, null, scenarioRunner -> {
-			
-			EList<Sequence> sequences = scenarioRunner.getScenario().getScheduleModel().getSchedule().getSequences();
+
+			List<Sequence> sequences = ScenarioModelUtil.getScheduleModel(scenarioRunner.getScenarioDataProvider()).getSchedule().getSequences();
 			boolean found = false;
 			for (Sequence sequence : sequences) {
 				if (vesselAvailability.equals(sequence.getVesselAvailability())) {
@@ -184,32 +184,31 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 	@Test
 	@Category({ MicroTest.class })
 	public void testCargo_NoCargoOnOptionalVessel() throws Exception {
-		
+
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true)
-				.build();
-		
+				.withOptionality(true).build();
+
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
-		
+
 		@NonNull
 		final Port port2 = portFinder.findPort("Dominion Cove Point LNG");
-		
+
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-		
+
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vesselClass.setMaxSpeed(15.0);
-		
+
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
-		
+
 		evaluateTest(null, null, scenarioRunner -> {
-			
-			EList<Sequence> sequences = scenarioRunner.getScenario().getScheduleModel().getSchedule().getSequences();
+
+			EList<Sequence> sequences = ScenarioModelUtil.getScheduleModel(scenarioRunner.getScenarioDataProvider()).getSchedule().getSequences();
 			boolean found = false;
 			for (Sequence sequence : sequences) {
 				if (vesselAvailability.equals(sequence.getVesselAvailability())) {
