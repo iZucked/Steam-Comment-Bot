@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.tabular;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ColumnViewer;
@@ -20,7 +21,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
