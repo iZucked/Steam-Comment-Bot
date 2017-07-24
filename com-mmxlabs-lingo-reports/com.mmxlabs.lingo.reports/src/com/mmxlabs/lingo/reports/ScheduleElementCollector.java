@@ -27,13 +27,17 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 	public Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, boolean pinned) {
 
 		LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+		if (scenarioModel == null) {
+			return Collections.emptySet();
+		}
 		ScheduleModel scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
 
 		final Schedule lastScheduleFromScenario = scheduleModel == null ? null : scheduleModel.getSchedule();
-		if (lastScheduleFromScenario != null)
+		if (lastScheduleFromScenario != null) {
 			return collectElements(scenarioResult, scenarioModel, lastScheduleFromScenario, pinned);
-		else
+		} else {
 			return Collections.emptySet();
+		}
 	}
 
 	protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel rootObject, final Schedule schedule) {
