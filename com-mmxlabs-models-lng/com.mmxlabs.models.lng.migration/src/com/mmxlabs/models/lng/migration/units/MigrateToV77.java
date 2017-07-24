@@ -7,11 +7,8 @@ package com.mmxlabs.models.lng.migration.units;
 import java.time.YearMonth;
 import java.util.List;
 
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
@@ -40,23 +37,16 @@ public class MigrateToV77 extends AbstractMigrationUnit {
 	@Override
 	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
 
-		final EPackage package_ParametersModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ParametersModel);
-		final EClass class_UserSettings = MetamodelUtils.getEClass(package_ParametersModel, "UserSettings");
-
-		final TreeIterator<EObject> itr = model.eAllContents();
-		while (itr.hasNext()) {
-			final EObject itr_obj = itr.next();
-			if (class_UserSettings.isInstance(itr_obj)) {
-				final EObjectWrapper obj = (EObjectWrapper) itr_obj;
-				final YearMonth old = (YearMonth) obj.getAttrib("periodStart");
-				if (old != null) {
-					obj.setAttrib("periodStartDate", old.atDay(1));
-				}
-				obj.unsetFeature("periodStart");
+		final EObjectWrapper obj = model.getRef("userSettings");
+		if (obj != null) {
+			final YearMonth old = (YearMonth) obj.getAttrib("periodStart");
+			if (old != null) {
+				obj.setAttrib("periodStartDate", old.atDay(1));
 			}
+			obj.unsetFeature("periodStart");
 		}
 
-		// check strucuture
+		// check structure
 		final EObjectWrapper cargoModel = model.getRef("cargoModel");
 		if (cargoModel != null) {
 			final EObjectWrapper canalBookings = cargoModel.getRef("canalBookings");
