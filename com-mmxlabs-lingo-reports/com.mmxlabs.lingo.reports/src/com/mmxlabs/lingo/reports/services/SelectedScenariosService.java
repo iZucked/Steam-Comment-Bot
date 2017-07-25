@@ -447,7 +447,12 @@ public class SelectedScenariosService {
 			if (false && scenarioRecords.containsKey(scenarioResult)) {
 				record = scenarioRecords.get(scenarioResult);
 			} else {
-				record = createKeyValueRecord(scenarioResult);
+				try {
+					record = createKeyValueRecord(scenarioResult);
+				} catch (Exception e) {
+					// Failed to load - this can happen when the scenario is removed after getting the current selection.
+					continue;
+				}
 				final KeyValueRecord oldRecord = scenarioRecords.put(scenarioResult, record);
 				if (oldRecord != null) {
 					oldRecord.dispose();
