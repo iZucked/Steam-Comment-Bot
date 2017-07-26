@@ -575,12 +575,21 @@ public class PriceIntervalProviderHelper {
 		final List<int @NonNull []> list = new LinkedList<>();
 		for (int i = 0; i < intervals.size(); i++) {
 			if (list.size() == 0) {
+				// first interval
 				if (intervals.get(i)[0] == inclusiveStart) {
+					// easy case
 					list.add(new int[] { inclusiveStart, intervals.get(i)[1] });
 				} else if (intervals.get(i)[0] > inclusiveStart) {
-					list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1] });
-					if (intervals.get(i)[0] < exclusiveEnd) {
-						list.add(intervals.get(i));
+					// start is less than the start of the interval
+					if (i > 0) {
+						// create trimmed forward interval
+						list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1]});
+						if (intervals.get(i)[0] < exclusiveEnd) {
+							list.add(intervals.get(i));
+						}
+					} else {
+						// no previous interval, so use current
+						list.add(new int[] {inclusiveStart, intervals.get(i)[1]});
 					}
 				}
 			} else if (intervals.get(i)[0] < exclusiveEnd) {
