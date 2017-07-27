@@ -29,6 +29,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSchedulingCanalDistanceProvider {
 
 	private static final int DEFAULT_CARGO_CV = 22670000;
+	
+	private static final int half_a_knot = OptimiserUnitConvertor.convertToInternalSpeed(.1);
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -160,7 +162,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		}
 		// round min and max speeds to allow better speed stepping
 		minSpeed = roundUpToNearest(minSpeed, 100);
-		int maxSpeed = roundDownToNearest(vessel.getVesselClass().getMaxSpeed(), 100);
+		int maxSpeed = vessel.getVesselClass().getMaxSpeed();
 
 		// min speed needs to be bounded!
 		minSpeed = Math.min(minSpeed, maxSpeed);
@@ -169,14 +171,22 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		int speed = minSpeed;
 		@NonNull
 		LadenRouteData @NonNull [] ladenRouteTimes = getMinimumTravelTimes(load, discharge, vessel, startTime, false, availableRouteChoice);
-		int half_a_knot = OptimiserUnitConvertor.convertToInternalSpeed(.1);
-		List<Integer> times = new ArrayList<Integer>();
+		
+		List<Integer> times = new ArrayList<>();
+
 		while (speed <= maxSpeed) {
+
 			for (LadenRouteData ladenRouteData : ladenRouteTimes) {
 				int time = startTime + Calculator.getTimeFromSpeedDistance(speed, ladenRouteData.ladenRouteDistance) + ladenRouteData.transitTime;
 				times.add(time);
 			}
+			if (speed == maxSpeed) {
+				break;
+			}
 			speed += half_a_knot;
+			if (speed > maxSpeed) {
+				speed = maxSpeed;
+			}
 		}
 		// return sorted unique times
 		return times.stream().distinct().sorted().collect(Collectors.toList());
