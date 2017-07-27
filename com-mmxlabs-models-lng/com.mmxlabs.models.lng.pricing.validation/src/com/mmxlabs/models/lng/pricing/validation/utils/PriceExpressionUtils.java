@@ -24,6 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
@@ -144,7 +145,7 @@ public class PriceExpressionUtils {
 				}
 			}
 		}
-
+		// TODO DATED AVG USE
 		if (parser != null) {
 			ISeries parsed = null;
 			String hints = "";
@@ -152,17 +153,17 @@ public class PriceExpressionUtils {
 				final IExpression<ISeries> expression = parser.parse(priceExpression);
 				parsed = expression.evaluate();
 
-			} catch (final EmptyStackException e) {
+			} catch (final UnknownSeriesException e) {
+				hints = e.getMessage();
+			} catch (final Exception e) {
 				final String operatorPattern = "([-/*+][-/*+]+)";
 				final Pattern p = Pattern.compile(operatorPattern);
 				final Matcher m = p.matcher(priceExpression);
 				if (m.find()) {
 					hints = "Consecutive operators: " + m.group(0);
 				} else {
-					hints = "Unknown problem";
+					hints = "Unknown problem: " + e.getMessage();
 				}
-			} catch (final Exception e) {
-				hints = e.getMessage();
 			}
 			if (parsed == null) {
 				return ValidationResult.createErrorStatus("Unable to parse: " + hints);
