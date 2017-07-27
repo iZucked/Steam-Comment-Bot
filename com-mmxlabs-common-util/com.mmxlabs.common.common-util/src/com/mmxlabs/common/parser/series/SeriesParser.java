@@ -4,35 +4,23 @@
  */
 package com.mmxlabs.common.parser.series;
 
-import java.util.ArrayList;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.IFunctionFactory;
-import com.mmxlabs.common.parser.IInfixOperatorFactory;
-import com.mmxlabs.common.parser.IPrefixOperatorFactory;
-import com.mmxlabs.common.parser.ITermFactory;
-import com.mmxlabs.common.parser.series.functions.And;
-import com.mmxlabs.common.parser.series.functions.DatedAverageSeries;
-import com.mmxlabs.common.parser.series.functions.Equal;
-import com.mmxlabs.common.parser.series.functions.If;
-import com.mmxlabs.common.parser.series.functions.InOrder;
-import com.mmxlabs.common.parser.series.functions.Max;
-import com.mmxlabs.common.parser.series.functions.Mean;
-import com.mmxlabs.common.parser.series.functions.Min;
-import com.mmxlabs.common.parser.series.functions.Minus;
-import com.mmxlabs.common.parser.series.functions.Or;
-import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
+import com.mmxlabs.common.parser.impl.Lexer;
+import com.mmxlabs.common.parser.impl.Parser;
 
-public class SeriesParser extends ExpressionParser<ISeries> {
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.Symbol;
+
+public class SeriesParser {
 	private final @NonNull Map<@NonNull String, @NonNull ISeries> evaluatedSeries = new HashMap<>();
 	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
 	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
@@ -55,169 +43,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	public void setShiftMapper(ShiftFunctionMapper shiftMapper) {
 		this.shiftMapper = shiftMapper;
 	}
-
-	private class FunctionConstructor implements IExpression<ISeries> {
-		private final Class<? extends ISeries> clazz;
-		private final List<IExpression<ISeries>> arguments;
-
-		public FunctionConstructor(final Class<? extends ISeries> clazz, final List<IExpression<ISeries>> arguments) {
-			this.clazz = clazz;
-			this.arguments = arguments;
-		}
-
-		public @NonNull ISeries construct() {
-			try {
-				return clazz.getConstructor(List.class).newInstance(evaluate(arguments));
-			} catch (final Throwable th) {
-				throw new RuntimeException(th);
-			}
-		}
-
-		private List<ISeries> evaluate(final List<IExpression<ISeries>> exprs) {
-			final List<ISeries> result = new ArrayList<ISeries>(exprs.size());
-			for (final IExpression<ISeries> exp : exprs) {
-				result.add(exp.evaluate());
-			}
-			return result;
-		}
-
-		@Override
-		public @NonNull ISeries evaluate() {
-			return construct();
-		}
-	}
-
-	public SeriesParser() {
-		setInfixOperatorFactory(new IInfixOperatorFactory<ISeries>() {
-			@Override
-			public boolean isOperatorHigherPriority(final char a, final char b) {
-				if (a == b)
-					return false;
-				switch (a) {
-				case '%':
-					return true;
-				case '*':
-					return b == '+' || b == '-';
-				case '/':
-					return b != '%';
-				case '+':
-					return b == '-';
-				case '-':
-					return false;
-				}
-				return false;
-			}
-
-			@Override
-			public boolean isInfixOperator(final char operator) {
-				return operator == '*' || operator == '/' || operator == '+' || operator == '-' || operator == '%';
-			}
-
-			@Override
-			public @NonNull IExpression<ISeries> createInfixOperator(final char operator, final @NonNull IExpression<ISeries> lhs, final @NonNull IExpression<ISeries> rhs) {
-				return new SeriesOperatorExpression(operator, lhs, rhs);
-			}
-		});
-
-		setTermFactory(new ITermFactory<ISeries>() {
-			@Override
-			public @NonNull IExpression<ISeries> createTerm(final @NonNull String term) {
-				try {
-					final long i = Long.parseLong(term);
-					return new ConstantSeriesExpression(i);
-				} catch (final NumberFormatException nfe) {
-					try {
-						final double d = Double.parseDouble(term);
-						return new ConstantSeriesExpression(d);
-					} catch (final NumberFormatException nfe2) {
-						return new NamedSeriesExpression(getSeries(term));
-					}
-				}
-			}
-		});
-
-		setFunctionFactory(new IFunctionFactory<ISeries>() {
-			@Override
-			public IExpression<ISeries> createFunction(final String name, final List<IExpression<ISeries>> arguments) {
-				if (name.equals("MAX")) {
-					return new FunctionConstructor(Max.class, arguments);
-				} else if (name.equals("MIN")) {
-					return new FunctionConstructor(Min.class, arguments);
-				} else if (name.equals("AVG")) {
-					return new FunctionConstructor(Mean.class, arguments);
-				} else if (name.equals("SHIFT")) {
-					@Nullable
-					ShiftFunctionMapper pShiftMapper = shiftMapper;
-					if (pShiftMapper == null) {
-						throw new IllegalStateException("No shift mapper function defined");
-					}
-					return new IExpression<ISeries>() {
-						@Override
-						public @NonNull ISeries evaluate() {
-							@NonNull
-							ISeries shiftExpression = arguments.get(1).evaluate();
-							Number evaluate = shiftExpression.evaluate(0);
-							return new ShiftedSeries(arguments.get(0).evaluate(), evaluate.intValue(), pShiftMapper);
-						}
-					};
-				} else if (name.equals("DATEDAVG")) {
-					@Nullable
-					CalendarMonthMapper pMapper = calendarMonthMapper;
-					if (pMapper == null) {
-						throw new IllegalStateException("No calender mapper function defined");
-					}
-					return new IExpression<ISeries>() {
-						@Override
-						public @NonNull ISeries evaluate() {
-							Number months = arguments.get(1).evaluate().evaluate(0);
-							Number lag = arguments.get(2).evaluate().evaluate(0);
-							Number reset = arguments.get(3).evaluate().evaluate(0);
-							return new DatedAverageSeries(arguments.get(0).evaluate(), months.intValue(), lag.intValue(), reset.intValue(), pMapper);
-						}
-					};
-				} else if (name.equals("AND")) {
-					return new FunctionConstructor(And.class, arguments);
-				} else if (name.equals("OR")) {
-					return new FunctionConstructor(Or.class, arguments);
-				} else if (name.equals("IF")) {
-					return new FunctionConstructor(If.class, arguments);
-				} else if (name.equals("SEQ")) {
-					return new FunctionConstructor(InOrder.class, arguments);
-				} else if (name.equals("EQ")) {
-					return new FunctionConstructor(Equal.class, arguments);
-				} else {
-					throw new RuntimeException("Unknown series function " + name);
-				}
-			}
-		});
-
-		setPrefixOperatorFactory(new IPrefixOperatorFactory<ISeries>() {
-
-			@Override
-			public boolean isPrefixOperator(final char operator) {
-				if (operator == '-') {
-					return true;
-				}
-				return false;
-			}
-
-			@Override
-			public IExpression<ISeries> createPrefixOperator(final char operator, final IExpression<ISeries> argument) {
-				if (operator == '-') {
-					return new IExpression<ISeries>() {
-						@Override
-						public @NonNull ISeries evaluate() {
-							return new Minus(argument.evaluate());
-						}
-					};
-				}
-
-				throw new RuntimeException("Unknown prefix op " + operator);
-			}
-
-		});
-	}
-
+  	  
 	public @NonNull ISeries getSeries(final @NonNull String name) {
 		if (evaluatedSeries.containsKey(name.toLowerCase())) {
 			return evaluatedSeries.get(name.toLowerCase());
@@ -229,12 +55,29 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			throw new RuntimeException("No series with name " + name + " defined");
 		}
 	}
+	
+		public IExpression<ISeries> parse(final String expression) {
+
+		try {
+			final ComplexSymbolFactory symbolFactory = new ComplexSymbolFactory();
+			Parser parser = new Parser(new Lexer(new StringReader(expression), symbolFactory));
+			parser.setSeriesParser(this);
+			parser.setShiftFunctionMapper(shiftMapper);
+			parser.setCalendarMonthMapper(calendarMonthMapper);
+			
+			Symbol parse = parser.parse();
+			return (IExpression<ISeries>) parse.value;
+		} catch (final Exception e) {
+			throw new RuntimeException("Error parsing expression", e);
+		}
+	}
+	
 
 	public void addConstant(@NonNull final String name, @NonNull final Number value) {
 		evaluatedSeries.put(name.toLowerCase(), new ConstantSeriesExpression(value).evaluate());
 	}
 
-	public void addSeriesData(@NonNull final String name, @NonNull ISeries series) {
+	public void addSeriesData(final @NonNull String name,final @NonNull ISeries series) {
 		evaluatedSeries.put(name.toLowerCase(), series);
 		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
 		for (final String expr : expressionCurves) {
@@ -287,13 +130,5 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			}
 		}
 		unevaluatedSeries.put(name.toLowerCase(), expression);
-	}
-
-	public static void main(final String args[]) {
-		final SeriesParser parser = new SeriesParser();
-		parser.addConstant("X", 1);
-		parser.addConstant("Y", 10);
-		parser.addSeriesData("Z", new int[] { 0, 10, 20 }, new @NonNull Number[] { -5d, 4d, 9.4 });
-		System.err.println(SeriesUtil.toString(parser.parse(args[0]).evaluate()));
 	}
 }
