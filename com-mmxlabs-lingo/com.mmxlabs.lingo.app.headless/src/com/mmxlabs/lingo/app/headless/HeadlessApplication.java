@@ -663,12 +663,13 @@ public class HeadlessApplication implements IApplication {
 	private void createDateRanges(final OptimisationPlan plan, final HeadlessParameters headlessParameters) {
 		final JMap periodSettings = headlessParameters.getParameterValue("period-data", JMap.class);
 		final YearMonth dateBefore = periodSettings.getValue("period-optimisation-date-before", YearMonth.class);
-		final LocalDate dateAfter = periodSettings.getValue("period-optimisation-date-after", LocalDate.class);
+		final YearMonth dateAfterYM = periodSettings.getValue("period-optimisation-date-after", YearMonth.class);
 		if (dateBefore != null) {
 			plan.getUserSettings().setPeriodEnd(dateBefore);
 		}
-		if (dateAfter != null) {
-			plan.getUserSettings().setPeriodStartDate(dateAfter);
+		if (dateAfterYM != null) {
+			final LocalDate dateAfterLD = LocalDate.of(dateAfterYM.getYear(), dateAfterYM.getMonth(), 1);
+			plan.getUserSettings().setPeriodStartDate(dateAfterLD);
 		}
 	}
 
