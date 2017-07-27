@@ -1,5 +1,6 @@
 /* // Originally based on example from http://www2.cs.tum.edu/projekte/cup/examples.php */
 import java_cup.runtime.*;
+import java.util.*;
 import com.mmxlabs.common.parser.*;
 import com.mmxlabs.common.parser.series.*;
 import com.mmxlabs.common.parser.series.functions.*;
@@ -20,6 +21,11 @@ parser code {:
     private SeriesParser seriesParser;
     public SeriesParser getSeriesParser() { return seriesParser; }
     public void setSeriesParser(SeriesParser seriesParser) { this.seriesParser = seriesParser; }
+    
+    // Error capturing
+    public List<Symbol> errors = new LinkedList<>();
+	public void syntax_error(Symbol s){	errors.add(s); }
+    
 :}
 
 /* define how to connect to the scanner! */
@@ -50,6 +56,7 @@ precedence left NUMBER;
 /* The grammar rules */
 expr_list ::= expr_list expr:e          {: RESULT =e; :}
             | expr:e                     {:RESULT = e; :}
+            | error
 ;
 expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpression('+', lhs, rhs);       :}
              | expr:lhs MINUS expr:rhs        {: RESULT = new SeriesOperatorExpression('-', lhs, rhs);      :}
