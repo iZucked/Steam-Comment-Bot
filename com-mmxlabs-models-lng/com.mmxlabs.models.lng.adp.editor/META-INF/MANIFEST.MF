@@ -31,5 +31,5 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.scenario.service.ui,
  com.mmxlabs.scenario.service.model,
  com.mmxlabs.common.common-util,
- com.mmxlabs.license.features;bundle-version="4.2.16"
+ com.mmxlabs.license.features;bundle-version="4.2.17"
 Bundle-ActivationPolicy: lazy
