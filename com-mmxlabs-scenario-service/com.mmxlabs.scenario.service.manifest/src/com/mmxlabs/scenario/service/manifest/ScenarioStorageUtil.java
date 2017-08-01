@@ -127,7 +127,9 @@ public class ScenarioStorageUtil {
 		final File uuidDir = new File(storageDirectory.toFile(), escape(uuid) + ".d");
 		if (uuidDir.exists() == false) {
 			uuidDir.mkdirs();
-			tempDirectories.add(uuidDir);
+			synchronized (tempDirectories) {
+				tempDirectories.add(uuidDir);
+			}
 		}
 		return new File(uuidDir, escape(name) + ".lingo");
 	}
@@ -138,7 +140,9 @@ public class ScenarioStorageUtil {
 
 	public static String storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
 		final File tempFile = INSTANCE.getTemporaryFile(instance);
-		tempFiles.add(tempFile);
+		synchronized (tempFiles) {
+			tempFiles.add(tempFile);
+		}
 		storeToFile(instance, tempFile);
 
 		return tempFile.getAbsolutePath();
@@ -417,7 +421,7 @@ public class ScenarioStorageUtil {
 
 					{
 						final String subModelURI = original.getRootObjectURI();
-						final File f = File.createTempFile("migration", ".xmi");
+						final File f = File.createTempFile("migration-ssu", ".xmi");
 						tmpFiles.add(f);
 						// Create a temp file and generate a URI to it to pass into migration code.
 						final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
@@ -426,6 +430,9 @@ public class ScenarioStorageUtil {
 						assert sourceURI != null;
 						ScenarioServiceUtils.copyURIData(uc, sourceURI, tmpURI);
 						cpy.setRootObjectURI(tmpURI.toString());
+						synchronized (tempFiles) {
+							tempFiles.add(f);
+						}
 					}
 
 					// Perform the migration!
@@ -479,6 +486,9 @@ public class ScenarioStorageUtil {
 							// Clean up tmp files
 							for (final File f : tmpFiles) {
 								f.delete();
+								synchronized (tempFiles) {
+									tempFiles.remove(f);
+								}
 							}
 							tmpFiles.clear();
 						});
@@ -531,6 +541,8 @@ public class ScenarioStorageUtil {
 			consumer.accept(p.getFirst(), p.getSecond());
 		} finally {
 			p.getSecond().close();
+			// Added to help clean up with unit tests
+			System.gc();
 		}
 	}
 
