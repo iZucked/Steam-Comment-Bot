@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Record class for holding information on the sequences in a Schedule. Provides the following fields:
@@ -48,14 +49,18 @@ public class ScheduleSequenceData {
 	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
 	final public LNGScenarioModel model;
 	public Set<CanalBookingSlot> usedCanalBookings = new HashSet<>();
+	public IScenarioDataProvider scenarioDataProvider;
 
 	/** Extracts the relevant information from the model */
-	public ScheduleSequenceData(final LNGScenarioModel model, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
-		this.model = model;
+	public ScheduleSequenceData(final IScenarioDataProvider scenarioDataProvider, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+		this.scenarioDataProvider = scenarioDataProvider;
+		this.model = scenarioDataProvider == null ? null : scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		this.verticalReportVisualiser = verticalReportVisualiser;
 		final ScheduleModel scheduleModel = (model == null ? null : model.getScheduleModel());
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
 
+		verticalReportVisualiser.setData(this);
+		
 		if (schedule == null) {
 			vessels = null;
 			fobSales = desPurchases = null;
@@ -77,7 +82,7 @@ public class ScheduleSequenceData {
 					Journey journey = (Journey) event;
 					usedCanalBookings.add(journey.getCanalBooking());
 				}
-				
+
 				// Event data
 				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event.getStart());
 				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event.getEnd());

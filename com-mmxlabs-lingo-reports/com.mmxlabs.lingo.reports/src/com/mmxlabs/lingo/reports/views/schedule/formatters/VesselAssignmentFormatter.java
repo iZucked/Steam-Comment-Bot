@@ -53,6 +53,8 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 						}
 					}
 				}
+				// TODO Check this against master results!
+				// break;
 			case FLEET:
 				Sequence sequence = cargoAllocation.getSequence();
 				return getSequenceLabel(sequence);

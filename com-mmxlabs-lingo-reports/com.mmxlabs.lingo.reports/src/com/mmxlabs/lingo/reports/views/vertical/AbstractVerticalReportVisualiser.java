@@ -36,6 +36,8 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -47,6 +49,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public abstract class AbstractVerticalReportVisualiser {
 
@@ -61,6 +65,7 @@ public abstract class AbstractVerticalReportVisualiser {
 	protected final Map<Triple<EObject, Date, EAttribute>, LocalDateTime> dateCacheB = new HashMap<>();
 
 	protected final ColourPalette colourPalette;
+	private ScheduleSequenceData data;
 
 	protected AbstractVerticalReportVisualiser() {
 		this(ColourPalette.getInstance());
@@ -147,7 +152,13 @@ public abstract class AbstractVerticalReportVisualiser {
 			Journey journey = (Journey) event;
 			final LocalDate eventStart = getLocalDateFor(event.getStart());
 			if (journey.getCanalDate() != null && date.equals(journey.getCanalDate())) {
-				return journey.getCanalEntry().getName();
+				IScenarioDataProvider scenarioDataProvider = getScenarioDataProviderFor(journey);
+				if (scenarioDataProvider != null) {
+					ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+					if (modelDistanceProvider != null) {
+						return modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
+					}
+				}
 			}
 
 			// how many days since the start of the event?
@@ -390,5 +401,16 @@ public abstract class AbstractVerticalReportVisualiser {
 	 */
 	public boolean filterAfterLastEvent() {
 		return false;
+	}
+
+	public IScenarioDataProvider getScenarioDataProviderFor(Object object) {
+		if (data != null) {
+			return data.scenarioDataProvider;
+		}
+		return null;
+	}
+
+	public void setData(ScheduleSequenceData data) {
+		this.data = data;
 	}
 }

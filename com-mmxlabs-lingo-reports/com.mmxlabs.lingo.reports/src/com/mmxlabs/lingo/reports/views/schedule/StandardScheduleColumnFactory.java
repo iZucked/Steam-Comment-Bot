@@ -65,10 +65,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -101,6 +101,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
@@ -515,13 +516,22 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Canal Entry", "The canal entry port", ColumnType.NORMAL, new BaseFormatter() {
 
-				private EntryPoint getValue(final Object object) {
-					if (object instanceof EObject) {
+				private String getValue(Object object) {
+
+					IScenarioDataProvider scenarioDataProvider = null;
+					if (object instanceof Row) {
+						Row row = (Row) object;
+						scenarioDataProvider = row.getScenarioDataProvider();
+						object = ((EObject) object).eGet(targetObjectRef);
+					}
+
+					if (object instanceof EObject && scenarioDataProvider != null) {
 						final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 						if (portVisit != null) {
 							final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 							if (journey != null) {
-								return journey.getCanalEntry();
+								ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+								return modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
 							}
 						}
 					}
@@ -531,9 +541,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					final EntryPoint value = getValue(object);
+					final String value = getValue(object);
 					if (value != null) {
-						return value.getName();
+						return value;
 					}
 
 					return null;
@@ -541,13 +551,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				@Override
 				public Comparable getComparable(final Object object) {
-					final EntryPoint value = getValue(object);
+					final String value = getValue(object);
 					if (value != null) {
-						return value.getName();
+						return value;
 					}
 					return "";
 				}
-			}, targetObjectRef));
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden.canal_booked":
 
@@ -560,8 +570,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (portVisit != null) {
 									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 									if (journey != null) {
-										final Route route = journey.getRoute();
-										if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
+										final RouteOption routeOption = journey.getRouteOption();
+										if (routeOption == RouteOption.PANAMA) {
 											final CanalBookingSlot canalBooking = journey.getCanalBooking();
 
 											if (canalBooking != null) {
@@ -683,13 +693,22 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Canal Entry", "The canal entry port", ColumnType.NORMAL, new BaseFormatter() {
 
-				private EntryPoint getValue(final Object object) {
-					if (object instanceof EObject) {
+				private String getValue(Object object) {
+
+					IScenarioDataProvider scenarioDataProvider = null;
+					if (object instanceof Row) {
+						Row row = (Row) object;
+						scenarioDataProvider = row.getScenarioDataProvider();
+						object = ((EObject) object).eGet(dischargeAllocationRef);
+					}
+
+					if (object instanceof EObject && scenarioDataProvider != null) {
 						final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 						if (portVisit != null) {
 							final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 							if (journey != null) {
-								return journey.getCanalEntry();
+								ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+								return modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
 							}
 						}
 					}
@@ -699,9 +718,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					final EntryPoint value = getValue(object);
+					final String value = getValue(object);
 					if (value != null) {
-						return value.getName();
+						return value;
 					}
 
 					return null;
@@ -709,13 +728,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				@Override
 				public Comparable getComparable(final Object object) {
-					final EntryPoint value = getValue(object);
+					final String value = getValue(object);
 					if (value != null) {
-						return value.getName();
+						return value;
 					}
 					return "";
 				}
-			}, dischargeAllocationRef));
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast.canal_booked":
 
@@ -728,8 +747,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (portVisit != null) {
 									final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 									if (journey != null) {
-										final Route route = journey.getRoute();
-										if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
+										if (journey.getRouteOption() == RouteOption.PANAMA) {
 											final CanalBookingSlot canalBooking = journey.getCanalBooking();
 
 											if (canalBooking != null) {

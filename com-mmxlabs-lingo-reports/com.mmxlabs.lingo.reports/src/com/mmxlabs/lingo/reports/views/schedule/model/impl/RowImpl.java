@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <!-- begin-user-doc -->
@@ -57,6 +58,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTable <em>Table</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLinkedSequences <em>Linked Sequences</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenarioDataProvider <em>Scenario Data Provider</em>}</li>
  * </ul>
  *
  * @generated
@@ -301,6 +303,26 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * @ordered
 	 */
 	protected EList<Sequence> linkedSequences;
+
+	/**
+	 * The default value of the '{@link #getScenarioDataProvider() <em>Scenario Data Provider</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioDataProvider()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final IScenarioDataProvider SCENARIO_DATA_PROVIDER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getScenarioDataProvider() <em>Scenario Data Provider</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioDataProvider()
+	 * @generated
+	 * @ordered
+	 */
+	protected IScenarioDataProvider scenarioDataProvider = SCENARIO_DATA_PROVIDER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1021,6 +1043,27 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public IScenarioDataProvider getScenarioDataProvider() {
+		return scenarioDataProvider;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScenarioDataProvider(IScenarioDataProvider newScenarioDataProvider) {
+		IScenarioDataProvider oldScenarioDataProvider = scenarioDataProvider;
+		scenarioDataProvider = newScenarioDataProvider;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__SCENARIO_DATA_PROVIDER, oldScenarioDataProvider, scenarioDataProvider));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -1133,6 +1176,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return getTable();
 			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
 				return getLinkedSequences();
+			case ScheduleReportPackage.ROW__SCENARIO_DATA_PROVIDER:
+				return getScenarioDataProvider();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1208,6 +1253,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				getLinkedSequences().clear();
 				getLinkedSequences().addAll((Collection<? extends Sequence>)newValue);
 				return;
+			case ScheduleReportPackage.ROW__SCENARIO_DATA_PROVIDER:
+				setScenarioDataProvider((IScenarioDataProvider)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1280,6 +1328,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
 				getLinkedSequences().clear();
 				return;
+			case ScheduleReportPackage.ROW__SCENARIO_DATA_PROVIDER:
+				setScenarioDataProvider(SCENARIO_DATA_PROVIDER_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1332,6 +1383,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return getTable() != null;
 			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
 				return linkedSequences != null && !linkedSequences.isEmpty();
+			case ScheduleReportPackage.ROW__SCENARIO_DATA_PROVIDER:
+				return SCENARIO_DATA_PROVIDER_EDEFAULT == null ? scenarioDataProvider != null : !SCENARIO_DATA_PROVIDER_EDEFAULT.equals(scenarioDataProvider);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1356,6 +1409,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 		result.append(name2);
 		result.append(", reference: ");
 		result.append(reference);
+		result.append(", scenarioDataProvider: ");
+		result.append(scenarioDataProvider);
 		result.append(')');
 		return result.toString();
 	}

@@ -48,7 +48,11 @@
         eOpposite="#//Table/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequences" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Sequence"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioDataProvider" eType="#//IScenarioDataProvider"
+        transient="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IScenarioDataProvider" instanceClassName="com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider"
+      serializable="false"/>
   <eClassifiers xsi:type="ecore:EClass" name="CycleGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"

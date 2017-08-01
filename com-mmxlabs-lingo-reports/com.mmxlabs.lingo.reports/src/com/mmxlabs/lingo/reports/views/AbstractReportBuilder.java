@@ -16,6 +16,7 @@ import org.eclipse.ui.IMemento;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * @author Simon Goodall

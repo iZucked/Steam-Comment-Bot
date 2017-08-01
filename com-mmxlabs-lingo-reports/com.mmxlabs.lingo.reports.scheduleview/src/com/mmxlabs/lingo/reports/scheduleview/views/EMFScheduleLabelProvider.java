@@ -41,10 +41,12 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -171,10 +173,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			text = seqText;
 		} else if (element instanceof Journey) {
 			final Journey j = (Journey) element;
-			final Route route = j.getRoute();
-			if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
+			final RouteOption routeOption = j.getRouteOption();
+			if (routeOption != RouteOption.DIRECT) {
 				if (memento.getBoolean(Show_Canals)) {
-					text = route.getName().replace("canal", "");
+					text = PortModelLabeller.getName(routeOption);
 				}
 			}
 		} else if (element instanceof CombinedSequence) {
@@ -348,17 +350,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				for (final FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
-				final Route route = journey.getRoute();
+				final RouteOption routeOption = journey.getRouteOption();
 
-				if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
-					eventText.append(" | " + route + "\n");
-					if (route.getRouteOption() == RouteOption.PANAMA) {
+				if (routeOption != null && routeOption != RouteOption.DIRECT) {
+					eventText.append(" | " + PortModelLabeller.getName(routeOption) + "\n");
+					if (routeOption== RouteOption.PANAMA) {
 						final CanalBookingSlot canalBooking = journey.getCanalBooking();
 						String direction = "";
-						if (journey.getCanalEntry() == journey.getRoute().getNorthEntrance()) {
+						if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
 							direction = "southbound";
 						}
-						if (journey.getCanalEntry() == journey.getRoute().getSouthEntrance()) {
+						if (journey.getCanalEntrance() == CanalEntry.SOUTHSIDE) {
 							direction = "northbound";
 						}
 						if (canalBooking != null) {
@@ -374,10 +376,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 				final CanalBookingSlot canalBooking = journey.getCanalBooking();
 				String direction = "";
-				if (journey.getCanalEntry() == journey.getRoute().getNorthEntrance()) {
+				if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
 					direction = "southbound";
 				}
-				if (journey.getCanalEntry() == journey.getRoute().getSouthEntrance()) {
+				if (journey.getCanalEntrance() == CanalEntry.SOUTHSIDE) {
 					direction = "northbound";
 				}
 				if (canalBooking != null) {

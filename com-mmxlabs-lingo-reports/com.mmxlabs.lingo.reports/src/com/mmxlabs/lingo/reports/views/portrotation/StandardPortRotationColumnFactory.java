@@ -31,8 +31,9 @@ import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -48,6 +49,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -252,7 +254,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "At Port", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent_Port(), name);
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.route":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Route", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getJourney_Route(), name);
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Route", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, sp.getJourney_RouteOption());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_m3":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Transfer Volume", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -450,17 +452,34 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					new SimpleEmfBlockColumnFactory(columnID, "Latest Canal Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, sp.getJourney_LatestPossibleCanalDate()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalentry":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, sp.getJourney_CanalEntry()));
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public @Nullable String render(final Object object) {
+
+					if (object instanceof Journey) {
+						final Journey journey = (Journey) object;
+						final ScenarioResult scenarioResult = builder.getReport().getScenarioInstance(object);
+						if (scenarioResult != null) {
+							final IScenarioDataProvider scenarioDataProvider = scenarioResult.getScenarioDataProvider();
+							if (scenarioDataProvider != null) {
+								final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+								return modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
+							}
+						}
+					}
+
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canal.booked":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Booked", null, ColumnType.NORMAL, new BaseFormatter() {
-				String getValue(Object object) {
+				String getValue(final Object object) {
 					if (object instanceof Journey) {
-						Journey journey = (Journey) object;
-						Route route = journey.getRoute();
-						if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
-							CanalBookingSlot canalBooking = journey.getCanalBooking();
+						final Journey journey = (Journey) object;
+						final RouteOption routeOption = journey.getRouteOption();
+						if (routeOption == RouteOption.PANAMA) {
+							final CanalBookingSlot canalBooking = journey.getCanalBooking();
 
 							if (canalBooking != null) {
 								return "Yes";
@@ -477,8 +496,8 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				}
 
 				@Override
-				public @Nullable String render(Object object) {
-					String value = getValue(object);
+				public @Nullable String render(final Object object) {
+					final String value = getValue(object);
 					if (value != null) {
 						return value;// ? "Yes" : "No";
 					}
@@ -486,7 +505,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				}
 
 				@Override
-				public Comparable getComparable(Object object) {
+				public Comparable getComparable(final Object object) {
 					return getValue(object);
 				}
 			}));

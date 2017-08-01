@@ -37,6 +37,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -395,7 +396,7 @@ public class TotalsHierarchyView extends ViewPart {
 					final Journey j = (Journey) event;
 					if (j.getToll() > 0) {
 						final TreeData thisLeg = new TreeData(
-								(j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via " + j.getRoute(), j.getToll());
+								(j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via " + PortModelLabeller.getName(j.getRouteOption()), j.getToll());
 						thisVessel.addChild(thisLeg);
 					}
 				}

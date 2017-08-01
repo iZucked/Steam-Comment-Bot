@@ -23,6 +23,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.CanalEntry;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -260,13 +264,15 @@ public final class VerticalReportUtils {
 	}
 
 	public static List<Event> getCanalBookings(final ScheduleSequenceData data) {
-
+		final @NonNull ModelDistanceProvider modelDistanceProvider = data.scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		final List<Event> events = new LinkedList<Event>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
-				events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
+				final String name = modelDistanceProvider.getCanalEntranceName(slot.getRouteOption(), slot.getCanalEntrance());
+				final Port port = modelDistanceProvider.getCanalPort(slot.getRouteOption(), slot.getCanalEntrance());
+				events.add(new VirtualCanalEvent(slot, name, port, data.usedCanalBookings.contains(slot)));
 			}
 		}
 		return events;
@@ -274,14 +280,17 @@ public final class VerticalReportUtils {
 	}
 
 	public static List<Event> getCanalBookingsNorthEntrance(final ScheduleSequenceData data) {
-
+		final @NonNull ModelDistanceProvider modelDistanceProvider = data.scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		final List<Event> events = new LinkedList<Event>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
-				if (slot.getRoute().getNorthEntrance() == slot.getEntryPoint()) {
-					events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
+				if (slot.getCanalEntrance() == CanalEntry.NORTHSIDE) {
+					final String name = modelDistanceProvider.getCanalEntranceName(slot.getRouteOption(), slot.getCanalEntrance());
+					final Port port = modelDistanceProvider.getCanalPort(slot.getRouteOption(), slot.getCanalEntrance());
+
+					events.add(new VirtualCanalEvent(slot, name, port, data.usedCanalBookings.contains(slot)));
 				}
 			}
 		}
@@ -289,14 +298,17 @@ public final class VerticalReportUtils {
 	}
 
 	public static List<Event> getCanalBookingsForSouthEntrance(final ScheduleSequenceData data) {
-
+		final @NonNull ModelDistanceProvider modelDistanceProvider = data.scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		final List<Event> events = new LinkedList<Event>();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(data.model);
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			for (final CanalBookingSlot slot : canalBookings.getCanalBookingSlots()) {
-				if (slot.getRoute().getSouthEntrance() == slot.getEntryPoint()) {
-					events.add(new VirtualCanalEvent(slot, data.usedCanalBookings.contains(slot)));
+				if (slot.getCanalEntrance() == CanalEntry.SOUTHSIDE) {
+					final String name = modelDistanceProvider.getCanalEntranceName(slot.getRouteOption(), slot.getCanalEntrance());
+					final Port port = modelDistanceProvider.getCanalPort(slot.getRouteOption(), slot.getCanalEntrance());
+
+					events.add(new VirtualCanalEvent(slot, name, port, data.usedCanalBookings.contains(slot)));
 				}
 			}
 		}

@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -23,6 +24,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <!-- begin-user-doc -->
@@ -79,6 +81,13 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	private EEnum changeTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType iScenarioDataProviderEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -440,6 +449,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRow_ScenarioDataProvider() {
+		return (EAttribute)rowEClass.getEStructuralFeatures().get(20);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getCycleGroup() {
 		return cycleGroupEClass;
@@ -609,6 +627,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getIScenarioDataProvider() {
+		return iScenarioDataProviderEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ScheduleReportFactory getScheduleReportFactory() {
 		return (ScheduleReportFactory)getEFactoryInstance();
@@ -664,6 +691,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEReference(rowEClass, ROW__ROW_GROUP);
 		createEReference(rowEClass, ROW__TABLE);
 		createEReference(rowEClass, ROW__LINKED_SEQUENCES);
+		createEAttribute(rowEClass, ROW__SCENARIO_DATA_PROVIDER);
 
 		cycleGroupEClass = createEClass(CYCLE_GROUP);
 		createEAttribute(cycleGroupEClass, CYCLE_GROUP__DESCRIPTION);
@@ -687,6 +715,9 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 		// Create enums
 		changeTypeEEnum = createEEnum(CHANGE_TYPE);
+
+		// Create data types
+		iScenarioDataProviderEDataType = createEDataType(ISCENARIO_DATA_PROVIDER);
 	}
 
 	/**
@@ -753,6 +784,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEReference(getRow_RowGroup(), this.getRowGroup(), this.getRowGroup_Rows(), "rowGroup", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_Table(), this.getTable(), this.getTable_Rows(), "table", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_LinkedSequences(), theSchedulePackage.getSequence(), null, "linkedSequences", null, 0, -1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRow_ScenarioDataProvider(), this.getIScenarioDataProvider(), "scenarioDataProvider", null, 0, 1, Row.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cycleGroupEClass, CycleGroup.class, "CycleGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCycleGroup_Description(), ecorePackage.getEString(), "description", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -781,6 +813,9 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		addEEnumLiteral(changeTypeEEnum, ChangeType.CHARTERING);
 		addEEnumLiteral(changeTypeEEnum, ChangeType.VESSEL);
 		addEEnumLiteral(changeTypeEEnum, ChangeType.WIRING);
+
+		// Initialize data types
+		initEDataType(iScenarioDataProviderEDataType, IScenarioDataProvider.class, "IScenarioDataProvider", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -27,6 +27,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -39,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * A gantt chart content provider which provides content for a selected EMF Schedule object.
@@ -46,7 +49,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
  * @author hinton
  * 
  */
-public class EMFScheduleContentProvider implements IGanttChartContentProvider {
+public abstract class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	private final WeakHashMap<Slot, SlotVisit> cachedElements = new WeakHashMap<Slot, SlotVisit>();
 
@@ -125,17 +128,22 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 				}
 				newEvents.add(event);
 				if (event instanceof Journey) {
-					Journey journey = (Journey) event;
+					final Journey journey = (Journey) event;
 					if (journey.getCanalDate() != null) {
-						if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+						if (journey.getRouteOption() == RouteOption.PANAMA) {
+							final IScenarioDataProvider scenarioDataProviderFor = getScenarioDataProviderFor(journey);
+							if (scenarioDataProviderFor != null) {
+								final @NonNull ModelDistanceProvider modelDistanceProvider = scenarioDataProviderFor.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+										ModelDistanceProvider.class);
 
-							CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
-							canal.setLinkedSequence(journey.getSequence());
-							canal.setLinkedJourney(journey);
-							canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
-							canal.setEnd(canal.getStart().plusDays(1));
-							canal.setPort(journey.getCanalEntry().getPort());
-							newEvents.add(canal);
+								final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+								canal.setLinkedSequence(journey.getSequence());
+								canal.setLinkedJourney(journey);
+								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+								canal.setEnd(canal.getStart().plusDays(1));
+								canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
+								newEvents.add(canal);
+							}
 						}
 					}
 				}
@@ -153,16 +161,18 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					}
 					newEvents.add(event);
 					if (event instanceof Journey) {
-						Journey journey = (Journey) event;
+						final Journey journey = (Journey) event;
 						if (journey.getCanalDate() != null) {
-							if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+							if (journey.getRouteOption() == RouteOption.PANAMA) {
+								final @NonNull ModelDistanceProvider modelDistanceProvider = getScenarioDataProviderFor(journey).getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+										ModelDistanceProvider.class);
 
-								CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+								final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
 								canal.setLinkedSequence(journey.getSequence());
 								canal.setLinkedJourney(journey);
 								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
 								canal.setEnd(canal.getStart().plusDays(1));
-								canal.setPort(journey.getCanalEntry().getPort());
+								canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
 								newEvents.add(canal);
 							}
 						}
@@ -307,4 +317,6 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		}
 		return true;
 	}
+
+	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
 }

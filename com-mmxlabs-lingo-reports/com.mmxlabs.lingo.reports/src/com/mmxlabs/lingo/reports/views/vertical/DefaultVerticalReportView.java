@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.reports.views.vertical.providers.SequenceEventProvider;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class DefaultVerticalReportView extends AbstractVerticalCalendarReportView {
 

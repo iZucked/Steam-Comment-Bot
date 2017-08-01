@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.schedule.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -352,13 +353,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW__LINKED_SEQUENCES = 19;
 
 	/**
+	 * The feature id for the '<em><b>Scenario Data Provider</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__SCENARIO_DATA_PROVIDER = 20;
+
+	/**
 	 * The number of structural features of the '<em>Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 20;
+	int ROW_FEATURE_COUNT = 21;
 
 	/**
 	 * The number of operations of the '<em>Row</em>' class.
@@ -601,6 +611,17 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	int CHANGE_TYPE = 6;
+
+
+	/**
+	 * The meta object id for the '<em>IScenario Data Provider</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getIScenarioDataProvider()
+	 * @generated
+	 */
+	int ISCENARIO_DATA_PROVIDER = 7;
 
 
 	/**
@@ -932,6 +953,17 @@ public interface ScheduleReportPackage extends EPackage {
 	EReference getRow_LinkedSequences();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioDataProvider <em>Scenario Data Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scenario Data Provider</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioDataProvider()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EAttribute getRow_ScenarioDataProvider();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup <em>Cycle Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1113,6 +1145,17 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getChangeType();
+
+	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider <em>IScenario Data Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>IScenario Data Provider</em>'.
+	 * @see com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider
+	 * @model instanceClass="com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider" serializeable="false"
+	 * @generated
+	 */
+	EDataType getIScenarioDataProvider();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1382,6 +1425,14 @@ public interface ScheduleReportPackage extends EPackage {
 		EReference ROW__LINKED_SEQUENCES = eINSTANCE.getRow_LinkedSequences();
 
 		/**
+		 * The meta object literal for the '<em><b>Scenario Data Provider</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROW__SCENARIO_DATA_PROVIDER = eINSTANCE.getRow_ScenarioDataProvider();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl <em>Cycle Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1527,6 +1578,16 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CHANGE_TYPE = eINSTANCE.getChangeType();
+
+		/**
+		 * The meta object literal for the '<em>IScenario Data Provider</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getIScenarioDataProvider()
+		 * @generated
+		 */
+		EDataType ISCENARIO_DATA_PROVIDER = eINSTANCE.getIScenarioDataProvider();
 
 	}
 

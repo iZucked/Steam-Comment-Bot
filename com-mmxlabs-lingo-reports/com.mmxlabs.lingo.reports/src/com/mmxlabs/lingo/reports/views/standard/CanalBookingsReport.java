@@ -176,8 +176,8 @@ public class CanalBookingsReport extends AbstractReportView {
 		createColumn(sortingSupport, "Canal", rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString(),
 				rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString());
 
-		createColumn(sortingSupport, "Canal Entry", rowData -> (rowData.entryPoint == null) ? "" : rowData.entryPoint.getName(),
-				rowData -> (rowData.entryPoint == null) ? "" : rowData.entryPoint.getName());
+		createColumn(sortingSupport, "Canal Entry", rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName,
+				rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName);
 
 		createColumn(sortingSupport, "Date", rowData -> Formatters.asLocalDateFormatter.render(rowData.bookingDate), rowData -> rowData.bookingDate);
 

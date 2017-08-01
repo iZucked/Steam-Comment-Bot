@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,6 +45,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences <em>Linked Sequences</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioDataProvider <em>Scenario Data Provider</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow()
@@ -557,5 +559,31 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	EList<Sequence> getLinkedSequences();
+
+	/**
+	 * Returns the value of the '<em><b>Scenario Data Provider</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scenario Data Provider</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scenario Data Provider</em>' attribute.
+	 * @see #setScenarioDataProvider(IScenarioDataProvider)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_ScenarioDataProvider()
+	 * @model dataType="com.mmxlabs.lingo.reports.views.schedule.model.IScenarioDataProvider" transient="true"
+	 * @generated
+	 */
+	IScenarioDataProvider getScenarioDataProvider();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioDataProvider <em>Scenario Data Provider</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scenario Data Provider</em>' attribute.
+	 * @see #getScenarioDataProvider()
+	 * @generated
+	 */
+	void setScenarioDataProvider(IScenarioDataProvider value);
 
 } // Row

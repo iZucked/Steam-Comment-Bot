@@ -87,12 +87,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 						scenarios.add(0, pinned);
 					}
 					if (!scenarios.isEmpty()) {
-						@SuppressWarnings("null")
 						final ScenarioResult result = scenarios.get(0);
-						final LNGScenarioModel scenario = result.getTypedRoot(LNGScenarioModel.class);
-						final ScheduleModel scheduleModel = result.getTypedResult(ScheduleModel.class);
-						final Schedule schedule = scheduleModel == null ? null : scheduleModel.getSchedule();
-						ViewerHelper.setInput(gridViewer, true, scenario);
+						ViewerHelper.setInput(gridViewer, true, result.getScenarioDataProvider());
 						setCurrentScenario(result);
 					} else {
 						ViewerHelper.setInput(gridViewer, true, (Object) null);
@@ -111,6 +107,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	@NonNull
 	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
+
+	protected ScheduleSequenceData currentData;
 
 	protected AbstractVerticalCalendarReportView(@NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		super();
@@ -174,6 +172,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * @param data
 	 */
 	protected void setData(final ScheduleSequenceData data) {
+		this.currentData = data;
 	}
 
 	@Override
@@ -231,5 +230,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	protected void setCurrentScenario(@Nullable final ScenarioResult instance) {
 		// For sub classes
+	}
+
+	protected ScheduleSequenceData getCurrentData() {
+		return currentData;
 	}
 }

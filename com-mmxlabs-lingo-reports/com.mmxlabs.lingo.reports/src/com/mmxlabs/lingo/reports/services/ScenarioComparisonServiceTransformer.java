@@ -559,6 +559,7 @@ public class ScenarioComparisonServiceTransformer {
 		for (final Row row : rows) {
 			row.setScenarioName(scenarioResult.getModelRecord().getName());
 			row.setSchedule(schedule);
+			row.setScenarioDataProvider(scenarioResult.getScenarioDataProvider());
 		}
 
 		// Generate the element by key map

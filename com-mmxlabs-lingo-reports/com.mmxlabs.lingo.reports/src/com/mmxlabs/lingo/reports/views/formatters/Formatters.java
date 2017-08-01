@@ -10,6 +10,9 @@ import java.time.format.FormatStyle;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.port.CanalEntry;
+import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -21,6 +24,10 @@ public final class Formatters {
 	public static final ICellRenderer namedObjectFormatter = new BaseFormatter() {
 		@Override
 		public @Nullable String render(final Object object) {
+			if (object instanceof RouteOption) {
+				RouteOption routeOption = (RouteOption) object;
+				return PortModelLabeller.getName(routeOption);
+			}
 			if (object instanceof NamedObject) {
 				final NamedObject namedObject = (NamedObject) object;
 				return namedObject.getName();

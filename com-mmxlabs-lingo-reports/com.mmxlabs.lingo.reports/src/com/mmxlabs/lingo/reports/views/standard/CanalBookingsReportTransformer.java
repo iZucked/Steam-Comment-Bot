@@ -15,9 +15,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -38,21 +39,21 @@ public class CanalBookingsReportTransformer {
 		public final boolean preBooked;
 		public final String scheduleName;
 		public final @Nullable LocalDate bookingDate;
-		public final @Nullable EntryPoint entryPoint;
+		public final @Nullable String entryPointName;
 		public final @Nullable PortVisit event;
 		public final RouteOption routeOption;
 		public final CanalBookingSlot booking;
 		public final String period;
 
 		public RowData(final @NonNull String scheduleName, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, final String period) {
+				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
 			this.booking = booking;
 			this.routeOption = routeOption;
 			this.bookingDate = bookingDate;
-			this.entryPoint = entryPoint;
+			this.entryPointName = entryPointName;
 			this.event = usedSlot;
 			this.period = period;
 
@@ -64,7 +65,7 @@ public class CanalBookingsReportTransformer {
 			this.scheduleName = "";
 			this.booking = null;
 			this.bookingDate = null;
-			this.entryPoint = null;
+			this.entryPointName = null;
 			this.event = null;
 			this.routeOption = null;
 			this.preBooked = false;
@@ -81,6 +82,8 @@ public class CanalBookingsReportTransformer {
 
 		final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		assert scenarioModel != null;
+
+		final ModelDistanceProvider modelDistanceProvider = scenarioResult.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
 		final LocalDate promptDate = scenarioModel.getPromptPeriodStart();
 		LocalDate strictDate;
@@ -107,7 +110,7 @@ public class CanalBookingsReportTransformer {
 					final Journey journey = (Journey) evt;
 
 					String period = "";
-					
+
 					switch (journey.getCanalBookingPeriod()) {
 					case BEYOND:
 						period = "Open";
@@ -124,29 +127,30 @@ public class CanalBookingsReportTransformer {
 					default:
 						period = "Open";
 						break;
-					
+
 					}
-//					
-//					if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
-//						period = "Nominal";
-//					} else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
-//						period = "Open";
-//					} else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
-//						period = "Open";
-//					} else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
-//						period = "Relaxed";
-//					} else {
-//						period = "Strict";
-//					}
+					//
+					// if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
+					// period = "Nominal";
+					// } else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
+					// period = "Open";
+					// } else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
+					// period = "Open";
+					// } else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
+					// period = "Relaxed";
+					// } else {
+					// period = "Strict";
+					// }
 
 					if (journey.getCanalBooking() != null) {
 						final CanalBookingSlot booking = journey.getCanalBooking();
-						result.add(new RowData(modelRecord.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
-								(PortVisit) journey.getPreviousEvent(), period));
+						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
+						result.add(
+								new RowData(modelRecord.getName(), true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period));
 						existingBookings.remove(booking);
-					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-						result.add(new RowData(modelRecord.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
-								(PortVisit) journey.getPreviousEvent(), period));
+					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
+						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
+						result.add(new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period));
 					}
 				}
 			}
@@ -154,7 +158,8 @@ public class CanalBookingsReportTransformer {
 
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
-			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused"));
+			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
+			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRouteOption(), booking.getBookingDate(), entryPointName, null, "Unused"));
 		}
 
 		return result;

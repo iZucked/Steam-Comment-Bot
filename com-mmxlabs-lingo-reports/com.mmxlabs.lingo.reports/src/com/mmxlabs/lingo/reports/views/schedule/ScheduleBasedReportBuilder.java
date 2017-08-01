@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.
@@ -402,5 +403,4 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public void setAdaptableReport(final IAdaptable adaptableReport) {
 		this.adaptableReport = adaptableReport;
 	}
-
 }

@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -24,6 +25,7 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Class that makes the relevant API calls to the nebula Grid widget viewer framework.
@@ -44,7 +46,7 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 	protected final Map<LocalDate, Integer> rowCache = new HashMap<>();
 	protected final AbstractVerticalCalendarReportView verticalReport;
 
-	protected LNGScenarioModel root = null;
+	protected IScenarioDataProvider scenarioDataProvider = null;
 
 	private boolean collapseEvents = false;
 
@@ -91,22 +93,22 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		root = null;
+		scenarioDataProvider = null;
 		rowCache.clear();
 		verticalReportVisualiser.inputChanged();
-		if (newInput instanceof LNGScenarioModel) {
-			root = (LNGScenarioModel) newInput;
+		if (newInput instanceof IScenarioDataProvider) {
+			scenarioDataProvider = (IScenarioDataProvider) newInput;
 		} else if (newInput instanceof Collection<?>) {
 
 			Collection<?> collection = (Collection<?>) newInput;
 			// svso.getCollectedElements in this case returns a singleton list containing the root object
 			for (final Object element : collection) {
-				root = (LNGScenarioModel) element;
+				scenarioDataProvider = (IScenarioDataProvider) element;
 				break;
 			}
 		}
 		// extract the relevant data from the root object
-		final ScheduleSequenceData data = new ScheduleSequenceData(root, verticalReportVisualiser);
+		final ScheduleSequenceData data = new ScheduleSequenceData(scenarioDataProvider, verticalReportVisualiser);
 
 		verticalReport.setData(data);
 		// setup table columns and rows
@@ -185,8 +187,8 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		}
 	}
 
-	public LNGScenarioModel getRoot() {
-		return root;
+	public IScenarioDataProvider getRoot() {
+		return scenarioDataProvider;
 	}
 
 	public CalendarColumn getCalendarColumn(final int columnIdx) {
