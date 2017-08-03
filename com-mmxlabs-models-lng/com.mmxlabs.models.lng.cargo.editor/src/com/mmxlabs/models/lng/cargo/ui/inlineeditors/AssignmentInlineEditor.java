@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.inlineeditors;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -14,10 +17,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.edit.utils.AssignableElementCommandHelper;
+import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -27,6 +32,21 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 
 	public AssignmentInlineEditor(final EStructuralFeature feature) {
 		super(feature);
+	}
+
+	protected List<Pair<String, EObject>> getValues() {
+		List<Pair<String, EObject>> values = super.getValues();
+		values.forEach(p -> {
+			if (p.getSecond() instanceof VesselAvailability) {
+				final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
+				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselAvailability));
+			} else if (p.getSecond() instanceof CharterInMarket) {
+				final CharterInMarket charterInMarket = (CharterInMarket) p.getSecond();
+				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, -2));
+			}
+		});
+
+		return values;
 	}
 
 	@Override
@@ -54,8 +74,8 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 								if (rootObject instanceof LNGScenarioModel) {
 
 									// Always assign to first element
-//									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
-									final int maxSpot = 0;//AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
+									// final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
+									final int maxSpot = 0;// AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
 
 									commandHandler.handleCommand(
 											AssignableElementCommandHelper.reassignElement(commandHandler.getEditingDomain(), (VesselAssignmentType) vessel, elementAssignment, maxSpot),
