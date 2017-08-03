@@ -56,6 +56,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	static final Color White = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	static final Color Light_Grey = new Color(Display.getCurrent(), new RGB(240, 240, 240));
 	static final Color Grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
+	static final Color Black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
@@ -270,14 +271,14 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			if (row.loadSlot != null) {
 				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), row.loadSlot instanceof SpotSlot, ca, graphics, midpoint);
 			} else if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
-				drawCross(true, Grey, ca, graphics, midpoint);
+				drawCross(true, Black, ca, graphics, midpoint);
 			}
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
 			if (row.dischargeSlot != null) {
 				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), row.dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
 			} else if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
-				drawCross(false, Grey, ca, graphics, midpoint);
+				drawCross(false, Black, ca, graphics, midpoint);
 			}
 			rawI++;
 		}
@@ -326,17 +327,18 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		graphics.setLineWidth(2);
 		int x = 0;
+		int terminalSize2 = terminalSize - 2;
 		if (isLeft) {
-			x = ca.x + terminalSize;
+			x = ca.x + terminalSize2 - 1;
 		} else {
-			x = ca.x + ca.width - 2 * terminalSize;
+			x = ca.x - 3 + ca.width - 2 * terminalSize2;
 		}
 
-		int y = (int) (midpoint - (terminalSize) / 2 - 1);
+		int y = 1 + (int) (midpoint - terminalSize2 / 2 - 1);
 		graphics.setForeground(terminalColour);
 		graphics.setBackground(terminalColour);
-		graphics.drawLine(x, y, x + terminalSize, y + terminalSize);
-		graphics.drawLine(x + terminalSize, y, x, y + terminalSize);
+		graphics.drawLine(x, y, x + terminalSize2, y + terminalSize2);
+		graphics.drawLine(x + terminalSize2, y, x, y + terminalSize2);
 	}
 
 	public Rectangle getCanvasClientArea() {
