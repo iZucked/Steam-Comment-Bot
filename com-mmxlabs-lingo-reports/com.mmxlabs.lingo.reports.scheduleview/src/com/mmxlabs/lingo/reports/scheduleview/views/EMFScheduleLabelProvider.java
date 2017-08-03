@@ -38,7 +38,9 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -59,6 +61,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -282,6 +285,27 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					tt.append("ID: " + name + "\n");
 				}
 			}
+
+			{
+				if (element instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) element;
+					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+
+					Contract contract = slot.getContract();
+					if (contract != null) {
+						tt.append("Contract: " + contract.getName() + " \n");
+					} else if (slot instanceof SpotSlot) {
+						SpotSlot spotSlot = (SpotSlot) slot;
+						SpotMarket market = spotSlot.getMarket();
+						tt.append("Spot market: " + market.getName() + " \n");
+					} else {
+						// Spot purchase or sale - leave blank?
+						// tt.append("Spot " + (slot instanceof LoadSlot ? "purchase" : "sale") + " \n");
+					}
+					tt.append(" \n");
+				}
+			}
+
 			final Event event = (Event) element;
 			final String start = dateToString(event.getStart());
 			final String end = dateToString(event.getEnd());
@@ -339,12 +363,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
 				}
 			} else if (element instanceof SlotVisit) {
-				eventText.append("Time in port: " + durationTime + " \n");
-				eventText.append(" \n");
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+				eventText.append("Time in port: " + durationTime + " \n");
 				// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
 				eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
+				eventText.append(" \n");
 
 				boolean checkLateness = true;
 				// Do not check divertable slots
