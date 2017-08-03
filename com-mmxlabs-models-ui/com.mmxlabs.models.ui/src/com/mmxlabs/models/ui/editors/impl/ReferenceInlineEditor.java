@@ -114,7 +114,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		if (combo == null || combo.isDisposed()) {
 			return;
 		}
-		final List<Pair<String, EObject>> values = valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
+		final List<Pair<String, EObject>> values = getValues();
 		// update combo contents
 		combo.removeAll();
 		nameList.clear();
@@ -125,6 +125,10 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 			nameList.add(object.getFirst());
 			combo.add(object.getFirst());
 		}
+	}
+
+	protected List<Pair<String, EObject>> getValues() {
+		return valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
 	}
 
 	/**
