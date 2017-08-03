@@ -269,11 +269,15 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
 				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), row.loadSlot instanceof SpotSlot, ca, graphics, midpoint);
+			} else if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
+				drawCross(true, Grey, ca, graphics, midpoint);
 			}
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
 			if (row.dischargeSlot != null) {
 				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), row.dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
+			} else if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
+				drawCross(false, Grey, ca, graphics, midpoint);
 			}
 			rawI++;
 		}
@@ -316,6 +320,23 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				graphics.fillOval(x + 4 + extraRadius / 2, y, 4, 4);
 			}
 		}
+	}
+
+	private void drawCross(boolean isLeft, Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
+
+		graphics.setLineWidth(2);
+		int x = 0;
+		if (isLeft) {
+			x = ca.x + terminalSize;
+		} else {
+			x = ca.x + ca.width - 2 * terminalSize;
+		}
+
+		int y = (int) (midpoint - (terminalSize) / 2 - 1);
+		graphics.setForeground(terminalColour);
+		graphics.setBackground(terminalColour);
+		graphics.drawLine(x, y, x + terminalSize, y + terminalSize);
+		graphics.drawLine(x + terminalSize, y, x, y + terminalSize);
 	}
 
 	public Rectangle getCanvasClientArea() {
@@ -440,10 +461,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			// check if the user is trying to pair two slots which are a ship-to-ship transfer
 			// (i.e. they are effectively the same slot!)
-			final boolean shipToShipLink = toRowData != null
-					&& fromRowData != null
-					&& ((toRowData.loadSlot != null && fromRowData.dischargeSlot != null && toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot) || (toRowData.dischargeSlot != null
-							&& fromRowData.loadSlot != null && toRowData.dischargeSlot.getTransferTo() == fromRowData.loadSlot));
+			final boolean shipToShipLink = toRowData != null && fromRowData != null
+					&& ((toRowData.loadSlot != null && fromRowData.dischargeSlot != null && toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot)
+							|| (toRowData.dischargeSlot != null && fromRowData.loadSlot != null && toRowData.dischargeSlot.getTransferTo() == fromRowData.loadSlot));
 
 			if (!shipToShipLink) {
 				// now find column
