@@ -18,6 +18,7 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.delayedactions.impl,
  com.mmxlabs.common.detailtree,
  com.mmxlabs.common.detailtree.impl,
+ com.mmxlabs.common.http,
  com.mmxlabs.common.impl,
  com.mmxlabs.common.indexedobjects,
  com.mmxlabs.common.indexedobjects.impl,
@@ -28,11 +29,14 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.parser.arithmetic,
  com.mmxlabs.common.parser.series,
  com.mmxlabs.common.parser.series.functions,
+ com.mmxlabs.common.strings,
  com.mmxlabs.common.time,
  com.mmxlabs.common.timezone,
  com.mmxlabs.common.timezone.impl,
  com.mmxlabs.common.util,
  com.mmxlabs.common.util.exceptions
-Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ org.apache.httpcomponents.httpclient;bundle-version="4.3.6",
+ org.apache.httpcomponents.httpcore;bundle-version="4.3.3"
 Bundle-ClassPath: java-cup-11b-runtime.jar,
  .
