@@ -540,7 +540,7 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setRestartIterationsThreshold(restartingSettings.getValue("threshold", Integer.class));
 
 			// Similarity
-			stage.getConstraintAndFitnessSettings().setSimilaritySettings(similaritySettings);
+			stage.getConstraintAndFitnessSettings().setSimilaritySettings(createSimilaritySettings(settingsOverride, headlessParameters, plan.getUserSettings()));
 			
 			final ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
@@ -562,7 +562,7 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			stage.getAnnealingSettings().setCooling(coolingFactor);
 			// Similarity
-			stage.getConstraintAndFitnessSettings().setSimilaritySettings(similaritySettings);
+			stage.getConstraintAndFitnessSettings().setSimilaritySettings(createSimilaritySettings(settingsOverride, headlessParameters, plan.getUserSettings()));
 
 			final ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
