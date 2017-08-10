@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -61,7 +62,7 @@ public class TimeWindowScheduler {
 		private final IResource resource;
 		private final ISequence sequence;
 		// This data is used as the key
-		private final Map<IPort, List<IRouteOptionBooking>> unassignedBookings;
+		private final Map<ECanalEntry, List<IRouteOptionBooking>> unassignedBookings;
 		// This data will be modified by the scheduler
 		private transient CurrentBookingData currentBookingData;
 
@@ -71,7 +72,7 @@ public class TimeWindowScheduler {
 			// Copy unassigned elements for use in key
 			this.unassignedBookings = new HashMap<>();
 			if (_currentBookingData.unassignedBookings != null) {
-				for (final Map.Entry<IPort, List<IRouteOptionBooking>> e : _currentBookingData.unassignedBookings.entrySet()) {
+				for (final Map.Entry<ECanalEntry, List<IRouteOptionBooking>> e : _currentBookingData.unassignedBookings.entrySet()) {
 					this.unassignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
 				}
 			}
@@ -124,8 +125,8 @@ public class TimeWindowScheduler {
 
 		// Construct new bookings data object
 		final CurrentBookingData data = new CurrentBookingData();
-		data.assignedBookings = new HashMap<IPort, List<IRouteOptionBooking>>();
-		data.unassignedBookings = new HashMap<IPort, List<IRouteOptionBooking>>();
+		data.assignedBookings = new HashMap<>();
+		data.unassignedBookings = new HashMap<>();
 
 		if (useCanalBasedWindowTrimming) {
 			panamaSlotsProvider.getAssignedBookings().entrySet().forEach(e -> {

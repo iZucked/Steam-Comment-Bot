@@ -97,4 +97,8 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	};
 
 	RouteOptionDirection getRouteOptionDirection(IPort port, ERouteOption routeOption);
+
+	ECanalEntry getRouteOptionCanalEntrance(@NonNull IPort port, ERouteOption routeOption);
+
+	IPort getRouteOptionEntryPort(ERouteOption routeOption, ECanalEntry canalEntry);
 }

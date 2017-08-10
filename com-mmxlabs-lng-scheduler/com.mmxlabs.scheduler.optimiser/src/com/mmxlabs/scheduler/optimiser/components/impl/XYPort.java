@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 
@@ -13,42 +16,43 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public final class XYPort extends Port implements IXYPort {
 
-	private float x;
+	private double  x;
 
-	private float y;
+	private double y;
 
 	public XYPort(final IIndexingContext context) {
 		super(context);
 	}
 
-	public XYPort(final IIndexingContext context, final String name, final float x, final float y) {
+	public XYPort(final IIndexingContext context, final String name, final double x, final double y) {
 		super(context, name);
 		this.x = x;
 		this.y = y;
 	}
 
 	@Override
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 
-	public void setX(final float x) {
+	public void setX(final double x) {
 		this.x = x;
 	}
 
 	@Override
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
-	public final void setY(final float y) {
+	public final void setY(final double y) {
 		this.y = y;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 
 		if (obj instanceof XYPort) {
 			final XYPort p = (XYPort) obj;

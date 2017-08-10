@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.providers;
 import java.util.Map;
 import java.util.SortedSet;
 
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 /**
@@ -19,7 +18,7 @@ public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 	/**
 	 * Sets the bookings, overwriting existing ones.
 	 */
-	void setBookings(Map<IPort, SortedSet<IRouteOptionBooking>> bookings);
+	void setBookings(Map<ECanalEntry, SortedSet<IRouteOptionBooking>> bookings);
 
 	/**
 	 * All dates before this boundary strictly need a Panama booking. Exclusive

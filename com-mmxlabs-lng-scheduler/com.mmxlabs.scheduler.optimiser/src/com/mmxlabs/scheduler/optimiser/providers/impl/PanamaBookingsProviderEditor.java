@@ -19,8 +19,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
 /**
@@ -32,27 +32,27 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	// make client configurable
 	private static final int MAX_SPEED_TO_CANAL = Integer.MAX_VALUE;
 
-	private ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> panamaBookings;
+	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> panamaBookings;
 	private int strictBoundary;
 	private int relaxedBoundary;
 	private int relaxedBookingsCountAtEntryA;
 	private int relaxedBookingsCountAtEntryB;
 	private int arrivalMargin;
 
-	private ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> assignedBookings;
+	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings;
 
-	private ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> unassignedBookings;
+	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings;
 
 	@Override
-	public void setBookings(final Map<IPort, SortedSet<IRouteOptionBooking>> bookings) {
-		final ImmutableMap.Builder<IPort, ImmutableList<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
+	public void setBookings(final Map<ECanalEntry, SortedSet<IRouteOptionBooking>> bookings) {
+		final ImmutableMap.Builder<ECanalEntry, ImmutableList<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
 		bookings.forEach((k, v) -> {
 			builder.put(k, ImmutableList.copyOf(v));
 		});
 		panamaBookings = builder.build();
 
-		Map<IPort, ImmutableList<IRouteOptionBooking>> assignedBookings = new HashMap<>();
-		Map<IPort, ImmutableList<IRouteOptionBooking>> unassignedBookings = new HashMap<>();
+		Map<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings = new HashMap<>();
+		Map<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings = new HashMap<>();
 
 		panamaBookings.entrySet().forEach(e -> {
 			final Set<@NonNull IRouteOptionBooking> assigned = e.getValue().stream().filter(j -> j.getPortSlot().isPresent()).collect(Collectors.toSet());
@@ -72,7 +72,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getAllBookings() {
+	public ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAllBookings() {
 		if (panamaBookings == null) {
 			throw new IllegalStateException("Panama booking not set");
 		}
@@ -80,7 +80,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getAssignedBookings() {
+	public ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAssignedBookings() {
 		if (assignedBookings == null) {
 			throw new IllegalStateException("Panama booking not set");
 		}
@@ -88,7 +88,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getUnassignedBookings() {
+	public ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getUnassignedBookings() {
 		if (unassignedBookings == null) {
 			throw new IllegalStateException("Panama booking not set");
 		}

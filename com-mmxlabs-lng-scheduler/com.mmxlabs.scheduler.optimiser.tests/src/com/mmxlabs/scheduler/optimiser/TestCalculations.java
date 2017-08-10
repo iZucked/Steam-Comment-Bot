@@ -130,10 +130,10 @@ public class TestCalculations {
 
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
-			final IPort port1 = portBuilder.createPort("port-1", "UTC");
-			final IPort port2 = portBuilder.createPort("port-2", "UTC");
-			final IPort port3 = portBuilder.createPort("port-3", "UTC");
-			final IPort port4 = portBuilder.createPort("port-4", "UTC");
+			final IPort port1 = portBuilder.createPort("port-1", "port-1", "UTC");
+			final IPort port2 = portBuilder.createPort("port-2", "port-2", "UTC");
+			final IPort port3 = portBuilder.createPort("port-3", "port-3", "UTC");
+			final IPort port4 = portBuilder.createPort("port-4", "port-4", "UTC");
 
 			final int minSpeed = 12000;
 			final int maxSpeed = 20000;
@@ -452,10 +452,10 @@ public class TestCalculations {
 
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
-			final IPort port1 = portBuilder.createPort("port-1", "UTC");
-			final IPort port2 = portBuilder.createPort("port-2", "UTC");
-			final IPort port3 = portBuilder.createPort("port-3", "UTC");
-			final IPort port4 = portBuilder.createPort("port-4", "UTC");
+			final IPort port1 = portBuilder.createPort("port-1", "port-1", "UTC");
+			final IPort port2 = portBuilder.createPort("port-2", "port-2", "UTC");
+			final IPort port3 = portBuilder.createPort("port-3", "port-3", "UTC");
+			final IPort port4 = portBuilder.createPort("port-4", "port-4", "UTC");
 
 			final int minSpeed = 16000;
 			final int maxSpeed = 20000;
@@ -785,10 +785,10 @@ public class TestCalculations {
 
 			final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
-			final IPort port1 = portBuilder.createPort("port-1", "UTC");
-			final IPort port2 = portBuilder.createPort("port-2", "UTC");
-			final IPort port3 = portBuilder.createPort("port-3", "UTC");
-			final IPort port4 = portBuilder.createPort("port-4", "UTC");
+			final IPort port1 = portBuilder.createPort("port-1", "port-1", "UTC");
+			final IPort port2 = portBuilder.createPort("port-2", "port-2", "UTC");
+			final IPort port3 = portBuilder.createPort("port-3", "port-3", "UTC");
+			final IPort port4 = portBuilder.createPort("port-4", "port-4", "UTC");
 
 			final int minSpeed = 16000;
 			final int maxSpeed = 20000;

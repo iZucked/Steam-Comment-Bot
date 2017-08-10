@@ -12,8 +12,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -30,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -477,9 +476,10 @@ public class FeasibleTimeWindowTrimmer {
 					final int suezTravelTime = travelTimeData.getTravelTime(ERouteOption.SUEZ, index - 1);
 					final int panamaTravelTime = travelTimeData.getTravelTime(ERouteOption.PANAMA, index - 1);
 
-					@Nullable
-					final IPort routeOptionEntry = distanceProvider.getRouteOptionEntryPort(prevPortSlot.getPort(), ERouteOption.PANAMA);
-					if (routeOptionEntry != null) {
+					final ECanalEntry panamaEntry = distanceProvider.getRouteOptionCanalEntrance(prevPortSlot.getPort(), ERouteOption.PANAMA);
+					final IPort nearestPanamaPort = distanceProvider.getRouteOptionEntryPort(prevPortSlot.getPort(), ERouteOption.PANAMA);
+
+					if (nearestPanamaPort != null) {
 
 						final PanamaPeriod panamaPeriod;
 						if (windowStartTime[index] > panamaBookingsProvider.getRelaxedBoundary()) {
@@ -490,12 +490,11 @@ public class FeasibleTimeWindowTrimmer {
 							panamaPeriod = PanamaPeriod.Strict;
 						}
 
-						final IPort panamaEntry = routeOptionEntry;
 						final Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new ArrayList<>()).stream().filter(e -> {
 							return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(p_prevPortSlot);
 						}).findFirst();
 
-						final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), routeOptionEntry,
+						final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), nearestPanamaPort,
 								Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselMaxSpeed)) + panamaBookingsProvider.getMargin() + visitDuration[index - 1];
 						if (isRoundTripSequence) {
 							// // Normal behaviour
@@ -508,8 +507,8 @@ public class FeasibleTimeWindowTrimmer {
 							if (windowStartTime[index - 1] + toCanal < potentialBooking.get().getBookingDate()) {
 								currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
 
-								final int fromEntryPoint = distanceProvider.getTravelTime(potentialBooking.get().getRouteOption(), vesselAvailability.getVessel(),
-										potentialBooking.get().getEntryPoint(), portSlot.getPort(), vesselMaxSpeed);
+								final int fromEntryPoint = distanceProvider.getTravelTime(potentialBooking.get().getRouteOption(), vesselAvailability.getVessel(), nearestPanamaPort, portSlot.getPort(),
+										vesselMaxSpeed);
 
 								// Visit duration should implicitly be included in this calculation.
 								final int travelTime = (potentialBooking.get().getBookingDate() + fromEntryPoint) - windowStartTime[index - 1];
@@ -552,7 +551,7 @@ public class FeasibleTimeWindowTrimmer {
 										// booking can't be reached. All following bookings are later and can't be reached either
 										continue;
 									}
-									final int fromEntryPoint = distanceProvider.getTravelTime(booking.getRouteOption(), vesselAvailability.getVessel(), booking.getEntryPoint(), portSlot.getPort(),
+									final int fromEntryPoint = distanceProvider.getTravelTime(booking.getRouteOption(), vesselAvailability.getVessel(), nearestPanamaPort, portSlot.getPort(),
 											vesselMaxSpeed);
 									final int travelTime = toCanal + fromEntryPoint;
 

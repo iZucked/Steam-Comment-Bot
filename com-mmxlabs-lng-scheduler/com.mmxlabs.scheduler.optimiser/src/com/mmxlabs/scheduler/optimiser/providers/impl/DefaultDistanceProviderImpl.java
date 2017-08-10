@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -50,8 +51,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	private final Map<ERouteOption, Pair<IPort, IPort>> routeOptionEntryPoints = new HashMap<>();
 
 	// cache
-	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntry = new ConcurrentHashMap();
-	private final Map<Pair<IPort, ERouteOption>, RouteOptionDirection> nearestRouteOptionDirection = new ConcurrentHashMap();
+	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntryPort = new ConcurrentHashMap<>();
+	private final Map<Pair<IPort, ERouteOption>, ECanalEntry> nearestRouteOptionEntry = new ConcurrentHashMap<>();
+	private final Map<Pair<IPort, ERouteOption>, RouteOptionDirection> nearestRouteOptionDirection = new ConcurrentHashMap<>();
 
 	@Override
 	public List<DistanceMatrixEntry> getDistanceValues(final IPort from, final IPort to, final IVessel vessel, AvailableRouteChoices availableRouteChoices) {
@@ -158,7 +160,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Override
 	public IPort getRouteOptionEntryPort(IPort port, ERouteOption routeOption) {
-		return nearestRouteOptionEntry.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
+		return nearestRouteOptionEntryPort.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
 			Pair<IPort, IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
 			if (entryPoints != null) {
 
@@ -209,5 +211,39 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public ECanalEntry getRouteOptionCanalEntrance(@NonNull IPort port, ERouteOption routeOption) {
+
+		return nearestRouteOptionEntry.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {
+			Pair<IPort, IPort> entryPoints = routeOptionEntryPoints.get(pair.getSecond());
+			if (entryPoints != null) {
+
+				int distanceToNorthEntrance = getDistance(ERouteOption.DIRECT, port, entryPoints.getFirst(), null);
+				int distanceToSouthEntrance = getDistance(ERouteOption.DIRECT, port, entryPoints.getSecond(), null);
+				if (distanceToNorthEntrance < distanceToSouthEntrance) {
+					return ECanalEntry.NorthSide;
+				} else {
+					return ECanalEntry.SouthSide;
+				}
+			}
+			return null;
+		});
+	}
+
+	@Override
+	public IPort getRouteOptionEntryPort(ERouteOption routeOption, ECanalEntry canalEntry) {
+		Pair<IPort, IPort> p = routeOptionEntryPoints.get(routeOption);
+		if (p == null) {
+			return null;
+		}
+		if (canalEntry == ECanalEntry.NorthSide) {
+			return p.getFirst();
+		}
+		if (canalEntry == ECanalEntry.SouthSide) {
+			return p.getSecond();
+		}
+		return null;
 	}
 }

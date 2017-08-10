@@ -12,7 +12,7 @@ package com.mmxlabs.scheduler.optimiser.components;
  */
 public interface IXYPort extends IPort {
 
-	float getX();
+	double getX();
 
-	float getY();
+	double getY();
 }

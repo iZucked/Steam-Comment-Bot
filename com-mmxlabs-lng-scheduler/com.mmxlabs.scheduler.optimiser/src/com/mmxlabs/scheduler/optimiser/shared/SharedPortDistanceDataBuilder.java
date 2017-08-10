@@ -55,7 +55,7 @@ public final class SharedPortDistanceDataBuilder {
 	public void init() {
 
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", "UTC"/* no timezone */);
+		ANYWHERE = createPort("ANYWHERE", "ANYWHERE", "UTC"/* no timezone */);
 		portProvider.setAnywherePort(ANYWHERE);
 		for (final ERouteOption route : ERouteOption.values()) {
 			setPortToPortDistance(ANYWHERE, ANYWHERE, route, 0);
@@ -67,25 +67,25 @@ public final class SharedPortDistanceDataBuilder {
 	}
 
 	@NonNull
-	public IPort createPort(final @NonNull String name, final @NonNull String timezoneId) {
+	public IPort createPort(final @NonNull String name, final @NonNull String mmxId, final @NonNull String timezoneId) {
 
 		final Port port = new Port(indexingContext);
 		buildPort(port, name, timezoneId);
 
-		portProvider.addPort(port, name, /* mmxID */ name);
+		portProvider.addPort(port, name, mmxId);
 
 		return port;
 	}
 
 	@NonNull
-	public IXYPort createPort(final @NonNull String name, final float x, final float y, final @NonNull String timezoneId) {
+	public IXYPort createPort(final @NonNull String name, final @NonNull String mmxId, final double x, final double y, final @NonNull String timezoneId) {
 
 		final XYPort port = new XYPort(indexingContext);
 		buildPort(port, name, timezoneId);
 		port.setX(x);
 		port.setY(y);
 
-		portProvider.addPort(port, name, /* mmxID */ name);
+		portProvider.addPort(port, name, mmxId);
 
 		return port;
 	}
@@ -114,7 +114,6 @@ public final class SharedPortDistanceDataBuilder {
 	}
 
 	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final ERouteOption route, final int distance) {
-
 		portDistanceProvider.set(route, from, to, distance);
 	}
 

@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
  */
 public interface IPanamaBookingsProvider extends IDataComponentProvider {
 
-	ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getAllBookings();
+	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAllBookings();
 
 	/**
 	 * All dates before this boundary strictly need a Panama booking. Exclusive
@@ -61,8 +61,8 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	int getMargin();
 
 	// Sorted
-	ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getAssignedBookings();
+	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAssignedBookings();
 
 	// Sorted
-	ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> getUnassignedBookings();
+	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getUnassignedBookings();
 }

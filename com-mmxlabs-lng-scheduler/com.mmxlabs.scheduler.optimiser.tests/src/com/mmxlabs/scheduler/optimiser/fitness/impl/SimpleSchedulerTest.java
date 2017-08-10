@@ -88,12 +88,12 @@ public class SimpleSchedulerTest {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
-		final IPort port1 = portBuilder.createPort("port-1", 0, 0, "UTC");
-		final IPort port2 = portBuilder.createPort("port-2", 0, 5, "UTC");
-		final IPort port3 = portBuilder.createPort("port-3", 5, 0, "UTC");
-		final IPort port4 = portBuilder.createPort("port-4", 5, 5, "UTC");
-		final IPort port5 = portBuilder.createPort("port-5", 0, 10, "UTC");
-		final IPort port6 = portBuilder.createPort("port-6", 5, 10, "UTC");
+		final IPort port1 = portBuilder.createPort("port-1", "port-1", 0, 0, "UTC");
+		final IPort port2 = portBuilder.createPort("port-2", "port-2", 0, 5, "UTC");
+		final IPort port3 = portBuilder.createPort("port-3", "port-3", 5, 0, "UTC");
+		final IPort port4 = portBuilder.createPort("port-4", "port-4", 5, 5, "UTC");
+		final IPort port5 = portBuilder.createPort("port-5", "port-5", 0, 10, "UTC");
+		final IPort port6 = portBuilder.createPort("port-6", "port-6", 5, 10, "UTC");
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<>();
 		keypoints.put(12000, 12000L);
@@ -207,8 +207,8 @@ public class SimpleSchedulerTest {
 				for (final IPort to : portsList) {
 					if (to instanceof IXYPort) {
 						final IXYPort xyTo = (IXYPort) to;
-						final float diffX = xyFrom.getX() - xyTo.getX();
-						final float diffY = xyFrom.getY() - xyTo.getY();
+						final double diffX = xyFrom.getX() - xyTo.getX();
+						final double diffY = xyFrom.getY() - xyTo.getY();
 
 						final double distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
 						portBuilder.setPortToPortDistance(from, to, ERouteOption.DIRECT, (int) distance);
