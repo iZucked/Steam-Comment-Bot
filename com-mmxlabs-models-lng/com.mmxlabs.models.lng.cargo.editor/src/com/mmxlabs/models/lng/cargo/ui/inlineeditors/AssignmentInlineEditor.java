@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.inlineeditors;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;

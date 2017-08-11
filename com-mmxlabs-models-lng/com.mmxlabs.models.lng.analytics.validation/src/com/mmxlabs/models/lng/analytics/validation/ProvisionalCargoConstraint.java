@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.soap.SOAPBinding.ParameterStyle;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -20,13 +22,15 @@ import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -111,20 +115,26 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
-			final VesselClass vesselClass = plan.getVessel().getVesselClass();
-			if (plan.getVessel() == null || vesselClass == null) {
+			final Vessel vessel = plan.getVessel();
+			if (vessel != null) {
 				return;
 			}
 
-			final double maxSpeedKnots = vesselClass.getMaxSpeed();
+			final double maxSpeedKnots = vessel.getVesselOrDelegateMaxSpeed();
 
 			@SuppressWarnings("unchecked")
 			Map<Pair<Port, Port>, Integer> minTimes = (Map<Pair<Port, Port>, Integer>) ctx.getCurrentConstraintData();
 			if (minTimes == null) {
 				minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
-				for (final VesselClassRouteParameters parameters : vesselClass.getRouteParameters()) {
-					collectMinTimes(minTimes, parameters.getRoute(), parameters.getExtraTransitTime(), maxSpeedKnots);
+				PortModel portModel = ScenarioModelUtil.getPortModel(scenario);
+
+				for (final VesselClassRouteParameters parameters : vessel.getVesselOrDelegateRouteParameters()) {
+					for (Route r : portModel.getRoutes()) {
+						if (r.getRouteOption() == parameters.getRouteOption()) {
+							collectMinTimes(minTimes, r, parameters.getExtraTransitTime(), maxSpeedKnots);
+						}
+					}
 				}
 
 				for (final Route route : scenario.getReferenceModel().getPortModel().getRoutes()) {

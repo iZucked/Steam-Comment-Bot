@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

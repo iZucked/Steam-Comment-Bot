@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -151,7 +150,7 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 						Vessel vessel = loadSlot.getNominatedVessel();
 						if (vessel != null) {
 							// get the capacity directly
-							return vessel.getVesselOrVesselClassCapacity();
+							return vessel.getVesselOrDelegateCapacity();
 						}
 					}
 				}
@@ -165,13 +164,13 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 			Vessel vessel = vesselAvailability.getVessel();
 			if (vessel != null) {
-				capacity = vessel.getVesselOrVesselClassCapacity();
+				capacity = vessel.getVesselOrDelegateCapacity();
 			}
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-			final VesselClass vesselClass = charterInMarket.getVesselClass();
-			if (vesselClass != null) {
-				capacity = vesselClass.getCapacity();
+			final Vessel vessel = charterInMarket.getVessel();
+			if (vessel != null) {
+				capacity = vessel.getVesselOrDelegateCapacity();
 			}
 		} else {
 			// Can't do much here, no capacity...

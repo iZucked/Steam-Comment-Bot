@@ -56,6 +56,7 @@ public class CharterOutMarketItemProvider
 			addCharterOutRatePropertyDescriptor(object);
 			addMinCharterOutDurationPropertyDescriptor(object);
 			addAvailablePortsPropertyDescriptor(object);
+			addVesselsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -149,23 +150,23 @@ public class CharterOutMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter Out Rate feature.
+	 * This adds a property descriptor for the Vessels feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCharterOutRatePropertyDescriptor(Object object) {
+	protected void addVesselsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterOutMarket_charterOutRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_charterOutRate_feature", "_UI_CharterOutMarket_type"),
-				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_RATE,
+				 getString("_UI_CharterOutMarket_vessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_vessels_feature", "_UI_CharterOutMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -198,6 +199,28 @@ public class CharterOutMarketItemProvider
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter Out Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterOutRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutMarket_charterOutRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_charterOutRate_feature", "_UI_CharterOutMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**

@@ -18,10 +18,8 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -33,13 +31,13 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 public class AllowedVesselsValueProviderFactory implements IReferenceValueProviderFactory {
 
 	private final IReferenceValueProviderFactory vesselProviderFactory;
-	private final IReferenceValueProviderFactory vesselClassProviderFactory;
+	private final IReferenceValueProviderFactory vesselGroupProviderFactory;
 
 	public AllowedVesselsValueProviderFactory() {
 		this.vesselProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), FleetPackage.eINSTANCE.getVessel());
 
-		this.vesselClassProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
-				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), FleetPackage.eINSTANCE.getVesselClass());
+		this.vesselGroupProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
+				FleetPackage.eINSTANCE.getVesselGroup());
 	}
 
 	@Override
@@ -59,11 +57,8 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 		// Shouldn't need to pass in explicit references...
 		final IReferenceValueProvider vesselProvider = vesselProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL, FleetPackage.Literals.FLEET_MODEL__VESSELS, rootObject);
 
-		final IReferenceValueProvider vesselClassProvider = vesselClassProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL,
-				FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES, rootObject);
-		
-		final IReferenceValueProvider vesselGroupProvider = vesselClassProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL,
-				FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS, rootObject);
+		final IReferenceValueProvider vesselGroupProvider = vesselGroupProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS,
+				rootObject);
 
 		if (reference == CargoPackage.Literals.SLOT__ALLOWED_VESSELS || reference == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS) {
 			return new IReferenceValueProvider() {
@@ -71,35 +66,7 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> vesselResult = vesselProvider.getAllowedValues(target, field);
-					final List<Pair<String, EObject>> vesselClassResult = vesselClassProvider.getAllowedValues(target, field);
 					final List<Pair<String, EObject>> vesselGroupResult = vesselGroupProvider.getAllowedValues(target, field);
-
-					// // determine the current value for the target object
-					// final VesselAssignmentType currentValue;
-					// {
-					// // if (target instanceof AssignableElement) {
-					// // final AssignableElement assignment = (AssignableElement) target;
-					// // currentValue = assignment.getVesselAssignmentType();
-					// // } else {
-					// currentValue = null;
-					// // }
-					// }
-
-					// // All scenario vessels - those we use to ship ourselves
-					// final Set<Vessel> scenarioVessels = new HashSet<>();
-					// for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-					// scenarioVessels.add(va.getVessel());
-					// }
-
-					final boolean includeVesselClasses;
-
-					if (field == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS) {
-						includeVesselClasses = target instanceof CharterOutEvent;
-					} else if (field == CargoPackage.Literals.SLOT__ALLOWED_VESSELS) {
-						includeVesselClasses = true;
-					} else {
-						throw new RuntimeException("Invalid code path");
-					}
 
 					// create list to populate
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
@@ -108,12 +75,6 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 					for (final Pair<String, EObject> pair : vesselResult) {
 						final Vessel vessel = (Vessel) pair.getSecond();
 						if (vessel == null) {
-							continue;
-						}
-
-						// determine the vessel class (if any) for this option
-						final VesselClass vc = vessel.getVesselClass();
-						if (vc == null) {
 							continue;
 						}
 
@@ -131,38 +92,14 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 						if (vessel.getVessels().isEmpty()) {
 							continue;
 						}
-					 
-						
+
 						final boolean display = true;
-						
+
 						if (display) {
 							result.add(pair);
 						}
 					}
 
-					// Find available spot markets
-					if (includeVesselClasses) {
-
-						// filter the globally permissible values by the settings for this cargo
-						for (final Pair<String, EObject> pair : vesselClassResult) {
-							final VesselClass vc = (VesselClass) pair.getSecond();
-							if (vc == null) {
-								continue;
-							}
-
-							final boolean display = true;
-
-							// // Always show the option if the option is the null option
-							// // or the current value for the cargo is set to this vessel-set
-							// if (Equality.isEqual(charterInMarket, currentValue) || charterInMarket == null) {
-							// display = true;
-							// }
-
-							if (display) {
-								result.add(new Pair<String, EObject>(pair.getFirst(), pair.getSecond()));
-							}
-						}
-					}
 					Collections.sort(result, createComparator());
 
 					return result;
@@ -183,7 +120,7 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 
 				@Override
 				public void dispose() {
-					vesselClassProvider.dispose();
+					vesselGroupProvider.dispose();
 					vesselProvider.dispose();
 				}
 
@@ -194,15 +131,6 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 						public int compare(final Pair<String, ?> o1, final Pair<String, ?> o2) {
 							final Object v1 = o1.getSecond();
 							final Object v2 = o2.getSecond();
-							if (v1 instanceof Vessel) {
-								if (v2 instanceof VesselClass) {
-									return -1;
-								}
-							} else if (v1 instanceof VesselClass) {
-								if (v2 instanceof Vessel) {
-									return 1;
-								}
-							}
 
 							return o1.getFirst().compareTo(o2.getFirst());
 						}
@@ -220,7 +148,7 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 						return true;
 					}
 
-					return vesselProvider.updateOnChangeToFeature(changedFeature) || vesselClassProvider.updateOnChangeToFeature(changedFeature);
+					return vesselProvider.updateOnChangeToFeature(changedFeature) || vesselGroupProvider.updateOnChangeToFeature(changedFeature);
 				}
 
 			};

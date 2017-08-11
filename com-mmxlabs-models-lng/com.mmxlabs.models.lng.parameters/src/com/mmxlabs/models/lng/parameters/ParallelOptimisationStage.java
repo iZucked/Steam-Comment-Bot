@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.parameters;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Parallel Optimisation Stage</b></em>'.

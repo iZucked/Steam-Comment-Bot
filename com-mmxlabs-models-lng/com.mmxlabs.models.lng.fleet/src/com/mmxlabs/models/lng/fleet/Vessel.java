@@ -20,13 +20,31 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getShortName <em>Short Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getIMO <em>IMO</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getType <em>Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getReference <em>Reference</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes <em>Laden Attributes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBallastAttributes <em>Ballast Attributes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed <em>Max Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isRouteParametersOverride <em>Route Parameters Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getRouteParameters <em>Route Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getNotes <em>Notes</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -61,34 +79,86 @@ public interface Vessel extends AVesselSet<Vessel> {
 	void setShortName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
+	 * Returns the value of the '<em><b>IMO</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
+	 * If the meaning of the '<em>IMO</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Class</em>' reference.
-	 * @see #setVesselClass(VesselClass)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_VesselClass()
-	 * @model required="true"
+	 * @return the value of the '<em>IMO</em>' attribute.
+	 * @see #setIMO(String)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_IMO()
+	 * @model
 	 * @generated
 	 */
-	VesselClass getVesselClass();
+	String getIMO();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getIMO <em>IMO</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Vessel Class</em>' reference.
-	 * @see #getVesselClass()
+	 * @param value the new value of the '<em>IMO</em>' attribute.
+	 * @see #getIMO()
 	 * @generated
 	 */
-	void setVesselClass(VesselClass value);
+	void setIMO(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' attribute.
+	 * @see #setType(String)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Type()
+	 * @model
+	 * @generated
+	 */
+	String getType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getType <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' attribute.
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Reference</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Reference</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Reference</em>' reference.
+	 * @see #setReference(Vessel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Reference()
+	 * @model
+	 * @generated
+	 */
+	Vessel getReference();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getReference <em>Reference</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Reference</em>' reference.
+	 * @see #getReference()
+	 * @generated
+	 */
+	void setReference(Vessel value);
 
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Inaccessible Ports</em>' reference list isn't clear,
@@ -101,6 +171,32 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	EList<APortSet<Port>> getInaccessiblePorts();
+
+	/**
+	 * Returns the value of the '<em><b>Inaccessible Routes Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Inaccessible Routes Override</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Inaccessible Routes Override</em>' attribute.
+	 * @see #setInaccessibleRoutesOverride(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_InaccessibleRoutesOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isInaccessibleRoutesOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Inaccessible Routes Override</em>' attribute.
+	 * @see #isInaccessibleRoutesOverride()
+	 * @generated
+	 */
+	void setInaccessibleRoutesOverride(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
@@ -158,7 +254,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 
 	/**
 	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute.
-	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Fill Capacity</em>' attribute isn't clear,
@@ -170,8 +265,8 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #unsetFillCapacity()
 	 * @see #setFillCapacity(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_FillCapacity()
-	 * @model default="1" unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%' exportFormatString='#.###'"
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='##0.#' unit='%' exportFormatString='#.###'"
 	 * @generated
 	 */
 	double getFillCapacity();
@@ -210,6 +305,556 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	boolean isSetFillCapacity();
+
+	/**
+	 * Returns the value of the '<em><b>Laden Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Attributes</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Attributes</em>' containment reference.
+	 * @see #setLadenAttributes(VesselStateAttributes)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_LadenAttributes()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	VesselStateAttributes getLadenAttributes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes <em>Laden Attributes</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Attributes</em>' containment reference.
+	 * @see #getLadenAttributes()
+	 * @generated
+	 */
+	void setLadenAttributes(VesselStateAttributes value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Attributes</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Attributes</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Attributes</em>' containment reference.
+	 * @see #setBallastAttributes(VesselStateAttributes)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BallastAttributes()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	VesselStateAttributes getBallastAttributes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBallastAttributes <em>Ballast Attributes</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Attributes</em>' containment reference.
+	 * @see #getBallastAttributes()
+	 * @generated
+	 */
+	void setBallastAttributes(VesselStateAttributes value);
+
+	/**
+	 * Returns the value of the '<em><b>Min Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Speed</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Speed</em>' attribute.
+	 * @see #isSetMinSpeed()
+	 * @see #unsetMinSpeed()
+	 * @see #setMinSpeed(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MinSpeed()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts' formatString='#0.###'"
+	 * @generated
+	 */
+	double getMinSpeed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Speed</em>' attribute.
+	 * @see #isSetMinSpeed()
+	 * @see #unsetMinSpeed()
+	 * @see #getMinSpeed()
+	 * @generated
+	 */
+	void setMinSpeed(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMinSpeed()
+	 * @see #getMinSpeed()
+	 * @see #setMinSpeed(double)
+	 * @generated
+	 */
+	void unsetMinSpeed();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Min Speed</em>' attribute is set.
+	 * @see #unsetMinSpeed()
+	 * @see #getMinSpeed()
+	 * @see #setMinSpeed(double)
+	 * @generated
+	 */
+	boolean isSetMinSpeed();
+
+	/**
+	 * Returns the value of the '<em><b>Max Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Max Speed</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Max Speed</em>' attribute.
+	 * @see #isSetMaxSpeed()
+	 * @see #unsetMaxSpeed()
+	 * @see #setMaxSpeed(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MaxSpeed()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts' formatString='#0.###'"
+	 * @generated
+	 */
+	double getMaxSpeed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed <em>Max Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Max Speed</em>' attribute.
+	 * @see #isSetMaxSpeed()
+	 * @see #unsetMaxSpeed()
+	 * @see #getMaxSpeed()
+	 * @generated
+	 */
+	void setMaxSpeed(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed <em>Max Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMaxSpeed()
+	 * @see #getMaxSpeed()
+	 * @see #setMaxSpeed(double)
+	 * @generated
+	 */
+	void unsetMaxSpeed();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed <em>Max Speed</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Max Speed</em>' attribute is set.
+	 * @see #unsetMaxSpeed()
+	 * @see #getMaxSpeed()
+	 * @see #setMaxSpeed(double)
+	 * @generated
+	 */
+	boolean isSetMaxSpeed();
+
+	/**
+	 * Returns the value of the '<em><b>Safety Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Safety Heel</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Safety Heel</em>' attribute.
+	 * @see #isSetSafetyHeel()
+	 * @see #unsetSafetyHeel()
+	 * @see #setSafetyHeel(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_SafetyHeel()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###,##0' unit='m\263'"
+	 * @generated
+	 */
+	int getSafetyHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Safety Heel</em>' attribute.
+	 * @see #isSetSafetyHeel()
+	 * @see #unsetSafetyHeel()
+	 * @see #getSafetyHeel()
+	 * @generated
+	 */
+	void setSafetyHeel(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSafetyHeel()
+	 * @see #getSafetyHeel()
+	 * @see #setSafetyHeel(int)
+	 * @generated
+	 */
+	void unsetSafetyHeel();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Safety Heel</em>' attribute is set.
+	 * @see #unsetSafetyHeel()
+	 * @see #getSafetyHeel()
+	 * @see #setSafetyHeel(int)
+	 * @generated
+	 */
+	boolean isSetSafetyHeel();
+
+	/**
+	 * Returns the value of the '<em><b>Warming Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Warming Time</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Warming Time</em>' attribute.
+	 * @see #isSetWarmingTime()
+	 * @see #unsetWarmingTime()
+	 * @see #setWarmingTime(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_WarmingTime()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs' formatString='##0'"
+	 * @generated
+	 */
+	int getWarmingTime();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Warming Time</em>' attribute.
+	 * @see #isSetWarmingTime()
+	 * @see #unsetWarmingTime()
+	 * @see #getWarmingTime()
+	 * @generated
+	 */
+	void setWarmingTime(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetWarmingTime()
+	 * @see #getWarmingTime()
+	 * @see #setWarmingTime(int)
+	 * @generated
+	 */
+	void unsetWarmingTime();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Warming Time</em>' attribute is set.
+	 * @see #unsetWarmingTime()
+	 * @see #getWarmingTime()
+	 * @see #setWarmingTime(int)
+	 * @generated
+	 */
+	boolean isSetWarmingTime();
+
+	/**
+	 * Returns the value of the '<em><b>Cooling Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cooling Volume</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cooling Volume</em>' attribute.
+	 * @see #isSetCoolingVolume()
+	 * @see #unsetCoolingVolume()
+	 * @see #setCoolingVolume(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_CoolingVolume()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
+	 * @generated
+	 */
+	int getCoolingVolume();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cooling Volume</em>' attribute.
+	 * @see #isSetCoolingVolume()
+	 * @see #unsetCoolingVolume()
+	 * @see #getCoolingVolume()
+	 * @generated
+	 */
+	void setCoolingVolume(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCoolingVolume()
+	 * @see #getCoolingVolume()
+	 * @see #setCoolingVolume(int)
+	 * @generated
+	 */
+	void unsetCoolingVolume();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cooling Volume</em>' attribute is set.
+	 * @see #unsetCoolingVolume()
+	 * @see #getCoolingVolume()
+	 * @see #setCoolingVolume(int)
+	 * @generated
+	 */
+	boolean isSetCoolingVolume();
+
+	/**
+	 * Returns the value of the '<em><b>Route Parameters Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route Parameters Override</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Parameters Override</em>' attribute.
+	 * @see #setRouteParametersOverride(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_RouteParametersOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isRouteParametersOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isRouteParametersOverride <em>Route Parameters Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Route Parameters Override</em>' attribute.
+	 * @see #isRouteParametersOverride()
+	 * @generated
+	 */
+	void setRouteParametersOverride(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Route Parameters</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route Parameters</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Parameters</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_RouteParameters()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<VesselClassRouteParameters> getRouteParameters();
+
+	/**
+	 * Returns the value of the '<em><b>Pilot Light Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pilot Light Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pilot Light Rate</em>' attribute.
+	 * @see #isSetPilotLightRate()
+	 * @see #unsetPilotLightRate()
+	 * @see #setPilotLightRate(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_PilotLightRate()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.##'"
+	 * @generated
+	 */
+	double getPilotLightRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pilot Light Rate</em>' attribute.
+	 * @see #isSetPilotLightRate()
+	 * @see #unsetPilotLightRate()
+	 * @see #getPilotLightRate()
+	 * @generated
+	 */
+	void setPilotLightRate(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPilotLightRate()
+	 * @see #getPilotLightRate()
+	 * @see #setPilotLightRate(double)
+	 * @generated
+	 */
+	void unsetPilotLightRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pilot Light Rate</em>' attribute is set.
+	 * @see #unsetPilotLightRate()
+	 * @see #getPilotLightRate()
+	 * @see #setPilotLightRate(double)
+	 * @generated
+	 */
+	boolean isSetPilotLightRate();
+
+	/**
+	 * Returns the value of the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Base Fuel Consumption</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Base Fuel Consumption</em>' attribute.
+	 * @see #isSetMinBaseFuelConsumption()
+	 * @see #unsetMinBaseFuelConsumption()
+	 * @see #setMinBaseFuelConsumption(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MinBaseFuelConsumption()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
+	 * @generated
+	 */
+	double getMinBaseFuelConsumption();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Base Fuel Consumption</em>' attribute.
+	 * @see #isSetMinBaseFuelConsumption()
+	 * @see #unsetMinBaseFuelConsumption()
+	 * @see #getMinBaseFuelConsumption()
+	 * @generated
+	 */
+	void setMinBaseFuelConsumption(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMinBaseFuelConsumption()
+	 * @see #getMinBaseFuelConsumption()
+	 * @see #setMinBaseFuelConsumption(double)
+	 * @generated
+	 */
+	void unsetMinBaseFuelConsumption();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Min Base Fuel Consumption</em>' attribute is set.
+	 * @see #unsetMinBaseFuelConsumption()
+	 * @see #getMinBaseFuelConsumption()
+	 * @see #setMinBaseFuelConsumption(double)
+	 * @generated
+	 */
+	boolean isSetMinBaseFuelConsumption();
+
+	/**
+	 * Returns the value of the '<em><b>Has Reliq Capability Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Has Reliq Capability Override</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Has Reliq Capability Override</em>' attribute.
+	 * @see #setHasReliqCapabilityOverride(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_HasReliqCapabilityOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isHasReliqCapabilityOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Has Reliq Capability Override</em>' attribute.
+	 * @see #isHasReliqCapabilityOverride()
+	 * @generated
+	 */
+	void setHasReliqCapabilityOverride(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Has Reliq Capability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Has Reliq Capability</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Has Reliq Capability</em>' attribute.
+	 * @see #setHasReliqCapability(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_HasReliqCapability()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/featureEnablement feature='reliq-support'"
+	 * @generated
+	 */
+	boolean isHasReliqCapability();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability <em>Has Reliq Capability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Has Reliq Capability</em>' attribute.
+	 * @see #isHasReliqCapability()
+	 * @generated
+	 */
+	void setHasReliqCapability(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Notes</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Notes</em>' attribute.
+	 * @see #setNotes(String)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Notes()
+	 * @model
+	 * @generated
+	 */
+	String getNotes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getNotes <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Notes</em>' attribute.
+	 * @see #getNotes()
+	 * @generated
+	 */
+	void setNotes(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.
@@ -265,30 +910,30 @@ public interface Vessel extends AVesselSet<Vessel> {
 	boolean isSetScnt();
 
 	/**
-	 * Returns the value of the '<em><b>Override Inaccessible Routes</b></em>' attribute.
+	 * Returns the value of the '<em><b>Inaccessible Ports Override</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Override Inaccessible Routes</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Inaccessible Ports Override</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Override Inaccessible Routes</em>' attribute.
-	 * @see #setOverrideInaccessibleRoutes(boolean)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_OverrideInaccessibleRoutes()
+	 * @return the value of the '<em>Inaccessible Ports Override</em>' attribute.
+	 * @see #setInaccessiblePortsOverride(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_InaccessiblePortsOverride()
 	 * @model
 	 * @generated
 	 */
-	boolean isOverrideInaccessibleRoutes();
+	boolean isInaccessiblePortsOverride();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Override Inaccessible Routes</em>' attribute.
-	 * @see #isOverrideInaccessibleRoutes()
+	 * @param value the new value of the '<em>Inaccessible Ports Override</em>' attribute.
+	 * @see #isInaccessiblePortsOverride()
 	 * @generated
 	 */
-	void setOverrideInaccessibleRoutes(boolean value);
+	void setInaccessiblePortsOverride(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -309,20 +954,57 @@ public interface Vessel extends AVesselSet<Vessel> {
 	EList<RouteOption> getInaccessibleRoutes();
 
 	/**
+	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Base Fuel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @return the value of the '<em>Base Fuel</em>' reference.
+	 * @see #isSetBaseFuel()
+	 * @see #unsetBaseFuel()
+	 * @see #setBaseFuel(BaseFuel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BaseFuel()
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	int getVesselOrVesselClassCapacity();
+	BaseFuel getBaseFuel();
 
 	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @param value the new value of the '<em>Base Fuel</em>' reference.
+	 * @see #isSetBaseFuel()
+	 * @see #unsetBaseFuel()
+	 * @see #getBaseFuel()
 	 * @generated
 	 */
-	double getVesselOrVesselClassFillCapacity();
+	void setBaseFuel(BaseFuel value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBaseFuel()
+	 * @see #getBaseFuel()
+	 * @see #setBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	void unsetBaseFuel();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Base Fuel</em>' reference is set.
+	 * @see #unsetBaseFuel()
+	 * @see #getBaseFuel()
+	 * @see #setBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	boolean isSetBaseFuel();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -331,6 +1013,126 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	String getShortenedName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<APortSet<Port>> getVesselOrDelegateInaccessiblePorts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<RouteOption> getVesselOrDelegateInaccessibleRoutes();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	BaseFuel getVesselOrDelegateBaseFuel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegateCapacity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	double getVesselOrDelegateFillCapacity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	double getVesselOrDelegateMinSpeed();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	double getVesselOrDelegateMaxSpeed();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegateSafetyHeel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegateWarmingTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegateCoolingVolume();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<VesselClassRouteParameters> getVesselOrDelegateRouteParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	double getVesselOrDelegatePilotLightRate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	double getVesselOrDelegateMinBaseFuelConsumption();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	boolean getVesselOrDelegateHasReliqCapability();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegateSCNT();
 
 } // end of  Vessel
 

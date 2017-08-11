@@ -56,7 +56,7 @@
                      class="RouteCost">
                </target>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
             <constraint

@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.CharterOutEvent} object.

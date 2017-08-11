@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
@@ -125,28 +124,28 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 				final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 
-				final Set<VesselClass> usedClasses = new HashSet<>();
+				final Set<Vessel> usedVessels = new HashSet<>();
 
 				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 					final Vessel vessel = va.getVessel();
 					if (vessel != null) {
-						usedClasses.add(vessel.getVesselClass());
+						usedVessels.add(vessel);
 					}
 				}
 				for (final CharterInMarket charterCostModel : spotMarketsModel.getCharterInMarkets()) {
 					if (charterCostModel.getCharterInRate() != null && charterCostModel.getSpotCharterCount() > 0) {
-						usedClasses.add(charterCostModel.getVesselClass());
+						usedVessels.add(charterCostModel.getVessel());
 					}
 				}
-				usedClasses.remove(null);
+				usedVessels.remove(null);
 
-				if (usedClasses.isEmpty()) {
+				if (usedVessels.isEmpty()) {
 					// Cannot perform our validation, so return
 					return;
 				}
 
-				for (final VesselClass vc : usedClasses) {
-					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
+				for (final Vessel vessel : usedVessels) {
+					maxSpeedKnots = Math.max(vessel.getVesselOrDelegateMaxSpeed(), maxSpeedKnots);
 				}
 
 				final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(from, to, cargo.getSortedSlots().get(0).getWindowStart(), cargo.getVesselAssignmentType(),
@@ -292,7 +291,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
 				int travelTime = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
-						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
+						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true));
 				if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 					final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s",
 							from.getName(), to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()),

@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
@@ -63,10 +62,10 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof RoundTripShippingOption) {
 			final RoundTripShippingOption option = (RoundTripShippingOption) object;
-			final VesselClass vesselClass = option.getVesselClass();
+			final Vessel vessel = option.getVessel();
 			String vesselName = "<No vessel>";
-			if (vesselClass != null) {
-				final String s = vesselClass.getName();
+			if (vessel != null) {
+				final String s = vessel.getName();
 				if (s != null && !s.trim().isEmpty()) {
 					vesselName = s;
 				}

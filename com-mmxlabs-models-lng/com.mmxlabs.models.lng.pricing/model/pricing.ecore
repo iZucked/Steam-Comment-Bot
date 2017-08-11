@@ -102,9 +102,13 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RouteCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" lowerBound="1"
+        upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -126,10 +130,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getPortCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="for (final PortCostEntry entry : getEntries()) {&#xA;&#x9;if (entry.getActivity() == activity) {&#xA;&#x9;&#x9;if (isSetReferenceCapacity()) {&#xA;&#x9;&#x9;&#x9;return (int)&#xA;&#x9;&#x9;&#x9;&#x9;(entry.getCost() * (((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity()));&#xA;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;return entry.getCost();&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;return 0;"/>
-      </eAnnotations>
-      <eParameters name="vesselClass" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
+      <eParameters name="vessel" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       <eParameters name="activity" lowerBound="1" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1">
@@ -278,19 +279,7 @@
         <details key="formatString" value="##,###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mooringCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unitPrefix" value="$"/>
-        <details key="formatString" value="##,###,##0"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pilotageCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unitPrefix" value="$"/>
-        <details key="formatString" value="##,###,##0"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disbursements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixedCosts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unitPrefix" value="$"/>
         <details key="formatString" value="##,###,##0"/>

@@ -35,7 +35,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -76,7 +76,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 				mItem.dispose();
 			}
 		}
-		
+
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);
 
@@ -145,17 +145,17 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								}));
 							} else {
 
-								final VesselClass vesselClass = AnalyticsBuilder.getVesselClass(row.getShipping());
+								final Vessel vessel = AnalyticsBuilder.getVessel(row.getShipping());
 								final Port fromPort = AnalyticsBuilder.getPort(row.getBuyOption());
 								final Port toPort = AnalyticsBuilder.getPort(row.getSellOption());
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 								final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 								final ZonedDateTime sellDate = AnalyticsBuilder.getWindowStartDate(row.getSellOption());
 
-								if (vesselClass != null && fromPort != null && toPort != null && sellDate != null) {
+								if (vessel != null && fromPort != null && toPort != null && sellDate != null) {
 									final MenuManager dateMenu = new MenuManager("Set date using");
 									dateMenu.add(new RunnableAction("max speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
+										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
 
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -165,11 +165,11 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 												AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 
 									}));
-									if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
+									if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 
 										dateMenu.add(new RunnableAction("service speed", () -> {
-											final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort,
-													toPort, portModel);
+											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
+													portModel);
 
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -232,17 +232,17 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								}));
 							} else {
 
-								final VesselClass vesselClass = AnalyticsBuilder.getVesselClass(row.getShipping());
+								final Vessel vessel = AnalyticsBuilder.getVessel(row.getShipping());
 								final Port fromPort = AnalyticsBuilder.getPort(row.getBuyOption());
 								final Port toPort = AnalyticsBuilder.getPort(row.getSellOption());
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 								final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 								final ZonedDateTime buyDate = AnalyticsBuilder.getWindowStartDate(row.getBuyOption());
 
-								if (vesselClass != null && fromPort != null && toPort != null && buyDate != null) {
+								if (vessel != null && fromPort != null && toPort != null && buyDate != null) {
 									final MenuManager dateMenu = new MenuManager("Set date using");
 									dateMenu.add(new RunnableAction("max speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
+										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
 
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
@@ -252,11 +252,11 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 												AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 
 									}));
-									if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
+									if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 
 										dateMenu.add(new RunnableAction("service speed", () -> {
-											final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort,
-													toPort, portModel);
+											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
+													portModel);
 
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();

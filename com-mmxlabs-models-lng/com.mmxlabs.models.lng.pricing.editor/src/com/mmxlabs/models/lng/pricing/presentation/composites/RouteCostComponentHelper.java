@@ -65,48 +65,31 @@ public class RouteCostComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_routeEditor(detailComposite, topClass);
-		add_vesselClassEditor(detailComposite, topClass);
+		add_routeOptionEditor(detailComposite, topClass);
+		add_vesselsEditor(detailComposite, topClass);
 		add_ladenCostEditor(detailComposite, topClass);
 		add_ballastCostEditor(detailComposite, topClass);
 	}
+
 	/**
-	 * Create the editor for the route feature on RouteCost
+	 * Create the editor for the routeOption feature on RouteCost
 	 *
 	 * @generated NO
 	 */
-	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__ROUTE);
+	protected void add_routeOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__ROUTE_OPTION);
 		editor.setEditorEnabled(false); // NOTE: this causes an exception because it is not expected before the control is created
 		detailComposite.addInlineEditor(editor);
 	}
 
-	/**
-	 * Create the editor for the vesselClass feature on RouteCost
-	 *
-	 * @generated NO
-	 */
-	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS);
-		editor.setEditorEnabled(false);
-		/*
-		BasicAttributeInlineEditor editor = new BasicAttributeInlineEditor(PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS) {
-			Label label;
-			@Override
-			public Control createControl(Composite parent) {
-				label = new Label(parent, 0);
-				return super.wrapControl(label);
-			}
 
-			@Override
-			protected void updateDisplay(Object value) {
-				if (value instanceof VesselClass) {
-					label.setText(((VesselClass) value).getName());
-				}
-			}
-			
-		}; */
-		detailComposite.addInlineEditor(editor);
+	/**
+	 * Create the editor for the vessels feature on RouteCost
+	 *
+	 * @generated
+	 */
+	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__VESSELS));
 	}
 
 	/**

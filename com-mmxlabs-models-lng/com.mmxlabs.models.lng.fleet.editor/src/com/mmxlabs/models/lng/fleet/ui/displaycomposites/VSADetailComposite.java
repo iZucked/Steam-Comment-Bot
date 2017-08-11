@@ -1,5 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.ui.displaycomposites;
@@ -8,10 +7,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -23,6 +25,7 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -58,6 +61,7 @@ import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -108,9 +112,9 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 				Group g_port = new Group(this, SWT.NONE);
 				toolkit.adapt(g_port);
 				g_port.setText("Port");
-				if (object.eContainingFeature() == FleetPackage.Literals.VESSEL_CLASS__LADEN_ATTRIBUTES) {
+				if (object.eContainingFeature() == FleetPackage.Literals.VESSEL__LADEN_ATTRIBUTES) {
 					g_port.setText("Load port");
-				} else if (object.eContainingFeature() == FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES) {
+				} else if (object.eContainingFeature() == FleetPackage.Literals.VESSEL__BALLAST_ATTRIBUTES) {
 					g_port.setText("Discharge port");
 				}
 				g_port.setLayout(new GridLayout(2, false));
@@ -139,12 +143,11 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 				g_voyage.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).grab(true, false).create());
 				g_voyage.setText("Voyage");
 				for (final IInlineEditor editor : editors) {
-					if (!portFeatures.contains(editor.getFeature())) {
+					if (!portFeatures.contains(editor.getFeature()) && editor.getFeature() != FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE) {
 						final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(g_voyage, SWT.NONE) : null;
 						editor.setLabel(label);
 						final Control control = editor.createControl(g_voyage, dbc, toolkit);
 						dialogContext.registerEditorControl(object, editor.getFeature(), control);
-
 						control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
 						control.setData(LABEL_CONTROL_KEY, label);
 						control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -161,7 +164,27 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		@SuppressWarnings("unused")
-		final Label consumptionCurve = toolkit.createLabel(this, "Fuel Consumption");
+		Composite lblComposite = new Composite(this, SWT.NONE);
+		lblComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
+		lblComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
+		final Label consumptionCurve = toolkit.createLabel(lblComposite, "Fuel Consumption");
+
+		fuelConsumptionOverrideBtn = new Button(lblComposite, SWT.CHECK);
+		fuelConsumptionOverrideBtn.setText("Override");
+		fuelConsumptionOverrideBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				CompoundCommand cmd = new CompoundCommand();
+				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE,
+						fuelConsumptionOverrideBtn.getSelection()));
+				if (fuelConsumptionOverrideBtn.getSelection() == false) {
+					cmd.append(SetCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION, SetCommand.UNSET_VALUE));
+				}
+				commandHandler.handleCommand(cmd, oldValue, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE);
+			}
+		});
+		fuelConsumptionOverrideBtn.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		final TableViewer tableViewer = new TableViewer(this, SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
@@ -182,8 +205,9 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 			@Override
 			public void handleEvent(Event event) {
-				if (resizing)
+				if (resizing) {
 					return;
+				}
 				resizing = true;
 				speedColumn.getColumn().pack();
 				fuelColumn.getColumn().pack();
@@ -238,9 +262,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 			@Override
 			protected void setValue(Object element, Object value) {
 				final EditingDomain ed = commandHandler.getEditingDomain();
-				commandHandler.handleCommand(SetCommand.create(ed, element, attr, value)
-
-						, (EObject) element, attr);
+				commandHandler.handleCommand(SetCommand.create(ed, element, attr, value), (EObject) element, attr);
 			}
 
 			@Override
@@ -275,8 +297,13 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 			@Override
 			public Object[] getElements(Object inputElement) {
-				Object[] things = ((VesselStateAttributes) inputElement).getFuelConsumption().toArray();
-				Arrays.sort(things, new Comparator() {
+				VesselStateAttributes vesselStateAttributes = (VesselStateAttributes) inputElement;
+				List<?> list = (List<?>) vesselStateAttributes.eGetWithDefault(FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
+				if (list == null) {
+					return new Object[0];
+				}
+				Object[] things = list.toArray();
+				Arrays.sort(things, new Comparator<Object>() {
 
 					@Override
 					public int compare(Object arg0, Object arg1) {
@@ -333,7 +360,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 					selection = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
 				} else {
 					selection = null;
-					for (final FuelConsumption c : oldValue.getFuelConsumption()) {
+					for (final FuelConsumption c : oldValue.getVesselOrDelegateFuelConsumption()) {
 						if (selection == null || selection.getSpeed() < c.getSpeed())
 							selection = c;
 					}
@@ -359,19 +386,38 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		@Override
 		public void reallyNotifyChanged(Notification notification) {
 			if (!isDisposed() && isVisible()) {
-				if (tableViewer != null && tableViewer.getTable().isDisposed() == false)
+
+				if (notification.getFeature() == FleetPackage.Literals.VESSEL__REFERENCE) {
+					fuelConsumptionOverrideBtn.setVisible(notification.getNewValue() != null);
+					tableViewer.getControl().setEnabled(notification.getNewValue() == null || oldValue.isFuelConsumptionOverride());
+				}
+
+				if (tableViewer != null && tableViewer.getTable().isDisposed() == false) {
+					if (notification.getFeature() == FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE && notification.getNotifier() == oldValue) {
+						tableViewer.getControl().setEnabled(notification.getNewBooleanValue());
+						fuelConsumptionOverrideBtn.setSelection(notification.getNewBooleanValue());
+
+					}
 					tableViewer.refresh();
+				}
 			} else {
 				VSADetailComposite.this.removeAdapter();
 			}
 		}
 
 	};
+	private Button fuelConsumptionOverrideBtn;
 
 	void removeAdapter() {
-		if (oldValue != null) {
-			oldValue.eAdapters().remove(adapter);
-			oldValue = null;
+		VesselStateAttributes oldValue2 = oldValue;
+		oldValue = null;
+		if (oldValue2 != null) {
+			oldValue2.eAdapters().remove(adapter);
+
+			if (oldValue2.eContainer() != null) {
+				oldValue2.eContainer().eAdapters().remove(adapter);
+			}
+
 		}
 	}
 
@@ -379,9 +425,16 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject value, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		delegate.display(dialogContext, root, value, range, dbc);
 		tableViewer.setInput(value);
+		tableViewer.getControl().setEnabled(((Vessel) value.eContainer()).getReference() == null || ((VesselStateAttributes) value).isFuelConsumptionOverride());
+		fuelConsumptionOverrideBtn.setSelection(((VesselStateAttributes) value).isFuelConsumptionOverride());
+
 		removeAdapter();
 		oldValue = (VesselStateAttributes) value;
 		value.eAdapters().add(adapter);
+		if (value.eContainer() != null) {
+			fuelConsumptionOverrideBtn.setVisible(((Vessel) value.eContainer()).getReference() != null);
+			value.eContainer().eAdapters().add(adapter);
+		}
 	}
 
 	@Override

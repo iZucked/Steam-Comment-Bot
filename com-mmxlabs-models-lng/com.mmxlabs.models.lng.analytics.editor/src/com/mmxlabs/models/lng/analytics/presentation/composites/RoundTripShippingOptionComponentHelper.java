@@ -68,16 +68,16 @@ public class RoundTripShippingOptionComponentHelper extends BaseComponentHelper 
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselClassEditor(detailComposite, topClass);
+		add_vesselEditor(detailComposite, topClass);
 		add_hireCostEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the vesselClass feature on RoundTripShippingOption
+	 * Create the editor for the vessel feature on RoundTripShippingOption
 	 *
 	 * @generated
 	 */
-	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS));
+	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL));
 	}
 
 	/**

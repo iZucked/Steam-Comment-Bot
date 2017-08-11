@@ -71,16 +71,6 @@ public interface FleetPackage extends EPackage {
 	int VESSEL = 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClass()
-	 * @generated
-	 */
-	int VESSEL_CLASS = 3;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -118,22 +108,13 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Classes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__VESSEL_CLASSES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Base Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Groups</b></em>' containment reference list.
@@ -142,7 +123,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -151,7 +132,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -245,13 +226,40 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__SHORT_NAME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * The feature id for the '<em><b>IMO</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__VESSEL_CLASS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+	int VESSEL__IMO = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__TYPE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Reference</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__REFERENCE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_PORTS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -260,97 +268,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
+	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
+	 * The feature id for the '<em><b>Inaccessible Routes Override</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
-
-	/**
-	 * The number of structural features of the '<em>Vessel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__UUID = TypesPackage.AVESSEL_SET__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__NAME = TypesPackage.AVESSEL_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+	int VESSEL__INACCESSIBLE_ROUTES_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -359,7 +286,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
@@ -368,7 +295,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
+	int VESSEL__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -377,7 +304,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -386,7 +313,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
@@ -395,7 +322,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -404,7 +331,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
+	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -413,7 +340,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
+	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -422,16 +349,16 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
+	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
 
 	/**
-	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
+	 * The feature id for the '<em><b>Safety Heel</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
+	int VESSEL__SAFETY_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -440,7 +367,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
+	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -449,43 +376,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
-
-	/**
-	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
-
-	/**
-	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
-
-	/**
-	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
-
-	/**
-	 * The feature id for the '<em><b>Has Reliq Capability</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
@@ -494,16 +385,79 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
+	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
 
 	/**
-	 * The number of structural features of the '<em>Vessel Class</em>' class.
+	 * The feature id for the '<em><b>Route Parameters Override</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
+	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
+
+	/**
+	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
+
+	/**
+	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
+
+	/**
+	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
+
+	/**
+	 * The feature id for the '<em><b>Has Reliq Capability Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
+
+	/**
+	 * The feature id for the '<em><b>Has Reliq Capability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__NOTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 25;
+
+	/**
+	 * The number of structural features of the '<em>Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 26;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -513,7 +467,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselStateAttributes()
 	 * @generated
 	 */
-	int VESSEL_STATE_ATTRIBUTES = 5;
+	int VESSEL_STATE_ATTRIBUTES = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
@@ -523,7 +477,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelConsumption()
 	 * @generated
 	 */
-	int FUEL_CONSUMPTION = 6;
+	int FUEL_CONSUMPTION = 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl <em>Vessel Class Route Parameters</em>}' class.
@@ -533,7 +487,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClassRouteParameters()
 	 * @generated
 	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS = 7;
+	int VESSEL_CLASS_ROUTE_PARAMETERS = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
@@ -543,7 +497,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselGroup()
 	 * @generated
 	 */
-	int VESSEL_GROUP = 4;
+	int VESSEL_GROUP = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -637,13 +591,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Fuel Consumption Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Service Speed</b></em>' attribute.
@@ -652,7 +615,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>In Port NBO Rate</b></em>' attribute.
@@ -661,7 +624,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
@@ -670,7 +633,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -709,13 +672,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extra Transit Time</b></em>' attribute.
@@ -793,15 +756,37 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_ShortName();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getIMO <em>IMO</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getVesselClass()
+	 * @return the meta object for the attribute '<em>IMO</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getIMO()
 	 * @see #getVessel()
 	 * @generated
 	 */
-	EReference getVessel_VesselClass();
+	EAttribute getVessel_IMO();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getType()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_Type();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getReference <em>Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Reference</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getReference()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_Reference();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
@@ -813,6 +798,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVessel_InaccessiblePorts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Inaccessible Routes Override</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_InaccessibleRoutesOverride();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}'.
@@ -837,6 +833,160 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_FillCapacity();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes <em>Laden Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Laden Attributes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_LadenAttributes();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getBallastAttributes <em>Ballast Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Ballast Attributes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getBallastAttributes()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_BallastAttributes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed <em>Min Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getMinSpeed()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_MinSpeed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed <em>Max Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getMaxSpeed()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_MaxSpeed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel <em>Safety Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Safety Heel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getSafetyHeel()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_SafetyHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime <em>Warming Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Warming Time</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getWarmingTime()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_WarmingTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume <em>Cooling Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cooling Volume</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getCoolingVolume()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_CoolingVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isRouteParametersOverride <em>Route Parameters Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Parameters Override</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isRouteParametersOverride()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_RouteParametersOverride();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.Vessel#getRouteParameters <em>Route Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Route Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getRouteParameters()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_RouteParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate <em>Pilot Light Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pilot Light Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getPilotLightRate()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_PilotLightRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Base Fuel Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getMinBaseFuelConsumption()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_MinBaseFuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapabilityOverride <em>Has Reliq Capability Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Has Reliq Capability Override</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapabilityOverride()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_HasReliqCapabilityOverride();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability <em>Has Reliq Capability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Has Reliq Capability</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_HasReliqCapability();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getNotes()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_Notes();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -848,15 +998,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_Scnt();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessiblePortsOverride <em>Inaccessible Ports Override</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Override Inaccessible Routes</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes()
+	 * @return the meta object for the attribute '<em>Inaccessible Ports Override</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isInaccessiblePortsOverride()
 	 * @see #getVessel()
 	 * @generated
 	 */
-	EAttribute getVessel_OverrideInaccessibleRoutes();
+	EAttribute getVessel_InaccessiblePortsOverride();
 
 	/**
 	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}'.
@@ -870,201 +1020,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_InaccessibleRoutes();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselClass <em>Vessel Class</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass
-	 * @generated
-	 */
-	EClass getVesselClass();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getInaccessiblePorts <em>Inaccessible Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Inaccessible Ports</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getInaccessiblePorts()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EReference getVesselClass_InaccessiblePorts();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel <em>Base Fuel</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Base Fuel</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getBaseFuel()
-	 * @see #getVesselClass()
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel()
+	 * @see #getVessel()
 	 * @generated
 	 */
-	EReference getVesselClass_BaseFuel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCapacity <em>Capacity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Capacity</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getCapacity()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_Capacity();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getFillCapacity <em>Fill Capacity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fill Capacity</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getFillCapacity()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_FillCapacity();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes <em>Laden Attributes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Laden Attributes</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getLadenAttributes()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EReference getVesselClass_LadenAttributes();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Ballast Attributes</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EReference getVesselClass_BallastAttributes();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Min Speed</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_MinSpeed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Max Speed</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_MaxSpeed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Min Heel</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_MinHeel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime <em>Warming Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Warming Time</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_WarmingTime();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cooling Volume</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_CoolingVolume();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Route Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EReference getVesselClass_RouteParameters();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pilot Light Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_PilotLightRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Min Base Fuel Consumption</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_MinBaseFuelConsumption();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability <em>Has Reliq Capability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Has Reliq Capability</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_HasReliqCapability();
-
-	/**
-	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getInaccessibleRoutes <em>Inaccessible Routes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Inaccessible Routes</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getInaccessibleRoutes()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_InaccessibleRoutes();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getScnt <em>Scnt</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Scnt</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getScnt()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_Scnt();
+	EReference getVessel_BaseFuel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
@@ -1086,17 +1050,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetModel_Vessels();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselClasses <em>Vessel Classes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Classes</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVesselClasses()
-	 * @see #getFleetModel()
-	 * @generated
-	 */
-	EReference getFleetModel_VesselClasses();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}'.
@@ -1196,6 +1149,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselStateAttributes_InPortBaseRate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#isFuelConsumptionOverride <em>Fuel Consumption Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fuel Consumption Override</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#isFuelConsumptionOverride()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_FuelConsumptionOverride();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption <em>Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1271,15 +1235,15 @@ public interface FleetPackage extends EPackage {
 	EClass getVesselClassRouteParameters();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRouteOption <em>Route Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRoute()
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRouteOption()
 	 * @see #getVesselClassRouteParameters()
 	 * @generated
 	 */
-	EReference getVesselClassRouteParameters_Route();
+	EAttribute getVesselClassRouteParameters_RouteOption();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}'.
@@ -1398,12 +1362,28 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__SHORT_NAME = eINSTANCE.getVessel_ShortName();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>IMO</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL__VESSEL_CLASS = eINSTANCE.getVessel_VesselClass();
+		EAttribute VESSEL__IMO = eINSTANCE.getVessel_IMO();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__TYPE = eINSTANCE.getVessel_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__REFERENCE = eINSTANCE.getVessel_Reference();
 
 		/**
 		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.
@@ -1412,6 +1392,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL__INACCESSIBLE_PORTS = eINSTANCE.getVessel_InaccessiblePorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Routes Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__INACCESSIBLE_ROUTES_OVERRIDE = eINSTANCE.getVessel_InaccessibleRoutesOverride();
 
 		/**
 		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
@@ -1430,6 +1418,118 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__FILL_CAPACITY = eINSTANCE.getVessel_FillCapacity();
 
 		/**
+		 * The meta object literal for the '<em><b>Laden Attributes</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__LADEN_ATTRIBUTES = eINSTANCE.getVessel_LadenAttributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Attributes</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__BALLAST_ATTRIBUTES = eINSTANCE.getVessel_BallastAttributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__MIN_SPEED = eINSTANCE.getVessel_MinSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__MAX_SPEED = eINSTANCE.getVessel_MaxSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Safety Heel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__SAFETY_HEEL = eINSTANCE.getVessel_SafetyHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Warming Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__WARMING_TIME = eINSTANCE.getVessel_WarmingTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Cooling Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__COOLING_VOLUME = eINSTANCE.getVessel_CoolingVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Parameters Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__ROUTE_PARAMETERS_OVERRIDE = eINSTANCE.getVessel_RouteParametersOverride();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__ROUTE_PARAMETERS = eINSTANCE.getVessel_RouteParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Pilot Light Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__PILOT_LIGHT_RATE = eINSTANCE.getVessel_PilotLightRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Base Fuel Consumption</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__MIN_BASE_FUEL_CONSUMPTION = eINSTANCE.getVessel_MinBaseFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Has Reliq Capability Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE = eINSTANCE.getVessel_HasReliqCapabilityOverride();
+
+		/**
+		 * The meta object literal for the '<em><b>Has Reliq Capability</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__HAS_RELIQ_CAPABILITY = eINSTANCE.getVessel_HasReliqCapability();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__NOTES = eINSTANCE.getVessel_Notes();
+
+		/**
 		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1438,12 +1538,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__SCNT = eINSTANCE.getVessel_Scnt();
 
 		/**
-		 * The meta object literal for the '<em><b>Override Inaccessible Routes</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Inaccessible Ports Override</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = eINSTANCE.getVessel_OverrideInaccessibleRoutes();
+		EAttribute VESSEL__INACCESSIBLE_PORTS_OVERRIDE = eINSTANCE.getVessel_InaccessiblePortsOverride();
 
 		/**
 		 * The meta object literal for the '<em><b>Inaccessible Routes</b></em>' attribute list feature.
@@ -1454,150 +1554,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__INACCESSIBLE_ROUTES = eINSTANCE.getVessel_InaccessibleRoutes();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassImpl
-		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClass()
-		 * @generated
-		 */
-		EClass VESSEL_CLASS = eINSTANCE.getVesselClass();
-
-		/**
-		 * The meta object literal for the '<em><b>Inaccessible Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CLASS__INACCESSIBLE_PORTS = eINSTANCE.getVesselClass_InaccessiblePorts();
-
-		/**
 		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_CLASS__BASE_FUEL = eINSTANCE.getVesselClass_BaseFuel();
-
-		/**
-		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__CAPACITY = eINSTANCE.getVesselClass_Capacity();
-
-		/**
-		 * The meta object literal for the '<em><b>Fill Capacity</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__FILL_CAPACITY = eINSTANCE.getVesselClass_FillCapacity();
-
-		/**
-		 * The meta object literal for the '<em><b>Laden Attributes</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CLASS__LADEN_ATTRIBUTES = eINSTANCE.getVesselClass_LadenAttributes();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Attributes</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CLASS__BALLAST_ATTRIBUTES = eINSTANCE.getVesselClass_BallastAttributes();
-
-		/**
-		 * The meta object literal for the '<em><b>Min Speed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__MIN_SPEED = eINSTANCE.getVesselClass_MinSpeed();
-
-		/**
-		 * The meta object literal for the '<em><b>Max Speed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__MAX_SPEED = eINSTANCE.getVesselClass_MaxSpeed();
-
-		/**
-		 * The meta object literal for the '<em><b>Min Heel</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__MIN_HEEL = eINSTANCE.getVesselClass_MinHeel();
-
-		/**
-		 * The meta object literal for the '<em><b>Warming Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__WARMING_TIME = eINSTANCE.getVesselClass_WarmingTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Cooling Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__COOLING_VOLUME = eINSTANCE.getVesselClass_CoolingVolume();
-
-		/**
-		 * The meta object literal for the '<em><b>Route Parameters</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CLASS__ROUTE_PARAMETERS = eINSTANCE.getVesselClass_RouteParameters();
-
-		/**
-		 * The meta object literal for the '<em><b>Pilot Light Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__PILOT_LIGHT_RATE = eINSTANCE.getVesselClass_PilotLightRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Min Base Fuel Consumption</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = eINSTANCE.getVesselClass_MinBaseFuelConsumption();
-
-		/**
-		 * The meta object literal for the '<em><b>Has Reliq Capability</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__HAS_RELIQ_CAPABILITY = eINSTANCE.getVesselClass_HasReliqCapability();
-
-		/**
-		 * The meta object literal for the '<em><b>Inaccessible Routes</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__INACCESSIBLE_ROUTES = eINSTANCE.getVesselClass_InaccessibleRoutes();
-
-		/**
-		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__SCNT = eINSTANCE.getVesselClass_Scnt();
+		EReference VESSEL__BASE_FUEL = eINSTANCE.getVessel_BaseFuel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
@@ -1616,14 +1578,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__VESSELS = eINSTANCE.getFleetModel_Vessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Classes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLEET_MODEL__VESSEL_CLASSES = eINSTANCE.getFleetModel_VesselClasses();
 
 		/**
 		 * The meta object literal for the '<em><b>Base Fuels</b></em>' containment reference list feature.
@@ -1702,6 +1656,14 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = eINSTANCE.getVesselStateAttributes_InPortBaseRate();
 
 		/**
+		 * The meta object literal for the '<em><b>Fuel Consumption Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE = eINSTANCE.getVesselStateAttributes_FuelConsumptionOverride();
+
+		/**
 		 * The meta object literal for the '<em><b>Fuel Consumption</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1762,12 +1724,12 @@ public interface FleetPackage extends EPackage {
 		EClass VESSEL_CLASS_ROUTE_PARAMETERS = eINSTANCE.getVesselClassRouteParameters();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE = eINSTANCE.getVesselClassRouteParameters_Route();
+		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION = eINSTANCE.getVesselClassRouteParameters_RouteOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Extra Transit Time</b></em>' attribute feature.

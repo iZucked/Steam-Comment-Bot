@@ -14,7 +14,7 @@ package com.mmxlabs.models.lng.pricing;
  *
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelIndex()
- * @model superTypes="com.mmxlabs.models.lng.pricing.NamedIndexContainer<org.eclipse.emf.ecore.EDoubleObject>"
+ * @model superTypes="com.mmxlabs.models.lng.pricing.NamedIndexContainer&lt;org.eclipse.emf.ecore.EDoubleObject&gt;"
  * @generated
  */
 public interface BaseFuelIndex extends NamedIndexContainer<Double> {

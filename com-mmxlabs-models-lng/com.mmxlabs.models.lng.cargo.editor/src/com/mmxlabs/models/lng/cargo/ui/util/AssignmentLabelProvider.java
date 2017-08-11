@@ -6,23 +6,22 @@ package com.mmxlabs.models.lng.cargo.ui.util;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 public class AssignmentLabelProvider {
-	
+
 	public static String getLabelFor(final VesselAvailability vesselAvailability) {
 
 		final Vessel vessel = vesselAvailability.getVessel();
 		if (vessel != null) {
-			return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrVesselClassCapacity() / 1000);
+			return String.format("%s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000);
 		}
 		return "";
 	}
 
 	public static String getLabelFor(final CharterInMarket charterInMarket, int spotIndex) {
-		VesselClass vesselClass = charterInMarket.getVesselClass();
-		int capacity = vesselClass == null ? 0 : vesselClass.getCapacity();
+		Vessel vessel = charterInMarket.getVessel();
+		int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 		String type;
 		if (spotIndex >= 0) {
 			type = "model";

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +29,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -52,32 +50,26 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 				return Activator.PLUGIN_ID;
 			}
 
-			final Set<? extends Vessel> vessels;
+			final Vessel vessel;
 			if (vesselAssignmentType instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-				vessels = SetUtils.<AVesselSet<Vessel>, Vessel> getObjects(charterInMarket.getVesselClass());
+				vessel = charterInMarket.getVessel();
 			} else if (vesselAssignmentType instanceof VesselAvailability) {
 				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-				vessels = Collections.singleton(vesselAvailability.getVessel());
+				vessel = vesselAvailability.getVessel();
 			} else {
 				return Activator.PLUGIN_ID;
 			}
 
-			final Set<Port> restrictedPorts = new HashSet<Port>();
-			boolean firstPass = true;
-			for (final Vessel vessel : vessels) {
-				final EList<APortSet<Port>> inaccessiblePorts = vessel.getInaccessiblePorts();
+			final Set<Port> restrictedPorts = new HashSet<>();
+			{
+				final EList<APortSet<Port>> inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
 				if (inaccessiblePorts.isEmpty()) {
 					// At least one vessel has no restrictions.
 					return Activator.PLUGIN_ID;
 				} else {
 					final Set<Port> ports = SetUtils.getObjects(inaccessiblePorts);
-					if (firstPass) {
-						restrictedPorts.addAll(ports);
-						firstPass = false;
-					} else {
-						restrictedPorts.retainAll(inaccessiblePorts);
-					}
+					restrictedPorts.addAll(ports);
 				}
 			}
 
@@ -102,8 +94,8 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 							name = ((NamedObject) target).getName();
 						}
 
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name
-								+ " has reference to inaccessible port " + port.getName()));
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name + " has reference to inaccessible port " + port.getName()));
 
 						if (target instanceof Slot) {
 							failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getSlot_Port());

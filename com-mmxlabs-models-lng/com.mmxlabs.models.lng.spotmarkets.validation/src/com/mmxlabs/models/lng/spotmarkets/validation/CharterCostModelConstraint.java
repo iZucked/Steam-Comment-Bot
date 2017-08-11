@@ -29,10 +29,10 @@ public class CharterCostModelConstraint extends AbstractModelMultiConstraint {
 		final EObject object = ctx.getTarget();
 		if (object instanceof CharterInMarket) {
 			final CharterInMarket ccm = (CharterInMarket) object;
-			if (ccm.getVesselClass() == null) {
-				final String failureMessage = "A charter cost model needs to be associated with at least one vessel class.";
+			if (ccm.getVessel() == null) {
+				final String failureMessage = "A charter in market model needs to be associated with a vessel.";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
-				dsd.addEObjectAndFeature(ccm, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS);
+				dsd.addEObjectAndFeature(ccm, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL);
 				statuses.add(dsd);
 			}
 			if (ccm.getCharterInRate() == null) {
@@ -53,10 +53,10 @@ public class CharterCostModelConstraint extends AbstractModelMultiConstraint {
 		}
 		if (object instanceof CharterOutMarket) {
 			final CharterOutMarket ccm = (CharterOutMarket) object;
-			if (ccm.getVesselClass() == null) {
-				final String failureMessage = "A charter cost model needs to be associated with at least one vessel class.";
+			if (ccm.getVessels().isEmpty()) {
+				final String failureMessage = "A charter out market needs to be associated with one or more vessels.";
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
-				dsd.addEObjectAndFeature(ccm, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS);
+				dsd.addEObjectAndFeature(ccm, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS);
 				statuses.add(dsd);
 			}
 

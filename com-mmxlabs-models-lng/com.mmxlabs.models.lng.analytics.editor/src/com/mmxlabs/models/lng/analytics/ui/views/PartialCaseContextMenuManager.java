@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -133,7 +133,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 							final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
-							final VesselClass vesselClass = row.getShipping().isEmpty() ? null : AnalyticsBuilder.getVesselClass(row.getShipping().get(0));
+							final Vessel vessel = row.getShipping().isEmpty() ? null : AnalyticsBuilder.getVessel(row.getShipping().get(0));
 							final Port toPort = AnalyticsBuilder.getPort(sellOption);
 							final ZonedDateTime sellDate = AnalyticsBuilder.getWindowStartDate(sellOption);
 
@@ -148,8 +148,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 											if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
 												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
 														AnalyticsBuilder.getDate(sellOption)));
-											} else if (vesselClass != null) {
-												final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
+											} else if (vessel != null) {
+												final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
 
 												final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 												final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -161,7 +161,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
 									}
 								}));
-								if (vesselClass != null && vesselClass.getLadenAttributes() != null && vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
+								if (vessel != null && vessel.getLadenAttributes() != null && vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 									dateMenu.add(new RunnableAction("service speed", () -> {
 
 										final CompoundCommand cmd = new CompoundCommand("Change dates");
@@ -171,9 +171,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 												if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
 													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
 															AnalyticsBuilder.getDate(sellOption)));
-												} else if (vesselClass != null) {
-													final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT,
-															fromPort, toPort, portModel);
+												} else if (vessel != null) {
+													final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
+															portModel);
 
 													final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 													final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -207,7 +207,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 							final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
-							final VesselClass vesselClass = row.getShipping().isEmpty() ? null : AnalyticsBuilder.getVesselClass(row.getShipping().get(0));
+							final Vessel vessel = row.getShipping().isEmpty() ? null : AnalyticsBuilder.getVessel(row.getShipping().get(0));
 							final Port fromPort = AnalyticsBuilder.getPort(buyOption);
 							final ZonedDateTime buyDate = AnalyticsBuilder.getWindowStartDate(buyOption);
 
@@ -222,8 +222,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 											if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
 												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
 														AnalyticsBuilder.getDate(buyOption)));
-											} else if (vesselClass != null) {
-												final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
+											} else if (vessel != null) {
+												final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
 
 												final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 												final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
@@ -235,7 +235,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
 									}
 								}));
-								if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
+								if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
 
 									dateMenu.add(new RunnableAction("service speed", () -> {
 
@@ -246,9 +246,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 												if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
 													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
 															AnalyticsBuilder.getDate(buyOption)));
-												} else if (vesselClass != null) {
-													final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT,
-															fromPort, toPort, portModel);
+												} else if (vessel != null) {
+													final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
+															portModel);
 
 													final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 													final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();

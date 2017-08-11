@@ -33,15 +33,6 @@ public interface FleetFactory extends EFactory {
 	Vessel createVessel();
 
 	/**
-	 * Returns a new object of class '<em>Vessel Class</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel Class</em>'.
-	 * @generated
-	 */
-	VesselClass createVesselClass();
-
-	/**
 	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

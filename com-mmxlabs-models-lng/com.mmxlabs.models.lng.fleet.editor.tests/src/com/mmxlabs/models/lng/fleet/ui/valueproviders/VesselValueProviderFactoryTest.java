@@ -60,7 +60,6 @@ public class VesselValueProviderFactoryTest {
 	}
 	private Vessel buildVessel(String name) {
 		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-		vessel.setVesselClass(null);
 		vessel.setName(name);
 		return vessel;
 	}

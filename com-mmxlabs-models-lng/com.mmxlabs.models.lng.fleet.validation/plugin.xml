@@ -40,9 +40,6 @@
                      class="Vessel">
                </target>
                <target
-                     class="VesselClass">
-               </target>
-               <target
                      class="VesselClassRouteParameters">
                </target>
             </constraint>
@@ -63,7 +60,7 @@
                   The minimum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
                </description>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
             <constraint
@@ -101,7 +98,7 @@
                   The maximum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
                </description>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
             <constraint
@@ -120,7 +117,7 @@
                   The minimum speed of a vessel class should be lower than its maximum speed.
                </description>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
             <constraint
@@ -139,7 +136,7 @@
                   Fill capacity should not be zero, negative or exceed 100 percent.
                </description>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
             <constraint
@@ -158,7 +155,7 @@
                   Fill capacity should not be too low.
                </description>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
           
@@ -211,32 +208,16 @@
                   {0}
                </message>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselConstraint"
                   isEnabledByDefault="true"
                   lang="java"
                   mode="Batch"
-                  name="Vessel Class Min Heel Constraint"
-                  severity="ERROR"
-                  statusCode="0">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="VesselClass">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="Vessel Min Heel Constraint"
+                  name="Vessel Constraint"
                   severity="ERROR"
                   statusCode="0">
                <message>

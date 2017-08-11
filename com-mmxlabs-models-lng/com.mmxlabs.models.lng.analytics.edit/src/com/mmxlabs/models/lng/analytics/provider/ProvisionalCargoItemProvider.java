@@ -569,11 +569,6 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 FleetFactory.eINSTANCE.createVesselClass()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 FleetFactory.eINSTANCE.createVesselGroup()));
 
 		newChildDescriptors.add

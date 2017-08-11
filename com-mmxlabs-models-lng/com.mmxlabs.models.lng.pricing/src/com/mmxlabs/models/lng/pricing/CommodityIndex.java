@@ -13,7 +13,7 @@ package com.mmxlabs.models.lng.pricing;
  *
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCommodityIndex()
- * @model superTypes="com.mmxlabs.models.lng.pricing.NamedIndexContainer<org.eclipse.emf.ecore.EDoubleObject>"
+ * @model superTypes="com.mmxlabs.models.lng.pricing.NamedIndexContainer&lt;org.eclipse.emf.ecore.EDoubleObject&gt;"
  * @generated
  */
 public interface CommodityIndex extends NamedIndexContainer<Double> {

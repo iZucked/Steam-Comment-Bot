@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
@@ -124,56 +123,8 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 				} else if (o instanceof Vessel) {
 					final Vessel vessel = (Vessel) o;
 
-					// if (existing != null) {
 					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vessel);
-					// if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
-					// final NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
-					// final CompoundCommand cmd = new CompoundCommand();
-					// if (opt.eContainer() == null) {
-					// cmd.append(
-					// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
-					// }
-					// cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt));
-					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
-					// } else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
-					// // final BaseCaseRow pExisting = existing;
-					// // menuHelper.clearActions();
-					// // menuHelper.addAction(new RunnableAction("Create RT", () -> {
-					// // final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					// // opt.setVesselClass(vessel.getVesselClass());
-					// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-					// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-					// // AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-					// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					// // }));
-					// // menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-					// // final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-					// // opt.setVessel(vessel);
-					// // AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-					// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-					// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-					// // AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-					// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					// // }));
-					// //
-					// // menuHelper.open();
-					// }
-					// }
-				} else if (o instanceof VesselClass) {
-					VesselClass vesselClass = (VesselClass) o;
-					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vesselClass, menuHelper);
 
-					//
-					// final BaseCaseRow pExisting = existing;
-					//
-					// final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					// opt.setVesselClass((VesselClass) o);
-					// if (pExisting != null) {
-					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-					// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-					// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					// }
 				} else if (o instanceof ShippingOption) {
 					if (existing != null) {
 						ShippingOption opt = null;
@@ -229,7 +180,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}
-				if (o instanceof Vessel || o instanceof VesselClass) {
+				if (o instanceof Vessel) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}

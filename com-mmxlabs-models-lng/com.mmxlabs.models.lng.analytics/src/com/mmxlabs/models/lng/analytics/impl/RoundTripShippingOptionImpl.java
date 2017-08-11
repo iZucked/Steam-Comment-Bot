@@ -9,7 +9,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl#getHireCost <em>Hire Cost</em>}</li>
  * </ul>
  *
@@ -33,14 +33,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements RoundTripShippingOption {
 	/**
-	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVesselClass()
+	 * @see #getVessel()
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselClass vesselClass;
+	protected Vessel vessel;
 
 	/**
 	 * The default value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
@@ -86,16 +86,16 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselClass getVesselClass() {
-		if (vesselClass != null && vesselClass.eIsProxy()) {
-			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
-			vesselClass = (VesselClass)eResolveProxy(oldVesselClass);
-			if (vesselClass != oldVesselClass) {
+	public Vessel getVessel() {
+		if (vessel != null && vessel.eIsProxy()) {
+			InternalEObject oldVessel = (InternalEObject)vessel;
+			vessel = (Vessel)eResolveProxy(oldVessel);
+			if (vessel != oldVessel) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS, oldVesselClass, vesselClass));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL, oldVessel, vessel));
 			}
 		}
-		return vesselClass;
+		return vessel;
 	}
 
 	/**
@@ -103,8 +103,8 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselClass basicGetVesselClass() {
-		return vesselClass;
+	public Vessel basicGetVessel() {
+		return vessel;
 	}
 
 	/**
@@ -112,11 +112,11 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVesselClass(VesselClass newVesselClass) {
-		VesselClass oldVesselClass = vesselClass;
-		vesselClass = newVesselClass;
+	public void setVessel(Vessel newVessel) {
+		Vessel oldVessel = vessel;
+		vessel = newVessel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS, oldVesselClass, vesselClass));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL, oldVessel, vessel));
 	}
 
 	/**
@@ -148,9 +148,9 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS:
-				if (resolve) return getVesselClass();
-				return basicGetVesselClass();
+			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__HIRE_COST:
 				return getHireCost();
 		}
@@ -165,8 +165,8 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS:
-				setVesselClass((VesselClass)newValue);
+			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL:
+				setVessel((Vessel)newValue);
 				return;
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__HIRE_COST:
 				setHireCost((String)newValue);
@@ -183,8 +183,8 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS:
-				setVesselClass((VesselClass)null);
+			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL:
+				setVessel((Vessel)null);
 				return;
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__HIRE_COST:
 				setHireCost(HIRE_COST_EDEFAULT);
@@ -201,8 +201,8 @@ public class RoundTripShippingOptionImpl extends ShippingOptionImpl implements R
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS:
-				return vesselClass != null;
+			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__VESSEL:
+				return vessel != null;
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION__HIRE_COST:
 				return HIRE_COST_EDEFAULT == null ? hireCost != null : !HIRE_COST_EDEFAULT.equals(hireCost);
 		}

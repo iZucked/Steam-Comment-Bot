@@ -285,6 +285,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		// Initialize simple dependencies
 		DateTimePackage.eINSTANCE.eClass();
 		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		thePricingPackage.createPackageContents();
@@ -450,8 +453,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRouteCost_Route() {
-		return (EReference)routeCostEClass.getEStructuralFeatures().get(0);
+	public EAttribute getRouteCost_RouteOption() {
+		return (EAttribute)routeCostEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -459,7 +462,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRouteCost_VesselClass() {
+	public EReference getRouteCost_Vessels() {
 		return (EReference)routeCostEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -999,7 +1002,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSuezCanalTariff_MooringCost() {
+	public EAttribute getSuezCanalTariff_FixedCosts() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1008,7 +1011,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSuezCanalTariff_PilotageCost() {
+	public EAttribute getSuezCanalTariff_DiscountFactor() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -1017,26 +1020,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSuezCanalTariff_Disbursements() {
-		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSuezCanalTariff_DiscountFactor() {
-		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getSuezCanalTariff_SdrToUSD() {
-		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1189,8 +1174,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(costModelEClass, COST_MODEL__SUEZ_CANAL_TARIFF);
 
 		routeCostEClass = createEClass(ROUTE_COST);
-		createEReference(routeCostEClass, ROUTE_COST__ROUTE);
-		createEReference(routeCostEClass, ROUTE_COST__VESSEL_CLASS);
+		createEAttribute(routeCostEClass, ROUTE_COST__ROUTE_OPTION);
+		createEReference(routeCostEClass, ROUTE_COST__VESSELS);
 		createEAttribute(routeCostEClass, ROUTE_COST__LADEN_COST);
 		createEAttribute(routeCostEClass, ROUTE_COST__BALLAST_COST);
 
@@ -1248,9 +1233,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__BANDS);
 		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__TUG_BANDS);
 		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__TUG_COST);
-		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__MOORING_COST);
-		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__PILOTAGE_COST);
-		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__DISBURSEMENTS);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__FIXED_COSTS);
 		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR);
 		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__SDR_TO_USD);
 
@@ -1293,8 +1276,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
-		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter dataIndexEClass_Value = addETypeParameter(dataIndexEClass, "Value");
@@ -1409,8 +1392,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getCostModel_SuezCanalTariff(), this.getSuezCanalTariff(), null, "suezCanalTariff", null, 0, 1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(routeCostEClass, RouteCost.class, "RouteCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRouteCost_Route(), thePortPackage.getRoute(), null, "route", null, 1, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRouteCost_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRouteCost_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 0, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
+		g1.getETypeArguments().add(g2);
+		initEReference(getRouteCost_Vessels(), g1, null, "vessels", null, 1, -1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRouteCost_LadenCost(), ecorePackage.getEInt(), "ladenCost", null, 1, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRouteCost_BallastCost(), ecorePackage.getEInt(), "ballastCost", null, 1, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1427,7 +1413,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPortCost_ReferenceCapacity(), ecorePackage.getEInt(), "referenceCapacity", null, 1, 1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(portCostEClass, ecorePackage.getEInt(), "getPortCost", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theFleetPackage.getVesselClass(), "vesselClass", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theFleetPackage.getVessel(), "vessel", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theTypesPackage.getPortCapability(), "activity", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(portCostEntryEClass, PortCostEntry.class, "PortCostEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1487,9 +1473,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getSuezCanalTariff_Bands(), this.getSuezCanalTariffBand(), null, "bands", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSuezCanalTariff_TugBands(), this.getSuezCanalTugBand(), null, "tugBands", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariff_TugCost(), ecorePackage.getEDouble(), "tugCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSuezCanalTariff_MooringCost(), ecorePackage.getEDouble(), "mooringCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSuezCanalTariff_PilotageCost(), ecorePackage.getEDouble(), "pilotageCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSuezCanalTariff_Disbursements(), ecorePackage.getEDouble(), "disbursements", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_FixedCosts(), ecorePackage.getEDouble(), "fixedCosts", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariff_DiscountFactor(), ecorePackage.getEDouble(), "discountFactor", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariff_SdrToUSD(), ecorePackage.getEString(), "sdrToUSD", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1622,21 +1606,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 			 "formatString", "##,###,##0"
 		   });	
 		addAnnotation
-		  (getSuezCanalTariff_MooringCost(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariff_PilotageCost(), 
-		   source, 
-		   new String[] {
-			 "unitPrefix", "$",
-			 "formatString", "##,###,##0"
-		   });	
-		addAnnotation
-		  (getSuezCanalTariff_Disbursements(), 
+		  (getSuezCanalTariff_FixedCosts(), 
 		   source, 
 		   new String[] {
 			 "unitPrefix", "$",

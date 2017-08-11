@@ -12,8 +12,6 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Slot Insertion Options</b></em>'.

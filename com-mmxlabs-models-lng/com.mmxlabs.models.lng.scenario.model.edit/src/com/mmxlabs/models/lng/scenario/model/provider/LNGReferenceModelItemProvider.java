@@ -7,8 +7,6 @@
 package com.mmxlabs.models.lng.scenario.model.provider;
 
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;

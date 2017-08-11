@@ -17,9 +17,9 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -39,7 +39,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 		if (getContext() != null)
 			return false;
 		if (deletedObject instanceof VesselEvent || deletedObject instanceof Cargo || deletedObject instanceof Vessel || deletedObject instanceof Slot || deletedObject instanceof Port
-				|| deletedObject instanceof VesselClass) {
+				|| deletedObject instanceof VesselAvailability) {
 			setContext(Boolean.TRUE);
 			return true;
 		}

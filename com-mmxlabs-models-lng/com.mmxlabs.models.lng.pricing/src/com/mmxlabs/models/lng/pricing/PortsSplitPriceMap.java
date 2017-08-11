@@ -33,7 +33,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 public interface PortsSplitPriceMap extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Ports</em>' reference list isn't clear,

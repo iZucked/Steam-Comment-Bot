@@ -64,12 +64,8 @@ public class VesselAvailabilityStartPortValueProviderFactory implements IReferen
 					admissible.addAll(portModel.getPorts());
 
 					if (currentVessel != null) {
-						if (!currentVessel.getInaccessiblePorts().isEmpty()) {
-							admissible.removeAll(SetUtils.getObjects(currentVessel.getInaccessiblePorts()));
-						} else {
-							if (!currentVessel.getVesselClass().getInaccessiblePorts().isEmpty()) {
-								admissible.removeAll(SetUtils.getObjects(currentVessel.getVesselClass().getInaccessiblePorts()));
-							}
+						if (!currentVessel.getVesselOrDelegateInaccessiblePorts().isEmpty()) {
+							admissible.removeAll(SetUtils.getObjects(currentVessel.getVesselOrDelegateInaccessiblePorts()));
 						}
 					}
 

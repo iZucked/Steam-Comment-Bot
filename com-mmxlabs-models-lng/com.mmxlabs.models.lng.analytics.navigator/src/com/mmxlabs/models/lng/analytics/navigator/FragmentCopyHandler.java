@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -25,7 +24,6 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -41,11 +39,9 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -66,11 +62,11 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 	@Override
 	public boolean copy(@NonNull final ScenarioFragment scenarioFragment, @NonNull final ScenarioInstance target) {
 
-		// Below code does not properly code/reattach data into the new scenario. Still leaves references to original data model 
+		// Below code does not properly code/reattach data into the new scenario. Still leaves references to original data model
 		if (true) {
 			return false;
 		}
-		
+
 		final ScenarioInstance source = scenarioFragment.getScenarioInstance();
 		final ScenarioModelRecord sourceRecord = SSDataManager.Instance.getModelRecord(source);
 
@@ -108,7 +104,6 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 						final Map<String, SpotMarket> fobPurchaseMarketMapping = generateFOBPurchaseMarketMapping(targetModel);
 
 						final Map<String, Vessel> vesselMapping = generateVesselMapping(targetModel);
-						final Map<String, VesselClass> vesselClassMapping = generateVesselClassMapping(targetModel);
 
 						for (final BuyOption buy : copyModel.getBuys()) {
 							if (buy instanceof BuyReference) {
@@ -194,8 +189,8 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 								}
 							} else if (option instanceof RoundTripShippingOption) {
 								final RoundTripShippingOption opt = (RoundTripShippingOption) option;
-								if (opt.getVesselClass() != null) {
-									opt.setVesselClass(vesselClassMapping.get(opt.getVesselClass().getName()));
+								if (opt.getVessel() != null) {
+									opt.setVessel(vesselMapping.get(opt.getVessel().getName()));
 								}
 							}
 						};
@@ -282,10 +277,4 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 		final FleetModel model = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 		return model.getVessels().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
-
-	private Map<String, VesselClass> generateVesselClassMapping(final LNGScenarioModel lngScenarioModel) {
-		final FleetModel model = ScenarioModelUtil.getFleetModel(lngScenarioModel);
-		return model.getVesselClasses().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
-	}
-
 }

@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -93,11 +92,9 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				}
 
 				// Expand out VesselGroups
-				final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
+				final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<>();
 				for (final AVesselSet<Vessel> s : allowedVessels) {
 					if (s instanceof Vessel) {
-						expandedVessels.add(s);
-					} else if (s instanceof VesselClass) {
 						expandedVessels.add(s);
 					} else {
 						// This is ok as other impl (VesselGroup and VesselTypeGroup) only permit contained Vessels
@@ -105,13 +102,13 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					}
 				}
 
-				AVesselSet<Vessel> vesselAssignment = null;
+				Vessel vesselAssignment = null;
 				if (vesselAssignmentType instanceof VesselAvailability) {
 					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 					vesselAssignment = vesselAvailability.getVessel();
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-					vesselAssignment = charterInMarket.getVesselClass();
+					vesselAssignment = charterInMarket.getVessel();
 				} else {
 					log.error("Assignment is not a VesselAvailability or CharterInMarket - unable to validate");
 					return Activator.PLUGIN_ID;
@@ -120,16 +117,6 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				boolean permitted = false;
 				if (expandedVessels.contains(vesselAssignment)) {
 					permitted = true;
-				} else if (vesselAssignment instanceof Vessel) {
-					final Vessel vessel = (Vessel) vesselAssignment;
-					for (final AVesselSet<Vessel> vs : expandedVessels) {
-						if (vs instanceof VesselClass) {
-							if (vs == vessel.getVesselClass()) {
-								permitted = true;
-								break;
-							}
-						}
-					}
 				}
 
 				if (!permitted) {

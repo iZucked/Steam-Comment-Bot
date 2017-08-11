@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.provider;
 
 
+import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class RouteCostItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addRoutePropertyDescriptor(object);
-			addVesselClassPropertyDescriptor(object);
+			addRouteOptionPropertyDescriptor(object);
+			addVesselsPropertyDescriptor(object);
 			addLadenCostPropertyDescriptor(object);
 			addBallastCostPropertyDescriptor(object);
 		}
@@ -57,41 +58,41 @@ public class RouteCostItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Route feature.
+	 * This adds a property descriptor for the Route Option feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRoutePropertyDescriptor(Object object) {
+	protected void addRouteOptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_RouteCost_route_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RouteCost_route_feature", "_UI_RouteCost_type"),
-				 PricingPackage.Literals.ROUTE_COST__ROUTE,
+				 getString("_UI_RouteCost_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RouteCost_routeOption_feature", "_UI_RouteCost_type"),
+				 PricingPackage.Literals.ROUTE_COST__ROUTE_OPTION,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
+	 * This adds a property descriptor for the Vessels feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
+	protected void addVesselsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_RouteCost_vesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RouteCost_vesselClass_feature", "_UI_RouteCost_type"),
-				 PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS,
+				 getString("_UI_RouteCost_vessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RouteCost_vessels_feature", "_UI_RouteCost_type"),
+				 PricingPackage.Literals.ROUTE_COST__VESSELS,
 				 true,
 				 false,
 				 true,
@@ -163,8 +164,11 @@ public class RouteCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		RouteCost routeCost = (RouteCost)object;
-		return getString("_UI_RouteCost_type") + " " + routeCost.getLadenCost();
+		RouteOption labelValue = ((RouteCost)object).getRouteOption();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_RouteCost_type") :
+			getString("_UI_RouteCost_type") + " " + label;
 	}
 
 	/**
@@ -179,6 +183,7 @@ public class RouteCostItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(RouteCost.class)) {
+			case PricingPackage.ROUTE_COST__ROUTE_OPTION:
 			case PricingPackage.ROUTE_COST__LADEN_COST:
 			case PricingPackage.ROUTE_COST__BALLAST_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

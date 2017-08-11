@@ -22,9 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugBands <em>Tug Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugCost <em>Tug Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getMooringCost <em>Mooring Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getPilotageCost <em>Pilotage Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDisbursements <em>Disbursements</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getFixedCosts <em>Fixed Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDiscountFactor <em>Discount Factor</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getSdrToUSD <em>Sdr To USD</em>}</li>
  * </ul>
@@ -93,82 +91,30 @@ public interface SuezCanalTariff extends EObject {
 	void setTugCost(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Mooring Cost</b></em>' attribute.
+	 * Returns the value of the '<em><b>Fixed Costs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Mooring Cost</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Fixed Costs</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Mooring Cost</em>' attribute.
-	 * @see #setMooringCost(double)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSuezCanalTariff_MooringCost()
+	 * @return the value of the '<em>Fixed Costs</em>' attribute.
+	 * @see #setFixedCosts(double)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSuezCanalTariff_FixedCosts()
 	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='##,###,##0'"
 	 * @generated
 	 */
-	double getMooringCost();
+	double getFixedCosts();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getMooringCost <em>Mooring Cost</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getFixedCosts <em>Fixed Costs</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Mooring Cost</em>' attribute.
-	 * @see #getMooringCost()
+	 * @param value the new value of the '<em>Fixed Costs</em>' attribute.
+	 * @see #getFixedCosts()
 	 * @generated
 	 */
-	void setMooringCost(double value);
-
-	/**
-	 * Returns the value of the '<em><b>Pilotage Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Pilotage Cost</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Pilotage Cost</em>' attribute.
-	 * @see #setPilotageCost(double)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSuezCanalTariff_PilotageCost()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='##,###,##0'"
-	 * @generated
-	 */
-	double getPilotageCost();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getPilotageCost <em>Pilotage Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Pilotage Cost</em>' attribute.
-	 * @see #getPilotageCost()
-	 * @generated
-	 */
-	void setPilotageCost(double value);
-
-	/**
-	 * Returns the value of the '<em><b>Disbursements</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Disbursements</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Disbursements</em>' attribute.
-	 * @see #setDisbursements(double)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSuezCanalTariff_Disbursements()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='##,###,##0'"
-	 * @generated
-	 */
-	double getDisbursements();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDisbursements <em>Disbursements</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Disbursements</em>' attribute.
-	 * @see #getDisbursements()
-	 * @generated
-	 */
-	void setDisbursements(double value);
+	void setFixedCosts(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Discount Factor</b></em>' attribute.

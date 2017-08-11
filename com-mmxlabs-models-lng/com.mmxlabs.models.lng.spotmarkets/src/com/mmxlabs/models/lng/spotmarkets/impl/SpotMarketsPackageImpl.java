@@ -181,7 +181,12 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		// Initialize simple dependencies
 		CommercialPackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
 		PricingPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theSpotMarketsPackage.createPackageContents();
@@ -590,6 +595,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCharterOutMarket_Vessels() {
+		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getCharterOutMarket_CharterOutRate() {
 		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(0);
 	}
@@ -608,53 +622,17 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCharterInMarket_Vessel() {
+		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getCharterInMarket_Nominal() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterInMarket_SpotCharterCount() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterInMarket_OverrideInaccessibleRoutes() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterInMarket_InaccessibleRoutes() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCharterInMarket_CharterContract() {
-		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCharterInMarket_CharterInRate() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -680,8 +658,44 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotCharterMarket_VesselClass() {
-		return (EReference)spotCharterMarketEClass.getEStructuralFeatures().get(1);
+	public EAttribute getCharterInMarket_SpotCharterCount() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarket_OverrideInaccessibleRoutes() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarket_InaccessibleRoutes() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCharterInMarket_CharterContract() {
+		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterInMarket_CharterInRate() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -774,8 +788,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__CHARTER_OUT_RATE);
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__AVAILABLE_PORTS);
+		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__VESSELS);
 
 		charterInMarketEClass = createEClass(CHARTER_IN_MARKET);
+		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__VESSEL);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__CHARTER_IN_RATE);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__SPOT_CHARTER_COUNT);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES);
@@ -785,7 +801,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
-		createEReference(spotCharterMarketEClass, SPOT_CHARTER_MARKET__VESSEL_CLASS);
 
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
@@ -914,8 +929,13 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterOutMarket_AvailablePorts(), g1, null, "availablePorts", null, 0, -1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
+		g1.getETypeArguments().add(g2);
+		initEReference(getCharterOutMarket_Vessels(), g1, null, "vessels", null, 0, -1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterInMarketEClass, CharterInMarket.class, "CharterInMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCharterInMarket_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_CharterInRate(), ecorePackage.getEString(), "charterInRate", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_SpotCharterCount(), ecorePackage.getEInt(), "spotCharterCount", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_OverrideInaccessibleRoutes(), ecorePackage.getEBoolean(), "overrideInaccessibleRoutes", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -925,7 +945,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		initEClass(spotCharterMarketEClass, SpotCharterMarket.class, "SpotCharterMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotCharterMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotCharterMarket_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

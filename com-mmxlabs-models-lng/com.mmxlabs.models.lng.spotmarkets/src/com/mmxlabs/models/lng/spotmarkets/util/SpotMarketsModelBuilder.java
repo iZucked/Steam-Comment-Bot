@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -32,28 +32,28 @@ public class SpotMarketsModelBuilder {
 	}
 
 	@NonNull
-	public CharterInMarket createCharterInMarket(@NonNull final String name, @NonNull final VesselClass vesselClass, @NonNull final String charterInRate, final int charterInCount) {
+	public CharterInMarket createCharterInMarket(@NonNull final String name, @NonNull final Vessel vessel, @NonNull final String charterInRate, final int charterInCount) {
 
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setName(name);
-		charterInMarket.setVesselClass(vesselClass);
+		charterInMarket.setVessel(vessel);
 		charterInMarket.setCharterInRate(charterInRate);
 		charterInMarket.setSpotCharterCount(charterInCount);
 
 		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 		return charterInMarket;
 	}
-	
+
 	@NonNull
-	public CharterOutMarket createCharterOutMarket(@NonNull final String name, @NonNull final VesselClass vesselClass, @NonNull final String charterOutRate, int minDurationInDays) {
-		
+	public CharterOutMarket createCharterOutMarket(@NonNull final String name, @NonNull final Vessel vessel, @NonNull final String charterOutRate, int minDurationInDays) {
+
 		final CharterOutMarket charterOutMarket = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
 		charterOutMarket.setName(name);
 		charterOutMarket.setEnabled(true);
-		charterOutMarket.setVesselClass(vesselClass);
+		charterOutMarket.getVessels().add(vessel);
 		charterOutMarket.setCharterOutRate(charterOutRate);
 		charterOutMarket.setMinCharterOutDuration(minDurationInDays);
-		
+
 		spotMarketsModel.getCharterOutMarkets().add(charterOutMarket);
 		return charterOutMarket;
 	}

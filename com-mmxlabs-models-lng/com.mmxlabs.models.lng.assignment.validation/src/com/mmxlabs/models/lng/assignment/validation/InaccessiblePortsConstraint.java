@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -49,19 +48,13 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 				final Vessel vessel = vesselAvailability.getVessel();
 				if (vessel != null) {
-					inaccessiblePorts = vessel.getInaccessiblePorts();
-					if (inaccessiblePorts.isEmpty()) {
-						final VesselClass vesselClass = vessel.getVesselClass();
-						if (vesselClass != null) {
-							inaccessiblePorts = vesselClass.getInaccessiblePorts();
-						}
-					}
+					inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
 				}
 			} else if (vesselAssignmentType instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-				final VesselClass vesselClass = charterInMarket.getVesselClass();
-				if (vesselClass != null) {
-					inaccessiblePorts = vesselClass.getInaccessiblePorts();
+				final Vessel vessel = charterInMarket.getVessel();
+				if (vessel != null) {
+					inaccessiblePorts = vessel.getVesselOrDelegateInaccessiblePorts();
 				}
 			}
 
@@ -127,13 +120,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 					final Vessel nominatedVessel = loadSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
-						inaccessiblePorts = nominatedVessel.getInaccessiblePorts();
-						if (inaccessiblePorts.isEmpty()) {
-							final VesselClass vesselClass = nominatedVessel.getVesselClass();
-							if (vesselClass != null) {
-								inaccessiblePorts = vesselClass.getInaccessiblePorts();
-							}
-						}
+						inaccessiblePorts = nominatedVessel.getVesselOrDelegateInaccessiblePorts();
 					}
 				}
 			}
@@ -143,13 +130,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
 					final Vessel nominatedVessel = dischargeSlot.getNominatedVessel();
 					if (nominatedVessel != null) {
-						inaccessiblePorts = nominatedVessel.getInaccessiblePorts();
-						if (inaccessiblePorts.isEmpty()) {
-							final VesselClass vesselClass = nominatedVessel.getVesselClass();
-							if (vesselClass != null) {
-								inaccessiblePorts = vesselClass.getInaccessiblePorts();
-							}
-						}
+						inaccessiblePorts = nominatedVessel.getVesselOrDelegateInaccessiblePorts();
 					}
 				}
 			}

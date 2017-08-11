@@ -131,7 +131,11 @@ public class PortPickerDialog extends ListSelectionDialog {
 		if (open() == Window.OK) {
 			final Object[] result = getResult();
 
-			final ArrayList<EObject> resultList = new ArrayList<EObject>();
+			if (result == null) {
+				return null;
+			}
+			
+			final List<EObject> resultList = new ArrayList<>();
 			for (final Object o : result) {
 				resultList.add(((Pair<String, EObject>) o).getSecond());
 			}

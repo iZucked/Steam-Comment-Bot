@@ -24,7 +24,7 @@ import org.eclipse.emf.common.util.EList;
 public interface DataIndex<Value> extends Index<Value> {
 	/**
 	 * Returns the value of the '<em><b>Points</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.IndexPoint}&lt;Value>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.IndexPoint}<code>&lt;Value&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Points</em>' containment reference list isn't clear,

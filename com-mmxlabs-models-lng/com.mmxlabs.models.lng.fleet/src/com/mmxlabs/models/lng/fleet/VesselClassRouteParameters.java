@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -15,7 +16,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRoute <em>Route</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getExtraTransitTime <em>Extra Transit Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}</li>
@@ -29,30 +30,33 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  */
 public interface VesselClassRouteParameters extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Route</b></em>' reference.
+	 * Returns the value of the '<em><b>Route Option</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Route</em>' reference isn't clear,
+	 * If the meaning of the '<em>Route Option</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Route</em>' reference.
-	 * @see #setRoute(Route)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_Route()
-	 * @model required="true"
+	 * @return the value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #setRouteOption(RouteOption)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_RouteOption()
+	 * @model
 	 * @generated
 	 */
-	Route getRoute();
+	RouteOption getRouteOption();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRoute <em>Route</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getRouteOption <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Route</em>' reference.
-	 * @see #getRoute()
+	 * @param value the new value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #getRouteOption()
 	 * @generated
 	 */
-	void setRoute(Route value);
+	void setRouteOption(RouteOption value);
 
 	/**
 	 * Returns the value of the '<em><b>Extra Transit Time</b></em>' attribute.

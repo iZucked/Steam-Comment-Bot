@@ -11,7 +11,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -25,14 +24,6 @@ public class VesselAndClassContentProvider implements ITreeContentProvider {
 
 		public VesselContainer(List<Vessel> vessels) {
 			this.vessels = vessels.toArray();
-		}
-	}
-
-	public static class VesselClassContainer {
-		public Object[] vesselClasses;
-
-		public VesselClassContainer(List<VesselClass> vesselClasses) {
-			this.vesselClasses = vesselClasses.toArray();
 		}
 	}
 
@@ -62,7 +53,7 @@ public class VesselAndClassContentProvider implements ITreeContentProvider {
 			if (referenceModel != null) {
 				FleetModel fleetModel = referenceModel.getFleetModel();
 
-				return new Object[] { new VesselContainer(fleetModel.getVessels()), new VesselClassContainer(fleetModel.getVesselClasses()) };
+				return new Object[] { new VesselContainer(fleetModel.getVessels()) };
 			}
 		}
 
@@ -74,10 +65,6 @@ public class VesselAndClassContentProvider implements ITreeContentProvider {
 		if (parentElement instanceof VesselContainer) {
 			VesselContainer vesselContainer = (VesselContainer) parentElement;
 			return vesselContainer.vessels;
-		}
-		if (parentElement instanceof VesselClassContainer) {
-			VesselClassContainer vesselClassContainer = (VesselClassContainer) parentElement;
-			return vesselClassContainer.vesselClasses;
 		}
 
 		return new Object[0];
@@ -91,9 +78,6 @@ public class VesselAndClassContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(final Object element) {
 		if (element instanceof VesselContainer) {
-			return true;
-		}
-		if (element instanceof VesselClassContainer) {
 			return true;
 		}
 		return false;

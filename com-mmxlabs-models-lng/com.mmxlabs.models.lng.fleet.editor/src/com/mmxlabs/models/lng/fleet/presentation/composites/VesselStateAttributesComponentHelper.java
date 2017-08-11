@@ -68,6 +68,7 @@ public class VesselStateAttributesComponentHelper extends BaseComponentHelper {
 		add_idleNBORateEditor(detailComposite, topClass);
 		add_idleBaseRateEditor(detailComposite, topClass);
 		add_inPortBaseRateEditor(detailComposite, topClass);
+		add_fuelConsumptionOverrideEditor(detailComposite, topClass);
 		add_fuelConsumptionEditor(detailComposite, topClass);
 		add_serviceSpeedEditor(detailComposite, topClass);
 		add_inPortNBORateEditor(detailComposite, topClass);
@@ -103,6 +104,15 @@ public class VesselStateAttributesComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_inPortBaseRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE));
+	}
+
+	/**
+	 * Create the editor for the fuelConsumptionOverride feature on VesselStateAttributes
+	 *
+	 * @generated
+	 */
+	protected void add_fuelConsumptionOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE));
 	}
 
 	/**

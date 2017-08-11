@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.fleet.Vessel;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -19,11 +20,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getCharterOutRate <em>Charter Out Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getAvailablePorts <em>Available Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getVessels <em>Vessels</em>}</li>
  * </ul>
  *
  * @generated
@@ -127,6 +129,16 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	protected EList<APortSet<Port>> availablePorts;
 
 	/**
+	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> vessels;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -209,6 +221,18 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			availablePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS);
 		}
 		return availablePorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AVesselSet<Vessel>> getVessels() {
+		if (vessels == null) {
+			vessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS);
+		}
+		return vessels;
 	}
 
 	/**
@@ -302,6 +326,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return getMinCharterOutDuration();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				return getAvailablePorts();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
+				return getVessels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -332,6 +358,10 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				getAvailablePorts().clear();
 				getAvailablePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
+				getVessels().clear();
+				getVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -359,6 +389,9 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				getAvailablePorts().clear();
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
+				getVessels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -381,6 +414,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return minCharterOutDuration != MIN_CHARTER_OUT_DURATION_EDEFAULT;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
 				return availablePorts != null && !availablePorts.isEmpty();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__VESSELS:
+				return vessels != null && !vessels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

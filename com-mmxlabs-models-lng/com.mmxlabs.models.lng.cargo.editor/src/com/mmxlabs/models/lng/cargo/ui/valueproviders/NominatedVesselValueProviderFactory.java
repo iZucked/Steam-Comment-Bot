@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -71,8 +70,6 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 						for (final AVesselSet<Vessel> s : allowedVessels) {
 							if (s instanceof Vessel) {
 								expandedVessels.add(s);
-							} else if (s instanceof VesselClass) {
-								expandedVessels.addAll(SetUtils.getObjects(s));
 							} else {
 								expandedVessels.addAll(SetUtils.getObjects(s));
 							}

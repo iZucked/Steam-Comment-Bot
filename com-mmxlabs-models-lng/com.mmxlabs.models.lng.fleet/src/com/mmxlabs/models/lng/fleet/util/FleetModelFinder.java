@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 
 public class FleetModelFinder {
 	private final @NonNull FleetModel fleetModel;
@@ -20,16 +19,6 @@ public class FleetModelFinder {
 	@NonNull
 	public FleetModel getFleetModel() {
 		return fleetModel;
-	}
-
-	@NonNull
-	public VesselClass findVesselClass(@NonNull final String vesselClassName) {
-		for (final VesselClass vesselClass : getFleetModel().getVesselClasses()) {
-			if (vesselClassName.equals(vesselClass.getName())) {
-				return vesselClass;
-			}
-		}
-		throw new IllegalArgumentException("Unknown vessel class");
 	}
 
 	@NonNull

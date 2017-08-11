@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -48,19 +47,14 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				return Activator.PLUGIN_ID;
 			}
 
-			final VesselClass vesselClass = vessel.getVesselClass();
-			if (vesselClass == null) {
-				return Activator.PLUGIN_ID;
-			}
-			final Set<Port> inaccessiblePortSet = vessel.getInaccessiblePorts().isEmpty() ? SetUtils.getObjects(vesselClass.getInaccessiblePorts())
-					: SetUtils.getObjects(vessel.getInaccessiblePorts());
+			final Set<Port> inaccessiblePortSet = vessel.getVesselOrDelegateInaccessiblePorts().isEmpty() ? SetUtils.getObjects(vessel.getVesselOrDelegateInaccessiblePorts()) : SetUtils.getObjects(vessel.getVesselOrDelegateInaccessiblePorts());
 			if (availablility.getStartAt() != null) {
 
 				final Port p = availablility.getStartAt();
 				{
 					if (inaccessiblePortSet.contains(p)) {
 						final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "start",
-								p.getName(), vessel.getVesselClass().getName(), p.getName());
+								p.getName(), vessel.getName(), p.getName());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 						dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_StartAt());
@@ -75,7 +69,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 
 					if (inaccessiblePortSet.contains(p)) {
 						final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "end",
-								p.getName(), vessel.getVesselClass().getName(), p.getName());
+								p.getName(), vessel.getName(), p.getName());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 						dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_EndAt());
@@ -84,8 +78,8 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 					}
 				}
 			}
-		} else if (target instanceof VesselClass) {
-			final VesselClass vesselClass = (VesselClass) target;
+		} else if (target instanceof Vessel) {
+			final Vessel vessel = (Vessel) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 
@@ -95,9 +89,9 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				final List<String> badVessels = new LinkedList<String>();
 				for (final VesselAvailability availability : lngScenarioModel.getCargoModel().getVesselAvailabilities()) {
 					final Vessel v = availability.getVessel();
-					if (v != null && extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
+					if (v != null && extraContext.getReplacement(vessel) == v) {
 
-						final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vesselClass.getInaccessiblePorts());
+						final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vessel.getVesselOrDelegateInaccessiblePorts());
 
 						boolean bad = false;
 						{
@@ -133,7 +127,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				if (badVessels.isEmpty() == false) {
 					final String message = String.format("The vessels %s have start / end requirements at the ports %s, which are in the inaccessible port list.", badVessels, badPorts);
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-					dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts());
+					dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_InaccessiblePorts());
 					statuses.add(dcsd);
 				}
 			}

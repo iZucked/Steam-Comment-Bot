@@ -34,7 +34,6 @@ import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
@@ -140,9 +139,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 			if (earliestDate != null && vessel != null) {
-				final VesselClass vesselClass = vessel.getVesselClass();
-				if (vesselClass != null) {
-					final BaseFuel baseFuel = vesselClass.getBaseFuel();
+				{
+					final BaseFuel baseFuel = vessel.getVesselOrDelegateBaseFuel();
 					if (baseFuel != null) {
 						final MMXRootObject rootObject = extraContext.getRootObject();
 						if (rootObject instanceof LNGScenarioModel) {
@@ -307,11 +305,10 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		double maxSpeed = 25.0;
 		final Vessel vessel = va.getVessel();
 		if (vessel != null) {
-			final VesselClass vesselClass = vessel.getVesselClass();
-			if (vesselClass != null) {
-				final VesselStateAttributes ballastAttributes = vesselClass.getBallastAttributes();
+			{
+				final VesselStateAttributes ballastAttributes = vessel.getBallastAttributes();
 				if (ballastAttributes != null) {
-					final List<FuelConsumption> fuelConsumptions = ballastAttributes.getFuelConsumption();
+					final List<FuelConsumption> fuelConsumptions = ballastAttributes.getVesselOrDelegateFuelConsumption();
 					if (fuelConsumptions != null && !fuelConsumptions.isEmpty()) {
 						double vminSpeed = Double.MAX_VALUE;
 						double vmaxSpeed = Double.MIN_VALUE;

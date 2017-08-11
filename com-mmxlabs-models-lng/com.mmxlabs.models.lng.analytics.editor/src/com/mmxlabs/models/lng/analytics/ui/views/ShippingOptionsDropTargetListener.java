@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -96,21 +95,21 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					}));
 					menuHelper.addAction(new RunnableAction("Create RT", () -> {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-						opt.setVesselClass(vessel.getVesselClass());
+						opt.setVessel(vessel);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
-//					menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-//						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-//						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-//						opt.setVessel(vessel);
-//						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-//								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-//								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-//						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-//					}));
+					// menuHelper.addAction(new RunnableAction("Create fleet", () -> {
+					// final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+					// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+					// opt.setVessel(vessel);
+					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+					// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+					// optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+					// }));
 					menuHelper.addAction(new RunnableAction("Create availability", () -> {
 						final OptionalAvailabilityShippingOption opt = AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption();
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
@@ -122,14 +121,6 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					}));
 
 					menuHelper.open();
-				} else if (o instanceof VesselClass) {
-
-					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					opt.setVesselClass((VesselClass) o);
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 				} else if (o instanceof ShippingOption) {
 					ShippingOption opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
 
@@ -164,7 +155,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
 			if (selection.size() == 1) {
 				final Object o = selection.getFirstElement();
-				if (o instanceof Vessel || o instanceof VesselClass) {
+				if (o instanceof Vessel) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}

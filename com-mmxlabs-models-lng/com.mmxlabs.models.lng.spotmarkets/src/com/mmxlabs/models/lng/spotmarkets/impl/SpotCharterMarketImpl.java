@@ -8,11 +8,9 @@ package com.mmxlabs.models.lng.spotmarkets.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
@@ -25,7 +23,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl#isEnabled <em>Enabled</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
  *
  * @generated
@@ -49,16 +46,6 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 	 * @ordered
 	 */
 	protected boolean enabled = ENABLED_EDEFAULT;
-	/**
-	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselClass()
-	 * @generated
-	 * @ordered
-	 */
-	protected VesselClass vesselClass;
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -104,52 +91,11 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselClass getVesselClass() {
-		if (vesselClass != null && vesselClass.eIsProxy()) {
-			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
-			vesselClass = (VesselClass)eResolveProxy(oldVesselClass);
-			if (vesselClass != oldVesselClass) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.SPOT_CHARTER_MARKET__VESSEL_CLASS, oldVesselClass, vesselClass));
-			}
-		}
-		return vesselClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VesselClass basicGetVesselClass() {
-		return vesselClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVesselClass(VesselClass newVesselClass) {
-		VesselClass oldVesselClass = vesselClass;
-		vesselClass = newVesselClass;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_CHARTER_MARKET__VESSEL_CLASS, oldVesselClass, vesselClass));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_CHARTER_MARKET__ENABLED:
 				return isEnabled();
-			case SpotMarketsPackage.SPOT_CHARTER_MARKET__VESSEL_CLASS:
-				if (resolve) return getVesselClass();
-				return basicGetVesselClass();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -164,9 +110,6 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_CHARTER_MARKET__ENABLED:
 				setEnabled((Boolean)newValue);
-				return;
-			case SpotMarketsPackage.SPOT_CHARTER_MARKET__VESSEL_CLASS:
-				setVesselClass((VesselClass)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -183,9 +126,6 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 			case SpotMarketsPackage.SPOT_CHARTER_MARKET__ENABLED:
 				setEnabled(ENABLED_EDEFAULT);
 				return;
-			case SpotMarketsPackage.SPOT_CHARTER_MARKET__VESSEL_CLASS:
-				setVesselClass((VesselClass)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -200,8 +140,6 @@ public abstract class SpotCharterMarketImpl extends EObjectImpl implements SpotC
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_CHARTER_MARKET__ENABLED:
 				return enabled != ENABLED_EDEFAULT;
-			case SpotMarketsPackage.SPOT_CHARTER_MARKET__VESSEL_CLASS:
-				return vesselClass != null;
 		}
 		return super.eIsSet(featureID);
 	}

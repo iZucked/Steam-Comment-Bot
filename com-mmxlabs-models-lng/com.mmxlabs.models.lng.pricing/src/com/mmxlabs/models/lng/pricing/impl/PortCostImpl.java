@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
@@ -181,14 +181,14 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	public int getPortCost(final VesselClass vesselClass, final PortCapability activity) {
+	public int getPortCost(final Vessel vessel, final PortCapability activity) {
 		for (final PortCostEntry entry : getEntries()) {
 			if (entry.getActivity() == activity) {
 				if (isSetReferenceCapacity()) {
 					return (int)
-						(entry.getCost() * (((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity()));
+						((double)entry.getCost() * (double)vessel.getVesselOrDelegateCapacity() / (double) getReferenceCapacity());
 				} else {
 					return entry.getCost();
 				}

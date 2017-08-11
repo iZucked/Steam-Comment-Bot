@@ -789,22 +789,22 @@ public interface PricingPackage extends EPackage {
 	int ROUTE_COST__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_COST__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int ROUTE_COST__ROUTE_OPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_COST__VESSEL_CLASS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int ROUTE_COST__VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Laden Cost</b></em>' attribute.
@@ -1353,31 +1353,13 @@ public interface PricingPackage extends EPackage {
 	int SUEZ_CANAL_TARIFF__TUG_COST = 2;
 
 	/**
-	 * The feature id for the '<em><b>Mooring Cost</b></em>' attribute.
+	 * The feature id for the '<em><b>Fixed Costs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__MOORING_COST = 3;
-
-	/**
-	 * The feature id for the '<em><b>Pilotage Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUEZ_CANAL_TARIFF__PILOTAGE_COST = 4;
-
-	/**
-	 * The feature id for the '<em><b>Disbursements</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUEZ_CANAL_TARIFF__DISBURSEMENTS = 5;
+	int SUEZ_CANAL_TARIFF__FIXED_COSTS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Discount Factor</b></em>' attribute.
@@ -1386,7 +1368,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR = 6;
+	int SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR = 4;
 
 	/**
 	 * The feature id for the '<em><b>Sdr To USD</b></em>' attribute.
@@ -1395,7 +1377,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__SDR_TO_USD = 7;
+	int SUEZ_CANAL_TARIFF__SDR_TO_USD = 5;
 
 	/**
 	 * The number of structural features of the '<em>Suez Canal Tariff</em>' class.
@@ -1404,7 +1386,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF_FEATURE_COUNT = 8;
+	int SUEZ_CANAL_TARIFF_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffBandImpl <em>Suez Canal Tariff Band</em>}' class.
@@ -1677,26 +1659,26 @@ public interface PricingPackage extends EPackage {
 	EClass getRouteCost();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.RouteCost#getRouteOption <em>Route Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getRoute()
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getRouteOption()
 	 * @see #getRouteCost()
 	 * @generated
 	 */
-	EReference getRouteCost_Route();
+	EAttribute getRouteCost_RouteOption();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass <em>Vessel Class</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.RouteCost#getVessels <em>Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass()
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.RouteCost#getVessels()
 	 * @see #getRouteCost()
 	 * @generated
 	 */
-	EReference getRouteCost_VesselClass();
+	EReference getRouteCost_Vessels();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.RouteCost#getLadenCost <em>Laden Cost</em>}'.
@@ -2331,37 +2313,15 @@ public interface PricingPackage extends EPackage {
 	EAttribute getSuezCanalTariff_TugCost();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getMooringCost <em>Mooring Cost</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getFixedCosts <em>Fixed Costs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Mooring Cost</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getMooringCost()
+	 * @return the meta object for the attribute '<em>Fixed Costs</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getFixedCosts()
 	 * @see #getSuezCanalTariff()
 	 * @generated
 	 */
-	EAttribute getSuezCanalTariff_MooringCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getPilotageCost <em>Pilotage Cost</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pilotage Cost</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getPilotageCost()
-	 * @see #getSuezCanalTariff()
-	 * @generated
-	 */
-	EAttribute getSuezCanalTariff_PilotageCost();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDisbursements <em>Disbursements</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Disbursements</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDisbursements()
-	 * @see #getSuezCanalTariff()
-	 * @generated
-	 */
-	EAttribute getSuezCanalTariff_Disbursements();
+	EAttribute getSuezCanalTariff_FixedCosts();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDiscountFactor <em>Discount Factor</em>}'.
@@ -2647,20 +2607,20 @@ public interface PricingPackage extends EPackage {
 		EClass ROUTE_COST = eINSTANCE.getRouteCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROUTE_COST__ROUTE = eINSTANCE.getRouteCost_Route();
+		EAttribute ROUTE_COST__ROUTE_OPTION = eINSTANCE.getRouteCost_RouteOption();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROUTE_COST__VESSEL_CLASS = eINSTANCE.getRouteCost_VesselClass();
+		EReference ROUTE_COST__VESSELS = eINSTANCE.getRouteCost_Vessels();
 
 		/**
 		 * The meta object literal for the '<em><b>Laden Cost</b></em>' attribute feature.
@@ -3169,28 +3129,12 @@ public interface PricingPackage extends EPackage {
 		EAttribute SUEZ_CANAL_TARIFF__TUG_COST = eINSTANCE.getSuezCanalTariff_TugCost();
 
 		/**
-		 * The meta object literal for the '<em><b>Mooring Cost</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Fixed Costs</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SUEZ_CANAL_TARIFF__MOORING_COST = eINSTANCE.getSuezCanalTariff_MooringCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Pilotage Cost</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SUEZ_CANAL_TARIFF__PILOTAGE_COST = eINSTANCE.getSuezCanalTariff_PilotageCost();
-
-		/**
-		 * The meta object literal for the '<em><b>Disbursements</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SUEZ_CANAL_TARIFF__DISBURSEMENTS = eINSTANCE.getSuezCanalTariff_Disbursements();
+		EAttribute SUEZ_CANAL_TARIFF__FIXED_COSTS = eINSTANCE.getSuezCanalTariff_FixedCosts();
 
 		/**
 		 * The meta object literal for the '<em><b>Discount Factor</b></em>' attribute feature.

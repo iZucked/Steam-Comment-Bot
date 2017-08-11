@@ -82,7 +82,7 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 						final VesselAvailability va = (VesselAvailability) target;
 						final Vessel vessel = va.getVessel();
 						if (vessel != null) {
-							final EList<APortSet<Port>> ips = vessel.getInaccessiblePorts();
+							final EList<APortSet<Port>> ips = vessel.getVesselOrDelegateInaccessiblePorts();
 							final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 							for (final Pair<String, EObject> p : delegateValue) {
 								// search recursively

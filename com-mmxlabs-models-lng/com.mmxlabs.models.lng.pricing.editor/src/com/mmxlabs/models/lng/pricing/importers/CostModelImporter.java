@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
@@ -19,10 +20,6 @@ import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
@@ -33,7 +30,11 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.importers.PanamaCanalTariffImporter.MarkupRate;
+import com.mmxlabs.models.lng.pricing.importers.SuezCanalTariffImporter.ExtraData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -48,16 +49,22 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 /**
  */
 public class CostModelImporter implements ISubmodelImporter {
-	private static final HashMap<String, String> inputs = new HashMap<String, String>();
+	private static final Map<String, String> inputs = new HashMap<>();
 	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	public static final String PORT_COSTS_KEY = "PORT_COSTS";
+	public static final String ROUTE_COSTS_KEY = "ROTUE_COSTS";
 	public static final String PANAMA_CANAL_TARIFF_KEY = "PANAMA_CANAL_TARIFF";
+	public static final String SUEZ_CANAL_TARIFF_KEY = "SUEZ_CANAL_TARIFF";
 
 	static {
 		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
 		inputs.put(PORT_COSTS_KEY, "Port Costs");
+		inputs.put(ROUTE_COSTS_KEY, "Route Costs");
 		if (LicenseFeatures.isPermitted("features:panama-canal")) {
 			inputs.put(PANAMA_CANAL_TARIFF_KEY, "Panama Canal Tariff");
+		}
+		if (LicenseFeatures.isPermitted("features:suez-canal")) {
+			inputs.put(SUEZ_CANAL_TARIFF_KEY, "Suez Canal Tariff");
 		}
 	}
 
@@ -66,7 +73,9 @@ public class CostModelImporter implements ISubmodelImporter {
 
 	private IClassImporter cooldownPriceImporter;
 	private IClassImporter portCostImporter;
+	private IClassImporter routeCostImporter;
 	private final PanamaCanalTariffImporter panamaCanalTariffBandImporter = new PanamaCanalTariffImporter();
+	private final SuezCanalTariffImporter suezCanalTariffBandImporter = new SuezCanalTariffImporter();
 
 	/**
 	 */
@@ -84,6 +93,7 @@ public class CostModelImporter implements ISubmodelImporter {
 		if (importerRegistry != null) {
 			cooldownPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
 			portCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPortCost());
+			routeCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getRouteCost());
 		}
 	}
 
@@ -98,6 +108,9 @@ public class CostModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(PORT_COSTS_KEY)) {
 			costModel.getPortCosts().addAll((Collection<? extends PortCost>) portCostImporter.importObjects(PricingPackage.eINSTANCE.getPortCost(), inputs.get(PORT_COSTS_KEY), context));
 		}
+		if (inputs.containsKey(ROUTE_COSTS_KEY)) {
+			costModel.getRouteCosts().addAll((Collection<? extends RouteCost>) routeCostImporter.importObjects(PricingPackage.eINSTANCE.getRouteCost(), inputs.get(ROUTE_COSTS_KEY), context));
+		}
 
 		if (inputs.containsKey(COOLDOWN_PRICING_KEY)) {
 			costModel.getCooldownCosts()
@@ -106,9 +119,7 @@ public class CostModelImporter implements ISubmodelImporter {
 
 		if (inputs.containsKey(PANAMA_CANAL_TARIFF_KEY)) {
 			final PanamaCanalTariff panamaCanalTariff = PricingFactory.eINSTANCE.createPanamaCanalTariff();
-
-			// panamaCanalTariff.getBands().addAll((Collection<? extends PanamaCanalTariffBand>)
-
+			costModel.setPanamaCanalTariff(panamaCanalTariff);
 			for (final EObject o : panamaCanalTariffBandImporter.importObjects(PricingPackage.eINSTANCE.getPanamaCanalTariffBand(), inputs.get(PANAMA_CANAL_TARIFF_KEY), context)) {
 				if (o instanceof PanamaCanalTariffBand) {
 					final PanamaCanalTariffBand band = (PanamaCanalTariffBand) o;
@@ -118,8 +129,23 @@ public class CostModelImporter implements ISubmodelImporter {
 					panamaCanalTariff.setMarkupRate(markupRate.markupRate);
 				}
 			}
+		}
 
-			costModel.setPanamaCanalTariff(panamaCanalTariff);
+		if (inputs.containsKey(SUEZ_CANAL_TARIFF_KEY)) {
+			final SuezCanalTariff suezCanalTariff = PricingFactory.eINSTANCE.createSuezCanalTariff();
+			costModel.setSuezCanalTariff(suezCanalTariff);
+			for (final EObject o : suezCanalTariffBandImporter.importObjects(EcorePackage.eINSTANCE.getEObject(), inputs.get(SUEZ_CANAL_TARIFF_KEY), context)) {
+				if (o instanceof SuezCanalTariffBand) {
+					final SuezCanalTariffBand band = (SuezCanalTariffBand) o;
+					suezCanalTariff.getBands().add(band);
+				} else if (o instanceof SuezCanalTugBand) {
+					final SuezCanalTugBand band = (SuezCanalTugBand) o;
+					suezCanalTariff.getTugBands().add(band);
+				} else if (o instanceof ExtraData) {
+					final ExtraData data = (ExtraData) o;
+					suezCanalTariff.eSet(data.feature, data.value);
+				}
+			}
 		}
 
 		context.doLater(new IDeferment() {
@@ -132,29 +158,6 @@ public class CostModelImporter implements ISubmodelImporter {
 
 					final PricingModel pricing = ScenarioModelUtil.getPricingModel(scenarioModel);
 					final FleetModel fleet = ScenarioModelUtil.getFleetModel(scenarioModel);
-					final PortModel port = ScenarioModelUtil.getPortModel(scenarioModel);
-					if (pricing != null && fleet != null && port != null) {
-						for (final Route route : port.getRoutes()) {
-							if (route.getRouteOption() == RouteOption.SUEZ) {
-								for (final VesselClass vesselClass : fleet.getVesselClasses()) {
-									boolean found = false;
-									for (final RouteCost cost : costModel.getRouteCosts()) {
-										if (cost.getVesselClass() == vesselClass && cost.getRoute() == route) {
-											found = true;
-											break;
-										}
-									}
-									if (!found) {
-										context.addProblem(context.createProblem("There was no route cost for " + route.getName() + " with " + vesselClass.getName(), false, false, false));
-										final RouteCost cost = PricingFactory.eINSTANCE.createRouteCost();
-										cost.setRoute(route);
-										cost.setVesselClass(vesselClass);
-										costModel.getRouteCosts().add(cost);
-									}
-								}
-							}
-						}
-					}
 					if (pricing != null && fleet != null) {
 						for (final BaseFuel baseFuel : fleet.getBaseFuels()) {
 							boolean found = false;
@@ -187,9 +190,14 @@ public class CostModelImporter implements ISubmodelImporter {
 		final CostModel costModel = (CostModel) model;
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(costModel.getCooldownCosts(), context));
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(costModel.getPortCosts(), context));
+		output.put(ROUTE_COSTS_KEY, routeCostImporter.exportObjects(costModel.getRouteCosts(), context));
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
 			output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportTariff(panamaCanalTariff, context));
+		}
+		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
+		if (suezCanalTariff != null) {
+			output.put(SUEZ_CANAL_TARIFF_KEY, suezCanalTariffBandImporter.exportTariff(suezCanalTariff, context));
 		}
 	}
 

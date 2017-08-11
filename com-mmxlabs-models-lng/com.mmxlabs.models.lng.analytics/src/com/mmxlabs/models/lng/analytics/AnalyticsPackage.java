@@ -1811,13 +1811,13 @@ s	 * <!-- end-user-doc -->
 	int ROUND_TRIP_SHIPPING_OPTION = 25;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS = SHIPPING_OPTION_FEATURE_COUNT + 0;
+	int ROUND_TRIP_SHIPPING_OPTION__VESSEL = SHIPPING_OPTION_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -4116,15 +4116,15 @@ s	 * <!-- end-user-doc -->
 	EClass getRoundTripShippingOption();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVesselClass <em>Vessel Class</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVesselClass()
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVessel()
 	 * @see #getRoundTripShippingOption()
 	 * @generated
 	 */
-	EReference getRoundTripShippingOption_VesselClass();
+	EReference getRoundTripShippingOption_Vessel();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getHireCost <em>Hire Cost</em>}'.
@@ -5970,12 +5970,12 @@ s	 * <!-- end-user-doc -->
 		EClass ROUND_TRIP_SHIPPING_OPTION = eINSTANCE.getRoundTripShippingOption();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS = eINSTANCE.getRoundTripShippingOption_VesselClass();
+		EReference ROUND_TRIP_SHIPPING_OPTION__VESSEL = eINSTANCE.getRoundTripShippingOption_Vessel();
 
 		/**
 		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.

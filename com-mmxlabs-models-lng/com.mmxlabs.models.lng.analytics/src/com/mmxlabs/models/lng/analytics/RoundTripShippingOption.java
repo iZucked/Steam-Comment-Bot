@@ -6,7 +6,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getHireCost <em>Hire Cost</em>}</li>
  * </ul>
  *
@@ -27,30 +27,30 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
  */
 public interface RoundTripShippingOption extends ShippingOption {
 	/**
-	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Class</em>' reference.
-	 * @see #setVesselClass(VesselClass)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getRoundTripShippingOption_VesselClass()
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(Vessel)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getRoundTripShippingOption_Vessel()
 	 * @model
 	 * @generated
 	 */
-	VesselClass getVesselClass();
+	Vessel getVessel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVesselClass <em>Vessel Class</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption#getVessel <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Vessel Class</em>' reference.
-	 * @see #getVesselClass()
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
 	 * @generated
 	 */
-	void setVesselClass(VesselClass value);
+	void setVessel(Vessel value);
 
 	/**
 	 * Returns the value of the '<em><b>Hire Cost</b></em>' attribute.

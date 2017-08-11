@@ -13,20 +13,16 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.BindingRule;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.DeliverToProfileFlow;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.BaseReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
-import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
-import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class SubContractProfileValueProviderFactory implements IReferenceValueProviderFactory {
 

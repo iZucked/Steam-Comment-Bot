@@ -21,21 +21,15 @@ import org.eclipse.emf.ecore.EcorePackage;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ShippingOption;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -145,12 +139,6 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							continue;
 						}
 
-						// determine the vessel class (if any) for this option
-						final VesselClass vc = vessel.getVesselClass();
-						if (vc == null) {
-							continue;
-						}
-
 						boolean display = true;
 
 						// Filter out non-scenario vessels
@@ -181,8 +169,6 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							if (charterInMarket == null) {
 								continue;
 							}
-							final VesselClass vc = charterInMarket.getVesselClass();
-
 							boolean display = true;
 
 							// Always show the option if the option is the null option

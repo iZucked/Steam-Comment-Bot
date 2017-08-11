@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -188,8 +187,8 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), optionAnalysisModel,
-									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row),
+									optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, Collections.singletonList(row)),
@@ -200,61 +199,9 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 					}
 				} else if (o instanceof Vessel) {
 					final Vessel vessel = (Vessel) o;
-
 					if (existing != null) {
 						AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vessel, menuHelper);
-
-						// final ShippingType shippingType = AnalyticsBuilder.isNonShipped(existing);
-						// if (shippingType == ShippingType.NonShipped) {
-						// NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
-						// if (opt.eContainer() == null) {
-						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-						// optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-						// }
-						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), existing,
-						// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						// } else if (shippingType == ShippingType.Shipped) {
-						// // final PartialCaseRow pExisting = existing;
-						// // menuHelper.clearActions();
-						// // menuHelper.addAction(new RunnableAction("Create RT", () -> {
-						// // final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-						// // opt.setVesselClass(vessel.getVesselClass());
-						// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
-						// // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-						// // }));
-						// // menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-						// // final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-						// // AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-						// // opt.setVessel(vessel);
-						// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
-						// // AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-						// // }));
-						// //
-						// // menuHelper.open();
-						// }
 					}
-				} else if (o instanceof VesselClass) {
-					final VesselClass vesselClass = (VesselClass) o;
-					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vesselClass, menuHelper);
-
-					// final PartialCaseRow pExisting = existing;
-					// final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					// opt.setVesselClass((VesselClass) o);
-					// if (pExisting != null) {
-					// final ShippingType shippingType = AnalyticsBuilder.isNonShipped(pExisting);
-					// if (shippingType == ShippingType.Shipped) {
-					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-					// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
-					// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					// }
-					// }
 				} else if (o instanceof ShippingOption) {
 					if (existing != null) {
 						// ShippingOption opt = null;
@@ -315,7 +262,7 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}
-				if (o instanceof Vessel || o instanceof VesselClass) {
+				if (o instanceof Vessel) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}

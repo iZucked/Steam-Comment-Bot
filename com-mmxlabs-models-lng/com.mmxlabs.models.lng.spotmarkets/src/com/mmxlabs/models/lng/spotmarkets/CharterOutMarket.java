@@ -6,10 +6,12 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import com.mmxlabs.models.lng.fleet.Vessel;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
@@ -24,6 +26,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate <em>Charter Out Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getAvailablePorts <em>Available Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getVessels <em>Vessels</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket()
@@ -75,7 +78,7 @@ public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Available Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Available Ports</em>' reference list isn't clear,
@@ -88,6 +91,22 @@ public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 	 * @generated
 	 */
 	EList<APortSet<Port>> getAvailablePorts();
+
+	/**
+	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessels</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket_Vessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet<Vessel>> getVessels();
 
 	/**
 	 * Returns the value of the '<em><b>Charter Out Rate</b></em>' attribute.

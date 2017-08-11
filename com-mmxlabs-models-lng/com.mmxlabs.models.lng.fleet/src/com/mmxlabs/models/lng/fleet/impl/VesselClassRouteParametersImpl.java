@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -21,7 +22,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getRoute <em>Route</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getExtraTransitTime <em>Extra Transit Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getLadenConsumptionRate <em>Laden Consumption Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getLadenNBORate <em>Laden NBO Rate</em>}</li>
@@ -33,14 +34,24 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  */
 public class VesselClassRouteParametersImpl extends MMXObjectImpl implements VesselClassRouteParameters {
 	/**
-	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
+	 * The default value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRoute()
+	 * @see #getRouteOption()
 	 * @generated
 	 * @ordered
 	 */
-	protected Route route;
+	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.DIRECT;
+
+	/**
+	 * The cached value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getExtraTransitTime() <em>Extra Transit Time</em>}' attribute.
@@ -166,16 +177,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route getRoute() {
-		if (route != null && route.eIsProxy()) {
-			InternalEObject oldRoute = (InternalEObject)route;
-			route = (Route)eResolveProxy(oldRoute);
-			if (route != oldRoute) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE, oldRoute, route));
-			}
-		}
-		return route;
+	public RouteOption getRouteOption() {
+		return routeOption;
 	}
 
 	/**
@@ -183,20 +186,11 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route basicGetRoute() {
-		return route;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRoute(Route newRoute) {
-		Route oldRoute = route;
-		route = newRoute;
+	public void setRouteOption(RouteOption newRouteOption) {
+		RouteOption oldRouteOption = routeOption;
+		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE, oldRoute, route));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION, oldRouteOption, routeOption));
 	}
 
 	/**
@@ -311,9 +305,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE:
-				if (resolve) return getRoute();
-				return basicGetRoute();
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+				return getRouteOption();
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				return getExtraTransitTime();
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
@@ -336,8 +329,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE:
-				setRoute((Route)newValue);
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+				setRouteOption((RouteOption)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				setExtraTransitTime((Integer)newValue);
@@ -366,8 +359,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE:
-				setRoute((Route)null);
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				setExtraTransitTime(EXTRA_TRANSIT_TIME_EDEFAULT);
@@ -396,8 +389,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE:
-				return route != null;
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
+				return routeOption != ROUTE_OPTION_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 				return extraTransitTime != EXTRA_TRANSIT_TIME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
@@ -422,7 +415,9 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (extraTransitTime: ");
+		result.append(" (routeOption: ");
+		result.append(routeOption);
+		result.append(", extraTransitTime: ");
 		result.append(extraTransitTime);
 		result.append(", ladenConsumptionRate: ");
 		result.append(ladenConsumptionRate);

@@ -6,9 +6,6 @@ package com.mmxlabs.models.lng.scenario.model.util;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
-
 /**
  * 
  * @author Simon Goodall

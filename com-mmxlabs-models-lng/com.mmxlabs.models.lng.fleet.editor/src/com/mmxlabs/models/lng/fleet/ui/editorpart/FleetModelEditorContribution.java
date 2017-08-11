@@ -19,7 +19,7 @@ import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView;
+import com.mmxlabs.models.lng.fleet.editor.views.VesselView;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -63,7 +63,7 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 			final EObject target = dcsd.getTarget();
 
 			if (target instanceof BaseFuel || target instanceof BaseFuelCost) {
-			
+
 				final EModelService modelService = editorPart.getSite().getService(EModelService.class);
 				final EPartService partService = editorPart.getSite().getService(EPartService.class);
 				final MApplication application = editorPart.getSite().getService(MApplication.class);
@@ -84,8 +84,8 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 						oPart = ((CompatibilityView) oPart).getView();
 
 					}
-					if (oPart instanceof VesselAndClassView) {
-						final VesselAndClassView vesselViewerPane_View = (VesselAndClassView) oPart;
+					if (oPart instanceof VesselView) {
+						final VesselView vesselViewerPane_View = (VesselView) oPart;
 						vesselViewerPane_View.editObject(target);
 					}
 				}

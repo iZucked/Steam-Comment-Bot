@@ -28,8 +28,8 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
@@ -51,7 +51,8 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Enabled", new BooleanAttributeManipulator(SpotMarketsPackage.eINSTANCE.getSpotCharterMarket_Enabled(), getEditingDomain()));
 
-		addTypicalColumn("Vessel Class", new SingleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getSpotCharterMarket_VesselClass(), getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Vessels", new MultipleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_Vessels(), getReferenceValueProviderCache(), getEditingDomain(),
+				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
 		addTypicalColumn("Min Duration", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_MinCharterOutDuration(), getEditingDomain()));
 

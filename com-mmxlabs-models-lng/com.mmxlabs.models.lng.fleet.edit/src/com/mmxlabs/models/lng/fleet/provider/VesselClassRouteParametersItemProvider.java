@@ -17,6 +17,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
@@ -48,7 +49,7 @@ public class VesselClassRouteParametersItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addRoutePropertyDescriptor(object);
+			addRouteOptionPropertyDescriptor(object);
 			addExtraTransitTimePropertyDescriptor(object);
 			addLadenConsumptionRatePropertyDescriptor(object);
 			addLadenNBORatePropertyDescriptor(object);
@@ -59,23 +60,23 @@ public class VesselClassRouteParametersItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Route feature.
+	 * This adds a property descriptor for the Route Option feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRoutePropertyDescriptor(Object object) {
+	protected void addRouteOptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselClassRouteParameters_route_feature"),
-				 getString("_UI_VesselClassRouteParameters_route_description"),
-				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE,
+				 getString("_UI_VesselClassRouteParameters_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClassRouteParameters_routeOption_feature", "_UI_VesselClassRouteParameters_type"),
+				 FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -209,8 +210,11 @@ public class VesselClassRouteParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		VesselClassRouteParameters vesselClassRouteParameters = (VesselClassRouteParameters)object;
-		return getString("_UI_VesselClassRouteParameters_type") + " " + vesselClassRouteParameters.getExtraTransitTime();
+		RouteOption labelValue = ((VesselClassRouteParameters)object).getRouteOption();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_VesselClassRouteParameters_type") :
+			getString("_UI_VesselClassRouteParameters_type") + " " + label;
 	}
 
 	/**
@@ -225,6 +229,7 @@ public class VesselClassRouteParametersItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselClassRouteParameters.class)) {
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION:
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME:
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:

@@ -10,7 +10,6 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
-import java.time.LocalDate;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;

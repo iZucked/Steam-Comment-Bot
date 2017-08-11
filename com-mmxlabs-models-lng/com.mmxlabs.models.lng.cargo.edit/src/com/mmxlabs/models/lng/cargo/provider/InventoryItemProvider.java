@@ -11,8 +11,6 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Inventory;
 
-import java.time.LocalDate;
-
 import java.util.Collection;
 import java.util.List;
 

@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -152,8 +151,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								if (desPurchase.getNominatedVessel() != null) {
 									final Vessel vessel = desPurchase.getNominatedVessel();
 
-									final VesselClass vesselClass = vessel.getVesselClass();
-									if (vesselClass == null) {
+									if (vessel == null) {
 										return Activator.PLUGIN_ID;
 									}
 
@@ -163,9 +161,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider,
-											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, true));
+											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, true));
 									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider,
-											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, false));
+											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, false));
 
 									// Calculate minimum time due to slot windows
 									final int ladenMaxWindowInHours;

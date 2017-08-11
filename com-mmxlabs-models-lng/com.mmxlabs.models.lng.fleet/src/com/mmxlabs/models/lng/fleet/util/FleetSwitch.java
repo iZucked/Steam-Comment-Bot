@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -110,17 +109,6 @@ public class FleetSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.VESSEL_CLASS: {
-				VesselClass vesselClass = (VesselClass)theEObject;
-				T1 result = caseVesselClass(vesselClass);
-				if (result == null) result = caseAVesselSet(vesselClass);
-				if (result == null) result = caseObjectSet(vesselClass);
-				if (result == null) result = caseUUIDObject(vesselClass);
-				if (result == null) result = caseNamedObject(vesselClass);
-				if (result == null) result = caseMMXObject(vesselClass);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case FleetPackage.VESSEL_GROUP: {
 				VesselGroup vesselGroup = (VesselGroup)theEObject;
 				T1 result = caseVesselGroup(vesselGroup);
@@ -168,21 +156,6 @@ public class FleetSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseVessel(Vessel object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Class</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Class</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseVesselClass(VesselClass object) {
 		return null;
 	}
 

@@ -13,7 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -32,10 +32,10 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselClass) {
-			final VesselClass vesselClass = (VesselClass) target;
-			final VesselStateAttributes laden = vesselClass.getLadenAttributes();
-			final VesselStateAttributes ballast = vesselClass.getBallastAttributes();
+		if (target instanceof Vessel) {
+			final Vessel vessel = (Vessel) target;
+			final VesselStateAttributes laden = vessel.getLadenAttributes();
+			final VesselStateAttributes ballast = vessel.getBallastAttributes();
 
 			if (laden == null || ballast == null) {
 				return ctx.createSuccessStatus();
@@ -43,12 +43,12 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 
 			if (ctx.getCurrentConstraintId().equals(ORDER_ID)) {
 				// min speed cannot be larger than max speed, but can be equal.
-				if (vesselClass.getMinSpeed() > vesselClass.getMaxSpeed()) {
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+vesselClass.getName()+"'", vesselClass.getMinSpeed(),
-							vesselClass.getMaxSpeed()));
+				if (vessel.getVesselOrDelegateMinSpeed() > vessel.getVesselOrDelegateMaxSpeed()) {
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus("'" + vessel.getName() + "'", vessel.getVesselOrDelegateMinSpeed(), vessel.getVesselOrDelegateMaxSpeed()));
 
-					dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_MinSpeed());
-					dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_MaxSpeed());
+					dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_MinSpeed());
+					dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_MaxSpeed());
 					return dcsd;
 				} else {
 					return ctx.createSuccessStatus();
@@ -62,19 +62,19 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 			final double theSpeed;
 			final EAttribute theAttribute;
 			if (ctx.getCurrentConstraintId().equals(MIN_ID)) {
-				theSpeed = vesselClass.getMinSpeed();
-				theAttribute = FleetPackage.eINSTANCE.getVesselClass_MinSpeed();
+				theSpeed = vessel.getVesselOrDelegateMinSpeed();
+				theAttribute = FleetPackage.eINSTANCE.getVessel_MinSpeed();
 			} else if (ctx.getCurrentConstraintId().equals(MAX_ID)) {
-				theSpeed = vesselClass.getMaxSpeed();
-				theAttribute = FleetPackage.eINSTANCE.getVesselClass_MaxSpeed();
+				theSpeed = vessel.getVesselOrDelegateMaxSpeed();
+				theAttribute = FleetPackage.eINSTANCE.getVessel_MaxSpeed();
 			} else {
 				return ctx.createSuccessStatus();
 			}
 
 			if (theSpeed < maxMinSpeed || theSpeed > minMaxSpeed) {
-				final IStatus fail = ctx.createFailureStatus("'"+vesselClass.getName()+"'", theSpeed, maxMinSpeed, minMaxSpeed);
+				final IStatus fail = ctx.createFailureStatus("'" + vessel.getName() + "'", theSpeed, maxMinSpeed, minMaxSpeed);
 				final DetailConstraintStatusDecorator detail = new DetailConstraintStatusDecorator((IConstraintStatus) fail);
-				detail.addEObjectAndFeature(vesselClass, theAttribute);
+				detail.addEObjectAndFeature(vessel, theAttribute);
 				return detail;
 			}
 		}
@@ -84,7 +84,7 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 
 	private final double getMinimumSpeed(final VesselStateAttributes attributes) {
 		double value = Float.MAX_VALUE;
-		for (final FuelConsumption line : attributes.getFuelConsumption()) {
+		for (final FuelConsumption line : attributes.getVesselOrDelegateFuelConsumption()) {
 			value = Math.min(value, line.getSpeed());
 		}
 		return value;
@@ -92,7 +92,7 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 
 	private final double getMaximumSpeed(final VesselStateAttributes attributes) {
 		double value = Float.MIN_VALUE;
-		for (final FuelConsumption line : attributes.getFuelConsumption()) {
+		for (final FuelConsumption line : attributes.getVesselOrDelegateFuelConsumption()) {
 			value = Math.max(value, line.getSpeed());
 		}
 		return value;

@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
@@ -68,7 +67,6 @@ import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -112,7 +110,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private BuyOptionsComponent buyComponent;
 	private SellOptionsComponent sellComponent;
 	private VesselsComponent vesselsComponent;
-	private VesselClassesComponent vesselClassesComponent;
 
 	private BaseCaseComponent baseCaseComponent;
 	private ResultsComponent resultsComponent;
@@ -204,10 +201,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			{
 				vesselsComponent = new VesselsComponent(OptionModellerView.this, validationErrors, () -> getModel());
 				hook.accept(vesselsComponent, true);
-			}
-			{
-				vesselClassesComponent = new VesselClassesComponent(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(vesselClassesComponent, true);
 			}
 		}
 
@@ -601,7 +594,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		inputWants.forEach(want -> want.accept(model));
 
 		vesselsComponent.setInput(this);
-		vesselClassesComponent.setInput(this);
 
 		rootOptionsModel = getRootOptionsModel(model);
 		if (rootOptionsModel != null) {
@@ -666,7 +658,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				shippingOptionsComponent.refresh();
 				vesselsComponent.refresh();
-				vesselClassesComponent.refresh();
 				if (layout) {
 					// packAll(vesselComposite);
 					packAll(lhsComposite);

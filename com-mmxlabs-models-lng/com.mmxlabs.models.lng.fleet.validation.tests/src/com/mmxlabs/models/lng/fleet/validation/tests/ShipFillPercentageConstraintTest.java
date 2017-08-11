@@ -15,7 +15,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint;
 
 /**
@@ -133,14 +133,14 @@ public class ShipFillPercentageConstraintTest {
 		final ShipFillPercentageConstraint constraint = new ShipFillPercentageConstraint();
 
 		// mock a vessel class
-		final VesselClass vesselClass = mock(VesselClass.class);
+		final Vessel vessel = mock(Vessel.class);
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);
 
-		when(vesselClass.getName()).thenReturn("vc");
-		when(vesselClass.getFillCapacity()).thenReturn(fill);
+		when(vessel.getName()).thenReturn("vc");
+		when(vessel.getVesselOrDelegateFillCapacity()).thenReturn(fill);
 		// what's the target?
-		when(validationContext.getTarget()).thenReturn(vesselClass);
+		when(validationContext.getTarget()).thenReturn(vessel);
 		when(validationContext.getCurrentConstraintId()).thenReturn(id);
 
 		if (expectSuccess) {
@@ -153,8 +153,8 @@ public class ShipFillPercentageConstraintTest {
 		constraint.validate(validationContext);
 
 		// verify the mocked methods are called
-		verify(vesselClass, atLeast(0)).getName();
-		verify(vesselClass, atLeast(1)).getFillCapacity();
+		verify(vessel, atLeast(0)).getName();
+		verify(vessel, atLeast(1)).getVesselOrDelegateFillCapacity();
 		verify(validationContext).getTarget();
 		verify(validationContext, atLeast(1)).getCurrentConstraintId();
 		if (expectSuccess) {
@@ -163,7 +163,7 @@ public class ShipFillPercentageConstraintTest {
 			verify(validationContext).createFailureStatus(any(), any(), any());
 		}
 		// verify that only the methods above are called.
-		verifyNoMoreInteractions(vesselClass);
+		verifyNoMoreInteractions(vessel);
 		verifyNoMoreInteractions(validationContext);
 
 	}

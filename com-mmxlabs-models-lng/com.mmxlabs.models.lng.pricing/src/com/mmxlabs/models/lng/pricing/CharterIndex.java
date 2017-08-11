@@ -13,7 +13,7 @@ package com.mmxlabs.models.lng.pricing;
  *
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCharterIndex()
- * @model superTypes="com.mmxlabs.models.lng.pricing.NamedIndexContainer<org.eclipse.emf.ecore.EIntegerObject>"
+ * @model superTypes="com.mmxlabs.models.lng.pricing.NamedIndexContainer&lt;org.eclipse.emf.ecore.EIntegerObject&gt;"
  * @generated
  */
 public interface CharterIndex extends NamedIndexContainer<Integer> {

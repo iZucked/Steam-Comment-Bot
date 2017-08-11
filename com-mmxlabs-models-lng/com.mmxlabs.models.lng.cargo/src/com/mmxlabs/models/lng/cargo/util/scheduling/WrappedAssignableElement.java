@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -41,8 +40,7 @@ public class WrappedAssignableElement {
 	private Pair<ZonedDateTime, ZonedDateTime> endWindow;
 	private int minElementDuration;
 
-	public WrappedAssignableElement(final @NonNull List<Slot> sortedSlots, @Nullable VesselClass vesselClass, final @Nullable PortModel portModel,
-			@Nullable final IAssignableElementDateProvider dateProvider) {
+	public WrappedAssignableElement(final @NonNull List<Slot> sortedSlots, @Nullable Vessel vessel, final @Nullable PortModel portModel, @Nullable final IAssignableElementDateProvider dateProvider) {
 		this.assignableElement = null;
 		{
 			Slot firstSlot = null;
@@ -68,7 +66,7 @@ public class WrappedAssignableElement {
 					final Port nextPort = slot.getPort();
 					final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
 					if (lastPort != null && lastTime != null) {
-						final int minTravelTime = portModel == null ? 0 : getTravelTime(vesselClass, portModel, lastPort, nextPort);
+						final int minTravelTime = portModel == null ? 0 : getTravelTime(vessel, portModel, lastPort, nextPort);
 						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
 
@@ -105,7 +103,7 @@ public class WrappedAssignableElement {
 					final ZonedDateTime slotTime = getWindowEnd(slot, dateProvider);
 					final Port nextPort = slot.getPort();
 					if (lastPort != null && lastTime != null) {
-						final int minTravelTime = portModel == null ? 0 : getTravelTime(vesselClass, portModel, nextPort, lastPort);
+						final int minTravelTime = portModel == null ? 0 : getTravelTime(vessel, portModel, nextPort, lastPort);
 						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
 
@@ -361,31 +359,28 @@ public class WrappedAssignableElement {
 
 	private int getTravelTime(final AssignableElement assignableElement, final PortModel portModel, final Port from, final Port to) {
 
-		VesselClass vesselClass = null;
+		Vessel vessel = null;
 
 		final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 		if (vesselAssignmentType instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-			final Vessel vessel = vesselAvailability.getVessel();
-			if (vessel != null) {
-				vesselClass = vessel.getVesselClass();
-			}
+			vessel = vesselAvailability.getVessel();
 		} else if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-			vesselClass = charterInMarket.getVesselClass();
+			vessel = charterInMarket.getVessel();
 		}
 
-		return getTravelTime(vesselClass, portModel, from, to);
+		return getTravelTime(vessel, portModel, from, to);
 
 	}
 
-	private int getTravelTime(final VesselClass vesselClass, final PortModel portModel, final Port from, final Port to) {
+	private int getTravelTime(final @Nullable Vessel vessel, final PortModel portModel, final Port from, final Port to) {
 
-		if (vesselClass == null) {
+		if (vessel == null) {
 			return Integer.MAX_VALUE;
 		}
 
-		final double maxSpeed = vesselClass.getMaxSpeed();
+		final double maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		if (maxSpeed == 0.0) {
 			return Integer.MAX_VALUE;
 		}
@@ -393,7 +388,7 @@ public class WrappedAssignableElement {
 		int travelTimeInHours = Integer.MAX_VALUE;
 		if (portModel != null) {
 			for (final Route route : portModel.getRoutes()) {
-				int totalTime = TravelTimeUtils.getTimeForRoute(vesselClass, maxSpeed, route, from, to);
+				int totalTime = TravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to);
 				if (totalTime != Integer.MAX_VALUE) {
 					travelTimeInHours = Math.min(totalTime, travelTimeInHours);
 				}

@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -67,15 +66,14 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 					}
 					if (baseCaseRow.getShipping() instanceof RoundTripShippingOption) {
 						final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) baseCaseRow.getShipping();
-						final VesselClass vesselClass = roundTripShippingOption.getVesselClass();
+						final Vessel vessel = roundTripShippingOption.getVessel();
 
-						validateTravelTime(ctx, statuses, baseCaseRow, portModel, vesselClass);
+						validateTravelTime(ctx, statuses, baseCaseRow, portModel, vessel);
 					} else if (baseCaseRow.getShipping() instanceof FleetShippingOption) {
 						final FleetShippingOption roundTripShippingOption = (FleetShippingOption) baseCaseRow.getShipping();
 						final Vessel vessel = roundTripShippingOption.getVessel();
 						if (vessel != null) {
-							final VesselClass vesselClass = vessel.getVesselClass();
-							validateTravelTime(ctx, statuses, baseCaseRow, portModel, vesselClass);
+							validateTravelTime(ctx, statuses, baseCaseRow, portModel, vessel);
 						}
 					}
 
@@ -118,17 +116,17 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private void validateTravelTime(final IValidationContext ctx, final List<IStatus> statuses, final BaseCaseRow baseCaseRow, final PortModel portModel, final VesselClass vesselClass) {
+	private void validateTravelTime(final IValidationContext ctx, final List<IStatus> statuses, final BaseCaseRow baseCaseRow, final PortModel portModel, final Vessel vessel) {
 		final Port fromPort = AnalyticsBuilder.getPort(baseCaseRow.getBuyOption());
 		final Port toPort = AnalyticsBuilder.getPort(baseCaseRow.getSellOption());
-		if (fromPort != null && toPort != null && vesselClass != null) {
+		if (fromPort != null && toPort != null && vessel != null) {
 
 			final ZonedDateTime windowStartDate = AnalyticsBuilder.getWindowStartDate(baseCaseRow.getBuyOption());
 			final ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(baseCaseRow.getSellOption());
 
-			final double speed = vesselClass.getMaxSpeed();
+			final double speed = vessel.getVesselOrDelegateMaxSpeed();
 
-			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vesselClass, speed, portModel.getRoutes());
+			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes());
 
 			if (windowStartDate != null && windowEndDate != null) {
 				final int optionDuration = AnalyticsBuilder.getDuration(baseCaseRow.getBuyOption());

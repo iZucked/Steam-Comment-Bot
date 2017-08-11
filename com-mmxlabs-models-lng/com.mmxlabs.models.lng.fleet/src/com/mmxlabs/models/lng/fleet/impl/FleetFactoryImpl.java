@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -69,7 +68,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.FLEET_MODEL: return createFleetModel();
 			case FleetPackage.BASE_FUEL: return createBaseFuel();
 			case FleetPackage.VESSEL: return createVessel();
-			case FleetPackage.VESSEL_CLASS: return createVesselClass();
 			case FleetPackage.VESSEL_GROUP: return createVesselGroup();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
@@ -87,16 +85,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public Vessel createVessel() {
 		VesselImpl vessel = new VesselImpl();
 		return vessel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VesselClass createVesselClass() {
-		VesselClassImpl vesselClass = new VesselClassImpl();
-		return vesselClass;
 	}
 
 	/**

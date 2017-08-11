@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
@@ -301,7 +300,7 @@ public class CargoEditorMenuHelper {
 				}
 
 				public void run() {
-					helper.assignNominatedVessel(String.format("Assign to %s (%dk)", vessel.getName(), vessel.getVesselOrVesselClassCapacity() / 1000), slot, vessel);
+					helper.assignNominatedVessel(String.format("Assign to %s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000), slot, vessel);
 				}
 			}
 
@@ -323,7 +322,7 @@ public class CargoEditorMenuHelper {
 					if (p.getSecond() == slot.getNominatedVessel()) {
 						continue;
 					}
-					final int capacity = ((Vessel) p.getSecond()).getVesselOrVesselClassCapacity();
+					final int capacity = ((Vessel) p.getSecond()).getVesselOrDelegateCapacity();
 					m.add(new AssignAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), (Vessel) p.getSecond()));
 					counter++;
 					if (firstEntry == null) {
@@ -349,7 +348,7 @@ public class CargoEditorMenuHelper {
 			} else {
 				for (final Pair<String, EObject> p : allowedValues) {
 					if (p.getSecond() != slot.getNominatedVessel()) {
-						final int capacity = ((Vessel) p.getSecond()).getVesselOrVesselClassCapacity();
+						final int capacity = ((Vessel) p.getSecond()).getVesselOrDelegateCapacity();
 						reassignMenuManager.add(new AssignAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), (Vessel) p.getSecond()));
 					}
 				}
@@ -396,8 +395,8 @@ public class CargoEditorMenuHelper {
 
 				if (assignmentOption instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
-					final VesselClass vesselClass = charterInMarket.getVesselClass();
-					final int capacity = vesselClass == null ? 0 : vesselClass.getCapacity();
+					final Vessel vessel = charterInMarket.getVessel();
+					final int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 					nominalMenuUsed = true;
 					nominalMenu.add(new RunnableAction(String.format("%s (%dk)", charterInMarket.getName(), capacity / 1000),
 							() -> helper.assignCargoToSpotCharterIn(String.format("Assign to %s", charterInMarket.getName()), cargo, charterInMarket, -1)));
@@ -447,7 +446,7 @@ public class CargoEditorMenuHelper {
 						}
 						final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
 						final Vessel vessel = vesselAvailability.getVessel();
-						final int capacity = vessel == null ? 0 : vessel.getVesselOrVesselClassCapacity();
+						final int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 
 						m.add(new RunnableAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000),
 								() -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, (VesselAvailability) p.getSecond())));
@@ -478,7 +477,7 @@ public class CargoEditorMenuHelper {
 					for (final Pair<String, EObject> p : vesselAvailabilityOptions) {
 						final VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
 						final Vessel vessel = vesselAvailability.getVessel();
-						final int capacity = vessel == null ? 0 : vessel.getVesselOrVesselClassCapacity();
+						final int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 
 						reassignMenuManager.add(new RunnableAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000),
 								() -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, (VesselAvailability) p.getSecond())));
@@ -1096,13 +1095,13 @@ public class CargoEditorMenuHelper {
 							cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
 						} else if (!loadSlot.isDESPurchase()) {
 
-							AVesselSet<? extends Vessel> assignedVessel = null;
+							Vessel assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
 								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
 								if (vesselAssignmentType instanceof VesselAvailability) {
 									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarket) {
-									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVesselClass();
+									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
@@ -1151,13 +1150,13 @@ public class CargoEditorMenuHelper {
 						// Take into account travel time
 						if (!dischargeSlot.isFOBSale()) {
 
-							AVesselSet<? extends Vessel> assignedVessel = null;
+							Vessel assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
 								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
 								if (vesselAssignmentType instanceof VesselAvailability) {
 									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
 								} else if (vesselAssignmentType instanceof CharterInMarket) {
-									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVesselClass();
+									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVessel();
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
@@ -1213,7 +1212,7 @@ public class CargoEditorMenuHelper {
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 			{
-				cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+				cec.verifyCargoModel(ScenarioModelUtil.getCargoModel((LNGScenarioModel) scenarioEditingLocation.getRootObject()));
 			}
 
 		}
@@ -1356,10 +1355,7 @@ public class CargoEditorMenuHelper {
 
 		if (assignedVessel instanceof Vessel) {
 			final Vessel vessel = (Vessel) assignedVessel;
-			final VesselClass vesselClass = vessel.getVesselClass();
-			if (vesselClass != null) {
-				maxSpeed = vesselClass.getMaxSpeed();
-			}
+			maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		}
 
 		int distance = 0;

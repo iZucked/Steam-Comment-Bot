@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -39,8 +38,6 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
@@ -60,15 +57,13 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		vessel1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel1);
@@ -83,8 +78,6 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
@@ -92,7 +85,7 @@ public class InaccessiblePortsConstraintTest {
 		cargo.getSlots().add(slot);
 
 		// Test restriction on vessel class
-		vesselClass1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -107,7 +100,7 @@ public class InaccessiblePortsConstraintTest {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
@@ -115,11 +108,11 @@ public class InaccessiblePortsConstraintTest {
 		cargo.getSlots().add(slot);
 
 		// Test restriction on vessel class
-		vesselClass1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
-		// Test vessel class as assignment
+		// Test market as assignment
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterInMarket.setVesselClass(vesselClass1);
+		charterInMarket.setVessel(vessel1);
 		cargo.setVesselAssignmentType(charterInMarket);
 		checkConstraint(cargo, false);
 	}
@@ -130,8 +123,6 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
@@ -149,13 +140,11 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		vessel1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel1);
@@ -170,14 +159,12 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
 		// Test restriction on vessel class
-		vesselClass1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -192,17 +179,17 @@ public class InaccessiblePortsConstraintTest {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
 
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
 		// Test restriction on vessel class
-		vesselClass1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterInMarket.setVesselClass(vesselClass1);
+		charterInMarket.setVessel(vessel1);
 		event.setVesselAssignmentType(charterInMarket);
 
 		checkConstraint(event, false);
@@ -214,8 +201,6 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
@@ -233,13 +218,11 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		vessel1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		vesselAvailability.setVessel(vessel1);
@@ -254,14 +237,12 @@ public class InaccessiblePortsConstraintTest {
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
 		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		vessel1.setVesselClass(vesselClass1);
 
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
 		// Test restriction on vessel class
-		vesselClass1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
@@ -276,17 +257,17 @@ public class InaccessiblePortsConstraintTest {
 
 		final Port port1 = PortFactory.eINSTANCE.createPort();
 
-		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
 
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
 		// Test restriction on vessel class
-		vesselClass1.getInaccessiblePorts().add(port1);
+		vessel1.getVesselOrDelegateInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterInMarket.setVesselClass(vesselClass1);
+		charterInMarket.setVessel(vessel1);
 		event.setVesselAssignmentType(charterInMarket);
 
 		checkConstraint(event, false);

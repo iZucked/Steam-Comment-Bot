@@ -105,7 +105,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				for (ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, portModel, AnalyticsBuilder.getVesselClass(option));
+						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, portModel, AnalyticsBuilder.getVessel(option));
 						if (lateness < 0) {
 							return lateness;
 						}

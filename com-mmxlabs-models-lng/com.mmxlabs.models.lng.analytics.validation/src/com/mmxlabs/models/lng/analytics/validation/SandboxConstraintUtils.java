@@ -35,26 +35,25 @@ public class SandboxConstraintUtils {
 		}
 		return true;
 	}
-		
+
 	public static boolean vesselRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
 		if (buy instanceof BuyReference) {
 			final Set<AVesselSet<Vessel>> allowedVessels = AnalyticsBuilder.getBuyVesselRestrictions(buy);
-			final AVesselSet<Vessel> vesselSet = AnalyticsBuilder.getAVesselSet(shippingOption);
-			 if (!allowedVessels.isEmpty() && vesselSet != null) {
-				 return allowedVessels.contains(vesselSet);
-			 }
+			final Vessel vessel = AnalyticsBuilder.getVessel(shippingOption);
+			if (!allowedVessels.isEmpty() && vessel != null) {
+				return SetUtils.getObjects(allowedVessels).contains(vessel);
+			}
 		}
 		return true;
 	}
-	
+
 	public static boolean checkVolumeAgainstBuyAndSell(final BuyOption buy, final SellOption sell) {
 		if (buy == null || sell == null) {
 			return true;
 		}
 		final int[] buyVolumeInMMBTU = AnalyticsBuilder.getBuyVolumeInMMBTU(buy);
 		final int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell);
-		if (buyVolumeInMMBTU == null
-				|| sellVolumeInMMBTU == null) {
+		if (buyVolumeInMMBTU == null || sellVolumeInMMBTU == null) {
 			return true;
 		}
 		if (buyVolumeInMMBTU[0] > sellVolumeInMMBTU[1]) {
@@ -63,8 +62,7 @@ public class SandboxConstraintUtils {
 		return true;
 	}
 
-	public static boolean checkVolumeAgainstVessel(final BuyOption buy, final SellOption sell,
-			final ShippingOption shippingOption) {
+	public static boolean checkVolumeAgainstVessel(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
 		if (buy == null || sell == null || shippingOption == null) {
 			return true;
 		}

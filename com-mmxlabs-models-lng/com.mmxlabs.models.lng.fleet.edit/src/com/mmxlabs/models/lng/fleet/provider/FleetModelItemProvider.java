@@ -65,7 +65,6 @@ public class FleetModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSELS);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__BASE_FUELS);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS);
 		}
@@ -123,7 +122,6 @@ public class FleetModelItemProvider
 
 		switch (notification.getFeatureID(FleetModel.class)) {
 			case FleetPackage.FLEET_MODEL__VESSELS:
-			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -147,11 +145,6 @@ public class FleetModelItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.FLEET_MODEL__VESSELS,
 				 FleetFactory.eINSTANCE.createVessel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES,
-				 FleetFactory.eINSTANCE.createVesselClass()));
 
 		newChildDescriptors.add
 			(createChildParameter

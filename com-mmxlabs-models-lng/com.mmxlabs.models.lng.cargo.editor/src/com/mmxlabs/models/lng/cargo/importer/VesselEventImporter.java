@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -119,10 +118,10 @@ public class VesselEventImporter extends DefaultClassImporter {
 							// Old style
 							if (spotindex != null && !spotindex.isEmpty()) {
 
-								final VesselClass vc = (VesselClass) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL_CLASS);
+								final Vessel vc = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
 								if (vc != null) {
 									for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getReferenceModel().getSpotMarketsModel().getCharterInMarkets()) {
-										if (vc.equals(charterInMarket.getVesselClass())) {
+										if (vc.equals(charterInMarket.getVessel())) {
 											assignableElement.setVesselAssignmentType(charterInMarket);
 											break;
 										}

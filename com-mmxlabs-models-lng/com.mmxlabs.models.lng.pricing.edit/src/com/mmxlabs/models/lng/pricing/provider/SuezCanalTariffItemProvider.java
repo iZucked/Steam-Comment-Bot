@@ -69,9 +69,7 @@ public class SuezCanalTariffItemProvider
 			super.getPropertyDescriptors(object);
 
 			addTugCostPropertyDescriptor(object);
-			addMooringCostPropertyDescriptor(object);
-			addPilotageCostPropertyDescriptor(object);
-			addDisbursementsPropertyDescriptor(object);
+			addFixedCostsPropertyDescriptor(object);
 			addDiscountFactorPropertyDescriptor(object);
 			addSdrToUSDPropertyDescriptor(object);
 		}
@@ -101,63 +99,19 @@ public class SuezCanalTariffItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Mooring Cost feature.
+	 * This adds a property descriptor for the Fixed Costs feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMooringCostPropertyDescriptor(Object object) {
+	protected void addFixedCostsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SuezCanalTariff_mooringCost_feature"),
-				 getString("_UI_SuezCanalTariff_mooringCost_description"),
-				 PricingPackage.Literals.SUEZ_CANAL_TARIFF__MOORING_COST,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Pilotage Cost feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPilotageCostPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SuezCanalTariff_pilotageCost_feature"),
-				 getString("_UI_SuezCanalTariff_pilotageCost_description"),
-				 PricingPackage.Literals.SUEZ_CANAL_TARIFF__PILOTAGE_COST,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Disbursements feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDisbursementsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SuezCanalTariff_disbursements_feature"),
-				 getString("_UI_SuezCanalTariff_disbursements_description"),
-				 PricingPackage.Literals.SUEZ_CANAL_TARIFF__DISBURSEMENTS,
+				 getString("_UI_SuezCanalTariff_fixedCosts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SuezCanalTariff_fixedCosts_feature", "_UI_SuezCanalTariff_type"),
+				 PricingPackage.Literals.SUEZ_CANAL_TARIFF__FIXED_COSTS,
 				 true,
 				 false,
 				 false,
@@ -278,9 +232,7 @@ public class SuezCanalTariffItemProvider
 
 		switch (notification.getFeatureID(SuezCanalTariff.class)) {
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
-			case PricingPackage.SUEZ_CANAL_TARIFF__MOORING_COST:
-			case PricingPackage.SUEZ_CANAL_TARIFF__PILOTAGE_COST:
-			case PricingPackage.SUEZ_CANAL_TARIFF__DISBURSEMENTS:
+			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:
 			case PricingPackage.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR:
 			case PricingPackage.SUEZ_CANAL_TARIFF__SDR_TO_USD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

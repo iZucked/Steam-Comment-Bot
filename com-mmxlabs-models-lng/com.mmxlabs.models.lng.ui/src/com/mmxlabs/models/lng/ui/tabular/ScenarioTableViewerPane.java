@@ -101,7 +101,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 	protected ScenarioTableViewer scenarioViewer;
 	/**
 	 */
-	protected final IScenarioEditingLocation scenarioEditingLocation;
+	protected final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
 	/**
 	 */

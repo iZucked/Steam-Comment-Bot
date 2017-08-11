@@ -49,26 +49,26 @@ public class RoundTripShippingOptionItemProvider extends ShippingOptionItemProvi
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselClassPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
 			addHireCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
+	 * This adds a property descriptor for the Vessel feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
+	protected void addVesselPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_RoundTripShippingOption_vesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RoundTripShippingOption_vesselClass_feature", "_UI_RoundTripShippingOption_type"),
-				 AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS,
+				 getString("_UI_RoundTripShippingOption_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RoundTripShippingOption_vessel_feature", "_UI_RoundTripShippingOption_type"),
+				 AnalyticsPackage.Literals.ROUND_TRIP_SHIPPING_OPTION__VESSEL,
 				 true,
 				 false,
 				 true,

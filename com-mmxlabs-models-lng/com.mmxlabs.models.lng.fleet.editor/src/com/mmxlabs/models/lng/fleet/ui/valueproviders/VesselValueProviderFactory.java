@@ -28,12 +28,9 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 			final FleetPackage fleet = FleetPackage.eINSTANCE;
 
 			if (referenceClass == TypesPackage.Literals.AVESSEL_SET) {
-				return new MergedReferenceValueProvider(fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES,
-						FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS);
+				return new MergedReferenceValueProvider(fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS);
 			} else if (referenceClass == fleet.getVessel()) {
 				return new SimpleReferenceValueProvider(fleetModel, fleet.getFleetModel_Vessels());
-			} else if (referenceClass == fleet.getVesselClass()) {
-				return new SimpleReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselClasses());
 			} else if (referenceClass == fleet.getVesselGroup()) {
 				return new SimpleReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselGroups());
 			}

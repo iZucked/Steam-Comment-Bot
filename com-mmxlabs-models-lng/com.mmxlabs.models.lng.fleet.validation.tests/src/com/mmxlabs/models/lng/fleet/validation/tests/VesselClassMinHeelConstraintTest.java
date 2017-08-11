@@ -17,17 +17,17 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.validation.VesselConstraint;
 
 public class VesselClassMinHeelConstraintTest {
 
 	@Test
 	public void testMinHeel_Ok() {
 
-		final VesselClass target = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel target = FleetFactory.eINSTANCE.createVessel();
 
-		target.setMinHeel(500);
+		target.setSafetyHeel(500);
 		target.setCapacity(1000);
 		target.setFillCapacity(1.0);
 
@@ -37,9 +37,9 @@ public class VesselClassMinHeelConstraintTest {
 	@Test
 	public void testMinHeel_CapacityTooLow() {
 
-		final VesselClass target = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel target = FleetFactory.eINSTANCE.createVessel();
 
-		target.setMinHeel(500);
+		target.setSafetyHeel(500);
 		target.setCapacity(100);
 		target.setFillCapacity(1.0);
 
@@ -49,9 +49,9 @@ public class VesselClassMinHeelConstraintTest {
 	@Test
 	public void testMinHeel_FillPercentTooLow() {
 
-		final VesselClass target = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel target = FleetFactory.eINSTANCE.createVessel();
 
-		target.setMinHeel(500);
+		target.setSafetyHeel(500);
 		target.setCapacity(1000);
 		target.setFillCapacity(0.1);
 
@@ -70,7 +70,7 @@ public class VesselClassMinHeelConstraintTest {
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
 		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
 
-		final VesselClassMinHeelConstraint constraint = new VesselClassMinHeelConstraint();
+		final VesselConstraint constraint = new VesselConstraint();
 		final IStatus status = constraint.validate(ctx);
 
 		if (expectSuccess) {

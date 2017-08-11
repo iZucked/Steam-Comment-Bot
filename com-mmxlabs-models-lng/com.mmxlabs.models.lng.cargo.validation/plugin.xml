@@ -945,7 +945,7 @@
                      class="VesselAvailability">
                </target>
                <target
-                     class="VesselClass">
+                     class="Vessel">
                </target>
             </constraint>
          </constraints>

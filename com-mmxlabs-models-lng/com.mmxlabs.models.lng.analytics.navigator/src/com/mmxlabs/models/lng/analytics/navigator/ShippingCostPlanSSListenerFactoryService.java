@@ -5,13 +5,9 @@
 package com.mmxlabs.models.lng.analytics.navigator;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ShippingCostPlanSSListenerFactoryService {
 

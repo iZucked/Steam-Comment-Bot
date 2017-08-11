@@ -11,8 +11,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Actionable Set Plan</b></em>'.

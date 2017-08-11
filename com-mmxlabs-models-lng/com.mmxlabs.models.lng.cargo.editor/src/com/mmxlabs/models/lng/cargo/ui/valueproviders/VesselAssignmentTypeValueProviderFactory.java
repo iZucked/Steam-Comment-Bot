@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -46,11 +45,11 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 	private final IReferenceValueProviderFactory charterInMarketProviderFactory;
 
 	public VesselAssignmentTypeValueProviderFactory() {
-		this.vesselAvailabilityProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
-				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), CargoPackage.eINSTANCE.getVesselAvailability());
+		this.vesselAvailabilityProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
+				CargoPackage.eINSTANCE.getVesselAvailability());
 
-		this.charterInMarketProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
-				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), SpotMarketsPackage.eINSTANCE.getCharterInMarket());
+		this.charterInMarketProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
+				SpotMarketsPackage.eINSTANCE.getCharterInMarket());
 	}
 
 	public VesselAssignmentTypeValueProviderFactory(final IReferenceValueProviderFactory vesselAvailabilityProviderFactory, final IReferenceValueProviderFactory charterInMarketProviderFactory) {
@@ -125,8 +124,6 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 						for (final AVesselSet<Vessel> s : allowedVessels) {
 							if (s instanceof Vessel) {
 								expandedVessels.add(s);
-							} else if (s instanceof VesselClass) {
-								expandedVessels.add(s);
 							} else {
 								// instanceof Vessel Group
 								expandedVessels.addAll(SetUtils.getObjects(s));
@@ -149,18 +146,10 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							continue;
 						}
 
-						// determine the vessel class (if any) for this option
-						final VesselClass vc = vessel.getVesselClass();
-						if (vc == null) {
-							continue;
-						}
-
 						boolean display = !noVesselsAllowed && (
 						// show the option if the cargo allows this vessel-set
 						// (an empty list of allowed vessels means "all vessels")
-								expandedVessels.isEmpty() || expandedVessels.contains(vessel)
-								// show the option if the cargo allows vessels of this class
-								|| (vc != null && expandedVessels.contains(vc)));
+						expandedVessels.isEmpty() || expandedVessels.contains(vessel));
 
 						// Filter out non-scenario vessels
 						if (display) {
@@ -171,7 +160,8 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 						// Always show the option if the option is the null option
 						// or the current value for the cargo is set to this vessel-set
-						if (Equality.isEqual(vessel, currentValue) || (currentValue instanceof VesselAvailability && Equality.isEqual(vessel, ((VesselAvailability)currentValue).getVessel())  ) || vessel == null) {
+						if (Equality.isEqual(vessel, currentValue) || (currentValue instanceof VesselAvailability && Equality.isEqual(vessel, ((VesselAvailability) currentValue).getVessel()))
+								|| vessel == null) {
 							display = true;
 						}
 
@@ -189,14 +179,14 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 							if (charterInMarket == null) {
 								continue;
 							}
-							final VesselClass vc = charterInMarket.getVesselClass();
+							final Vessel vessel = charterInMarket.getVessel();
 
 							boolean display = !noVesselsAllowed && (
 							// show the option if the cargo allows this vessel-set
 							// (an empty list of allowed vessels means "all vessels")
-									expandedVessels.isEmpty()
+							expandedVessels.isEmpty()
 									// show the option if the cargo allows vessels of this class
-									|| (vc != null && expandedVessels.contains(vc)));
+									|| (vessel != null && expandedVessels.contains(vessel)));
 
 							// Always show the option if the option is the null option
 							// or the current value for the cargo is set to this vessel-set
@@ -286,7 +276,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 					return vesselAvailabilityProvider.updateOnChangeToFeature(changedFeature) || charterInMarketProvider.updateOnChangeToFeature(changedFeature);
 				}
-				
+
 				public IReferenceValueProvider getVesselAvailabilityProvider() {
 					return vesselAvailabilityProvider;
 				}
@@ -294,16 +284,18 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 				public IReferenceValueProvider getCharterIn() {
 					return charterInMarketProvider;
 				}
-				
+
 			};
 		}
 
 		return null;
 	}
-	public final IReferenceValueProviderFactory getVesselAvailabilityProviderFactory () {
+
+	public final IReferenceValueProviderFactory getVesselAvailabilityProviderFactory() {
 		return vesselAvailabilityProviderFactory;
 	}
-	public final IReferenceValueProviderFactory getCharterInMarketProviderFactory () {
+
+	public final IReferenceValueProviderFactory getCharterInMarketProviderFactory() {
 		return charterInMarketProviderFactory;
 	}
 

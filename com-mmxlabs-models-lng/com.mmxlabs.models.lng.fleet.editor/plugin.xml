@@ -29,12 +29,6 @@
 			modelClass="com.mmxlabs.models.lng.fleet.Vessel" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.VesselClass"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselClassComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.VesselClass" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.FleetModel"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FleetModelComponentHelper"
 			inheritable="false"
@@ -73,11 +67,6 @@
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
-          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.VesselClass"
-          referenceEClass="com.mmxlabs.models.lng.fleet.VesselClass">
-    </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.VesselGroup"
           referenceEClass="com.mmxlabs.models.lng.fleet.VesselGroup">
     </valueProvider>
@@ -90,6 +79,12 @@
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory_AVesselSet"
           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselBasedOnValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselBasedOnValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel"
+          ownerEClass="com.mmxlabs.models.lng.fleet.Vessel">          
     </valueProvider>
  </extension>
  <extension
@@ -111,12 +106,6 @@
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
-    <factory
-          ID="com.mmxlabs.models.lng.fleet.editor.vesselClassFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Vessel Class"
-          targetEClass="com.mmxlabs.models.lng.fleet.VesselClass">
-    </factory>
     <factory
           ID="com.mmxlabs.models.lng.fleet.editor.vesselFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
@@ -140,9 +129,9 @@
  <extension
        point="com.mmxlabs.models.util.import.classes">
     <classImporter
-          ID="com.mmxlabs.models.lng.fleet.editor.vesselClassImporter"
-          classImporterClass="com.mmxlabs.models.lng.fleet.importer.VesselClassImporter"
-          eClassName="com.mmxlabs.models.lng.fleet.VesselClass"
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselImporter"
+          classImporterClass="com.mmxlabs.models.lng.fleet.importer.VesselImporter"
+          eClassName="com.mmxlabs.models.lng.fleet.Vessel"
           inheritable="true">
     </classImporter>
     <classImporter
@@ -155,7 +144,7 @@
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
     <editorFactory
-          factoryClass="com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteCostInlineEditorFactory"
+          factoryClass="com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteParametersInlineEditorFactory"
           id="com.mmxlabs.models.lng.fleet.editor.editorfactories.routeCostInlineEditorFactory">
        <FeatureAnyOf>
           <EClassExtends
@@ -164,7 +153,7 @@
        </FeatureAnyOf>
        <OwnerAnyOf>
           <EClassExtends
-                EClass="com.mmxlabs.models.lng.fleet.VesselClass">
+                EClass="com.mmxlabs.models.lng.fleet.Vessel">
           </EClassExtends>
        </OwnerAnyOf>
     </editorFactory>
@@ -174,18 +163,11 @@
        point="org.eclipse.ui.views">
     <view
           category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
+          class="com.mmxlabs.models.lng.fleet.editor.views.VesselView"
           id="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
           name="Vessels"
           restorable="true">
     </view>
- </extension>
- <extension
-       point="com.mmxlabs.models.common.modelcommandprovider">
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider"
-          id="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider">
-    </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated fleet -->
@@ -206,6 +188,13 @@
             priority="0"
             subModelClass="com.mmxlabs.models.lng.fleet.FleetModel">
       </jointModelEditor>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.common.modelcommandprovider">
+      <ModelCommandProvider
+            commandProvider="com.mmxlabs.models.lng.fleet.ui.commandprovider.VesselBasedOnCommandProvider"
+            id="com.mmxlabs.models.lng.fleet.ui.commandprovider.VesselBasedOnCommandProvider">
+      </ModelCommandProvider>
    </extension>
 
 

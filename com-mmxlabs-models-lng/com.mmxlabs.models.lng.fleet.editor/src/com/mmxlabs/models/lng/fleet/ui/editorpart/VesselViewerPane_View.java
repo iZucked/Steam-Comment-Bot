@@ -43,6 +43,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -52,21 +53,27 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
-	private final IScenarioEditingLocation jointModelEditor;
+	private final IScenarioEditingLocation scenarioEditingLocation;
 
 	public VesselViewerPane_View(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
+		this.scenarioEditingLocation = location;
 	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
+		
+		getToolBarManager().appendToGroup("edit", new BaseFuelEditorAction());
+		getToolBarManager().update(true);
+		
+		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
 		addTypicalColumn("Capacity (m³)", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Capacity(), editingDomain));
-		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain));
+		addTypicalColumn("Reference vessel", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Reference(), scenarioEditingLocation.getReferenceValueProviderCache(), editingDomain));
+		addTypicalColumn("Inaccessible Ports", new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_InaccessiblePorts(), scenarioEditingLocation.getReferenceValueProviderCache(),
+				editingDomain, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
 		// getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
 		/*
@@ -87,7 +94,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 			@Override
 			public void run() {
-				final MMXRootObject rootObject = jointModelEditor.getRootObject();
+				final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
@@ -114,7 +121,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 		@Override
 		public void run() {
-			final MMXRootObject rootObject = jointModelEditor.getRootObject();
+			final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
@@ -126,8 +133,8 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 		@Override
 		protected void populate(final Menu menu) {
-			if (jointModelEditor.getRootObject() instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) jointModelEditor.getRootObject();
+			if (scenarioEditingLocation.getRootObject() instanceof LNGScenarioModel) {
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 				boolean b = false;
 				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
@@ -137,15 +144,15 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 						protected void populate(final Menu submenu) {
 							final LockableAction edit = new LockableAction("Edit...") {
 								public void run() {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
-									dcd.open(getJointModelEditorPart(), jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
+									dcd.open(getJointModelEditorPart(), scenarioEditingLocation.getRootObject(), Collections.singletonList((EObject) baseFuel));
 								}
 							};
 							addActionToMenu(edit, submenu);
 
 							final Action delete = new LockableAction("Delete...") {
 								public void run() {
-									final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
+									final ICommandHandler handler = scenarioEditingLocation.getDefaultCommandHandler();
 									handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel,
 											FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
 								}
@@ -162,7 +169,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
 					@Override
 					public MMXRootObject getRootObject() {
-						return jointModelEditor.getRootObject();
+						return scenarioEditingLocation.getRootObject();
 					}
 
 					@Override
@@ -177,12 +184,12 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 					@Override
 					public ICommandHandler getCommandHandler() {
-						return jointModelEditor.getDefaultCommandHandler();
+						return scenarioEditingLocation.getDefaultCommandHandler();
 					}
 
 					@Override
 					public IScenarioEditingLocation getEditorPart() {
-						return jointModelEditor;
+						return scenarioEditingLocation;
 					}
 
 					@Override

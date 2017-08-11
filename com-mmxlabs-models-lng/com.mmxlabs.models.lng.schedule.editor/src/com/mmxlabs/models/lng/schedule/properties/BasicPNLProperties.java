@@ -31,7 +31,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.properties.DetailProperty;
 import com.mmxlabs.models.ui.properties.PropertiesFactory;
 import com.mmxlabs.models.ui.properties.factory.DetailPropertyFactoryRegistry;
-import com.mmxlabs.models.ui.properties.factory.DetailPropertyFactoryUtil;
 import com.mmxlabs.models.ui.properties.factory.IDetailPropertyFactory;
 import com.mmxlabs.models.ui.properties.ui.StringFormatLabelProvider;
 

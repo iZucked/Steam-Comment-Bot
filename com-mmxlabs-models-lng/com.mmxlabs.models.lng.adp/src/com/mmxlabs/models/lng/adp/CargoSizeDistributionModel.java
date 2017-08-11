@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.adp;
 
-import com.mmxlabs.models.lng.cargo.Slot;
-
 
 /**
  * <!-- begin-user-doc -->

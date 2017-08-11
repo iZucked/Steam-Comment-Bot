@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.validation;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;

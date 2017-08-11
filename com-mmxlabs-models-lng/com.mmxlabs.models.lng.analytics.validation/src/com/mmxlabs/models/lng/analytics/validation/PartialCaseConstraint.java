@@ -221,7 +221,7 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 					// test shipping only
 					if (isFOBPurchase().test(buyOption) && isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
 						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, ((LNGScenarioModel) extraContext.getRootObject()).getReferenceModel().getPortModel(),
-								AnalyticsBuilder.getVesselClass(option));
+								AnalyticsBuilder.getVessel(option));
 						if (lateness < 0) {
 							return lateness;
 						}

@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselGroup()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/csv namePrefix='VesselGroup'"
  * @generated
  */
 public interface VesselGroup extends AVesselSet<Vessel> {

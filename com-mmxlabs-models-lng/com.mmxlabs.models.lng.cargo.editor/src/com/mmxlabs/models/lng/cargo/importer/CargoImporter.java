@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -306,40 +305,6 @@ public class CargoImporter extends DefaultClassImporter {
 		final String buyMarket = row.get("buy.market");
 		final String sellMarket = row.get("sell.market");
 
-		final String buyAssignment = row.get("buy.assignment");
-		final String sellAssignment = row.get("sell.assignment");
-
-		// For older CSV sheets (pre LiNGO 3.7.0), there is an assignment field rather than nominated vessels.
-		if (buyAssignment != null && !buyAssignment.isEmpty()) {
-			context.doLater(new IDeferment() {
-				public void run(IImportContext importContext) {
-					final IMMXImportContext context = (IMMXImportContext) importContext;
-					if (fLoad.isDESPurchase()) {
-						fLoad.setNominatedVessel((Vessel) context.getNamedObject(buyAssignment, FleetPackage.Literals.VESSEL));
-					}
-				}
-
-				@Override
-				public int getStage() {
-					return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
-				}
-			});
-		}
-		if (sellAssignment != null && !sellAssignment.isEmpty()) {
-			context.doLater(new IDeferment() {
-				public void run(IImportContext importContext) {
-					final IMMXImportContext context = (IMMXImportContext) importContext;
-					if (fDischarge.isFOBSale()) {
-						fDischarge.setNominatedVessel((Vessel) context.getNamedObject(sellAssignment, FleetPackage.Literals.VESSEL));
-					}
-				}
-
-				@Override
-				public int getStage() {
-					return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
-				}
-			});
-		}
 		context.doLater(new IDeferment() {
 
 			@Override
@@ -511,9 +476,6 @@ public class CargoImporter extends DefaultClassImporter {
 	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
 		objects.addAll(super.importObject(parent, eClass, row, context).getCreatedObjects());
-		for (final EObject target : objects) {
-			addAssignmentTask(target, new FieldMap(row), context);
-		}
 
 		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
 		final IFieldMap fieldMap = new FieldMap(row);
@@ -525,9 +487,6 @@ public class CargoImporter extends DefaultClassImporter {
 			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
 			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
-			for (final EObject target : values) {
-				addAssignmentTask(target, subKeys, context);
-			}
 			objects.addAll(values);
 		}
 		{
@@ -537,72 +496,8 @@ public class CargoImporter extends DefaultClassImporter {
 			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
 			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
-			for (final EObject target : values) {
-				addAssignmentTask(target, subKeys, context);
-			}
 			objects.addAll(values);
 		}
 		return objects;
-	}
-
-	private void addAssignmentTask(final EObject target, final IFieldMap fields, final IMMXImportContext context) {
-		if (target instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) target;
-
-			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE.getName().toLowerCase());
-			final String assignment = fields.get("assignment");
-			final String spotindex = fields.get("spotindex");
-
-			if ((vesselName != null && !vesselName.isEmpty()) || (assignment != null && !assignment.isEmpty())) {
-				context.doLater(new IDeferment() {
-
-					@Override
-					public void run(final IImportContext importContext) {
-						final IMMXImportContext context = (IMMXImportContext) importContext;
-						// New style
-						if (vesselName != null && !vesselName.isEmpty()) {
-							final CharterInMarket charterInMarket = (CharterInMarket) context.getNamedObject(vesselName.trim(), SpotMarketsPackage.Literals.CHARTER_IN_MARKET);
-							if (charterInMarket != null) {
-								assignableElement.setVesselAssignmentType(charterInMarket);
-							} else {
-								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
-								if (v != null) {
-									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), null);
-									assignableElement.setVesselAssignmentType(availability);
-								}
-							}
-						} else {
-							// Old style
-							if (spotindex != null && !spotindex.isEmpty()) {
-
-								final VesselClass vc = (VesselClass) context.getNamedObject(assignment.trim(), FleetPackage.Literals.VESSEL_CLASS);
-								if (vc != null) {
-									for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getReferenceModel().getSpotMarketsModel().getCharterInMarkets()) {
-										if (vc.equals(charterInMarket.getVesselClass())) {
-											assignableElement.setVesselAssignmentType(charterInMarket);
-											break;
-										}
-									}
-								}
-
-							} else {
-								final Vessel v = (Vessel) context.getNamedObject(assignment.trim(), FleetPackage.Literals.VESSEL);
-								if (v != null) {
-									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities(), null);
-									assignableElement.setVesselAssignmentType(availability);
-								}
-							}
-						}
-					}
-
-					@Override
-					public int getStage() {
-						return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
-					}
-				});
-			}
-		}
 	}
 }

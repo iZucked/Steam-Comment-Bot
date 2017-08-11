@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.spotmarkets;
 
 import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -21,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
@@ -49,6 +51,32 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 //	CharterIndex getCharterInPrice();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(Vessel)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_Vessel()
+	 * @model
+	 * @generated
+	 */
+	Vessel getVessel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getVessel <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
+	 * @generated
+	 */
+	void setVessel(Vessel value);
 
 	/**
 	 * Returns the value of the '<em><b>Nominal</b></em>' attribute.

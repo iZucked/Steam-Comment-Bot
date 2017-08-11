@@ -65,7 +65,6 @@ public class SpotCharterMarketComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_enabledEditor(detailComposite, topClass);
-		add_vesselClassEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -75,14 +74,5 @@ public class SpotCharterMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_enabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__ENABLED));
-	}
-
-	/**
-	 * Create the editor for the vesselClass feature on SpotCharterMarket
-	 *
-	 * @generated
-	 */
-	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS));
 	}
 }

@@ -64,7 +64,7 @@ public class VesselClassRouteParametersComponentHelper extends BaseComponentHelp
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_routeEditor(detailComposite, topClass);
+		add_routeOptionEditor(detailComposite, topClass);
 		add_extraTransitTimeEditor(detailComposite, topClass);
 		add_ladenConsumptionRateEditor(detailComposite, topClass);
 		add_ladenNBORateEditor(detailComposite, topClass);
@@ -72,13 +72,14 @@ public class VesselClassRouteParametersComponentHelper extends BaseComponentHelp
 		add_ballastNBORateEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the route feature on VesselClassRouteParameters
+	 * Create the editor for the routeOption feature on VesselClassRouteParameters
 	 *
 	 * @generated
 	 */
-	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE));
+	protected void add_routeOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE_OPTION));
 	}
+
 	/**
 	 * Create the editor for the extraTransitTime feature on VesselClassRouteParameters
 	 *

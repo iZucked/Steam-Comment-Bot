@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -430,7 +431,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		isInited = true;
 
 		// Initialize simple dependencies
+		CargoPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theAnalyticsPackage.createPackageContents();
@@ -1822,7 +1832,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRoundTripShippingOption_VesselClass() {
+	public EReference getRoundTripShippingOption_Vessel() {
 		return (EReference)roundTripShippingOptionEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -2554,7 +2564,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(optionalAvailabilityShippingOptionEClass, OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END_PORT);
 
 		roundTripShippingOptionEClass = createEClass(ROUND_TRIP_SHIPPING_OPTION);
-		createEReference(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS);
+		createEReference(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__VESSEL);
 		createEAttribute(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__HIRE_COST);
 
 		nominatedShippingOptionEClass = createEClass(NOMINATED_SHIPPING_OPTION);
@@ -2881,7 +2891,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getOptionalAvailabilityShippingOption_EndPort(), thePortPackage.getPort(), null, "endPort", null, 0, 1, OptionalAvailabilityShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(roundTripShippingOptionEClass, RoundTripShippingOption.class, "RoundTripShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRoundTripShippingOption_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRoundTripShippingOption_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoundTripShippingOption_HireCost(), ecorePackage.getEString(), "hireCost", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nominatedShippingOptionEClass, NominatedShippingOption.class, "NominatedShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

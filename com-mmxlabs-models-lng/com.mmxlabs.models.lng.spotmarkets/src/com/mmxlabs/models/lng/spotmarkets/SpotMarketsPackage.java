@@ -1088,22 +1088,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_CHARTER_MARKET__ENABLED = 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_CHARTER_MARKET__VESSEL_CLASS = 1;
-
-	/**
 	 * The number of structural features of the '<em>Spot Charter Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_CHARTER_MARKET_FEATURE_COUNT = 2;
+	int SPOT_CHARTER_MARKET_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl <em>Charter Out Market</em>}' class.
@@ -1123,15 +1114,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_MARKET__ENABLED = SPOT_CHARTER_MARKET__ENABLED;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT_MARKET__VESSEL_CLASS = SPOT_CHARTER_MARKET__VESSEL_CLASS;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1179,13 +1161,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_OUT_MARKET__AVAILABLE_PORTS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_MARKET__VESSELS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
+	int CHARTER_OUT_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl <em>Charter In Market</em>}' class.
@@ -1207,15 +1198,6 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__ENABLED = SPOT_CHARTER_MARKET__ENABLED;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_IN_MARKET__VESSEL_CLASS = SPOT_CHARTER_MARKET__VESSEL_CLASS;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1234,13 +1216,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__NAME = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__VESSEL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Charter In Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_IN_RATE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+	int CHARTER_IN_MARKET__CHARTER_IN_RATE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -1249,7 +1240,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
+	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
@@ -1258,7 +1249,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
+	int CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -1267,7 +1258,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
+	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
@@ -1276,7 +1267,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
+	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Nominal</b></em>' attribute.
@@ -1285,7 +1276,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
+	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
@@ -1294,7 +1285,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
@@ -1771,6 +1762,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getCharterOutMarket_AvailablePorts();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getVessels()
+	 * @see #getCharterOutMarket()
+	 * @generated
+	 */
+	EReference getCharterOutMarket_Vessels();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate <em>Charter Out Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1792,6 +1794,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EClass getCharterInMarket();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getVessel()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EReference getCharterInMarket_Vessel();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1801,6 +1814,27 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCharterInMarket_Nominal();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Spot Charter Market</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket
+	 * @generated
+	 */
+	EClass getSpotCharterMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#isEnabled <em>Enabled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Enabled</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#isEnabled()
+	 * @see #getSpotCharterMarket()
+	 * @generated
+	 */
+	EAttribute getSpotCharterMarket_Enabled();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}'.
@@ -1856,38 +1890,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCharterInMarket_CharterInRate();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Spot Charter Market</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket
-	 * @generated
-	 */
-	EClass getSpotCharterMarket();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#isEnabled <em>Enabled</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Enabled</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#isEnabled()
-	 * @see #getSpotCharterMarket()
-	 * @generated
-	 */
-	EAttribute getSpotCharterMarket_Enabled();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#getVesselClass <em>Vessel Class</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#getVesselClass()
-	 * @see #getSpotCharterMarket()
-	 * @generated
-	 */
-	EReference getSpotCharterMarket_VesselClass();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}'.
@@ -2286,6 +2288,14 @@ public interface SpotMarketsPackage extends EPackage {
 		EReference CHARTER_OUT_MARKET__AVAILABLE_PORTS = eINSTANCE.getCharterOutMarket_AvailablePorts();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_MARKET__VESSELS = eINSTANCE.getCharterOutMarket_Vessels();
+
+		/**
 		 * The meta object literal for the '<em><b>Charter Out Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2304,12 +2314,38 @@ public interface SpotMarketsPackage extends EPackage {
 		EClass CHARTER_IN_MARKET = eINSTANCE.getCharterInMarket();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET__VESSEL = eINSTANCE.getCharterInMarket_Vessel();
+
+		/**
 		 * The meta object literal for the '<em><b>Nominal</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__NOMINAL = eINSTANCE.getCharterInMarket_Nominal();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl
+		 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsPackageImpl#getSpotCharterMarket()
+		 * @generated
+		 */
+		EClass SPOT_CHARTER_MARKET = eINSTANCE.getSpotCharterMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_CHARTER_MARKET__ENABLED = eINSTANCE.getSpotCharterMarket_Enabled();
 
 		/**
 		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
@@ -2350,32 +2386,6 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__CHARTER_IN_RATE = eINSTANCE.getCharterInMarket_CharterInRate();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl
-		 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsPackageImpl#getSpotCharterMarket()
-		 * @generated
-		 */
-		EClass SPOT_CHARTER_MARKET = eINSTANCE.getSpotCharterMarket();
-
-		/**
-		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SPOT_CHARTER_MARKET__ENABLED = eINSTANCE.getSpotCharterMarket_Enabled();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SPOT_CHARTER_MARKET__VESSEL_CLASS = eINSTANCE.getSpotCharterMarket_VesselClass();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.

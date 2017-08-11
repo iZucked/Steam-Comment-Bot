@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
+import java.util.function.BiConsumer;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -11,10 +14,9 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 
 public class FleetModelBuilder {
 	private @NonNull final FleetModel fleetModel;
@@ -28,22 +30,15 @@ public class FleetModelBuilder {
 	}
 
 	@NonNull
-	public Vessel createVessel(@NonNull final String name, @NonNull final VesselClass vesselClass) {
-		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-		vessel.setName(name);
-		vessel.setVesselClass(vesselClass);
+	public Vessel createVesselFrom(@NonNull final String name, final Vessel source, BiConsumer<Vessel, Vessel> costCloner) {
+		final Vessel copy = EcoreUtil.copy(source);
+		copy.setName(name);
 
-		fleetModel.getVessels().add(vessel);
+		costCloner.accept(source, copy);
 
-		return vessel;
-	}
+		fleetModel.getVessels().add(copy);
 
-	@NonNull
-	public Vessel createVessel(@NonNull final String name, @NonNull final VesselClass vesselClass, final int capacityInM3, final double fillPercent) {
-		final Vessel vessel = createVessel(name, vesselClass);
-		vessel.setCapacity(capacityInM3);
-		vessel.setFillCapacity(fillPercent);
-		return vessel;
+		return copy;
 	}
 
 	@NonNull
@@ -60,56 +55,55 @@ public class FleetModelBuilder {
 		fleetModel.getVessels().add(vessel);
 	}
 
-	public void setRouteParameters(final VesselClass vesselClass, @NonNull final Route route, final int ladenConsumptionRatePerDay, final int ballastConsumptionRatePerDay,
+	public void setRouteParameters(final Vessel vessel, @NonNull final RouteOption routeOption, final int ladenConsumptionRatePerDay, final int ballastConsumptionRatePerDay,
 			final int ladenNBORatePerDay, final int ballastNBORatePerDay, final int canalTransitHours) {
 
 		final VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 
-		params.setRoute(route);
+		params.setRouteOption(routeOption);
 		params.setLadenConsumptionRate(ladenConsumptionRatePerDay);
 		params.setBallastConsumptionRate(ballastConsumptionRatePerDay);
 		params.setLadenNBORate(ladenNBORatePerDay);
 		params.setBallastNBORate(ballastNBORatePerDay);
 		params.setExtraTransitTime(canalTransitHours);
 
-		vesselClass.getRouteParameters().add(params);
+		vessel.getVesselOrDelegateRouteParameters().add(params);
 	}
 
-	public @NonNull VesselClass createVesselClass(@NonNull final String vesselClassName, final int capacityInM3, final double fillCapacity, final double minSpeed, final double maxSpeed,
+	public @NonNull Vessel createVessel(@NonNull final String vesselName, final int capacityInM3, final double fillCapacity, final double minSpeed, final double maxSpeed,
 			@NonNull final BaseFuel baseFuel, final double pilotLightRate, final int minHeelVolume, final int cooldownVolume, final int warmupTime) {
 
 		if (minSpeed > maxSpeed) {
 			throw new IllegalArgumentException();
 		}
 
-		final VesselClass vesselClass = FleetFactory.eINSTANCE.createVesselClass();
+		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
 		final VesselStateAttributes ballast = FleetFactory.eINSTANCE.createVesselStateAttributes();
 
-		vesselClass.setLadenAttributes(laden);
-		vesselClass.setBallastAttributes(ballast);
+		vessel.setLadenAttributes(laden);
+		vessel.setBallastAttributes(ballast);
 
-		vesselClass.setName(vesselClassName);
-		vesselClass.setBaseFuel(baseFuel);
-		vesselClass.setMinSpeed(minSpeed);
-		vesselClass.setMaxSpeed(maxSpeed);
-		vesselClass.setCapacity(capacityInM3);
-		vesselClass.setPilotLightRate(pilotLightRate);
-		vesselClass.setWarmingTime(warmupTime);
-		vesselClass.setCoolingVolume(cooldownVolume);
-		vesselClass.setMinHeel(minHeelVolume);
-		vesselClass.setFillCapacity(fillCapacity);
+		vessel.setName(vesselName);
+		vessel.setBaseFuel(baseFuel);
+		vessel.setMinSpeed(minSpeed);
+		vessel.setMaxSpeed(maxSpeed);
+		vessel.setCapacity(capacityInM3);
+		vessel.setPilotLightRate(pilotLightRate);
+		vessel.setWarmingTime(warmupTime);
+		vessel.setCoolingVolume(cooldownVolume);
+		vessel.setSafetyHeel(minHeelVolume);
+		vessel.setFillCapacity(fillCapacity);
 
-		fleetModel.getVesselClasses().add(vesselClass);
+		fleetModel.getVessels().add(vessel);
 
-		return vesselClass;
+		return vessel;
 
 	}
 
-	public void setVesselStateAttributes(final @NonNull VesselClass vesselClass, final boolean isLaden, final int nboRate, final int idleNBORate, final int idleBaseRate,
-			final int portConsumptionRate) {
-		final VesselStateAttributes attributes = isLaden ? vesselClass.getLadenAttributes() : vesselClass.getBallastAttributes();
+	public void setVesselStateAttributes(final @NonNull Vessel vessel, final boolean isLaden, final int nboRate, final int idleNBORate, final int idleBaseRate, final int portConsumptionRate) {
+		final VesselStateAttributes attributes = isLaden ? vessel.getLadenAttributes() : vessel.getBallastAttributes();
 
 		attributes.setNboRate(nboRate);
 		attributes.setIdleNBORate(idleNBORate);
@@ -117,10 +111,10 @@ public class FleetModelBuilder {
 		attributes.setInPortBaseRate(portConsumptionRate);
 	}
 
-	public void setVesselStateAttributesCurve(@NonNull final VesselClass vesselClass, final boolean isLaden, final double speed, final double consumption) {
-		final VesselStateAttributes attributes = isLaden ? vesselClass.getLadenAttributes() : vesselClass.getBallastAttributes();
+	public void setVesselStateAttributesCurve(@NonNull final Vessel vessel, final boolean isLaden, final double speed, final double consumption) {
+		final VesselStateAttributes attributes = isLaden ? vessel.getLadenAttributes() : vessel.getBallastAttributes();
 
-		for (final FuelConsumption fuelConsumption : attributes.getFuelConsumption()) {
+		for (final FuelConsumption fuelConsumption : attributes.getVesselOrDelegateFuelConsumption()) {
 			if (fuelConsumption.getSpeed() == speed) {
 				fuelConsumption.setConsumption(consumption);
 				return;
@@ -130,8 +124,7 @@ public class FleetModelBuilder {
 		final FuelConsumption fuelConsumption = FleetFactory.eINSTANCE.createFuelConsumption();
 		fuelConsumption.setSpeed(speed);
 		fuelConsumption.setConsumption(consumption);
-		attributes.getFuelConsumption().add(fuelConsumption);
-
+		attributes.getVesselOrDelegateFuelConsumption().add(fuelConsumption);
 	}
 
 }

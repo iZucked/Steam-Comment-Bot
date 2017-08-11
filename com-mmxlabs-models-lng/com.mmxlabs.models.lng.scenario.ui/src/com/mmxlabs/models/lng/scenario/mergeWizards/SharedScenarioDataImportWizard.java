@@ -225,8 +225,6 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 
 			if (dataOptions.contains(DataOptions.FleetDatabase)) {
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
-						FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
 						FleetPackage.eINSTANCE.getFleetModel_Vessels()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
 						FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));

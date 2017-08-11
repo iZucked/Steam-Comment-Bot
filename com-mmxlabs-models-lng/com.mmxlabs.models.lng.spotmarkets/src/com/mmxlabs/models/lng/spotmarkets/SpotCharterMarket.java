@@ -8,8 +8,6 @@ package com.mmxlabs.models.lng.spotmarkets;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Spot Charter Market</b></em>'.
@@ -20,7 +18,6 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#isEnabled <em>Enabled</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotCharterMarket()
@@ -55,30 +52,4 @@ public interface SpotCharterMarket extends EObject {
 	 * @generated
 	 */
 	void setEnabled(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Class</em>' reference.
-	 * @see #setVesselClass(VesselClass)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotCharterMarket_VesselClass()
-	 * @model
-	 * @generated
-	 */
-	VesselClass getVesselClass();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#getVesselClass <em>Vessel Class</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Vessel Class</em>' reference.
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	void setVesselClass(VesselClass value);
 } // SpotCharterMarket

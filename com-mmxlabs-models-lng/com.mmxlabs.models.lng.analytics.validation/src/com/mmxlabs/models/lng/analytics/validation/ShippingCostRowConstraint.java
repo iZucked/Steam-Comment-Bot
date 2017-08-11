@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -27,7 +26,6 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-
 
 		if (target instanceof ShippingCostRow) {
 			final ShippingCostRow shippingCostRow = (ShippingCostRow) target;
@@ -81,11 +79,10 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 							final ShippingCostPlan shippingCostPlan = (ShippingCostPlan) container;
 							if (shippingCostPlan.getVessel() != null) {
 								final Vessel vessel = shippingCostPlan.getVessel();
-								final VesselClass vesselClass = shippingCostPlan.getVessel().getVesselClass();
-								final double capacity = (double) vessel.getVesselOrVesselClassCapacity() * vessel.getVesselOrVesselClassFillCapacity();
+								final double capacity = (double) vessel.getVesselOrDelegateCapacity() * vessel.getVesselOrDelegateFillCapacity();
 								if (shippingCostRow.getHeelVolume() > capacity) {
-									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-											"Heel volume is greater than vessel capacity of %.0f (%d) ", capacity, vesselClass.getCapacity())));
+									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus(String.format("Heel volume is greater than vessel capacity of %.0f (%d) ", capacity, vessel.getVesselOrDelegateCapacity())));
 									deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_HeelVolume());
 									statuses.add(deco);
 								}

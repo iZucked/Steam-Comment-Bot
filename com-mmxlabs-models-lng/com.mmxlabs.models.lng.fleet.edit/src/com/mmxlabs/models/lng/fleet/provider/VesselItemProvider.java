@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.fleet.provider;
 
 
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -49,13 +51,29 @@ public class VesselItemProvider
 			super.getPropertyDescriptors(object);
 
 			addShortNamePropertyDescriptor(object);
-			addVesselClassPropertyDescriptor(object);
+			addIMOPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
+			addReferencePropertyDescriptor(object);
+			addInaccessiblePortsOverridePropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
-			addOverrideInaccessibleRoutesPropertyDescriptor(object);
+			addInaccessibleRoutesOverridePropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
+			addBaseFuelPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
+			addMinSpeedPropertyDescriptor(object);
+			addMaxSpeedPropertyDescriptor(object);
+			addSafetyHeelPropertyDescriptor(object);
+			addWarmingTimePropertyDescriptor(object);
+			addCoolingVolumePropertyDescriptor(object);
 			addScntPropertyDescriptor(object);
+			addRouteParametersOverridePropertyDescriptor(object);
+			addRouteParametersPropertyDescriptor(object);
+			addPilotLightRatePropertyDescriptor(object);
+			addMinBaseFuelConsumptionPropertyDescriptor(object);
+			addHasReliqCapabilityOverridePropertyDescriptor(object);
+			addHasReliqCapabilityPropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -83,19 +101,63 @@ public class VesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
+	 * This adds a property descriptor for the IMO feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
+	protected void addIMOPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Vessel_vesselClass_feature"),
-				 getString("_UI_Vessel_vesselClass_description"),
-				 FleetPackage.Literals.VESSEL__VESSEL_CLASS,
+				 getString("_UI_Vessel_IMO_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_IMO_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__IMO,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_type_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Reference feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReferencePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_reference_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_reference_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__REFERENCE,
 				 true,
 				 false,
 				 true,
@@ -127,6 +189,28 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Inaccessible Routes Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInaccessibleRoutesOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_inaccessibleRoutesOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_inaccessibleRoutesOverride_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Capacity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -138,7 +222,7 @@ public class VesselItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Vessel_capacity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_capacity_feature", "_UI_Vessel_type"),
+				 getString("_UI_Vessel_capacity_description"),
 				 FleetPackage.Literals.VESSEL__CAPACITY,
 				 true,
 				 false,
@@ -160,12 +244,276 @@ public class VesselItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Vessel_fillCapacity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_fillCapacity_feature", "_UI_Vessel_type"),
+				 getString("_UI_Vessel_fillCapacity_description"),
 				 FleetPackage.Literals.VESSEL__FILL_CAPACITY,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Min Speed feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinSpeedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_minSpeed_feature"),
+				 getString("_UI_Vessel_minSpeed_description"),
+				 FleetPackage.Literals.VESSEL__MIN_SPEED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Speed feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxSpeedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_maxSpeed_feature"),
+				 getString("_UI_Vessel_maxSpeed_description"),
+				 FleetPackage.Literals.VESSEL__MAX_SPEED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Safety Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSafetyHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_safetyHeel_feature"),
+				 getString("_UI_Vessel_safetyHeel_description"),
+				 FleetPackage.Literals.VESSEL__SAFETY_HEEL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Warming Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWarmingTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_warmingTime_feature"),
+				 getString("_UI_Vessel_warmingTime_description"),
+				 FleetPackage.Literals.VESSEL__WARMING_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cooling Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCoolingVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_coolingVolume_feature"),
+				 getString("_UI_Vessel_coolingVolume_description"),
+				 FleetPackage.Literals.VESSEL__COOLING_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Route Parameters Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRouteParametersOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_routeParametersOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_routeParametersOverride_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Route Parameters feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRouteParametersPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_routeParameters_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_routeParameters_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS,
+				 true,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pilot Light Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPilotLightRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_pilotLightRate_feature"),
+				 getString("_UI_Vessel_pilotLightRate_description"),
+				 FleetPackage.Literals.VESSEL__PILOT_LIGHT_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Min Base Fuel Consumption feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinBaseFuelConsumptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_minBaseFuelConsumption_feature"),
+				 getString("_UI_Vessel_minBaseFuelConsumption_description"),
+				 FleetPackage.Literals.VESSEL__MIN_BASE_FUEL_CONSUMPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Has Reliq Capability Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHasReliqCapabilityOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_hasReliqCapabilityOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_hasReliqCapabilityOverride_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Has Reliq Capability feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHasReliqCapabilityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_hasReliqCapability_feature"),
+				 getString("_UI_Vessel_hasReliqCapability_description"),
+				 FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_notes_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -193,25 +541,57 @@ public class VesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Override Inaccessible Routes feature.
+	 * This adds a property descriptor for the Inaccessible Ports Override feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addOverrideInaccessibleRoutesPropertyDescriptor(Object object) {
+	protected void addInaccessiblePortsOverridePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Vessel_overrideInaccessibleRoutes_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_overrideInaccessibleRoutes_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES,
+				 getString("_UI_Vessel_inaccessiblePortsOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_inaccessiblePortsOverride_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS_OVERRIDE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL__LADEN_ATTRIBUTES);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL__BALLAST_ATTRIBUTES);
+			childrenFeatures.add(FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -226,12 +606,34 @@ public class VesselItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Vessel_inaccessibleRoutes_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_inaccessibleRoutes_feature", "_UI_Vessel_type"),
+				 getString("_UI_Vessel_inaccessibleRoutes_description"),
 				 FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Base Fuel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBaseFuelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_baseFuel_feature"),
+				 getString("_UI_Vessel_baseFuel_description"),
+				 FleetPackage.Literals.VESSEL__BASE_FUEL,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -274,12 +676,31 @@ public class VesselItemProvider
 
 		switch (notification.getFeatureID(Vessel.class)) {
 			case FleetPackage.VESSEL__SHORT_NAME:
-			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+			case FleetPackage.VESSEL__IMO:
+			case FleetPackage.VESSEL__TYPE:
+			case FleetPackage.VESSEL__INACCESSIBLE_PORTS_OVERRIDE:
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES_OVERRIDE:
 			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
 			case FleetPackage.VESSEL__CAPACITY:
 			case FleetPackage.VESSEL__FILL_CAPACITY:
+			case FleetPackage.VESSEL__MIN_SPEED:
+			case FleetPackage.VESSEL__MAX_SPEED:
+			case FleetPackage.VESSEL__SAFETY_HEEL:
+			case FleetPackage.VESSEL__WARMING_TIME:
+			case FleetPackage.VESSEL__COOLING_VOLUME:
 			case FleetPackage.VESSEL__SCNT:
+			case FleetPackage.VESSEL__ROUTE_PARAMETERS_OVERRIDE:
+			case FleetPackage.VESSEL__PILOT_LIGHT_RATE:
+			case FleetPackage.VESSEL__MIN_BASE_FUEL_CONSUMPTION:
+			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE:
+			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY:
+			case FleetPackage.VESSEL__NOTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
+			case FleetPackage.VESSEL__BALLAST_ATTRIBUTES:
+			case FleetPackage.VESSEL__ROUTE_PARAMETERS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -295,6 +716,44 @@ public class VesselItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__LADEN_ATTRIBUTES,
+				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__BALLAST_ATTRIBUTES,
+				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.VESSEL__ROUTE_PARAMETERS,
+				 FleetFactory.eINSTANCE.createVesselClassRouteParameters()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == FleetPackage.Literals.VESSEL__LADEN_ATTRIBUTES ||
+			childFeature == FleetPackage.Literals.VESSEL__BALLAST_ATTRIBUTES;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

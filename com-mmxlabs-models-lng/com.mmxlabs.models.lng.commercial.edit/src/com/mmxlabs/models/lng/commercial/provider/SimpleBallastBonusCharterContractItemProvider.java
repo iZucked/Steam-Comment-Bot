@@ -12,8 +12,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
 
 import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 

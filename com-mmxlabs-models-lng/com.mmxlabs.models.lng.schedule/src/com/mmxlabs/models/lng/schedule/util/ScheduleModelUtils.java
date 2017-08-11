@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -171,7 +170,7 @@ public class ScheduleModelUtils {
 		return null;
 
 	}
-	
+
 	public static int sumFuelVolumes(final List<FuelQuantity> fuels, final FuelUnit fuelUnit) {
 		int fuelTotal = 0;
 		for (final FuelQuantity fuel : fuels) {
@@ -184,17 +183,14 @@ public class ScheduleModelUtils {
 		return fuelTotal;
 	}
 
-	public static @Nullable VesselClass getVesselClass(final Sequence seq) {
+	public static @Nullable Vessel getVessel(final Sequence seq) {
 		final VesselAvailability vesselAvailability = seq.getVesselAvailability();
 		if (vesselAvailability != null) {
-			final Vessel vessel = vesselAvailability.getVessel();
-			if (vessel != null) {
-				return vessel.getVesselClass();
-			}
+			return vesselAvailability.getVessel();
 		}
 		final CharterInMarket charterInMarket = seq.getCharterInMarket();
 		if (charterInMarket != null) {
-			return charterInMarket.getVesselClass();
+			return charterInMarket.getVessel();
 		}
 		return null;
 	}

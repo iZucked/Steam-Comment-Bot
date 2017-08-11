@@ -10,7 +10,6 @@
       childCreationExtenders="true" ecorePackage="fleet.ecore#/">
     <genClasses ecoreClass="fleet.ecore#//FleetModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/vessels"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/vesselClasses"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/baseFuels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//FleetModel/vesselGroups"/>
     </genClasses>
@@ -21,60 +20,43 @@
     <genClasses ecoreClass="fleet.ecore#//Vessel">
       <genFeatures createChild="false" propertyDescription="A short form of the vessel name for use in reporting"
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/shortName"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="The class of the vessel, which defines its fuel usage properties"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/vesselClass"/>
+      <genFeatures createChild="false" propertyDescription="Flag indicating this is a model vessel rather than a real vessel"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/prototype"/>
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports and port groups where this vessel cannot go"
           propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/inaccessiblePorts"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/capacity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/fillCapacity"/>
-      <genFeatures createChild="false" propertyDescription="Override Suez Canal Net Tonnage"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/scnt"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/overrideInaccessibleRoutes"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/inaccessibleRoutes"/>
-      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrVesselClassCapacity"/>
-      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrVesselClassFillCapacity"/>
-      <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
-    </genClasses>
-    <genClasses ecoreClass="fleet.ecore#//VesselClass">
-      <genFeatures notify="false" createChild="false" propertyDescription="A list of ports where vessels of this class cannot go"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/inaccessiblePorts"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="A list of routes this vessel cannot traverse"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/inaccessibleRoutes"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The type of fuel this vessel runs on"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/baseFuel"/>
+          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/baseFuel"/>
       <genFeatures createChild="false" propertyDescription="The capacity of this vessel's LNG tanks"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/capacity"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/capacity"/>
       <genFeatures createChild="false" propertyDescription="The percentage of the capacity which is actually usable"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/fillCapacity"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/ladenAttributes"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/ballastAttributes"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/fillCapacity"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/ladenAttributes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/ballastAttributes"/>
       <genFeatures createChild="false" propertyDescription="The minimum speed of vessels of this class"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/minSpeed"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/minSpeed"/>
       <genFeatures createChild="false" propertyDescription="The maximum speed of vessels of this class"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/maxSpeed"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/maxSpeed"/>
       <genFeatures createChild="false" propertyDescription="The safety heel is typically the quantity of LNG needed at the start of port operations unless heeled out or cooling down."
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/minHeel"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/safetyHeel"/>
       <genFeatures createChild="false" propertyDescription="The number of hours the vessel has to sit empty to require a cooldow"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/warmingTime"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/warmingTime"/>
       <genFeatures createChild="false" propertyDescription="The volume of LNG required to cool the tanks to operating temperature"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/coolingVolume"/>
-      <genFeatures children="true" createChild="true" propertyDescription="" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/routeParameters"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/coolingVolume"/>
+      <genFeatures children="true" createChild="true" propertyDescription="" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/routeParameters"/>
       <genFeatures createChild="false" propertyDescription="The rate at which base fuel must be used to run the pilot light, when running on LNG"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/pilotLightRate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/minBaseFuelConsumption"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/hasReliqCapability"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/inaccessibleRoutes"/>
-      <genFeatures createChild="false" propertyDescription="Suez Canal Net Tonnage"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/scnt"/>
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/pilotLightRate"/>
+      <genFeatures createChild="false" propertyDescription="The minimum quantity of base fuel required for travel - even if otherwise an NBO/FBO voyage"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/minBaseFuelConsumption"/>
+      <genFeatures createChild="false" propertyDescription="Flag indicating this vessel has reliquification capability"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/hasReliqCapability"/>
+      <genFeatures createChild="false" propertyDescription="The Suez Canal Net Tonnage"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/scnt"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselGroup">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselGroup/vessels"/>
-    </genClasses>
-    <genClasses ecoreClass="fleet.ecore#//HeelOptions">
-      <genFeatures createChild="false" propertyDescription="The maximum quantity of heel available"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//HeelOptions/volumeAvailable"/>
-      <genFeatures createChild="false" propertyDescription="The CV value of the heel"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//HeelOptions/cvValue"/>
-      <genFeatures createChild="false" propertyDescription="The unit price of the heel"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//HeelOptions/pricePerMMBTU"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselStateAttributes">
       <genFeatures createChild="false" propertyDescription="The rate at which LNG boils off under normal use"

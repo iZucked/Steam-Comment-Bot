@@ -15,7 +15,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -33,28 +33,28 @@ public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstrain
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselClass) {
-			final VesselClass vesselClass = (VesselClass) target;
+		if (target instanceof Vessel) {
+			final Vessel vessel = (Vessel) target;
 			{
-				final VesselStateAttributes laden = vesselClass.getLadenAttributes();
+				final VesselStateAttributes laden = vessel.getLadenAttributes();
 				final Set<Double> seenSpeeds = new HashSet<Double>();
-				for (final FuelConsumption line : laden.getFuelConsumption()) {
+				for (final FuelConsumption line : laden.getVesselOrDelegateFuelConsumption()) {
 					if (!seenSpeeds.add(line.getSpeed())) {
-						final String message = String.format("Vessel Class %s has duplicate speed entry of %2.2f in Laden attributes", vesselClass.getName(), line.getSpeed());
+						final String message = String.format("Vessel %s has duplicate speed entry of %2.2f in Laden attributes", vessel.getName(), line.getSpeed());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_LadenAttributes());
+						dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_LadenAttributes());
 						statuses.add(dcsd);
 					}
 				}
 			}
 			{
-				final VesselStateAttributes ballast = vesselClass.getBallastAttributes();
+				final VesselStateAttributes ballast = vessel.getBallastAttributes();
 				final Set<Double> seenSpeeds = new HashSet<Double>();
-				for (final FuelConsumption line : ballast.getFuelConsumption()) {
+				for (final FuelConsumption line : ballast.getVesselOrDelegateFuelConsumption()) {
 					if (!seenSpeeds.add(line.getSpeed())) {
-						final String message = String.format("Vessel Class %s has duplicate speed entry of %2.2f in ballast attributes", vesselClass.getName(), line.getSpeed());
+						final String message = String.format("Vessel %s has duplicate speed entry of %2.2f in ballast attributes", vessel.getName(), line.getSpeed());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_LadenAttributes());
+						dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_LadenAttributes());
 						statuses.add(dcsd);
 					}
 				}

@@ -27,7 +27,7 @@ import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 
@@ -113,10 +113,10 @@ public class FuelCurveImporter {
 					@Override
 					public void run(final IImportContext importContext) {
 						final IMMXImportContext context = (IMMXImportContext) importContext;
-						final VesselClass vesselClass = (VesselClass) context.getNamedObject(s, FleetPackage.eINSTANCE.getVesselClass());
-						if (vesselClass != null) {
-							vesselClass.getLadenAttributes().getFuelConsumption().addAll(c.getSecond().getFirst());
-							vesselClass.getBallastAttributes().getFuelConsumption().addAll(c.getSecond().getSecond());
+						final Vessel vessel = (Vessel) context.getNamedObject(s, FleetPackage.eINSTANCE.getVessel());
+						if (vessel != null) {
+							vessel.getLadenAttributes().getFuelConsumption().addAll(c.getSecond().getFirst());
+							vessel.getBallastAttributes().getFuelConsumption().addAll(c.getSecond().getSecond());
 						} else {
 							context.addProblem(c.getFirst());
 						}
@@ -133,26 +133,26 @@ public class FuelCurveImporter {
 		}
 	}
 
-	public Collection<Map<String, String>> exportCurves(final EList<VesselClass> vesselClasses, final IExportContext context) {
-		final List<Map<String, String>> rows = new ArrayList<Map<String, String>>(vesselClasses.size() * 2);
+	public Collection<Map<String, String>> exportCurves(final EList<Vessel> vessels, final IExportContext context) {
+		final List<Map<String, String>> rows = new ArrayList<>(vessels.size() * 2);
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		// Use a LinkedHashMap to preserve put order, use a TreeMap to sort columns by speed
 
-		for (final VesselClass vc : vesselClasses) {
-			final Map<String, String> ladenRow = new LinkedHashMap<String, String>();
-			final Map<String, String> ladenRowValues = new TreeMap<String, String>();
-			ladenRow.put("class", vc.getName());
+		for (final Vessel vessel : vessels) {
+			final Map<String, String> ladenRow = new LinkedHashMap<>();
+			final Map<String, String> ladenRowValues = new TreeMap<>();
+			ladenRow.put("class", vessel.getName());
 			ladenRow.put("state", "laden");
-			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRowValues, nai);
+			exportConsumptions(vessel.getLadenAttributes().getVesselOrDelegateFuelConsumption(), ladenRowValues, nai);
 			ladenRow.putAll(ladenRowValues);
 			rows.add(ladenRow);
 
-			final Map<String, String> ballastRow = new LinkedHashMap<String, String>();
-			final Map<String, String> ballastRowValues = new TreeMap<String, String>();
-			ballastRow.put("class", vc.getName());
+			final Map<String, String> ballastRow = new LinkedHashMap<>();
+			final Map<String, String> ballastRowValues = new TreeMap<>();
+			ballastRow.put("class", vessel.getName());
 			ballastRow.put("state", "ballast");
-			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRowValues, nai);
+			exportConsumptions(vessel.getBallastAttributes().getVesselOrDelegateFuelConsumption(), ballastRowValues, nai);
 			ballastRow.putAll(ballastRowValues);
 			rows.add(ballastRow);
 		}

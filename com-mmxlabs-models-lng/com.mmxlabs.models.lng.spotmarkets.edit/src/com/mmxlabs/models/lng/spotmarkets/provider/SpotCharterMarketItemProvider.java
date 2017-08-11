@@ -1,18 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.spotmarkets.provider;
 
+
+import com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -25,16 +26,13 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SpotCharterMarketItemProvider
+public class SpotCharterMarketItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -64,7 +62,6 @@ public class SpotCharterMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addEnabledPropertyDescriptor(object);
-			addVesselClassPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -92,28 +89,6 @@ public class SpotCharterMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotCharterMarket_vesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotCharterMarket_vesselClass_feature", "_UI_SpotCharterMarket_type"),
-				 SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -124,6 +99,7 @@ public class SpotCharterMarketItemProvider
 		SpotCharterMarket spotCharterMarket = (SpotCharterMarket)object;
 		return getString("_UI_SpotCharterMarket_type") + " " + spotCharterMarket.isEnabled();
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

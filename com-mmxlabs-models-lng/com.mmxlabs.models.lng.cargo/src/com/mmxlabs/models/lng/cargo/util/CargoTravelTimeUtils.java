@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -33,12 +32,14 @@ import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
+@NonNullByDefault
 public class CargoTravelTimeUtils {
 
 	public static final List<RouteOption> EMPTY_ROUTES = Collections.emptyList();
 
-	public static int getDivertableDESMinRouteTimeInHours(final @NonNull LoadSlot desPurchase, @NonNull final Slot from, final @NonNull Slot to,
-			final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final @NonNull PortModel portModel, final Vessel vessel, final double referenceSpeed) {
+	public static int getDivertableDESMinRouteTimeInHours(final LoadSlot desPurchase, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
+			final PortModel portModel, final Vessel vessel, final double referenceSpeed) {
+
 		Collection<Route> allowedRoutes = null;
 		if (shippingDaysSpeedProvider != null) {
 			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(portModel, desPurchase);
@@ -46,27 +47,27 @@ public class CargoTravelTimeUtils {
 		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
 			allowedRoutes = portModel.getRoutes();
 		}
-		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel.getVesselClass(), referenceSpeed, allowedRoutes);
+		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes);
 		return minDuration;
 	}
 
 	public static int getFobMinTimeInHours(final Slot from, final Slot to, final LocalDate date, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final CostModel costModel,
 			final double referenceSpeed) {
 		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, date, portModel, costModel);
-		final Pair<VesselClass, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
-		final VesselClass vc = vesselAssignmentTypeData.getFirst();
-		final double maxSpeed = vc != null ? vc.getMaxSpeed() : referenceSpeed;
+		final Pair<Vessel, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
+		final Vessel vessel = vesselAssignmentTypeData.getFirst();
+		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
 		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes);
 	}
 
-	private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, final VesselClass vesselClass, final double referenceSpeed, final Collection<Route> allowedRoutes) {
+	private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes) {
 		int minDuration = Integer.MAX_VALUE;
 		for (final Route route : allowedRoutes) {
 			assert route != null;
 			final Port fromPort = from.getPort();
 			final Port toPort = to.getPort();
 			if (fromPort != null && toPort != null) {
-				final int totalTime = TravelTimeUtils.getTimeForRoute(vesselClass, referenceSpeed, route, fromPort, toPort);
+				final int totalTime = TravelTimeUtils.getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort);
 				if (totalTime < minDuration) {
 					minDuration = totalTime;
 				}
@@ -81,31 +82,30 @@ public class CargoTravelTimeUtils {
 			return portModel.getRoutes();
 		}
 		final List<Route> routes = new LinkedList<Route>();
-		final Pair<VesselClass, List<RouteOption>> vatData = getVesselAssignmentTypeData(vesselAssignmentType);
+		final Pair<Vessel, List<RouteOption>> vatData = getVesselAssignmentTypeData(vesselAssignmentType);
 		for (final Route route : portModel.getRoutes()) {
-			if (!vatData.getSecond().contains(route.getRouteOption()) && !vatData.getFirst().getInaccessibleRoutes().contains(route.getRouteOption())) {
+			if (!vatData.getSecond().contains(route.getRouteOption()) && !vatData.getFirst().getVesselOrDelegateInaccessibleRoutes().contains(route.getRouteOption())) {
 				routes.add(route);
 			}
 		}
 		return routes;
 	}
 
-	public static Pair<VesselClass, List<RouteOption>> getVesselAssignmentTypeData(final VesselAssignmentType vesselAssignmentType) {
-		VesselClass vc;
+	public static Pair<Vessel, List<RouteOption>> getVesselAssignmentTypeData(final VesselAssignmentType vesselAssignmentType) {
+		Vessel vessel;
 		List<RouteOption> vesselDisabledRoutes;
 		if (vesselAssignmentType == null) {
-			return new Pair<VesselClass, List<RouteOption>>(null, null);
+			return new Pair<>();
 		}
 		if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket cim = ((CharterInMarket) vesselAssignmentType);
-			vc = cim.getVesselClass();
-			vesselDisabledRoutes = /* cim.isOverrideInaccessibleRoutes() ? cim.getInaccessibleRoutes() : */ EMPTY_ROUTES;
+			vessel = cim.getVessel();
 		} else {
-			final VesselAvailability v = (VesselAvailability) vesselAssignmentType;
-			vc = v.getVessel().getVesselClass();
-			vesselDisabledRoutes = v.getVessel().isOverrideInaccessibleRoutes() ? v.getVessel().getInaccessibleRoutes() : EMPTY_ROUTES;
+			final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
+			vessel = va.getVessel();
 		}
-		return new Pair(vc, vesselDisabledRoutes);
+		vesselDisabledRoutes = vessel.getVesselOrDelegateInaccessibleRoutes();
+		return new Pair(vessel, vesselDisabledRoutes);
 	}
 
 	private static List<Route> processRouteOptions(final EList<Route> routes, final EList<RouteOption> inaccessibleRoutes) {
@@ -121,7 +121,7 @@ public class CargoTravelTimeUtils {
 		return newRoutes;
 	}
 
-	public static Pair<LoadSlot, DischargeSlot> getDESSlots(final Cargo cargo) {
+	public static Pair<@Nullable LoadSlot, @Nullable DischargeSlot> getDESSlots(final Cargo cargo) {
 		if (cargo.getCargoType() == CargoType.DES) {
 			LoadSlot desPurchase = null;
 			DischargeSlot dischargeSlot = null;
@@ -135,32 +135,31 @@ public class CargoTravelTimeUtils {
 					dischargeSlot = (DischargeSlot) s;
 				}
 			}
-			return new Pair<LoadSlot, DischargeSlot>(desPurchase, dischargeSlot);
+			return new Pair<>(desPurchase, dischargeSlot);
 		}
-		return new Pair<LoadSlot, DischargeSlot>();
+		return new Pair<>();
 	}
 
-	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final VesselClass vesselClass, final boolean isLaden) {
+	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final Vessel vessel, final boolean isLaden) {
 		double referenceSpeed;
 
 		// catch error in case no service registered
 		if (shippingDaysSpeedProvider != null) {
-			referenceSpeed = shippingDaysSpeedProvider.getSpeed(vesselClass, isLaden);
+			referenceSpeed = shippingDaysSpeedProvider.getSpeed(vessel, isLaden);
 		} else {
-			referenceSpeed = vesselClass.getMaxSpeed();
+			referenceSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		}
 		return referenceSpeed;
 	}
 
-	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot loadSlot, final VesselClass vesselClass,
-			final boolean isLaden) {
+	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot loadSlot, final Vessel vessel, final boolean isLaden) {
 		double referenceSpeed;
 
 		// catch error in case no service registered
 		if (shippingDaysSpeedProvider != null) {
-			referenceSpeed = shippingDaysSpeedProvider.getSpeed(loadSlot, vesselClass, isLaden);
+			referenceSpeed = shippingDaysSpeedProvider.getSpeed(loadSlot, vessel, isLaden);
 		} else {
-			referenceSpeed = vesselClass.getMaxSpeed();
+			referenceSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		}
 		return referenceSpeed;
 	}

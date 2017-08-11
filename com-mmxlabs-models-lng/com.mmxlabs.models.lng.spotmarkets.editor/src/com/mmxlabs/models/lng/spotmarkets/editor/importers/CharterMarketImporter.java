@@ -50,17 +50,18 @@ public class CharterMarketImporter extends DefaultClassImporter {
 
 			final String kind = row.get(KIND_KEY);
 			if ("CharterCostModel".equals(kind)) {
-				final String vesselClassesStr = row.get("vesselclasses");
-				if (vesselClassesStr != null) {
+				final String vesselsStr = row.get("vesselclasses");
+				if (vesselsStr != null) {
 					final ImportResults results = new ImportResults(null);
 
-					final String[] vesselClasses = vesselClassesStr.split(",");
-					for (final String vesselClass : vesselClasses) {
+					final String[] vessels = vesselsStr.split(",");
+					for (final String vessel : vessels) {
 						final String charterOutPrice = row.get("charteroutprice");
 						if (charterOutPrice != null && !charterOutPrice.isEmpty()) {
 							final CharterOutMarket market = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
-							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS,
-									getEReferenceLinkType(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS), vesselClass, context));
+
+							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS,
+									getEReferenceLinkType(SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__VESSELS), vessel, context));
 
 							market.setCharterOutRate(charterOutPrice);
 
@@ -77,15 +78,15 @@ public class CharterMarketImporter extends DefaultClassImporter {
 								}
 							}
 
-							market.setName(String.format("%s - %s", vesselClass, charterOutPrice));
+							market.setName(String.format("%s - %s", vessel, charterOutPrice));
 
 							results.add(market);
 						}
 						final String charterInPrice = row.get("charterinprice");
 						if (charterInPrice != null && !charterInPrice.isEmpty()) {
 							final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS,
-									getEReferenceLinkType(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS), vesselClass, context));
+							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL,
+									getEReferenceLinkType(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL), vessel, context));
 
 							market.setCharterInRate(charterInPrice);
 
@@ -102,7 +103,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 								}
 							}
 
-							market.setName(String.format("%s - %s", vesselClass, charterInPrice));
+							market.setName(String.format("%s - %s", vessel, charterInPrice));
 
 							results.add(market);
 						}

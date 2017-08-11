@@ -17,8 +17,6 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.ZoneId;

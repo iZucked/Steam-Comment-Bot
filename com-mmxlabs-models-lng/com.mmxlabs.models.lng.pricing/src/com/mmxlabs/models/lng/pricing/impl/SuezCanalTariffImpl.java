@@ -38,9 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getTugBands <em>Tug Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getTugCost <em>Tug Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getMooringCost <em>Mooring Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getPilotageCost <em>Pilotage Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getDisbursements <em>Disbursements</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getFixedCosts <em>Fixed Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getDiscountFactor <em>Discount Factor</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getSdrToUSD <em>Sdr To USD</em>}</li>
  * </ul>
@@ -89,64 +87,24 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	protected double tugCost = TUG_COST_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMooringCost() <em>Mooring Cost</em>}' attribute.
+	 * The default value of the '{@link #getFixedCosts() <em>Fixed Costs</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMooringCost()
+	 * @see #getFixedCosts()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double MOORING_COST_EDEFAULT = 0.0;
+	protected static final double FIXED_COSTS_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getMooringCost() <em>Mooring Cost</em>}' attribute.
+	 * The cached value of the '{@link #getFixedCosts() <em>Fixed Costs</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMooringCost()
+	 * @see #getFixedCosts()
 	 * @generated
 	 * @ordered
 	 */
-	protected double mooringCost = MOORING_COST_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPilotageCost() <em>Pilotage Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotageCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double PILOTAGE_COST_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getPilotageCost() <em>Pilotage Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotageCost()
-	 * @generated
-	 * @ordered
-	 */
-	protected double pilotageCost = PILOTAGE_COST_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getDisbursements() <em>Disbursements</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDisbursements()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double DISBURSEMENTS_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getDisbursements() <em>Disbursements</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDisbursements()
-	 * @generated
-	 * @ordered
-	 */
-	protected double disbursements = DISBURSEMENTS_EDEFAULT;
+	protected double fixedCosts = FIXED_COSTS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDiscountFactor() <em>Discount Factor</em>}' attribute.
@@ -257,8 +215,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getMooringCost() {
-		return mooringCost;
+	public double getFixedCosts() {
+		return fixedCosts;
 	}
 
 	/**
@@ -266,53 +224,11 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMooringCost(double newMooringCost) {
-		double oldMooringCost = mooringCost;
-		mooringCost = newMooringCost;
+	public void setFixedCosts(double newFixedCosts) {
+		double oldFixedCosts = fixedCosts;
+		fixedCosts = newFixedCosts;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SUEZ_CANAL_TARIFF__MOORING_COST, oldMooringCost, mooringCost));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public double getPilotageCost() {
-		return pilotageCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPilotageCost(double newPilotageCost) {
-		double oldPilotageCost = pilotageCost;
-		pilotageCost = newPilotageCost;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SUEZ_CANAL_TARIFF__PILOTAGE_COST, oldPilotageCost, pilotageCost));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public double getDisbursements() {
-		return disbursements;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDisbursements(double newDisbursements) {
-		double oldDisbursements = disbursements;
-		disbursements = newDisbursements;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SUEZ_CANAL_TARIFF__DISBURSEMENTS, oldDisbursements, disbursements));
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS, oldFixedCosts, fixedCosts));
 	}
 
 	/**
@@ -387,12 +303,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 				return getTugBands();
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				return getTugCost();
-			case PricingPackage.SUEZ_CANAL_TARIFF__MOORING_COST:
-				return getMooringCost();
-			case PricingPackage.SUEZ_CANAL_TARIFF__PILOTAGE_COST:
-				return getPilotageCost();
-			case PricingPackage.SUEZ_CANAL_TARIFF__DISBURSEMENTS:
-				return getDisbursements();
+			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:
+				return getFixedCosts();
 			case PricingPackage.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR:
 				return getDiscountFactor();
 			case PricingPackage.SUEZ_CANAL_TARIFF__SDR_TO_USD:
@@ -421,14 +333,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				setTugCost((Double)newValue);
 				return;
-			case PricingPackage.SUEZ_CANAL_TARIFF__MOORING_COST:
-				setMooringCost((Double)newValue);
-				return;
-			case PricingPackage.SUEZ_CANAL_TARIFF__PILOTAGE_COST:
-				setPilotageCost((Double)newValue);
-				return;
-			case PricingPackage.SUEZ_CANAL_TARIFF__DISBURSEMENTS:
-				setDisbursements((Double)newValue);
+			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:
+				setFixedCosts((Double)newValue);
 				return;
 			case PricingPackage.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR:
 				setDiscountFactor((Double)newValue);
@@ -457,14 +363,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				setTugCost(TUG_COST_EDEFAULT);
 				return;
-			case PricingPackage.SUEZ_CANAL_TARIFF__MOORING_COST:
-				setMooringCost(MOORING_COST_EDEFAULT);
-				return;
-			case PricingPackage.SUEZ_CANAL_TARIFF__PILOTAGE_COST:
-				setPilotageCost(PILOTAGE_COST_EDEFAULT);
-				return;
-			case PricingPackage.SUEZ_CANAL_TARIFF__DISBURSEMENTS:
-				setDisbursements(DISBURSEMENTS_EDEFAULT);
+			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:
+				setFixedCosts(FIXED_COSTS_EDEFAULT);
 				return;
 			case PricingPackage.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR:
 				setDiscountFactor(DISCOUNT_FACTOR_EDEFAULT);
@@ -490,12 +390,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 				return tugBands != null && !tugBands.isEmpty();
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				return tugCost != TUG_COST_EDEFAULT;
-			case PricingPackage.SUEZ_CANAL_TARIFF__MOORING_COST:
-				return mooringCost != MOORING_COST_EDEFAULT;
-			case PricingPackage.SUEZ_CANAL_TARIFF__PILOTAGE_COST:
-				return pilotageCost != PILOTAGE_COST_EDEFAULT;
-			case PricingPackage.SUEZ_CANAL_TARIFF__DISBURSEMENTS:
-				return disbursements != DISBURSEMENTS_EDEFAULT;
+			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:
+				return fixedCosts != FIXED_COSTS_EDEFAULT;
 			case PricingPackage.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR:
 				return discountFactor != DISCOUNT_FACTOR_EDEFAULT;
 			case PricingPackage.SUEZ_CANAL_TARIFF__SDR_TO_USD:
@@ -516,12 +412,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (tugCost: ");
 		result.append(tugCost);
-		result.append(", mooringCost: ");
-		result.append(mooringCost);
-		result.append(", pilotageCost: ");
-		result.append(pilotageCost);
-		result.append(", disbursements: ");
-		result.append(disbursements);
+		result.append(", fixedCosts: ");
+		result.append(fixedCosts);
 		result.append(", discountFactor: ");
 		result.append(discountFactor);
 		result.append(", sdrToUSD: ");

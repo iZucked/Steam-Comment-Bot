@@ -9,7 +9,7 @@ import java.util.Collection;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 
@@ -22,14 +22,14 @@ import com.mmxlabs.models.lng.port.Route;
 public interface IShippingDaysRestrictionSpeedProvider {
 
 	/**
-	 * Return the reference speed to use to check shipping days times for this vessel class.
+	 * Return the reference speed to use to check shipping days times for this vessel.
 	 * 
-	 * @param vesselClass
+	 * @param vessel
 	 * @return
 	 */
-	double getSpeed(@NonNull VesselClass vesselClass, boolean isLaden);
+	double getSpeed(@NonNull Vessel vessel, boolean isLaden);
 
-	double getSpeed(@NonNull LoadSlot loadSlot, @NonNull VesselClass vesselClass, boolean isLaden);
+	double getSpeed(@NonNull LoadSlot loadSlot, @NonNull Vessel vessel, boolean isLaden);
 
 	@NonNull
 	Collection<@NonNull Route> getValidRoutes(@NonNull PortModel portModel, @NonNull final LoadSlot loadSlot);

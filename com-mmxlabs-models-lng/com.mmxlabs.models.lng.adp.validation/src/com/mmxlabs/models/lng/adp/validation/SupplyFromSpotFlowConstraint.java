@@ -11,8 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.DeliverToSpotFlow;
-import com.mmxlabs.models.lng.adp.SupplyFromFlow;
 import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
 import com.mmxlabs.models.lng.adp.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;

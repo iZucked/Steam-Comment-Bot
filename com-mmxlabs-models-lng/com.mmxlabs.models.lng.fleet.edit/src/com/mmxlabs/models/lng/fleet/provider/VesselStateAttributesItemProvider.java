@@ -54,6 +54,7 @@ public class VesselStateAttributesItemProvider
 			addIdleNBORatePropertyDescriptor(object);
 			addIdleBaseRatePropertyDescriptor(object);
 			addInPortBaseRatePropertyDescriptor(object);
+			addFuelConsumptionOverridePropertyDescriptor(object);
 			addServiceSpeedPropertyDescriptor(object);
 			addInPortNBORatePropertyDescriptor(object);
 		}
@@ -144,6 +145,28 @@ public class VesselStateAttributesItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Fuel Consumption Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFuelConsumptionOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselStateAttributes_fuelConsumptionOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselStateAttributes_fuelConsumptionOverride_feature", "_UI_VesselStateAttributes_type"),
+				 FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -261,6 +284,7 @@ public class VesselStateAttributesItemProvider
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION_OVERRIDE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

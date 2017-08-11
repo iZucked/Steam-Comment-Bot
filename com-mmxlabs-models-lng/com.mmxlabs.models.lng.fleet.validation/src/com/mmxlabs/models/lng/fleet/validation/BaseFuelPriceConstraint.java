@@ -15,7 +15,7 @@ public class BaseFuelPriceConstraint  extends AbstractModelConstraint {
 
 	@Override
 	public IStatus validate(IValidationContext ctx) {
-		final EObject target = ctx.getTarget();
+//		final EObject target = ctx.getTarget();
 
 		// Disable for now in light of API change..
 //		if (target instanceof BaseFuelCost) {

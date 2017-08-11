@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -36,7 +34,6 @@ import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
-import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -51,7 +48,6 @@ import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -446,7 +442,7 @@ public class BaseCaseEvaluator {
 				final String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
 				market.setName(id);
 				market.setCharterInRate(roundTripShippingOption.getHireCost());
-				market.setVesselClass(roundTripShippingOption.getVesselClass());
+				market.setVessel(roundTripShippingOption.getVessel());
 				cargo.setVesselAssignmentType(market);
 				cargo.setSpotIndex(-1);
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
@@ -507,12 +503,12 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
 					// vesselAvailability.getStartHeel().setPriceExpression(PerMMBTU(0.1);
 
-					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 
@@ -550,12 +546,12 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 				if (fleetShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
 					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
-					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 				vesselAvailability.setOptional(false);
@@ -589,12 +585,12 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
 					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
-					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 
@@ -632,12 +628,12 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 
 				if (fleetShippingOption.isUseSafetyHeel()) {
-					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getStartHeel().setCvValue(22.8);
 					// vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
 
-					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselClass().getMinHeel());
-					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getEndHeel().setMinimumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
+					vesselAvailability.getEndHeel().setMaximumEndHeel(vessel.getVesselOrDelegateSafetyHeel());
 					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 				vesselAvailability.setOptional(false);
@@ -654,7 +650,7 @@ public class BaseCaseEvaluator {
 				final String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
 				market.setName(id);
 				market.setCharterInRate(roundTripShippingOption.getHireCost());
-				market.setVesselClass(roundTripShippingOption.getVesselClass());
+				market.setVessel(roundTripShippingOption.getVessel());
 				clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
 
 				availabilitiesMap.put(roundTripShippingOption, market);

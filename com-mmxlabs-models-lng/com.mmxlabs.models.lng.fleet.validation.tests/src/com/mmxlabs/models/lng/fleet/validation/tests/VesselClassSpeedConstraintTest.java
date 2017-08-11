@@ -21,7 +21,7 @@ import org.mockito.AdditionalMatchers;
 import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint;
 
@@ -120,28 +120,28 @@ public class VesselClassSpeedConstraintTest {
 	private void testVesselClassSpeedConstraintSuccess(final VesselStateAttributes laden, final VesselStateAttributes ballast) {
 
 		// mock a vessel class
-		final VesselClass vesselClass = mock(VesselClass.class);
+		final Vessel vessel = mock(Vessel.class);
 		final IValidationContext validationContext = mock(IValidationContext.class);
 		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);
 
 		final VesselClassSpeedConstraint constraint = new VesselClassSpeedConstraint();
 
 		// what's the target?
-		when(validationContext.getTarget()).thenReturn(vesselClass);
+		when(validationContext.getTarget()).thenReturn(vessel);
 
-		when(vesselClass.getBallastAttributes()).thenReturn(ballast);
-		when(vesselClass.getLadenAttributes()).thenReturn(laden);
+		when(vessel.getBallastAttributes()).thenReturn(ballast);
+		when(vessel.getLadenAttributes()).thenReturn(laden);
 		when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
-		when(validationContext.getTarget()).thenReturn(vesselClass);
+		when(validationContext.getTarget()).thenReturn(vessel);
 
 		constraint.validate(validationContext);
 
-		verify(vesselClass).getBallastAttributes();
-		verify(vesselClass).getLadenAttributes();
+		verify(vessel).getBallastAttributes();
+		verify(vessel).getLadenAttributes();
 		verify(validationContext).createSuccessStatus();
 		verify(validationContext).getTarget();
 		// verify that only the methods above are called.
-		verifyNoMoreInteractions(vesselClass);
+		verifyNoMoreInteractions(vessel);
 		verifyNoMoreInteractions(validationContext);
 	}
 
@@ -154,7 +154,7 @@ public class VesselClassSpeedConstraintTest {
 	private void testVesselClassSpeedConstraintOrderFailure(final double minSpeed, final double maxSpeed) {
 
 		// mock a vessel class
-		final VesselClass vesselClass = mock(VesselClass.class);
+		final Vessel vessel = mock(Vessel.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 
@@ -168,30 +168,30 @@ public class VesselClassSpeedConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 
 		// what's the target?
-		when(validationContext.getTarget()).thenReturn(vesselClass);
-		when(vesselClass.getBallastAttributes()).thenReturn(ballast);
-		when(vesselClass.getLadenAttributes()).thenReturn(laden);
+		when(validationContext.getTarget()).thenReturn(vessel);
+		when(vessel.getBallastAttributes()).thenReturn(ballast);
+		when(vessel.getLadenAttributes()).thenReturn(laden);
 		when(validationContext.getCurrentConstraintId()).thenReturn(ORDER_ID);
-		when(vesselClass.getName()).thenReturn("vc");
+		when(vessel.getName()).thenReturn("vc");
 		// one call for testing, another call for producing the error.
-		when(vesselClass.getMinSpeed()).thenReturn(minSpeed);
+		when(vessel.getVesselOrDelegateMinSpeed()).thenReturn(minSpeed);
 		// one call for testing, another call for producing the error.
-		when(vesselClass.getMaxSpeed()).thenReturn(maxSpeed);
+		when(vessel.getVesselOrDelegateMaxSpeed()).thenReturn(maxSpeed);
 		when(validationContext.createFailureStatus(anyString(), anyFloat(), anyFloat())).thenReturn(failureStatus);
 
 		constraint.validate(validationContext);
 
 		// what's the target?
-		verify(vesselClass).getBallastAttributes();
-		verify(vesselClass).getLadenAttributes();
-		verify(vesselClass).getName();
-		verify(vesselClass, times(2)).getMinSpeed();
-		verify(vesselClass, times(2)).getMaxSpeed();
+		verify(vessel).getBallastAttributes();
+		verify(vessel).getLadenAttributes();
+		verify(vessel).getName();
+		verify(vessel, times(2)).getVesselOrDelegateMinSpeed();
+		verify(vessel, times(2)).getVesselOrDelegateMaxSpeed();
 		verify(validationContext).getTarget();
 		verify(validationContext).getCurrentConstraintId();
 		verify(validationContext).createFailureStatus(Matchers.anyString(), AdditionalMatchers.eq(minSpeed, 1.0), AdditionalMatchers.eq(maxSpeed, 1.0));
 		// verify that only the methods above are called.
-		verifyNoMoreInteractions(vesselClass);
+		verifyNoMoreInteractions(vessel);
 		verifyNoMoreInteractions(validationContext);
 	}
 
@@ -204,7 +204,7 @@ public class VesselClassSpeedConstraintTest {
 	private void testVesselClassSpeedConstraintOrderSuccess(final double minSpeed, final double maxSpeed) {
 
 		// mock a vessel class
-		final VesselClass vesselClass = mock(VesselClass.class);
+		final Vessel vessel = mock(Vessel.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 
@@ -217,27 +217,27 @@ public class VesselClassSpeedConstraintTest {
 		final VesselClassSpeedConstraint constraint = new VesselClassSpeedConstraint();
 
 		// what's the target?
-		when(validationContext.getTarget()).thenReturn(vesselClass);
-		when(vesselClass.getBallastAttributes()).thenReturn(ballast);
-		when(vesselClass.getLadenAttributes()).thenReturn(laden);
+		when(validationContext.getTarget()).thenReturn(vessel);
+		when(vessel.getBallastAttributes()).thenReturn(ballast);
+		when(vessel.getLadenAttributes()).thenReturn(laden);
 		when(validationContext.getCurrentConstraintId()).thenReturn(ORDER_ID);
 		// one call for testing, another call for producing the error.
-		when(vesselClass.getMinSpeed()).thenReturn(minSpeed);
+		when(vessel.getVesselOrDelegateMinSpeed()).thenReturn(minSpeed);
 		// one call for testing, another call for producing the error.
-		when(vesselClass.getMaxSpeed()).thenReturn(maxSpeed);
+		when(vessel.getVesselOrDelegateMaxSpeed()).thenReturn(maxSpeed);
 		when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 
 		constraint.validate(validationContext);
 
-		verify(vesselClass).getBallastAttributes();
-		verify(vesselClass).getLadenAttributes();
-		verify(vesselClass).getMinSpeed();
-		verify(vesselClass).getMaxSpeed();
+		verify(vessel).getBallastAttributes();
+		verify(vessel).getLadenAttributes();
+		verify(vessel).getVesselOrDelegateMinSpeed();
+		verify(vessel).getVesselOrDelegateMaxSpeed();
 		verify(validationContext).getTarget();
 		verify(validationContext).getCurrentConstraintId();
 		verify(validationContext).createSuccessStatus();
 		// verify that only the methods above are called.
-		verifyNoMoreInteractions(vesselClass);
+		verifyNoMoreInteractions(vessel);
 		verifyNoMoreInteractions(validationContext);
 	}
 
@@ -347,7 +347,7 @@ public class VesselClassSpeedConstraintTest {
 	private void testVesselClassSpeedConstraintID(final boolean expectSuccess, final String ID, final double minVCSpeed, final double maxVCSpeed, final double minFCLSpeed, final double maxFCLSpeed) {
 
 		// mock a vessel class
-		final VesselClass vesselClass = mock(VesselClass.class);
+		final Vessel vessel = mock(Vessel.class);
 
 		final IValidationContext validationContext = mock(IValidationContext.class);
 
@@ -370,21 +370,21 @@ public class VesselClassSpeedConstraintTest {
 		final IConstraintStatus resultStatus = mock(IConstraintStatus.class);
 
 		// what's the target?
-		when(validationContext.getTarget()).thenReturn(vesselClass);
+		when(validationContext.getTarget()).thenReturn(vessel);
 		// Make sure the vessel class returns the ballast and laden attribs.
-		when(vesselClass.getBallastAttributes()).thenReturn(ballast);
-		when(vesselClass.getLadenAttributes()).thenReturn(laden);
+		when(vessel.getBallastAttributes()).thenReturn(ballast);
+		when(vessel.getLadenAttributes()).thenReturn(laden);
 		// The ID that we are testing for.
 		when(validationContext.getCurrentConstraintId()).thenReturn(ID);
 		// The vessel class has a min and max speed as specified by the method arguments.
-		when(vesselClass.getMinSpeed()).thenReturn(minVCSpeed);
-		when(vesselClass.getMaxSpeed()).thenReturn(maxVCSpeed);
+		when(vessel.getVesselOrDelegateMinSpeed()).thenReturn(minVCSpeed);
+		when(vessel.getVesselOrDelegateMaxSpeed()).thenReturn(maxVCSpeed);
 		// Set the fuel consump. lines to return a speed as specified by the method arguments.
 		when(minFCL.getSpeed()).thenReturn(minFCLSpeed);
 		when(maxFCL.getSpeed()).thenReturn(maxFCLSpeed);
 		// Return the same list of fuel consumption values for the laden and ballast
-		when(laden.getFuelConsumption()).thenReturn(list);
-		when(ballast.getFuelConsumption()).thenReturn(list);
+		when(laden.getVesselOrDelegateFuelConsumption()).thenReturn(list);
+		when(ballast.getVesselOrDelegateFuelConsumption()).thenReturn(list);
 
 		// find out the speed which the test is failing about, so the failure status can be called using the correct speed.
 		double failureSpeed = 0;
@@ -397,7 +397,7 @@ public class VesselClassSpeedConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 		} else {
-			when(validationContext.createFailureStatus(Matchers.<Object>anyVararg())).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(Matchers.<Object> anyVararg())).thenReturn(resultStatus);
 		}
 
 		constraint.validate(validationContext);
@@ -405,24 +405,24 @@ public class VesselClassSpeedConstraintTest {
 		// what's the target?
 		verify(validationContext).getTarget();
 		// Make sure the vessel class returns the ballast and laden attribs.
-		verify(vesselClass).getBallastAttributes();
-		verify(vesselClass).getLadenAttributes();
+		verify(vessel).getBallastAttributes();
+		verify(vessel).getLadenAttributes();
 		// The ID that we are testing for.
 		verify(validationContext, atLeast(2)).getCurrentConstraintId();
 		// The vessel class has a min and max speed as specified by the method arguments.
-		verify(vesselClass, atLeast(0)).getMinSpeed();
-		verify(vesselClass, atLeast(0)).getMaxSpeed();
+		verify(vessel, atLeast(0)).getVesselOrDelegateMinSpeed();
+		verify(vessel, atLeast(0)).getVesselOrDelegateMaxSpeed();
 		// Set the fuel consump. lines to return a speed as specified by the method arguments.
 		verify(minFCL, atLeast(0)).getSpeed();
 		verify(maxFCL, atLeast(0)).getSpeed();
 		// Return the same list of fuel consumption values for the laden and ballast
-		verify(laden, atLeast(0)).getFuelConsumption();
-		verify(ballast, atLeast(0)).getFuelConsumption();
+		verify(laden, atLeast(0)).getVesselOrDelegateFuelConsumption();
+		verify(ballast, atLeast(0)).getVesselOrDelegateFuelConsumption();
 
 		if (expectSuccess) {
 			verify(validationContext).createSuccessStatus();
 		} else {
-			verify(validationContext).createFailureStatus(Matchers.<Object>anyVararg());
+			verify(validationContext).createFailureStatus(Matchers.<Object> anyVararg());
 		}
 	}
 

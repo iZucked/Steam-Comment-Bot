@@ -4,11 +4,16 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.base.Joiner;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -17,10 +22,11 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
@@ -38,6 +44,7 @@ public class ScenarioElementNameHelper {
 	private static final @NonNull String TYPE_CARGO = "Cargo";
 	private static final @NonNull String TYPE_SLOT = "Slot";
 	private static final @NonNull String TYPE_PORT = "Port";
+	private static final @NonNull String TYPE_VESSEL = "Vessel";
 	private static final @NonNull String TYPE_VESSEL_EVENT = "Event";
 	private static final @NonNull String TYPE_VESSEL_AVAILABILITY = "Availability";
 
@@ -45,12 +52,15 @@ public class ScenarioElementNameHelper {
 		return getName(target, "(unknown)");
 	}
 
-	public static @NonNull String getTypeName(@Nullable EObject target) {
+	public static @NonNull String getTypeName(@Nullable final EObject target) {
 		if (target instanceof Cargo) {
 			return TYPE_CARGO;
 		}
 		if (target instanceof VesselEvent) {
 			return TYPE_VESSEL_EVENT;
+		}
+		if (target instanceof Vessel) {
+			return TYPE_VESSEL;
 		}
 		if (target instanceof VesselAvailability) {
 			return TYPE_VESSEL_AVAILABILITY;
@@ -71,7 +81,10 @@ public class ScenarioElementNameHelper {
 		} else if (target instanceof APortSet) {
 			final APortSet port = (APortSet) target;
 			return String.format("%s \"%s\"", TYPE_PORT.toLowerCase(), getNonNullString(port.getName()));
-		} 
+		} else if (target instanceof NamedObject) {
+			final NamedObject namedObject = (NamedObject) target;
+			return String.format("%s \"%s\"", getTypeName(namedObject).toLowerCase(), getNonNullString(namedObject.getName()));
+		}
 		return defaultName;
 	}
 
@@ -104,5 +117,17 @@ public class ScenarioElementNameHelper {
 			}
 		}
 		return defaultName;
+	}
+
+	public static @NonNull String getName(final @Nullable Collection<AVesselSet<Vessel>> vessels, final @NonNull String defaultName) {
+		if (vessels == null || vessels.isEmpty()) {
+			return defaultName;
+		}
+		final List<String> parts = new LinkedList<>();
+		for (final AVesselSet<Vessel> v : vessels) {
+			parts.add(v.getName());
+		}
+
+		return Joiner.on(", ").join(parts);
 	}
 }

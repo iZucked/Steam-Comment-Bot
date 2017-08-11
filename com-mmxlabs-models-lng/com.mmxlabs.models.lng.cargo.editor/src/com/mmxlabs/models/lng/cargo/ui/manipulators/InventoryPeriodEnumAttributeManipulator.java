@@ -9,13 +9,10 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
-import com.mmxlabs.models.lng.commercial.ContractType;
-import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 /**

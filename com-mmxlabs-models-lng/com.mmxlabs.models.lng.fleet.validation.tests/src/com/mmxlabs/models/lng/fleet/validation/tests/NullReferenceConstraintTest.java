@@ -18,7 +18,6 @@ import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint;
 
 /**
@@ -60,43 +59,35 @@ import com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint;
  */
 public class NullReferenceConstraintTest {
 
-	private VesselClass initVesselClass() {
-		final VesselClass vesselClass = FleetFactory.eINSTANCE.createVesselClass();
-		// create and set values for fields that start out as null
-		vesselClass.setBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
-		vesselClass.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
-		vesselClass.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
-
-		return vesselClass;
-	}
-
 	private Vessel initVessel() {
-		final Vessel v = FleetFactory.eINSTANCE.createVessel();
+		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+		// create and set values for fields that start out as null
+		vessel.setBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		vessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
+		vessel.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 
-		// vessel class is null by default, so add a value.
-		v.setVesselClass(FleetFactory.eINSTANCE.createVesselClass());
-		return v;
+		return vessel;
 	}
 
 	/**
-	 * Test that {@link VesselClass#getBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
+	 * Test that {@link VesselClass#getVesselOrDelegateBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
 	 */
 	@Test
-	public void testVesselClass() {
+	public void testVessel() {
 
-		final VesselClass vc = initVesselClass();
+		final Vessel vc = initVessel();
 
 		// expect it not to be null, and so succeed.
 		testNullReferenceConstraint(true, vc);
 	}
 
 	/**
-	 * Test that {@link VesselClass#getBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
+	 * Test that {@link VesselClass#getVesselOrDelegateBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
 	 */
 	@Test
 	public void testVesselClassBaseFuelNull() {
 
-		final VesselClass vc = initVesselClass();
+		final Vessel vc = initVessel();
 
 		// test the base fuel being null
 		vc.setBaseFuel(null);
@@ -104,12 +95,12 @@ public class NullReferenceConstraintTest {
 	}
 
 	/**
-	 * Test that {@link VesselClass#getBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
+	 * Test that {@link VesselClass#getVesselOrDelegateBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
 	 */
 	@Test
 	public void testVesselClassNullBallastAttributes() {
 
-		final VesselClass vc = initVesselClass();
+		final Vessel vc = initVessel();
 
 		// test the ballast attributes being null
 		vc.setBallastAttributes(null);
@@ -117,40 +108,15 @@ public class NullReferenceConstraintTest {
 	}
 
 	/**
-	 * Test that {@link VesselClass#getBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
+	 * Test that {@link VesselClass#getVesselOrDelegateBaseFuel()}, {@link VesselClass#getBallastAttributes()}, and {@link VesselClass#getLadenAttributes()} are not null. If any one is null, the test should fail.
 	 */
 	@Test
 	public void testVesselClassLadenAttributesNull() {
 
-		final VesselClass vc = initVesselClass();
+		final Vessel vc = initVessel();
 		// test the laden attributes being null
 		vc.setLadenAttributes(null);
 		testNullReferenceConstraint(false, vc);
-	}
-
-	/**
-	 * Test that {@link Vessel#getClass_()} is not null. If it is then expect a failure.
-	 */
-	@Test
-	public void testVessel() {
-
-		final Vessel v = initVessel();
-
-		// expect it not to be null, and so succeed.
-		testNullReferenceConstraint(true, v);
-	}
-
-	/**
-	 * Test that {@link Vessel#getClass_()} is not null. If it is then expect a failure.
-	 */
-	@Test
-	public void testVesselClassNull() {
-
-		final Vessel v = initVessel();
-
-		v.setVesselClass(null);
-		// expect it to be null, so fail.
-		testNullReferenceConstraint(false, v);
 	}
 
 	/**

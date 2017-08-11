@@ -3,9 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,8 +19,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoute <em>Route</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getRouteOption <em>Route Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getLadenCost <em>Laden Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getBallastCost <em>Ballast Cost</em>}</li>
  * </ul>
@@ -28,56 +31,49 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  */
 public interface RouteCost extends MMXObject {
 	/**
-	 * Returns the value of the '<em><b>Route</b></em>' reference.
+	 * Returns the value of the '<em><b>Route Option</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Route</em>' reference isn't clear,
+	 * If the meaning of the '<em>Route Option</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Route</em>' reference.
-	 * @see #setRoute(Route)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_Route()
-	 * @model required="true"
+	 * @return the value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #setRouteOption(RouteOption)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_RouteOption()
+	 * @model
 	 * @generated
 	 */
-	Route getRoute();
+	RouteOption getRouteOption();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoute <em>Route</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.RouteCost#getRouteOption <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Route</em>' reference.
-	 * @see #getRoute()
+	 * @param value the new value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #getRouteOption()
 	 * @generated
 	 */
-	void setRoute(Route value);
+	void setRouteOption(RouteOption value);
 
 	/**
-	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
+	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}<code>&lt;com.mmxlabs.models.lng.fleet.Vessel&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
+	 * If the meaning of the '<em>Vessels</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Class</em>' reference.
-	 * @see #setVesselClass(VesselClass)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_VesselClass()
+	 * @return the value of the '<em>Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_Vessels()
 	 * @model required="true"
 	 * @generated
 	 */
-	VesselClass getVesselClass();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass <em>Vessel Class</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Vessel Class</em>' reference.
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	void setVesselClass(VesselClass value);
+	EList<AVesselSet<Vessel>> getVessels();
 
 	/**
 	 * Returns the value of the '<em><b>Laden Cost</b></em>' attribute.

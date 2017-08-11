@@ -17,7 +17,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVessels <em>Vessels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroups <em>Vessel Groups</em>}</li>
  * </ul>
@@ -42,22 +41,6 @@ public interface FleetModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<Vessel> getVessels();
-
-	/**
-	 * Returns the value of the '<em><b>Vessel Classes</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselClass}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Vessel Classes</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Classes</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_VesselClasses()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<VesselClass> getVesselClasses();
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuels</b></em>' containment reference list.

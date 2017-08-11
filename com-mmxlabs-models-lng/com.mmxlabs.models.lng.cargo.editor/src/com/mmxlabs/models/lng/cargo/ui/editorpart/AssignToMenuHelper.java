@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.Activator;
@@ -60,7 +59,7 @@ public class AssignToMenuHelper {
 			}
 
 			public void run() {
-				helper.assignNominatedVessel(String.format("Assign to %s (%dk)", vessel.getName(), vessel.getVesselOrVesselClassCapacity() / 1000), slot, vessel);
+				helper.assignNominatedVessel(String.format("Assign to %s (%dk)", vessel.getName(), vessel.getVesselOrDelegateCapacity() / 1000), slot, vessel);
 			}
 		}
 
@@ -83,7 +82,7 @@ public class AssignToMenuHelper {
 				if (p.getSecond() == slot.getNominatedVessel()) {
 					continue;
 				}
-				int capacity = ((Vessel) p.getSecond()).getVesselOrVesselClassCapacity();
+				int capacity = ((Vessel) p.getSecond()).getVesselOrDelegateCapacity();
 				m.addAction(new AssignAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), (Vessel) p.getSecond()));
 				counter++;
 				if (firstEntry == null) {
@@ -111,7 +110,7 @@ public class AssignToMenuHelper {
 		} else {
 			for (final Pair<String, EObject> p : allowedValues) {
 				if (p.getSecond() != slot.getNominatedVessel()) {
-					int capacity = ((Vessel) p.getSecond()).getVesselOrVesselClassCapacity();
+					int capacity = ((Vessel) p.getSecond()).getVesselOrDelegateCapacity();
 					reassignMenuManager.addAction(new AssignAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), (Vessel) p.getSecond()));
 				}
 			}
@@ -150,8 +149,8 @@ public class AssignToMenuHelper {
 			}
 			if (assignmentOption instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
-				VesselClass vesselClass = charterInMarket.getVesselClass();
-				int capacity = vesselClass == null ? 0 : vesselClass.getCapacity();
+				Vessel vessel = charterInMarket.getVessel();
+				int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 				nominalMenuUsed = true;
 				nominalMenu.addAction(new RunnableAction(String.format("%s (%dk)", charterInMarket.getName(), capacity / 1000),
 						() -> helper.assignCargoToSpotCharterIn(String.format("Assign to %s", charterInMarket.getName()), cargo, charterInMarket, -1)));
@@ -200,7 +199,7 @@ public class AssignToMenuHelper {
 
 					VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
 					Vessel vessel = vesselAvailability.getVessel();
-					int capacity = vessel == null ? 0 : vessel.getVesselOrVesselClassCapacity();
+					int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 					m.addAction(new RunnableAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000), () -> {
 						helper.assignCargoToVesselAvailability(String.format("Assign to %s (%dk)", p.getFirst(), capacity / 1000), cargo, vesselAvailability);
 					}));
@@ -231,7 +230,7 @@ public class AssignToMenuHelper {
 				for (Pair<String, EObject> p : vesselAvailabilityOptions) {
 					VesselAvailability vesselAvailability = (VesselAvailability) p.getSecond();
 					Vessel vessel = vesselAvailability.getVessel();
-					int capacity = vessel == null ? 0 : vessel.getVesselOrVesselClassCapacity();
+					int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 					reassignMenuManager.addAction(new RunnableAction(String.format("%s (%dk)", p.getFirst(), capacity / 1000),
 							() -> helper.assignCargoToVesselAvailability(String.format("Assign to %s (%dk)", p.getFirst(), capacity / 1000), cargo, (VesselAvailability) p.getSecond())));
 				}

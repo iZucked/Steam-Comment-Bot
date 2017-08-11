@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.fleet.ui.valueproviders;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -26,7 +28,11 @@ public class BaseFuelValueProviderFactory implements IReferenceValueProviderFact
 
 			final EClass referenceClass = reference.getEReferenceType();
 			if (referenceClass == FleetPackage.eINSTANCE.getBaseFuel()) {
-				return new SimpleReferenceValueProvider(fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
+				return new SimpleReferenceValueProvider(fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels()) {
+					protected Pair<String, EObject> getEmptyObject() {
+						return new Pair<>("<Not specified>", null);
+					}
+				};
 			}
 		}
 		return null;

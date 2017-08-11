@@ -91,7 +91,7 @@ public interface SpotAvailability extends EObject {
 	 * @see #unsetCurve()
 	 * @see #setCurve(DataIndex)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotAvailability_Curve()
-	 * @model type="com.mmxlabs.models.lng.pricing.DataIndex<org.eclipse.emf.ecore.EIntegerObject>" containment="true" unsettable="true" required="true"
+	 * @model type="com.mmxlabs.models.lng.pricing.DataIndex&lt;org.eclipse.emf.ecore.EIntegerObject&gt;" containment="true" unsettable="true" required="true"
 	 * @generated
 	 */
 	DataIndex<Integer> getCurve();
