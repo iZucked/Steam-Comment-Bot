@@ -133,8 +133,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
-		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getVesselClass().getSafetyHeel(), vessel.getVesselClass().getSafetyHeel(), VesselTankState.MUST_BE_COLD,
-				ConstantHeelPriceCalculator.ZERO);
+		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, ConstantHeelPriceCalculator.ZERO);
 
 		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
@@ -162,8 +161,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPricePerMMBTu);
 
-		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getVesselClass().getSafetyHeel(), vessel.getVesselClass().getSafetyHeel(), VesselTankState.MUST_BE_COLD,
-				new ConstantHeelPriceCalculator(0));
+		final HeelOptionConsumer heelOptions = new HeelOptionConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0));
 
 		final PortSlot notionalReturnSlot = new NotionalEndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), heelOptions);
 
@@ -224,7 +222,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 				break;
 			case LadenBaseBallastOptimal:
 				ladenOptions.setUseFBOForSupplement(false);
-				if (!vessel.getVesselClass().hasReliqCapability()) {
+				if (!vessel.hasReliqCapability()) {
 					vpoChoices.add(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
 					vpoChoices.add(new FBOVoyagePlanChoice(ballastOptions));
 					vpoChoices.add(new IdleNBOVoyagePlanChoice(ballastOptions));
@@ -234,7 +232,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 				break;
 			case LadenFBOBallastOptimal:
 				ladenOptions.setUseFBOForSupplement(true);
-				if (!vessel.getVesselClass().hasReliqCapability()) {
+				if (!vessel.hasReliqCapability()) {
 					vpoChoices.add(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
 					vpoChoices.add(new FBOVoyagePlanChoice(ballastOptions));
 					vpoChoices.add(new IdleNBOVoyagePlanChoice(ballastOptions));

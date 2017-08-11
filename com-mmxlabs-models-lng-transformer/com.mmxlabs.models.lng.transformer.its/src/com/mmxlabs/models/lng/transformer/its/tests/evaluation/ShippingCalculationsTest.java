@@ -71,7 +71,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
-		msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, canal);
+		msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -125,7 +125,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, canal);
-		msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, canal);
+		msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -154,8 +154,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
-		msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, canal);
-		final RouteCost cost = msc.getRouteCost(msc.vc, canal);
+		msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
+		final RouteCost cost = msc.getRouteCost(msc.vessel, RouteOption.SUEZ);
 		cost.setLadenCost(500);
 
 		final SequenceTester checker = getDefaultTester();
@@ -184,8 +184,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		{
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
 			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, suezCanal);
-			msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, suezCanal);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, suezCanal);
+			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -195,8 +195,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		{
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
 			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 20, panamaCanal);
-			msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, panamaCanal);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, panamaCanal);
+			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.PANAMA);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -257,8 +257,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		{
 			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
 			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, suezCanal);
-			msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, suezCanal);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, suezCanal);
+			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.SUEZ);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.SUEZ);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -268,8 +268,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		{
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
 			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, panamaCanal);
-			msc.fleetCreator.assignDefaultPanamaCanalData(msc.vc, panamaCanal);
-			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, panamaCanal);
+			msc.fleetCreator.assignDefaultPanamaCanalData(msc.vessel, RouteOption.PANAMA);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
 			routeParameters.setExtraTransitTime(2);
 			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -340,8 +340,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// but the vessel's capacity is only 50m3 greater than its minimum heel
 		// and the journeys (after loading) use a total of 40m3 NBO
 		// so only 10m3 is available for FBO, which is not enough for both journeys
-		msc.vc.setCapacity(60);
-		msc.vc.setMinHeel(10);
+		msc.vessel.setCapacity(60);
+		msc.vessel.setSafetyHeel(10);
 
 		// Create second cargo to require arriving cold
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
@@ -456,7 +456,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: add a maximum load volume
 		msc.cargo.getSlots().get(0).setMaxQuantity(500);
 		// no minimum heel
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -487,7 +487,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		loadSlot.setCargoCV(21);
 		loadSlot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		// no minimum heel
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -579,7 +579,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		dischargeSlot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 
 		// for the moment, set min heel to zero since it causes problems in the volume calculations
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.baseFuelPricePerMT = 100;
@@ -615,7 +615,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.cargo.getSlots().get(1).setMinQuantity(9965);
 
 		// for the moment, set min heel to zero since it causes problems in the volume calculations
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.baseFuelPricePerMT = 100;
@@ -745,9 +745,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change from default scenario: cooldown times and volumes specified
-		msc.vc.setWarmingTime(3);
+		msc.vessel.setWarmingTime(3);
 		// msc.vc.setCoolingTime(1);
-		msc.vc.setCoolingVolume(100);
+		msc.vessel.setCoolingVolume(100);
 
 		msc.setupCooldown(1.0);
 		msc.loadPort.setAllowCooldown(true);
@@ -769,9 +769,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change from default scenario: cooldown times and volumes specified
-		msc.vc.setWarmingTime(0);
+		msc.vessel.setWarmingTime(0);
 		// msc.vc.setCoolingTime(0);
-		msc.vc.setCoolingVolume(100);
+		msc.vessel.setCoolingVolume(100);
 
 		msc.setupCooldown(1.0);
 		msc.loadPort.setAllowCooldown(true);
@@ -806,9 +806,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
 		// change from default scenario: cooldown times and volumes specified
-		msc.vc.setWarmingTime(0);
+		msc.vessel.setWarmingTime(0);
 		// msc.vc.setCoolingTime(0);
-		msc.vc.setCoolingVolume(100);
+		msc.vessel.setCoolingVolume(100);
 
 		msc.setupCooldownLumpSum("2100");
 		msc.loadPort.setAllowCooldown(true);
@@ -869,7 +869,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// Remove default vessel
 		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenario);
-		fleetModel.getVessels().clear();
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenario);
 		cargoModel.getVesselAvailabilities().clear();
@@ -888,9 +887,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final CharterInMarket charterModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charteringSpotMarkets.add(charterModel);
-		charterModel.setName("market-" + msc.vc.getName());
+		charterModel.setName("market-" + msc.vessel.getName());
 
-		charterModel.setVesselClass(msc.vc);
+		charterModel.setVessel(msc.vessel);
 		charterModel.setSpotCharterCount(1);
 		charterModel.setCharterInRate("" + charterRatePerDay);
 
@@ -1192,8 +1191,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		Integer[] portDurations = new Integer[] { 24, 48 };
 
 		// set the in-port laden fuel consumption for the vessel class
-		msc.vc.getLadenAttributes().setInPortBaseRate(ladenBaseConsumption);
-		msc.vc.getBallastAttributes().setInPortBaseRate(ballastBaseConsumption);
+		msc.vessel.getLadenAttributes().setInPortBaseRate(ladenBaseConsumption);
+		msc.vessel.getBallastAttributes().setInPortBaseRate(ballastBaseConsumption);
 		// set the durations of the load visit & discharge visit
 		for (int i = 0; i < portDurations.length; i++) {
 			msc.cargo.getSortedSlots().get(i).setDuration(portDurations[i]);
@@ -1230,7 +1229,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final Slot loadSlot = msc.cargo.getSlots().get(0);
 		final LocalDateTime loadDate = loadSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime();
 
-		final double maxSpeed = msc.vc.getMaxSpeed();
+		final double maxSpeed = msc.vessel.getVesselOrDelegateMaxSpeed();
 		final int firstIdle = 1;
 		Integer travelTime = msc.getTravelTime(msc.originPort, msc.loadPort, RouteOption.DIRECT, (int) maxSpeed);
 		final LocalDateTime startAfterDate = loadDate.minusHours(5 * travelTime);
@@ -1260,7 +1259,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, ScenarioModelUtil.getPortModel(scenario).getPorts());
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vessel, 1, 96, ScenarioModelUtil.getPortModel(scenario).getPorts());
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
@@ -1319,7 +1318,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, ScenarioModelUtil.getPortModel(scenario).getPorts());
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vessel, 1, 96, ScenarioModelUtil.getPortModel(scenario).getPorts());
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
@@ -1383,7 +1382,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, ScenarioModelUtil.getPortModel(scenario).getPorts());
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vessel, 1, 96, ScenarioModelUtil.getPortModel(scenario).getPorts());
 
 		SequenceTester checker = getDefaultTester();
 

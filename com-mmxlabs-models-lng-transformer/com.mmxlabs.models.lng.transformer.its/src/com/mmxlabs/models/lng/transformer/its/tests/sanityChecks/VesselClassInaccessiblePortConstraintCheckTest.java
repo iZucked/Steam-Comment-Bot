@@ -12,8 +12,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -61,29 +61,29 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		final int numOfClassFour = 1;
 
 		// createVessels creates and adds the vessels to the scenario.
-		final ArrayList<Vessel> vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
-		final ArrayList<Vessel> vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
-		final ArrayList<Vessel> vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
-		final ArrayList<Vessel> vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		final List<VesselAvailability> vesselsOfClassOne = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
+		final List<VesselAvailability> vesselsOfClassTwo = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
+		final List<VesselAvailability> vesselsOfClassThree = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
+		final List<VesselAvailability> vesselsOfClassFour = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 		// get the vessel classes
-		final VesselClass vesselClassOne = vesselsOfClassOne.get(0).getVesselClass();
-		final VesselClass vesselClassTwo = vesselsOfClassTwo.get(0).getVesselClass();
-		final VesselClass vesselClassThree = vesselsOfClassThree.get(0).getVesselClass();
-		final VesselClass vesselClassFour = vesselsOfClassFour.get(0).getVesselClass();
+		final Vessel vesselClassOne = vesselsOfClassOne.get(0).getVessel();
+		final Vessel vesselClassTwo = vesselsOfClassTwo.get(0).getVessel();
+		final Vessel vesselClassThree = vesselsOfClassThree.get(0).getVessel();
+		final Vessel vesselClassFour = vesselsOfClassFour.get(0).getVessel();
 
 		// create some cargoes.
 		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
 		// add some constraints.
 		// vessel class One can't go to port A.
-		vesselClassOne.getInaccessiblePorts().add(portA);
+		vesselClassOne.getVesselOrDelegateInaccessiblePorts().add(portA);
 		// vessel class Two can't go to port B.
-		vesselClassTwo.getInaccessiblePorts().add(portB);
+		vesselClassTwo.getVesselOrDelegateInaccessiblePorts().add(portB);
 		// vessel class Three can't go to port C.
-		vesselClassThree.getInaccessiblePorts().add(portC);
+		vesselClassThree.getVesselOrDelegateInaccessiblePorts().add(portC);
 		// vessel class Four can't go to port D.
-		vesselClassFour.getInaccessiblePorts().add(portD);
+		vesselClassFour.getVesselOrDelegateInaccessiblePorts().add(portD);
 
 		// build and run the scenario.
 		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
@@ -94,7 +94,7 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		for (final Sequence sequence : result.getSequences()) {
 
 			// Vessel vessel = sequence.getVessel();
-			VesselClass vesselClass = sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel().getVesselClass() : sequence.getCharterInMarket().getVesselClass();
+			Vessel vesselClass = sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : sequence.getCharterInMarket().getVessel();
 
 			Port bannedPort = null;
 			if (vesselClass.equals(vesselClassOne)) {
@@ -110,9 +110,9 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 			}
 			assert bannedPort != null;
 
-			Assert.assertTrue("inaccessible port still exists", vesselClass.getInaccessiblePorts().contains(bannedPort));
-			Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getInaccessiblePorts().size());
-			System.out.println("Vessel (" + vesselClass.getName() + ") is banned from " + vesselClass.getInaccessiblePorts().get(0).getName());
+			Assert.assertTrue("inaccessible port still exists", vesselClass.getVesselOrDelegateInaccessiblePorts().contains(bannedPort));
+			Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getVesselOrDelegateInaccessiblePorts().size());
+			System.out.println("Vessel (" + vesselClass.getName() + ") is banned from " + vesselClass.getVesselOrDelegateInaccessiblePorts().get(0).getName());
 
 			final List<Port> visitedPorts = SanityCheckTools.getVesselsVisitedPorts(sequence);
 

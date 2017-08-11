@@ -25,7 +25,6 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -38,7 +37,6 @@ import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
@@ -118,9 +116,6 @@ public class LNGScenarioTransformerTest {
 
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
 
-		final VesselClass eVesselClass = FleetFactory.eINSTANCE.createVesselClass();
-		fleetModel.getVesselClasses().add(eVesselClass);
-
 		final Vessel eVessel1 = FleetFactory.eINSTANCE.createVessel();
 		final Vessel eVessel2 = FleetFactory.eINSTANCE.createVessel();
 		final Vessel eVessel3 = FleetFactory.eINSTANCE.createVessel();
@@ -138,15 +133,6 @@ public class LNGScenarioTransformerTest {
 		fleetModel.getVessels().add(eVessel6);
 		fleetModel.getVessels().add(eVessel7);
 		fleetModel.getVessels().add(eVessel8);
-
-		eVessel1.setVesselClass(eVesselClass);
-		eVessel2.setVesselClass(eVesselClass);
-		eVessel3.setVesselClass(eVesselClass);
-		eVessel4.setVesselClass(eVesselClass);
-		eVessel5.setVesselClass(eVesselClass);
-		eVessel6.setVesselClass(eVesselClass);
-		eVessel7.setVesselClass(eVesselClass);
-		eVessel8.setVesselClass(eVesselClass);
 
 		eVessel1.setName("30_000");
 		eVessel2.setName("60_000");
@@ -185,23 +171,9 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel7, oVessel7);
 		vesselAssociation.add(eVessel8, oVessel8);
 
-		final IVesselClass oVesselClass1 = Mockito.mock(IVesselClass.class);
-
-		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<>();
-		vesselClassAssociation.add(eVesselClass, oVesselClass1);
-
-		Mockito.when(oVessel1.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel2.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel3.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel4.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel5.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel6.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel7.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel8.getVesselClass()).thenReturn(oVesselClass1);
-
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4, oVessel5, oVessel6, oVessel7, oVessel8);
 
-		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
+		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff);
 
 		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel1), Matchers.eq(IRouteCostProvider.CostType.Laden),
 				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 30_000, 0, 0, 0)));
@@ -344,9 +316,7 @@ public class LNGScenarioTransformerTest {
 		suezCanalTariff.getTugBands().add(tugBand2);
 
 		suezCanalTariff.setTugCost(7_000);
-		suezCanalTariff.setMooringCost(30_000);
-		suezCanalTariff.setPilotageCost(20_000);
-		suezCanalTariff.setDisbursements(10_000);
+		suezCanalTariff.setFixedCosts(30_000 + 20_000 + 10_000);
 
 		// TODO: Set discount factor
 		// TODO: Set SDR rate
@@ -358,9 +328,6 @@ public class LNGScenarioTransformerTest {
 
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
 
-		final VesselClass eVesselClass = FleetFactory.eINSTANCE.createVesselClass();
-		fleetModel.getVesselClasses().add(eVesselClass);
-
 		final Vessel eVessel1 = FleetFactory.eINSTANCE.createVessel();
 		final Vessel eVessel2 = FleetFactory.eINSTANCE.createVessel();
 		final Vessel eVessel3 = FleetFactory.eINSTANCE.createVessel();
@@ -370,11 +337,6 @@ public class LNGScenarioTransformerTest {
 		fleetModel.getVessels().add(eVessel2);
 		fleetModel.getVessels().add(eVessel3);
 		fleetModel.getVessels().add(eVessel4);
-
-		eVessel1.setVesselClass(eVesselClass);
-		eVessel2.setVesselClass(eVesselClass);
-		eVessel3.setVesselClass(eVesselClass);
-		eVessel4.setVesselClass(eVesselClass);
 
 		eVessel1.setName("5_000");
 		eVessel2.setName("5_001");
@@ -397,21 +359,11 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel3, oVessel3);
 		vesselAssociation.add(eVessel4, oVessel4);
 
-		final IVesselClass oVesselClass1 = Mockito.mock(IVesselClass.class);
-
-		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<>();
-		vesselClassAssociation.add(eVesselClass, oVesselClass1);
-
-		Mockito.when(oVessel1.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel2.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel3.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel4.getVesselClass()).thenReturn(oVesselClass1);
-
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4);
 		final SeriesParser currencyIndices = new SeriesParser();
 		final DateAndCurveHelper dateHelper = new DateAndCurveHelper(
 				new Pair<>(ZonedDateTime.of(LocalDateTime.of(2000, 1, 1, 0, 0, 0), ZoneId.of("UTC")), ZonedDateTime.of(LocalDateTime.of(2020, 1, 1, 0, 0, 0), ZoneId.of("UTC"))));
-		LNGScenarioTransformer.buildSuezCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, suezCanalTariff, currencyIndices, dateHelper);
+		LNGScenarioTransformer.buildSuezCosts(builder, vesselAssociation, vesselAvailabilities, suezCanalTariff, currencyIndices, dateHelper);
 
 		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.SUEZ), Matchers.eq(oVessel1), Matchers.eq(IRouteCostProvider.CostType.Laden),
 				MyMatcher.eq(expectedSuezCost(suezCanalTariff, 1, IRouteCostProvider.CostType.Laden, 5_000, 0, 0, 0, 0, 0, 0)));
@@ -495,9 +447,6 @@ public class LNGScenarioTransformerTest {
 
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
 
-		final VesselClass eVesselClass = FleetFactory.eINSTANCE.createVesselClass();
-		fleetModel.getVesselClasses().add(eVesselClass);
-
 		final Vessel eVessel1 = FleetFactory.eINSTANCE.createVessel();
 		final Vessel eVessel2 = FleetFactory.eINSTANCE.createVessel();
 		final Vessel eVessel3 = FleetFactory.eINSTANCE.createVessel();
@@ -515,15 +464,6 @@ public class LNGScenarioTransformerTest {
 		fleetModel.getVessels().add(eVessel6);
 		fleetModel.getVessels().add(eVessel7);
 		fleetModel.getVessels().add(eVessel8);
-
-		eVessel1.setVesselClass(eVesselClass);
-		eVessel2.setVesselClass(eVesselClass);
-		eVessel3.setVesselClass(eVesselClass);
-		eVessel4.setVesselClass(eVesselClass);
-		eVessel5.setVesselClass(eVesselClass);
-		eVessel6.setVesselClass(eVesselClass);
-		eVessel7.setVesselClass(eVesselClass);
-		eVessel8.setVesselClass(eVesselClass);
 
 		eVessel1.setName("30_000");
 		eVessel2.setName("60_000");
@@ -562,23 +502,9 @@ public class LNGScenarioTransformerTest {
 		vesselAssociation.add(eVessel7, oVessel7);
 		vesselAssociation.add(eVessel8, oVessel8);
 
-		final IVesselClass oVesselClass1 = Mockito.mock(IVesselClass.class);
-
-		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<>();
-		vesselClassAssociation.add(eVesselClass, oVesselClass1);
-
-		Mockito.when(oVessel1.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel2.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel3.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel4.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel5.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel6.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel7.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel8.getVesselClass()).thenReturn(oVesselClass1);
-
 		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4, oVessel5, oVessel6, oVessel7, oVessel8);
 
-		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
+		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff);
 
 		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel1), Matchers.eq(IRouteCostProvider.CostType.Laden),
 				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 30_000, 0, 0, 0)));
@@ -703,46 +629,19 @@ public class LNGScenarioTransformerTest {
 		fleetModel.getVessels().add(eVessel1);
 		fleetModel.getVessels().add(eVessel2);
 
-		final VesselClass eVesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
-		final VesselClass eVesselClass2 = FleetFactory.eINSTANCE.createVesselClass();
-		final VesselClass eVesselClass3 = FleetFactory.eINSTANCE.createVesselClass();
-
-		fleetModel.getVesselClasses().add(eVesselClass1);
-		fleetModel.getVesselClasses().add(eVesselClass2);
-		fleetModel.getVesselClasses().add(eVesselClass3);
-
-		eVesselClass1.setCapacity(138_000);
-		eVesselClass2.setCapacity(155_000);
-		eVesselClass3.setCapacity(177_000);
-
 		eVessel1.setCapacity(138_000);
 		eVessel2.setCapacity(155_000);
 
 		final IVessel oVessel1 = Mockito.mock(IVessel.class);
 		final IVessel oVessel2 = Mockito.mock(IVessel.class);
-		// Spot vessel
-		final IVessel oVessel3 = Mockito.mock(IVessel.class);
 
 		final Association<Vessel, IVessel> vesselAssociation = new Association<>();
 		vesselAssociation.add(eVessel1, oVessel1);
 		vesselAssociation.add(eVessel2, oVessel2);
 
-		final IVesselClass oVesselClass1 = Mockito.mock(IVesselClass.class);
-		final IVesselClass oVesselClass2 = Mockito.mock(IVesselClass.class);
-		final IVesselClass oVesselClass3 = Mockito.mock(IVesselClass.class);
+		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2);
 
-		final Association<VesselClass, IVesselClass> vesselClassAssociation = new Association<>();
-		vesselClassAssociation.add(eVesselClass1, oVesselClass1);
-		vesselClassAssociation.add(eVesselClass2, oVesselClass2);
-		vesselClassAssociation.add(eVesselClass3, oVesselClass3);
-
-		Mockito.when(oVessel1.getVesselClass()).thenReturn(oVesselClass1);
-		Mockito.when(oVessel2.getVesselClass()).thenReturn(oVesselClass2);
-		Mockito.when(oVessel3.getVesselClass()).thenReturn(oVesselClass3);
-
-		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3);
-
-		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
+		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselAvailabilities, panamaCanalTariff);
 
 		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(311_880_000L));
 		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(274_980_000L));
@@ -751,10 +650,6 @@ public class LNGScenarioTransformerTest {
 		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(345_200_000L));
 		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(304_050_000L));
 		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(273_000_000L));
-
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(388_320_000L));
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(341_670_000L));
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(306_000_000L));
 
 		Mockito.verifyNoMoreInteractions(builder);
 	}
@@ -813,9 +708,7 @@ public class LNGScenarioTransformerTest {
 
 		total += (double) tugs * suezCanalTariff.getTugCost();
 
-		total += suezCanalTariff.getDisbursements();
-		total += suezCanalTariff.getMooringCost();
-		total += suezCanalTariff.getPilotageCost();
+		total += suezCanalTariff.getFixedCosts();
 
 		return new ConstantValueLongCurve((long) Math.round(1000.0 * total));
 	}

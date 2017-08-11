@@ -34,7 +34,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -93,8 +93,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null,
-					null, false);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,
+					false);
 
 			scenarioRunner.evaluateInitialState();
 			if (parentForFork != null && fork) {
@@ -132,8 +132,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			} else {
 				hints = new String[] { LNGTransformerHelper.HINT_DISABLE_CACHES };
 			}
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null,
-					null, false, hints);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,
+					false, hints);
 
 			scenarioRunner.evaluateInitialState();
 			scenarioRunner.run();
@@ -174,8 +174,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			} else {
 				hints = new String[] { LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN, LNGTransformerHelper.HINT_DISABLE_CACHES };
 			}
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null,
-					null, false, hints);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, scenarioDataProvider, null, optimisationPlan, scenarioDataProvider.getEditingDomain(), null, null, null,
+					false, hints);
 
 			@NonNull
 			final LNGScenarioToOptimiserBridge bridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -215,20 +215,19 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					final ShippingOption copyOfShipping = mapper.getCopy(shipping);
 					final VesselAssignmentType key = shippingMap.get(copyOfShipping);
 
-					VesselClass vesselClass = null;
+					Vessel vessel = null;
 					if (key instanceof VesselAvailability) {
 						final VesselAvailability vesselAvailability = (VesselAvailability) key;
-						final com.mmxlabs.models.lng.fleet.Vessel vessel = vesselAvailability.getVessel();
-						vesselClass = vessel.getVesselClass();
+						vessel = vesselAvailability.getVessel();
 					} else if (key instanceof CharterInMarket) {
 						final CharterInMarket charterInMarket = (CharterInMarket) key;
-						vesselClass = charterInMarket.getVesselClass();
+						vessel = charterInMarket.getVessel();
 					}
 
 					final List<WrappedAssignableElement> sortableElements = m_ToGenerate.computeIfAbsent(key, k -> new LinkedList<>());
 					final List<Slot> sortedSlots = Lists.newArrayList(load, discharge);
 
-					final WrappedAssignableElement e = new WrappedAssignableElement(sortedSlots, vesselClass, portModel, null);
+					final WrappedAssignableElement e = new WrappedAssignableElement(sortedSlots, vessel, portModel, null);
 					sortableElements.add(e);
 
 					assignableMap.put(e, sortedSlots);

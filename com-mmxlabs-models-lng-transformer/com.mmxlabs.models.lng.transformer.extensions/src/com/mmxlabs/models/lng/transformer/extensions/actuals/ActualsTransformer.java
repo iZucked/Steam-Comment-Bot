@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;

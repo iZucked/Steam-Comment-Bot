@@ -41,7 +41,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -75,7 +75,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 		msc.vesselAvailability.getEndHeel().setMinimumEndHeel(2000);
 		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(2000);
 		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
@@ -113,7 +113,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		msc.cargo.getSlots().get(0).setMaxQuantity(1000);
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		msc.vessel.setCapacity(10);
 
@@ -138,7 +138,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		// change from default scenario: add a maximum load volume
 		msc.cargo.getSlots().get(0).setMaxQuantity(20);
@@ -167,7 +167,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		msc.cargo.getSlots().get(0).setMaxQuantity(500);
 		msc.cargo.getSlots().get(1).setMinQuantity(500);
@@ -202,7 +202,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		Cargo cargo2 = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		msc.cargo.getSlots().get(0).setMaxQuantity(500);
 		msc.cargo.getSlots().get(1).setMinQuantity(500);
@@ -254,7 +254,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -288,7 +288,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -328,7 +328,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
 		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -384,7 +384,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final IScenarioDataProvider scenario = msc.getScenarioDataProvider();
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -424,7 +424,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.vesselAvailability.getStartHeel().setMinVolumeAvailable(startHeelInM3);
 		msc.vesselAvailability.getStartHeel().setMaxVolumeAvailable(startHeelInM3);
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);
@@ -493,7 +493,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.vesselAvailability.getEndHeel().setMaximumEndHeel(0);
 		msc.vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 
-		msc.vc.setMinHeel(0);
+		msc.vessel.setSafetyHeel(0);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
 		Slot dischargeSlot = msc.cargo.getSlots().get(1);

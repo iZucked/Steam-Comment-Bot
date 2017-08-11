@@ -26,7 +26,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
@@ -81,9 +80,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -133,6 +130,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -163,7 +161,6 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -173,6 +170,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculat
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.contracts.ICalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -331,9 +329,6 @@ public class LNGScenarioTransformer {
 
 	@NonNull
 	private final Map<Vessel, IVessel> allVessels = new HashMap<>();
-
-	@NonNull
-	private final Map<IVessel, Collection<IVesselAvailability>> vesselToAvailabilities = new HashMap<>();
 
 	/**
 	 * The {@link Set} of ID strings already used. The UI should restrict user entered data items from clashing, but generated ID's may well clash with user ones.
@@ -667,7 +662,9 @@ public class LNGScenarioTransformer {
 
 		final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 
-		final Map<Port, ICooldownCalculator> cooldownCalculators = new HashMap<Port, ICooldownCalculator>();
+		final Map<CooldownPrice, ICooldownCalculator> cooldownCalculators = new HashMap<>();
+		final Map<Port, CooldownPrice> portToCooldownMap = new HashMap<>();
+		// Build calculators and explicit port mapping
 		for (final CooldownPrice price : costModel.getCooldownCosts()) {
 			final ICooldownCalculator cooldownCalculator;
 			// Check here if price is indexed or expression
@@ -683,8 +680,20 @@ public class LNGScenarioTransformer {
 			}
 			injector.injectMembers(cooldownCalculator);
 
+			cooldownCalculators.put(price, cooldownCalculator);
+
+			for (final APortSet<Port> portSet : price.getPorts()) {
+				if (portSet instanceof Port) {
+					portToCooldownMap.put((Port) portSet, price);
+				}
+			}
+		}
+		// Now do the group based mapping
+		for (final CooldownPrice price : costModel.getCooldownCosts()) {
 			for (final Port port : SetUtils.getObjects(price.getPorts())) {
-				cooldownCalculators.put(port, cooldownCalculator);
+				if (!portToCooldownMap.containsKey(port)) {
+					portToCooldownMap.put(port, price);
+				}
 			}
 		}
 
@@ -692,7 +701,8 @@ public class LNGScenarioTransformer {
 			final IPort port = portProvider.getPortForName(ePort.getName());
 			assert port != null;
 
-			builder.setPortCooldownData(port, !ePort.isAllowCooldown(), cooldownCalculators.get(ePort));
+			final CooldownPrice eCooldownPrice = portToCooldownMap.get(ePort);
+			builder.setPortCooldownData(port, !ePort.isAllowCooldown(), cooldownCalculators.get(eCooldownPrice));
 
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
@@ -732,8 +742,7 @@ public class LNGScenarioTransformer {
 			extension.startTransforming(rootObject, modelEntityMap, builder);
 		}
 
-		final NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation,
-				charterIndexAssociation, modelEntityMap);
+		final Association<Vessel, IVessel> vesselAssociation = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation, modelEntityMap);
 		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
 			assert vesselAvailability != null;
 			final VesselAvailability eVesselAvailability = modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class);
@@ -781,54 +790,66 @@ public class LNGScenarioTransformer {
 			loadPriceCalculatorProvider.setPortfolioCalculator(calculator);
 		}
 
+		final Map<Port, PortCost> portToPortCostMap = new HashMap<>();
+
+		// Register specific costs first (these override groups)
+		for (final PortCost portCost : costModel.getPortCosts()) {
+			for (final APortSet<Port> portSet : portCost.getPorts()) {
+				if (portSet instanceof Port) {
+					portToPortCostMap.put((Port) portSet, portCost);
+				}
+			}
+		}
+
+		// Register groups next, ignoring already registered items.
+		for (final PortCost portCost : costModel.getPortCosts()) {
+
+			for (final Port port : SetUtils.getObjects(portCost.getPorts())) {
+				if (!portToPortCostMap.containsKey(port)) {
+					portToPortCostMap.put(port, portCost);
+				}
+			}
+		}
+
 		// process port costs
-		for (final PortCost cost : costModel.getPortCosts()) {
-			for (final Port port : SetUtils.getObjects(cost.getPorts())) {
-				for (final PortCostEntry entry : cost.getEntries()) {
-					PortType type = null;
-					switch (entry.getActivity()) {
-					case LOAD:
-						type = PortType.Load;
-						break;
-					case DISCHARGE:
-						type = PortType.Discharge;
-						break;
-					case DRYDOCK:
-						type = PortType.DryDock;
-						break;
-					case MAINTENANCE:
-						type = PortType.Maintenance;
-						break;
-					}
+		for (final Map.Entry<Port, PortCost> e : portToPortCostMap.entrySet()) {
+			final PortCost cost = e.getValue();
+			for (final PortCostEntry entry : cost.getEntries()) {
+				PortType type = null;
+				switch (entry.getActivity()) {
+				case LOAD:
+					type = PortType.Load;
+					break;
+				case DISCHARGE:
+					type = PortType.Discharge;
+					break;
+				case DRYDOCK:
+					type = PortType.DryDock;
+					break;
+				case MAINTENANCE:
+					type = PortType.Maintenance;
+					break;
+				}
 
-					if (type != null) {
-						final Set<IVessel> vessels = new HashSet<>();
-						// Add all pyhsical vessels including reference vessels ...
-						vessels.addAll(allVessels.values());
-						// ... however this excludes the spot vessels, so add them from here
-						for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-							vessels.add(vesselAvailability.getVessel());
-						}
-						// Now create port costs for all the vessel instances.
-						for (final IVessel v : vessels) {
-							// TODO should the builder handle the application of costs to vessel classes?
-							final VesselClass vesselClass = vesselAssociations.getFirst().reverseLookup(v.getVesselClass());
-							final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(vesselClass, entry.getActivity()));
-							builder.setPortCost(portAssociation.lookupNullChecked((Port) port), v, type, activityCost);
-						}
-
+				if (type != null) {
+					// Now create port costs for all the vessel instances.
+					for (final IVessel oVessel : allVessels.values()) {
+						// TODO should the builder handle the application of costs to vessel classes?
+						final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
+						final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(eVessel, entry.getActivity()));
+						builder.setPortCost(portAssociation.lookupNullChecked(e.getKey()), oVessel, type, activityCost);
 					}
 				}
 			}
 		}
 
-		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getSecond(), vesselAssociations.getFirst(), modelEntityMap);
+		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociation, modelEntityMap);
 
 		registerSpotCargoMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
-		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), vesselAssociations.getFirst(), contractTransformers, modelEntityMap);
+		buildCargoes(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap);
 
-		buildVesselEvents(builder, portAssociation, vesselAssociations.getSecond(), vesselAssociations.getFirst(), modelEntityMap);
+		buildVesselEvents(builder, portAssociation, vesselAssociation, modelEntityMap);
 
 		buildSpotCargoMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
 
@@ -841,7 +862,9 @@ public class LNGScenarioTransformer {
 		// freeze any frozen assignments
 		freezeAssignmentModel(builder, modelEntityMap);
 
-		for (final ITransformerExtension extension : allTransformerExtensions) {
+		for (
+
+		final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
 		}
 
@@ -1036,7 +1059,7 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildVesselEvents(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, @NonNull final ModelEntityMap modelEntityMap) {
+			@NonNull final ModelEntityMap modelEntityMap) {
 
 		final ZonedDateTime latestDate = dateHelper.getLatestTime();
 
@@ -1074,11 +1097,11 @@ public class LNGScenarioTransformer {
 				throw new RuntimeException("Unknown event type: " + event.getClass().getName());
 			}
 
-			applySlotVesselRestrictions(event.getAllowedVessels(), builderSlot, vesselAssociation, vesselClassAssociation);
+			applySlotVesselRestrictions(event.getAllowedVessels(), builderSlot, vesselAssociation);
 			// Apply restrictions to related slots
 			for (final IPortSlot e : builderSlot.getEventPortSlots()) {
 				if (e != builderSlot) {
-					applySlotVesselRestrictions(event.getAllowedVessels(), e, vesselAssociation, vesselClassAssociation);
+					applySlotVesselRestrictions(event.getAllowedVessels(), e, vesselAssociation);
 				}
 			}
 
@@ -1100,8 +1123,7 @@ public class LNGScenarioTransformer {
 	 * @param defaultRewiring
 	 */
 	private void buildCargoes(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, @NonNull final Collection<IContractTransformer> contractTransformers,
-			@NonNull final ModelEntityMap modelEntityMap) {
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
 
 		// All Discharge ports - for use with
 		final Set<IPort> allDischargePorts = new HashSet<IPort>();
@@ -1140,7 +1162,7 @@ public class LNGScenarioTransformer {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					{
-						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, loadSlot);
+						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
 						usedLoadSlots.add(loadSlot);
 						loadOptions.add(load);
 						slotMap.put(loadSlot, load);
@@ -1150,8 +1172,7 @@ public class LNGScenarioTransformer {
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					{
-						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap,
-								dischargeSlot);
+						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
 						usedDischargeSlots.add(dischargeSlot);
 						dischargeOptions.add(discharge);
 						slotMap.put(dischargeSlot, discharge);
@@ -1244,7 +1265,7 @@ public class LNGScenarioTransformer {
 			{
 
 				// Make optional
-				load = createLoadOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, loadSlot);
+				load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
 				setSlotAsSoftRequired(builder, loadSlot, load);
 			}
 
@@ -1264,7 +1285,7 @@ public class LNGScenarioTransformer {
 
 			final IDischargeOption discharge;
 			{
-				discharge = createDischargeOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, dischargeSlot);
+				discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
 				setSlotAsSoftRequired(builder, dischargeSlot, discharge);
 			}
 
@@ -1471,8 +1492,8 @@ public class LNGScenarioTransformer {
 
 	@NonNull
 	private IDischargeOption createDischargeOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
-			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final DischargeSlot dischargeSlot) {
+			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
+			@NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
 		final String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS", dischargeSlot.getName());
 
@@ -1649,15 +1670,15 @@ public class LNGScenarioTransformer {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
 		if (!dischargeSlot.isFOBSale()) {
-			applySlotVesselRestrictions(dischargeSlot.getAllowedVessels(), discharge, vesselAssociation, vesselClassAssociation);
+			applySlotVesselRestrictions(dischargeSlot.getAllowedVessels(), discharge, vesselAssociation);
 		}
 		return discharge;
 	}
 
 	@NonNull
 	private ILoadOption createLoadOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
-			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final LoadSlot loadSlot) {
+			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
+			@NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
 		final String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP", loadSlot.getName());
 		usedIDStrings.add(elementName);
@@ -1805,7 +1826,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (!loadSlot.isDESPurchase()) {
-			applySlotVesselRestrictions(loadSlot.getAllowedVessels(), load, vesselAssociation, vesselClassAssociation);
+			applySlotVesselRestrictions(loadSlot.getAllowedVessels(), load, vesselAssociation);
 		}
 
 		return load;
@@ -1820,8 +1841,7 @@ public class LNGScenarioTransformer {
 		spotMarketSlotsProviderEditor.setSpotMarketSlot(element, portSlot, o_spotMarket, marketDateKey);
 	}
 
-	private void applySlotVesselRestrictions(final @Nullable List<AVesselSet<Vessel>> allowedVessels, final @NonNull IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation,
-			final Association<VesselClass, IVesselClass> vesselClassAssociation) {
+	private void applySlotVesselRestrictions(final @Nullable List<AVesselSet<Vessel>> allowedVessels, final @NonNull IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation) {
 
 		if (allowedVessels == null) {
 			return;
@@ -1830,36 +1850,17 @@ public class LNGScenarioTransformer {
 		if (!allowedVessels.isEmpty()) {
 
 			List<@NonNull IVessel> permittedVessels = null;
-			List<@NonNull IVesselClass> permittedVesselClasses = null;
 
 			for (final AVesselSet<Vessel> vesselSet : allowedVessels) {
-				if (vesselSet instanceof Vessel) {
-					final Vessel e_vessel = (Vessel) vesselSet;
+
+				for (final Vessel e_vessel : SetUtils.getObjects(vesselSet)) {
 					final IVessel o_vessel = vesselAssociation.lookupNullChecked(e_vessel);
 					if (permittedVessels == null) {
 						permittedVessels = new LinkedList<>();
 					}
 					permittedVessels.add(o_vessel);
-				} else if (vesselSet instanceof VesselClass) {
-					final VesselClass e_vesselClass = (VesselClass) vesselSet;
-					final IVesselClass o_vesselClass = vesselClassAssociation.lookupNullChecked(e_vesselClass);
-					if (permittedVesselClasses == null) {
-						permittedVesselClasses = new LinkedList<>();
-					}
-					permittedVesselClasses.add(o_vesselClass);
-				} else if (vesselSet instanceof VesselGroup) {
-					final VesselGroup vesselGroup = (VesselGroup) vesselSet;
-					for (final Vessel e_vessel : vesselGroup.getVessels()) {
-						final IVessel o_vessel = vesselAssociation.lookupNullChecked(e_vessel);
-						if (permittedVessels == null) {
-							permittedVessels = new LinkedList<>();
-						}
-						permittedVessels.add(o_vessel);
-					}
-				} else {
-					assert false;
 				}
-				builder.setVesselAndClassPermissions(optimiserSlot, permittedVessels, permittedVesselClasses);
+				builder.setVesselPermissions(optimiserSlot, permittedVessels);
 			}
 		}
 	}
@@ -2704,8 +2705,8 @@ public class LNGScenarioTransformer {
 	 * @throws IncompleteScenarioException
 	 */
 	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final List<IPort> allPorts,
-			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
-			@NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
+			throws IncompleteScenarioException {
 
 		// set canal route consumptions and toll info
 		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
@@ -2720,9 +2721,17 @@ public class LNGScenarioTransformer {
 			}
 		}
 
+		final boolean usedPanamaFormula = false;
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
-			buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
+			buildPanamaCosts(builder, vesselAssociation, optimiserVessels, panamaCanalTariff);
+		}
+
+		boolean usedSuezFormula = false;
+		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
+		if (suezCanalTariff != null) {
+			buildSuezCosts(builder, vesselAssociation, optimiserVessels, suezCanalTariff, currencyIndices, dateHelper);
+			usedSuezFormula = true;
 		}
 
 		/*
@@ -2733,54 +2742,94 @@ public class LNGScenarioTransformer {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
 			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
+		}
 
-			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
-					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
+		final Map<Vessel, RouteCost> vesselToSuezRouteCostMap = new HashMap<>();
+		final Map<Vessel, RouteCost> vesselToPanamRouteCostMap = new HashMap<>();
 
-			for (final IVessel vessel : optimiserVessels) {
-
-				final IVesselClass vesselClass = vessel.getVesselClass();
-				if (vesselClass != null) {
-					final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
-					for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
-						builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
-
-						builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
-								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
-								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
-
-						builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
-								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
-								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-					}
-
-					final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
-					if (routeCosts != null) {
-						// Some unit tests have null data state
-						for (final RouteCost routeCost : routeCosts) {
-
-							if (panamaCanalTariff != null && routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
-								// continue;
-							} else {
-
-								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden,
-										new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
-
-								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast,
-										new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
-
-								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
-										new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
-							}
-						}
+		// Register specific costs first (these override formula)
+		for (final RouteCost routeCost : costModel.getRouteCosts()) {
+			if (routeCost.getRouteOption() == RouteOption.DIRECT) {
+				continue;
+			}
+			for (final AVesselSet<Vessel> vesselSet : routeCost.getVessels()) {
+				if (vesselSet instanceof Vessel) {
+					if (routeCost.getRouteOption() == RouteOption.SUEZ) {
+						vesselToSuezRouteCostMap.put((Vessel) vesselSet, routeCost);
+					} else if (routeCost.getRouteOption() == RouteOption.PANAMA) {
+						vesselToPanamRouteCostMap.put((Vessel) vesselSet, routeCost);
 					}
 				}
 			}
 		}
+
+		// Register vessel groups next, ignoring already registered vessels. Cost formulas override generic values.
+		for (final RouteCost routeCost : costModel.getRouteCosts()) {
+			if (routeCost.getRouteOption() == RouteOption.DIRECT) {
+				continue;
+			}
+			if (routeCost.getRouteOption() == RouteOption.PANAMA) {
+				if (usedPanamaFormula) {
+					continue;
+				}
+			}
+			for (final Vessel vessel : SetUtils.getObjects(routeCost.getVessels())) {
+				if (routeCost.getRouteOption() == RouteOption.SUEZ) {
+					if (vessel.getVesselOrDelegateSCNT() != 0 && usedSuezFormula) {
+						continue;
+					}
+					if (!vesselToSuezRouteCostMap.containsKey(vessel)) {
+						vesselToSuezRouteCostMap.put(vessel, routeCost);
+					}
+				} else if (routeCost.getRouteOption() == RouteOption.PANAMA) {
+					if (!vesselToPanamRouteCostMap.containsKey(vessel)) {
+						vesselToPanamRouteCostMap.put(vessel, routeCost);
+					}
+				}
+			}
+		}
+
+		for (final IVessel oVessel : optimiserVessels) {
+			assert oVessel != null;
+			final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
+			for (final VesselClassRouteParameters routeParameters : eVessel.getVesselOrDelegateRouteParameters()) {
+				final ERouteOption mappedRouteOption = mapRouteOption(routeParameters.getRouteOption());
+				builder.setVesselRouteTransitTime(mappedRouteOption, oVessel, routeParameters.getExtraTransitTime());
+
+				builder.setVesselRouteFuel(mappedRouteOption, oVessel, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+						OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
+
+				builder.setVesselRouteFuel(mappedRouteOption, oVessel, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+						OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
+			}
+
+			if (vesselToSuezRouteCostMap.containsKey(eVessel)) {
+				final RouteCost routeCost = vesselToSuezRouteCostMap.get(eVessel);
+
+				final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
+				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
+
+				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Ballast, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+
+				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.RoundTripBallast,
+						new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+			}
+			if (vesselToPanamRouteCostMap.containsKey(eVessel)) {
+				final RouteCost routeCost = vesselToPanamRouteCostMap.get(eVessel);
+
+				final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
+				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
+
+				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Ballast, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+
+				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.RoundTripBallast,
+						new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+			}
+		}
 	}
 
-	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Collection<IVessel> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
+	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final Collection<IVessel> vessels,
+			@NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
@@ -2794,17 +2843,11 @@ public class LNGScenarioTransformer {
 		// Sort the bands smallest to largest
 		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
 
-		for (final IVessel vessel : vesselAvailabilities) {
-			final int capacityInM3;
+		for (final IVessel vessel : vessels) {
 			assert vessel != null;
 			final Vessel eVessel = vesselAssociation.reverseLookup(vessel);
-			if (eVessel == null) {
-				// spot charter
-				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(vessel.getVesselClass());
-				capacityInM3 = eVesselClass.getCapacity();
-			} else {
-				capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
-			}
+			final int capacityInM3 = eVessel.getVesselOrDelegateCapacity();
+
 			double totalLadenCost = 0.0;
 			double totalBallastCost = 0.0;
 			double totalBallastRoundTripCost = 0.0;
@@ -2840,9 +2883,8 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	public static void buildSuezCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Collection<IVessel> vesselAvailabilities, @NonNull final SuezCanalTariff suezCanalTariff,
-			final @NonNull SeriesParser currencyIndices, final @NonNull DateAndCurveHelper dateHelper) {
+	public static void buildSuezCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final Collection<IVessel> vesselAvailabilities,
+			@NonNull final SuezCanalTariff suezCanalTariff, final @NonNull SeriesParser currencyIndices, final @NonNull DateAndCurveHelper dateHelper) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, SuezCanalTariffBand>> bands = new LinkedList<>();
@@ -2856,17 +2898,15 @@ public class LNGScenarioTransformer {
 		// Sort the bands smallest to largest
 		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
 
-		for (final IVessel vessel : vesselAvailabilities) {
-			final int scnt;
-			assert vessel != null;
-			final Vessel eVessel = vesselAssociation.reverseLookup(vessel);
-			if (eVessel == null) {
-				// spot charter
-				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(vessel.getVesselClass());
-				scnt = eVesselClass.getScnt();
-			} else {
-				scnt = eVessel.isSetScnt() ? eVessel.getScnt() : eVessel.getVesselClass().getScnt();
+		for (final IVessel oVessel : vesselAvailabilities) {
+			assert oVessel != null;
+			final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
+			final int scnt = eVessel.getVesselOrDelegateSCNT();
+
+			if (scnt == 0) {
+				continue;
 			}
+
 			double ladenCostInSDR = 0.0;
 			double ballastCostInSDR = 0.0;
 			for (final Pair<Integer, SuezCanalTariffBand> p : bands) {
@@ -2905,10 +2945,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final double extraCosts = (double) tugCount * suezCanalTariff.getTugCost() //
-					+ suezCanalTariff.getPilotageCost() //
-					+ suezCanalTariff.getMooringCost() //
-					+ suezCanalTariff.getDisbursements();
+			final double extraCosts = ((double) tugCount * suezCanalTariff.getTugCost()) + suezCanalTariff.getFixedCosts();
 
 			final String ladenExpression = String.format("(%.3f*%s)+%.3f", ladenCostInSDR, suezCanalTariff.getSdrToUSD(), extraCosts);
 			final String ballastExpression = String.format("(%.3f*%s)+%.3f", ballastCostInSDR, suezCanalTariff.getSdrToUSD(), extraCosts);
@@ -2916,12 +2953,12 @@ public class LNGScenarioTransformer {
 			@Nullable
 			final ILongCurve ladenCostCurve = dateHelper.generateLongExpressionCurve(ladenExpression, currencyIndices);
 			assert ladenCostCurve != null;
-			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.Laden, ladenCostCurve);
+			builder.setVesselRouteCost(ERouteOption.SUEZ, oVessel, CostType.Laden, ladenCostCurve);
 
 			final ILongCurve ballastCostCurve = dateHelper.generateLongExpressionCurve(ballastExpression, currencyIndices);
 			assert ballastCostCurve != null;
-			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.Ballast, ballastCostCurve);
-			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.RoundTripBallast, ballastCostCurve);
+			builder.setVesselRouteCost(ERouteOption.SUEZ, oVessel, CostType.Ballast, ballastCostCurve);
+			builder.setVesselRouteCost(ERouteOption.SUEZ, oVessel, CostType.RoundTripBallast, ballastCostCurve);
 		}
 	}
 
@@ -2942,39 +2979,49 @@ public class LNGScenarioTransformer {
 		/*
 		 * Build the fleet model - first we must create the vessel classes from the model
 		 */
-		final Association<Vessel, IVessel> vesselAssociation = new Association<Vessel, IVessel>();
-		final Association<VesselAvailability, IVesselAvailability> vesselAvailabilityAssociation = new Association<VesselAvailability, IVesselAvailability>();
+		final Association<Vessel, IVessel> vesselAssociation = new Association<>();
+		final Association<VesselAvailability, IVesselAvailability> vesselAvailabilityAssociation = new Association<>();
 
-		final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
-		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
+		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 
 		// look up prices
 
-		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-			assert eVc != null;
+		for (final Vessel eVessel : fleetModel.getVessels()) {
+			assert eVessel != null;
 
-			final IBaseFuel bf = modelEntityMap.getOptimiserObjectNullChecked(eVc.getBaseFuel(), IBaseFuel.class);
-			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, bf);
-
-			vesselClassAssociation.add(eVc, vc);
+			final IBaseFuel oBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
+			final IVessel oVessel = TransformerHelper.buildIVessel(builder, eVessel, oBaseFuel);
 
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
 			 */
-			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
-			for (final Port ePort : SetUtils.getObjects(eVc.getInaccessiblePorts())) {
-				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
+			final Set<IPort> oInaccessiblePorts = new HashSet<>();
+			for (final Port ePort : SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts())) {
+				oInaccessiblePorts.add(portAssociation.lookup((Port) ePort));
 			}
 
-			if (inaccessiblePorts.isEmpty() == false) {
-				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
+			if (!oInaccessiblePorts.isEmpty()) {
+				builder.setVesselInaccessiblePorts(oVessel, oInaccessiblePorts);
 			}
 
 			/*
 			 * set up inaccessible routes for vessel class
 			 */
-			getAndSetInaccessibleRoutesForVesselClass(builder, eVc, vc);
-			modelEntityMap.addModelObject(eVc, vc);
+			getAndSetInaccessibleRoutesForVessel(builder, eVessel, oVessel);
+
+			final int ballastReferenceSpeed, ladenReferenceSpeed;
+			if (shippingDaysRestrictionSpeedProvider == null) {
+				ballastReferenceSpeed = ladenReferenceSpeed = oVessel.getMaxSpeed();
+			} else {
+				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel, false /* ballast */));
+				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel, true /* laden */));
+			}
+			builder.setShippingDaysRestrictionReferenceSpeed(oVessel, VesselState.Ballast, ballastReferenceSpeed);
+			builder.setShippingDaysRestrictionReferenceSpeed(oVessel, VesselState.Laden, ladenReferenceSpeed);
+
+			vesselAssociation.add(eVessel, oVessel);
+			modelEntityMap.addModelObject(eVessel, oVessel);
+			allVessels.put(eVessel, oVessel);
 		}
 
 		// Sorted by fleet model vessel order
@@ -2991,54 +3038,16 @@ public class LNGScenarioTransformer {
 			}
 
 		}
-		/*
-		 * Now create each vessel
-		 */
-
-		for (final Vessel eVessel : fleetModel.getVessels()) {
-
-			final IVessel vessel = builder.createVessel(eVessel.getName(), vesselClassAssociation.lookupNullChecked(eVessel.getVesselClass()),
-					OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrVesselClassCapacity() * eVessel.getVesselOrVesselClassFillCapacity())));
-			vesselAssociation.add(eVessel, vessel);
-
-			final int ballastReferenceSpeed, ladenReferenceSpeed;
-			if (shippingDaysRestrictionSpeedProvider == null) {
-				ballastReferenceSpeed = ladenReferenceSpeed = vessel.getVesselClass().getMaxSpeed();
-			} else {
-				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), false /* ballast */));
-				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), true /* laden */));
-			}
-			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Ballast, ballastReferenceSpeed);
-			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Laden, ladenReferenceSpeed);
-			modelEntityMap.addModelObject(eVessel, vessel);
-			allVessels.put(eVessel, vessel);
-
-			/*
-			 * set up inaccessible ports by applying resource allocation constraints
-			 */
-			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
-			for (final Port ePort : SetUtils.getObjects(eVessel.getInaccessiblePorts())) {
-				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
-			}
-
-			if (inaccessiblePorts.isEmpty() == false) {
-				builder.setVesselInaccessiblePorts(vessel, inaccessiblePorts);
-			}
-
-			/*
-			 * set up inaccessible routes
-			 */
-			getAndSetInaccessibleRoutesForVessel(builder, eVessel, vessel);
-			vesselToAvailabilities.put(vessel, new LinkedList<IVesselAvailability>());
-		}
-
 		// Now register the availabilities.
 		for (final VesselAvailability eVesselAvailability : sortedAvailabilities) {
 			final Vessel eVessel = eVesselAvailability.getVessel();
+			assert eVessel != null;
 
 			final Port startingPort = eVesselAvailability.getStartAt();
 
-			final IHeelOptionSupplier heelSupplier = createHeelSupplier(eVesselAvailability.getStartHeel());
+			final StartHeelOptions startHeel = eVesselAvailability.getStartHeel();
+			assert startHeel != null;
+			final IHeelOptionSupplier heelSupplier = createHeelSupplier(startHeel);
 			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfterAsDateTime() : null,
 					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartByAsDateTime() : null, startingPort, heelSupplier);
 
@@ -3056,7 +3065,9 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final IHeelOptionConsumer heelConsumer = createHeelConsumer(eVesselAvailability.getEndHeel());
+			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
+			assert endHeel != null;
+			final IHeelOptionConsumer heelConsumer = createHeelConsumer(endHeel);
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), heelConsumer,
 					forceHireCostOnlyEndRule);
 
@@ -3090,7 +3101,6 @@ public class LNGScenarioTransformer {
 
 			allVesselAvailabilities.add(vesselAvailability);
 
-			vesselToAvailabilities.get(vessel).add(vesselAvailability);
 			for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 				vesselAvailabilityTransformer.vesselAvailabilityTransformed(eVesselAvailability, vesselAvailability);
 			}
@@ -3108,12 +3118,11 @@ public class LNGScenarioTransformer {
 				builder.setGeneratedCharterOutStartTime(0);
 			}
 
-			// final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
-			// createHeelConsumer(vesselClass.getSafetyHeel(), vesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
-
 			for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
 
-				final VesselClass eVesselClass = charterInMarket.getVesselClass();
+				final Vessel eVessel = charterInMarket.getVessel();
+				assert eVessel != null;
+				final IVessel oVessel = vesselAssociation.lookupNullChecked(eVessel);
 
 				final ILongCurve charterInCurve;
 				if (charterInMarket.getCharterInRate() != null) {
@@ -3124,7 +3133,6 @@ public class LNGScenarioTransformer {
 
 				assert charterInCurve != null;
 				charterCount = charterInMarket.getSpotCharterCount();
-				final IVesselClass oVesselClass = vesselClassAssociation.lookupNullChecked(eVesselClass);
 
 				@Nullable
 				IBallastBonusContract ballastBonusContract = null;
@@ -3136,12 +3144,12 @@ public class LNGScenarioTransformer {
 							ballastBonusContract = createAndGetBallastBonusContract(charterContract.getBallastBonusContract());
 							if (ballastBonusContract != null) {
 								// Note: this is a default assumption, that all spot charter ins with a ballast bonus can end at any discharge port
-								charterInEndRule = createDefaultCharterInEndRequirement(builder, portAssociation, modelEntityMap, oVesselClass);
+								charterInEndRule = createDefaultCharterInEndRequirement(builder, portAssociation, modelEntityMap, oVessel);
 							}
 						}
 					}
 				}
-				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVesselClass, charterInCurve, charterCount, charterInEndRule,
+				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterCount, charterInEndRule,
 						ballastBonusContract);
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
@@ -3151,14 +3159,8 @@ public class LNGScenarioTransformer {
 					final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, NOMINAL_CARGO_INDEX);
 					spotCharterInToAvailability.put(key, roundTripOption);
 					allVesselAvailabilities.add(roundTripOption);
-					vesselToAvailabilities.put(roundTripOption.getVessel(), Collections.singleton(roundTripOption));
-
-					/*
-					 * set up inaccessible routes
-					 */
-					// For future vessel model refactor, disable charter in specific route exclusions
-					// getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, roundTripOption.getVessel());
 				}
+
 				if (charterCount > 0 && charterInMarket.isEnabled()) {
 
 					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + charterInMarket.getName(), spotCharterInMarket);
@@ -3166,8 +3168,6 @@ public class LNGScenarioTransformer {
 						final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, i);
 						final IVesselAvailability spotAvailability = spots.get(i);
 						spotCharterInToAvailability.put(key, spotAvailability);
-
-						vesselToAvailabilities.put(spotAvailability.getVessel(), Collections.singleton(spotAvailability));
 
 						/*
 						 * set up inaccessible routes
@@ -3180,93 +3180,63 @@ public class LNGScenarioTransformer {
 					allVesselAvailabilities.addAll(spots);
 				}
 			}
-			for (final CharterOutMarket charterCost : spotMarketsModel.getCharterOutMarkets()) {
-				assert charterCost != null;
+			for (final CharterOutMarket eCharterOutMarket : spotMarketsModel.getCharterOutMarkets()) {
+				assert eCharterOutMarket != null;
 
-				if (!charterCost.isEnabled()) {
+				if (!eCharterOutMarket.isEnabled()) {
 					continue;
 				}
 
-				final VesselClass eVesselClass = charterCost.getVesselClass();
-
-				if (charterCost.getCharterOutRate() != null) {
-					final ILongCurve charterOutCurve = dateHelper.generateLongExpressionCurve(charterCost.getCharterOutRate(), charterIndices);
+				if (eCharterOutMarket.getCharterOutRate() != null) {
+					final ILongCurve charterOutCurve = dateHelper.generateLongExpressionCurve(eCharterOutMarket.getCharterOutRate(), charterIndices);
 					assert charterOutCurve != null;
 
-					final int minDuration = 24 * charterCost.getMinCharterOutDuration();
+					final int minDuration = 24 * eCharterOutMarket.getMinCharterOutDuration();
 
-					final Set<Port> portSet = SetUtils.getObjects(charterCost.getAvailablePorts());
-					final ArrayList<Port> sortedPortSet = new ArrayList<Port>(portSet);
-					Collections.sort(sortedPortSet, new Comparator<Port>() {
-						@Override
-						public int compare(final Port p1, final Port p2) {
-							return p1.getName().compareTo(p2.getName());
-						}
+					final Set<Port> portSet = SetUtils.getObjects(eCharterOutMarket.getAvailablePorts());
 
-					});
-					final Set<IPort> marketPorts = new LinkedHashSet<IPort>();
+					final List<Port> sortedPortSet = new ArrayList<>(portSet);
+					Collections.sort(sortedPortSet, (p1, p2) -> p1.getName().compareTo(p2.getName()));
+
+					final Set<IPort> marketPorts = new LinkedHashSet<>();
 					for (final Port ap : sortedPortSet) {
 						final IPort ip = portAssociation.lookup((Port) ap);
 						if (ip != null) {
 							marketPorts.add(ip);
 						}
 					}
-
-					builder.createCharterOutCurve(vesselClassAssociation.lookupNullChecked(eVesselClass), charterOutCurve, minDuration, marketPorts);
+					for (final Vessel eVessel : SetUtils.getObjects(eCharterOutMarket.getVessels())) {
+						builder.createCharterOutCurve(vesselAssociation.lookupNullChecked(eVessel), charterOutCurve, minDuration, marketPorts);
+					}
 				}
 			}
 		}
 
-		return new NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
-
+		return vesselAssociation;
 	}
 
 	private IEndRequirement createDefaultCharterInEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap,
-			final IVesselClass oVesselClass) {
+			final IVessel oVessel) {
 		@NonNull
 		final IEndRequirement allDischargeCharterInEndRequirement = createEndRequirement(builder, portAssociation, null, null,
 				modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()),
-				new HeelOptionConsumer(oVesselClass.getSafetyHeel(), oVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+				new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 		return allDischargeCharterInEndRequirement;
 	}
 
 	private void getAndSetInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final Vessel eVessel, final IVessel vessel) {
-		final Set<ERouteOption> inaccessibleERoutesForVessel = getInaccessibleERoutesForVessel(eVessel);
+		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(eVessel.getVesselOrDelegateInaccessibleRoutes());
 		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
-	}
-
-	private void getAndSetInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final VesselClass eVesselClass, final IVesselClass vesselClass) {
-		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(true, eVesselClass.getInaccessibleRoutes());
-		setInaccessibleRoutesForVesselClass(builder, vesselClass, inaccessibleERoutesForVessel);
-	}
-
-	private void getAndSetInaccessibleRoutesForSpotCharterInVessel(final ISchedulerBuilder builder, final CharterInMarket charterInMarket, final IVessel vessel) {
-		// SG: Disabled for future vessel model refactor. Left method in for now.
-		throw new UnsupportedOperationException();
-		// final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
-		// setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
 	}
 
 	private void setInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final IVessel vessel, final Set<ERouteOption> inaccessibleERoutesForVessel) {
 		builder.setVesselInaccessibleRoutes(vessel, inaccessibleERoutesForVessel);
 	}
 
-	private void setInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final IVesselClass vesselClass, final Set<ERouteOption> inaccessibleERoutesForVessel) {
-		if (!inaccessibleERoutesForVessel.isEmpty()) {
-			builder.setVesselClassInaccessibleRoutes(vesselClass, inaccessibleERoutesForVessel);
-		}
-	}
-
-	public Set<ERouteOption> getInaccessibleERoutesForVessel(final Vessel eVessel) {
-		return createRouteOptionSet(eVessel.isOverrideInaccessibleRoutes(), eVessel.getInaccessibleRoutes());
-	}
-
-	public Set<ERouteOption> createRouteOptionSet(final boolean canOverride, final Collection<RouteOption> routeOptions) {
+	public Set<ERouteOption> createRouteOptionSet(final Collection<RouteOption> routeOptions) {
 		final Set<ERouteOption> inaccessibleERoutes = new HashSet<>();
-		if (canOverride) {
-			for (final RouteOption routeOption : routeOptions) {
-				inaccessibleERoutes.add(mapRouteOption(routeOption));
-			}
+		for (final RouteOption routeOption : routeOptions) {
+			inaccessibleERoutes.add(mapRouteOption(routeOption));
 		}
 		return inaccessibleERoutes;
 	}

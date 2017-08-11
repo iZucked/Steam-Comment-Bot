@@ -132,13 +132,13 @@ public class JourneyEventExporter {
 						voyageDetails.getOptions().getVessel(), //
 						canalEntry, //
 						voyageDetails.getOptions().getToPortSlot().getPort(), //
-						voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
+						voyageDetails.getOptions().getVessel().getMaxSpeed());
 
 				final ZonedDateTime endTime = modelEntityMap.getDateFromHours(currentTime + options.getAvailableTime(), canalEntry);
 				final int marginHours;
 				final int toCanalSpeed;
 				if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
+					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getMaxSpeed());
 					marginHours = panamaSlotsProvider.getMargin();
 				} else {
 					// Suez - use voyage speed

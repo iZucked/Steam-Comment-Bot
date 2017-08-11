@@ -10,12 +10,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -27,21 +27,25 @@ public class TransformerHelper {
 	/**
 	 */
 	@NonNull
-	public static IVesselClass buildIVesselClass(@NonNull final ISchedulerBuilder builder, @NonNull final VesselClass eVc, @NonNull final IBaseFuel baseFuel) {
-		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
-				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()), eVc.isHasReliqCapability());
-		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
-		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
+	public static IVessel buildIVessel(@NonNull final ISchedulerBuilder builder, Vessel eVessel, @NonNull final IBaseFuel baseFuel) {
+
+		@NonNull
+		final IVessel vc = builder.createVessel(eVessel.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMinSpeed()),
+				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity())),
+				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), baseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()),
+				eVessel.getVesselOrDelegateWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateCoolingVolume()),
+				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegateMinBaseFuelConsumption()), eVessel.getVesselOrDelegateHasReliqCapability());
+
+		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVessel.getLadenAttributes());
+		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVessel.getBallastAttributes());
 
 		//
 		// TODO: we don't have port type attributes in the model yet
 		// so we kludge them by pulling VesselState-dependent out of the vessel class
 		//
 
-		builder.setVesselClassPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getLadenAttributes().getInPortBaseRate()));
-		builder.setVesselClassPortTypeParameters(vc, PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getBallastAttributes().getInPortBaseRate()));
+		builder.setVesselPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getLadenAttributes().getVesselOrDelegateInPortBaseRate()));
+		builder.setVesselPortTypeParameters(vc, PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getBallastAttributes().getVesselOrDelegateInPortBaseRate()));
 
 		return vc;
 	}
@@ -64,13 +68,13 @@ public class TransformerHelper {
 	 * @param ladenAttributes
 	 *            the {@link VesselStateAttributes} from the EMF model
 	 */
-	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.@NonNull VesselState state,
+	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVessel vc, final com.mmxlabs.scheduler.optimiser.components.@NonNull VesselState state,
 			final VesselStateAttributes attrs) {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<>();
 
 		int minSpeed = Integer.MAX_VALUE;
 		int maxSpeed = Integer.MIN_VALUE;
-		for (final FuelConsumption line : attrs.getFuelConsumption()) {
+		for (final FuelConsumption line : attrs.getVesselOrDelegateFuelConsumption()) {
 			final int speed = OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed());
 			keypoints.put(speed, (long) OptimiserUnitConvertor.convertToInternalDailyRate(line.getConsumption()));
 			if (speed > maxSpeed) {
@@ -85,8 +89,8 @@ public class TransformerHelper {
 
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(minSpeed, maxSpeed, consumptionCalculator);
 
-		builder.setVesselClassStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getNboRate()),
-				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleBaseRate()), cc,
-				OptimiserUnitConvertor.convertToInternalSpeed(attrs.getServiceSpeed()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getInPortNBORate()) );
+		builder.setVesselStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateIdleNBORate()),
+				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateIdleBaseRate()), cc, OptimiserUnitConvertor.convertToInternalSpeed(attrs.getVesselOrDelegateServiceSpeed()),
+				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getVesselOrDelegateInPortNBORate()));
 	}
 }

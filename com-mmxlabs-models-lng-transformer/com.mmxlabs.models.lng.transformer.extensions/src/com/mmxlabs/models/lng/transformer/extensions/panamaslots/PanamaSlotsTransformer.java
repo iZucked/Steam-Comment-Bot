@@ -41,7 +41,6 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 

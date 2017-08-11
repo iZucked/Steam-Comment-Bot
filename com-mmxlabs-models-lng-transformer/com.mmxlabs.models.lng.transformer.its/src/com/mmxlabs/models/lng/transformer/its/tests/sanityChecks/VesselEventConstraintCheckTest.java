@@ -9,6 +9,9 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,9 +20,11 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -29,6 +34,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
@@ -59,10 +66,10 @@ public class VesselEventConstraintCheckTest {
 	private final int numOfClassTwo = 4;
 	private final int numOfClassThree = 5;
 	private final int numOfClassFour = 6;
-	private ArrayList<Vessel> vesselsOfClassOne;
-	private ArrayList<Vessel> vesselsOfClassTwo;
-	private ArrayList<Vessel> vesselsOfClassThree;
-	private ArrayList<Vessel> vesselsOfClassFour;
+	private List<VesselAvailability> vesselsOfClassOne;
+	private List<VesselAvailability> vesselsOfClassTwo;
+	private List<VesselAvailability> vesselsOfClassThree;
+	private List<VesselAvailability> vesselsOfClassFour;
 
 	/**
 	 * This is called before each test is run.
@@ -79,10 +86,10 @@ public class VesselEventConstraintCheckTest {
 		SanityCheckTools.setPortDistances(csc, ports);
 
 		// createVessels creates and adds the vessels to the scenario.
-		vesselsOfClassOne = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
-		vesselsOfClassTwo = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
-		vesselsOfClassThree = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
-		vesselsOfClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
+		vesselsOfClassOne = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false)));
+		vesselsOfClassTwo = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false)));
+		vesselsOfClassThree = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false)));
+		vesselsOfClassFour = new ArrayList<>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
 
 	}
 
@@ -106,12 +113,10 @@ public class VesselEventConstraintCheckTest {
 	public void testAllConstraints() {
 
 		// get some vessels and vessel classes to restrict the dry docks and charter outs
-		final Vessel allowedDrydockVessel = vesselsOfClassOne.get(0);
-		final VesselClass allowedDrydockVesselClass = vesselsOfClassThree.get(0).getVesselClass();
-		final Vessel allowedCharterOutVessel = vesselsOfClassTwo.get(0);
-		final VesselClass allowedCharterOutVesselClass = vesselsOfClassFour.get(0).getVesselClass();
+		final Vessel allowedDrydockVessel = vesselsOfClassThree.get(0).getVessel();
+		final Vessel allowedCharterOutVessel = vesselsOfClassFour.get(0).getVessel();
 
-		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		addVesselEventsAndRunTest(Collections.singleton(allowedDrydockVessel), Collections.singleton(allowedCharterOutVessel));
 	}
 
 	/**
@@ -120,12 +125,9 @@ public class VesselEventConstraintCheckTest {
 	@Test
 	public void testDrydockVessel() {
 
-		final Vessel allowedDrydockVessel = vesselsOfClassOne.get(0);
-		final VesselClass allowedDrydockVesselClass = null;
-		final Vessel allowedCharterOutVessel = null;
-		final VesselClass allowedCharterOutVesselClass = null;
+		final VesselAvailability allowedDrydockVessel = vesselsOfClassOne.get(0);
 
-		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		addVesselEventsAndRunTest(Collections.singleton(allowedDrydockVessel.getVessel()), Collections.emptySet());
 	}
 
 	/**
@@ -134,12 +136,9 @@ public class VesselEventConstraintCheckTest {
 	@Test
 	public void testCharterOutVessel() {
 
-		final Vessel allowedDrydockVessel = null;
-		final VesselClass allowedDrydockVesselClass = null;
-		final Vessel allowedCharterOutVessel = vesselsOfClassOne.get(0);
-		final VesselClass allowedCharterOutVesselClass = null;
+		final VesselAvailability allowedCharterOutVessel = vesselsOfClassOne.get(0);
 
-		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		addVesselEventsAndRunTest(Collections.emptySet(), Collections.singleton(allowedCharterOutVessel.getVessel()));
 	}
 
 	/**
@@ -148,12 +147,10 @@ public class VesselEventConstraintCheckTest {
 	@Test
 	public void testDryDockVesselClass() {
 
-		final Vessel allowedDrydockVessel = null;
-		final VesselClass allowedDrydockVesselClass = vesselsOfClassOne.get(0).getVesselClass();
-		final Vessel allowedCharterOutVessel = null;
-		final VesselClass allowedCharterOutVesselClass = null;
-
-		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		final Vessel allowedDrydockVessel = vesselsOfClassOne.get(0).getVessel();
+		VesselGroup group = FleetFactory.eINSTANCE.createVesselGroup();
+		group.getVessels().add(allowedDrydockVessel);
+		addVesselEventsAndRunTest(Collections.singleton(group), Collections.emptySet());
 	}
 
 	/**
@@ -162,12 +159,12 @@ public class VesselEventConstraintCheckTest {
 	@Test
 	public void testCharterOutVesselClass() {
 
-		final Vessel allowedDrydockVessel = null;
-		final VesselClass allowedDrydockVesselClass = null;
-		final Vessel allowedCharterOutVessel = null;
-		final VesselClass allowedCharterOutVesselClass = vesselsOfClassOne.get(0).getVesselClass();
+		final Vessel allowedCharterOutVesselClass = vesselsOfClassOne.get(0).getVessel();
 
-		addVesselEventsAndRunTest(allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		VesselGroup group = FleetFactory.eINSTANCE.createVesselGroup();
+		group.getVessels().add(allowedCharterOutVesselClass);
+		addVesselEventsAndRunTest(Collections.emptySet(), Collections.singleton(group));
+
 	}
 
 	/**
@@ -182,12 +179,11 @@ public class VesselEventConstraintCheckTest {
 	 * @param allowedCharterOutVesselClass
 	 *            A class of vessel that is allowed charter out
 	 */
-	private void addVesselEventsAndRunTest(final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass, final Vessel allowedCharterOutVessel,
-			final VesselClass allowedCharterOutVesselClass) {
+	private void addVesselEventsAndRunTest(final Collection<AVesselSet<Vessel>> allowedDrydockVessel, final Collection<AVesselSet<Vessel>> allowedCharterOutVessel) {
 
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
-		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel, allowedDrydockVesselClass);
-		SanityCheckTools.addCharterOuts(csc, ports, allowedCharterOutVessel, allowedCharterOutVesselClass, cvValue, dischargePrice);
+		SanityCheckTools.addDrydocks(csc, ports, allowedDrydockVessel);
+		SanityCheckTools.addCharterOuts(csc, ports, allowedCharterOutVessel, cvValue, dischargePrice);
 
 		final IScenarioDataProvider scenarioDataProvider = csc.getScenarioDataProvider();
 		// evaluate and get a schedule
@@ -202,7 +198,7 @@ public class VesselEventConstraintCheckTest {
 		ScenarioTools.printSequences(result);
 
 		// check the output
-		checkOutput(result, allowedDrydockVessel, allowedDrydockVesselClass, allowedCharterOutVessel, allowedCharterOutVesselClass);
+		checkOutput(result, allowedDrydockVessel, allowedCharterOutVessel);
 	}
 
 	/**
@@ -219,8 +215,7 @@ public class VesselEventConstraintCheckTest {
 	 * @param allowedCharterOutVesselClass
 	 *            The vessel class allowed to take charter outs.
 	 */
-	private void checkOutput(final Schedule result, final Vessel allowedDryDockVessel, final VesselClass allowedDryDockVesselClass, final Vessel allowedCharterOutVessel,
-			final VesselClass allowedCharterOutVesselClass) {
+	private void checkOutput(final Schedule result, final Collection<AVesselSet<Vessel>> allowedDryDockVessel, final Collection<AVesselSet<Vessel>> allowedCharterOutVessel) {
 
 		for (final Sequence seq : result.getSequences()) {
 			for (final Event e : seq.getEvents()) {
@@ -232,9 +227,9 @@ public class VesselEventConstraintCheckTest {
 					final Vessel usedVessel = seq.getVesselAvailability().getVessel();
 
 					if (ve instanceof CharterOutEvent) {
-						assertTrue("Charter out uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
+						assertTrue("Charter out uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel));
 					} else if (ve instanceof DryDockEvent) {
-						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel, allowedDryDockVesselClass));
+						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel));
 					} else {
 						fail("Test should cover all VesselEvents.");
 					}
@@ -243,21 +238,12 @@ public class VesselEventConstraintCheckTest {
 		}
 	}
 
-	private boolean isUsedVesselValid(final Vessel usedVessel, final Vessel allowedVessel, final VesselClass allowedVesselClass) {
-
+	private boolean isUsedVesselValid(final Vessel usedVessel, final Collection<AVesselSet<Vessel>> allowedVessels) {
 		// in the case that there are no restrictions on a vessel event all vessels are valid, so return true
-		if ((allowedVessel == null) && (allowedVesselClass == null)) {
+		if ((allowedVessels == null || allowedVessels.isEmpty())) {
 			return true;
 		} else {
-			boolean isValid = false;
-			if (allowedVessel != null) {
-				isValid = isValid || usedVessel.equals(allowedVessel);
-			}
-			if (allowedVesselClass != null) {
-				isValid = isValid || allowedVesselClass.equals(usedVessel.getVesselClass());
-			}
-
-			return isValid;
+			return SetUtils.getObjects(allowedVessels).contains(usedVessel);
 		}
 	}
 }

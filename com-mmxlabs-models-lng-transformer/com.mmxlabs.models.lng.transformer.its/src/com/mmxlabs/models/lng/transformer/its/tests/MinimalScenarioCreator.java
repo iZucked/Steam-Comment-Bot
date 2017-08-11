@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -31,7 +30,6 @@ import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 
 public class MinimalScenarioCreator extends DefaultScenarioCreator {
-	public final VesselClass vc;
 	public final Vessel vessel;
 	public VesselAvailability vesselAvailability;
 
@@ -59,17 +57,17 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		purchaseContract = addPurchaseContract("Purchase Contract", purchasePrice);
 
 		// create a vessel class with default name
-		vc = fleetCreator.createDefaultVesselClass(null);
+		vessel = fleetCreator.createDefaultVessel("");
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0].getVessel();
+		fleetCreator.createMultipleDefaultVessels(vessel, 1, shippingEntity);
 
 		// need to create a default route
 		addRoute(RouteOption.DIRECT);
 
-		final double maxSpeed = vc.getMaxSpeed();
+		final double maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
 
 		// initialise the port creator with a convenient base distance multiplier
-		if (vc.getMinSpeed() == maxSpeed) {
+		if (vessel.getVesselOrDelegateMinSpeed() == maxSpeed) {
 			portCreator.baseDistanceMultiplier = maxSpeed;
 		}
 
@@ -114,7 +112,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	}
 
 	public int getMarginHours(final Port startPort, final Port endPort) {
-		return 2 * getTravelTime(startPort, endPort, RouteOption.DIRECT, (int) vc.getMaxSpeed());
+		return 2 * getTravelTime(startPort, endPort, RouteOption.DIRECT, (int) vessel.getVesselOrDelegateMaxSpeed());
 	}
 
 	public VesselAvailability setDefaultAvailability(final Port startPort, final Port endPort) {

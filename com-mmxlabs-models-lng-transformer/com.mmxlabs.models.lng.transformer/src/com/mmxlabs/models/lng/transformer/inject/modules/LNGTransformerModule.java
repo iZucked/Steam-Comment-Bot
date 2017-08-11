@@ -36,7 +36,6 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;

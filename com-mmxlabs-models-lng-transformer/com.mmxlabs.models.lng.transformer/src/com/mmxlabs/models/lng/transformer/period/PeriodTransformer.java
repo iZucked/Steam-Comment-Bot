@@ -86,7 +86,6 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
@@ -300,8 +299,8 @@ public class PeriodTransformer {
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
 
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, startConditionMap, endConditionMap, eventDependencies.getFirst(),
-				eventDependencies.getSecond(), objectToPortVisitMap, mapping);
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(),
+				objectToPortVisitMap, mapping);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 
 		if (extensions != null) {
@@ -748,11 +747,11 @@ public class PeriodTransformer {
 	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo) {
 
 		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
-		AVesselSet<Vessel> lockedVessel = null;
+		Vessel lockedVessel = null;
 		if (vat instanceof VesselAvailability) {
 			lockedVessel = (((VesselAvailability) vat).getVessel());
 		} else if (vat instanceof CharterInMarket) {
-			lockedVessel = (((CharterInMarket) vat).getVesselClass());
+			lockedVessel = (((CharterInMarket) vat).getVessel());
 		}
 
 		for (final Slot slot : cargo.getSlots()) {
@@ -821,7 +820,7 @@ public class PeriodTransformer {
 			if (vat instanceof VesselAvailability) {
 				slot.getAllowedVessels().add(((VesselAvailability) vat).getVessel());
 			} else if (vat instanceof CharterInMarket) {
-				slot.getAllowedVessels().add(((CharterInMarket) vat).getVesselClass());
+				slot.getAllowedVessels().add(((CharterInMarket) vat).getVessel());
 			}
 		}
 		slot.setLocked(true);
@@ -867,9 +866,8 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep,
-			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
+			@NonNull final PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
+			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
 		assert collectedAssignments != null;

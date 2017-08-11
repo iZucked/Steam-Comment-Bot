@@ -6,19 +6,22 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * Tools that are used in many of the sanity checks.
@@ -135,7 +138,7 @@ public class SanityCheckTools {
 	 * @param allowedDrydockVesselClass
 	 *            A vessel class to add to all dry dock's allowed-vesselclass list. If null it will not be added to any dry dock.
 	 */
-	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
+	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final @Nullable Collection<AVesselSet<Vessel>> allowedDrydockVessel) {
 
 		LocalDateTime start = LocalDateTime.now();
 		for (final Port portA : ports) {
@@ -145,10 +148,7 @@ public class SanityCheckTools {
 					final DryDockEvent dry = csc.addDryDock(portB, start, 1);
 
 					if (allowedDrydockVessel != null) {
-						dry.getAllowedVessels().add(allowedDrydockVessel);
-					}
-					if (allowedDrydockVesselClass != null) {
-						dry.getAllowedVessels().add(allowedDrydockVesselClass);
+						dry.getAllowedVessels().addAll(allowedDrydockVessel);
 					}
 
 					start = start.plusHours(2);
@@ -167,8 +167,7 @@ public class SanityCheckTools {
 	 * @param allowedCharterOutVesselClass
 	 *            A class of vessel to add to every charter out's allowed vessel class list. If null it will not be added to any charter out.
 	 */
-	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass, final float cvValue,
-			final float dischargePrice) {
+	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final @Nullable Collection<AVesselSet<Vessel>> allowedCharterOutVessel, final float cvValue, final float dischargePrice) {
 
 		final LocalDateTime start = LocalDateTime.now();
 		int charterOutDurationDays = 1;
@@ -180,10 +179,7 @@ public class SanityCheckTools {
 				final CharterOutEvent charterOut = csc.addCharterOut(id, portA, portB, start, 1000, charterOutDurationDays, cvValue, dischargePrice, 100, 0);
 
 				if (allowedCharterOutVessel != null) {
-					charterOut.getAllowedVessels().add(allowedCharterOutVessel);
-				}
-				if (allowedCharterOutVesselClass != null) {
-					charterOut.getAllowedVessels().add(allowedCharterOutVesselClass);
+					charterOut.getAllowedVessels().addAll(allowedCharterOutVessel);
 				}
 
 				if (portA.equals(portB)) {

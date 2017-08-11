@@ -58,7 +58,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setCvValue(21);
 		vesselAvailability.getStartHeel().setPriceExpression("1");
 
-		msc.vc.setMinHeel(5000);
+		msc.vessel.setSafetyHeel(5000);
 
 		// Push up base fuel price for force NBO+FBO
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
@@ -68,7 +68,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 		checker.baseFuelPricePerMT = 100;
 
-		msc.vessel.getVesselClass().setWarmingTime(0);
+		msc.vessel.setWarmingTime(0);
 
 		msc.setupCooldown(20.0);
 
@@ -145,7 +145,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// No ballast idle
 
-		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+		final int vesselCapacity = (int) (msc.vessel.getVesselOrDelegateCapacity() * msc.vessel.getVesselOrDelegateFillCapacity());
 		final int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
 		final int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
 		// change from default scenario
@@ -264,7 +264,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// No ballast idle
 
-		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+		final int vesselCapacity = (int) (msc.vessel.getVesselOrDelegateCapacity() * msc.vessel.getVesselOrDelegateFillCapacity());
 		final int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
 		final int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
 		// change from default scenario
@@ -301,8 +301,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setPriceExpression("1");
 
 		// Set up cooldown infrastructure
-		msc.vessel.getVesselClass().setWarmingTime(0);
-		msc.vessel.getVesselClass().setCoolingVolume(500);
+		msc.vessel.setWarmingTime(0);
+		msc.vessel.setCoolingVolume(500);
 		msc.setupCooldown(0);
 
 		// change from default scenario
@@ -364,7 +364,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final int expectedHeelRolledOver = (int) vesselAvailability.getStartHeel().getMinVolumeAvailable() - legLNG[0];
 		final int totalLNGUsed = legLNG[1] + legLNG[2];
 
-		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+		final int vesselCapacity = (int) (msc.vessel.getVesselOrDelegateCapacity() * msc.vessel.getVesselOrDelegateFillCapacity());
 		final int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
 		final int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
 		// change from default scenario
@@ -405,7 +405,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setCvValue(21);
 		vesselAvailability.getStartHeel().setPriceExpression("1");
 
-		msc.vc.setMinHeel(500);
+		msc.vessel.setSafetyHeel(500);
 
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
@@ -463,9 +463,9 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final int startheel = (int) vesselAvailability.getStartHeel().getMaxVolumeAvailable();
 		final int orphanHeel = startheel - legLNG[0];
 		final int firstLoad = 10000 - orphanHeel; // No start event heel rollover
-		final int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]) - msc.vc.getMinHeel();
-		final int secondLoad = 10000 - msc.vc.getMinHeel();
-		final int secondDischarges = secondLoad + msc.vc.getMinHeel() - (legLNG[3] + legLNG[4]); // Can arrive warm
+		final int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]) - msc.vessel.getVesselOrDelegateSafetyHeel();
+		final int secondLoad = 10000 - msc.vessel.getVesselOrDelegateSafetyHeel();
+		final int secondDischarges = secondLoad + msc.vessel.getVesselOrDelegateSafetyHeel() - (legLNG[3] + legLNG[4]); // Can arrive warm
 
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { firstLoad, -firstDischarge, secondLoad, -secondDischarges });
 
@@ -498,10 +498,10 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setCvValue(21);
 		vesselAvailability.getStartHeel().setPriceExpression("1");
 
-		msc.vc.setMinHeel(500);
+		msc.vessel.setSafetyHeel(500);
 
-		msc.vessel.getVesselClass().setWarmingTime(0);
-		msc.vessel.getVesselClass().setCoolingVolume(500);
+		msc.vessel.setWarmingTime(0);
+		msc.vessel.setCoolingVolume(500);
 
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
@@ -597,7 +597,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
 		// force a heel rollover at the maintenance port
-		msc.vc.setMinHeel(500);
+		msc.vessel.setSafetyHeel(500);
 
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 

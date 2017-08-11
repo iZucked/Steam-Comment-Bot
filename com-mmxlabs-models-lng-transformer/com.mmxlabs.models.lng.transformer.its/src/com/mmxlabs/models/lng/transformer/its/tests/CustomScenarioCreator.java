@@ -19,14 +19,12 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -93,7 +91,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	 * @param minHeelVolume
 	 *            The minimum heel volume
 	 */
-	public Vessel[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
+	public VesselAvailability[] addVesselSimple(final String vesselClassName, final int numOfVesselsToCreate, final float baseFuelUnitPrice, final int speed, final int capacity, final int consumption,
 			final int NBORate, final int pilotLightRate, final int minHeelVolume, final boolean isTimeChartered) {
 
 		final float equivalenceFactor = 1;
@@ -106,7 +104,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	/**
 	 * Creates a vessel class and adds the specified number of vessels of the created class to the scenario. The attributes of the vessel class and vessel are set using the arguments.
 	 */
-	public Vessel[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor,
+	public VesselAvailability[] addVessel(final String vesselClassName, final int numOfVesselsToCreate, final int spotCharterCount, final float baseFuelUnitPrice, final float equivalenceFactor,
 			final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed, final int ballastMaxConsumption,
 			final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption, final int ladenMaxSpeed,
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
@@ -126,35 +124,34 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		BaseFuelIndex baseFuelIndex = scenarioModelBuilder.getPricingModelBuilder().createBaseFuelExpressionIndex("BASEFUEL", baseFuelUnitPrice);
 		final BaseFuelCost bfc = scenarioModelBuilder.getCostModelBuilder().createBaseFuelCost(baseFuel, baseFuelIndex);
 
-		final VesselClass vc = scenarioModelBuilder.getFleetModelBuilder().createVesselClass(vesselClassName, capacity, fillCapacity, minSpeed, maxSpeed, baseFuel, pilotLightRate, minHeelVolume,
+		final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(vesselClassName, capacity, fillCapacity, minSpeed, maxSpeed, baseFuel, pilotLightRate, minHeelVolume,
 				cooldownVolume, warmupTime);
 
-		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, "0", spotCharterCount);
 
-		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributes(vc, true, ladenNBORate, ladenIdleNBORate, ladenIdleConsumptionRate, 0);
-		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributes(vc, false, ballastNBORate, ballastIdleNBORate, ballastIdleConsumptionRate, 0);
+		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributes(vessel, true, ladenNBORate, ladenIdleNBORate, ladenIdleConsumptionRate, 0);
+		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributes(vessel, false, ballastNBORate, ballastIdleNBORate, ballastIdleConsumptionRate, 0);
 
-		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vc, false, ballastMinSpeed, ballastMinConsumption);
+		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vessel, false, ballastMinSpeed, ballastMinConsumption);
 		if (ballastMinSpeed != ballastMaxSpeed) {
-			scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vc, false, ballastMaxSpeed, ballastMaxConsumption);
+			scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vessel, false, ballastMaxSpeed, ballastMaxConsumption);
 		}
-		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vc, true, ladenMinSpeed, ladenMinConsumption);
+		scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vessel, true, ladenMinSpeed, ladenMinConsumption);
 		if (ladenMinSpeed != ladenMaxSpeed) {
-			scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vc, true, ladenMaxSpeed, ladenMaxConsumption);
+			scenarioModelBuilder.getFleetModelBuilder().setVesselStateAttributesCurve(vessel, true, ladenMaxSpeed, ladenMaxConsumption);
 		}
 
 		// return a list of all vessels created.
-		final Vessel created[] = new Vessel[numOfVesselsToCreate];
+		final VesselAvailability created[] = new VesselAvailability[numOfVesselsToCreate];
 
 		// now create vessels of this class
 		for (int i = 0; i < numOfVesselsToCreate; i++) {
-			final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(i + " (class " + vesselClassName + ")", vc);
 			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder().makeVesselAvailability(vessel, shippingEntity) //
 					.build();
 			if (isTimeChartered) {
 				availability.setTimeCharterRate("10");
 			}
-			created[i] = vessel;
+			created[i] = availability;
 		}
 
 		return created;
@@ -274,10 +271,6 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		return addCargo(cargoID, loadPort, dischargePort, Float.toString(loadPrice), Float.toString(dischargePrice), cvValue, loadWindowStart, travelTime);
 	}
 
-//	public DryDockEvent addDryDock(final Port startPort, final LocalDateTime start, final int durationDays) {
-//
-//		return addDryDock(startPort, start, durationDays);
-//	}
 
 	public CharterOutEvent addCharterOut(final String id, final @NonNull Port startPort, final @Nullable Port endPort, final @NonNull LocalDateTime startCharterOut, final int heelLimit,
 			final int charterOutDurationDays, final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
@@ -315,9 +308,9 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(B, A, canalOption, distanceBToA, false);
 
 		final FleetModel fleetModel = scenarioModelBuilder.getFleetModelBuilder().getFleetModel();
-		for (final VesselClass vc : fleetModel.getVesselClasses()) {
-			scenarioModelBuilder.getFleetModelBuilder().setRouteParameters(vc, canal, canalTransitFuelDays, canalTransitFuelDays, canalNBORateDays, canalNBORateDays, canalTransitTime);
-			scenarioModelBuilder.getCostModelBuilder().setRouteCost(vc, canal, canalLadenCost, canalUnladenCost);
+		for (final Vessel vc : fleetModel.getVessels()) {
+			scenarioModelBuilder.getFleetModelBuilder().setRouteParameters(vc, canalOption, canalTransitFuelDays, canalTransitFuelDays, canalNBORateDays, canalNBORateDays, canalTransitTime);
+			scenarioModelBuilder.getCostModelBuilder().setRouteCost(vc, canalOption, canalLadenCost, canalUnladenCost);
 		}
 	}
 
@@ -331,13 +324,13 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 	 *            The ports to make inaccessible.
 	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
 	 */
-	public boolean addInaccessiblePortsOnVesselClass(final VesselClass vc, final Port[] inaccessiblePorts) {
+	public boolean addInaccessiblePortsOnVessel(final Vessel vc, final Port[] inaccessiblePorts) {
 
-		if (scenarioFleetModelContainsVesselClass(vc)) {
+		if (scenarioFleetModelContainsVessel(vc)) {
 			FleetModel fleetModel = scenarioModelBuilder.getFleetModelBuilder().getFleetModel();
-			for (final VesselClass v : fleetModel.getVesselClasses()) {
+			for (final Vessel v : fleetModel.getVessels()) {
 				if (v.equals(vc)) {
-					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
+					v.getVesselOrDelegateInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
 				}
 
 				return true;
@@ -346,10 +339,10 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		return false;
 	}
 
-	private boolean scenarioFleetModelContainsVesselClass(final VesselClass vc) {
+	private boolean scenarioFleetModelContainsVessel(final Vessel vessel) {
 
 		for (final Vessel v : scenarioModelBuilder.getFleetModelBuilder().getFleetModel().getVessels()) {
-			if (v.getVesselClass().equals(vc)) {
+			if (v.equals(vessel)) {
 				return true;
 			}
 		}

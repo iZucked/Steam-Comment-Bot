@@ -169,13 +169,13 @@ public class PeriodOptimiserTest {
 		tester.cargoB3.getSortedSlots().get(0).setPriceExpression("20.0");
 
 		// Fix loads to vessel
-		tester.cargoA1.getSlots().get(0).getAllowedVessels().add(tester.vessels[1]);
-		tester.cargoA2.getSlots().get(0).getAllowedVessels().add(tester.vessels[1]);
-		tester.cargoA3.getSlots().get(0).getAllowedVessels().add(tester.vessels[1]);
+		tester.cargoA1.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[1].getVessel());
+		tester.cargoA2.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[1].getVessel());
+		tester.cargoA3.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[1].getVessel());
 
-		tester.cargoB1.getSlots().get(0).getAllowedVessels().add(tester.vessels[0]);
-		tester.cargoB2.getSlots().get(0).getAllowedVessels().add(tester.vessels[0]);
-		tester.cargoB3.getSlots().get(0).getAllowedVessels().add(tester.vessels[0]);
+		tester.cargoB1.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
+		tester.cargoB2.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
+		tester.cargoB3.getSlots().get(0).getAllowedVessels().add(tester.vesselAvailabilities[0].getVessel());
 
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
@@ -211,7 +211,7 @@ public class PeriodOptimiserTest {
 		public Cargo cargoA1, cargoA2, cargoA3;
 		public Cargo cargoB1, cargoB2, cargoB3;
 
-		public final Vessel[] vessels;
+		public final VesselAvailability[] vesselAvailabilities;
 		public IScenarioDataProvider scenarioDataProvider;
 
 		public PeriodOptimiserScenarioTester() {
@@ -256,17 +256,10 @@ public class PeriodOptimiserTest {
 
 			// create a few vessels and add them to the list of vessels created.
 			// createVessels creates and adds the vessels to the scenario.
-			vessels = csc.addVesselSimple("classOne", 2, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
-
-			final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
-			for (int i = 0; i < vessels.length; ++i) {
-				for (VesselAvailability vesselAvailability : csc.getScenarioDataProvider().getTypedScenario(LNGScenarioModel.class).getCargoModel().getVesselAvailabilities()) {
-					if (vesselAvailability.getVessel() == vessels[i]) {
-						vesselAvailabilities[i] = vesselAvailability;
-					}
-				}
-			}
-
+			vesselAvailabilities = new VesselAvailability[2];
+			vesselAvailabilities[0] = csc.addVesselSimple("classOne", 1, fuelPrice, 25, 1000000, 10, 10, 0, 500, false)[0];
+			vesselAvailabilities[1] = csc.addVesselSimple("classTwo", 1, fuelPrice, 25, 1000000, 10, 10, 0, 500, false)[0];
+ 
 			// create two different cargoes
 			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, dateA, 50);
 			cargoA2 = csc.addCargo("Cargo-A2", loadPort, dischargePort, 5, 5.0f, 20.f, dateB, 50);
@@ -295,13 +288,13 @@ public class PeriodOptimiserTest {
 			cargoB3.setVesselAssignmentType(vesselAvailabilities[1]);
 
 			// Fix loads to vessel
-			cargoA1.getSlots().get(0).getAllowedVessels().add(vessels[0]);
-			cargoA2.getSlots().get(0).getAllowedVessels().add(vessels[0]);
-			cargoA3.getSlots().get(0).getAllowedVessels().add(vessels[0]);
+			cargoA1.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[0].getVessel());
+			cargoA2.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[0].getVessel());
+			cargoA3.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[0].getVessel());
 
-			cargoB1.getSlots().get(0).getAllowedVessels().add(vessels[1]);
-			cargoB2.getSlots().get(0).getAllowedVessels().add(vessels[1]);
-			cargoB3.getSlots().get(0).getAllowedVessels().add(vessels[1]);
+			cargoB1.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[1].getVessel());
+			cargoB2.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[1].getVessel());
+			cargoB3.getSlots().get(0).getAllowedVessels().add(vesselAvailabilities[1].getVessel());
 
 			// Set volumes
 			cargoA1.getSlots().get(0).setMaxQuantity(bigQty);

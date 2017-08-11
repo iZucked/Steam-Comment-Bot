@@ -6,12 +6,13 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -42,7 +43,7 @@ public class VesselExistenceCheckTest {
 	public void test() {
 
 		// this is the list of vessels to check against the output.
-		final ArrayList<Vessel> inputVessels = new ArrayList<Vessel>();
+		final List<VesselAvailability> inputVessels = new ArrayList<>();
 
 		final int loadPrice = 1;
 		final int cvValue = 10;
@@ -115,7 +116,7 @@ public class VesselExistenceCheckTest {
 	 * @param inputVessels
 	 * @param expectedNumOfVessels
 	 */
-	private void checkVesselExistence(final Schedule result, final ArrayList<Vessel> inputVessels) {
+	private void checkVesselExistence(final Schedule result, final List<VesselAvailability> inputVessels) {
 
 		// the list of input vessels will be changed, and the number of expected vessels it not yet know, so save the number of expected vessels.
 		final int expectedNumOfVessels = inputVessels.size();
@@ -124,7 +125,7 @@ public class VesselExistenceCheckTest {
 		int numOfVesselsInOutput = 0;
 		for (final Sequence sequence : result.getSequences()) {
 			if (sequence.isFleetVessel()) {
-				final Vessel fv = sequence.getVesselAvailability().getVessel();
+				final VesselAvailability fv = sequence.getVesselAvailability();
 
 				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv));
 				// remove the vessel - it should only exist once.

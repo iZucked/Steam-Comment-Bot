@@ -37,41 +37,47 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 	@Inject
 	IDistanceProvider distanceProvider;
-	
+
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
-	
+
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-	
+
 	@Inject
 	private IPortVisitDurationProvider portVisitDurationProvider;
-	
+
 	@Inject
 	private IElementDurationProvider elementDurationProvider;
-	
+
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	
+
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Override
 	public long calculateNonCharterVariableCosts(ILoadSlot loadA, IDischargeSlot dischargeA, ILoadSlot loadB, IDischargeSlot dischargeB, IVessel vessel) {
 		ITimeWindow startA = loadA.getTimeWindow();
 		ITimeWindow endA = dischargeA.getTimeWindow();
-//		Pair<ERouteOption,Integer> quickestTravelTimeA = distanceProvider.getQuickestTravelTime(vessel, loadA.getPort(), dischargeA.getPort(), startA.getInclusiveStart(), vessel.getVesselClass().getMaxSpeed());
+		// Pair<ERouteOption,Integer> quickestTravelTimeA = distanceProvider.getQuickestTravelTime(vessel, loadA.getPort(), dischargeA.getPort(), startA.getInclusiveStart(),
+		// vessel.getVesselClass().getMaxSpeed());
 		ITimeWindow startB = loadB.getTimeWindow();
 		ITimeWindow endB = dischargeB.getTimeWindow();
 
-//		Pair<ERouteOption,Integer> quickestTravelTimeB = distanceProvider.getQuickestTravelTime(vessel, loadB.getPort(), dischargeB.getPort(), startA.getInclusiveStart(), vessel.getVesselClass().getMaxSpeed());
-//		int earliestStartB = Math.max(endB.getInclusiveStart() - quickestTravelTimeB.getSecond(), startB.getInclusiveStart());
-		@NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel, dischargeA.getPort(), loadB.getPort(), vessel.getVesselClass().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
+		// Pair<ERouteOption,Integer> quickestTravelTimeB = distanceProvider.getQuickestTravelTime(vessel, loadB.getPort(), dischargeB.getPort(), startA.getInclusiveStart(),
+		// vessel.getVesselClass().getMaxSpeed());
+		// int earliestStartB = Math.max(endB.getInclusiveStart() - quickestTravelTimeB.getSecond(), startB.getInclusiveStart());
+		@NonNull
+		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel, dischargeA.getPort(), loadB.getPort(), vessel.getMaxSpeed(),
+				AvailableRouteChoices.OPTIMAL);
 		int salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeB, endA.getInclusiveStart());
-		long[] legFuelCosts = PriceIntervalProviderHelper.getLegFuelCosts(salesPrice, vessel.getVesselClass().getNBORate(VesselState.Ballast), vessel.getVesselClass(), loadA.getCargoCVValue(),
-				new int[] {endA.getInclusiveStart(), endA.getInclusiveStart() + quickestTravelTimeAToB.getSecond()}, distanceProvider.getDistance(quickestTravelTimeAToB.getFirst(), dischargeA.getPort(), loadB.getPort(), vessel),
-				vessel.getVesselClass().getBaseFuel().getEquivalenceFactor(), vesselBaseFuelCalculator.getBaseFuelPrice(vessel, startA.getInclusiveStart()), routeCostProvider.getRouteTransitTime(quickestTravelTimeAToB.getFirst(), vessel), portVisitDurationProvider.getVisitDuration(dischargeA.getPort(), PortType.Discharge), false);
-		
+		long[] legFuelCosts = PriceIntervalProviderHelper.getLegFuelCosts(salesPrice, vessel.getNBORate(VesselState.Ballast), vessel, loadA.getCargoCVValue(),
+				new int[] { endA.getInclusiveStart(), endA.getInclusiveStart() + quickestTravelTimeAToB.getSecond() },
+				distanceProvider.getDistance(quickestTravelTimeAToB.getFirst(), dischargeA.getPort(), loadB.getPort(), vessel), vessel.getBaseFuel().getEquivalenceFactor(),
+				vesselBaseFuelCalculator.getBaseFuelPrice(vessel, startA.getInclusiveStart()), routeCostProvider.getRouteTransitTime(quickestTravelTimeAToB.getFirst(), vessel),
+				portVisitDurationProvider.getVisitDuration(dischargeA.getPort(), PortType.Discharge), false);
+
 		return LongStream.of(legFuelCosts).sum() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel, endA.getInclusiveStart(), CostType.RoundTripBallast);
 	}
 
@@ -96,9 +102,10 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		}
 		return costs;
 	}
-	
+
 	/**
 	 * Note: includes duration
+	 * 
 	 * @param cargoes
 	 * @param vessels
 	 * @return
@@ -114,17 +121,21 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 				for (List<IPortSlot> cargoB : cargoes) {
 					for (IVesselAvailability vessel : vessels) {
 						ILoadSlot loadB = getLoadSlot(cargoB);
-						@NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), dischargeA.getPort(), loadB.getPort(), vessel.getVessel().getVesselClass().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
-						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond() + elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel));
+						@NonNull
+						Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), dischargeA.getPort(), loadB.getPort(),
+								vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
+						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
+								+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel));
 					}
 				}
 			}
 		}
 		return times;
 	}
-	
+
 	/**
 	 * Note: includes duration
+	 * 
 	 * @param cargoes
 	 * @param vessels
 	 * @return
@@ -139,7 +150,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 			for (IVesselAvailability vessel : vessels) {
 				@NonNull
 				Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), loadA.getPort(), dischargeA.getPort(),
-						vessel.getVessel().getVesselClass().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
+						vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
 				times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
 						+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(loadA), vesselProvider.getResource(vessel));
 			}
@@ -155,14 +166,14 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		}
 		return null;
 	}
-	
+
 	private IDischargeSlot getDischargeSlot(List<IPortSlot> cargo) {
 		if (cargo.get(cargo.size() - 1) instanceof IDischargeSlot) {
 			return (IDischargeSlot) cargo.get(cargo.size() - 1);
 		}
 		return null;
 	}
-	
+
 	private Map<List<IPortSlot>, Integer> getCargoMap(List<List<IPortSlot>> cargoes) {
 		Map<List<IPortSlot>, Integer> cargoMap = new HashMap<>();
 		for (int i = 0; i < cargoes.size(); i++) {

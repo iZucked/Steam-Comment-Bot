@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
@@ -72,9 +71,11 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -188,7 +189,7 @@ public class DefaultScenarioCreator {
 				final FuelConsumption fc = FleetFactory.eINSTANCE.createFuelConsumption();
 				fc.setConsumption(consumption);
 				fc.setSpeed(speeds[i]);
-				result.getFuelConsumption().add(fc);
+				result.getVesselOrDelegateFuelConsumption().add(fc);
 			}
 
 			result.setIdleBaseRate(fuelIdleConsumptionPerDay);
@@ -207,10 +208,10 @@ public class DefaultScenarioCreator {
 		int defaultNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(defaultNBORatePerHour);
 		int defaultTransitTimeInHours = 0;
 
-		public VesselClassRouteParameters createVesselClassRouteParameters(final Route route) {
+		public VesselClassRouteParameters createVesselClassRouteParameters(final RouteOption routeOption) {
 			final VesselClassRouteParameters result = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 
-			result.setRoute(route);
+			result.setRouteOption(routeOption);
 			result.setLadenConsumptionRate(defaultConsumptionRatePerDay);
 			result.setBallastConsumptionRate(defaultConsumptionRatePerDay);
 			result.setLadenNBORate(defaultNBORatePerDay);
@@ -302,34 +303,34 @@ public class DefaultScenarioCreator {
 		 * @param name
 		 * @return
 		 */
-		public VesselClass createDefaultVesselClass(String name) {
+		public Vessel createDefaultVessel(String name) {
 			final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 			if (name == null) {
-				final int n = fleetModel.getVesselClasses().size();
-				name = "Vessel Class " + n;
+				final int n = fleetModel.getVessels().size();
+				name = "Vessel " + n;
 			}
 
-			final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
-			fleetModel.getVesselClasses().add(vc);
+			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+			fleetModel.getVessels().add(vessel);
 
 			final DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
 
-			final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
+			final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, "0", spotCharterCount);
 
-			vc.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
-			vc.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
-			vc.setName(name);
-			vc.setBaseFuel(createDefaultBaseFuel());
-			vc.setMinSpeed(defaultMinSpeed);
-			vc.setMaxSpeed(defaultMaxSpeed);
-			vc.setCapacity(defaultCapacity);
-			vc.setPilotLightRate(defaultPilotLightRate);
-			vc.setWarmingTime(defaultWarmupTime);
-			vc.setCoolingVolume(cooldownVolume);
-			vc.setMinHeel(defaultSafetyHeelVolume);
-			vc.setFillCapacity(defaultFillCapacity);
+			vessel.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
+			vessel.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
+			vessel.setName(name);
+			vessel.setBaseFuel(createDefaultBaseFuel());
+			vessel.setMinSpeed(defaultMinSpeed);
+			vessel.setMaxSpeed(defaultMaxSpeed);
+			vessel.setCapacity(defaultCapacity);
+			vessel.setPilotLightRate(defaultPilotLightRate);
+			vessel.setWarmingTime(defaultWarmupTime);
+			vessel.setCoolingVolume(cooldownVolume);
+			vessel.setSafetyHeel(defaultSafetyHeelVolume);
+			vessel.setFillCapacity(defaultFillCapacity);
 
-			return vc;
+			return vessel;
 		}
 
 		/**
@@ -339,12 +340,7 @@ public class DefaultScenarioCreator {
 		 * @param vc
 		 * @return
 		 */
-		public VesselAvailability createDefaultVessel(final @NonNull String name, final @NonNull VesselClass vc, final @NonNull BaseLegalEntity shippingEntity) {
-			final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-			final CargoModel cargoModel = scenario.getCargoModel();
-
-			@NonNull
-			final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(name, vc);
+		public VesselAvailability createDefaultVessel(final @NonNull Vessel vessel, final @NonNull BaseLegalEntity shippingEntity) {
 
 			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder() //
 					.makeVesselAvailability(vessel, shippingEntity) //
@@ -361,10 +357,10 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public VesselAvailability[] createMultipleDefaultVessels(final VesselClass vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
+		public VesselAvailability[] createMultipleDefaultVessels(final Vessel vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
 			final VesselAvailability[] result = new VesselAvailability[num];
 			for (int i = 0; i < num; i++) {
-				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc, shippingEntity);
+				result[i] = createDefaultVessel(vc, shippingEntity);
 			}
 			return result;
 		}
@@ -392,14 +388,14 @@ public class DefaultScenarioCreator {
 			return null;
 		}
 
-		public void assignDefaultSuezCanalData(final VesselClass vc, final Route route) {
-			assignRouteParameters(vc, route);
-			setCanalCost(vc, route, defaultSuezCanalCost, defaultSuezCanalCost);
+		public void assignDefaultSuezCanalData(final Vessel vc, final RouteOption routeOption) {
+			assignRouteParameters(vc, routeOption);
+			setCanalCost(vc, routeOption, defaultSuezCanalCost, defaultSuezCanalCost);
 		}
 
-		public void assignDefaultPanamaCanalData(final VesselClass vc, final Route route) {
-			assignRouteParameters(vc, route);
-			setCanalCost(vc, route, defaultPanamaCanalCost, defaultPanamaCanalCost);
+		public void assignDefaultPanamaCanalData(final Vessel vc, final RouteOption routeOption) {
+			assignRouteParameters(vc, routeOption);
+			setCanalCost(vc, routeOption, defaultPanamaCanalCost, defaultPanamaCanalCost);
 		}
 
 		/**
@@ -409,20 +405,20 @@ public class DefaultScenarioCreator {
 		 * @param route
 		 * @return
 		 */
-		public VesselClassRouteParameters assignRouteParameters(final VesselClass vc, final Route route) {
-			final VesselClassRouteParameters result = new DefaultVesselClassRouteParametersCreator().createVesselClassRouteParameters(route);
-			vc.getRouteParameters().add(result);
+		public VesselClassRouteParameters assignRouteParameters(final Vessel vc, final RouteOption routeOption) {
+			final VesselClassRouteParameters result = new DefaultVesselClassRouteParametersCreator().createVesselClassRouteParameters(routeOption);
+			vc.getVesselOrDelegateRouteParameters().add(result);
 			return result;
 		}
 
-		public RouteCost setCanalCost(final VesselClass vc, final Route route, final int ladenCost, final int ballastCost) {
+		public RouteCost setCanalCost(final Vessel vc, final RouteOption routeOption, final int ladenCost, final int ballastCost) {
 			final CostModel costModel = scenario.getReferenceModel().getCostModel();
 
 			final RouteCost result = PricingFactory.eINSTANCE.createRouteCost();
-			result.setRoute(route);
+			result.setRouteOption(routeOption);
 			result.setLadenCost(ladenCost); // cost in dollars for a laden vessel
 			result.setBallastCost(ballastCost); // cost in dollars for a ballast vessel
-			result.setVesselClass(vc);
+			result.getVessels().add(vc);
 			costModel.getRouteCosts().add(result);
 			return result;
 		}
@@ -675,9 +671,9 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		public CharterOutMarket createDefaultCharterCostModel(final VesselClass vc, final Integer minDuration, final Integer price, final EList<Port> ports) {
+		public CharterOutMarket createDefaultCharterCostModel(final Vessel vessel, final Integer minDuration, final Integer price, final EList<Port> ports) {
 			final CharterOutMarket result = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
-			result.setVesselClass(vc);
+			result.getVessels().add(vessel);
 			result.setMinCharterOutDuration(minDuration);
 
 			result.setCharterOutRate(Integer.toString(price));
@@ -846,14 +842,14 @@ public class DefaultScenarioCreator {
 	 *            The ports to make inaccessible.
 	 * @return If the ports are added successfully the method will return true. If the vessel class is not in the scenario it will return false.
 	 */
-	public boolean addInaccessiblePortsOnVesselClass(final VesselClass vc, final Port[] inaccessiblePorts) {
+	public boolean addInaccessiblePortsOnVessel(final Vessel vc, final Port[] inaccessiblePorts) {
 
 		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-		if (scenarioFleetModelContainsVesselClass(vc)) {
+		if (scenarioFleetModelContainsVessel(vc)) {
 
-			for (final VesselClass v : fleetModel.getVesselClasses()) {
+			for (final Vessel v : fleetModel.getVessels()) {
 				if (v.equals(vc)) {
-					v.getInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
+					v.getVesselOrDelegateInaccessiblePorts().addAll(Arrays.asList(inaccessiblePorts));
 				}
 
 				return true;
@@ -862,11 +858,11 @@ public class DefaultScenarioCreator {
 		return false;
 	}
 
-	private boolean scenarioFleetModelContainsVesselClass(final VesselClass vc) {
+	private boolean scenarioFleetModelContainsVessel(final Vessel vc) {
 
 		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 		for (final Vessel v : fleetModel.getVessels()) {
-			if (v.getVesselClass().equals(vc)) {
+			if (v.equals(vc)) {
 				return true;
 			}
 		}
@@ -936,19 +932,34 @@ public class DefaultScenarioCreator {
 		Assert.assertEquals(journey.getDistance(), (int) getDistance(from, to, route.getRouteOption()));
 	}
 
-	public RouteCost getRouteCost(final VesselClass vc, final Route route) {
+	public RouteCost getRouteCost(final Vessel vessel, final RouteOption routeOption) {
 		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		for (final RouteCost rc : costModel.getRouteCosts()) {
-			if (rc.getRoute().equals(route) && rc.getVesselClass().equals(vc)) {
-				return rc;
+
+			if (rc.getRouteOption() == routeOption) {
+				for (AVesselSet<Vessel> v : rc.getVessels()) {
+					if (v == vessel) {
+						return rc;
+					}
+				}
+			}
+		}
+		for (final RouteCost rc : costModel.getRouteCosts()) {
+
+			if (rc.getRouteOption() == routeOption) {
+				for (Vessel v : SetUtils.getObjects(rc.getVessels())) {
+					if (v == vessel) {
+						return rc;
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	public VesselClassRouteParameters getRouteParameters(final VesselClass vc, final Route route) {
-		for (final VesselClassRouteParameters parameters : vc.getRouteParameters()) {
-			if (parameters.getRoute().equals(route)) {
+	public VesselClassRouteParameters getRouteParameters(final Vessel vc, final RouteOption routeOption) {
+		for (final VesselClassRouteParameters parameters : vc.getVesselOrDelegateRouteParameters()) {
+			if (parameters.getRouteOption() == routeOption) {
 				return parameters;
 			}
 		}

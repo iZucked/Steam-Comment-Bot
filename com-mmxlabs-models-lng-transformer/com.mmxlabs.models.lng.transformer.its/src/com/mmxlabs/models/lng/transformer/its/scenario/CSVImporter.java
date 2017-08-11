@@ -45,7 +45,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
-import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
+import com.mmxlabs.models.lng.fleet.importer.VesselImporter;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -102,7 +102,6 @@ public class CSVImporter {
 	}
 
 	public void importFleetData(@NonNull final String urlRoot) throws MalformedURLException {
-		dataMap.put(FleetModelImporter.VESSEL_CLASSES_KEY, createURL(urlRoot, "Vessel Classes.csv"));
 		dataMap.put(FleetModelImporter.VESSELS_KEY, createURL(urlRoot, "Vessels.csv"));
 		dataMap.put(FleetModelImporter.CURVES_KEY, createURL(urlRoot, "Consumption Curves.csv"));
 		dataMap.put(FleetModelImporter.GROUPS_KEY, createURL(urlRoot, "Vessel Groups.csv"));
@@ -131,7 +130,9 @@ public class CSVImporter {
 
 		dataMap.put(CostModelImporter.COOLDOWN_PRICING_KEY, createURL(urlRoot, "Cooldown Prices.csv"));
 		dataMap.put(CostModelImporter.PORT_COSTS_KEY, createURL(urlRoot, "Port Costs.csv"));
+		dataMap.put(CostModelImporter.ROUTE_COSTS_KEY, createURL(urlRoot, "Route Costs.csv"));
 		dataMap.put(CostModelImporter.PANAMA_CANAL_TARIFF_KEY, createURL(urlRoot, "Panama Canal Tariff.csv"));
+		dataMap.put(CostModelImporter.SUEZ_CANAL_TARIFF_KEY, createURL(urlRoot, "Suez Canal Tariff.csv"));
 	}
 
 	public void importPromptData(@NonNull final String urlRoot) throws MalformedURLException {
@@ -283,7 +284,7 @@ public class CSVImporter {
 					classImporters.put(CargoPackage.eINSTANCE.getLoadSlot(), new LoadSlotImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getPortCost(), new PortCostImporter());
 					classImporters.put(SpotMarketsPackage.eINSTANCE.getSpotMarket(), new SpotMarketImporter());
-					classImporters.put(FleetPackage.eINSTANCE.getVesselClass(), new VesselClassImporter());
+					classImporters.put(FleetPackage.eINSTANCE.getVessel(), new VesselImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getDataIndex(), new DataIndexImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getBaseFuelIndex(), new BaseFuelIndexImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getCurrencyIndex(), new CurrencyIndexImporter());
@@ -426,7 +427,8 @@ public class CSVImporter {
 				try {
 					importer.importModel(scenarioModel, readers, context);
 				} catch (final Throwable th) {
-					Assert.fail(th.getMessage());
+					throw new RuntimeException(th);
+//					Assert.fail(th.getMessage());
 				}
 			} finally {
 				for (final CSVReader r : readers.values()) {

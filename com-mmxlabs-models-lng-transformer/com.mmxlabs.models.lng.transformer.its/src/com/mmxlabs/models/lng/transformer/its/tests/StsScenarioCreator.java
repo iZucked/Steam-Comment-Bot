@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 
@@ -18,7 +18,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	/**
 	 * 
 	 */
-	public final VesselClass vc;
+	public final Vessel vessel;
 	public final VesselAvailability[] vesselAvailabilities;
 
 	public final Port originPort;
@@ -48,9 +48,9 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		purchaseContract = addPurchaseContract("Purchase Contract", purchasePrice);
 
 		// create a vessel class with default name
-		vc = fleetCreator.createDefaultVesselClass(null);
+		vessel = fleetCreator.createDefaultVessel(null);
 		// create two vessels in that class
-		vesselAvailabilities = fleetCreator.createMultipleDefaultVessels(vc, 2, shippingEntity);
+		vesselAvailabilities = fleetCreator.createMultipleDefaultVessels(vessel, 2, shippingEntity);
 		// final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
 		// for (int i = 0; i < vessels.length; ++i) {
 		// for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
@@ -63,10 +63,10 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		// need to create a default route
 		addRoute(RouteOption.DIRECT);
 
-		final double maxSpeed = vc.getMaxSpeed();
+		final double maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
 
 		// initialise the port creator with a convenient base distance multiplier
-		if (vc.getMinSpeed() == maxSpeed) {
+		if (vessel.getVesselOrDelegateMinSpeed() == maxSpeed) {
 			portCreator.baseDistanceMultiplier = maxSpeed;
 		}
 

@@ -18,7 +18,6 @@ import java.util.Set;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
@@ -31,7 +30,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -228,15 +226,11 @@ public class ScenarioTools {
 
 		final int spotCharterCount = 0;
 
-		Vessel[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
+		VesselAvailability[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
 				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
 				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, minHeelVolume, false);
 
-		final Vessel vessel = vessels[0];
-		vessel.setName("Vessel");
-
-		// csc.addVessel should have created this...
-		final VesselAvailability availability = csc.getScenarioModelBuilder().getCargoModelBuilder().getCargoModel().getVesselAvailabilities().get(0);
+		final VesselAvailability availability = vessels[0];
 
 		final PurchaseContract pc = csc.purchaseContract;
 		final SalesContract sc = csc.salesContract;
@@ -313,12 +307,9 @@ public class ScenarioTools {
 		final int minHeelVolume = 0;
 		final int spotCharterCount = 0;
 
-		Vessel[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
+		VesselAvailability[] vessels = csc.addVessel("Vessel Class", 1, spotCharterCount, baseFuelUnitPrice, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption,
 				ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption,
 				ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, minHeelVolume, false);
-
-		final Vessel vessel = vessels[0];
-		vessel.setName("Vessel");
 
 		final PurchaseContract pc = csc.purchaseContract;
 		final SalesContract sc = csc.salesContract;
