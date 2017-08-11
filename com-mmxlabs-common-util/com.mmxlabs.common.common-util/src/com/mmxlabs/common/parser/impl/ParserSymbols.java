@@ -8,39 +8,41 @@ package com.mmxlabs.common.parser.impl;
 /** CUP generated interface containing symbol constants. */
 public interface ParserSymbols {
   /* terminals */
-  public static final int TIMES = 5;
+  public static final int TIMES = 4;
+  public static final int QUESTION = 12;
   public static final int PERCENT = 11;
-  public static final int PLUS = 3;
+  public static final int PLUS = 2;
   public static final int RPAREN = 9;
-  public static final int SEMI = 2;
-  public static final int SHIFT = 14;
-  public static final int DATEDAVG = 15;
+  public static final int SHIFT = 15;
+  public static final int DATEDAVG = 16;
   public static final int LPAREN = 8;
   public static final int COMMA = 10;
-  public static final int NUMBER = 17;
+  public static final int NUMBER = 18;
   public static final int EOF = 0;
-  public static final int DIVIDE = 6;
-  public static final int MINUS = 4;
+  public static final int UPLUS = 6;
+  public static final int DIVIDE = 5;
+  public static final int MINUS = 3;
   public static final int error = 1;
-  public static final int MIN = 12;
-  public static final int INTEGER = 16;
-  public static final int MAX = 13;
-  public static final int NAMED_ELEMENT = 19;
-  public static final int SERIES = 18;
+  public static final int MIN = 13;
+  public static final int INTEGER = 17;
+  public static final int MAX = 14;
+  public static final int NAMED_ELEMENT = 20;
+  public static final int SERIES = 19;
   public static final int UMINUS = 7;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "SEMI",
   "PLUS",
   "MINUS",
   "TIMES",
   "DIVIDE",
+  "UPLUS",
   "UMINUS",
   "LPAREN",
   "RPAREN",
   "COMMA",
   "PERCENT",
+  "QUESTION",
   "MIN",
   "MAX",
   "SHIFT",

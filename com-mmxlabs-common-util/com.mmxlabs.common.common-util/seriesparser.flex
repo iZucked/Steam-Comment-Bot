@@ -82,6 +82,7 @@ white_space = {new_line} | [ \t\f]
 "*"               { return symbol("mul",TIMES  ); }
 "/"               { return symbol("div",DIVIDE  ); }
 "%"               { return symbol("percent",PERCENT  ); }
+"?"               { return symbol("question",QUESTION  ); }
 {Named_Element}        { return symbol("namedelement", NAMED_ELEMENT, new String(yytext()) ); }
 //{Integer}        { return symbol("integer", INTEGER, new Integer(yytext()) ); }
 {Number}        { return symbol("number", NUMBER, new Double(yytext()) ); }
