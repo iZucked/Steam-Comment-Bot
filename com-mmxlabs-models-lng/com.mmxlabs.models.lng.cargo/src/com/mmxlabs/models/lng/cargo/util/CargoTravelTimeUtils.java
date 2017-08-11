@@ -75,8 +75,6 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
-	
-
 	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final LocalDate date, final PortModel portModel, final CostModel costModel) {
 		if (vesselAssignmentType == null) {
 			// allow all routes if not on a vessel
@@ -101,7 +99,7 @@ public class CargoTravelTimeUtils {
 		if (vesselAssignmentType instanceof CharterInMarket) {
 			final CharterInMarket cim = ((CharterInMarket) vesselAssignmentType);
 			vc = cim.getVesselClass();
-			vesselDisabledRoutes = cim.isOverrideInaccessibleRoutes() ? cim.getInaccessibleRoutes() : EMPTY_ROUTES;
+			vesselDisabledRoutes = /* cim.isOverrideInaccessibleRoutes() ? cim.getInaccessibleRoutes() : */ EMPTY_ROUTES;
 		} else {
 			final VesselAvailability v = (VesselAvailability) vesselAssignmentType;
 			vc = v.getVessel().getVesselClass();

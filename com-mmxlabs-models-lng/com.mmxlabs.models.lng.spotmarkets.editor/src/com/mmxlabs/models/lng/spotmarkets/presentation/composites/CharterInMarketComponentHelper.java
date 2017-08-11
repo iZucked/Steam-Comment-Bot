@@ -111,7 +111,7 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_inaccessibleRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new RouteExclusionMultiInlineEditor(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES));
+//		detailComposite.addInlineEditor(new RouteExclusionMultiInlineEditor(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES));
 	}
 
 	/**
