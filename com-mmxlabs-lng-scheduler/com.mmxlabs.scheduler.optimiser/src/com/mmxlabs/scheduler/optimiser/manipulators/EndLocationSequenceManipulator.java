@@ -24,7 +24,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -161,14 +160,14 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	private @NonNull Set<@NonNull IPort> getCharterMarketPortsForResource(final @NonNull IResource resource) {
-		final IVesselClass resourceVesselClass = getVesselClass(resource);
-		return charterMarketProvider.getCharteringPortsForVesselClass(resourceVesselClass);
+		final IVessel resourceVessel = getVessel(resource);
+		return charterMarketProvider.getCharteringPortsForVessel(resourceVessel);
 	}
 
-	private @NonNull IVesselClass getVesselClass(final @NonNull IResource resource) {
+	private @NonNull IVessel getVessel(final @NonNull IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final IVessel vessel = vesselAvailability.getVessel();
-		return vessel.getVesselClass();
+		return vessel;
 	}
 
 	@Override

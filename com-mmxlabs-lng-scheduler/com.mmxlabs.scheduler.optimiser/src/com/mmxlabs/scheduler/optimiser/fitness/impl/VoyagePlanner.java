@@ -30,7 +30,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
@@ -136,7 +135,6 @@ public class VoyagePlanner {
 
 		@NonNull
 		final IVessel vessel = vesselAvailability.getVessel();
-		final IVesselClass vesselClass = vessel.getVesselClass();
 
 		final IPort thisPort = thisPortSlot.getPort();
 		final IPort prevPort = prevPortSlot.getPort();
@@ -150,7 +148,7 @@ public class VoyagePlanner {
 		// Flag to force NBO use over cost choice - e.g. for cases where there is already a heel onboard
 		boolean forceNBO = false;
 
-		final boolean isReliq = vesselClass.hasReliqCapability();
+		final boolean isReliq = vessel.hasReliqCapability();
 
 		if (prevPortType == PortType.Load) {
 			useNBO = true;
@@ -188,9 +186,9 @@ public class VoyagePlanner {
 		options.setCargoCVValue(cargoCV);
 
 		// Convert rate to MT equivalent per day
-		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuel().getEquivalenceFactor());
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vessel.getNBORate(vesselState), cargoCV, vessel.getBaseFuel().getEquivalenceFactor());
 		if (nboRateInMTPerDay > 0) {
-			final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
+			final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
 			options.setNBOSpeed(nboSpeed);
 		}
 		// Determined by voyage plan optimiser
@@ -368,14 +366,14 @@ public class VoyagePlanner {
 
 		// For spot charters, start with the safety heel.
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
-			assert heelInM3Range[0] == vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
-			assert heelInM3Range[1] == vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+			assert heelInM3Range[0] == vesselAvailability.getVessel().getSafetyHeel();
+			assert heelInM3Range[1] == vesselAvailability.getVessel().getSafetyHeel();
 			// heelVolumeInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
 			assert heelInM3Range[0] >= 0;
 		}
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-			assert heelInM3Range[0] == vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
-			assert heelInM3Range[1] == vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+			assert heelInM3Range[0] == vesselAvailability.getVessel().getSafetyHeel();
+			assert heelInM3Range[1] == vesselAvailability.getVessel().getSafetyHeel();
 			// heelVolumeInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
 			assert heelInM3Range[0] >= 0;
 		}
@@ -670,10 +668,10 @@ public class VoyagePlanner {
 						} else if (actualsDataProvider.hasActuals(voyageOptions.getFromPortSlot())) {
 							final long heelAfterDischarge = actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot());
 							// end heel cannot be larger than discharge heel
-							endHeelInM3 = Math.min(heelAfterDischarge, vesselAvailability.getVessel().getVesselClass().getSafetyHeel());
+							endHeelInM3 = Math.min(heelAfterDischarge, vesselAvailability.getVessel().getSafetyHeel());
 						} else {
 							// Assume we arrive with safety heel at next destination.
-							endHeelInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+							endHeelInM3 = vesselAvailability.getVessel().getSafetyHeel();
 						}
 						// Take of end heel, this is now our laden BOG quantity;
 						lngInM3 -= endHeelInM3;
@@ -975,8 +973,8 @@ public class VoyagePlanner {
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (nominatedVessel != null) {
 			// Set a start and end heel for BOG estimations
-			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getSafetyHeel());
-			currentPlan.setRemainingHeelInM3(nominatedVessel.getVesselClass().getSafetyHeel());
+			currentPlan.setStartingHeelInM3(nominatedVessel.getSafetyHeel());
+			currentPlan.setRemainingHeelInM3(nominatedVessel.getSafetyHeel());
 		}
 
 		boolean dischargeOptionInMMBTU = false;

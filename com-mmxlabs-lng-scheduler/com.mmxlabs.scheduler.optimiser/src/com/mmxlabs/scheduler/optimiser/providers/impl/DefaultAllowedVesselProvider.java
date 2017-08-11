@@ -13,13 +13,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 
 public class DefaultAllowedVesselProvider implements IAllowedVesselProviderEditor {
 
 	private final Map<@NonNull IPortSlot, @Nullable Collection<@NonNull IVessel>> permittedVesselMap = new HashMap<>();
-	private final Map<@NonNull IPortSlot, @Nullable Collection<@NonNull IVesselClass>> permittedVesselClassMap = new HashMap<>();
 
 	@Override
 	public @Nullable Collection<@NonNull IVessel> getPermittedVessels(@NonNull final IPortSlot portSlot) {
@@ -27,22 +25,14 @@ public class DefaultAllowedVesselProvider implements IAllowedVesselProviderEdito
 	}
 
 	@Override
-	public @Nullable Collection<@NonNull IVesselClass> getPermittedVesselClasses(@NonNull final IPortSlot portSlot) {
-		return permittedVesselClassMap.getOrDefault(portSlot, null);
-	}
-
-	@Override
-	public void setPermittedVesselAndClasses(@NonNull final IPortSlot portSlot, @Nullable final Collection<@NonNull IVessel> permittedVessels,
-			@Nullable final Collection<@NonNull IVesselClass> permittedVesselClasses) {
+	public void setPermittedVesselAndClasses(@NonNull final IPortSlot portSlot, @Nullable final Collection<@NonNull IVessel> permittedVessels) {
 		permittedVesselMap.put(portSlot, permittedVessels);
-		permittedVesselClassMap.put(portSlot, permittedVesselClasses);
 	}
 
 	@Override
-	public boolean isPermittedOnVessel(final IPortSlot portSlot, final IVessel vessel, final IVesselClass vesselClass) {
+	public boolean isPermittedOnVessel(final IPortSlot portSlot, final IVessel vessel) {
 
 		boolean allowedOnVessel = true;
-		boolean allowedOnVesselClass = true;
 
 		@Nullable
 		final Collection<@NonNull IVessel> permittedVessels = getPermittedVessels(portSlot);
@@ -54,25 +44,11 @@ public class DefaultAllowedVesselProvider implements IAllowedVesselProviderEdito
 			}
 		}
 
-		@Nullable
-		final Collection<@NonNull IVesselClass> permittedVesselClasses = getPermittedVesselClasses(portSlot);
-		if (permittedVesselClasses != null) {
-			if (vesselClass == null) {
-				allowedOnVesselClass = false;
-			} else if (!permittedVesselClasses.contains(vesselClass)) {
-				allowedOnVesselClass = false;
-			}
-		}
-
-		if (permittedVessels == null && permittedVesselClasses == null) {
+		if (permittedVessels == null) {
 			// No restrictions
 			return true;
-		} else if (permittedVessels != null && permittedVesselClasses == null) {
-			return allowedOnVessel;
-		} else if (permittedVessels == null && permittedVesselClasses != null) {
-			return allowedOnVesselClass;
 		} else {
-			return allowedOnVessel || allowedOnVesselClass;
+			return allowedOnVessel;
 		}
 	}
 }

@@ -45,7 +45,6 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -87,7 +86,7 @@ public interface ISchedulerBuilder {
 	IOptimisationData getOptimisationData();
 
 	/**
-	 * Like the other {@link createVesselClass}, but with an hourly charter price specified (defaults to zero otherwise);
+	 * Create a new vessel
 	 * 
 	 * @param name
 	 * @param minSpeed
@@ -105,13 +104,13 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselClass createVesselClass(@NonNull String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, @NonNull IBaseFuel baseFuel, int pilotLightRate, int warmupTimeInHours,
+	IVessel createVessel(@NonNull String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, @NonNull IBaseFuel baseFuel, int pilotLightRate, int warmupTimeInHours,
 			long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay, boolean hasReliqCapability);
 
 	/**
-	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
+	 * Set {@link IVessel} parameters that depend upon the {@link VesselState}.
 	 * 
-	 * @param vesselClass
+	 * @param vessel
 	 * @param state
 	 * @param nboRateInM3PerHour
 	 *            Hourly scaled M3 of LNG rate of boil-off when travelling
@@ -126,18 +125,18 @@ public interface ISchedulerBuilder {
 	 * @param nboSpeed
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
 	 */
-	void setVesselClassStateParameters(@NonNull IVesselClass vc, @NonNull VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+	void setVesselStateParameters(@NonNull IVessel vessel, @NonNull VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			@NonNull IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int serviceSpeed, int inPortNBORateInM3PerHour);
 
 	/**
-	 * Set {@link IVesselClass} parameters that depend upon the {@link PortType}.
+	 * Set {@link IVessel} parameters that depend upon the {@link PortType}.
 	 * 
-	 * @param vesselClass
+	 * @param vessel
 	 * @param portType
 	 * @param inPortConsumptionRateInMTPerHour
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 */
-	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, @NonNull PortType portType, int inPortConsumptionRateInMTPerDay);
+	void setVesselPortTypeParameters(@NonNull IVessel vessel, @NonNull PortType portType, int inPortConsumptionRateInMTPerDay);
 
 	/**
 	 * Create a base fuel
@@ -201,16 +200,6 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselEventPortSlot createMaintenanceEvent(@NonNull String id, @NonNull ITimeWindow arrival, @NonNull IPort port, int durationHours);
-
-	/**
-	 * Create a vessel with the given name, class and capacity.
-	 * 
-	 * @param name
-	 * @param vesselClass
-	 * @return
-	 */
-	@NonNull
-	IVessel createVessel(@NonNull String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
 
 	@NonNull
 	IHeelOptionSupplier createHeelSupplier(long minHeelInM3, long maxHeelInM3, int heelCVValue, @NonNull IHeelPriceCalculator heelPriceCalculator);
@@ -442,14 +431,6 @@ public interface ISchedulerBuilder {
 	void setVesselInaccessiblePorts(@NonNull IVessel vessel, @NonNull Set<IPort> inaccessiblePorts);
 
 	/**
-	 * Set the list of ports vessels of this class are not permitted to travel to.
-	 * 
-	 * @param vessel
-	 * @param inaccessiblePorts
-	 */
-	void setVesselClassInaccessiblePorts(@NonNull IVesselClass vc, @NonNull Set<IPort> inaccessiblePorts);
-
-	/**
 	 * Add a global total volume limit
 	 * 
 	 * @param ports
@@ -567,14 +548,14 @@ public interface ISchedulerBuilder {
 	void setEarliestDate(@NonNull ZonedDateTime earliestTime);
 
 	/**
-	 * @param vesselClass
-	 *            The {@link IVesselClass} this data applies to
+	 * @param vessel
+	 *            The {@link IVessel} this data applies to
 	 * @param charterOutCurve
 	 *            The hourly charter out price curve
 	 * @param minDuration
 	 *            The minimum duration in hours a charter out can be.
 	 */
-	void createCharterOutCurve(@NonNull IVesselClass vesselClass, @NonNull ILongCurve charterOutCurve, int minDuration, @NonNull Set<IPort> allowedPorts);
+	void createCharterOutCurve(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, @NonNull Set<IPort> allowedPorts);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
@@ -676,7 +657,7 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
 			IBallastBonusContract ballastBonusContract);
 
 	/***
@@ -695,7 +676,7 @@ public interface ISchedulerBuilder {
 
 	void bindSlotsToRoundTripVessel(@NonNull IVesselAvailability roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
 
-	void setVesselAndClassPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels, @Nullable List<@NonNull IVesselClass> permittedVesselClasses);
+	void setVesselPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels);
 
 	void addOpenEndWindow(@NonNull MutableTimeWindow window);
 
@@ -715,13 +696,4 @@ public interface ISchedulerBuilder {
 	 * @param inaccessibleRoutes
 	 */
 	void setVesselInaccessibleRoutes(@NonNull IVessel vessel, Set<ERouteOption> inaccessibleRoutes);
-
-	/**
-	 * Set Inaccessible Routes (canals) for a class of vessel
-	 * 
-	 * @param vessel
-	 * @param inaccessibleRoutes
-	 */
-	void setVesselClassInaccessibleRoutes(@NonNull IVesselClass vesselClass, Set<ERouteOption> inaccessibleRoutes);
-
 }

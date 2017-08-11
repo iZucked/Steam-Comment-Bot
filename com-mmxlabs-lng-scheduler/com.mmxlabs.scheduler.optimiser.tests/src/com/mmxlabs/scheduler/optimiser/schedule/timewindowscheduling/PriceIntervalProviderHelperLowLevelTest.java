@@ -19,7 +19,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;

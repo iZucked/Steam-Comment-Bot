@@ -42,7 +42,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -140,17 +139,15 @@ public final class VoyagePlannerTest {
 		portTypeProvider.setPortType(element3, PortType.Load);
 		portTypeProvider.setPortType(element4, PortType.Discharge);
 
-		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setCargoCapacity(1000000);
-		final Vessel vessel = new Vessel("Schedule1Vessel", vesselClass, 1000000);
+		final Vessel vessel = new Vessel("Schedule1Vessel", 1000000);
 
 		final IResource resource = new Resource(index, vessel.getName());
 
 		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
 		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
 
-		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
-		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
+		vessel.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
+		vessel.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
 

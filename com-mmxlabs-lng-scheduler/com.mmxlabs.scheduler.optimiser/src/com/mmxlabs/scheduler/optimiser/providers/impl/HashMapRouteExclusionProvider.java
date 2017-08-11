@@ -9,83 +9,45 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
 
+@NonNullByDefault
 public class HashMapRouteExclusionProvider implements IRouteExclusionProviderEditor {
-	private HashMap<IVesselClass, Set<ERouteOption>> exclusionsByVesselClass = new HashMap<>();
-	private HashMap<IVessel, Set<ERouteOption>> exclusionsByVessel = new HashMap<>();
+	private final HashMap<IVessel, Set<ERouteOption>> exclusionsByVessel = new HashMap<>();
 
 	private boolean isVesselExclusionsEmpty = true;
-	private boolean isVesselClassExclusionsEmpty = true;
 	private static final Set<ERouteOption> EMPTY = Collections.emptySet();
 
 	@Override
-	public Set<ERouteOption> getExcludedRoutes(final IVesselClass vesselClass) {
-		final Set<ERouteOption> routes = exclusionsByVesselClass.get(vesselClass);
-		if (routes == null) {
-			return EMPTY;
-		} else {
-			return routes;
-		}
-	}
-
-	/**
-	 */
-	@Override
 	public Set<ERouteOption> getExcludedRoutes(final IVessel vessel) {
-		final Set<ERouteOption> routes = exclusionsByVessel.get(vessel);
-		if (routes == null) {
-			return EMPTY;
-		} else {
-			return routes;
-		}
+		return exclusionsByVessel.getOrDefault(vessel, EMPTY);
 	}
 
-	@Override
-	public void setExcludedRoutes(final IVesselClass vesselClass, final Set<ERouteOption> excludedRoutes) {
-		exclusionsByVesselClass.put(vesselClass, new HashSet<ERouteOption>(excludedRoutes));
-		if (excludedRoutes.isEmpty() == false) {
-			isVesselClassExclusionsEmpty = false;
-		} else {
-			for (final Set<ERouteOption> ex : exclusionsByVesselClass.values()) {
-				if (ex.isEmpty() == false) {
-					isVesselClassExclusionsEmpty = false;
-					return;
-				}
-			}
-			isVesselClassExclusionsEmpty = true;
-		}
-	}
-
-	/**
-	 */
 	@Override
 	public void setExcludedRoutes(final IVessel vessel, final Set<ERouteOption> excludedRoutes) {
-		HashSet<ERouteOption> vesselExcludedRoutes = new HashSet<ERouteOption>(excludedRoutes);
+		final Set<ERouteOption> vesselExcludedRoutes = new HashSet<>(excludedRoutes);
 		exclusionsByVessel.put(vessel, vesselExcludedRoutes);
 		if (vesselExcludedRoutes.isEmpty() == false) {
 			isVesselExclusionsEmpty = false;
 		}
-		Set<ERouteOption> excludedRoutesForVesselClass = getExcludedRoutes(vessel.getVesselClass());
-		// add all vessel class excluded routes to make lookup more efficient
-		vesselExcludedRoutes.addAll(excludedRoutesForVesselClass);
 	}
 
 	@Override
 	public boolean hasNoExclusions() {
-		return isVesselExclusionsEmpty && isVesselClassExclusionsEmpty;
+		return isVesselExclusionsEmpty;
 	}
-	
+
 	@Override
-	public boolean isRouteEnabled(IVessel vessel, ERouteOption route) {
+	public boolean isRouteEnabled(final IVessel vessel, final ERouteOption route) {
 		if (hasNoExclusions() || vessel == null || route == ERouteOption.DIRECT) {
 			return true;
 		} else {
-			Set<ERouteOption> excludedRoutes = getExcludedRoutes(vessel);
-			if (excludedRoutes == EMPTY) { 
+			final Set<ERouteOption> excludedRoutes = getExcludedRoutes(vessel);
+			if (excludedRoutes == EMPTY) {
 				return true;
 			} else if (excludedRoutes.contains(route)) {
 				return false;

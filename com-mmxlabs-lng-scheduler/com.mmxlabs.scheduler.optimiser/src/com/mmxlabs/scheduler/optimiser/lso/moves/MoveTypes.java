@@ -6,8 +6,6 @@ package com.mmxlabs.scheduler.optimiser.lso.moves;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-
 public enum MoveTypes {
 	// "Legacy" move types
 	Move_Segment, Swap_Segments, Swap_Tails, Move_Within_Sequence, Rotate_Within_Sequence, Insert_Optional_Element, Remove_Optional_Element, Shuffle_Element, // <<-- replace with

@@ -42,9 +42,9 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	public long getNBORate(IVessel vessel, PortType portStatus) {
 
 		if (portStatus == PortType.Load) {
-			return vessel.getVesselClass().getInPortNBORate(VesselState.Laden);
+			return vessel.getInPortNBORate(VesselState.Laden);
 		} else if (portStatus == PortType.Discharge) {
-			return vessel.getVesselClass().getInPortNBORate(VesselState.Ballast);
+			return vessel.getInPortNBORate(VesselState.Ballast);
 		}
 		return 0;
 	}
@@ -55,7 +55,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		PortType eventType = portSlot.getPortType();
 		final long dailyRateInM3 = getNBORate(vessel, eventType);
 		int eventDurationInHours = record.portTimesRecord.getSlotDuration(portSlot);
-		return Calculator.quantityFromRateTime(dailyRateInM3, eventDurationInHours)/ 24L;
+		return Calculator.quantityFromRateTime(dailyRateInM3, eventDurationInHours) / 24L;
 	}
 
 }

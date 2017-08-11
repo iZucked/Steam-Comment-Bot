@@ -52,7 +52,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -145,7 +144,7 @@ public class TestCalculations {
 			final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -155,8 +154,8 @@ public class TestCalculations {
 			final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
 			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(48);
-			builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-					ladenConsumptionCalculator, 0, laden_inPortNBORateInM3PerHour);
+			builder.setVesselStateParameters(vessel1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator, 0,
+					laden_inPortNBORateInM3PerHour);
 			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 			ballastKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.3));
@@ -166,14 +165,13 @@ public class TestCalculations {
 			final int ballast_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
 			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(24);
-			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
+			builder.setVesselStateParameters(vessel1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
 
 			IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
 
-			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), false);
 
@@ -470,7 +468,7 @@ public class TestCalculations {
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelUnitEquivalence);
 
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -482,8 +480,8 @@ public class TestCalculations {
 			final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
 			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(48.0);
 
-			builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-					ladenConsumptionCalculator, 0, laden_inPortNBORateInM3PerHour);
+			builder.setVesselStateParameters(vessel1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator, 0,
+					laden_inPortNBORateInM3PerHour);
 
 			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
@@ -495,7 +493,7 @@ public class TestCalculations {
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
 			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(24.0);
 
-			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
+			builder.setVesselStateParameters(vessel1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
@@ -504,7 +502,6 @@ public class TestCalculations {
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), heelOptionConsumer,
 					false);
 
-			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), false);
 
@@ -803,7 +800,7 @@ public class TestCalculations {
 
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -815,8 +812,8 @@ public class TestCalculations {
 			final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
 			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(48.0);
 
-			builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-					ladenConsumptionCalculator, 0, laden_inPortNBORateInM3PerHour);
+			builder.setVesselStateParameters(vessel1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator, 0,
+					laden_inPortNBORateInM3PerHour);
 
 			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
@@ -827,7 +824,7 @@ public class TestCalculations {
 			final int ballast_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
 			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(24.0);
-			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
+			builder.setVesselStateParameters(vessel1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
@@ -835,7 +832,6 @@ public class TestCalculations {
 
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
 
-			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), isOptional);
 

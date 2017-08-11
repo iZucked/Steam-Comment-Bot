@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -50,8 +49,6 @@ public class AllowedVesselPermissionConstraintCheckerTest {
 		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
 
 		final Pair<@NonNull ISequenceElement, @NonNull IPortSlot> slot1 = createSequenceElement(portSlotProvider);

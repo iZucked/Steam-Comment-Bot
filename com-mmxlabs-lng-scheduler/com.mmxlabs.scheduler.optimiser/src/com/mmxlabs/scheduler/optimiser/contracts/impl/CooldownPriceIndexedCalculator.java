@@ -11,7 +11,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
@@ -41,9 +41,9 @@ public class CooldownPriceIndexedCalculator implements ICooldownCalculator {
 	}
 
 	@Override
-	public long calculateCooldownCost(final IVesselClass vesselClass, final IPort port, final int cooldownCV, final int time) {
+	public long calculateCooldownCost(final IVessel vessel, final IPort port, final int cooldownCV, final int time) {
 		final int priceM3 = Calculator.costPerM3FromMMBTu(calculateUnitPriceAtUTCTime(time, port), cooldownCV);
-		final long volumeM3 = vesselClass.getCooldownVolume();
+		final long volumeM3 = vessel.getCooldownVolume();
 		final long cost = Calculator.costFromConsumption(volumeM3, priceM3);
 		return cost;
 	}

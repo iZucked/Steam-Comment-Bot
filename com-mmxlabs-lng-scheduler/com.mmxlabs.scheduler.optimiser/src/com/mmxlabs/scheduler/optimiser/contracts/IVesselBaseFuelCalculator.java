@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -14,10 +15,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * @author achurchill
  * 
  */
+@NonNullByDefault
 public interface IVesselBaseFuelCalculator extends ICalculator {
 	int getBaseFuelPrice(IVessel vessel, int voyagePlanStartTime);
 
 	int getBaseFuelPrice(IVessel vessel, IPortTimesRecord portTimesRecord);
-
-	int getBaseFuelPrice(IVesselClass vesselClass, int voyagePlanStartTime);
 }

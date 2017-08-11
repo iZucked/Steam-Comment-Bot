@@ -6,17 +6,19 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
 /**
  * Provider for Route exclusions
+ * 
  * @author achurchill
  *
  */
+@NonNullByDefault
 public interface IRouteExclusionProviderEditor extends IRouteExclusionProvider {
 
-	public void setExcludedRoutes(IVessel vessel, Set<ERouteOption> routes);
+	void setExcludedRoutes(IVessel vessel, Set<ERouteOption> routes);
 
-	public void setExcludedRoutes(IVesselClass vesselClass, Set<ERouteOption> routes);
 }

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.junit.Assert;
@@ -13,7 +11,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;

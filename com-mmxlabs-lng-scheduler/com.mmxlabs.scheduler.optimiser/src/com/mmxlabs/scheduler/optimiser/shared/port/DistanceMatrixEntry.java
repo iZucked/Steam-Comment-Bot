@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.shared.port;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;

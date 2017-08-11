@@ -177,11 +177,6 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	@NonNull
 	private Set<IPort> getExclusionsForVessel(@NonNull final IVessel vessel) {
 		Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel);
-
-		// If there are non, pick the class exclusions
-		if (exclusions.isEmpty()) {
-			exclusions = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
-		}
 		assert exclusions != null;
 		return exclusions;
 	}

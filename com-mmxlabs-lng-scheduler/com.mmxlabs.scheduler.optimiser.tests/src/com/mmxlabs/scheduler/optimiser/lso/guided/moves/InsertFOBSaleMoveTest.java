@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso.guided.moves;
 
-import static org.junit.Assert.*;
-
-import java.awt.geom.CubicCurve2D;
 import java.util.List;
 
 import org.junit.Assert;

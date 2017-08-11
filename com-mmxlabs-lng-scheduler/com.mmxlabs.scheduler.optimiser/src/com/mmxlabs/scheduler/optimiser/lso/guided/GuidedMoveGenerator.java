@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -19,7 +18,6 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Sets;
-import com.google.common.util.concurrent.CycleDetectingLockFactory.PotentialDeadlockException;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;

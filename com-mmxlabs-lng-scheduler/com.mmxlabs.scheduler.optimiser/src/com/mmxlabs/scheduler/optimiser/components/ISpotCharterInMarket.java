@@ -15,15 +15,15 @@ public interface ISpotCharterInMarket {
 	String getName();
 
 	@NonNull
-	IVesselClass getVesselClass();
+	IVessel getVessel();
 
 	@NonNull
 	ILongCurve getDailyCharterInRateCurve();
 
 	int getAvailabilityCount();
-	
+
 	IEndRequirement getEndRequirement();
-	
+
 	IBallastBonusContract getBallastBonusContract();
 
 }

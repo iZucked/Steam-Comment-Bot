@@ -7,14 +7,11 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -28,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
@@ -107,8 +103,8 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		final int prevVisitDuration = partialPortTimesRecord.getSlotDuration(prevPortSlot);
 
 		// TODO: Quickest != most economical routing
-		final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(),
-				vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
+		final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), endEventSlot.getPort(), vesselAvailability.getVessel().getMaxSpeed(),
+				partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
 		final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 		partialPortTimesRecord.setReturnSlotTime(endEventSlot, shortCargoReturnArrivalTime);
@@ -135,16 +131,14 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		if (false && extraExtent > 0) {
 			// TODO: Cacheable!
 
-//			Plan
+			// Plan
 			// Assume spot charter only (end cold, NBO ballast)
 			// Assume choice is best speed for FBO vs Base and routechoice
-			// Generate big table per vessel class of speed (to .1 knots) to LNG (mmbtu) and base fuel (MT) per day, canal lump sums. 
+			// Generate big table per vessel class of speed (to .1 knots) to LNG (mmbtu) and base fuel (MT) per day, canal lump sums.
 			// Iterate of .5 knot intervals to find best interval, reduce to .1 knots within interval (nbo speed to max speed).
 			// Find lowest cost! Prefer NBO speed DIRECT if conflict.
-//			 Assume can switch to nbo+base if needed for capacity constraint.
-			
-			
-			
+			// Assume can switch to nbo+base if needed for capacity constraint.
+
 			// >>>>>>>>>>>>>SPLIT OFF INTO OVERRIABLE METHOD
 
 			// There are some cases where we wish to evaluate the best time to
@@ -174,13 +168,12 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			final VoyageOptions finalOptions = new VoyageOptions(prevPortSlot, endEventSlot);
 
 			final IVessel vessel = vesselAvailability.getVessel();
-			final IVesselClass vesselClass = vessel.getVesselClass();
-			final boolean isReliq = vesselClass.hasReliqCapability();
+			final boolean isReliq = vessel.hasReliqCapability();
 
 			final IPortSlot firstSlot = partialPortTimesRecord.getFirstSlot();
 
 			final int cargoCV;
-			long maxLoadInM3 = vesselClass.getCargoCapacity();
+			long maxLoadInM3 = vessel.getCargoCapacity();
 			long minDischargeInM3 = 0;
 			final int bunkerPricePerMT = 0;
 			IHeelPriceCalculator lngPricePerMMBtu = null;
@@ -191,7 +184,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 
 			if (firstSlot instanceof ILoadSlot) {
 				final int ladenTravelTime = 0;
-				ladenEstimateInM3 = Calculator.quantityFromRateTime(vesselClass.getNBORate(VesselState.Laden), ladenTravelTime) / 24L;
+				ladenEstimateInM3 = Calculator.quantityFromRateTime(vessel.getNBORate(VesselState.Laden), ladenTravelTime) / 24L;
 				final ILoadSlot loadSlot = (ILoadSlot) firstSlot;
 				cargoCV = loadSlot.getCargoCVValue();
 
@@ -237,9 +230,9 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				finalOptions.setCargoCVValue(cargoCV);
 
 				// Convert rate to MT equivalent per day
-				final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(VesselState.Ballast), cargoCV, vesselClass.getBaseFuel().getEquivalenceFactor());
+				final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vessel.getNBORate(VesselState.Ballast), cargoCV, vessel.getBaseFuel().getEquivalenceFactor());
 				if (nboRateInMTPerDay > 0) {
-					final int nboSpeed = vesselClass.getConsumptionRate(VesselState.Ballast).getSpeed(nboRateInMTPerDay);
+					final int nboSpeed = vessel.getConsumptionRate(VesselState.Ballast).getSpeed(nboRateInMTPerDay);
 					finalOptions.setNBOSpeed(nboSpeed);
 				}
 
@@ -250,15 +243,15 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				finalOptions.setAllowCooldown(false);
 			}
 
-			final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
-			final int minSpeed = vessel.getVesselClass().getMinSpeed();
+			final int maxSpeed = vessel.getMaxSpeed();
+			final int minSpeed = vessel.getMinSpeed();
 
 			final IPort from = prevPortSlot.getPort();
 			final IPort to = endEventSlot.getPort();
 
 			// TODO: This check may not be correct.
 			final long endHeelInM3 = endRequirement.getHeelOptions().getExpectedTankState() != VesselTankState.MUST_BE_WARM ? endRequirement.getHeelOptions().getMinimumHeelAcceptedInM3() : 0;
-			final long startHeelInM3 = (finalOptions.isWarm()) ? 0 : vesselClass.getSafetyHeel();
+			final long startHeelInM3 = (finalOptions.isWarm()) ? 0 : vessel.getSafetyHeel();
 
 			final long estimatedBOGAvailableInM3 = startHeelInM3 + maxLoadInM3 - minDischargeInM3 - endHeelInM3 - ladenEstimateInM3;
 

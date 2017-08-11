@@ -23,7 +23,6 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -32,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
@@ -261,15 +259,15 @@ public class PriceIntervalProviderHelper {
 	}
 
 	public NonNullPair<LadenRouteData, Long> getTotalEstimatedJourneyCost(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
-			final long charterRatePerDay, @NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final boolean isLaden) {
+			final long charterRatePerDay, @NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final IVessel vessel, final int cv, final boolean isLaden) {
 		assert sortedCanalTimes.length > 0;
-		final int equivalenceFactor = vesselClass.getBaseFuel().getEquivalenceFactor();
+		final int equivalenceFactor = vessel.getBaseFuel().getEquivalenceFactor();
 		long bestMargin = Long.MAX_VALUE;
 		LadenRouteData bestCanal = null;
 
 		for (final LadenRouteData canal : sortedCanalTimes) {
 			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
-				final long cost = getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, boiloffRateM3, vesselClass, cv, equivalenceFactor, canal, charterRatePerDay, isLaden);
+				final long cost = getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, boiloffRateM3, vessel, cv, equivalenceFactor, canal, charterRatePerDay, isLaden);
 				if (cost < bestMargin) {
 					bestMargin = cost;
 					bestCanal = canal;
@@ -284,19 +282,19 @@ public class PriceIntervalProviderHelper {
 				}
 			}
 			if (bestCanal != null) {
-				bestMargin = getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, boiloffRateM3, vesselClass, cv, equivalenceFactor, bestCanal, charterRatePerDay, isLaden);
+				bestMargin = getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, boiloffRateM3, vessel, cv, equivalenceFactor, bestCanal, charterRatePerDay, isLaden);
 			}
 		}
 		assert bestCanal != null;
 		return new NonNullPair<LadenRouteData, Long>(bestCanal, bestMargin);
 	}
 
-	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3,
-			final IVesselClass vesselClass, final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
+	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3, final IVessel vessel,
+			final int cv, final int equivalenceFactor, final LadenRouteData canal, final long charterRatePerDay, final boolean isLaden) {
 		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
 				(int) canal.ladenTimeAtNBOSpeed);
-		final long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor,
-				vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.transitTime, loadDuration, isLaden);
+		final long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vessel, cv, times, canal.ladenRouteDistance, equivalenceFactor, vesselBaseFuelCalculator.getBaseFuelPrice(vessel, times[0]),
+				canal.transitTime, loadDuration, isLaden);
 
 		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long) (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel
 																																				// costs
@@ -321,7 +319,7 @@ public class PriceIntervalProviderHelper {
 	 *            TODO
 	 * @return
 	 */
-	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor,
+	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVessel vessel, final int cv, final int[] times, final long distance, final int equivalenceFactor,
 			final int baseFuelPrice, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
 		final VesselState vesselState;
 		if (isLaden) {
@@ -332,13 +330,13 @@ public class PriceIntervalProviderHelper {
 		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort - canalTransitTime);
 
 		// estimate speed and rate
-		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
+		final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
 		if (totalLegLengthInHours == 0) {
 			final int z = 0;
 		}
 		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);
-		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vesselClass.getMaxSpeed()); // the speed bounded by NBO and Max
-		final long rate = vesselClass.getConsumptionRate(vesselState).getRate(speed);
+		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vessel.getMaxSpeed()); // the speed bounded by NBO and Max
+		final long rate = vessel.getConsumptionRate(vesselState).getRate(speed);
 		final long vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, distance);
 		final long idleTimeInHours = Math.max(totalLegLengthInHours - vesselTravelTimeInHours, 0) + canalTransitTime; // note: modelling canal time as idle
 
@@ -346,14 +344,14 @@ public class PriceIntervalProviderHelper {
 		final long requiredTotalFuelM3 = Calculator.convertMTToM3(requiredTotalFuelMT, cv, equivalenceFactor);
 		final long requiredTotalFuelMMBTu = Calculator.convertM3ToMMBTu(requiredTotalFuelM3, cv);
 
-		final long idleBoiloffMMBTU = Calculator.convertM3ToMMBTu(vesselClass.getIdleNBORate(vesselState) * (int) idleTimeInHours, cv) / 24L;
+		final long idleBoiloffMMBTU = Calculator.convertM3ToMMBTu(vessel.getIdleNBORate(vesselState) * (int) idleTimeInHours, cv) / 24L;
 		final long idleBoiloffCost = Calculator.costFromVolume(idleBoiloffMMBTU, salesPrice);
 
 		final long[] fuelCosts = new long[2];
 		final long totalBoilOffCost;
 		final long totalBunkerCost;
 
-		if (vesselClass.hasReliqCapability()) {
+		if (vessel.hasReliqCapability()) {
 			totalBoilOffCost = Calculator.costFromVolume(requiredTotalFuelMMBTu, salesPrice);
 			totalBunkerCost = 0L;
 		} else {
@@ -583,13 +581,13 @@ public class PriceIntervalProviderHelper {
 					// start is less than the start of the interval
 					if (i > 0) {
 						// create trimmed forward interval
-						list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1]});
+						list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1] });
 						if (intervals.get(i)[0] < exclusiveEnd) {
 							list.add(intervals.get(i));
 						}
 					} else {
 						// no previous interval, so use current
-						list.add(new int[] {inclusiveStart, intervals.get(i)[1]});
+						list.add(new int[] { inclusiveStart, intervals.get(i)[1] });
 					}
 				}
 			} else if (intervals.get(i)[0] < exclusiveEnd) {

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl;
 
-import java.util.List;
 import java.util.Set;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;

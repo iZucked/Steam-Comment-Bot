@@ -14,7 +14,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
@@ -32,7 +32,7 @@ public class CooldownPriceIndexedCalculatorTest {
 	
 	public void testCalculatorPriceIndex(String timeZone) {
 		ICurve curve = Mockito.mock(ICurve.class);
-		IVesselClass mockVC = Mockito.mock(IVesselClass.class);
+		IVessel mockVessel = Mockito.mock(IVessel.class);
 		IPort mockPort = Mockito.mock(IPort.class);
 		// create a cooldown calculator and avoid using injection
 		// TODO Use injection
@@ -55,7 +55,7 @@ public class CooldownPriceIndexedCalculatorTest {
 		Mockito.when(curve.getValueAtPoint(timeA-12)).thenReturn(priceAMinus);
 		Mockito.when(curve.getValueAtPoint(timeB)).thenReturn(priceB);
 		Mockito.when(curve.getValueAtPoint(timeB-12)).thenReturn(priceBMinus);
-		Mockito.when(mockVC.getCooldownVolume()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(1000));
+		Mockito.when(mockVessel.getCooldownVolume()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(1000));
 		
 		// mock passed in timezone
 		Mockito.when(mockPort.getTimeZoneId()).thenReturn(timeZone);
@@ -69,8 +69,8 @@ public class CooldownPriceIndexedCalculatorTest {
 			expectedB = OptimiserUnitConvertor.convertToInternalFixedCost(220000);
 		}
 		
-		long testCalculationA = lsc.calculateCooldownCost(mockVC, mockPort, cvA, timeA);
-		long testCalculationB = lsc.calculateCooldownCost(mockVC, mockPort, cvB, timeB);
+		long testCalculationA = lsc.calculateCooldownCost(mockVessel, mockPort, cvA, timeA);
+		long testCalculationB = lsc.calculateCooldownCost(mockVessel, mockPort, cvB, timeB);
 		
 		
 		Assert.assertEquals(String.format("CooldownPriceIndexedCalculator returns %d but should be %d.", testCalculationA, expectedA), testCalculationA, expectedA);

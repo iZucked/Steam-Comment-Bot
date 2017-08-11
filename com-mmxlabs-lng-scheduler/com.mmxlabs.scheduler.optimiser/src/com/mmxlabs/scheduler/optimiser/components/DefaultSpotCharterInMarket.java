@@ -11,16 +11,17 @@ import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContr
 
 public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 
-	private final String name;
-	private final IVesselClass vesselClass;
-	private final ILongCurve dailyCharterInRateCurve;
+	private final @NonNull String name;
+	private final @NonNull IVessel vessel;
+	private final @NonNull ILongCurve dailyCharterInRateCurve;
 	private final int availabilityCount;
 	private final IBallastBonusContract ballastBonusContract;
 	private final IEndRequirement end;
 
-	public DefaultSpotCharterInMarket(@NonNull final String name, @NonNull final IVesselClass vesselClass, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount, IEndRequirement end, IBallastBonusContract ballastBonusContract) {
+	public DefaultSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount, IEndRequirement end,
+			IBallastBonusContract ballastBonusContract) {
 		this.name = name;
-		this.vesselClass = vesselClass;
+		this.vessel = vessel;
 		this.dailyCharterInRateCurve = dailyCharterInRateCurve;
 		this.availabilityCount = availabilityCount;
 		this.end = end;
@@ -29,21 +30,18 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 
 	@Override
 	@NonNull
-	@SuppressWarnings("null")
 	public final String getName() {
 		return name;
 	}
 
 	@Override
 	@NonNull
-	@SuppressWarnings("null")
-	public final IVesselClass getVesselClass() {
-		return vesselClass;
+	public final IVessel getVessel() {
+		return vessel;
 	}
 
 	@Override
 	@NonNull
-	@SuppressWarnings("null")
 	public final ILongCurve getDailyCharterInRateCurve() {
 		return dailyCharterInRateCurve;
 	}
@@ -62,7 +60,4 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	public IEndRequirement getEndRequirement() {
 		return end;
 	}
-	
-	
-
 }

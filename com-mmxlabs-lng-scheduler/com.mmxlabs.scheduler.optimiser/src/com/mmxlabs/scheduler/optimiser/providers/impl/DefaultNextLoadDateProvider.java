@@ -74,10 +74,10 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 			speed = contractToConstantSpeedMap.get(contract);
 			break;
 		case Max_Speed:
-			speed = vessel.getVesselClass().getMaxSpeed();
+			speed = vessel.getMaxSpeed();
 			break;
 		case Service_Speed:
-			speed = vessel.getVesselClass().getServiceSpeed(VesselState.Ballast);
+			speed = vessel.getServiceSpeed(VesselState.Ballast);
 			break;
 		default:
 			throw new IllegalSelectorException();

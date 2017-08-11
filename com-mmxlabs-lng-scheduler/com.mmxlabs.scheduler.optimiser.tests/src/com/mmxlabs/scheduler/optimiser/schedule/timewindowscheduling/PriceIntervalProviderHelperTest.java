@@ -34,7 +34,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -85,7 +84,7 @@ public class PriceIntervalProviderHelperTest {
 
 		final ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000 * 22.4));
-		final TimeWindow loadSlotTimeWindow = new TimeWindow(0,1);
+		final TimeWindow loadSlotTimeWindow = new TimeWindow(0, 1);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
 		final IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
@@ -111,8 +110,8 @@ public class PriceIntervalProviderHelperTest {
 		lrd[0] = new LadenRouteData(20, 30, 0, 300, 0);
 		lrd[1] = new LadenRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
 		final IVessel iVessel = getIVessel();
-		final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300,
-				iVessel.getVesselClass(), OptimiserUnitConvertor.convertToInternalDailyRate(22), true);
+		final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300, iVessel,
+				OptimiserUnitConvertor.convertToInternalDailyRate(22), true);
 
 	}
 
@@ -122,15 +121,13 @@ public class PriceIntervalProviderHelperTest {
 
 	static IVessel getIVessel(@Nullable final IConsumptionRateCalculator optionalConsumptionRateCalculator) {
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		final int maxSpeed = 10 * 1000;
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(maxSpeed);
+		Mockito.when(vessel.getMaxSpeed()).thenReturn(maxSpeed);
 		final IConsumptionRateCalculator consumptionRateCalculator = getMockedFixedConsumptionRateCalculator(maxSpeed);
-		Mockito.when(vesselClass.getConsumptionRate(Mockito.any())).thenReturn(consumptionRateCalculator);
+		Mockito.when(vessel.getConsumptionRate(Mockito.any())).thenReturn(consumptionRateCalculator);
 		final IBaseFuel baseFuel = Mockito.mock(IBaseFuel.class);
 		Mockito.when(baseFuel.getEquivalenceFactor()).thenReturn(44100);
-		Mockito.when(vesselClass.getBaseFuel()).thenReturn(baseFuel);
-		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getBaseFuel()).thenReturn(baseFuel);
 		return vessel;
 	}
 
@@ -587,7 +584,7 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
-		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVesselClass> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
+		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -688,7 +685,7 @@ public class PriceIntervalProviderHelperTest {
 		});
 
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
-		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVesselClass> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
+		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 

@@ -8,18 +8,142 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
+import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 public class VesselTest {
 
-	@SuppressWarnings("null")
 	@Test
 	public void testVessel() {
 		final String name = "name";
-		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		final Vessel vessel = new Vessel(name, vesselClass, 123456);
+		final Vessel vessel = new Vessel(name, 123456);
 		Assert.assertSame(name, vessel.getName());
-		Assert.assertSame(vesselClass, vessel.getVesselClass());
 		Assert.assertEquals(123456, vessel.getCargoCapacity());
+	}
+
+	@Test
+	public void testGetSetMinSpeed() {
+		final int value = 100;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getMinSpeed());
+		vessel.setMinSpeed(value);
+		Assert.assertEquals(value, vessel.getMinSpeed());
+	}
+
+	@Test
+	public void testGetSetMaxSpeed() {
+		final int value = 100;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getMaxSpeed());
+		vessel.setMaxSpeed(value);
+		Assert.assertEquals(value, vessel.getMaxSpeed());
+	}
+
+	@Test
+	public void testGetSetIdleConsumptionRate() {
+		final VesselState state1 = VesselState.Laden;
+		final VesselState state2 = VesselState.Ballast;
+
+		final long value = 100L;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getIdleConsumptionRate(state1));
+		Assert.assertEquals(0, vessel.getIdleConsumptionRate(state2));
+		vessel.setIdleConsumptionRate(state1, value);
+		Assert.assertEquals(value, vessel.getIdleConsumptionRate(state1));
+		Assert.assertEquals(0, vessel.getIdleConsumptionRate(state2));
+	}
+
+	@Test
+	public void testGetSetSafetyHeel() {
+		final long value = 100L;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getSafetyHeel());
+		vessel.setSafetyHeel(value);
+		Assert.assertEquals(value, vessel.getSafetyHeel());
+	}
+
+	@Test
+	public void testGetSetNBORate() {
+		final VesselState state1 = VesselState.Laden;
+		final VesselState state2 = VesselState.Ballast;
+
+		final long value = 100L;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getNBORate(state1));
+		Assert.assertEquals(0, vessel.getNBORate(state2));
+		vessel.setNBORate(state1, value);
+		Assert.assertEquals(value, vessel.getNBORate(state1));
+		Assert.assertEquals(0, vessel.getNBORate(state2));
+	}
+
+	@Test
+	public void testGetSetIdleNBORate() {
+		final VesselState state1 = VesselState.Laden;
+		final VesselState state2 = VesselState.Ballast;
+
+		final long value = 100L;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getIdleNBORate(state1));
+		Assert.assertEquals(0, vessel.getIdleNBORate(state2));
+		vessel.setIdleNBORate(state1, value);
+		Assert.assertEquals(value, vessel.getIdleNBORate(state1));
+		Assert.assertEquals(0, vessel.getIdleNBORate(state2));
+
+	}
+
+	@Test
+	public void testGetSetConsumptionRate() {
+		final VesselState state1 = VesselState.Laden;
+		final VesselState state2 = VesselState.Ballast;
+
+		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
+
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertNull(vessel.getConsumptionRate(state1));
+		Assert.assertNull(vessel.getConsumptionRate(state2));
+		vessel.setConsumptionRate(state1, calc);
+		Assert.assertSame(calc, vessel.getConsumptionRate(state1));
+		Assert.assertNull(vessel.getConsumptionRate(state2));
+
+	}
+
+	@Test
+	public void testGetSetBaseFuel() {
+		final IBaseFuel b = new BaseFuel("test");
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(null, vessel.getBaseFuel());
+		vessel.setBaseFuel(b);
+		Assert.assertEquals(b.getName(), vessel.getBaseFuel().getName());
+	}
+
+	@Test
+	public void testGetSetBaseFuelConversionFactor() {
+		final int value = 100;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(null, vessel.getBaseFuel());
+		IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(100);
+		vessel.setBaseFuel(baseFuel);
+
+		Assert.assertEquals(value, vessel.getBaseFuel().getEquivalenceFactor());
+	}
+
+	@Test
+	public void testGetSetPilotLightRate() {
+		final long value = 100;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getPilotLightRate());
+		vessel.setPilotLightRate(value);
+		Assert.assertEquals(value, vessel.getPilotLightRate());
+	}
+
+	@Test
+	public void testGetSetIdlePilotLightRate() {
+		final long value = 100;
+		final Vessel vessel = new Vessel("name", 123456);
+		Assert.assertEquals(0, vessel.getIdlePilotLightRate());
+		vessel.setIdlePilotLightRate(value);
+		Assert.assertEquals(value, vessel.getIdlePilotLightRate());
 	}
 }

@@ -6,15 +6,18 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
 /**
  * Provider for Route exclusions
+ * 
  * @author achurchill
  *
  */
+@NonNullByDefault
 public interface IRouteExclusionProvider extends IDataComponentProvider {
 
 	/**
@@ -26,14 +29,6 @@ public interface IRouteExclusionProvider extends IDataComponentProvider {
 	public Set<ERouteOption> getExcludedRoutes(IVessel vessel);
 
 	/**
-	 * Get the set of ports which vessels of this class cannot visit.
-	 * 
-	 * @param vesselClass
-	 * @return
-	 */
-	public Set<ERouteOption> getExcludedRoutes(IVesselClass vesselClass);
-
-	/**
 	 * If there are no exclusions set at all, this returns true. Useful for quickly avoiding execution if this is empty.
 	 * 
 	 * @return
@@ -42,6 +37,7 @@ public interface IRouteExclusionProvider extends IDataComponentProvider {
 
 	/**
 	 * Check whether a route is enabled for a vessel. If vessel is null we assume that the route is enabled, and DIRECT is always enabled.
+	 * 
 	 * @param vessel
 	 * @param route
 	 * @return

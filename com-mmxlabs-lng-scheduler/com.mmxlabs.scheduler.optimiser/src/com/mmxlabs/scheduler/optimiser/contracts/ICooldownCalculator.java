@@ -9,7 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  * An interface for cooldown price calculations. This calculator only has access to sequence and time information, because it will be used to calculate shipping costs.
@@ -35,5 +35,5 @@ public interface ICooldownCalculator extends ICalculator {
 	 * @param port
 	 *            {@link IPort} for local to UTC conversion
 	 */
-	public long calculateCooldownCost(@NonNull IVesselClass vesselClass, @NonNull IPort port, int cv, int localTime);
+	public long calculateCooldownCost(@NonNull IVessel vessel, @NonNull IPort port, int cv, int localTime);
 }

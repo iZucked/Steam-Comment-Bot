@@ -11,7 +11,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
@@ -50,7 +50,7 @@ public class CooldownLumpSumCalculator implements ICooldownCalculator {
 	}
 
 	@Override
-	public long calculateCooldownCost(final @NonNull IVesselClass vesselClass, final @NonNull IPort port, final int cv, final int time) {
+	public long calculateCooldownCost(final @NonNull IVessel vessel, final @NonNull IPort port, final int cv, final int time) {
 		return getLumpSumCost(time, port);
 	}
 

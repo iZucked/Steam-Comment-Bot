@@ -302,7 +302,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			if (thisDistance == Integer.MAX_VALUE) {
 				continue;
 			}
-			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
+			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
 			if (routeOption == ERouteOption.DIRECT) {
 				directTime = travelTime;
 				directEntry = d;
@@ -538,7 +538,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
 
 		List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
-		if (!vessel.getVesselClass().hasReliqCapability()) {
+		if (!vessel.hasReliqCapability()) {
 			// Add in NBO etc choices (ballast 1)
 			vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
 			vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getToCharter()));

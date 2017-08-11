@@ -14,7 +14,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
@@ -86,19 +86,19 @@ public class SchedulerBuilderTest {
 
 		final IBaseFuel baseFuel = new BaseFuel("test");
 		baseFuel.setEquivalenceFactor(1000);
-		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0, false);
+		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0, false);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
-		Assert.assertEquals(minSpeed, vesselClass.getMinSpeed());
-		Assert.assertEquals(maxSpeed, vesselClass.getMaxSpeed());
-		Assert.assertEquals(capacity, vesselClass.getCargoCapacity());
-		Assert.assertEquals(safetyHeel, vesselClass.getSafetyHeel());
-		Assert.assertEquals(baseFuel, vesselClass.getBaseFuel());
-		Assert.assertEquals(1000, vesselClass.getBaseFuel().getEquivalenceFactor());
+		Assert.assertEquals(minSpeed, vessel.getMinSpeed());
+		Assert.assertEquals(maxSpeed, vessel.getMaxSpeed());
+		Assert.assertEquals(capacity, vessel.getCargoCapacity());
+		Assert.assertEquals(safetyHeel, vessel.getSafetyHeel());
+		Assert.assertEquals(baseFuel, vessel.getBaseFuel());
+		Assert.assertEquals(1000, vessel.getBaseFuel().getEquivalenceFactor());
 
-		Assert.assertEquals(35353, vesselClass.getWarmupTime());
-		Assert.assertEquals(10101, vesselClass.getCooldownVolume());
+		Assert.assertEquals(35353, vessel.getWarmupTime());
+		Assert.assertEquals(10101, vessel.getCooldownVolume());
 
 		fail("Not yet implemented - Internal state checks");
 	}

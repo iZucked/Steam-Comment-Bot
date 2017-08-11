@@ -10,7 +10,6 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 
 /**
  * Default implementation of {@link IPort}

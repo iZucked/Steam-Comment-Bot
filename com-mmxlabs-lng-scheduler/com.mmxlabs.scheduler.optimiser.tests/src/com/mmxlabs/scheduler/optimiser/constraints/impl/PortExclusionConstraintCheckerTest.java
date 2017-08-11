@@ -21,17 +21,16 @@ import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IElementPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapElementPortEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
@@ -73,10 +72,7 @@ public class PortExclusionConstraintCheckerTest {
 		portProvider.setPortForElement(p3, o3);
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		final IResource resource = Mockito.mock(IResource.class);
-
-		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
@@ -88,9 +84,9 @@ public class PortExclusionConstraintCheckerTest {
 
 		Assert.assertTrue(checker.checkSequence(sequence, resource));
 
-		exclusionProvider.setExcludedPorts(vessel.getVesselClass(), CollectionsUtil.makeHashSet(p3));
+		exclusionProvider.setExcludedPorts(vessel, CollectionsUtil.makeHashSet(p3));
 		Assert.assertFalse(exclusionProvider.hasNoExclusions());
-		Assert.assertTrue(exclusionProvider.getExcludedPorts(vesselClass).contains(p3));
+		Assert.assertTrue(exclusionProvider.getExcludedPorts(vessel).contains(p3));
 
 		Assert.assertTrue(checker.checkSequence(sequence, resource));
 		final ISequence sequence2 = new ListSequence(CollectionsUtil.makeArrayList(o1, o3, o4));
@@ -129,16 +125,11 @@ public class PortExclusionConstraintCheckerTest {
 		portProvider.setPortForElement(p3, o3);
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		final IVessel nominatedVessel = Mockito.mock(IVessel.class);
-		final IVesselClass nominatedVesselClass = Mockito.mock(IVesselClass.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
-
-		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(nominatedVessel.getVesselClass()).thenReturn(nominatedVesselClass);
 
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 		nominatedVesselProviderEditor.setNominatedVessel(o2, resource, nominatedVessel);
@@ -148,9 +139,9 @@ public class PortExclusionConstraintCheckerTest {
 
 		Assert.assertTrue(checker.checkSequence(sequence, resource));
 
-		exclusionProvider.setExcludedPorts(nominatedVessel.getVesselClass(), CollectionsUtil.makeHashSet(p3));
+		exclusionProvider.setExcludedPorts(nominatedVessel, CollectionsUtil.makeHashSet(p3));
 		Assert.assertFalse(exclusionProvider.hasNoExclusions());
-		Assert.assertTrue(exclusionProvider.getExcludedPorts(nominatedVesselClass).contains(p3));
+		Assert.assertTrue(exclusionProvider.getExcludedPorts(nominatedVessel).contains(p3));
 
 		Assert.assertTrue(checker.checkSequence(sequence, resource));
 		final ISequence sequence2 = new ListSequence(CollectionsUtil.makeArrayList(o1, o3, o4));

@@ -250,7 +250,7 @@ public class PortTimesRecordMaker {
 					int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
 					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
 							prevPortSlot.getPort(), startPortSlot.getPort(), //
-							vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), //
+							vesselAvailability.getVessel().getMaxSpeed(), //
 							record.getSlotNextVoyageOptions(prevPortSlot) //
 					).getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;

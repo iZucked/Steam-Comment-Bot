@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
@@ -35,5 +35,5 @@ public abstract class AbstractCooldownCalculator implements ICooldownCalculator 
 	}
 
 	@Override
-	public abstract long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cv, int localTime);
+	public abstract long calculateCooldownCost(IVessel vessel, IPort port, int cv, int localTime);
 }

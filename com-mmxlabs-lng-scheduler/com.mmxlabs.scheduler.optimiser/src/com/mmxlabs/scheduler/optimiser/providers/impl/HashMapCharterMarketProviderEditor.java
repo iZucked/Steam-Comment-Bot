@@ -17,16 +17,18 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
 
 /**
  */
+@NonNullByDefault
 public class HashMapCharterMarketProviderEditor implements ICharterMarketProviderEditor {
 
 	private static class DefaultCharterMarketOptions implements CharterMarketOptions {
@@ -35,11 +37,11 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 
 		private final int minDuration;
 
-		private final @NonNull Set<@NonNull IPort> allowedPorts;
+		private final Set<@NonNull IPort> allowedPorts;
 
-		private final @NonNull ILongCurve priceCurve;
+		private final ILongCurve priceCurve;
 
-		public DefaultCharterMarketOptions(final int dateKey, final int minDuration, final @NonNull Set<@NonNull IPort> allowedPorts, final @NonNull ILongCurve priceCurve) {
+		public DefaultCharterMarketOptions(final int dateKey, final int minDuration, final Set<IPort> allowedPorts, final ILongCurve priceCurve) {
 			this.dateKey = dateKey;
 			this.minDuration = minDuration;
 			this.allowedPorts = allowedPorts;
@@ -52,7 +54,7 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		}
 
 		@Override
-		public int getCharterPrice(int date) {
+		public int getCharterPrice(final int date) {
 			return (int) priceCurve.getValueAtPoint(date);
 		}
 
@@ -72,46 +74,55 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		}
 	}
 
+	/**
+	 * Inner class to avoid repetitive generics
+	 *
+	 */
+	private static class MyTriple extends Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>> {
+
+		public MyTriple(final ILongCurve a, final int b, final Set<@NonNull IPort> c) {
+			super(a, b, c);
+		}
+
+	}
+
 	@Inject
-	@NonNull
 	private IDateKeyProvider dateKeyProvider;
 
-	private final @NonNull Map<@NonNull IVesselClass, @NonNull List<@NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>>>> charterInOptions = new HashMap<>();
-	private final @NonNull Map<@NonNull IVesselClass, @NonNull List<@NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>>>> charterOutOptions = new HashMap<>();
+	private final Map<@NonNull IVessel, List<@NonNull MyTriple>> charterInOptions = new HashMap<>();
+
+	private final Map<@NonNull IVessel, List<@NonNull MyTriple>> charterOutOptions = new HashMap<>();
 
 	private int charterOutStartTime = 0;
 
-	private final @NonNull Map<@NonNull IVesselClass, @NonNull Set<@NonNull IPort>> charteringPortsForVesselClassMap = new HashMap<>();
+	private final Map<@NonNull IVessel, @NonNull Set<@NonNull IPort>> charteringPortsForVesselMap = new HashMap<>();
 
 	@Override
-	public Collection<CharterMarketOptions> getCharterInOptions(final @NonNull IVesselClass vesselClass, final int time) {
+	public Collection<CharterMarketOptions> getCharterInOptions(final @NonNull IVessel vessel, final int time) {
 		final int dateKey = dateKeyProvider.getDateKeyFromHours(time);
-		return getOptions(charterInOptions, vesselClass, dateKey);
+		return getOptions(charterInOptions, vessel, dateKey);
 	}
 
 	@Override
-	public Collection<CharterMarketOptions> getCharterOutOptions(final @NonNull IVesselClass vesselClass, final int time) {
+	public Collection<CharterMarketOptions> getCharterOutOptions(final @NonNull IVessel vessel, final int time) {
 		final int dateKey = dateKeyProvider.getDateKeyFromHours(time);
-		return getOptions(charterOutOptions, vesselClass, dateKey);
+		return getOptions(charterOutOptions, vessel, dateKey);
 	}
 
 	@Override
-	public void addCharterInOption(final @NonNull IVesselClass vesselClass, final @NonNull ILongCurve curve) {
-		addOptions(charterInOptions, vesselClass, curve, 0, Collections.emptySet());
+	public void addCharterInOption(final @NonNull IVessel vessel, final @NonNull ILongCurve curve) {
+		addOptions(charterInOptions, vessel, curve, 0, Collections.emptySet());
 	}
 
 	@Override
-	public void addCharterOutOption(final @NonNull IVesselClass vesselClass, final @NonNull ILongCurve curve, final int minDuration, final @NonNull Set<@NonNull IPort> allowedPorts) {
-		addOptions(charterOutOptions, vesselClass, curve, minDuration, allowedPorts);
+	public void addCharterOutOption(final @NonNull IVessel vessel, final @NonNull ILongCurve curve, final int minDuration, final @NonNull Set<@NonNull IPort> allowedPorts) {
+		addOptions(charterOutOptions, vessel, curve, minDuration, allowedPorts);
 	}
 
-	@NonNull
-	private Collection<@NonNull CharterMarketOptions> getOptions(
-			final @NonNull Map<@NonNull IVesselClass, @NonNull List<@NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>>>> options, final @NonNull IVesselClass vesselClass,
-			final int dateKey) {
+	private Collection<@NonNull CharterMarketOptions> getOptions(final Map<@NonNull IVessel, @NonNull List<@NonNull MyTriple>> options, final IVessel vessel, final int dateKey) {
 
-		if (options.containsKey(vesselClass)) {
-			final List<@NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>>> entry = options.get(vesselClass);
+		if (options.containsKey(vessel)) {
+			final List<@NonNull MyTriple> entry = options.get(vessel);
 			final List<@NonNull CharterMarketOptions> result = new ArrayList<>(entry.size());
 			for (final Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>> p : entry) {
 				final ILongCurve curve = p.getFirst();
@@ -125,23 +136,23 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		return Collections.emptySet();
 	}
 
-	private void addOptions(final @NonNull Map<@NonNull IVesselClass, @NonNull List<@NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>>>> options,
-			final @NonNull IVesselClass vesselClass, final @NonNull ILongCurve curve, final int minDuration, final @NonNull Set<@NonNull IPort> allowedPorts) {
-		final @NonNull List<@NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>>> entry;
-		final @NonNull Set<@NonNull IPort> vesselClassCharteringPorts;
-		if (options.containsKey(vesselClass)) {
-			entry = options.get(vesselClass);
-			vesselClassCharteringPorts = charteringPortsForVesselClassMap.get(vesselClass);
+	private void addOptions(final Map<@NonNull IVessel, @NonNull List<@NonNull MyTriple>> options, final IVessel vessel, final ILongCurve curve, final int minDuration,
+			final Set<@NonNull IPort> allowedPorts) {
+		final @NonNull List<@NonNull MyTriple> entry;
+		final @NonNull Set<@NonNull IPort> vesselCharteringPorts;
+		if (options.containsKey(vessel)) {
+			entry = options.get(vessel);
+			vesselCharteringPorts = charteringPortsForVesselMap.get(vessel);
 		} else {
 			entry = new LinkedList<>();
-			options.put(vesselClass, entry);
-			vesselClassCharteringPorts = new LinkedHashSet<>();
-			charteringPortsForVesselClassMap.put(vesselClass, vesselClassCharteringPorts);
+			options.put(vessel, entry);
+			vesselCharteringPorts = new LinkedHashSet<>();
+			charteringPortsForVesselMap.put(vessel, vesselCharteringPorts);
 		}
 
-		final @NonNull Triple<@NonNull ILongCurve, @NonNull Integer, @NonNull Set<@NonNull IPort>> p = new Triple<>(curve, minDuration, allowedPorts);
+		final @NonNull MyTriple p = new MyTriple(curve, minDuration, allowedPorts);
 		entry.add(p);
-		vesselClassCharteringPorts.addAll(allowedPorts);
+		vesselCharteringPorts.addAll(allowedPorts);
 	}
 
 	@Override
@@ -150,15 +161,15 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 	}
 
 	@Override
-	public void setCharterOutStartTime(int startTime) {
+	public void setCharterOutStartTime(final int startTime) {
 		this.charterOutStartTime = startTime;
 	}
 
 	@Override
-	public Set<IPort> getCharteringPortsForVesselClass(IVesselClass vesselClass) {
-		if (charteringPortsForVesselClassMap.containsKey(vesselClass)) {
-			return charteringPortsForVesselClassMap.get(vesselClass);
+	public Set<IPort> getCharteringPortsForVessel(final IVessel vessel) {
+		if (charteringPortsForVesselMap.containsKey(vessel)) {
+			return charteringPortsForVesselMap.get(vessel);
 		}
-		return new LinkedHashSet<IPort>();
+		return new LinkedHashSet<>();
 	}
 }

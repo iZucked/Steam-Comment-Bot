@@ -37,7 +37,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
@@ -173,23 +172,16 @@ public class MoveHelper implements IMoveHelper {
 			}
 			if (vesselInstanceType != VesselInstanceType.ROUND_TRIP) {
 				IVessel vessel = null;
-				IVesselClass vesselClass = null;
 
 				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
 					vessel = vesselAvailability.getVessel();
-					vesselClass = vessel.getVesselClass();
 				} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-					// vessel = null; // Not a real vessel
-					vesselClass = vesselAvailability.getVessel().getVesselClass();
+					vessel = vesselAvailability.getVessel();
 				} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-
 					vessel = nominatedVesselProvider.getNominatedVessel(resource);
-					if (vessel != null) {
-						vesselClass = vessel.getVesselClass();
-					}
 				}
 
-				if (!allowedVesselProvider.isPermittedOnVessel(portSlot, vessel, vesselClass)) {
+				if (!allowedVesselProvider.isPermittedOnVessel(portSlot, vessel)) {
 					itr.remove();
 					continue;
 				}
@@ -201,10 +193,7 @@ public class MoveHelper implements IMoveHelper {
 					vessel = vesselAvailability.getVessel();
 				}
 				Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vessel);
-				// If there are none, pick the class exclusions
-				if (excludedPorts.isEmpty()) {
-					excludedPorts = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
-				}
+
 				if (!excludedPorts.isEmpty()) {
 					if (excludedPorts.contains(portSlot.getPort())) {
 						itr.remove();
@@ -356,7 +345,7 @@ public class MoveHelper implements IMoveHelper {
 	@Override
 	public boolean isVesselEvent(@NonNull final ISequenceElement element) {
 		final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-		return portSlot instanceof IVesselEventPortSlot ;
+		return portSlot instanceof IVesselEventPortSlot;
 	}
 
 	@Override

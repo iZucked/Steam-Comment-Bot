@@ -261,12 +261,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// set end ports
 		boolean goingToEnd = false;
 		final Set<IPort> endPorts = new HashSet<IPort>();
-		if (nextLoadSlot instanceof IEndPortSlot && charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
+		if (nextLoadSlot instanceof IEndPortSlot && charterMarketProvider.getCharteringPortsForVessel(vesselAvailability.getVessel()).contains(nextLoad)) {
 			goingToEnd = true;
 			endPorts.add(nextLoad);
 		}
 		// Scan all the markets for a match
-		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vesselAvailability.getVessel().getVesselClass(), ballastStartTime)) {
+		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vesselAvailability.getVessel(), ballastStartTime)) {
 			Set<IPort> ports = option.getAllowedPorts();
 			if (ports.isEmpty()) {
 				// If no ports, charter out at next load port (this is primarily for ITS cases)
@@ -329,7 +329,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			if (thisDistance == Integer.MAX_VALUE) {
 				continue;
 			}
-			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
+			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
 			if (routeOption == ERouteOption.DIRECT) {
 				directTime = travelTime;
 				directEntry = d;
@@ -566,7 +566,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
 
 		final List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
-		if (!vessel.getVesselClass().hasReliqCapability()) {
+		if (!vessel.hasReliqCapability()) {
 			// Add in NBO etc choices (ballast 1)
 			vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
 			vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getToCharter()));

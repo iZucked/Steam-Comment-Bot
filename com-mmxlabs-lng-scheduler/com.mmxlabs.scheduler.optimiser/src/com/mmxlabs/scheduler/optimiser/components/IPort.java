@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.components;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 
 /**
  * This interface defines a Port, a physical location that can be used as a source or destination point for travel.

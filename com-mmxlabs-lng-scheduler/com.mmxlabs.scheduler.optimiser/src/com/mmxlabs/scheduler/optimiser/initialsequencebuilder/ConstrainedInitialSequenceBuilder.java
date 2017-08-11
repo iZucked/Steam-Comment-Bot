@@ -246,7 +246,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 					int x = vit1.compareTo(vit2);
 					if (x == 0) {
-						x = ((Integer) vesselAvailability1.getVessel().getVesselClass().getMaxSpeed()).compareTo(vesselAvailability2.getVessel().getVesselClass().getMaxSpeed());
+						x = ((Integer) vesselAvailability1.getVessel().getMaxSpeed()).compareTo(vesselAvailability2.getVessel().getMaxSpeed());
 					}
 					return x;
 				}

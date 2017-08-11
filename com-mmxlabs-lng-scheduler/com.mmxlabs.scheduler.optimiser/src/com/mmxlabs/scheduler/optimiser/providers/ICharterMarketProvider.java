@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  */
@@ -39,10 +39,10 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 	};
 
 	@NonNull
-	Collection<CharterMarketOptions> getCharterInOptions(@NonNull IVesselClass vesselClass, int time);
+	Collection<CharterMarketOptions> getCharterInOptions(@NonNull IVessel vessel, int time);
 
 	@NonNull
-	Collection<CharterMarketOptions> getCharterOutOptions(@NonNull IVesselClass vesselClass, int time);
+	Collection<CharterMarketOptions> getCharterOutOptions(@NonNull IVessel vessel, int time);
 
 	/**
 	 * Return the earliest time we can charter out from.
@@ -52,6 +52,6 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 	int getCharterOutStartTime();
 
 	@NonNull
-	Set<@NonNull IPort> getCharteringPortsForVesselClass(@NonNull IVesselClass vesselClass);
+	Set<@NonNull IPort> getCharteringPortsForVessel(@NonNull IVessel vessel);
 
 }

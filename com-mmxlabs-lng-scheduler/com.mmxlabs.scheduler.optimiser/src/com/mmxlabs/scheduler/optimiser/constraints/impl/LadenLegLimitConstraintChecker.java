@@ -89,7 +89,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 		prev = cur = null;
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
+		final int maxSpeed = vesselAvailability.getVessel().getMaxSpeed();
 
 		while (iter.hasNext()) {
 			prev = cur;
@@ -126,7 +126,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
+		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getMaxSpeed());
 	}
 
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed) {

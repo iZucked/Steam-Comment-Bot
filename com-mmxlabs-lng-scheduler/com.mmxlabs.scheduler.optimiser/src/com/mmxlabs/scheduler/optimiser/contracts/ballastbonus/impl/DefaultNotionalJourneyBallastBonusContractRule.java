@@ -55,7 +55,7 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort, speedInKnots,
 					AvailableRouteChoices.OPTIMAL);
 			ERouteOption route = quickestTravelTime.getFirst();
-			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getVesselClass().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
+			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
 					(quickestTravelTime.getSecond() - routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel()))) / 24L;
 			long fuelUsedCanal = routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast);
 			long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
@@ -81,7 +81,7 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort, speedInKnots,
 					AvailableRouteChoices.OPTIMAL);
 			ERouteOption route = quickestTravelTime.getFirst();
-			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getVesselClass().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
+			long fuelUsedJourney = Calculator.quantityFromRateTime(vesselAvailability.getVessel().getConsumptionRate(VesselState.Ballast).getRate(speedInKnots),
 					(quickestTravelTime.getSecond() - routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel()))) / 24L;
 			long fuelUsedCanal = routeCostProvider.getRouteFuelUsage(route, vesselAvailability.getVessel(), VesselState.Ballast);
 			long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);

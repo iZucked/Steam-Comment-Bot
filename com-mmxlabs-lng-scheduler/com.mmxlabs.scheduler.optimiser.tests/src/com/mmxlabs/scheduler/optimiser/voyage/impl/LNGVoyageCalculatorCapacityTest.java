@@ -4,59 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import static org.junit.Assert.fail;
-
-import java.util.TreeMap;
-
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.mmxlabs.common.curves.ConstantValueLongCurve;
-import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
-import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
-import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
-import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
-import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
-import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class LNGVoyageCalculatorCapacityTest {
 

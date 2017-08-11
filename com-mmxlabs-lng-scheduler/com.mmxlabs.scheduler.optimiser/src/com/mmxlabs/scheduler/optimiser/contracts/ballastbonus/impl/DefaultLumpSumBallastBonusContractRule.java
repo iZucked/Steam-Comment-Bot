@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;

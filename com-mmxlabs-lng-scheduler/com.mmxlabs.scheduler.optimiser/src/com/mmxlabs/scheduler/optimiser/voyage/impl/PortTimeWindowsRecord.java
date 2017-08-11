@@ -13,7 +13,6 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;

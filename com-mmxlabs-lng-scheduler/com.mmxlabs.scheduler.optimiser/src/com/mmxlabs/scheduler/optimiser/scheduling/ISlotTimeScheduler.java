@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.scheduling;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.google.inject.ImplementedBy;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;

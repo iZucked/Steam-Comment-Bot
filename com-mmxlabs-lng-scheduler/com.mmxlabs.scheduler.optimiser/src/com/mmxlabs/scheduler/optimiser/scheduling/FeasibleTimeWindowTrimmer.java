@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -215,7 +213,7 @@ public class FeasibleTimeWindowTrimmer {
 		ISequenceElement prevElement = null;
 		final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
 
-		final int vesselMaxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
+		final int vesselMaxSpeed = vesselAvailability.getVessel().getMaxSpeed();
 
 		IPortSlot prevPortSlot = null;
 		// Used for end of sequence checks
@@ -457,7 +455,7 @@ public class FeasibleTimeWindowTrimmer {
 		int index = 0;
 		ISequenceElement prevElement = null;
 
-		final int vesselMaxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
+		final int vesselMaxSpeed = vesselAvailability.getVessel().getMaxSpeed();
 
 		IPortSlot prevPortSlot = null;
 

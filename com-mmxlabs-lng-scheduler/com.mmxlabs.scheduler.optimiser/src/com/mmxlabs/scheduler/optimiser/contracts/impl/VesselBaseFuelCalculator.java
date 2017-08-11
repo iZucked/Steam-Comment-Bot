@@ -6,10 +6,11 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -21,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * @author achurchill
  * 
  */
+@NonNullByDefault
 public class VesselBaseFuelCalculator implements IVesselBaseFuelCalculator {
 
 	@Inject
@@ -31,13 +33,8 @@ public class VesselBaseFuelCalculator implements IVesselBaseFuelCalculator {
 
 	@Override
 	public int getBaseFuelPrice(final IVessel vessel, final int voyagePlanStartTime) {
-		return getBaseFuelPrice(vessel.getVesselClass(), voyagePlanStartTime);
-	}
+		final IBaseFuel bf = vessel.getBaseFuel();
 
-	@Override
-	public int getBaseFuelPrice(final IVesselClass vesselClass, final int voyagePlanStartTime) {
-		final IBaseFuel bf = vesselClass.getBaseFuel();
-		
 		final ICurve curve = baseFuelProvider.getBaseFuelCurve(bf);
 		if (curve != null) {
 			return curve.getValueAtPoint(voyagePlanStartTime);

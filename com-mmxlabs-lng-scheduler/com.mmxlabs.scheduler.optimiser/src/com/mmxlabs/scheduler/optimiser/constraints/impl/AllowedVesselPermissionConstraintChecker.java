@@ -20,7 +20,6 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -131,22 +130,15 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		IVessel vessel = null;
-		IVesselClass vesselClass = null;
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER) {
 			vessel = vesselAvailability.getVessel();
-			vesselClass = vessel.getVesselClass();
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER || vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-			// vessel = null; // Not a real vessel
-			vesselClass = vesselAvailability.getVessel().getVesselClass();
+			vessel = vesselAvailability.getVessel();
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-
 			vessel = nominatedVesselProvider.getNominatedVessel(resource);
-			if (vessel != null) {
-				vesselClass = vessel.getVesselClass();
-			}
 		}
-		return allowedVesselProvider.isPermittedOnVessel(portSlot, vessel, vesselClass);
+		return allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
 	}
 
 	@Override

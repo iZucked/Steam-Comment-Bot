@@ -14,7 +14,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
@@ -32,7 +32,7 @@ public class CooldownLumpSumCalculatorTest {
 
 	public void testCalculatorLumpSum(String timeZone) {
 		ILongCurve curve = Mockito.mock(ILongCurve.class);
-		IVesselClass mockVC = Mockito.mock(IVesselClass.class);
+		IVessel mockVessel = Mockito.mock(IVessel.class);
 		IPort mockPort = Mockito.mock(IPort.class);
 		// create a cooldown calculator with injection
 		CooldownLumpSumCalculator lsc = createCooldownLumpSumCalculator(curve);
@@ -63,8 +63,8 @@ public class CooldownLumpSumCalculatorTest {
 			expectedB = OptimiserUnitConvertor.convertToInternalFixedCost(100000);
 		}
 
-		long testCalculationA = lsc.calculateCooldownCost(mockVC, mockPort, 0, timeA);
-		long testCalculationB = lsc.calculateCooldownCost(mockVC, mockPort, 0, timeB);
+		long testCalculationA = lsc.calculateCooldownCost(mockVessel, mockPort, 0, timeA);
+		long testCalculationB = lsc.calculateCooldownCost(mockVessel, mockPort, 0, timeB);
 
 		Assert.assertEquals(String.format("CooldownLumpSumCalculator returns %d but should be %d.", testCalculationA, expectedA), testCalculationA, expectedA);
 		Assert.assertEquals(String.format("CooldownLumpSumCalculator returns %d but should be %d.", testCalculationB, expectedB), testCalculationB, expectedB);

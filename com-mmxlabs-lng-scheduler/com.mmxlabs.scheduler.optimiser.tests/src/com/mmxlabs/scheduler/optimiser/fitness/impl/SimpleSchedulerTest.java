@@ -51,7 +51,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -112,22 +111,29 @@ public class SimpleSchedulerTest {
 		final int baseFuelEquivalence = 228000;
 		final IBaseFuel baseFuel = builder.createBaseFuel("test", baseFuelEquivalence);
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+
+		// TODO: Setup start/end ports correctly
+		final IVessel vessel1 = builder.createVessel("vessel-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+		final IVessel vessel2 = builder.createVessel("vessel-2", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+		final IVessel vessel3 = builder.createVessel("vessel-3", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 		// set up basefuel curve
 		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
 		baseFuelCurve.setValueAfter(0, 7000);
 		baseFuelCurveProvider.setBaseFuelCurve(baseFuel, baseFuelCurve);
 
-		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+		builder.setVesselStateParameters(vessel1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
-		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+		builder.setVesselStateParameters(vessel1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
-
-		// TODO: Setup start/end ports correctly
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 150000000);
-		final IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
-		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
+		builder.setVesselStateParameters(vessel2, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
+		builder.setVesselStateParameters(vessel2, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
+		builder.setVesselStateParameters(vessel3, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
+		builder.setVesselStateParameters(vessel3, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
 
 		IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0));
 

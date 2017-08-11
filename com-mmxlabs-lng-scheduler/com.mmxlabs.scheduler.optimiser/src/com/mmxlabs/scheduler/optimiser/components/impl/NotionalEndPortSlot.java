@@ -5,8 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
