@@ -26,7 +26,8 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 /**
- * Utility class holding methods used to convert a breakeven price from e.g. $9.8 to 115%HH + 6.8 
+ * Utility class holding methods used to convert a breakeven price from e.g. $9.8 to 115%HH + 6.8
+ * 
  * @author achurchill
  *
  */
@@ -250,22 +251,33 @@ public class IndexConversion {
 			getNodesOfType(markedUpNode, clazz, nodes);
 		}
 	}
-	
+
 	public static String getExpression(MarkedUpNode node) {
 		String s = "";
 		if (node instanceof ConstantNode) {
-			s = ""+((ConstantNode) node).getConstant();
+			s = "" + ((ConstantNode) node).getConstant();
 		} else if (node instanceof OperatorNode) {
+			OperatorNode operatorNode = (OperatorNode) node;
+			@NonNull
+			String operator = operatorNode.getOperator();
+
 			for (int i = 0; i < node.getChildren().size(); i++) {
 				@NonNull
 				MarkedUpNode child = node.getChildren().get(i);
 				String extra = "";
 				if (i < node.getChildren().size() - 1) {
-					extra = "" + ((OperatorNode) node).getOperator();
+					extra = "" + operator;
 				} else {
 					extra = "";
 				}
-				s += (getExpression(child) + extra);
+				if ("%".equals(operator) && i == 0) {
+					String expression = getExpression(child);
+					if (expression.startsWith("(") && expression.endsWith(")"))
+						expression = expression.substring(1, expression.length() - 1);
+					s += (expression + extra);
+				} else {
+					s += (getExpression(child) + extra);
+				}
 			}
 		} else if (node instanceof ShiftNode) {
 			s = String.format("shift(%s, %s)", getExpression(((ShiftNode) node).getChild()), ((ShiftNode) node).getMonths());
@@ -280,7 +292,7 @@ public class IndexConversion {
 		}
 		return String.format("(%s)", s);
 	}
-	
+
 	public static double getRearrangedPrice(@NonNull PricingModel pricingModel, @NonNull String expression, double breakevenPrice, YearMonth date) {
 		double price = 0.0;
 		MarkedUpNode markedUpNode = getMarkedUpNode(pricingModel, expression);
@@ -300,11 +312,11 @@ public class IndexConversion {
 		price = parseExpression(pricingModel, rearrangedExpression, date);
 		return price;
 	}
-	
+
 	private static double parseExpression(@NonNull PricingModel pricingModel, @NonNull String expression, YearMonth date) {
 		@NonNull
 		final LookupData lookupData = Exposures.createLookupData(pricingModel);
-		
+
 		final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
 		final IExpression<ISeries> series = p.parse(expression);
 		double unitPrice = 0.0;
@@ -316,7 +328,7 @@ public class IndexConversion {
 		}
 		return unitPrice;
 	}
-	
+
 	public static MarkedUpNode getMarkedUpNode(@NonNull PricingModel pricingModel, @NonNull String expression) {
 		@NonNull
 		final LookupData lookupData = Exposures.createLookupData(pricingModel);
@@ -327,7 +339,7 @@ public class IndexConversion {
 		final MarkedUpNode markedUpNode = Exposures.markupNodes(node, lookupData);
 		return markedUpNode;
 	}
-	
+
 	public static boolean isExpressionValidForIndexConversion(@NonNull PricingModel pricingModel, @NonNull String expression) {
 		try {
 			MarkedUpNode markedUpNode = getMarkedUpNode(pricingModel, expression);
