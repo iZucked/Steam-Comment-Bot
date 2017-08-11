@@ -3145,7 +3145,8 @@ public class LNGScenarioTransformer {
 					/*
 					 * set up inaccessible routes
 					 */
-					getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, roundTripOption.getVessel());
+					// For future vessel model refactor, disable charter in specific route exclusions
+//					getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, roundTripOption.getVessel());
 				}
 				if (charterCount > 0 && charterInMarket.isEnabled()) {
 
@@ -3160,7 +3161,7 @@ public class LNGScenarioTransformer {
 						/*
 						 * set up inaccessible routes
 						 */
-						getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, spotAvailability.getVessel());
+//						getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, spotAvailability.getVessel());
 						for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 							vesselAvailabilityTransformer.charterInVesselAvailabilityTransformed(charterInMarket, spotAvailability);
 						}
@@ -3229,8 +3230,10 @@ public class LNGScenarioTransformer {
 	}
 
 	private void getAndSetInaccessibleRoutesForSpotCharterInVessel(final ISchedulerBuilder builder, final CharterInMarket charterInMarket, final IVessel vessel) {
-		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
-		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
+		// SG: Disabled for future vessel model refactor. Left method in for now.
+		throw new UnsupportedOperationException();
+//		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
+//		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
 	}
 
 	private void setInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final IVessel vessel, final Set<ERouteOption> inaccessibleERoutesForVessel) {
