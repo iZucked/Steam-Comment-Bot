@@ -399,11 +399,11 @@ public class ChangeSetView implements IAdaptable {
 			final ChangeSetRoot root = view.root;
 			if (root != null) {
 				for (final ChangeSet cs : root.getChangeSets()) {
-					if (scenarioInstance == cs.getBaseScenario().getScenarioInstance()) {
+					if (cs.getBaseScenario() != null && scenarioInstance == cs.getBaseScenario().getScenarioInstance()) {
 						linkedScenario = true;
-					} else if (scenarioInstance == cs.getCurrentScenario().getScenarioInstance()) {
+					} else if (cs.getCurrentScenario() != null && scenarioInstance == cs.getCurrentScenario().getScenarioInstance()) {
 						linkedScenario = true;
-					} else if (scenarioInstance == cs.getPrevScenario().getScenarioInstance()) {
+					} else if (cs.getPrevScenario() != null && scenarioInstance == cs.getPrevScenario().getScenarioInstance()) {
 						linkedScenario = true;
 					}
 				}
