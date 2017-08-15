@@ -11,9 +11,9 @@ public class LadenRouteData {
 	public final long ladenRouteDistance;
 	public final int transitTime;
 	
-	public LadenRouteData(final long ladenMaxSpeed, final long ladenNBOSpeed, final long ladenRouteCost, final long ladenRouteDistance, final int transitTime) {
-		this.ladenTimeAtMaxSpeed = ladenMaxSpeed;
-		this.ladenTimeAtNBOSpeed = ladenNBOSpeed;
+	public LadenRouteData(final long ladenTimeAtMaxSpeed, final long ladenTimeAtNBOSpeed, final long ladenRouteCost, final long ladenRouteDistance, final int transitTime) {
+		this.ladenTimeAtMaxSpeed = ladenTimeAtMaxSpeed;
+		this.ladenTimeAtNBOSpeed = ladenTimeAtNBOSpeed;
 		this.ladenRouteCost = ladenRouteCost;
 		this.ladenRouteDistance = ladenRouteDistance;
 		this.transitTime = transitTime;
