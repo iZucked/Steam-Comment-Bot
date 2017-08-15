@@ -323,6 +323,9 @@ public class MigrationRegistry implements IMigrationRegistry {
 	@Override
 	public int getLastReleaseVersion(@NonNull final String context) {
 
+		if (!contexts.containsKey(context)) {
+			throw new IllegalStateException("Unknown context: " + context);
+		}
 		final Map<Integer, List<IMigrationUnit>> map = fromVersionMap.get(context);
 		int lastNumber = -1;
 		for (final Integer v : map.keySet()) {
