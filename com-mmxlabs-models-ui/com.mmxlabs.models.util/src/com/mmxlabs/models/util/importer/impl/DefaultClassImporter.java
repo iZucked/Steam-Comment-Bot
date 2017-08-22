@@ -99,7 +99,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, @NonNull final CSVReader reader, @NonNull final IMMXImportContext context) {
- 		final List<EObject> results = new ArrayList<EObject>();
+		final List<EObject> results = new ArrayList<EObject>();
 		try {
 			try {
 				context.pushReader(reader);
@@ -439,9 +439,11 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 
 		for (final EObject object : objects) {
-			final Map<String, String> flattened = exportObject(object, context);
-			flattened.put(KIND_KEY, object.eClass().getName());
-			result.add(flattened);
+			if (object != null) {
+				final Map<String, String> flattened = exportObject(object, context);
+				flattened.put(KIND_KEY, object.eClass().getName());
+				result.add(flattened);
+			}
 		}
 		return result;
 	}
