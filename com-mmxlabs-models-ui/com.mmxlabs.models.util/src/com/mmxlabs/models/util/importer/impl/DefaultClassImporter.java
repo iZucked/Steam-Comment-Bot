@@ -439,10 +439,11 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 
 		for (final EObject object : objects) {
-			assert object != null;
-			final Map<String, String> flattened = exportObject(object, context);
-			flattened.put(KIND_KEY, object.eClass().getName());
-			result.add(flattened);
+			if (object != null) {
+				final Map<String, String> flattened = exportObject(object, context);
+				flattened.put(KIND_KEY, object.eClass().getName());
+				result.add(flattened);
+			}
 		}
 		return result;
 	}
