@@ -69,10 +69,13 @@ public class SequencesHitchHikerHelper {
 			final ISequenceElement e = queue.remove(0);
 			seen.add(e);
 
-			// Skip spot slots to avoid unnecessary link ups. It will be included by dependent changes if need be.
-			if (spotMarketSlotsProvider.isSpotMarketSlot(e)) {
-				continue;
-			}
+			// 2017-08-22 - SG - Disable this check as is can cause spot slot to be used multiple time now with change to only mark the segment as evicted rather than whole sequence. Keep an eye on
+			// spot results!
+
+			// // Skip spot slots to avoid unnecessary link ups. It will be included by dependent changes if need be.
+			// if (spotMarketSlotsProvider.isSpotMarketSlot(e)) {
+			// continue;
+			// }
 
 			// Find original position of element
 			@Nullable
