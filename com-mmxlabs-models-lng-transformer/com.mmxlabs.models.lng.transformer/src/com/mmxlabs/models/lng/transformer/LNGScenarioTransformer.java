@@ -1644,8 +1644,9 @@ public class LNGScenarioTransformer {
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
-		applySlotVesselRestrictions(dischargeSlot.getAllowedVessels(), discharge, vesselAssociation, vesselClassAssociation);
-
+		if (!dischargeSlot.isFOBSale()) {
+			applySlotVesselRestrictions(dischargeSlot.getAllowedVessels(), discharge, vesselAssociation, vesselClassAssociation);
+		}
 		return discharge;
 	}
 
@@ -1794,7 +1795,9 @@ public class LNGScenarioTransformer {
 			cancellationFeeProviderEditor.setCancellationExpression(load, cancellationCurve);
 		}
 
-		applySlotVesselRestrictions(loadSlot.getAllowedVessels(), load, vesselAssociation, vesselClassAssociation);
+		if (!loadSlot.isDESPurchase()) {
+			applySlotVesselRestrictions(loadSlot.getAllowedVessels(), load, vesselAssociation, vesselClassAssociation);
+		}
 
 		return load;
 	}
@@ -3146,7 +3149,7 @@ public class LNGScenarioTransformer {
 					 * set up inaccessible routes
 					 */
 					// For future vessel model refactor, disable charter in specific route exclusions
-//					getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, roundTripOption.getVessel());
+					// getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, roundTripOption.getVessel());
 				}
 				if (charterCount > 0 && charterInMarket.isEnabled()) {
 
@@ -3161,7 +3164,7 @@ public class LNGScenarioTransformer {
 						/*
 						 * set up inaccessible routes
 						 */
-//						getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, spotAvailability.getVessel());
+						// getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterInMarket, spotAvailability.getVessel());
 						for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 							vesselAvailabilityTransformer.charterInVesselAvailabilityTransformed(charterInMarket, spotAvailability);
 						}
@@ -3232,8 +3235,8 @@ public class LNGScenarioTransformer {
 	private void getAndSetInaccessibleRoutesForSpotCharterInVessel(final ISchedulerBuilder builder, final CharterInMarket charterInMarket, final IVessel vessel) {
 		// SG: Disabled for future vessel model refactor. Left method in for now.
 		throw new UnsupportedOperationException();
-//		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
-//		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
+		// final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
+		// setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
 	}
 
 	private void setInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final IVessel vessel, final Set<ERouteOption> inaccessibleERoutesForVessel) {
@@ -3533,7 +3536,8 @@ public class LNGScenarioTransformer {
 		portModel.getRoutes().forEach(r -> {
 			if (r.getNorthEntrance() != null && r.getSouthEntrance() != null) {
 				if (r.getNorthEntrance().getPort() != null && r.getSouthEntrance().getPort() != null) {
-					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookup(r.getNorthEntrance().getPort()), portAssociation.lookup(r.getSouthEntrance().getPort()));
+					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookup(r.getNorthEntrance().getPort()),
+							portAssociation.lookup(r.getSouthEntrance().getPort()));
 				}
 			}
 		});
