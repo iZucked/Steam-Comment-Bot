@@ -69,8 +69,8 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, event1, event2), null));
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, event2, event1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event2, event1), null));
 		});
 	}
 
@@ -113,9 +113,9 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, event1, event2), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
 			checker.setMaxLateness(1);
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, event1, event2), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
 		});
 	}
 
@@ -161,9 +161,9 @@ public class TravelTimeConstraintCheckerTest extends AbstractMicroTestCase {
 
 			final TravelTimeConstraintChecker checker = MicroTestUtils.getChecker(scenarioToOptimiserBridge, TravelTimeConstraintChecker.class);
 			checker.setMaxLateness(0);
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, event1, event2), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
 			checker.setMaxLateness(1);
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability, event1, event2), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, event1, event2), null));
 		});
 	}
 }

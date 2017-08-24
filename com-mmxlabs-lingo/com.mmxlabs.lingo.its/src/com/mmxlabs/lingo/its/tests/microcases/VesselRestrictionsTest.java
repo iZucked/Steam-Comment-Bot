@@ -60,11 +60,11 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, -1, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, -1, cargo1), null));
 			// Spot cargo
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, 0, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, 0, cargo1), null));
 
 		});
 	}
@@ -106,11 +106,11 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, -1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, -1, cargo1), null));
 			// Spot cargo
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, 0, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, 0, cargo1), null));
 
 		});
 	}
@@ -150,11 +150,11 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, -1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, -1, cargo1), null));
 			// Spot cargo
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, 0, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, 0, cargo1), null));
 		});
 	}
 
@@ -237,11 +237,11 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, -1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, -1, cargo1), null));
 			// Spot cargo
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, 0, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, 0, cargo1), null));
 		});
 	}
 
@@ -281,11 +281,11 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, -1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, -1, cargo1), null));
 			// Spot cargo
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, 0, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, 0, cargo1), null));
 		});
 	}
 
@@ -327,11 +327,11 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
-			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, cargo1), null));
+			Assert.assertFalse(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, cargo1), null));
 			// Nominal vessel
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, -1, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, -1, cargo1), null));
 			// Spot cargo
-			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge, charterInMarket_1, 0, cargo1), null));
+			Assert.assertTrue(checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), charterInMarket_1, 0, cargo1), null));
 		});
 	}
 

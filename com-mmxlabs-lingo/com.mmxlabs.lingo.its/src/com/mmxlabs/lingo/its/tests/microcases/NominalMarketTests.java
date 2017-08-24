@@ -256,16 +256,17 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			LoadSlot l2 = (LoadSlot) optCargo2.getSlots().get(0);
 			DischargeSlot d2 = (DischargeSlot) optCargo2.getSlots().get(1);
 
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+			final ISequences initialRawSequences = dataTransformer.getInitialSequences();
 
 			// Validate the initial sequences are valid
-			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(dataTransformer, initialRawSequences));
 
-			final IModifiableSequences lsoSolution = SequenceHelper.createSequences(scenarioToOptimiserBridge);
-			SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_1, -1, l1, d2, l2, d1);
+			final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer);
+			SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_1, -1, l1, d2, l2, d1);
 
 			// Validate the swapped discharges are invalid
-			List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), lsoSolution);
+			List<IConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateConstraintCheckers(dataTransformer, lsoSolution);
 			Assert.assertNotNull(failedConstraintCheckers);
 
 			// Expect just this one to fail
@@ -761,18 +762,18 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 						// Ensure all sequences has been created!
 
-						final IModifiableSequences lsoSolution = SequenceHelper.createSequences(scenarioToOptimiserBridge);
+						final IModifiableSequences lsoSolution = SequenceHelper.createSequences(dataTransformer);
 						// Cargo should be unpaired
-						SequenceHelper.addToUnused(lsoSolution, scenarioToOptimiserBridge, cargo1);
+						SequenceHelper.addToUnused(lsoSolution, dataTransformer, cargo1);
 						// Cargo should move to cheaper vessel
-						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_2b, 0, cargo2);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2b, 0, cargo2);
 
 						// Sequences are now empty, but still need start/end events
-						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_2a, 0);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2a, 0);
 						// Nothing left on nominals
-						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_1, -1);
-						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_2a, -1);
-						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, charterInMarket_2b, -1);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_1, -1);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2a, -1);
+						SequenceHelper.addSequence(lsoSolution, dataTransformer, charterInMarket_2b, -1);
 
 						return lsoSolution;
 					}
