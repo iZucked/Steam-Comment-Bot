@@ -596,7 +596,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 					Assert.assertEquals(0 + 744, o_spot.getTimeWindow().getExclusiveEnd());
 
 					// Make output windows are correct - still full month
-					final Schedule schedule = scenarioToOptimiserBridge.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge, period_vesselAvailability, spot, period_dischargeSlot),
+					final Schedule schedule = scenarioToOptimiserBridge.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), period_vesselAvailability, spot, period_dischargeSlot),
 							null);
 					Assert.assertNotNull(schedule);
 					final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
@@ -685,7 +685,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			// Make output windows are correct
 			final Schedule schedule = scenarioToOptimiserBridge
-					.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge, period_vesselAvailability, period_loadSlot, period_dischargeSlot), null);
+					.createSchedule(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), period_vesselAvailability, period_loadSlot, period_dischargeSlot), null);
 			Assert.assertNotNull(schedule);
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
 			Assert.assertEquals(1, cargoAllocation.getLoadAllocation().getSlot().getWindowSize());

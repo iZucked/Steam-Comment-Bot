@@ -216,7 +216,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
-			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, loadSlot, dischargeSlot);
+			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is no ConstraintCheckers
@@ -251,7 +251,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
-			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, loadSlot, dischargeSlot);
+			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is no ConstraintCheckers
@@ -293,7 +293,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 
 			// Evaluate modified Sequence in the context of the first.
-			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge, vesselAvailability1, loadSlot, dischargeSlot);
+			final ISequences rawSequences = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability1, loadSlot, dischargeSlot);
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
 					rawSequences);
 			// Check that there is a singular constraint checker
