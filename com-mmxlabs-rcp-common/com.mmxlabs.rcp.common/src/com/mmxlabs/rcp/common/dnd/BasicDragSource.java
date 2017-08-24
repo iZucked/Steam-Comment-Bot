@@ -13,8 +13,8 @@ import org.eclipse.swt.dnd.DragSourceListener;
 
 public class BasicDragSource implements DragSourceListener {
 
-	private final @NonNull Viewer viewer;
-	private IStructuredSelection selection;
+	protected final @NonNull Viewer viewer;
+	protected IStructuredSelection selection;
 
 	public BasicDragSource(@NonNull final Viewer viewer) {
 		this.viewer = viewer;
