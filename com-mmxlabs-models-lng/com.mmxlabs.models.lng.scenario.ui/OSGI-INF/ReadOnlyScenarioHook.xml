@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" immediate="true" name="com.mmxlabs.models.lng.scenario.ui.ReadOnlyScenarioHook">
+   <implementation class="com.mmxlabs.models.lng.scenario.internal.ReadOnlyScenarioHook"/>
+   <service>
+      <provide interface="com.mmxlabs.scenario.service.model.manager.IPostChangeHook"/>
+   </service>
+</scr:component>
