@@ -68,4 +68,8 @@ public final class LongFastEnumMap<K extends Enum<K>> {
 	public String toString() {
 		return Arrays.toString(values);
 	}
+
+	public void clear() {
+		Arrays.fill(values, 0);
+	}
 }
