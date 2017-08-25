@@ -834,20 +834,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		execute(instance, i -> i.setReadonly(true));
 		try {
 			final InstanceData data = ScenarioStorageUtil.loadLocal(instance);
-
-			// Mark resources as read-only
-			final EditingDomain domain = data.getEditingDomain();
-			if (domain instanceof AdapterFactoryEditingDomain) {
-				final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
-				Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
-				if (resourceToReadOnlyMap == null) {
-					resourceToReadOnlyMap = new HashMap<>();
-					adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
-				}
-				for (final Resource r : data.getEditingDomain().getResourceSet().getResources()) {
-					resourceToReadOnlyMap.put(r, instance.isReadonly());
-				}
-			}
 			return data;
 		} catch (Exception e) {
 			throw new DirScanException(getName(), e);

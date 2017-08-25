@@ -1,7 +1,6 @@
 package com.mmxlabs.scenario.service.model.manager;
 
 import java.lang.ref.WeakReference;
-import java.rmi.activation.Activator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,12 +15,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager.PostChangeType;
 
 public final class ModelRecord {
@@ -33,6 +34,8 @@ public final class ModelRecord {
 
 	private int referenceCount = 0;
 
+	protected boolean readOnly = false;
+	
 	@Nullable
 	private InstanceData data = null;
 
@@ -61,7 +64,8 @@ public final class ModelRecord {
 		this.scenarioInstance = scenarioInstance;
 		this.loadFunction = loadFunction;
 		if (scenarioInstance != null) {
-			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "Previous validation status");
+			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
+			setReadOnly(scenarioInstance.isReadonly());
 		}
 	}
 
@@ -105,6 +109,9 @@ public final class ModelRecord {
 			if (referenceCount > 0) {
 				assert data != null;
 			}
+			
+			data.setReadOnly(readOnly);
+			
 			final ModelReference modelReference = new ModelReference(this, referenceID, data);
 			referencesList.add(new WeakReference<ModelReference>(modelReference));
 			return modelReference;
@@ -158,7 +165,7 @@ public final class ModelRecord {
 				data = null;
 				// Reset validation status
 				// validationStatus = Status.OK_STATUS;
-				validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "Previous validation status");
+				validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
 
 			}
 			cleanupReferencesList();
@@ -264,6 +271,15 @@ public final class ModelRecord {
 	// public ScenarioInstance getScenarioInstance() {
 	// return scenarioInstance;
 	// }
+	
+	private final AdapterImpl readOnlyAdapter = new AdapterImpl() {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
+			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
+				setReadOnly(msg.getNewBooleanValue());
+			}
+		};
+	};
+	
 
 	/**
 	 * Execute some code within the context of a {@link ModelReference}
@@ -273,17 +289,6 @@ public final class ModelRecord {
 			hook.accept(ref);
 		}
 	}
-
-	// public @NonNull Pair<@NonNull CDOView, @NonNull EObject> aquireView() {
-	// // Ensure model is loaded and thus a transaction is present
-	// try (ModelReference ref = aquireReference()) {
-	// final CDOTransaction transaction = data.getTransaction();
-	// final CDOSession session = transaction.getSession();
-	// // Construct a new view on the current branch point
-	// CDOView view = session.openView(transaction.getBranch(), transaction.getTimeStamp());
-	// return new Pair<>(view, view.getObject(ref.getInstance()));
-	// }
-	// }
 
 	public void dispose() {
 		// Right now we are asserting that we have been cleaned-up properly
@@ -369,10 +374,20 @@ public final class ModelRecord {
 		} finally {
 			referenceLock.unlock();
 		}
-
 	}
 
 	public @Nullable ModelReference getSharedReference() {
 		return sharedReference;
+	}
+	
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+		if (data != null) {
+			data.setReadOnly(readOnly);
+		}
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
 	}
 }

@@ -42,7 +42,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -366,7 +365,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 			System.gc();
 			System.gc();
-			
+
 			@Nullable
 			final ModelReference ref = modelRecord.aquireReferenceIfLoaded("FileScenarioService:1");
 			if (ref != null) {
@@ -374,7 +373,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				modelRecord.dumpReferences();
 			}
 			// With the ScenarioReferences it is possible we still have some references open at this stage.
-//			assert ref == null;
+			// assert ref == null;
 
 			// Find a resource set
 			ResourceSet instanceResourceSet = null;
@@ -836,22 +835,6 @@ public class FileScenarioService extends AbstractScenarioService {
 				// Nothing to do
 			});
 			p.getSecond().setInstanceData(data);
-
-			// TODO: This should be linked to a listener...
-			if (scenarioInstance.isReadonly()) {
-				// Mark resources as read-only
-				if (domain instanceof AdapterFactoryEditingDomain) {
-					final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
-					Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
-					if (resourceToReadOnlyMap == null) {
-						resourceToReadOnlyMap = new HashMap<>();
-						adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
-					}
-					for (final Resource r : data.getEditingDomain().getResourceSet().getResources()) {
-						resourceToReadOnlyMap.put(r, Boolean.TRUE);
-					}
-				}
-			}
 
 			return data;
 		} finally {

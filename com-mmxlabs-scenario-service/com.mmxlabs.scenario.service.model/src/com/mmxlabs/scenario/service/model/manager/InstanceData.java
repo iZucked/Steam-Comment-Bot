@@ -1,7 +1,10 @@
 package com.mmxlabs.scenario.service.model.manager;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
@@ -9,6 +12,8 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
@@ -135,4 +140,34 @@ public final class InstanceData {
 		return lastEvaluationFailed;
 	}
 
+	/**
+	 * Mark linked resources as read-only
+	 * 
+	 * @param readOnly
+	 */
+	public void setReadOnly(final boolean readOnly) {
+		// Mark resources as read-only
+		if (editingDomain instanceof AdapterFactoryEditingDomain) {
+			final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) editingDomain;
+			Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+			// Init map if needed.
+			if (resourceToReadOnlyMap == null) {
+				synchronized (adapterFactoryEditingDomain) {
+					// Re-do null check in the lock
+					resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+					if (resourceToReadOnlyMap == null) {
+						// Concurrent hash map would be better, but it does not like null keys (even in #get())
+						resourceToReadOnlyMap = Collections.synchronizedMap(new HashMap<>());
+						adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
+					}
+				}
+			}
+			// Find linked resources
+			for (final Resource r : editingDomain.getResourceSet().getResources()) {
+				if (r.getContents().contains(instance)) {
+					resourceToReadOnlyMap.put(r, readOnly);
+				}
+			}
+		}
+	}
 }
