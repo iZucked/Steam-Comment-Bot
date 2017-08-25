@@ -6,7 +6,9 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -525,6 +527,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		});
 	}
 
+	@Ignore("FOB/DESallowed vessel restrictions not applied in optimiser")
 	@Test
 	@Category({ MicroTest.class })
 	public void testFOBSaleVesselRestrictions_WrongVessel() throws Exception {
@@ -556,6 +559,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		});
 	}
 
+	@Ignore("FOB/DESallowed vessel restrictions not applied in optimiser")
 	@Test
 	@Category({ MicroTest.class })
 	public void testFOBSaleVesselRestrictions_WrongVesselClass() throws Exception {
