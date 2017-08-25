@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.insertion;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -18,16 +17,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
@@ -36,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator.MoveResult;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
