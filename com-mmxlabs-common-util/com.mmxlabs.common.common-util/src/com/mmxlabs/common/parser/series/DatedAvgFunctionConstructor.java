@@ -26,7 +26,7 @@ public class DatedAvgFunctionConstructor implements IExpression<ISeries> {
 		this.reset = arguments.get(3).evaluate().evaluate(0).intValue();
 	}
 
-	public DatedAvgFunctionConstructor(final CalendarMonthMapper calendarMonthMapper, IExpression<ISeries> series, final Number months, final Number lag, final Number reset) {
+	public DatedAvgFunctionConstructor(final CalendarMonthMapper calendarMonthMapper, IExpression<ISeries> series, final Integer months, final Integer lag, final Integer reset) {
 		if (calendarMonthMapper == null) {
 			throw new IllegalStateException("No calender mapper function defined");
 		}

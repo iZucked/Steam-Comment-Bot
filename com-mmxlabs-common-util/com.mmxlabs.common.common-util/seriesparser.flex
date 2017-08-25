@@ -74,7 +74,6 @@ white_space = {new_line} | [ \t\f]
 /* separators */
   \"              { string.setLength(0); yybegin(STRING); }
 ","               { return symbol("comma",COMMA); }
-";"               { return symbol(";",SEMI); }
 "("               { return symbol("(",LPAREN); }
 ")"               { return symbol(")",RPAREN); }
 "+"               { return symbol("plus",PLUS  ); }
@@ -84,7 +83,7 @@ white_space = {new_line} | [ \t\f]
 "%"               { return symbol("percent",PERCENT  ); }
 "?"               { return symbol("question",QUESTION  ); }
 {Named_Element}        { return symbol("namedelement", NAMED_ELEMENT, new String(yytext()) ); }
-//{Integer}        { return symbol("integer", INTEGER, new Integer(yytext()) ); }
+{Integer}        { return symbol("integer", INTEGER, new Integer(yytext()) ); }
 {Number}        { return symbol("number", NUMBER, new Double(yytext()) ); }
 {white_space}     { /* ignore */ }
 

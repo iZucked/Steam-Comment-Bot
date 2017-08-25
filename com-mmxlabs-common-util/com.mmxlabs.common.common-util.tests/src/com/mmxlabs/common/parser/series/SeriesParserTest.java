@@ -36,6 +36,11 @@ public class SeriesParserTest {
 				{ "10%(HH)", 0.1 }, //
 				{ "(((10.0)-(3.0))/(1.0%(HH)))", 700.0 }, //
 
+				{ "SHIFT(HH,-4)", 1.0 }, //
+				{ "SHIFT(HH,4)", 1.0 }, //
+
+				{ "DATEDAVG(HH,1,2,3)", 1.0 }, //
+
 		});
 	}
 
@@ -56,6 +61,20 @@ public class SeriesParserTest {
 	double parse(String expression) {
 		SeriesParser parser = new SeriesParser();
 		parser.addSeriesExpression("HH", "1.0");
+
+		parser.setShiftMapper((a, b) -> a);
+		parser.setCalendarMonthMapper(new CalendarMonthMapper() {
+
+			@Override
+			public int mapMonthToChangePoint(int currentChangePoint) {
+				return currentChangePoint;
+			}
+
+			@Override
+			public int mapChangePointToMonth(int currentChangePoint) {
+				return currentChangePoint;
+			}
+		});
 
 		IExpression<ISeries> parsed = parser.parse(expression);
 

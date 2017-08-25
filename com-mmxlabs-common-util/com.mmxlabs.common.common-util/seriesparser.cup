@@ -51,6 +51,7 @@ precedence left DIVIDE;
 precedence left PERCENT;
 precedence left UPLUS;
 precedence left UMINUS;
+precedence left INTEGER;
 precedence left NUMBER;
 
 /* The grammar rules */
@@ -62,10 +63,12 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
              | expr:lhs DIVIDE expr:rhs        {: RESULT = new SeriesOperatorExpression('/', lhs, rhs);       :}
              | MIN LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Min.class, e1, e2);       :}
              | MAX LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new FunctionConstructor(Max.class, e1, e2);       :}
+             | INTEGER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
              | NUMBER:lhs PERCENT expr:rhs                 {: RESULT = new SeriesOperatorExpression('%',    new ConstantSeriesExpression(lhs), rhs); :}
              %prec PERCENT
-             | SHIFT LPAREN expr:e1 COMMA expr:e2 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper, e1, e2);       :}
-             | DATEDAVG LPAREN expr:lhs COMMA NUMBER:n1 COMMA NUMBER:n2 COMMA NUMBER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(calendarMonthMapper, lhs, n1, n2, n3); :}
+             | SHIFT LPAREN expr:e1 COMMA INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper, e1, i1);       :}
+             | SHIFT LPAREN expr:e1 COMMA MINUS INTEGER:i1 RPAREN       {: RESULT = new ShiftFunctionConstructor(shiftMapper,e1,  -i1);       :}
+             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN  {: RESULT =  new DatedAvgFunctionConstructor(calendarMonthMapper, lhs, n1, n2, n3); :}
              | MINUS expr:e                 {: RESULT = new IExpression<ISeries>() {
 						@Override
 						public ISeries evaluate() {
@@ -79,6 +82,7 @@ expr      ::= expr:lhs PLUS expr:rhs         {: RESULT =new SeriesOperatorExpres
        | SERIES:n	                     {: RESULT = n;           :}
        | NAMED_ELEMENT:n	                     {: RESULT =  new NamedSeriesExpression(seriesParser.getSeries(n));           :}
        | NUMBER:n	                     {: RESULT =  new ConstantSeriesExpression(n);           :}
+       | INTEGER:n	                     {: RESULT =  new ConstantSeriesExpression(n);           :}
        | QUESTION:n	                     {: RESULT =  new ConstantSeriesExpression(0.0);           :}
              ;     
              
