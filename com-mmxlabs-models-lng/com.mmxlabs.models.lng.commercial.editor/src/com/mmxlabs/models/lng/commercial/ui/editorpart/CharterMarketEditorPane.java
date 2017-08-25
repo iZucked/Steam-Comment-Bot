@@ -4,14 +4,10 @@
  */
 package com.mmxlabs.models.lng.commercial.ui.editorpart;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
