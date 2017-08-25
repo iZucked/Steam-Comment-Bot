@@ -1,7 +1,4 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1394182765723
-Build-Jdk: 1.7.0_45
-Built-By: sg
 Bundle-Description: Project containing commonly used classes and utility
   functions.
 Bundle-DocURL: http://www.minimaxlabs.com/
@@ -10,16 +7,11 @@ Bundle-Name: common-recorder
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.common.common-recorder
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.2.17.qualifier
-Created-By: Apache Maven Bundle Plugin
-Export-Package: com.mmxlabs.common.recorder;uses:="javax.xml.stream,com.
- mmxlabs.common.recorder.conversion,com.mmxlabs.common.recorder.conversi
- on.impl,javax.xml.stream.events,javax.xml.namespace";version="2.2.3",co
- m.mmxlabs.common.recorder.conversion;version="2.2.3",com.mmxlabs.common
- .recorder.conversion.impl;uses:="com.mmxlabs.common.recorder.conversion
- ";version="2.2.3"
-Import-Package: javax.xml.namespace,javax.xml.stream,javax.xml.stream.ev
- ents
-Tool: Bnd-1.50.0
-Require-Bundle: com.mmxlabs.common.common-util;bundle-version="4.2.17",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+Bundle-Version: 4.3.0.qualifier
+Export-Package: com.mmxlabs.common.recorder,
+ com.mmxlabs.common.recorder.conversion,
+ com.mmxlabs.common.recorder.conversion.impl
+Import-Package: javax.xml.namespace,
+ javax.xml.stream,javax.xml.stream.events
+Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.3.0,5.0.0)"
