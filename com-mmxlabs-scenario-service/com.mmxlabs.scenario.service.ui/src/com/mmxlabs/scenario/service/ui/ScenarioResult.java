@@ -33,22 +33,22 @@ public class ScenarioResult {
 			ref[0] = s.getDefaultResult(instance);
 			return ref[0] == null;
 		});
-		if (ref[0] != null) {
-			return ref[0];
+		final MMXResultRoot result = ref[0];
+		if (result != null) {
+			return result;
 		}
 		throw new IllegalArgumentException("No default result root for instance");
 	}
 
-	public ScenarioResult(final ScenarioInstance instance) {
+	public ScenarioResult(final @NonNull ScenarioInstance instance) {
 		this.instance = instance;
-		@NonNull
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		final @NonNull ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 		this.modelReference = modelRecord.aquireReference("ScenarioResult:1");
 		this.resultRoot = getDefaultRoot(instance, modelReference);
 		this.hash = Objects.hash(instance, resultRoot);
 	}
 
-	public ScenarioResult(final ScenarioInstance instance, @NonNull final MMXResultRoot resultRoot) {
+	public ScenarioResult(final @NonNull ScenarioInstance instance, @NonNull final MMXResultRoot resultRoot) {
 		this.instance = instance;
 		this.resultRoot = resultRoot;
 		this.hash = Objects.hash(instance, resultRoot);

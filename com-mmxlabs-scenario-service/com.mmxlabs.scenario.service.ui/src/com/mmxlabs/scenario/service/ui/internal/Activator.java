@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
@@ -33,12 +34,12 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private Map<String, WeakReference<IScenarioService>> services = new HashMap<String, WeakReference<IScenarioService>>();
-	private Map<IScenarioService, String> serviceComponentIDs = new WeakHashMap<IScenarioService, String>();
+	private final @NonNull Map<String, WeakReference<IScenarioService>> services = new HashMap<>();
+	private final @NonNull Map<IScenarioService, String> serviceComponentIDs = new WeakHashMap<>();
 
 	private ServiceListener serviceListener;
 
-	private ScenarioServiceSelectionProvider scenarioServiceSelectionProvider = new ScenarioServiceSelectionProvider();
+	private final @NonNull ScenarioServiceSelectionProvider scenarioServiceSelectionProvider = new ScenarioServiceSelectionProvider();
 
 	private ServiceRegistration<IScenarioServiceSelectionProvider> selectionProviderRegistration;;
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerTracker;
@@ -61,7 +62,7 @@ public class Activator extends AbstractUIPlugin {
 
 		jobManagerTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class, null);
 		jobManagerTracker.open();
-		
+
 		serviceListener = new ServiceListener() {
 
 			@Override
@@ -83,8 +84,8 @@ public class Activator extends AbstractUIPlugin {
 		context.addServiceListener(serviceListener, "(objectclass=" + IScenarioService.class.getCanonicalName() + ")");
 
 		// Add existing services
-		final Collection<ServiceReference<IScenarioService>> serviceReferences = context
-				.getServiceReferences(IScenarioService.class, "(objectclass=" + IScenarioService.class.getCanonicalName() + ")");
+		final Collection<ServiceReference<IScenarioService>> serviceReferences = context.getServiceReferences(IScenarioService.class,
+				"(objectclass=" + IScenarioService.class.getCanonicalName() + ")");
 		for (final ServiceReference<IScenarioService> ref : serviceReferences) {
 
 			final ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
@@ -125,9 +126,9 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public ScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
-		return scenarioServiceSelectionProvider ;
+		return scenarioServiceSelectionProvider;
 	}
-	
+
 	public IEclipseJobManager getEclipseJobManager() {
 		return jobManagerTracker.getService();
 	}
@@ -136,13 +137,14 @@ public class Activator extends AbstractUIPlugin {
 	 * @param service
 	 * @return
 	 */
-	public String getServiceComponentID(IScenarioService service) {
+	public String getServiceComponentID(final IScenarioService service) {
 		return serviceComponentIDs.get(service);
 	}
-	
+
 	public IScenarioService getServiceForComponentID(final String componentID) {
-		WeakReference<IScenarioService> ref = services.get(componentID);
-		if (ref == null) return null;
+		final WeakReference<IScenarioService> ref = services.get(componentID);
+		if (ref == null)
+			return null;
 		return ref.get();
 	}
 }

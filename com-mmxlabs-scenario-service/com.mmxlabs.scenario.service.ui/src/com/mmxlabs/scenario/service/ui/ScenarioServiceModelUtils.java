@@ -153,7 +153,8 @@ public final class ScenarioServiceModelUtils {
 			} else {
 				final IScenarioService sourceScenarioService = SSDataManager.Instance.findScenarioService(scenario);
 				final URI sourceURI = sourceScenarioService == null ? URI.createURI(scenario.getRootObjectURI()) : sourceScenarioService.resolveURI(scenario.getRootObjectURI());
-
+				assert sourceURI != null;
+				
 				final IScenarioService destinationScenarioService = SSDataManager.Instance.findScenarioService(destination);
 
 				return destinationScenarioService.insert(destination, sourceURI, dup -> {

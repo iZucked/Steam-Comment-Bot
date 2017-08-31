@@ -172,18 +172,22 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public void setPinnedInstance(final ScenarioInstance instance) {
-		ScenarioResult scenarioResult = new ScenarioResult(instance);
-		setPinnedInstance(scenarioResult, false);
+	public void setPinnedInstance(final @Nullable ScenarioInstance instance) {
+		if (instance == null) {
+			setPinnedInstance(null, false);
+		} else {
+			final ScenarioResult scenarioResult = new ScenarioResult(instance);
+			setPinnedInstance(scenarioResult, false);
+		}
 	}
 
 	@Override
-	public void setPinnedInstance(final ScenarioResult instance) {
+	public void setPinnedInstance(final @Nullable ScenarioResult instance) {
 		setPinnedInstance(instance, false);
 	}
 
 	@Override
-	public void setPinnedPair(final ScenarioResult pinInstance, final ScenarioResult otherInstance, final boolean block) {
+	public void setPinnedPair(final @NonNull ScenarioResult pinInstance, final @NonNull ScenarioResult otherInstance, final boolean block) {
 		if (!Objects.equals(pin, pinInstance) || !selection.contains(otherInstance)) {
 
 			// Deselect results which are not part of the selection pair.
@@ -235,6 +239,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		fireSelectionChangedEvent(block);
 	}
 
+	@SuppressWarnings("unused")
 	private void fireSelectedEvent(@NonNull final Collection<ScenarioResult> instances, final boolean block) {
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.selected(this, instances, block);

@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -82,7 +81,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	private static final String PROPERTY_MODEL = "com.mmxlabs.scenario.service.file.model";
 
-	private final ResourceSet resourceSet = new ResourceSetImpl();
+	private final @NonNull ResourceSet resourceSet = new ResourceSetImpl();
 	private Resource resource;
 
 	private final Map<Object, Object> options;
@@ -199,10 +198,10 @@ public class FileScenarioService extends AbstractScenarioService {
 
 					@Override
 					public IStatus run(final IProgressMonitor monitor) {
-						monitor.beginTask("Storing scenario data backup in " + destinationLocation.toString(), 10);
+						SubMonitor m = SubMonitor.convert(monitor, "Storing scenario data backup in " + destinationLocation.toString(), 10);
 						try {
 							final File destFile = new File(destinationLocation + "/" + targetName);
-							moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
+							moveLocalArchive(localArchive, destFile, m.split(10));
 						} catch (final IOException e) {
 							log.error("Error moving archive to remote " + e.getMessage(), e);
 						} finally {
@@ -292,7 +291,7 @@ public class FileScenarioService extends AbstractScenarioService {
 							final File destinationLocation = new File(dest);
 							if (destinationLocation.exists() && destinationLocation.isDirectory()) {
 								final File destFile = new File(destinationLocation + "/" + targetName);
-								moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
+								moveLocalArchive(localArchive, destFile, SubMonitor.convert(monitor, 10));
 							}
 						} catch (final Exception e) {
 							log.error("Error performing backup: " + e.getMessage(), e);
@@ -322,7 +321,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void delete(final Container container) {
+	public void delete(final @NonNull Container container) {
 		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 		if (scenarioService != null && scenarioService != this) {
@@ -755,7 +754,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public URI resolveURI(final String uriString) {
+	public @NonNull URI resolveURI(final String uriString) {
 		final URI uri = URI.createURI(uriString);
 		if (uri.isRelative()) {
 			return uri.resolve(storeURI);
@@ -770,10 +769,10 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public InstanceData load(final ScenarioInstance scenarioInstance, @NonNull IProgressMonitor monitor) throws IOException {
+	public InstanceData load(final ScenarioInstance scenarioInstance, @NonNull IProgressMonitor parentMonitor) throws IOException {
 
+		SubMonitor subMonitor = SubMonitor.convert(parentMonitor, "Loading scenario", 100);
 		try {
-			monitor.beginTask("Loading scenario", 100);
 
 			@NonNull
 			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
@@ -785,14 +784,14 @@ public class FileScenarioService extends AbstractScenarioService {
 
 			if (scenarioMigrationService != null) {
 				try {
-					scenarioMigrationService.migrateScenario(this, scenarioInstance, SubMonitor.convert(monitor, "Migrate scenario", 100));
+					scenarioMigrationService.migrateScenario(this, scenarioInstance, subMonitor.split(99));
 				} catch (final RuntimeException e) {
 					throw e;
 				} catch (final Exception e) {
 					throw new RuntimeException("Error migrating scenario", e);
 				}
 			}
-			monitor.setTaskName("Loading scenario");
+			subMonitor.setTaskName("Loading scenario");
 
 			log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
 
@@ -836,9 +835,10 @@ public class FileScenarioService extends AbstractScenarioService {
 			});
 			p.getSecond().setInstanceData(data);
 
+			subMonitor.worked(1);
 			return data;
 		} finally {
-			monitor.done();
+			subMonitor.done();
 		}
 	}
 

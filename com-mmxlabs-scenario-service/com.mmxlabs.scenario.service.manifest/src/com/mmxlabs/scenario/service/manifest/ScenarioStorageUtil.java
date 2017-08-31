@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -262,7 +262,7 @@ public class ScenarioStorageUtil {
 		});
 	}
 
-	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, final IScenarioCipherProvider scenarioCipherProvider) {
+	public static @NonNull ScenarioInstance loadInstanceFromURI(final URI scenarioURI, final IScenarioCipherProvider scenarioCipherProvider) {
 		final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
 		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 
@@ -303,11 +303,12 @@ public class ScenarioStorageUtil {
 			}
 		} catch (final Exception e) {
 			log.error(e.getMessage(), e);
+			throw new RuntimeException("Unable to load scenario " + e.getMessage(), e);
 		}
-		return null;
+		throw new RuntimeException("Unable to load scenario");
 	}
 
-	public static String storeToTemporaryFile(final ScenarioInstance instance, final EObject instanceData) throws IOException {
+	public static @NonNull String storeToTemporaryFile(final @NonNull ScenarioInstance instance, final @NonNull EObject instanceData) throws IOException {
 		final File tempFile = INSTANCE.getTemporaryFile(instance);
 		tempFiles.add(tempFile);
 		storeToFile(instance, instanceData, tempFile);
@@ -357,11 +358,11 @@ public class ScenarioStorageUtil {
 	 * @param filePath
 	 * @return
 	 */
-	public static ScenarioInstance createInstanceFromFile(final String filePath, final IScenarioCipherProvider scenarioCipherProvider) {
+	public static @NonNull ScenarioInstance createInstanceFromFile(final String filePath, final IScenarioCipherProvider scenarioCipherProvider) {
 		return loadInstanceFromURI(URI.createFileURI(filePath), scenarioCipherProvider);
 	}
 
-	public static ScenarioInstance createInstanceFromFile(final String filePath) {
+	public static @NonNull ScenarioInstance createInstanceFromFile(final String filePath) {
 		return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 			return createInstanceFromFile(filePath, scenarioCipherProvider);
 		});
@@ -391,7 +392,7 @@ public class ScenarioStorageUtil {
 	}
 
 	public static @NonNull Pair<@NonNull ScenarioInstance, @NonNull ModelReference> load(final String filePath, @NonNull IProgressMonitor monitor) throws Exception {
-		final ScenarioInstance instance = createInstanceFromFile(filePath);
+		final @NonNull ScenarioInstance instance = createInstanceFromFile(filePath);
 		return load(instance, monitor);
 	}
 
@@ -405,7 +406,7 @@ public class ScenarioStorageUtil {
 	 * @throws CommitException
 	 * @throws ConcurrentAccessException
 	 */
-	public static @NonNull Pair<@NonNull ScenarioInstance, @NonNull ModelReference> load(final ScenarioInstance original, @NonNull IProgressMonitor monitor) throws Exception {
+	public static @NonNull Pair<@NonNull ScenarioInstance, @NonNull ModelReference> load(final @NonNull ScenarioInstance original, @NonNull IProgressMonitor monitor) throws Exception {
 		monitor.beginTask("Load Scenario", 13);
 		try {
 			return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
@@ -438,7 +439,7 @@ public class ScenarioStorageUtil {
 					// Perform the migration!
 					if (scenarioMigrationService != null) {
 						try {
-							scenarioMigrationService.migrateScenario(null, cpy, new SubProgressMonitor(monitor, 10));
+							scenarioMigrationService.migrateScenario(null, cpy, SubMonitor.convert(monitor, 10));
 						} catch (final RuntimeException e) {
 							throw e;
 						} catch (final Exception e) {
@@ -448,24 +449,12 @@ public class ScenarioStorageUtil {
 					return cpy;
 				});
 				monitor.worked(1);
-				final String uuid = EcoreUtil.generateUUID();
 
 				monitor.worked(1);
 				@NonNull
 				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(newInstance, (record, m) -> {
-					// final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
-					// final String rooObjectURI = newInstance.getRootObjectURI();
-					// // acquire sub models
-					// log.debug("Loading rootObject from " + rooObjectURI);
-					// final URI uri = URI.createURI(rooObjectURI);
-					// Resource resource;
+
 					try {
-						// resource = ResourceHelper.loadResource(resourceSet, uri);
-						//
-						// final EObject rootObject = resource.getContents().get(0);
-						// if (rootObject == null) {
-						// throw new NullPointerException();
-						// }
 
 						final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 						final String rooObjectURI = newInstance.getRootObjectURI();
@@ -480,9 +469,6 @@ public class ScenarioStorageUtil {
 
 							throw new UnsupportedOperationException();
 						}, (d) -> {
-							// transaction.close();
-							// sessionProvider.close();
-
 							// Clean up tmp files
 							for (final File f : tmpFiles) {
 								f.delete();
@@ -559,7 +545,9 @@ public class ScenarioStorageUtil {
 			throws Exception {
 		final @NonNull Pair<@NonNull ScenarioInstance, @NonNull ModelReference> p = load(uri, monitor);
 		try {
-			consumer.accept(p.getFirst(), (U) p.getSecond().getInstance());
+			@SuppressWarnings("unchecked")
+			final U data = (U) p.getSecond().getInstance();
+			consumer.accept(p.getFirst(), data);
 		} finally {
 			p.getSecond().close();
 		}
