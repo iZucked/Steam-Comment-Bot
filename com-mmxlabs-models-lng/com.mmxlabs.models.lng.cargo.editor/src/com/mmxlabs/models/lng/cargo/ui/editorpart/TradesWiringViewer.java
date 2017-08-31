@@ -227,7 +227,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final TradesFilter tradesFilter = new TradesFilter();
 
 	private final TradesCargoFilter tradesCargoFilter = new TradesCargoFilter();
-	
+
 	private Action resetSortOrder;
 
 	private PromptToolbarEditor promptToolbarEditor;
@@ -449,19 +449,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						if (object == null) {
 							return;
 						}
-
+						final RootData pRootData = rootData;
+						if (pRootData == null) {
+							return;
+						}
 						int idx = -1;
-						if (rootData.getLoadSlots().contains(object)) {
-							idx = rootData.getLoadSlots().indexOf(object);
-						} else if (rootData.getDischargeSlots().contains(object)) {
-							idx = rootData.getDischargeSlots().indexOf(object);
-						} else if (rootData.getCargoes().contains(object)) {
-							idx = rootData.getCargoes().indexOf(object);
+						if (pRootData.getLoadSlots().contains(object)) {
+							idx = pRootData.getLoadSlots().indexOf(object);
+						} else if (pRootData.getDischargeSlots().contains(object)) {
+							idx = pRootData.getDischargeSlots().indexOf(object);
+						} else if (pRootData.getCargoes().contains(object)) {
+							idx = pRootData.getCargoes().indexOf(object);
 						}
 
 						RowData rd = null;
 						if (idx >= 0) {
-							rd = rootData.getRows().get(idx);
+							rd = pRootData.getRows().get(idx);
 						}
 
 						if (rd != null) {
@@ -545,9 +548,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 					mgr.removeAll();
 					{
-						IContributionItem[] items = mgr.getItems();
+						final IContributionItem[] items = mgr.getItems();
 						mgr.removeAll();
-						for (IContributionItem mItem : items) {
+						for (final IContributionItem mItem : items) {
 							mItem.dispose();
 						}
 					}
@@ -628,27 +631,27 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, IStructuredSelection selection) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, final IStructuredSelection selection) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
 				mgr.removeAll();
 				{
-					IContributionItem[] items = mgr.getItems();
+					final IContributionItem[] items = mgr.getItems();
 					mgr.removeAll();
-					for (IContributionItem item : items) {
+					for (final IContributionItem item : items) {
 						item.dispose();
 					}
 				}
 				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
 				listener.menuAboutToShow(mgr);
-				
+
 				if (contextMenuExtensions != null) {
 					for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 						ext.contributeToMenu(scenarioEditingLocation, selection, mgr);
 					}
 				}
-				
+
 				menu.setVisible(true);
 			}
 		});
@@ -688,7 +691,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					aSet.remove(null);
 				} else if (a instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) a;
-//					aSet.add(cargoAllocation.getInputCargo());
+					// aSet.add(cargoAllocation.getInputCargo());
 					for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 						aSet.add(slotAllocation.getSlot());
 					}
@@ -1258,7 +1261,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		});
 		scenarioViewer.addOpenListener(new IOpenListener() {
 
-			private AssignToMenuHelper assignToHelper = new AssignToMenuHelper(scenarioEditingLocation.getShell(), scenarioEditingLocation, getScenarioModel());
+			private final AssignToMenuHelper assignToHelper = new AssignToMenuHelper(scenarioEditingLocation.getShell(), scenarioEditingLocation, getScenarioModel());
 
 			@Override
 			public void open(final OpenEvent event) {
@@ -1283,7 +1286,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 										final Iterator<?> itr = structuredSelection.iterator();
 										final Object obj = itr.next();
-										EObject target = null;
+										final EObject target = null;
 										if (obj instanceof RowData) {
 											final RowData rd = (RowData) obj;
 											if (rd.cargo != null && rd.cargo.getCargoType() == CargoType.FLEET) {
@@ -1662,15 +1665,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			filterValues.clear();
 		}
 	}
-	
+
 	private enum CargoFilterOption {
 		NONE, CARGO, LONG, SHORT
 	}
 
 	private class TradesCargoFilter extends ViewerFilter {
 		private CargoFilterOption option = CargoFilterOption.NONE;
+
 		@Override
-		public boolean select(Viewer viewer, Object parentElement, Object element) {
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 			RowData c = null;
 			Cargo cargo = null;
 			if (element instanceof RowData) {
@@ -1703,6 +1707,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 	}
+
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		/**
 		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
@@ -1742,11 +1747,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
 			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
 			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, new EMFMultiPath(true, vesselPath1, vesselPath2)), menu);
-			
-			DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction("General") {
+
+			final DefaultMenuCreatorAction dmca = new DefaultMenuCreatorAction("General") {
 
 				@Override
-				protected void populate(Menu menu) {
+				protected void populate(final Menu menu) {
 					final Action cargoesAction = new Action("Cargoes Only") {
 						@Override
 						public void run() {
