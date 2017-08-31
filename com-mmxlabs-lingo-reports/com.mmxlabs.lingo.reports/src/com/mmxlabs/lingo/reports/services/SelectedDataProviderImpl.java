@@ -20,17 +20,16 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class SelectedDataProviderImpl implements ISelectedDataProvider {
 
-	private final List<ScenarioResult> scenarioResults = new LinkedList<>();
-	private final Map<EObject, ScenarioResult> scenarioInstanceMap = new HashMap<>();
-	private final Map<EObject, Schedule> scheduleMap = new HashMap<>();
-	private ScenarioResult pinnedScenarioInstance;
+	private final @NonNull List<ScenarioResult> scenarioResults = new LinkedList<>();
+	private final @NonNull Map<EObject, ScenarioResult> scenarioResultMap = new HashMap<>();
+	private final @NonNull Map<EObject, Schedule> scheduleMap = new HashMap<>();
+	private ScenarioResult pinnedScenarioResult;
 
 	public void addScenario(@NonNull final ScenarioResult scenarioResult, @Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
 
 		scenarioResults.add(scenarioResult);
-
 		for (final EObject e : children) {
-			scenarioInstanceMap.put(e, scenarioResult);
+			scenarioResultMap.put(e, scenarioResult);
 			scheduleMap.put(e, schedule);
 		}
 	}
@@ -42,7 +41,7 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 
 	@Override
 	public ScenarioResult getScenarioResult(final EObject eObject) {
-		return scenarioInstanceMap.get(eObject);
+		return scenarioResultMap.get(eObject);
 	}
 
 	@Override
@@ -51,12 +50,11 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 	}
 
 	@Override
-	public boolean isPinnedObject(EObject eObject) {
-		return Objects.equals(getScenarioResult(eObject), pinnedScenarioInstance);
+	public boolean isPinnedObject(final EObject eObject) {
+		return Objects.equals(getScenarioResult(eObject), pinnedScenarioResult);
 	}
 
-	public void setPinnedScenarioInstance(ScenarioResult pinnedScenarioInstance) {
-		this.pinnedScenarioInstance = pinnedScenarioInstance;
+	public void setPinnedScenarioInstance(final @Nullable ScenarioResult pinnedScenarioResult) {
+		this.pinnedScenarioResult = pinnedScenarioResult;
 	}
-
 }
