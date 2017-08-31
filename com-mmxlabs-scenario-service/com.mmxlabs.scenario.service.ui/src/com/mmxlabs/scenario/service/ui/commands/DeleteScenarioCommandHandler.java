@@ -86,7 +86,9 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 						search.addAll(container.getElements());
 					}
 					for (final ScenarioInstance scenarioInstance : scenarios) {
-						ScenarioServiceModelUtils.closeReferences(scenarioInstance);
+						if (scenarioInstance != null) {
+							ScenarioServiceModelUtils.closeReferences(scenarioInstance);
+						}
 					}
 
 					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());

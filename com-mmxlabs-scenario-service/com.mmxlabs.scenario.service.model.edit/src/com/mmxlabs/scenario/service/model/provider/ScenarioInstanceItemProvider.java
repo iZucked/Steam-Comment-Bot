@@ -4,29 +4,20 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.ComposedImage;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.model.manager.ModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioInstance} object.

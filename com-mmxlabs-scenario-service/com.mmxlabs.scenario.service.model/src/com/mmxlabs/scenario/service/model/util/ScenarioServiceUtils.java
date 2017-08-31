@@ -16,8 +16,6 @@ import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
@@ -28,19 +26,15 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 public final class ScenarioServiceUtils {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServiceUtils.class);
-
-	public static final String FORK_PREFIX = "~";
-	public static final String OPTIMISED_PREFIX = "O~";
+	public static final @NonNull String FORK_PREFIX = "~";
+	public static final @NonNull String OPTIMISED_PREFIX = "O~";
 
 	/**
 	 * Event constant to indicate to parts to close any references to the scenario instance passed in with the event. E.g. the scenario is about to be deleted.
 	 */
-	public static final String EVENT_CLOSING_SCENARIO_INSTANCE = "scenario-service-closing-scenario-instance";
-	
-	@SuppressWarnings("null")
-	@NonNull
-	public static String stripFileExtension(@NonNull final String currentName) {
+	public static final @NonNull String EVENT_CLOSING_SCENARIO_INSTANCE = "scenario-service-closing-scenario-instance";
+
+	public static @NonNull String stripFileExtension(@NonNull final String currentName) {
 		String newName = currentName;
 		if (newName.toLowerCase().toLowerCase().endsWith(".lingo")) {
 			// Guava 14+
@@ -50,20 +44,15 @@ public final class ScenarioServiceUtils {
 		return newName;
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	public static String getForkName(@NonNull final String currentName) {
+	public static @NonNull String getForkName(@NonNull final String currentName) {
 		return String.format("%s%s", FORK_PREFIX, currentName);
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	public static String getOptimisedName(@NonNull final String currentName) {
+	public static @NonNull String getOptimisedName(@NonNull final String currentName) {
 		return String.format("%s%s", OPTIMISED_PREFIX, currentName);
 	}
 
-	@NonNull
-	public static String getNextName(@NonNull final String currentName, @NonNull final Set<String> existingNames) {
+	public static @NonNull String getNextName(@NonNull final String currentName, @NonNull final Set<String> existingNames) {
 
 		// Find a name that does not clash by appending a counter " (n)" if required
 		String newName = currentName;

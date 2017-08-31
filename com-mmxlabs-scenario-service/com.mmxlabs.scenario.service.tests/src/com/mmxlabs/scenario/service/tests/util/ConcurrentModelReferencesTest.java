@@ -37,6 +37,7 @@ public class ConcurrentModelReferencesTest {
 		}
 	}
 
+	@SuppressWarnings("null")
 	public void doTest() throws InterruptedException {
 
 		// Set up the scenario stuff

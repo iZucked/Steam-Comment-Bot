@@ -14,8 +14,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -25,8 +23,6 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
  * 
  */
 public class ForkScenarioCommandHandler extends AbstractHandler {
-
-	private static final Logger log = LoggerFactory.getLogger(ForkScenarioCommandHandler.class);
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {

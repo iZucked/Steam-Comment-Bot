@@ -16,7 +16,7 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 		if (adaptableObject instanceof DirScanException) {
 
 			final DirScanException exception = (DirScanException) adaptableObject;
-			return (T) new IReasonProvider() {
+			return adapterType.cast(new IReasonProvider() {
 
 				@Override
 				public String getTitle() {
@@ -38,10 +38,10 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 					return "There was an error loading the scenario from \"" + exception.getServiceName()
 							+ "\". This is often because a scenario needs to be migrated to the latest data model version.";
 				}
-			};
+			});
 		}
 
-		return (T) null;
+		return adapterType.cast(null);
 	}
 
 	@Override

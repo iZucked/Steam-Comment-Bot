@@ -11,12 +11,8 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ModelReference implements Closeable {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ModelReference.class);
 
 	private @NonNull final ModelRecord record;
 	private @NonNull final InstanceData data;

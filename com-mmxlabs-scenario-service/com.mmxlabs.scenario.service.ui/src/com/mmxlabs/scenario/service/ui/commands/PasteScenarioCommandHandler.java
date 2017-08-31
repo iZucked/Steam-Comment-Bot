@@ -19,8 +19,9 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -37,13 +38,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
@@ -95,9 +94,8 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		return null;
 	}
 
-	private boolean pasteLocal(final Clipboard clipboard, final Container container) throws IOException {
+	private boolean pasteLocal(final Clipboard clipboard, final @NonNull Container container) throws IOException {
 		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
-		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 		final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(container);
 
@@ -228,16 +226,16 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 						@Override
 						public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-							monitor.beginTask("Copying", 6 * scenarioFiles.size());
+							SubMonitor m = SubMonitor.convert(monitor, "Copying", 6 * scenarioFiles.size());
 							try {
 
 								for (final File f : scenarioFiles) {
 
-									if (monitor.isCanceled()) {
+									if (m.isCanceled()) {
 										break;
 									}
 
-									monitor.subTask("Copying " + f.getName());
+									m.subTask("Copying " + f.getName());
 									final Container destinationContainer = scenarioContainerMap.get(f);
 									assert destinationContainer != null;
 									// Get basic name
@@ -246,15 +244,15 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 									ScenarioStorageUtil.withExternalScenarioFromFile(f.getAbsolutePath(), (instance, modelReference) -> {
 										ScenarioServiceUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
-									}, new SubProgressMonitor(monitor, 5));
+									}, m.split(5));
 
-									monitor.worked(1);
+									m.worked(1);
 
 								}
 							} catch (final Exception e) {
 								log.error(e.getMessage(), e);
 							} finally {
-								monitor.done();
+								m.done();
 							}
 						}
 					});

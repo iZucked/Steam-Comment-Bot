@@ -54,9 +54,10 @@ public class ScenarioServicePartListener implements IPartListener {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 			if (scenarioInstance != null) {
 				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-				if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
-					if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
-						selectionProvider.deselect(lastAutoSelection);
+				final ScenarioInstance pLastAutoSelection = lastAutoSelection;
+				if (pLastAutoSelection != null && pLastAutoSelection != scenarioInstance) {
+					if (selectionProvider.isSelected(pLastAutoSelection) && selectionProvider.getPinnedInstance() != pLastAutoSelection) {
+						selectionProvider.deselect(pLastAutoSelection);
 					}
 					lastAutoSelection = null;
 				}
@@ -83,9 +84,10 @@ public class ScenarioServicePartListener implements IPartListener {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 			if (scenarioInstance != null) {
 				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-				if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
-					if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
-						selectionProvider.deselect(lastAutoSelection);
+				final ScenarioInstance pLastAutoSelection = lastAutoSelection;
+				if (pLastAutoSelection != null && pLastAutoSelection != scenarioInstance) {
+					if (selectionProvider.isSelected(pLastAutoSelection) && selectionProvider.getPinnedInstance() != pLastAutoSelection) {
+						selectionProvider.deselect(pLastAutoSelection);
 					}
 					lastAutoSelection = null;
 				}

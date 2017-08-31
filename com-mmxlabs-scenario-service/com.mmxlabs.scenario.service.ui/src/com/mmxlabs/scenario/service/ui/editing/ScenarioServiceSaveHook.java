@@ -64,7 +64,7 @@ public class ScenarioServiceSaveHook {
 					if (eObj instanceof ScenarioInstance) {
 						final ScenarioInstance scenarioInstance = (ScenarioInstance) eObj;
 						@NonNull
-						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 						try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:1")) {
 							if (ref != null) {
 								final BasicCommandStack stack = (BasicCommandStack) ref.getCommandStack();
@@ -203,7 +203,7 @@ public class ScenarioServiceSaveHook {
 							final ScenarioInstance scenario = (ScenarioInstance) instance;
 							monitor.setTaskName("Saving: " + scenario.getName());
 							@NonNull
-							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+							final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
 							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:2")) {
 								if (ref != null) {
 									try {
@@ -220,9 +220,11 @@ public class ScenarioServiceSaveHook {
 
 						// Forcibly set dirty to false to avoid eclipse framework from prompting to save again.
 						for (final ScenarioInstance ignoredInstance : ignoredInstances) {
-							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(ignoredInstance);
-							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:3")) {
-								// ref.setDirty(false);
+							if (ignoredInstance != null) {
+								final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(ignoredInstance);
+								try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:3")) {
+//									 ref.setDirty(false);
+								}
 							}
 						}
 

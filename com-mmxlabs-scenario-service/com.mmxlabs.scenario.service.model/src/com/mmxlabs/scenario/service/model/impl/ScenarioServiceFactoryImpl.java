@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
-import com.mmxlabs.scenario.service.model.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;

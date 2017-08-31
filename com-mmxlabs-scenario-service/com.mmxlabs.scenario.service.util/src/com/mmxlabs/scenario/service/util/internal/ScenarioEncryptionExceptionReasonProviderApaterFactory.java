@@ -16,13 +16,14 @@ public class ScenarioEncryptionExceptionReasonProviderApaterFactory implements I
 		if (adaptableObject instanceof ScenarioEncryptionException) {
 			final ScenarioEncryptionException exception = (ScenarioEncryptionException) adaptableObject;
 
-			return (T) new IReasonProvider() {
+			return adapterType.cast(new IReasonProvider() {
 
 				@Override
 				public String getTitle() {
 					return "Scenario Encryption Fault";
 				}
 
+				@SuppressWarnings("null")
 				@Override
 				public Throwable getThrowable() {
 					return exception.getCause();
@@ -37,11 +38,12 @@ public class ScenarioEncryptionExceptionReasonProviderApaterFactory implements I
 				public String getDescription() {
 					return "An error occurred decrypting your scenario";
 				}
-			};
+			});
 		}
-		return (T) null;
+		return adapterType.cast(null);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Class[] getAdapterList() {
 		return new Class[] { IReasonProvider.class };

@@ -24,8 +24,6 @@ import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -45,19 +43,18 @@ import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
  * 
  */
 public abstract class AbstractScenarioService extends AbstractScenarioServiceListenerHandler {
-	private static final Logger log = LoggerFactory.getLogger(AbstractScenarioService.class);
-	private final String name;
+
+	private final @NonNull String name;
 	private ScenarioService serviceModel;
-	// protected IModelService modelService;
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
 
 	protected IScenarioMigrationService scenarioMigrationService;
 	protected IScenarioCipherProvider _scenarioCipherProvider;
 
-	private Queue<Runnable> delayedRunWhenReadyRunnables = new ConcurrentLinkedQueue<>();
+	private final Queue<Runnable> delayedRunWhenReadyRunnables = new ConcurrentLinkedQueue<>();
 	private boolean ready;
 
-	protected AbstractScenarioService(final String name) {
+	protected AbstractScenarioService(final @NonNull String name) {
 		this.name = name;
 	}
 
@@ -139,116 +136,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		return new Pair<>(editingDomain, commandStack);
 
 	}
-	//
-	// @Override
-	// public void save(final ScenarioInstance scenarioInstance) throws IOException {
-	// final EObject instance = scenarioInstance.getInstance();
-	// if (instance == null) {
-	// return;
-	// }
-	//
-	// final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.SAVING);
-	// try (final ModelReference modelReference = scenarioInstance.getReference()) {
-	// if (lock.awaitClaim()) {
-	//
-	// fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
-	//
-	// final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
-	// final Resource eResource = rootObject.eResource();
-	// ResourceHelper.saveResource(eResource);
-	//
-	// // Update last modified date
-	// final Metadata metadata = scenarioInstance.getMetadata();
-	// if (metadata != null) {
-	// metadata.setLastModified(new Date());
-	// }
-	//
-	// final BasicCommandStack commandStack = (BasicCommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
-	// if (commandStack != null) {
-	// commandStack.saveIsDone();
-	// }
-	//
-	// scenarioInstance.setDirty(false);
-	//
-	// fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
-	// }
-	// } finally {
-	// lock.release();
-	// }
-	// }
-
-	// @Override
-	// public ScenarioInstance duplicate(final @NonNull ScenarioInstance original, final @NonNull Container destination, final @NonNull String newName) throws Exception {
-	// log.debug("Duplicating " + original.getUuid() + " into " + destination);
-	// // final IScenarioService originalService = original.getScenarioService();
-	// // final IScenarioService originalService = SSDataManager.Instance.findScenarioService(original);
-	//
-	// // Determine whether or not the model is currently loaded. If it is not currently loaded, then attempt to perform a scenario migration before loading the models. If it is loaded, we can assume
-	// // this process has already been performed.
-	// // final EObject rootObject;
-	//
-	// ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
-	// try (ModelReference ref = modelRecord.aquireReference()) {
-	//
-	// // Duplicate the root object data
-	// final EObject rootObjectCopy = EcoreUtil.copy(ref.getInstance());
-	//
-	// // Create the scenario duplicate
-	// final ScenarioInstance theDupe = insert(destination, rootObjectCopy, dup -> {
-	// // Copy across various bits of information
-	// dup.getMetadata().setContentType(original.getMetadata().getContentType());
-	// dup.getMetadata().setCreated(original.getMetadata().getCreated());
-	// dup.getMetadata().setLastModified(new Date());
-	// dup.setName(newName);
-	//
-	// // Copy version context information
-	// dup.setVersionContext(original.getVersionContext());
-	// dup.setScenarioVersion(original.getScenarioVersion());
-	//
-	// dup.setClientVersionContext(original.getClientVersionContext());
-	// dup.setClientScenarioVersion(original.getClientScenarioVersion());
-	// });
-	//
-	// return theDupe;
-	// }
-	// }
-
-	// /**
-	// */
-	// @Override
-	// public void unload(final ScenarioInstance instance) {
-	// if (instance.getInstance() == null) {
-	// return;
-	// }
-	//
-	// fireEvent(ScenarioServiceEvent.PRE_UNLOAD, instance);
-	//
-	// final List<ModelReference> modelReferences = instance.getModelReferences();
-	// synchronized (modelReferences) {
-	//
-	// if (!modelReferences.isEmpty()) {
-	// log.error("Attempting to unload a scenario which still has open model references");
-	// // return;
-	// }
-	//
-	// if (instance.getAdapters() != null) {
-	// instance.getAdapters().remove(EditingDomain.class);
-	// instance.getAdapters().remove(CommandStack.class);
-	// instance.getAdapters().remove(BasicCommandStack.class);
-	//
-	// final ResourceSet resourceSet = (ResourceSet) instance.getAdapters().remove(ResourceSet.class);
-	// if (resourceSet != null) {
-	// for (final Resource r : resourceSet.getResources()) {
-	// r.unload();
-	// }
-	// }
-	//
-	// instance.getAdapters().clear();
-	// }
-	// instance.setInstance(null);
-	// }
-	// fireEvent(ScenarioServiceEvent.POST_UNLOAD, instance);
-	// }
 
 	/**
 	 */
@@ -271,7 +158,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	@Override
-	public void notifyReady(Runnable r) {
+	public void notifyReady(final Runnable r) {
 
 		synchronized (delayedRunWhenReadyRunnables) {
 			if (isReady()) {
@@ -286,7 +173,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		synchronized (delayedRunWhenReadyRunnables) {
 			ready = true;
 			while (!delayedRunWhenReadyRunnables.isEmpty()) {
-				Runnable r = delayedRunWhenReadyRunnables.poll();
+				final Runnable r = delayedRunWhenReadyRunnables.poll();
 				r.run();
 			}
 		}
@@ -310,7 +197,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 	@Override
 	public <U extends Container> @NonNull U executeAdd(@NonNull final Container viewInstance, @NonNull final Supplier<@NonNull U> factory) {
-		@NonNull U child = factory.get();
+		final @NonNull U child = factory.get();
 		RunnerHelper.syncExec(() -> {
 			viewInstance.getElements().add(child);
 		});

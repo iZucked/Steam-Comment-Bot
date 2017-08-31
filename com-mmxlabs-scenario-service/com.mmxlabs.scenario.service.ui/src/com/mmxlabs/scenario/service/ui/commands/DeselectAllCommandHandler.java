@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
-import java.util.function.Consumer;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -18,8 +16,7 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 public class DeselectAllCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(),
-				() -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, (Consumer<IScenarioServiceSelectionProvider>) p -> p.deselectAll()));
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, p -> p.deselectAll()));
 
 		return null;
 	}

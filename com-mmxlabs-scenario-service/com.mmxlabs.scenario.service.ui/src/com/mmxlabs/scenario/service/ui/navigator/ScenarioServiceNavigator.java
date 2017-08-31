@@ -12,6 +12,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -22,7 +23,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
@@ -123,7 +123,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 	};
 
-	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
+	private final @NonNull IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 		@Override
 		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
 			if (viewer != null) {
@@ -403,13 +403,12 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		return propertySheetPage;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key.equals(IPropertySheetPage.class)) {
 			// Debugging only
 			// return getPropertySheetPage();
-			return null;
+			return key.cast(null);
 		} else {
 			return super.getAdapter(key);
 		}

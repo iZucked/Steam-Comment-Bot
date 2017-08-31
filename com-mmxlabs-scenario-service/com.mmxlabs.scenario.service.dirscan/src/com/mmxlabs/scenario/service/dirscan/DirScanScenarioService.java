@@ -36,8 +36,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -51,7 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -66,7 +63,6 @@ import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 import com.mmxlabs.scenario.service.util.ResourceHelper;
-import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 public class DirScanScenarioService extends AbstractScenarioService {
 
@@ -130,7 +126,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 	};
 
-	public DirScanScenarioService(final String name) throws IOException {
+	public DirScanScenarioService(final @NonNull String name) throws IOException {
 		super(name);
 	}
 

@@ -500,8 +500,8 @@ public class ScenarioStorageUtil {
 
 	}
 
-	public static void withExternalScenarioFromFile(final String filePath, final CheckedBiConsumer<ScenarioInstance, ModelReference, Exception> consumer, @NonNull IProgressMonitor monitor)
-			throws Exception {
+	public static void withExternalScenarioFromFile(final String filePath, final CheckedBiConsumer<@NonNull ScenarioInstance, @NonNull ModelReference, Exception> consumer,
+			@NonNull IProgressMonitor monitor) throws Exception {
 		final Pair<ScenarioInstance, ModelReference> p = load(filePath, monitor);
 		try {
 			consumer.accept(p.getFirst(), p.getSecond());
@@ -510,9 +510,9 @@ public class ScenarioStorageUtil {
 		}
 	}
 
-	public static <R> R withExternalScenarioFromFile(final String filePath, final CheckedBiFunction<ScenarioInstance, ModelReference, R, Exception> consumer, @NonNull IProgressMonitor monitor)
-			throws Exception {
-		final Pair<ScenarioInstance, ModelReference> p = load(filePath, monitor);
+	public static <R> R withExternalScenarioFromFile(final String filePath, final CheckedBiFunction<@NonNull ScenarioInstance, @NonNull ModelReference, R, Exception> consumer,
+			@NonNull IProgressMonitor monitor) throws Exception {
+		final Pair<@NonNull ScenarioInstance, @NonNull ModelReference> p = load(filePath, monitor);
 		try {
 			return consumer.apply(p.getFirst(), p.getSecond());
 		} finally {
@@ -520,7 +520,7 @@ public class ScenarioStorageUtil {
 		}
 	}
 
-	public static void withExternalScenarioFromFile(final File file, final CheckedBiConsumer<ScenarioInstance, ModelReference, Exception> consumer, @NonNull IProgressMonitor monitor)
+	public static void withExternalScenarioFromFile(final File file, final CheckedBiConsumer<@NonNull ScenarioInstance, @NonNull ModelReference, Exception> consumer, @NonNull IProgressMonitor monitor)
 			throws Exception {
 		final Pair<ScenarioInstance, ModelReference> p = load(file.getAbsolutePath(), monitor);
 		try {
@@ -532,7 +532,7 @@ public class ScenarioStorageUtil {
 		}
 	}
 
-	public static void withExternalScenarioFromResourceURL(final URL resourceURL, final CheckedBiConsumer<ScenarioInstance, ModelReference, Exception> consumer) throws Exception {
+	public static void withExternalScenarioFromResourceURL(final URL resourceURL, final CheckedBiConsumer<@NonNull ScenarioInstance, @NonNull ModelReference, Exception> consumer) throws Exception {
 		withExternalScenarioFromFile(new File(new URL(FileLocator.toFileURL(resourceURL).toString().replaceAll(" ", "%20")).toURI()), consumer, new NullProgressMonitor());
 	}
 

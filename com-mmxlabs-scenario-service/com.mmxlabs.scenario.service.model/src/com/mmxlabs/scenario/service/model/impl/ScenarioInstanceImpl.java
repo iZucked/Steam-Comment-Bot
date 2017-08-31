@@ -6,8 +6,6 @@ package com.mmxlabs.scenario.service.model.impl;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
@@ -37,17 +35,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * @generated
  */
 public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInstance {
-
-	/**
-	 * @generated NOT
-	 */
-	private static final Logger log = LoggerFactory.getLogger(ScenarioInstanceImpl.class);
-
-	/**
-	 * Object used as a lock when performing IO operations {@link #load()}, {@link #save()} and {@link #unload()};
-	 * @generated NOT
-	 */
-	private Object ioLock = new Object();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -72,6 +72,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 							if (scenarioServices.size() == 1) {
 
 								final ScenarioService top = scenarioServices.iterator().next().getServiceModel();
+								assert top != null;
 								createFolderInContainer(shell, top);
 							}
 						}

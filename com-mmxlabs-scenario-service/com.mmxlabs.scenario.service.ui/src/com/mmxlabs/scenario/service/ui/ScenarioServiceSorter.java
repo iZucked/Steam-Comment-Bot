@@ -14,6 +14,7 @@ import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
+@SuppressWarnings("deprecation") // Plugin.xml does not offer a ViewerComparator option (neon based at time of writing)
 public class ScenarioServiceSorter extends ViewerSorter {
 
 	private enum Types {

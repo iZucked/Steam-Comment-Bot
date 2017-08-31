@@ -42,9 +42,10 @@ public class LockScenarioCommandHandler extends AbstractHandler {
 					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 						final Object element = iterator.next();
 						if (element instanceof ScenarioInstance) {
+							@SuppressWarnings("unused")
 							final ScenarioInstance model = (ScenarioInstance) element;
 
-//							model.setLocked(!model.isLocked());
+							// model.setLocked(!model.isLocked());
 							throw new UnsupportedOperationException();
 						}
 					}

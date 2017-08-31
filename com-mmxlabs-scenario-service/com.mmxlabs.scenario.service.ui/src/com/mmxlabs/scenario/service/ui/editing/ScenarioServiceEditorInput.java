@@ -73,7 +73,7 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput, 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (ScenarioInstance.class.isAssignableFrom(adapter)) {
-			return (T) scenarioInstance;
+			return adapter.cast(scenarioInstance);
 		}
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);

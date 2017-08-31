@@ -16,11 +16,12 @@ public class ReloadScenarioExceptionReasonProviderApaterFactory implements IAdap
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 		if (adaptableObject instanceof ReloadScenarioException) {
 			ReloadScenarioException reloadScenarioException = (ReloadScenarioException) adaptableObject;
-			return (T) Platform.getAdapterManager().loadAdapter(reloadScenarioException.getCause(), IReasonProvider.class.getCanonicalName());
+			return adapterType.cast(Platform.getAdapterManager().loadAdapter(reloadScenarioException.getCause(), IReasonProvider.class.getCanonicalName()));
 		}
-		return (T) null;
+		return adapterType.cast(null);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Class[] getAdapterList() {
 		return new Class[] { IReasonProvider.class };

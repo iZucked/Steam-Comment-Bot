@@ -159,6 +159,7 @@ class EMFCipher implements URIConverter.Cipher {
 		if ((flags[0] & FLAG_ZIPPED) == FLAG_ZIPPED) {
 			final ZipInputStream zipInputStream = new ZipInputStream(in);
 			while (zipInputStream.available() != 0) {
+				@SuppressWarnings("unused")
 				final ZipEntry zipEntry = zipInputStream.getNextEntry();
 				in = zipInputStream;
 				break;

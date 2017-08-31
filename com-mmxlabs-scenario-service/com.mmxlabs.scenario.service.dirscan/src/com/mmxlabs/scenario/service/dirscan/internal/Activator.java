@@ -155,6 +155,9 @@ public class Activator extends AbstractUIPlugin {
 			this.serviceEnabled[idx] = true;
 
 			final String serviceName = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_NAME_KEY);
+			if (serviceName == null || serviceName.isEmpty()) {
+				return;
+			}
 			final String path = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_PATH_KEY);
 			if (path == null || path.isEmpty()) {
 				return;

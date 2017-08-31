@@ -56,7 +56,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
 
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
-		treeViewer.setSorter(new ScenarioServiceSorter());
+		treeViewer.setComparator(new ScenarioServiceSorter());
 		
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
