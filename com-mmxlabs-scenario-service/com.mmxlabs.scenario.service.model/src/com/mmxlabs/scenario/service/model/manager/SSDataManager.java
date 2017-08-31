@@ -161,6 +161,12 @@ public class SSDataManager {
 		case VALIDATION:
 			postChangeHooks_Validation.remove(hook);
 			break;
+		case ON_LOAD:
+			postChangeHooks_OnLoad.add(hook);
+			break;
+		case ON_UNLOAD:
+			postChangeHooks_OnUnload.add(hook);
+			break;
 		default:
 			throw new IllegalArgumentException("Unsupported phase");
 		}
