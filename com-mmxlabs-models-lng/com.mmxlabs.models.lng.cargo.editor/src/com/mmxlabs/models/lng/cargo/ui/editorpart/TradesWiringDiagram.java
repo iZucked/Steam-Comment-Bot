@@ -1,9 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
- */
-/**
-
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
@@ -232,6 +227,45 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				graphics.setLineDash(null);
 			}
 		}
+		// Draw lines for keep-open slots
+		for (final RowData row : root.getRows()) {
+			final int unsortedSource = root.getRows().indexOf(row);
+			if (unsortedSource < 0) {
+				// Error?
+				continue;
+			}
+			final int sortedSource = sortedIndices == null ? unsortedSource : sortedIndices[unsortedSource];
+
+			// Filtering can lead to missing terminals
+			if (sortedSource == -1) {
+				continue;
+			}
+
+			// If this is the wire currently being dragged, skip and handle in next code block
+			if (dragging) {
+				if (draggingFromLeft && draggingFrom == sortedSource) {
+					continue;
+				}
+			}
+
+			final float startMid = terminalPositions.get(sortedSource);
+			graphics.setLineDash(null);
+			graphics.setForeground(Black);
+			if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
+				// Draw wire - offset by ca.x to as x pos is relative to left hand side
+				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width / 2 - 4, startMid);
+				graphics.drawPath(path);
+				path.dispose();
+				graphics.setLineDash(null);
+			}
+			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
+				// Draw wire - offset by ca.x to as x pos is relative to left hand side
+				final Path path = makeConnector(e.display, ca.x + ca.width / 2 + 4, startMid, ca.x + ca.width - 1.5f * terminalSize, startMid);
+				graphics.drawPath(path);
+				path.dispose();
+				graphics.setLineDash(null);
+			}
+		}
 
 		// Clear clip rect for dragged wire
 		graphics.setClipping((Rectangle) null);
@@ -267,18 +301,22 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			}
 
 			final RowData row = root.getRows().get(i);
+			// Draw line for keep-open positions
+			if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
+				drawCross(true, Black, ca, graphics, midpoint);
+			}
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
 				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), row.loadSlot instanceof SpotSlot, ca, graphics, midpoint);
-			} else if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
-				drawCross(true, Black, ca, graphics, midpoint);
 			}
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
+			if (row.dischargeSlot != null && row.dischargeSlot.getCargo() == null && row.dischargeSlot.isLocked()) {
+				drawCross(false, Black, ca, graphics, midpoint);
+			}
+			// Draw line for keep-open positions
 			if (row.dischargeSlot != null) {
 				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), row.dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
-			} else if (row.loadSlot != null && row.loadSlot.getCargo() == null && row.loadSlot.isLocked()) {
-				drawCross(false, Black, ca, graphics, midpoint);
 			}
 			rawI++;
 		}
@@ -325,20 +363,19 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	private void drawCross(boolean isLeft, Color terminalColour, final Rectangle ca, final GC graphics, final float midpoint) {
 
-		graphics.setLineWidth(2);
+		graphics.setLineWidth(3);
 		int x = 0;
 		int terminalSize2 = terminalSize - 2;
 		if (isLeft) {
-			x = ca.x + terminalSize2 - 1;
+			x = ca.x + ca.width / 2 - 4;
 		} else {
-			x = ca.x - 3 + ca.width - 2 * terminalSize2;
+			x = ca.x + ca.width / 2 + 4;
 		}
+		int y = (int) (midpoint - terminalSize2 / 2 - 1);
 
-		int y = 1 + (int) (midpoint - terminalSize2 / 2 - 1);
 		graphics.setForeground(terminalColour);
 		graphics.setBackground(terminalColour);
-		graphics.drawLine(x, y, x + terminalSize2, y + terminalSize2);
-		graphics.drawLine(x + terminalSize2, y, x, y + terminalSize2);
+		graphics.drawLine(x, y, x, y + terminalSize2);
 	}
 
 	public Rectangle getCanvasClientArea() {
