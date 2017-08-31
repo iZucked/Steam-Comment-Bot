@@ -160,7 +160,7 @@ public final class ChangeSetTransformerUtil {
 	 * @param targets
 	 * @return
 	 */
-	public static MappingModel generateMappingModel(final Collection<EObject> targets) {
+	public static @NonNull MappingModel generateMappingModel(final @NonNull Collection<EObject> targets) {
 
 		final MappingModel mappingModel = new MappingModel();
 
@@ -308,7 +308,7 @@ public final class ChangeSetTransformerUtil {
 		return mappingModel;
 	}
 
-	public static List<ChangeSetRow> generateChangeSetRows(final @NonNull MappingModel beforeMapping, final @NonNull MappingModel afterMapping) {
+	public static @NonNull List<ChangeSetRow> generateChangeSetRows(final @NonNull MappingModel beforeMapping, final @NonNull MappingModel afterMapping) {
 
 		// Now start to generate the ChangeSetRows. There should be one for each Cargo, open position or other Vessel event.
 
@@ -550,7 +550,7 @@ public final class ChangeSetTransformerUtil {
 	 * @param rows
 	 * @param seenRows
 	 */
-	private static List<ChangeSetRow> generateRowData(final MappingModel beforeMapping, final MappingModel afterMapping) {
+	private static @NonNull List<ChangeSetRow> generateRowData(final MappingModel beforeMapping, final MappingModel afterMapping) {
 		final List<ChangeSetRow> rows = new LinkedList<ChangeSetRow>();
 
 		final Set<String> lhsKeys = new LinkedHashSet<>();
@@ -887,7 +887,9 @@ public final class ChangeSetTransformerUtil {
 		// Sort into wiring groups.
 		final Map<ChangeSetTableRow, Collection<ChangeSetTableRow>> rowToRowGroup = new HashMap<>();
 		for (final ChangeSetTableRow row : rows) {
-			ChangeSetTransformerUtil.updateRowGroups(row, rowToRowGroup);
+			if (row != null) {
+				ChangeSetTransformerUtil.updateRowGroups(row, rowToRowGroup);
+			}
 		}
 
 		ChangeSetTransformerUtil.convertToSortedGroups(rowToRowGroup);

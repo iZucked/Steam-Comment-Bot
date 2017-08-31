@@ -418,7 +418,7 @@ public class EquivalanceGroupBuilder {
 
 	protected static @NonNull String getSpotSlotSuffix(final Slot slot) {
 		final SpotMarket market = ((SpotSlot) slot).getMarket();
-		final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+		final @NonNull String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
 		final Cargo c = slot.getCargo();
 
 		if (c != null) {

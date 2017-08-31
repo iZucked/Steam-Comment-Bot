@@ -70,7 +70,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		this.colourPalette = colourPalette;
 	}
 
-	public DateTimeFormatter createDateFormat() {
+	public @NonNull DateTimeFormatter createDateFormat() {
 		return DateTimeFormatter.ofPattern("dd/MMM/yy");
 	}
 

@@ -314,11 +314,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return newData;
 	}
 
+	@Override
 	protected void makeActions() {
 		super.makeActions();
 		if (false) {
 			// Automatically calculated on evaluate.
 			final Action calculateExposures = new Action("Calculate") {
+				@Override
 				public void run() {
 
 					final SelectedScenariosService service = getViewSite().getService(SelectedScenariosService.class);
@@ -354,6 +356,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
+			@Override
 			public void run() {
 
 				final int modeIdx = (mode.ordinal() + 1) % Exposures.ValueMode.values().length;
@@ -368,6 +371,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
 		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_CHECK_BOX) {
+			@Override
 			public void run() {
 
 				selectionMode = !selectionMode;
