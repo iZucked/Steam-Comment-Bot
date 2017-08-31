@@ -35,7 +35,7 @@ public final class ModelRecord {
 	private int referenceCount = 0;
 
 	protected boolean readOnly = false;
-	
+
 	@Nullable
 	private InstanceData data = null;
 
@@ -66,6 +66,7 @@ public final class ModelRecord {
 		if (scenarioInstance != null) {
 			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
 			setReadOnly(scenarioInstance.isReadonly());
+			scenarioInstance.eAdapters().add(readOnlyAdapter);
 		}
 	}
 
@@ -97,11 +98,8 @@ public final class ModelRecord {
 				}
 				assert sharedReference == null;
 				sharedReference = ModelReference.createSharedReference(this, referenceID, data);
-				// Hack for Insertion Plan optimiser - force read only.
-				if (getScenarioInstance().isReadonly()) {
-					// Lock on the display thread so we know how to unlock later if needed.
-					// RunnerHelper.syncExec(() -> sharedReference.getLock().lock());
-				}
+
+				data.setReadOnly(readOnly);
 			}
 			if (loadFailure != null) {
 				throw new RuntimeException(loadFailure);
@@ -109,9 +107,9 @@ public final class ModelRecord {
 			if (referenceCount > 0) {
 				assert data != null;
 			}
-			
+
 			data.setReadOnly(readOnly);
-			
+
 			final ModelReference modelReference = new ModelReference(this, referenceID, data);
 			referencesList.add(new WeakReference<ModelReference>(modelReference));
 			return modelReference;
@@ -271,7 +269,7 @@ public final class ModelRecord {
 	// public ScenarioInstance getScenarioInstance() {
 	// return scenarioInstance;
 	// }
-	
+
 	private final AdapterImpl readOnlyAdapter = new AdapterImpl() {
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
@@ -279,7 +277,6 @@ public final class ModelRecord {
 			}
 		};
 	};
-	
 
 	/**
 	 * Execute some code within the context of a {@link ModelReference}
@@ -295,10 +292,13 @@ public final class ModelRecord {
 		if (data != null) {
 			LOG.error("ModelRecord #disposed before unloaded");
 		}
-//		assert data == null;
-//		assert lockListeners.isEmpty();
-//		assert validationListeners.isEmpty();
-//		assert dirtyListeners.isEmpty();
+		if (scenarioInstance != null) {
+			scenarioInstance.eAdapters().remove(readOnlyAdapter);
+		}
+		// assert data == null;
+		// assert lockListeners.isEmpty();
+		// assert validationListeners.isEmpty();
+		// assert dirtyListeners.isEmpty();
 	}
 
 	public String getName() {
@@ -379,7 +379,7 @@ public final class ModelRecord {
 	public @Nullable ModelReference getSharedReference() {
 		return sharedReference;
 	}
-	
+
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 		if (data != null) {
