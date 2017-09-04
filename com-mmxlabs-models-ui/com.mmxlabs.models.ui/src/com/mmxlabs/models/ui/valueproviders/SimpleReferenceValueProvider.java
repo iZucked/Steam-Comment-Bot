@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.models.ui.valueproviders;
 
+import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.common.Pair;
 
@@ -33,8 +36,7 @@ public class SimpleReferenceValueProvider extends BaseReferenceValueProvider {
 	}
 
 	@Override
-	public List<Pair<String, EObject>> getAllowedValues(EObject target,
-			EStructuralFeature field) {
+	public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 		if (cachedValues == null) {
 			cacheValues();
 		}
@@ -42,11 +44,8 @@ public class SimpleReferenceValueProvider extends BaseReferenceValueProvider {
 	}
 
 	@Override
-	protected boolean isRelevantTarget(Object target, Object feature) {
-		return (super.isRelevantTarget(target, feature) && (containingReference
-				.getEReferenceType().isSuperTypeOf(((EObject) target)
-				.eClass())))
-				|| feature == containingReference;
+	protected boolean isRelevantTarget(final Object target, final Object feature) {
+		return (super.isRelevantTarget(target, feature) && (containingReference.getEReferenceType().isSuperTypeOf(((EObject) target).eClass()))) || feature == containingReference;
 	}
 
 	@Override
@@ -68,5 +67,34 @@ public class SimpleReferenceValueProvider extends BaseReferenceValueProvider {
 	@Override
 	public void dispose() {
 		container.eAdapters().remove(this);
+	}
+
+	/**
+	 * Handles installation of the adapter on an EObject by adding the adapter to each of the directly contained objects.
+	 */
+	@Override
+	protected void setTarget(EObject target) {
+		basicSetTarget(target);
+		if (target == container) {
+			for (Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
+				Notifier notifier = i.next();
+				addAdapter(notifier);
+			}
+		}
+	}
+
+	/**
+	 * Handles undoing the installation of the adapter from an EObject by removing the adapter from each of the directly contained objects.
+	 */
+	@Override
+	protected void unsetTarget(EObject target) {
+		basicUnsetTarget(target);
+		if (target == container) {
+
+			for (Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<EObject>) target.eContents()).basicIterator(); i.hasNext();) {
+				Notifier notifier = i.next();
+				removeAdapter(notifier, false, true);
+			}
+		}
 	}
 }
