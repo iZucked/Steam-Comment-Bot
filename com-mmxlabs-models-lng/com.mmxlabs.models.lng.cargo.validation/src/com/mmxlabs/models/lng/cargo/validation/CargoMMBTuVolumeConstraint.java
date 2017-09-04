@@ -41,19 +41,28 @@ public class CargoMMBTuVolumeConstraint extends AbstractModelMultiConstraint {
 			int dischargeMinVolume = 0;
 			int dischargeMaxVolume = 0;
 			int numberOfSlots = cargo.getSlots().size();
+			// If false, we have hit an unbounded limit, so skip max checks.
+			boolean maxLoadValid = true;
+			boolean maxDischargeValid = true;
+
 			for (final Slot slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
 					loadMinVolume += slot.getSlotOrContractMinQuantity();
 					loadMaxVolume += slot.getSlotOrContractMaxQuantity();
+					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+						maxLoadValid = false;
+					}
 				} else if (slot instanceof DischargeSlot) {
 					dischargeMinVolume += slot.getSlotOrContractMinQuantity();
 					dischargeMaxVolume += slot.getSlotOrContractMaxQuantity();
-
+					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+						maxDischargeValid = false;
+					}
 					if (numberOfSlots > 2) {
 						// Check fields are set
 						if (!slot.isSetMaxQuantity() || !slot.isSetMinQuantity()) {
-							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName()
-									+ " requires min and max discharge volumes to be specified and identical"));
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName() + " requires min and max discharge volumes to be specified and identical"));
 
 							if (!slot.isSetMaxQuantity()) {
 								status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
@@ -66,8 +75,8 @@ public class CargoMMBTuVolumeConstraint extends AbstractModelMultiConstraint {
 						// Check fields are the same
 						if (slot.isSetMaxQuantity() && slot.isSetMinQuantity()) {
 							if (slot.getMinQuantity() != slot.getMaxQuantity()) {
-								final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName()
-										+ " requires min and max discharge volumes to be specified and identical"));
+								final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+										(IConstraintStatus) ctx.createFailureStatus("Complex Cargo|" + cargo.getLoadName() + " requires min and max discharge volumes to be specified and identical"));
 
 								status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 								status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
@@ -77,9 +86,9 @@ public class CargoMMBTuVolumeConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			if (loadMaxVolume < dischargeMinVolume) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName()
-						+ "] Max load volume less than min discharge)."), IStatus.WARNING);
+			if (maxLoadValid && loadMaxVolume < dischargeMinVolume) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] Max load volume less than min discharge)."), IStatus.WARNING);
 
 				for (final Slot slot : cargo.getSlots()) {
 					if (slot instanceof LoadSlot) {
@@ -92,9 +101,9 @@ public class CargoMMBTuVolumeConstraint extends AbstractModelMultiConstraint {
 
 				failures.add(status);
 			}
-			if (loadMinVolume > dischargeMaxVolume) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName()
-						+ "] Min load volume greater than max discharge."), IStatus.WARNING);
+			if (maxDischargeValid && loadMinVolume > dischargeMaxVolume) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] Min load volume greater than max discharge."), IStatus.WARNING);
 				for (final Slot slot : cargo.getSlots()) {
 					if (slot instanceof LoadSlot) {
 						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());

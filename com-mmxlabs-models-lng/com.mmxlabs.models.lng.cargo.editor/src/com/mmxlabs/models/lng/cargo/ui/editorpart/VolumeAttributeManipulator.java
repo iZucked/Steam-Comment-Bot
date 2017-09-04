@@ -87,6 +87,9 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 	protected String renderSetValue(final Object container, final Object setValue) {
 		if (setValue instanceof Number) {
 			final Number number = (Number) setValue;
+			if (number.equals(Integer.MAX_VALUE)) {
+				return "∞";
+			}
 			final double n = number.doubleValue();
 			return String.format("%sk", super.renderSetValue(container, (int) Math.round(n / 1000.0)));
 		}
