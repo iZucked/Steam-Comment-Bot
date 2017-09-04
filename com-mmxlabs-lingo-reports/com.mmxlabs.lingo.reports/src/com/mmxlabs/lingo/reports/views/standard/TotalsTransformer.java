@@ -92,13 +92,13 @@ public class TotalsTransformer {
 			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
 			if (vesselAvailability != null) {
 				final Vessel vessel = vesselAvailability.getVessel();
-				vesselCapacity = vessel.getVesselOrVesselClassCapacity();
+				vesselCapacity = vessel.getCapacity();
 			} else {
 				final CharterInMarket charterInMarket = seq.getCharterInMarket();
 				if (charterInMarket != null) {
-					final VesselClass vesselClass = charterInMarket.getVesselClass();
-					if (vesselClass != null) {
-						vesselCapacity = vesselClass.getCapacity();
+					final Vessel vessel = charterInMarket.getVessel();
+					if (vessel != null) {
+						vesselCapacity = vessel.getCapacity();
 					}
 				}
 			}

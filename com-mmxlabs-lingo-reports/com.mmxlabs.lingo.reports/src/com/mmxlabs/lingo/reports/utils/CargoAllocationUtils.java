@@ -180,9 +180,9 @@ public class CargoAllocationUtils {
 		} else if (sequence.isSetCharterInMarket()) {
 			final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 			if (charterInMarket != null) {
-				final VesselClass vesselClass = charterInMarket.getVesselClass();
-				if (vesselClass != null) {
-					return vesselClass.getName();
+				final Vessel vessel = charterInMarket.getVessel();
+				if (vessel != null) {
+					return vessel.getName();
 				}
 			}
 		}

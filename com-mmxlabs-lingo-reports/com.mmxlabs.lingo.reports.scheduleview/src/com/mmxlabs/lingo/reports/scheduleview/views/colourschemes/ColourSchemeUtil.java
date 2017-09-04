@@ -49,30 +49,27 @@ public class ColourSchemeUtil {
 		if (sequence == null) {
 			return false;
 		}
-		VesselClass vesselClass = null;
+		Vessel vessel = null;
 
 		// get vessel class directly from the sequence if it is a spot charter
 		final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 		if (charterInMarket != null) {
-			vesselClass = charterInMarket.getVesselClass();
+			vessel = charterInMarket.getVessel();
 		}
 		// otherwise get it from the vessel allocation
-		if (vesselClass == null) {
+		if (vessel == null) {
 			final VesselAvailability avail = sequence.getVesselAvailability();
 			if (avail == null) {
 				return false;
 			}
-			final Vessel vessel = avail.getVessel();
-			if (vessel == null) {
-				return false;
-			}
-			vesselClass = vessel.getVesselClass();
+			vessel = avail.getVessel();
+
 		}
-		if (vesselClass == null) {
+		if (vessel == null) {
 			return false;
 		}
 
-		final VesselStateAttributes attr = journey.isLaden() ? vesselClass.getLadenAttributes() : vesselClass.getBallastAttributes();
+		final VesselStateAttributes attr = journey.isLaden() ? vessel.getLadenAttributes() : vessel.getBallastAttributes();
 		final double speed = attr.getServiceSpeed();
 
 		final Event nextEvent = journey.getNextEvent();
