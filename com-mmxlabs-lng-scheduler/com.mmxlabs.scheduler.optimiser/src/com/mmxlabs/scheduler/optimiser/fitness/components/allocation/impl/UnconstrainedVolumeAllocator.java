@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -22,7 +23,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A cargo allocator which presumes that there are no total volume constraints, and so the total remaining capacity should be allocated
@@ -40,6 +40,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 	@Inject
 	private CargoTypeUtil cargoTypeUtil;
+
+	@Inject
+	@Named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)
+	private long defaultMaxVolumeInM3;
 
 	/**
 	 * Returns x, capped by y; if x has the special value 0, it is considered undefined and y is returned.
@@ -384,7 +388,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		// Note: Calculations in MMBTU
 		final long startVolumeInMMBTu;
-		final long vesselCapacityInMMBTu;
+		long vesselCapacityInMMBTu;
 
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
 		// Assuming a single cargo CV!
@@ -405,6 +409,18 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			startVolumeInMMBTu = 0;
 			vesselCapacityInMMBTu = Long.MAX_VALUE;
 		}
+
+		// If there are no upper bounds, apply default volume limit
+		boolean isAllMaxValue = vesselCapacityInMMBTu == Long.MAX_VALUE;
+		if (isAllMaxValue) {
+			for (int i = 0; i < slots.size(); ++i) {
+				isAllMaxValue &= allocationRecord.maxVolumesInMMBtu.get(i) == Long.MAX_VALUE;
+			}
+		}
+		if (isAllMaxValue) {
+			vesselCapacityInMMBTu = Calculator.convertM3ToMMBTu(defaultMaxVolumeInM3, defaultCargoCVValue);
+		}
+
 		final long availableCargoSpaceMMBTu = vesselCapacityInMMBTu - startVolumeInMMBTu;
 		long transferVolumeMMBTu = availableCargoSpaceMMBTu;
 		long transferVolumeM3 = -1;

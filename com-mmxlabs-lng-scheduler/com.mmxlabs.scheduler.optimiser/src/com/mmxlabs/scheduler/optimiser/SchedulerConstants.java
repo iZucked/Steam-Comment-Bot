@@ -43,4 +43,9 @@ public final class SchedulerConstants {
 
 	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
 	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
+	
+	/**
+	 * When there is not other information available, use this capacity limit. 
+	 */
+	public static final String KEY_DEFAULT_MAX_VOLUME_IN_M3 = "default-max-volume-in-m3";
 }

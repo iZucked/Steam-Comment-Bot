@@ -11,7 +11,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -42,6 +41,7 @@ import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateCheckerFactory;
@@ -76,9 +76,9 @@ public class ScheduleTestModule extends AbstractModule {
 
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
 
-	private final IOptimisationData data;
+	private final @NonNull IOptimisationData data;
 
-	public ScheduleTestModule(final IOptimisationData data) {
+	public ScheduleTestModule(final @NonNull IOptimisationData data) {
 		this.data = data;
 	}
 
@@ -120,11 +120,8 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(IArrivalTimeScheduler.class).to(ArrivalTimeScheduler.class);
 		bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class);
-		// if (Platform.isRunning()) {
-		// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
-		// bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
-		// bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
-		// }
+
+		bind(long.class).annotatedWith(Names.named(SchedulerConstants.KEY_DEFAULT_MAX_VOLUME_IN_M3)).toInstance(OptimiserUnitConvertor.convertToInternalVolume(140_000));
 
 		// bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
