@@ -11,4 +11,9 @@
 	<artifactId>com.mmxlabs.lingo.reports</artifactId>
 	<version>4.3.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<!-- Skipping files causing exceptions in sonar -->
+		<sonar.exclusions>file:**/com/mmxlabs/lingo/reports/views/changeset/actions/CreateSandboxAction.java</sonar.exclusions>
+	</properties>
 </project>
