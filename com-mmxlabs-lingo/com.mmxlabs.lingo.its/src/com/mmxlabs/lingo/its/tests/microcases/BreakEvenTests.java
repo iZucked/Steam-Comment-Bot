@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 @RunWith(value = ShiroRunner.class)
 public class BreakEvenTests extends AbstractMicroTestCase {
@@ -169,6 +170,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "?") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -206,6 +208,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "?") //
 				.build() //

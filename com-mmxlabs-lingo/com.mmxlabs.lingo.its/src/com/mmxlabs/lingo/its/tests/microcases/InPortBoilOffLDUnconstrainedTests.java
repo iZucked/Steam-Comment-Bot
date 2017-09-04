@@ -19,6 +19,7 @@ import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 @RunWith(Parameterized.class)
 public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
@@ -73,6 +74,7 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 
 		cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "9") //
 				.build() //
@@ -97,7 +99,7 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 		final int actualStartHeelInM3 = result.getStartHeel();
 		final int actualEndHeelInM3 = result.getEndHeel();
 
-		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
+		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getSlotOrContractMaxQuantity();
 		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 
 		int expectedLoadVolumeInM3 = Math.min(vesselCapacity, portLoadMaxInM3);
