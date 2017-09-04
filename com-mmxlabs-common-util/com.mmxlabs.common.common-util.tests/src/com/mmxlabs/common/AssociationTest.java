@@ -12,7 +12,7 @@ public class AssociationTest {
 	@Test
 	public void testAssociation() {
 
-		final Association<String, Object> assoc = new Association<String, Object>();
+		final Association<String, Object> assoc = new Association<>();
 
 		final String s1 = "s1";
 		final String s2 = "s2";

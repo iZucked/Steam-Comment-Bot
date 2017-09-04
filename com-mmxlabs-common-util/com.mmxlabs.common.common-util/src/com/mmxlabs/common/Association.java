@@ -20,7 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 public final class Association<A, B> {
 
 	@NonNull
-	private final HashMap<A, B> forwards = new HashMap<>();;
+	private final HashMap<A, B> forwards = new HashMap<>();
 
 	@NonNull
 	private final HashMap<B, A> reverse = new HashMap<>();

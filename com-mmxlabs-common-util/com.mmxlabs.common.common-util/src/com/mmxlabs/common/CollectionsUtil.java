@@ -149,7 +149,7 @@ public final class CollectionsUtil {
 	@NonNull
 	public static <K, V> Map<K, V> makeHashMap(final Object... elements) {
 
-		final Map<K, V> map = new HashMap<K, V>();
+		final Map<K, V> map = new HashMap<>();
 
 		for (int i = 0; i < elements.length; i += 2) {
 			final K key = (K) elements[i];
@@ -192,8 +192,13 @@ public final class CollectionsUtil {
 	}
 
 	public static class Sets {
+		
+		private Sets() {
+			
+		}
+		
 		public static <T> Set<T> merge(final Set<T>... sets) {
-			final Set<T> merged = new HashSet<T>();
+			final Set<T> merged = new HashSet<>();
 			for (final Set<T> set : sets) {
 				merged.addAll(set);
 			}
@@ -203,7 +208,7 @@ public final class CollectionsUtil {
 
 	public static class ASet {
 		public static <T> Set<T> of(final T... items) {
-			final Set<T> set = new HashSet<T>();
+			final Set<T> set = new HashSet<>();
 			set.addAll(Arrays.asList(items));
 			return set;
 		}
