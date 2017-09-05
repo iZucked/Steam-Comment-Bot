@@ -20,15 +20,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 public class CapacityViolationDiffUtils {
 
 	public static class CapacityViolationDifferences {
-		public HashMap<CapacityViolationType, Long> additionSet;
-		public HashMap<CapacityViolationType, Long> intersectSet;
-		public HashMap<CapacityViolationType, Long> subtractionSet;
-
-		public CapacityViolationDifferences() {
-			additionSet = new HashMap<CapacityViolationType, Long>();
-			intersectSet = new HashMap<CapacityViolationType, Long>();
-			subtractionSet = new HashMap<CapacityViolationType, Long>();
-		}
+		public Map<CapacityViolationType, Long> additionSet = new HashMap<>();
+		public Map<CapacityViolationType, Long> intersectSet = new HashMap<>();
+		public Map<CapacityViolationType, Long> subtractionSet = new HashMap<>();
 	}
 
 	public static String checkSlotAllocationForCapacityViolations(final SlotAllocation nonReference, final SlotAllocation reference) {

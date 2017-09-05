@@ -61,13 +61,9 @@ public final class ColourPalette {
 	private static ColourPalette instance;
 	private static Map<String, ColourPalette> namedInstances = new HashMap<>();
 
-	public static ColourPalette getInstance() {
+	public synchronized static ColourPalette getInstance() {
 		if (instance == null) {
-			synchronized (ColourPalette.class) {
-				if (instance == null) {
-					instance = new ColourPalette();
-				}
-			}
+			instance = new ColourPalette();
 		}
 		return instance;
 	}
@@ -127,7 +123,7 @@ public final class ColourPalette {
 
 		setItemColour(ColourPaletteItems.LONG, ColourElements.Background, Orange);
 		setItemColour(ColourPaletteItems.SHORT, ColourElements.Background, Orange);
-		
+
 		setItemColour(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background, Warning_Yellow);
 	}
 

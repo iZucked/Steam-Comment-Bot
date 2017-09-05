@@ -362,7 +362,11 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 						} else {
 							return null;
 						}
-						return DollarsPerMMBtuFormat.format((double) pnl / volume);
+						if (volume != 0.0) {
+							return DollarsPerMMBtuFormat.format((double) pnl / volume);
+						} else {
+							return null;
+						}
 					}
 				} else if (object instanceof MarketAllocation) {
 					final MarketAllocation marketAllocation = (MarketAllocation) object;
