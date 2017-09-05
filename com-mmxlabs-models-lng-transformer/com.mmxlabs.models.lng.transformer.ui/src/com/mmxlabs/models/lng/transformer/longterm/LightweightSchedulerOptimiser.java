@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,6 +26,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -42,7 +43,6 @@ import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairV
 import com.mmxlabs.models.lng.transformer.optimiser.valuepair.ProfitAndLossExtractor;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
-import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -76,6 +76,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  *
  */
 public class LightweightSchedulerOptimiser {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(LightweightSchedulerOptimiser.class);
 
 	@interface NonLDD {
 
@@ -433,17 +435,18 @@ public class LightweightSchedulerOptimiser {
 			final File f = new File(path);
 			f.delete();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		try (FileOutputStream fout = new FileOutputStream(path, false)) {
 			try (ObjectOutputStream oos = new ObjectOutputStream(fout)) {
 				oos.writeObject(serializable);
 			} catch (final Exception ex) {
-				ex.printStackTrace();
+				LOGGER.error(ex.getMessage(), ex);
+
 			}
 		} catch (final Exception ex) {
-			ex.printStackTrace();
+			LOGGER.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -456,7 +459,7 @@ public class LightweightSchedulerOptimiser {
 				e.printStackTrace();
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return readCase;
 	}

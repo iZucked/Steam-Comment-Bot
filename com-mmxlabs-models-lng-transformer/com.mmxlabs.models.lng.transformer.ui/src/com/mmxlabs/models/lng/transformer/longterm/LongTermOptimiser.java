@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
@@ -64,6 +66,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  *
  */
 public class LongTermOptimiser {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(LongTermOptimisationData.class);
 
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
@@ -295,11 +299,11 @@ public class LongTermOptimiser {
 		try (FileOutputStream fout = new FileOutputStream(path, false)) {
 			try (ObjectOutputStream oos = new ObjectOutputStream(fout)) {
 				oos.writeObject(serializable);
-			} catch (final Exception ex) {
-				ex.printStackTrace();
+			} catch (final Exception e) {
+				LOGGER.error(e.getMessage(), e);
 			}
-		} catch (final Exception ex) {
-			ex.printStackTrace();
+		} catch (final Exception e) {
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -309,11 +313,12 @@ public class LongTermOptimiser {
 			try (ObjectInputStream objectinputstream = new ObjectInputStream(streamIn)) {
 				readCase = (boolean[][]) objectinputstream.readObject();
 			} catch (final Exception e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
+
 		}
 		return readCase;
 	}
