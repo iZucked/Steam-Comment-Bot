@@ -17,22 +17,18 @@ import com.mmxlabs.common.Pair;
 
 public final class TableColourPalette {
 
-	public final boolean SANDBOX_WHITER_THEME = false;
+	public static final boolean SANDBOX_WHITER_THEME = false;
 
 	private static final RGB FontColour = new RGB(0, 0, 0);
-	private final RGB HeaderColour = SANDBOX_WHITER_THEME ? new RGB(255, 255, 255) : new RGB(230, 239, 249);
+	private static final RGB HeaderColour = SANDBOX_WHITER_THEME ? new RGB(255, 255, 255) : new RGB(230, 239, 249);
 	private static final RGB BorderColour = new RGB(220, 220, 220);
 
 	private static TableColourPalette instance;
 	private static Map<String, TableColourPalette> namedInstances = new HashMap<>();
 
-	public static TableColourPalette getInstance() {
+	public synchronized static TableColourPalette getInstance() {
 		if (instance == null) {
-			synchronized (TableColourPalette.class) {
-				if (instance == null) {
-					instance = new TableColourPalette();
-				}
-			}
+			instance = new TableColourPalette();
 		}
 		return instance;
 	}

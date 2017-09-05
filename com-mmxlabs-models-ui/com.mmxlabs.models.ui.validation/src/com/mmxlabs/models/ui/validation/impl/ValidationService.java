@@ -43,6 +43,7 @@ public class ValidationService implements IValidationService {
 			@Override
 			protected void finalize() {
 				shutdown();
+				super.finalize();
 			};
 		};
 		executor.allowCoreThreadTimeOut(true);
