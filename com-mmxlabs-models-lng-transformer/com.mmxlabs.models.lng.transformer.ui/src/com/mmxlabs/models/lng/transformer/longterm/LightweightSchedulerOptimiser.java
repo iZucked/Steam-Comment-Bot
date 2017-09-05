@@ -70,8 +70,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * Long term optimisation. Drives a long term optimisation using an
- * {@link ILongTermMatrixOptimiser}.
+ * Long term optimisation. Drives a long term optimisation using an {@link ILongTermMatrixOptimiser}.
  * 
  * @author achurchill
  *
@@ -79,13 +78,13 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class LightweightSchedulerOptimiser {
 
 	@interface NonLDD {
-		
+
 	}
-	
+
 	private enum CargoType {
 		SHIPPED, NON_SHIPPED, ALL
 	}
-	
+
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
 
@@ -109,7 +108,7 @@ public class LightweightSchedulerOptimiser {
 
 	@Inject
 	private ICargoVesselRestrictionsMatrixProducer cargoVesselRestrictionsMatrixProducer;
-	
+
 	@Inject
 	private ILightWeightSequenceOptimiser lightWeightSequenceOptimiser;
 
@@ -123,26 +122,26 @@ public class LightweightSchedulerOptimiser {
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final ExecutorService executorService, final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
+	public Pair<ISequences, Long> optimise(final ExecutorService executorService, final LNGDataTransformer dataTransformer, final CharterInMarket charterInMarket) {
 		// (1) Identify LT slots
 		@NonNull
-		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
-		List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
-		List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
+		final Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
+		final List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
+		final List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
 		optimiserRecorder.init(loads, discharges);
 		// (2) Generate S2S bindings matrix for LT slots
-		ExecutorService es = Executors.newSingleThreadExecutor();
+		final ExecutorService es = Executors.newSingleThreadExecutor();
 		getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
 		// now using our profits recorder we have a full matrix of constraints
 		// and pnl
-		Long[][] profit = optimiserRecorder.getProfit();
+		final Long[][] profit = optimiserRecorder.getProfit();
 
 		// (3) Optimise matrix
-		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(profit, optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges());
+		final boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(profit, optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges());
 
 		// (4) Export the pairings matrix to a Map
-		Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
-		for (ILoadOption load : loads) {
+		final Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
+		for (final ILoadOption load : loads) {
 			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
 		}
 
@@ -152,61 +151,65 @@ public class LightweightSchedulerOptimiser {
 		}
 
 		// create cargoes
-		List<List<IPortSlot>> shippedCargoes = getCargoes(loads, discharges, pairingsMatrix, CargoType.SHIPPED);
-		List<@NonNull IVesselAvailability> vessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v)).filter(v -> isShippedVessel(v)).collect(Collectors.toList());
-		List<@NonNull IVesselAvailability> allVessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v)).collect(Collectors.toList());
+		final List<List<IPortSlot>> shippedCargoes = getCargoes(loads, discharges, pairingsMatrix, CargoType.SHIPPED);
+		final List<@NonNull IVesselAvailability> vessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v)).filter(v -> isShippedVessel(v))
+				.collect(Collectors.toList());
+		final List<@NonNull IVesselAvailability> allVessels = vesselProvider.getSortedResources().stream().map(v -> vesselProvider.getVesselAvailability(v)).collect(Collectors.toList());
 		@NonNull
-		IVesselAvailability pnlVessel = allVessels.stream().filter(v->v.getVessel().getName().contains("RoundTrip-That's the spirit")).findFirst().get();
-		Long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
-		ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
+		final IVesselAvailability pnlVessel = allVessels.stream().filter(v -> v.getVessel().getName().contains("RoundTrip-That's the spirit")).findFirst().get();
+		final Long[][][] cargoToCargoCostsOnAvailability = cargoToCargoCostCalculator.createCargoToCargoCostMatrix(shippedCargoes, vessels);
+		final ArrayList<Set<Integer>> cargoVesselRestrictions = cargoVesselRestrictionsMatrixProducer.getIntegerCargoVesselRestrictions(shippedCargoes, vessels,
 				cargoVesselRestrictionsMatrixProducer.getCargoVesselRestrictions(shippedCargoes, vessels, getResourceAllocationConstraintChecker(this.constraintCheckers)));
-		long[] cargoPNL = getCargoPNL(profit, shippedCargoes, loads, discharges, pnlVessel);
-		int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
-		int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
-		
-		List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(shippedCargoes, vessels, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel);
+		final long[] cargoPNL = getCargoPNL(profit, shippedCargoes, loads, discharges, pnlVessel);
+		final int[][][] minCargoToCargoTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoToCargoTravelTimesPerVessel(shippedCargoes, vessels);
+		final int[][] minCargoStartToEndSlotTravelTimesPerVessel = cargoToCargoCostCalculator.getMinCargoStartToEndSlotTravelTimesPerVessel(shippedCargoes, vessels);
+
+		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(shippedCargoes, vessels, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel);
 		// (5) Export the pairings matrix to the raw sequences
-		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
-		IResource nominal = getNominal(rawSequences, charterInMarket);
+		final ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
+		final IResource nominal = getNominal(rawSequences, charterInMarket);
 		assert nominal != null;
 		updateSequences(rawSequences, sequences, shippedCargoes, vessels, pairingsMap, nominal);
 		return new Pair<>(rawSequences, 0L);
 	}
 
 	private static Set<VesselInstanceType> alloweVesselTypes = Sets.newHashSet(VesselInstanceType.FLEET, VesselInstanceType.SPOT_CHARTER, VesselInstanceType.TIME_CHARTER);
-	private boolean isShippedVessel(@NonNull IVesselAvailability v) {
+
+	private boolean isShippedVessel(@NonNull final IVesselAvailability v) {
 		return alloweVesselTypes.contains(v.getVesselInstanceType());
 	}
-	
+
 	@NonLDD
-	private long[] getCargoPNL(Long[][] profit, List<List<IPortSlot>> cargoes, List<ILoadOption> loads, List<IDischargeOption> discharges, @NonNull IVesselAvailability pnlVessel) {
-		long[] pnl = new long[cargoes.size()];
+	private long[] getCargoPNL(final Long[][] profit, final List<List<IPortSlot>> cargoes, final List<ILoadOption> loads, final List<IDischargeOption> discharges,
+			@NonNull final IVesselAvailability pnlVessel) {
+		final long[] pnl = new long[cargoes.size()];
 		int idx = 0;
-		for (List<IPortSlot> cargo : cargoes) {
-			pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))]/pnlVessel.getVessel().getCargoCapacity();
+		for (final List<IPortSlot> cargo : cargoes) {
+			pnl[idx++] = profit[loads.indexOf(cargo.get(0))][discharges.indexOf(cargo.get(cargo.size() - 1))] / pnlVessel.getVessel().getCargoCapacity();
 		}
 		return pnl;
 	}
 
-	private int calculateLatenessOnSequence(List<Integer> sequence, List<List<IPortSlot>> cargoes, int[][] cargoToCargoMinTravelTimes, int[] cargoMinTravelTimes) {
+	private int calculateLatenessOnSequence(final List<Integer> sequence, final List<List<IPortSlot>> cargoes, final int[][] cargoToCargoMinTravelTimes, final int[] cargoMinTravelTimes) {
 		int current = 0;
 		int lateness = 0;
 		for (int currIdx = 0; currIdx < sequence.size() - 1; currIdx++) {
-			List<IPortSlot> currentCargo = cargoes.get(currIdx);
-			int earliestCargoStart = Math.max(current, firstTime(currentCargo).getInclusiveStart());
+			final List<IPortSlot> currentCargo = cargoes.get(currIdx);
+			final int earliestCargoStart = Math.max(current, firstTime(currentCargo).getInclusiveStart());
 			lateness += (Math.max(0, firstTime(currentCargo).getExclusiveEnd() - 1 - earliestCargoStart) * -1);
-			int earliestCargoEnd = Math.max(earliestCargoStart + cargoMinTravelTimes[currIdx], lastTime(currentCargo).getInclusiveStart());
+			final int earliestCargoEnd = Math.max(earliestCargoStart + cargoMinTravelTimes[currIdx], lastTime(currentCargo).getInclusiveStart());
 			lateness += (Math.max(0, lastTime(currentCargo).getExclusiveEnd() - 1 - earliestCargoEnd) * -1);
-			current = earliestCargoEnd + cargoToCargoMinTravelTimes[currIdx][currIdx + 1]; 
+			current = earliestCargoEnd + cargoToCargoMinTravelTimes[currIdx][currIdx + 1];
 		}
 		return lateness;
 	}
-	
-	private long calculateProfitOnSequence(List<Integer> sequence, long[] cargoPNL) {
+
+	private long calculateProfitOnSequence(final List<Integer> sequence, final long[] cargoPNL) {
 		return sequence.stream().mapToLong(s -> cargoPNL[s]).sum();
 	}
-	
-	private long calculateCostOnSequence(List<Integer> sequence, List<List<IPortSlot>> cargoes, Long[][] cargoToCargoCost) {
+
+	private long calculateCostOnSequence(final List<Integer> sequence, final List<List<IPortSlot>> cargoes, final Long[][] cargoToCargoCost) {
 		long total = 0;
 		for (int currIdx = 0; currIdx < sequence.size() - 1; currIdx++) {
 			total += cargoToCargoCost[currIdx][currIdx + 1];
@@ -214,28 +217,27 @@ public class LightweightSchedulerOptimiser {
 		return total;
 	}
 
-		
-	private ITimeWindow firstTime(List<IPortSlot> cargo) {
+	private ITimeWindow firstTime(final List<IPortSlot> cargo) {
 		return cargo.get(0).getTimeWindow();
 	}
 
-	private ITimeWindow lastTime(List<IPortSlot> cargo) {
+	private ITimeWindow lastTime(final List<IPortSlot> cargo) {
 		return cargo.get(0).getTimeWindow();
 	}
 
 	@NonLDD
-	private List<List<IPortSlot>> getCargoes(List<ILoadOption> loads, List<IDischargeOption> discharges, boolean[][] pairingsMatrix, CargoType cargoFilter) {
-		List<List<IPortSlot>> cargoes = new LinkedList<>();
+	private List<List<IPortSlot>> getCargoes(final List<ILoadOption> loads, final List<IDischargeOption> discharges, final boolean[][] pairingsMatrix, final CargoType cargoFilter) {
+		final List<List<IPortSlot>> cargoes = new LinkedList<>();
 		for (int loadId = 0; loadId < pairingsMatrix.length; loadId++) {
 			for (int dischargeId = 0; dischargeId < pairingsMatrix[loadId].length; dischargeId++) {
 				if (cargoFilter == CargoType.SHIPPED || cargoFilter == CargoType.NON_SHIPPED) {
 					// FOB/DES check if filter is on
-					boolean shipped = loads.get(loadId) instanceof ILoadSlot && discharges.get(dischargeId) instanceof IDischargeSlot;
-					boolean expression = cargoFilter == CargoType.SHIPPED ? !shipped : shipped;
+					final boolean shipped = loads.get(loadId) instanceof ILoadSlot && discharges.get(dischargeId) instanceof IDischargeSlot;
+					final boolean expression = cargoFilter == CargoType.SHIPPED ? !shipped : shipped;
 					if (expression) {
 						continue;
 					}
-				} 
+				}
 				if (pairingsMatrix[loadId][dischargeId]) {
 					cargoes.add(Lists.newArrayList(loads.get(loadId), discharges.get(dischargeId)));
 				}
@@ -255,7 +257,7 @@ public class LightweightSchedulerOptimiser {
 	 * @param optimiserRecorder
 	 */
 	@NonLDD
-	private void getS2SBindings(final List<ILoadOption> loads, final List<IDischargeOption> discharges, final @NonNull CharterInMarket nominalMarket, ExecutorService executorService,
+	private void getS2SBindings(final List<ILoadOption> loads, final List<IDischargeOption> discharges, final @NonNull CharterInMarket nominalMarket, final ExecutorService executorService,
 			final LNGDataTransformer dataTransformer, final LongTermOptimisationData optimiserRecorder) {
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
 		// TODO: Filter
@@ -291,7 +293,7 @@ public class LightweightSchedulerOptimiser {
 		}
 	}
 
-	private ResourceAllocationConstraintChecker getResourceAllocationConstraintChecker(List<IPairwiseConstraintChecker> constraintCheckers) {
+	private ResourceAllocationConstraintChecker getResourceAllocationConstraintChecker(final List<IPairwiseConstraintChecker> constraintCheckers) {
 		return constraintCheckers.parallelStream().filter(c -> (c instanceof ResourceAllocationConstraintChecker)).map(c -> (ResourceAllocationConstraintChecker) c).findFirst().get();
 	}
 
@@ -302,11 +304,11 @@ public class LightweightSchedulerOptimiser {
 	 * @param path
 	 */
 	@NonLDD
-	private void produceDataForGurobi(LongTermOptimisationData longTermOptimisationData, String path) {
-		long[][] profitAsPrimitive = longTermOptimisationData.getProfitAsPrimitive();
-		boolean[][] valid = longTermOptimisationData.getValid();
-		boolean[] optionalLoads = longTermOptimisationData.getOptionalLoads();
-		boolean[] optionalDischarges = longTermOptimisationData.getOptionalDischarges();
+	private void produceDataForGurobi(final LongTermOptimisationData longTermOptimisationData, final String path) {
+		final long[][] profitAsPrimitive = longTermOptimisationData.getProfitAsPrimitive();
+		final boolean[][] valid = longTermOptimisationData.getValid();
+		final boolean[] optionalLoads = longTermOptimisationData.getOptionalLoads();
+		final boolean[] optionalDischarges = longTermOptimisationData.getOptionalDischarges();
 		serialize(profitAsPrimitive, path + "profit.lt");
 		serialize(valid, path + "constraints.lt");
 		serialize(optionalLoads, path + "loads.lt");
@@ -317,20 +319,21 @@ public class LightweightSchedulerOptimiser {
 	 * Updates the raw sequences given an allocations matrix
 	 * 
 	 * @param rawSequences
-	 * @param sequences 
-	 * @param cargoes 
+	 * @param sequences
+	 * @param cargoes
 	 * @param vessels
 	 * @param pairingsMap
 	 * @param nominal
 	 */
 	@NonLDD
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, List<List<Integer>> sequences, List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
-//		x Sort out Fob/Des in vessels list
-//		x Make sure all cargoes are whole (i.e. not just a lonely load)
+	private void updateSequences(@NonNull final IModifiableSequences rawSequences, final List<List<Integer>> sequences, final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels,
+			@NonNull final Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull final IResource nominal) {
+		// x Sort out Fob/Des in vessels list
+		// x Make sure all cargoes are whole (i.e. not just a lonely load)
 		moveElementsToUnusedList(rawSequences);
 		for (int vesselIndex = 0; vesselIndex < vessels.size(); vesselIndex++) {
-			IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
-			IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(vesselProvider.getResource(vesselAvailability));
+			final IVesselAvailability vesselAvailability = vessels.get(vesselIndex);
+			final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(vesselProvider.getResource(vesselAvailability));
 			int insertIndex = 0;
 			for (int i = 0; i < modifiableSequence.size(); i++) {
 				if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) != null && portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.End) {
@@ -338,12 +341,12 @@ public class LightweightSchedulerOptimiser {
 				}
 				insertIndex++;
 			}
-			List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
-			List<Integer> cargoIndexes = sequences.get(vesselIndex);
-			for (int cargoIndex : cargoIndexes) {
-				List<IPortSlot> cargo = cargoes.get(cargoIndex);
-				ILoadOption loadOption = (ILoadOption) cargo.get(0);
-				IDischargeOption dischargeOption = (IDischargeOption) cargo.get(1);
+			final List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
+			final List<Integer> cargoIndexes = sequences.get(vesselIndex);
+			for (final int cargoIndex : cargoIndexes) {
+				final List<IPortSlot> cargo = cargoes.get(cargoIndex);
+				final ILoadOption loadOption = (ILoadOption) cargo.get(0);
+				final IDischargeOption dischargeOption = (IDischargeOption) cargo.get(1);
 				// skip if unallocated
 				if (dischargeOption == null)
 					continue;
@@ -355,16 +358,16 @@ public class LightweightSchedulerOptimiser {
 					unusedElements.remove(portSlotProvider.getElement(dischargeOption));
 				} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeOption) {
 					// Fob Sale
-					IResource resource = getVirtualResource(dischargeOption);
+					final IResource resource = getVirtualResource(dischargeOption);
 					if (resource != null) {
-						IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
+						final IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
 						insertCargo(unusedElements, loadOption, dischargeOption, fobSale);
 					}
 				} else if (loadOption instanceof ILoadOption && dischargeOption instanceof IDischargeSlot) {
 					// DES purchase
-					IResource resource = getVirtualResource(loadOption);
+					final IResource resource = getVirtualResource(loadOption);
 					if (resource != null) {
-						IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
+						final IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
 						insertCargo(unusedElements, loadOption, dischargeOption, desPurchase);
 					}
 				}
@@ -372,9 +375,9 @@ public class LightweightSchedulerOptimiser {
 		}
 	}
 
-	private IResource getVirtualResource(IPortSlot portSlot) {
-		IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(portSlot));
-		IResource resource = vesselProvider.getResource(vesselAvailability);
+	private IResource getVirtualResource(final IPortSlot portSlot) {
+		final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(portSlot));
+		final IResource resource = vesselProvider.getResource(vesselAvailability);
 		return resource;
 	}
 
@@ -383,31 +386,31 @@ public class LightweightSchedulerOptimiser {
 	 * 
 	 * @param sequences
 	 */
-	private void moveElementsToUnusedList(IModifiableSequences sequences) {
+	private void moveElementsToUnusedList(final IModifiableSequences sequences) {
 		@NonNull
-		List<@NonNull IResource> resources = sequences.getResources();
+		final List<@NonNull IResource> resources = sequences.getResources();
 		for (@NonNull
-		IResource resource : resources) {
-			IModifiableSequence modifiableSequence = sequences.getModifiableSequence(resource);
-			List<ISequenceElement> modifiableUnusedElements = sequences.getModifiableUnusedElements();
+		final IResource resource : resources) {
+			final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(resource);
+			final List<ISequenceElement> modifiableUnusedElements = sequences.getModifiableUnusedElements();
 			for (int i = modifiableSequence.size() - 1; i > -1; i--) {
 				if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) instanceof IDischargeOption || portSlotProvider.getPortSlot(modifiableSequence.get(i)) instanceof ILoadOption) {
-					ISequenceElement removed = modifiableSequence.remove(i);
+					final ISequenceElement removed = modifiableSequence.remove(i);
 					modifiableUnusedElements.add(removed);
 				}
 			}
 		}
 	}
 
-	private void insertCargo(List<ISequenceElement> unusedElements, ILoadOption loadOption, IDischargeOption dischargeOption, IModifiableSequence desPurchase) {
+	private void insertCargo(final List<ISequenceElement> unusedElements, final ILoadOption loadOption, final IDischargeOption dischargeOption, final IModifiableSequence desPurchase) {
 		desPurchase.insert(1, portSlotProvider.getElement(loadOption));
 		unusedElements.remove(portSlotProvider.getElement(loadOption));
 		desPurchase.insert(2, portSlotProvider.getElement(dischargeOption));
 		unusedElements.remove(portSlotProvider.getElement(dischargeOption));
 	}
 
-	private IResource getNominal(ModifiableSequences rawSequences, CharterInMarket charterInMarket) {
-		for (IResource resource : rawSequences.getResources()) {
+	private IResource getNominal(final ModifiableSequences rawSequences, final CharterInMarket charterInMarket) {
+		for (final IResource resource : rawSequences.getResources()) {
 			if (resource.getName().contains(charterInMarket.getName()) && vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				return resource;
 			}
@@ -415,8 +418,8 @@ public class LightweightSchedulerOptimiser {
 		return null;
 	}
 
-	private void printPairings(List<ILoadOption> loads, boolean[][] pairingsMatrix) {
-		for (ILoadOption load : loads) {
+	private void printPairings(final List<ILoadOption> loads, final boolean[][] pairingsMatrix) {
+		for (final ILoadOption load : loads) {
 			System.out.println(String.format("%s to %s", load.getId(),
 					optimiserRecorder.getPairedDischarge(load, pairingsMatrix) == null ? "null" : optimiserRecorder.getPairedDischarge(load, pairingsMatrix).getId()));
 			if (load.getId().contains("Rejected PS4")) {
@@ -425,45 +428,35 @@ public class LightweightSchedulerOptimiser {
 		}
 	}
 
-	private void serialize(Serializable serializable, String path) {
+	private void serialize(final Serializable serializable, final String path) {
 		try {
-			File f = new File(path);
+			final File f = new File(path);
 			f.delete();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		ObjectOutputStream oos = null;
-		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(path, false);
-			oos = new ObjectOutputStream(fout);
-			oos.writeObject(serializable);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+
+		try (FileOutputStream fout = new FileOutputStream(path, false)) {
+			try (ObjectOutputStream oos = new ObjectOutputStream(fout)) {
+				oos.writeObject(serializable);
+			} catch (final Exception ex) {
+				ex.printStackTrace();
 			}
+		} catch (final Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
-	private static boolean[][] getPrestoredBooleans2D(String path) throws IOException {
-		ObjectInputStream objectinputstream = null;
+	private static boolean[][] getPrestoredBooleans2D(final String path) throws IOException {
 		boolean[][] readCase = null;
-		try {
-			FileInputStream streamIn = new FileInputStream(path);
-			objectinputstream = new ObjectInputStream(streamIn);
-			readCase = (boolean[][]) objectinputstream.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (objectinputstream != null) {
-				objectinputstream.close();
+		try (final FileInputStream streamIn = new FileInputStream(path)) {
+			try (ObjectInputStream objectinputstream = new ObjectInputStream(streamIn)) {
+				readCase = (boolean[][]) objectinputstream.readObject();
+			} catch (final Exception e) {
+				e.printStackTrace();
 			}
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		return readCase;
 	}

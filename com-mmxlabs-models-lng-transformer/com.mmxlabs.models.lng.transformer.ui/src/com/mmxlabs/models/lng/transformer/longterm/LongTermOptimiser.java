@@ -59,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Long term optimisation. Drives a long term optimisation using an {@link ILongTermMatrixOptimiser}.
+ * 
  * @author achurchill
  *
  */
@@ -84,31 +85,32 @@ public class LongTermOptimiser {
 
 	/**
 	 * Perform a long term (nominal) trading optimisation
+	 * 
 	 * @param executorService
 	 * @param dataTransformer
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final ExecutorService executorService, final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
+	public Pair<ISequences, Long> optimise(final ExecutorService executorService, final LNGDataTransformer dataTransformer, final CharterInMarket charterInMarket) {
 		// (1) Identify LT slots
 		@NonNull
-		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
-		List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
-		List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
+		final Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();
+		final List<ILoadOption> loads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
+		final List<IDischargeOption> discharges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m).collect(Collectors.toCollection(ArrayList::new));
 		optimiserRecorder.init(loads, discharges);
 		// (2) Generate S2S bindings matrix for LT slots
-		ExecutorService es = Executors.newSingleThreadExecutor();
+		final ExecutorService es = Executors.newSingleThreadExecutor();
 		getS2SBindings(loads, discharges, charterInMarket, es, dataTransformer, optimiserRecorder);
 		// now using our profits recorder we have a full matrix of constraints
 		// and pnl
-		Long[][] profit = optimiserRecorder.getProfit();
+		final Long[][] profit = optimiserRecorder.getProfit();
 		// (3) Optimise matrix
-//		produceDataForGurobi(optimiserRecorder, "c:/dev/data/");
+		// produceDataForGurobi(optimiserRecorder, "c:/dev/data/");
 		boolean[][] pairingsMatrix = matrixOptimiser.findOptimalPairings(profit, optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges());
 		if (false) {
 			try {
 				pairingsMatrix = getPrestoredBooleans2D("c:/dev/data/gurobi_allocations.lt");
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.exit(1);
@@ -116,19 +118,19 @@ public class LongTermOptimiser {
 		}
 
 		// (4) Export the pairings matrix to a Map
-		Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
-		for (ILoadOption load : loads) {
+		final Map<ILoadOption, IDischargeOption> pairingsMap = new HashMap<>();
+		for (final ILoadOption load : loads) {
 			pairingsMap.put(load, optimiserRecorder.getPairedDischarge(load, pairingsMatrix));
 		}
 
 		if (false) {
-		// print pairings for debug
-		printPairings(loads, pairingsMatrix);
+			// print pairings for debug
+			printPairings(loads, pairingsMatrix);
 		}
-		
+
 		// (5) Export the pairings matrix to the raw sequences
-		ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
-		IResource nominal = getNominal(rawSequences, charterInMarket);
+		final ModifiableSequences rawSequences = new ModifiableSequences(dataTransformer.getInitialSequences());
+		final IResource nominal = getNominal(rawSequences, charterInMarket);
 		assert nominal != null;
 		updateSequences(rawSequences, pairingsMap, nominal);
 		return new Pair<>(rawSequences, 0L);
@@ -144,7 +146,7 @@ public class LongTermOptimiser {
 	 * @param dataTransformer
 	 * @param optimiserRecorder
 	 */
-	private void getS2SBindings(final List<ILoadOption> loads, final List<IDischargeOption> discharges, final @NonNull CharterInMarket nominalMarket, ExecutorService executorService,
+	private void getS2SBindings(final List<ILoadOption> loads, final List<IDischargeOption> discharges, final @NonNull CharterInMarket nominalMarket, final ExecutorService executorService,
 			final LNGDataTransformer dataTransformer, final LongTermOptimisationData optimiserRecorder) {
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
 		// TODO: Filter
@@ -168,14 +170,15 @@ public class LongTermOptimiser {
 
 	/**
 	 * Produces serialized data that can be used by Gurobi
+	 * 
 	 * @param longTermOptimisationData
 	 * @param path
 	 */
-	private void produceDataForGurobi(LongTermOptimisationData longTermOptimisationData, String path) {
-		long[][] profitAsPrimitive = longTermOptimisationData.getProfitAsPrimitive();
-		boolean[][] valid = longTermOptimisationData.getValid();
-		boolean[] optionalLoads = longTermOptimisationData.getOptionalLoads();
-		boolean[] optionalDischarges = longTermOptimisationData.getOptionalDischarges();
+	private void produceDataForGurobi(final LongTermOptimisationData longTermOptimisationData, final String path) {
+		final long[][] profitAsPrimitive = longTermOptimisationData.getProfitAsPrimitive();
+		final boolean[][] valid = longTermOptimisationData.getValid();
+		final boolean[] optionalLoads = longTermOptimisationData.getOptionalLoads();
+		final boolean[] optionalDischarges = longTermOptimisationData.getOptionalDischarges();
 		serialize(profitAsPrimitive, path + "profit.lt");
 		serialize(valid, path + "constraints.lt");
 		serialize(optionalLoads, path + "loads.lt");
@@ -184,13 +187,14 @@ public class LongTermOptimiser {
 
 	/**
 	 * Updates the raw sequences given an allocations matrix
+	 * 
 	 * @param rawSequences
 	 * @param pairingsMap
 	 * @param nominal
 	 */
-	private void updateSequences(@NonNull IModifiableSequences rawSequences, @NonNull Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull IResource nominal) {
+	private void updateSequences(@NonNull final IModifiableSequences rawSequences, @NonNull final Map<ILoadOption, IDischargeOption> pairingsMap, @NonNull final IResource nominal) {
 		moveElementsToUnusedList(rawSequences);
-		IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
+		final IModifiableSequence modifiableSequence = rawSequences.getModifiableSequence(nominal);
 		int insertIndex = 0;
 		for (int i = 0; i < modifiableSequence.size(); i++) {
 			if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) != null && portSlotProvider.getPortSlot(modifiableSequence.get(i)).getPortType() == PortType.End) {
@@ -198,9 +202,9 @@ public class LongTermOptimiser {
 			}
 			insertIndex++;
 		}
-		List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
-		for (ILoadOption loadOption : pairingsMap.keySet()) {
-			IDischargeOption dischargeOption = pairingsMap.get(loadOption);
+		final List<ISequenceElement> unusedElements = rawSequences.getModifiableUnusedElements();
+		for (final ILoadOption loadOption : pairingsMap.keySet()) {
+			final IDischargeOption dischargeOption = pairingsMap.get(loadOption);
 			// skip if unallocated
 			if (dischargeOption == null)
 				continue;
@@ -212,57 +216,58 @@ public class LongTermOptimiser {
 				unusedElements.remove(portSlotProvider.getElement(dischargeOption));
 			} else if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeOption) {
 				// Fob Sale
-				IResource resource = getVirtualResource(dischargeOption);
+				final IResource resource = getVirtualResource(dischargeOption);
 				if (resource != null) {
-					IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
+					final IModifiableSequence fobSale = rawSequences.getModifiableSequence(resource);
 					insertCargo(unusedElements, loadOption, dischargeOption, fobSale);
 				}
 			} else if (loadOption instanceof ILoadOption && dischargeOption instanceof IDischargeSlot) {
 				// DES purchase
-				IResource resource = getVirtualResource(loadOption);
+				final IResource resource = getVirtualResource(loadOption);
 				if (resource != null) {
-					IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
+					final IModifiableSequence desPurchase = rawSequences.getModifiableSequence(resource);
 					insertCargo(unusedElements, loadOption, dischargeOption, desPurchase);
 				}
 			}
 		}
 	}
 
-	private IResource getVirtualResource(IPortSlot portSlot) {
-		IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(portSlot));
-		IResource resource = vesselProvider.getResource(vesselAvailability);
+	private IResource getVirtualResource(final IPortSlot portSlot) {
+		final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(portSlotProvider.getElement(portSlot));
+		final IResource resource = vesselProvider.getResource(vesselAvailability);
 		return resource;
 	}
 
 	/**
 	 * Moves everything to the unused list
+	 * 
 	 * @param sequences
 	 */
-	private void moveElementsToUnusedList(IModifiableSequences sequences) {
+	private void moveElementsToUnusedList(final IModifiableSequences sequences) {
 		@NonNull
-		List<@NonNull IResource> resources = sequences.getResources();
+		final List<@NonNull IResource> resources = sequences.getResources();
 		for (@NonNull
-		IResource resource : resources) {
-			IModifiableSequence modifiableSequence = sequences.getModifiableSequence(resource);
-			List<ISequenceElement> modifiableUnusedElements = sequences.getModifiableUnusedElements();
+		final IResource resource : resources) {
+			final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(resource);
+			final List<ISequenceElement> modifiableUnusedElements = sequences.getModifiableUnusedElements();
 			for (int i = modifiableSequence.size() - 1; i > -1; i--) {
 				if (portSlotProvider.getPortSlot(modifiableSequence.get(i)) instanceof IDischargeOption || portSlotProvider.getPortSlot(modifiableSequence.get(i)) instanceof ILoadOption) {
-					ISequenceElement removed = modifiableSequence.remove(i);
+					final ISequenceElement removed = modifiableSequence.remove(i);
 					modifiableUnusedElements.add(removed);
 				}
 			}
 		}
 	}
 
-	private void insertCargo(List<ISequenceElement> unusedElements, ILoadOption loadOption, IDischargeOption dischargeOption, IModifiableSequence desPurchase) {
+	private void insertCargo(final List<ISequenceElement> unusedElements, final ILoadOption loadOption, final IDischargeOption dischargeOption, final IModifiableSequence desPurchase) {
 		desPurchase.insert(1, portSlotProvider.getElement(loadOption));
 		unusedElements.remove(portSlotProvider.getElement(loadOption));
 		desPurchase.insert(2, portSlotProvider.getElement(dischargeOption));
 		unusedElements.remove(portSlotProvider.getElement(dischargeOption));
 	}
 
-	private IResource getNominal(ModifiableSequences rawSequences, CharterInMarket charterInMarket) {
-		for (IResource resource : rawSequences.getResources()) {
+	private IResource getNominal(final ModifiableSequences rawSequences, final CharterInMarket charterInMarket) {
+		for (final IResource resource : rawSequences.getResources()) {
 			if (resource.getName().contains(charterInMarket.getName()) && vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				return resource;
 			}
@@ -270,8 +275,8 @@ public class LongTermOptimiser {
 		return null;
 	}
 
-	private void printPairings(List<ILoadOption> loads, boolean[][] pairingsMatrix) {
-		for (ILoadOption load : loads) {
+	private void printPairings(final List<ILoadOption> loads, final boolean[][] pairingsMatrix) {
+		for (final ILoadOption load : loads) {
 			System.out.println(String.format("%s to %s", load.getId(),
 					optimiserRecorder.getPairedDischarge(load, pairingsMatrix) == null ? "null" : optimiserRecorder.getPairedDischarge(load, pairingsMatrix).getId()));
 			if (load.getId().contains("Rejected PS4")) {
@@ -280,45 +285,35 @@ public class LongTermOptimiser {
 		}
 	}
 
-	private void serialize(Serializable serializable, String path) {
+	private void serialize(final Serializable serializable, final String path) {
 		try {
-			File f = new File(path);
+			final File f = new File(path);
 			f.delete();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		ObjectOutputStream oos = null;
-		FileOutputStream fout = null;
-		try {
-			fout = new FileOutputStream(path, false);
-			oos = new ObjectOutputStream(fout);
-			oos.writeObject(serializable);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		try (FileOutputStream fout = new FileOutputStream(path, false)) {
+			try (ObjectOutputStream oos = new ObjectOutputStream(fout)) {
+				oos.writeObject(serializable);
+			} catch (final Exception ex) {
+				ex.printStackTrace();
 			}
+		} catch (final Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
-	private static boolean[][] getPrestoredBooleans2D(String path) throws IOException {
-		ObjectInputStream objectinputstream = null;
+	private static boolean[][] getPrestoredBooleans2D(final String path) throws IOException {
 		boolean[][] readCase = null;
-		try {
-			FileInputStream streamIn = new FileInputStream(path);
-			objectinputstream = new ObjectInputStream(streamIn);
-			readCase = (boolean[][]) objectinputstream.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (objectinputstream != null) {
-				objectinputstream.close();
+		try (final FileInputStream streamIn = new FileInputStream(path)) {
+			try (ObjectInputStream objectinputstream = new ObjectInputStream(streamIn)) {
+				readCase = (boolean[][]) objectinputstream.readObject();
+			} catch (final Exception e) {
+				e.printStackTrace();
+
 			}
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		return readCase;
 	}

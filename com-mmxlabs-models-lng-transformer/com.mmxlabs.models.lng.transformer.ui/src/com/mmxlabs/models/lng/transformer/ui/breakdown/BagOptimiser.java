@@ -850,7 +850,11 @@ public class BagOptimiser {
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
+				if (changes != 0) {
+					System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
+				} else {
+					System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, "---"));
+				}
 			}
 		}
 		reducedStates = reducedStates.subList(0, Math.min(reducedStates.size(), maxStates));
@@ -865,7 +869,11 @@ public class BagOptimiser {
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
+				if (changes == 0) {
+					System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
+				} else {
+					System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, "---"));
+				}
 			}
 		}
 		return reducedStates;
