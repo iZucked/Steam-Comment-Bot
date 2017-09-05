@@ -24,60 +24,38 @@ public class FileScenarioServiceBackup {
 
 	public void backup(final File target, final File source) throws IOException {
 
-		FileOutputStream dest = null;
-		ZipOutputStream out = null;
+		try (final FileOutputStream dest = new FileOutputStream(target)) {
+			try (final ZipOutputStream finalOut = new ZipOutputStream(new BufferedOutputStream(dest))) {
 
-		try {
-			dest = new FileOutputStream(target);
-			out = new ZipOutputStream(new BufferedOutputStream(dest));
+				Files.walkFileTree(source.toPath(), new SimpleFileVisitor<Path>() {
 
-			final ZipOutputStream finalOut = out;
+					@Override
+					public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
 
-			Files.walkFileTree(source.toPath(), new SimpleFileVisitor<Path>() {
+						// Skip the target zip file
+						if (file.equals(target.toPath())) {
+							return super.visitFile(file, attrs);
+						}
+						// Only include .xmi files
+						if (file.toString().endsWith(".xmi") == false) {
+							return super.visitFile(file, attrs);
+						}
 
-				@Override
-				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-
-					// Skip the target zip file
-					if (file.equals(target.toPath())) {
+						String entryName = source.toPath().relativize(file).toString();
+						final ZipEntry entry = new ZipEntry(entryName);
+						finalOut.putNextEntry(entry);
+						try {
+							try (FileInputStream fis = new FileInputStream(file.toFile())) {
+								try (BufferedInputStream bis = new BufferedInputStream(fis)) {
+									ByteStreams.copy(bis, finalOut);
+								}
+							}
+						} finally {
+							finalOut.flush();
+						}
 						return super.visitFile(file, attrs);
 					}
-					// Only include .xmi files
-					if (file.toString().endsWith(".xmi") == false) {
-						return super.visitFile(file, attrs);
-					}
-
-					String entryName = source.toPath().relativize(file).toString();
-					final ZipEntry entry = new ZipEntry(entryName);
-					finalOut.putNextEntry(entry);
-
-					FileInputStream fis = null;
-					BufferedInputStream bis = null;
-					try {
-						fis = new FileInputStream(file.toFile());
-						bis = new BufferedInputStream(fis);
-						ByteStreams.copy(bis, finalOut);
-
-					} finally {
-						if (bis != null) {
-							bis.close();
-						}
-						if (fis != null) {
-							fis.close();
-						}
-						finalOut.flush();
-					}
-					return super.visitFile(file, attrs);
-				}
-			});
-
-		} finally {
-			if (out != null) {
-				out.flush();
-				out.close();
-			}
-			if (dest != null) {
-				dest.close();
+				});
 			}
 		}
 	}
