@@ -346,7 +346,9 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							}
 
 							// Take average charter cost
-							cargoActuals.setCharterRatePerDay((int) Math.round((double) totalCharterCost / ((double) totalDurationInHours / 24.0)));
+							if (totalDurationInHours != 0) {
+								cargoActuals.setCharterRatePerDay((int) Math.round((double) totalCharterCost / ((double) totalDurationInHours / 24.0)));
+							}
 
 							final ReturnActuals returnActuals = ActualsFactory.eINSTANCE.createReturnActuals();
 

@@ -154,7 +154,8 @@ public class SuezCanalTariffTugBandInlineEditor extends AbstractTableInlineEdito
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : String.format("%d", ((EObject) element).eGet(attr));
+				Number number = (Number) ((EObject) element).eGet(attr);
+				return element == null ? "" : String.format("%d", number.intValue());
 			}
 		});
 

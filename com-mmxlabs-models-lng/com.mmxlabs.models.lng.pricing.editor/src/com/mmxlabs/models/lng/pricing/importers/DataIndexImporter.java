@@ -65,7 +65,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context) {
 		final Index<Number> result;
 		if (row.containsKey(EXPRESSION)) {
-			if (row.get(EXPRESSION).isEmpty() == false) {
+			if (!row.get(EXPRESSION).isEmpty()) {
 				final DerivedIndex<Number> di = PricingFactory.eINSTANCE.createDerivedIndex();
 				result = di;
 				di.setExpression(row.get(EXPRESSION));
@@ -79,13 +79,14 @@ public class DataIndexImporter extends AbstractClassImporter {
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
 			final Set<YearMonth> seenDates = new HashSet<>();
-			for (final String s : row.keySet()) {
+			for (final Map.Entry<String, String> e : row.entrySet()) {
+				String s = e.getKey();
 				try {
 					final YearMonth date = parseDateString(s);
 					if (date == null) {
 						continue;
 					}
-					final String valueString = row.get(s);
+					final String valueString = e.getValue();
 					if (valueString.isEmpty()) {
 						continue;
 					}
@@ -114,14 +115,15 @@ public class DataIndexImporter extends AbstractClassImporter {
 				}
 			}
 		} else {
-			for (final String s : row.keySet()) {
+			for (final Map.Entry<String, String> e : row.entrySet()) {
+				String s = e.getKey();
 				try {
 					dateParser.parseYearMonth(s);
-					if (row.get(s).isEmpty() == false) {
+					if (!e.getValue().isEmpty()) {
 						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
 					}
 				} catch (final ParseException ex) {
-
+					// Ignore
 				}
 			}
 		}
@@ -139,12 +141,12 @@ public class DataIndexImporter extends AbstractClassImporter {
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
-		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		final List<Map<String, String>> result = new ArrayList<>();
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
 				final DataIndex<Number> i = (DataIndex) o;
 				// Date sort columns
-				final Map<String, String> row = new TreeMap<String, String>(new Comparator<String>() {
+				final Map<String, String> row = new TreeMap<>(new Comparator<String>() {
 
 					@Override
 					public int compare(final String o1, final String o2) {
@@ -156,7 +158,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 					final Number n = pt.getValue();
 					final YearMonth dt = pt.getDate();
 					if (n instanceof Integer) {
-						row.put(dateParser.formatYearMonth(dt), String.format("%d", n));
+						row.put(dateParser.formatYearMonth(dt), String.format("%d", n.intValue()));
 					} else {
 						row.put(dateParser.formatYearMonth(dt), n.toString());
 					}
@@ -164,7 +166,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 				result.add(row);
 			} else if (o instanceof DerivedIndex) {
 				final DerivedIndex<Number> derived = (DerivedIndex<Number>) o;
-				final Map<String, String> row = new LinkedHashMap<String, String>();
+				final Map<String, String> row = new LinkedHashMap<>();
 				row.put(EXPRESSION, derived.getExpression());
 				result.add(row);
 			}
