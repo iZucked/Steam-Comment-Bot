@@ -16,8 +16,6 @@ import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 /**
  * A class to *more* securely erase files over {@link File}{@link #delete(File)}. Note the underlying filesystem is outside of the control of Java and may negate anything done here.
  * 
@@ -27,8 +25,6 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 public final class FileDeleter {
 
-	public static final @NonNull String LICENSE_FEATURE__SECURE_DELETE = "features:secure-delete";
-	
 	/**
 	 * Overwrite the contents of the file a few times with zeros, ones and random data before deleting.
 	 * 
@@ -36,15 +32,14 @@ public final class FileDeleter {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public static void delete(final File file, boolean secureDelete) throws IOException, FileNotFoundException {
+	public static boolean delete(final File file, boolean secureDelete) throws IOException, FileNotFoundException {
+
+		if (!file.exists()) {
+			return false;
+		}
 
 		if (!secureDelete) {
-			file.delete();
-			return;
-		}
-		
-		if (!file.exists()) {
-			return;
+			return file.delete();
 		}
 
 		if (file.isDirectory()) {
@@ -116,5 +111,6 @@ public final class FileDeleter {
 		if (file.exists()) {
 			Files.delete(file.toPath());
 		}
+		return !file.exists();
 	}
 }
