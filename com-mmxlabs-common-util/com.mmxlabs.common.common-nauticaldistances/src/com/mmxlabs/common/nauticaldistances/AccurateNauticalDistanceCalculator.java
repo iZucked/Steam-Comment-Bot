@@ -81,7 +81,12 @@ public class AccurateNauticalDistanceCalculator {
 		// for (int[] x : distanceMatrix) {
 		// log.info(Arrays.toString(x));
 		// }
-		log.info("Sparseness = " + (goodEdges / (double) (badEdges + goodEdges)));
+		int sum = badEdges + goodEdges;
+		if (sum != 0) {
+			log.info("Sparseness = " + (goodEdges / (double) sum));
+		} else {
+			log.info("Sparseness = NaN");
+		}
 		// distance matrix is computed, now ready for normal use
 	}
 

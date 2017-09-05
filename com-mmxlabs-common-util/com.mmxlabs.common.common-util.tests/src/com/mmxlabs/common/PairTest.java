@@ -10,7 +10,7 @@ import org.junit.Test;
 public class PairTest {
 	@Test
 	public void testEmptyPair() {
-		final Pair<Object, Object> pair = new Pair<Object, Object>();
+		final Pair<Object, Object> pair = new Pair<>();
 		Assert.assertNull(pair.getFirst());
 		Assert.assertNull(pair.getSecond());
 	}
@@ -19,7 +19,7 @@ public class PairTest {
 	public void testFullPair() {
 		final Object o = new Object();
 		final Object m = new Object();
-		final Pair<Object, Object> p = new Pair<Object, Object>(o, m);
+		final Pair<Object, Object> p = new Pair<>(o, m);
 		Assert.assertSame(o, p.getFirst());
 		Assert.assertSame(m, p.getSecond());
 	}
@@ -28,11 +28,11 @@ public class PairTest {
 	public void testPairCopy() {
 		final Object o = new Object();
 		final Object m = new Object();
-		final Pair<Object, Object> p = new Pair<Object, Object>(o, m);
+		final Pair<Object, Object> p = new Pair<>(o, m);
 		Assert.assertSame(o, p.getFirst());
 		Assert.assertSame(m, p.getSecond());
 
-		final Pair<Object, Object> p2 = new Pair<Object, Object>(p);
+		final Pair<Object, Object> p2 = new Pair<>(p);
 		Assert.assertSame(o, p2.getFirst());
 		Assert.assertSame(m, p2.getSecond());
 
@@ -48,14 +48,14 @@ public class PairTest {
 		final Object o2 = new Object();
 		final Object m2 = new Object();
 
-		final Pair<Object, Object> p0 = new Pair<Object, Object>(o1, m1);
-		final Pair<Object, Object> p1 = new Pair<Object, Object>(o1, m1);
-		final Pair<Object, Object> p2 = new Pair<Object, Object>(o2, m2);
+		final Pair<Object, Object> p0 = new Pair<>(o1, m1);
+		final Pair<Object, Object> p1 = new Pair<>(o1, m1);
+		final Pair<Object, Object> p2 = new Pair<>(o2, m2);
 
-		final Pair<Object, Object> p3 = new Pair<Object, Object>(null, m1);
-		final Pair<Object, Object> p4 = new Pair<Object, Object>(o1, null);
-		final Pair<Object, Object> p5 = new Pair<Object, Object>(null, null);
-		final Pair<Object, Object> p6 = new Pair<Object, Object>(null, null);
+		final Pair<Object, Object> p3 = new Pair<>(null, m1);
+		final Pair<Object, Object> p4 = new Pair<>(o1, null);
+		final Pair<Object, Object> p5 = new Pair<>(null, null);
+		final Pair<Object, Object> p6 = new Pair<>(null, null);
 
 		Assert.assertEquals(p0, p0);
 		Assert.assertEquals(p0, p1);
@@ -80,7 +80,7 @@ public class PairTest {
 	public void testAccessors() {
 		final Object o = new Object();
 		final Object m = new Object();
-		final Pair<Object, Object> pair = new Pair<Object, Object>();
+		final Pair<Object, Object> pair = new Pair<>();
 		pair.setFirst(o);
 		Assert.assertSame(o, pair.getFirst());
 		pair.setSecond(o);
@@ -103,27 +103,27 @@ public class PairTest {
 		final Object m = new Object();
 
 		// Neither object null
-		final Pair<Object, Object> pairNonNull = new Pair<Object, Object>(o, m);
+		final Pair<Object, Object> pairNonNull = new Pair<>(o, m);
 		Assert.assertNotNull(pairNonNull.toString());
 		Assert.assertTrue(pairNonNull.toString().length() > 0);
 
 		// first object null
-		final Pair<Object, Object> pairFirstNull = new Pair<Object, Object>(null, m);
+		final Pair<Object, Object> pairFirstNull = new Pair<>(null, m);
 		Assert.assertNotNull(pairFirstNull.toString());
 		Assert.assertTrue(pairFirstNull.toString().length() > 0);
 
 		// second object null
-		final Pair<Object, Object> pairSecondNull = new Pair<Object, Object>(o, null);
+		final Pair<Object, Object> pairSecondNull = new Pair<>(o, null);
 		Assert.assertNotNull(pairSecondNull.toString());
 		Assert.assertTrue(pairSecondNull.toString().length() > 0);
 
 		// both objects null
-		final Pair<Object, Object> pairBothNull = new Pair<Object, Object>(null, null);
+		final Pair<Object, Object> pairBothNull = new Pair<>(null, null);
 		Assert.assertNotNull(pairBothNull.toString());
 		Assert.assertTrue(pairBothNull.toString().length() > 0);
 
 		// blank pair null
-		final Pair<Object, Object> pairBlank = new Pair<Object, Object>();
+		final Pair<Object, Object> pairBlank = new Pair<>();
 		Assert.assertNotNull(pairBlank.toString());
 		Assert.assertTrue(pairBlank.toString().length() > 0);
 	}

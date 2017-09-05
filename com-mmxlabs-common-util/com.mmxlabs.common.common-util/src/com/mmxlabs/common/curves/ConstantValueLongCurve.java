@@ -34,4 +34,9 @@ public final class ConstantValueLongCurve implements ILongCurve {
 		}
 		return false;
 	}
+
+	@Override
+	public int hashCode() {
+		return Long.hashCode(value);
+	}
 }
