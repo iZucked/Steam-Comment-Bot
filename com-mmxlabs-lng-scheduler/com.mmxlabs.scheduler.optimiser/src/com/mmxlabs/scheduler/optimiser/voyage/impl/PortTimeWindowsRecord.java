@@ -56,7 +56,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 
 		@Override
 		public @NonNull String toString() {
-			return String.format("Idx %d, Win: %s Dur: %d", feasibleWindow, duration);
+			return String.format("Idx %d, Win: %s Dur: %d", index, feasibleWindow, duration);
 		}
 	}
 
