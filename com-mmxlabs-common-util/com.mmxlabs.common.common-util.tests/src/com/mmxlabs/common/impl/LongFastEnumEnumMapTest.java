@@ -20,8 +20,8 @@ public class LongFastEnumEnumMapTest {
 	@Test
 	public void testHashCode() {
 
-		final LongFastEnumEnumMap<Enum1, Enum2> map1 = new LongFastEnumEnumMap<Enum1, Enum2>(Enum1.values().length, Enum2.values().length);
-		final LongFastEnumEnumMap<Enum1, Enum2> map2 = new LongFastEnumEnumMap<Enum1, Enum2>(Enum1.values().length, Enum2.values().length);
+		final LongFastEnumEnumMap<Enum1, Enum2> map1 = new LongFastEnumEnumMap<>(Enum1.values().length, Enum2.values().length);
+		final LongFastEnumEnumMap<Enum1, Enum2> map2 = new LongFastEnumEnumMap<>(Enum1.values().length, Enum2.values().length);
 
 		Assert.assertEquals(map1.hashCode(), map2.hashCode());
 
@@ -34,7 +34,7 @@ public class LongFastEnumEnumMapTest {
 
 	@Test
 	public void testGetPut() {
-		final LongFastEnumEnumMap<Enum1, Enum2> map = new LongFastEnumEnumMap<Enum1, Enum2>(Enum1.values().length, Enum2.values().length);
+		final LongFastEnumEnumMap<Enum1, Enum2> map = new LongFastEnumEnumMap<>(Enum1.values().length, Enum2.values().length);
 
 		Assert.assertEquals(0l, map.get(Enum1.Enum1_A, Enum2.Enum2_A));
 		Assert.assertEquals(0l, map.get(Enum1.Enum1_A, Enum2.Enum2_B));
@@ -57,15 +57,15 @@ public class LongFastEnumEnumMapTest {
 
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testGetPut2() {
-		final LongFastEnumEnumMap<Enum1, Enum2> map = new LongFastEnumEnumMap<Enum1, Enum2>(1, 1);
+		final LongFastEnumEnumMap<Enum1, Enum2> map = new LongFastEnumEnumMap<>(1, 1);
 
 		map.get(Enum1.Enum1_A, Enum2.Enum2_B);
 	}
 
 	@Test
 	public void testEqualsObject() {
-		final LongFastEnumEnumMap<Enum1, Enum2> map1 = new LongFastEnumEnumMap<Enum1, Enum2>(Enum1.values().length, Enum2.values().length);
-		final LongFastEnumEnumMap<Enum1, Enum2> map2 = new LongFastEnumEnumMap<Enum1, Enum2>(Enum1.values().length, Enum2.values().length);
+		final LongFastEnumEnumMap<Enum1, Enum2> map1 = new LongFastEnumEnumMap<>(Enum1.values().length, Enum2.values().length);
+		final LongFastEnumEnumMap<Enum1, Enum2> map2 = new LongFastEnumEnumMap<>(Enum1.values().length, Enum2.values().length);
 
 		Assert.assertEquals(map1, map2);
 

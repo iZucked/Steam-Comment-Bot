@@ -27,7 +27,7 @@ public class MappingTransformerTest {
 
 		final Map<Object, String> map = CollectionsUtil.makeHashMap(obj1, s1, obj2, s2, obj3, s3);
 
-		final MappingTransformer<Object, String> transformer = new MappingTransformer<Object, String>(map);
+		final MappingTransformer<Object, String> transformer = new MappingTransformer<>(map);
 
 		Assert.assertSame(map, transformer.getMapping());
 
