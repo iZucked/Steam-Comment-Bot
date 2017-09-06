@@ -51,15 +51,15 @@ public final class ColourPalette {
 	private static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
 	//
 
-	public static RGB Black = new RGB(0, 0, 0);
-	private static RGB Grey = new RGB(168, 168, 168);
-	private static RGB Header_Grey = new RGB(228, 228, 228);
-	private static RGB Light_Grey = new RGB(240, 240, 240);
-	private static RGB Light_Orange = new RGB(255, 197, 168);
-	private static RGB Orange = new RGB(255, 168, 64);
+	public static final RGB Black = new RGB(0, 0, 0);
+	private static final RGB Grey = new RGB(168, 168, 168);
+	private static final RGB Header_Grey = new RGB(228, 228, 228);
+	private static final RGB Light_Grey = new RGB(240, 240, 240);
+	private static final RGB Light_Orange = new RGB(255, 197, 168);
+	private static final RGB Orange = new RGB(255, 168, 64);
 
 	private static ColourPalette instance;
-	private static Map<String, ColourPalette> namedInstances = new HashMap<>();
+	private static final Map<String, ColourPalette> namedInstances = new HashMap<>();
 
 	public synchronized static ColourPalette getInstance() {
 		if (instance == null) {

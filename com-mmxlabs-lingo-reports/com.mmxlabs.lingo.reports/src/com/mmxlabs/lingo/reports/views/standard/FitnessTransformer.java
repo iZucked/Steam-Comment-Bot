@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 

@@ -26,7 +26,6 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.LNGCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.PortCostFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardFleetColumnFactory implements IFleetColumnFactory {
 

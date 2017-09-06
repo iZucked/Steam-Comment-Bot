@@ -12,7 +12,6 @@ import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IColorProvider;

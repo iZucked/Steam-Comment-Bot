@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
@@ -18,7 +17,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser.Alignment;
 import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;

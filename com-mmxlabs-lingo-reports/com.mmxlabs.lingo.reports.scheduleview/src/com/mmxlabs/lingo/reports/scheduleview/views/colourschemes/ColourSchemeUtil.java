@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -70,7 +69,7 @@ public class ColourSchemeUtil {
 		}
 
 		final VesselStateAttributes attr = journey.isLaden() ? vessel.getLadenAttributes() : vessel.getBallastAttributes();
-		final double speed = attr.getServiceSpeed();
+		final double speed = attr.getVesselOrDelegateServiceSpeed();
 
 		final Event nextEvent = journey.getNextEvent();
 		if (nextEvent instanceof Idle) {

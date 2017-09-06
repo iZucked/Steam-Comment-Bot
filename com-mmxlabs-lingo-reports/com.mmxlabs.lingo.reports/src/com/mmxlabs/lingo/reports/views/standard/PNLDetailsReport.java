@@ -13,7 +13,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
-import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.rcp.common.application.TogglePinSelection;
 
 public class PNLDetailsReport extends DetailPropertiesView<PNLDetailsReportComponent> {

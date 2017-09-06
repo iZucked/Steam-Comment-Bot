@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,6 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 

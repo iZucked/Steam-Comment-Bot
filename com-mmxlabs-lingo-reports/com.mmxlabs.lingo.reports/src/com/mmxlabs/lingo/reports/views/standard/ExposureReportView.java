@@ -48,10 +48,8 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**

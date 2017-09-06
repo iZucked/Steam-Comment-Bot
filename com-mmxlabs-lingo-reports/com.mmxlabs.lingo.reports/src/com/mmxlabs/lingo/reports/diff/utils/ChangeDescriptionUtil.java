@@ -10,10 +10,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -21,7 +19,6 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class ChangeDescriptionUtil {
 

@@ -9,7 +9,6 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +24,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.function.BiFunction;
 
 import javax.inject.Inject;
@@ -104,7 +102,6 @@ import com.mmxlabs.lingo.reports.services.ScenarioChangeSetService;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;

@@ -14,7 +14,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.ActionableSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ActionableSetPlanTransformer {

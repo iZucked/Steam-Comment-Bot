@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOption;
 import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class InsertionPlanTransformer {

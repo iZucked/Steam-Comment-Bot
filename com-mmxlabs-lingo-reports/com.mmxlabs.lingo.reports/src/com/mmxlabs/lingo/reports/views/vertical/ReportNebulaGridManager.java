@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -25,7 +24,6 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 
 /**
  * Class that makes the relevant API calls to the nebula Grid widget viewer framework.

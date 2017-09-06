@@ -12,8 +12,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ActionSetTransformer {

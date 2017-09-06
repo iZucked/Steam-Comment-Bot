@@ -101,7 +101,6 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 

@@ -11,7 +11,6 @@ import java.util.function.ToLongFunction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.schedule.EventGrouping;

@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -92,13 +91,13 @@ public class TotalsTransformer {
 			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
 			if (vesselAvailability != null) {
 				final Vessel vessel = vesselAvailability.getVessel();
-				vesselCapacity = vessel.getCapacity();
+				vesselCapacity = vessel.getVesselOrDelegateCapacity();
 			} else {
 				final CharterInMarket charterInMarket = seq.getCharterInMarket();
 				if (charterInMarket != null) {
 					final Vessel vessel = charterInMarket.getVessel();
 					if (vessel != null) {
-						vesselCapacity = vessel.getCapacity();
+						vesselCapacity = vessel.getVesselOrDelegateCapacity();
 					}
 				}
 			}

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.preferences;
 
-import java.text.Normalizer.Form;
-
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 

@@ -10,8 +10,6 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MItem;
-import org.eclipse.e4.ui.model.application.ui.menu.MMenu;
-
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter.GroupMode;
 

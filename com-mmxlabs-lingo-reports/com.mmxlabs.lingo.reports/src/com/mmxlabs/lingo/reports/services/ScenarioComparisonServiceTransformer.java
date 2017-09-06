@@ -18,8 +18,6 @@ import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.ui.views.framelist.GoIntoAction;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
