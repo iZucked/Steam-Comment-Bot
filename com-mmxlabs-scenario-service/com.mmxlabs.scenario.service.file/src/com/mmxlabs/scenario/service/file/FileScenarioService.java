@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
@@ -18,19 +17,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
-import java.util.function.Consumer;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
@@ -40,13 +35,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -58,11 +50,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.io.FileDeleter;
-import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.file.internal.Activator;
 import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
@@ -75,14 +64,11 @@ import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.manager.InstanceData;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scenario.service.model.util.ResourceHelper;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class FileScenarioService extends AbstractScenarioService {
@@ -177,12 +163,9 @@ public class FileScenarioService extends AbstractScenarioService {
 				public IStatus run(final IProgressMonitor monitor) {
 					monitor.beginTask("Archive scenario data", IProgressMonitor.UNKNOWN);
 					try {
-						try {
-							new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
-						} catch (final IOException e) {
-							log.error("Error archiving scenario data: " + e.getMessage(), e);
-						}
+						new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
 					} catch (final Exception e) {
+						log.error("Error archiving scenario data: " + e.getMessage(), e);
 						return Status.CANCEL_STATUS;
 					} finally {
 						// Release the lock
@@ -248,7 +231,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		try {
 			Files.copy(source, dest);
 			monitor.worked(3);
-			FileDeleter.delete(source, LicenseFeatures.isPermitted("features:secure-delete"));
+			FileDeleter.delete(source, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
 			monitor.worked(1);
 		} finally {
 			monitor.done();
@@ -279,35 +262,32 @@ public class FileScenarioService extends AbstractScenarioService {
 			try {
 				final ProgressMonitorDialog p = new ProgressMonitorDialog(null);
 
-				final IRunnableWithProgress runnable = new IRunnableWithProgress() {
-					@Override
-					public void run(final IProgressMonitor monitor) {
-						monitor.beginTask("Backup scenario data", 20);
-						try {
+				final IRunnableWithProgress runnable = (monitor) -> {
+					monitor.beginTask("Backup scenario data", 20);
+					try {
 
-							monitor.subTask("Create archive");
-							// Get the zip file name
-							final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
+						monitor.subTask("Create archive");
+						// Get the zip file name
+						final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
 
-							// Use the URI to resolve to the scenario-service directory (or what ever is currently defined in the service properties).
-							final URI resolveURI = resolveURI(targetName);
-							final File localArchive = new File(resolveURI.toFileString());
+						// Use the URI to resolve to the scenario-service directory (or what ever is currently defined in the service properties).
+						final URI resolveURI = resolveURI(targetName);
+						final File localArchive = new File(resolveURI.toFileString());
 
-							new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
-							monitor.worked(10);
-							monitor.subTask("Move archive to destination");
-							// Second job to copy archive to remote mapped location then "secure" delete the archive
-							final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
-							final File destinationLocation = new File(dest);
-							if (destinationLocation.exists() && destinationLocation.isDirectory()) {
-								final File destFile = new File(destinationLocation + "/" + targetName);
-								moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
-							}
-						} catch (final Exception e) {
-							log.error("Error performing backup: " + e.getMessage(), e);
-						} finally {
-							monitor.done();
+						new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
+						monitor.worked(10);
+						monitor.subTask("Move archive to destination");
+						// Second job to copy archive to remote mapped location then "secure" delete the archive
+						final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
+						final File destinationLocation = new File(dest);
+						if (destinationLocation.exists() && destinationLocation.isDirectory()) {
+							final File destFile = new File(destinationLocation + File.pathSeparator + targetName);
+							moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
 						}
+					} catch (final Exception e) {
+						log.error("Error performing backup: " + e.getMessage(), e);
+					} finally {
+						monitor.done();
 					}
 				};
 
@@ -391,14 +371,14 @@ public class FileScenarioService extends AbstractScenarioService {
 			final File backupFile = new File(resolveURI(instance.getUuid() + ".lingo.backup").toFileString());
 			if (mainFile.exists()) {
 				try {
-					FileDeleter.delete(mainFile, LicenseFeatures.isPermitted("features:secure-delete"));
+					FileDeleter.delete(mainFile, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
 				} catch (final IOException e) {
 					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario " + mainFile, e);
 				}
 			}
 			if (backupFile.exists()) {
 				try {
-					FileDeleter.delete(backupFile, LicenseFeatures.isPermitted("features:secure-delete"));
+					FileDeleter.delete(backupFile, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
 				} catch (final IOException e) {
 					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting scenario backup " + backupFile, e);
 				}

@@ -216,7 +216,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 		if (f.isFile()) {
 			try {
-				FileDeleter.delete(f, LicenseFeatures.isPermitted("features:secure-delete"));
+				FileDeleter.delete(f, LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE));
 			} catch (final Exception e) {
 				log.error("Error deleting: " + f.getName(), e);
 			}

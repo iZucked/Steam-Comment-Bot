@@ -503,7 +503,7 @@ public class ScenarioStorageUtil {
 
 	private static Consumer<InstanceData> createCloseCallback(final List<File> tmpFiles) {
 		return d -> {
-			final boolean secureDelete = LicenseFeatures.isPermitted("features:secure-delete");
+			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
 			for (final File f : tmpFiles) {
 				try {
 					FileDeleter.delete(f, secureDelete);
