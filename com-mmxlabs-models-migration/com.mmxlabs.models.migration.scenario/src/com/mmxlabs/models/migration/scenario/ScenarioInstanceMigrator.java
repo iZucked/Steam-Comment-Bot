@@ -198,7 +198,7 @@ public class ScenarioInstanceMigrator {
 			throw new ScenarioMigrationException(e);
 		} finally {
 			// Done! Clean up
-			final boolean secureDelete = LicenseFeatures.isPermitted("features:secure-delete");
+			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
 			for (final File f : tmpFiles) {
 				FileDeleter.delete(f, secureDelete);
 			}
