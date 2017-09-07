@@ -202,6 +202,7 @@ public final class ChangeSetTransformerUtil {
 						// This is probably caused from schedule models pre-dating the SlotAllocationType. The purchase type appears to be used as default.
 						// We should add in migration into the relevant place to add it in (NOT CURRENT MIGRATION).
 						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+						assert slot != null;
 
 						final String key = ChangeSetTransformerUtil.getKeyName(loadAllocation);
 						final String name = ChangeSetTransformerUtil.getRowName(slot);
@@ -210,7 +211,7 @@ public final class ChangeSetTransformerUtil {
 						row.setLoadAllocation(loadAllocation);
 						row.setLoadSlot(slot);
 
-						if (row.getLoadSlot() instanceof SpotLoadSlot) {
+						if (slot instanceof SpotLoadSlot) {
 							final String mKey = getMarketSlotKey((SpotLoadSlot) slot);
 							mappingModel.lhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
 						}
@@ -221,6 +222,7 @@ public final class ChangeSetTransformerUtil {
 					if (i < dischargeAllocations.size()) {
 						dischargeAllocation = dischargeAllocations.get(i);
 						final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
+						assert slot != null;
 
 						final String key = ChangeSetTransformerUtil.getKeyName(dischargeAllocation);
 						final String name = ChangeSetTransformerUtil.getRowName(slot);
@@ -228,7 +230,7 @@ public final class ChangeSetTransformerUtil {
 						row.setRhsName(name);
 						row.setDischargeAllocation(dischargeAllocation);
 						row.setDischargeSlot(slot);
-						if (row.getDischargeSlot() instanceof SpotDischargeSlot) {
+						if (slot instanceof SpotDischargeSlot) {
 							final String mKey = getMarketSlotKey((SpotDischargeSlot) slot);
 							mappingModel.rhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
 						}
