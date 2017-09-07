@@ -32,9 +32,9 @@ public class DateTreeSetTest {
 
 		final Map<Object, Date> map = CollectionsUtil.makeHashMap(obj1, date1, obj2, date2, obj3, date3);
 
-		final ITransformer<Object, Date> transformer = new MappingTransformer<Object, Date>(map);
+		final ITransformer<Object, Date> transformer = new MappingTransformer<>(map);
 
-		final DateTreeSet<Object> dts = new DateTreeSet<Object>(transformer);
+		final DateTreeSet<Object> dts = new DateTreeSet<>(transformer);
 
 		dts.add(obj1);
 

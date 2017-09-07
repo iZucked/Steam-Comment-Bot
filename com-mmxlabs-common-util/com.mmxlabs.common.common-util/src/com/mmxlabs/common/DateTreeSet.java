@@ -32,8 +32,8 @@ public final class DateTreeSet<T> implements NavigableSet<T> {
 
 	public DateTreeSet(final ITransformer<T, Date> transformer) {
 		this.transformer = transformer;
-		this.comparator = new DateTreeSetComparator<T>(this.transformer);
-		this.treeSet = new TreeSet<Object>(comparator);
+		this.comparator = new DateTreeSetComparator<>(this.transformer);
+		this.treeSet = new TreeSet<>(comparator);
 	}
 
 	/**
@@ -236,10 +236,5 @@ public final class DateTreeSet<T> implements NavigableSet<T> {
 	@Override
 	public <U> U[] toArray(final U[] arg0) {
 		return treeSet.toArray(arg0);
-	}
-
-	@Override
-	protected DateTreeSet<T> clone() throws CloneNotSupportedException {
-		return new DateTreeSet<T>(this);
 	}
 }

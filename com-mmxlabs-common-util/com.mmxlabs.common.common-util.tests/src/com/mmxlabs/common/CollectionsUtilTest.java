@@ -121,7 +121,7 @@ public class CollectionsUtilTest {
 	@Test
 	public void getValueTest() {
 
-		final Map<String, Object> map = new HashMap<String, Object>();
+		final Map<String, Object> map = new HashMap<>();
 
 		final String key1 = "key1";
 		final String key2 = "key2";

@@ -29,20 +29,14 @@ public class DateTreeSetComparatorTest {
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
-		final Map<Object, Date> datemap = new HashMap<Object, Date>();
+		final Map<Object, Date> datemap = new HashMap<>();
 
 		datemap.put(obj1, d1);
 		datemap.put(obj2, d2);
 
-		final ITransformer<Object, Date> transformer = new ITransformer<Object, Date>() {
+		final ITransformer<Object, Date> transformer = t -> datemap.get(t);
 
-			@Override
-			public Date transform(final Object t) {
-				return datemap.get(t);
-			}
-		};
-
-		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<Object>(transformer);
+		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<>(transformer);
 
 		//
 		Assert.assertEquals(cmp.compare(d1, d2), cmp.compare(obj1, obj2));
@@ -78,20 +72,14 @@ public class DateTreeSetComparatorTest {
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
-		final Map<Object, Date> datemap = new HashMap<Object, Date>();
+		final Map<Object, Date> datemap = new HashMap<>();
 
 		datemap.put(obj1, d1);
 		datemap.put(obj2, d2);
 
-		final ITransformer<Object, Date> transformer = new ITransformer<Object, Date>() {
+		final ITransformer<Object, Date> transformer = t -> datemap.get(t);
 
-			@Override
-			public Date transform(final Object t) {
-				return datemap.get(t);
-			}
-		};
-
-		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<Object>(transformer);
+		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<>(transformer);
 
 		// Check obj1 retrieves d1, therefore obj1 equals d1
 		Assert.assertEquals(0, cmp.compare(d1, obj1));
