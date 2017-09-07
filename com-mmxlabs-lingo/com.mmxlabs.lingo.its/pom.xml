@@ -9,7 +9,11 @@
 	<artifactId>com.mmxlabs.lingo.its</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<version>4.3.1-SNAPSHOT</version>
-
+	
+	<properties>
+		<sonar.exclusions>file:**/*.java</sonar.exclusions>
+	</properties>
+	
 	<build>
 		<plugins>
 
