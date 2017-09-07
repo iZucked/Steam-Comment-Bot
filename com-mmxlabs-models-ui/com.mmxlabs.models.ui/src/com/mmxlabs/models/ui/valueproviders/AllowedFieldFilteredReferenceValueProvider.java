@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.ui.valueproviders;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -26,7 +27,7 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 			Pair<String, EObject> value) {
 
 		// get the list of allowed values in the field
-		EList<FieldType> allowed = getAllowedValuesFromField(target, field);
+		Collection<FieldType> allowed = getAllowedValuesFromField(target, field);
 		
 		// typically, if the allowed list is empty, this actually means "allow everything"
 		if (allowed.isEmpty()) {
@@ -62,7 +63,7 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 		return false;
 	}
 	
-	protected abstract EList<FieldType> getAllowedValuesFromField(
+	protected abstract Collection<FieldType> getAllowedValuesFromField(
 			EObject target, EStructuralFeature field);
 
 	protected abstract FieldType getCurrentValue(EObject target, EStructuralFeature field);
