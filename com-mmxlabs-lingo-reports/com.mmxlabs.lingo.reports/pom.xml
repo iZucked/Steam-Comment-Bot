@@ -13,7 +13,7 @@
 	<packaging>eclipse-plugin</packaging>
 	
 	<properties>
-		<!-- Skipping files causing exceptions in sonar -->
-		<sonar.exclusions>file:**/com/mmxlabs/lingo/reports/views/changeset/actions/CreateSandboxAction.java</sonar.exclusions>
+		<!-- Skipping files causing exceptions in sonar analysis and generated code -->
+		<sonar.exclusions>file:**/com/mmxlabs/lingo/reports/views/changeset/actions/CreateSandboxAction.java,file:**/com/mmxlabs/lingo/reports/views/changeset/model/*.java,file:**/com/mmxlabs/lingo/reports/views/changeset/model/impl/*.java,file:**/com/mmxlabs/lingo/reports/views/changeset/model/util/*.java,file:**/com/mmxlabs/lingo/reports/views/schedule/model/*.java,file:**/com/mmxlabs/lingo/reports/views/schedule/model/impl/*.java,file:**/com/mmxlabs/lingo/reports/views/schedule/model/util/*.java</sonar.exclusions>
 	</properties>
 </project>
