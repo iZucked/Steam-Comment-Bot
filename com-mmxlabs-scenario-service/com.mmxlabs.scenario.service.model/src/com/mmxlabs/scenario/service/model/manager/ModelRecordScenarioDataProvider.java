@@ -44,7 +44,9 @@ public class ModelRecordScenarioDataProvider implements IScenarioDataProvider {
 		cachedReferences.values().forEach(ref -> ref.close());
 		cachedReferences.clear();
 
-		modelReference.close();
+		if (modelReference != null) {
+			modelReference.close();
+		}
 	}
 
 	@Override
