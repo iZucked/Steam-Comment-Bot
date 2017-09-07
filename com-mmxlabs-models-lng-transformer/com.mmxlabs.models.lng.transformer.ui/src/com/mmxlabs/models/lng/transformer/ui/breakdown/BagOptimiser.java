@@ -869,7 +869,7 @@ public class BagOptimiser {
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				if (changes == 0) {
+				if (changes != 0) {
 					System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
 				} else {
 					System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, "---"));

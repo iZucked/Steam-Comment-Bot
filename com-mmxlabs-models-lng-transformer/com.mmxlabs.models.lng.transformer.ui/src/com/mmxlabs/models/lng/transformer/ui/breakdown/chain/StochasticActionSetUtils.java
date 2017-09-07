@@ -144,7 +144,9 @@ public class StochasticActionSetUtils {
 			totalChanges += cs.changesList.size();
 			totalPnl += cs.metricDelta[MetricType.PNL.ordinal()];
 		}
-
+		if (totalChanges == 0.0) {
+			return 0.0;
+		}
 		return totalPnl / totalChanges;
 	}
 
@@ -169,7 +171,9 @@ public class StochasticActionSetUtils {
 				break;
 			}
 		}
-
+		if (totalChanges == 0.0) {
+			return 0.0;
+		}
 		return prctilePnl / totalChanges;
 	}
 
@@ -201,7 +205,11 @@ public class StochasticActionSetUtils {
 	 * @return
 	 */
 	public static double calculateCurrentEfficiency(final Collection<ChangeSet> changeSets, final int currentDifferences, final int initialDifferences) {
-		return ((double) initialDifferences - (double) currentDifferences) / ((double) getTotalChanges(changeSets));
+		int totalChanges = getTotalChanges(changeSets);
+		if (totalChanges == 0) {
+			return 0.0;
+		}
+		return ((double) initialDifferences - (double) currentDifferences) / ((double) totalChanges);
 	}
 
 	/**
