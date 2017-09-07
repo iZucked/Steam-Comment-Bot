@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 
 /**
@@ -16,12 +19,13 @@ import com.mmxlabs.common.indexedobjects.IIndexingContext;
  * @author Simon Goodall
  * @since 1.0.2
  */
+@NonNullByDefault
 public final class CheckingIndexingContext implements IIndexingContext {
 
 	/**
 	 * The {@link Map} of indices; each entry maps the type to the next index for objects of that type or (or with that as their closest superclass).
 	 */
-	private final Map<Class<? extends Object>, AtomicInteger> indices = new HashMap<Class<? extends Object>, AtomicInteger>();
+	private final Map<Class<?>, AtomicInteger> indices = new HashMap<>();
 
 	/**
 	 * Flag indicating whether or not this context has been used to generate an index.
@@ -35,7 +39,7 @@ public final class CheckingIndexingContext implements IIndexingContext {
 	}
 
 	@Override
-	public void registerType(final Class<? extends Object> type) {
+	public void registerType(final Class<?> type) {
 		if (indices.containsKey(type)) {
 			throw new RuntimeException(type + " has already been registered");
 		}
@@ -65,9 +69,10 @@ public final class CheckingIndexingContext implements IIndexingContext {
 	 * @param type
 	 * @return
 	 */
-	private final AtomicInteger getLowestSuperclass(final Class<? extends Object> baseType) {
+	private final AtomicInteger getLowestSuperclass(final Class<?> baseType) {
 
-		Class<? extends Object> type = baseType;
+		@Nullable
+		Class<?> type = baseType;
 
 		while (type != null) {
 			if (indices.containsKey(type)) {

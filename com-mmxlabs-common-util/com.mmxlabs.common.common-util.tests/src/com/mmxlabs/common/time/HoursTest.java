@@ -30,7 +30,7 @@ public class HoursTest {
 		final YearMonth start = YearMonth.of(2015, 1);
 		final YearMonth end = YearMonth.of(2015, 2);
 
-		Assert.assertEquals(24 * 31, Hours.between(start, end));
+		Assert.assertEquals(24L * 31L, Hours.between(start, end));
 	}
 
 	@Test

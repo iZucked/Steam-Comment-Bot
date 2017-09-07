@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.indexedobjects;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 
 /**
@@ -22,8 +24,9 @@ import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
  * @author hinton
  * 
  */
+@NonNullByDefault
 public interface IIndexingContext {
-	void registerType(Class<? extends Object> type);
+	void registerType(Class<?> type);
 
 	int assignIndex(Object indexedObject);
 }
