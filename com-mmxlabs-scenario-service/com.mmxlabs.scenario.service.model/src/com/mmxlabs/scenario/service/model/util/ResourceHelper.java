@@ -116,6 +116,7 @@ public final class ResourceHelper {
 	}
 
 	public static void saveResource(@NonNull final Resource resource) throws IOException {
+		assert resource.getContents().size() > 0;
 		resource.save(null);
 	}
 
