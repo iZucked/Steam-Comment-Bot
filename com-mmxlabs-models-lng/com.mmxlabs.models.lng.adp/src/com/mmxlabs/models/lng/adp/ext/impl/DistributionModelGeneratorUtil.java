@@ -14,12 +14,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class DistributionModelGeneratorUtil {
 
@@ -65,8 +66,9 @@ public class DistributionModelGeneratorUtil {
 		slot.setWindowStart(date);
 
 		final LocalDate nextDate = nextDateGenerator.apply(date);
-		final int windowSize = Hours.between(date, nextDate);
+		final int windowSize = Days.between(date, nextDate);
 		slot.setWindowSize(windowSize);
+		slot.setWindowSizeUnits(TimePeriod.DAYS);
 
 		return slot;
 	}
