@@ -192,11 +192,11 @@ public final class CollectionsUtil {
 	}
 
 	public static class Sets {
-		
+
 		private Sets() {
-			
+
 		}
-		
+
 		public static <T> Set<T> merge(final Set<T>... sets) {
 			final Set<T> merged = new HashSet<>();
 			for (final Set<T> set : sets) {
@@ -207,6 +207,10 @@ public final class CollectionsUtil {
 	}
 
 	public static class ASet {
+		private ASet() {
+
+		}
+
 		public static <T> Set<T> of(final T... items) {
 			final Set<T> set = new HashSet<>();
 			set.addAll(Arrays.asList(items));
