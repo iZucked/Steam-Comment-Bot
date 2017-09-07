@@ -12,4 +12,9 @@
 	<artifactId>com.mmxlabs.models.lng.adp</artifactId>
 	<version>4.3.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/adp/*.java,file:**/com/mmxlabs/models/lng/adp/impl/*.java,file:**/com/mmxlabs/models/lng/adp/util/*.java</sonar.exclusions>
+	</properties>
+
 </project>
