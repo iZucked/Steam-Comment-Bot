@@ -65,8 +65,8 @@ public class CalibratingGeometricThresholder implements IThresholder {
 				calibrate();
 			}
 			return delta < 0 /*
-							 * || random.nextDouble() < Math.exp(-delta / (-(sumSamples/samples)/logInitialAcceptance))
-							 */;
+								 * || random.nextDouble() < Math.exp(-delta / (-(sumSamples/samples)/logInitialAcceptance))
+								 */;
 		}
 	}
 
@@ -106,6 +106,7 @@ public class CalibratingGeometricThresholder implements IThresholder {
 				result += GeometricThresholder.acceptanceProbability(l, temperature);
 			}
 		}
+		assert realSamples != 0;
 		return result / realSamples;
 	}
 
