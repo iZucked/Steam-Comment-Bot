@@ -17,7 +17,7 @@ public class ModelsLNGVersionMaker {
 			if (registry != null && registry.getDefaultMigrationContext() != null) {
 				final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 				manifest.setVersionContext(registry.getDefaultMigrationContext());
-				manifest.setScenarioVersion(registry.getLastReleaseVersion(manifest.getVersionContext()));
+				manifest.setScenarioVersion(registry.getLatestContextVersion(manifest.getVersionContext()));
 
 				@Nullable
 				final String clientContext = registry.getDefaultClientMigrationContext();
