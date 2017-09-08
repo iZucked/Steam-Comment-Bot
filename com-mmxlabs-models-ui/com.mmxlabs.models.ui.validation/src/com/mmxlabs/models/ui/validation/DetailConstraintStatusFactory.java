@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.ui.validation;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.OptionalInt;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
@@ -87,6 +89,12 @@ public class DetailConstraintStatusFactory {
 		this.features.add(new Pair<>(target, feature));
 
 		return this;
+	}
+
+	public DetailConstraintStatusDecorator make(final IValidationContext ctx, final Collection<IStatus> statues) {
+		final DetailConstraintStatusDecorator status = make(ctx);
+		statues.add(status);
+		return status;
 	}
 
 	public DetailConstraintStatusDecorator make(final IValidationContext ctx) {
