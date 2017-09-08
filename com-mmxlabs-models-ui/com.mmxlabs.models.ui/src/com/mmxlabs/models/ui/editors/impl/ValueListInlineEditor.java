@@ -74,7 +74,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 			this.names.add(pair.getFirst());
 			this.values.add(pair.getSecond());
 		}
-		
+
 		combo.setItems(names.toArray(new String[names.size()]));
 
 	}
@@ -120,7 +120,9 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	protected void setControlsEnabled(final boolean enabled) {
 		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		combo.setEnabled(controlsEnabled);
+		if (combo != null) {
+			combo.setEnabled(controlsEnabled);
+		}
 
 		super.setControlsEnabled(controlsEnabled);
 	}
