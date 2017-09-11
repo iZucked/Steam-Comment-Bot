@@ -76,11 +76,8 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 			final Double minCvValue = dischargeSlot.getSlotOrContractMinCv();
 			if (minCvValue != null && loadCV < minCvValue) {
 				if (dischargeSlot.isSetMinCvValue()) {
-					final ArrayList<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<Pair<EObject, EStructuralFeature>>() {
-						{
-							add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MinCvValue()));
-						}
-					};
+					final List<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<>();
+					detailsDecoratorData.add(new Pair<>(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MinCvValue()));
 					failures.add(addDetailConstraintStatusDecorator("discharge slot", dischargeSlot.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, true, loadCV, (double) minCvValue,
 							detailsDecoratorData, format, ctx));
 				} else { // sales contract
@@ -96,11 +93,8 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 			final Double maxCvValue = dischargeSlot.getSlotOrContractMaxCv();
 			if (maxCvValue != null && loadCV > maxCvValue) {
 				if (dischargeSlot.isSetMaxCvValue()) {
-					final ArrayList<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<Pair<EObject, EStructuralFeature>>() {
-						{
-							add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MaxCvValue()));
-						}
-					};
+					final List<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<>();
+					detailsDecoratorData.add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MaxCvValue()));
 					failures.add(addDetailConstraintStatusDecorator("discharge slot", dischargeSlot.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, true, loadCV, (double) maxCvValue,
 							detailsDecoratorData, format, ctx));
 				} else { // sales contract
@@ -112,14 +106,12 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 
 	private void addContractError(final boolean isMin, final List<IStatus> failures, final SalesContract salesContract, final DischargeSlot dischargeSlot, final LoadSlot loadSlot, final Cargo cargo,
 			final double loadCV, final double dischargeCV, final String format, final IValidationContext ctx) {
-		final ArrayList<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<Pair<EObject, EStructuralFeature>>() {
-			{
-				add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract()));
-			}
-		};
-		detailsDecoratorData.add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract()));
-		failures.add(addDetailConstraintStatusDecorator("sales contract", salesContract.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, isMin, loadCV, (double) dischargeCV, detailsDecoratorData,
-				format, ctx));
+		final List<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<>();
+		detailsDecoratorData.add(new Pair<>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract()));
+		detailsDecoratorData.add(new Pair<>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract()));
+
+		failures.add(addDetailConstraintStatusDecorator("sales contract", salesContract.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, isMin, loadCV, (double) dischargeCV,
+				detailsDecoratorData, format, ctx));
 	}
 
 	/*
@@ -147,12 +139,9 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 
 	private void addPortBoundsError(final boolean isMin, final Port port, final List<IStatus> failures, final DischargeSlot dischargeSlot, final LoadSlot loadSlot, final Cargo cargo,
 			final double loadCV, final double dischargeCV, final String format, final IValidationContext ctx) {
-		final ArrayList<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<Pair<EObject, EStructuralFeature>>() {
-			{
-				add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port()));
-				add(new Pair<EObject, EStructuralFeature>(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV()));
-			}
-		};
+		final List<Pair<EObject, EStructuralFeature>> detailsDecoratorData = new ArrayList<>();
+		detailsDecoratorData.add(new Pair<>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port()));
+		detailsDecoratorData.add(new Pair<>(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV()));
 		failures.add(addDetailConstraintStatusDecorator("port", port.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, isMin, loadCV, dischargeCV, detailsDecoratorData, format, ctx));
 	}
 
@@ -160,7 +149,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 	 * Creates a DetailConstraintStatusDecorator, with the appropriate error message
 	 */
 	private DetailConstraintStatusDecorator addDetailConstraintStatusDecorator(final String constraintName, final String constraintInstance, final String cargoName, final DischargeSlot dischargeSlot,
-			final LoadSlot loadSlot, final boolean isMin, final double loadCV, final double dischargeCV, final ArrayList<Pair<EObject, EStructuralFeature>> objectsAndFeatures, final String format,
+			final LoadSlot loadSlot, final boolean isMin, final double loadCV, final double dischargeCV, final List<Pair<EObject, EStructuralFeature>> objectsAndFeatures, final String format,
 			final IValidationContext ctx) {
 		String operator, bound = "";
 		if (isMin) {
