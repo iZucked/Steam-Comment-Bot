@@ -14,4 +14,4 @@ Export-Package: com.mmxlabs.common.recorder,
 Import-Package: javax.xml.namespace,
  javax.xml.stream,javax.xml.stream.events
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.3.1,5.0.0)"
+ com.mmxlabs.common.common-util;bundle-version="[4.3.2,5.0.0)"
