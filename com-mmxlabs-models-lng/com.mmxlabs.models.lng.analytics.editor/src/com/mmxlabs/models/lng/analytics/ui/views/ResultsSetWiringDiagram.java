@@ -98,7 +98,7 @@ public class ResultsSetWiringDiagram implements PaintListener {
 		this.grid.addPaintListener(this);
 	}
 
-	public int getTerminalSize() {
+	public synchronized int getTerminalSize() {
 		return terminalSize;
 	}
 
@@ -106,7 +106,7 @@ public class ResultsSetWiringDiagram implements PaintListener {
 		this.terminalSize = terminalSize;
 	}
 
-	public int getPathWidth() {
+	public synchronized int getPathWidth() {
 		return pathWidth;
 	}
 
@@ -173,10 +173,9 @@ public class ResultsSetWiringDiagram implements PaintListener {
 			List<AnalysisResultRow> rows = resultSet.getRows();
 			for (final AnalysisResultRow row : rows) {
 
-			 
 				BaseCaseRow other = null;
 				for (BaseCaseRow bcr : root.getBaseCase().getBaseCase()) {
-					if (bcr.getBuyOption() != null  && row.getBuyOption() == bcr.getBuyOption()) {
+					if (bcr.getBuyOption() != null && row.getBuyOption() == bcr.getBuyOption()) {
 						other = bcr;
 						break;
 					}

@@ -97,7 +97,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		this.grid.addPaintListener(this);
 	}
 
-	public int getTerminalSize() {
+	public synchronized int getTerminalSize() {
 		return terminalSize;
 	}
 
@@ -105,7 +105,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		this.terminalSize = terminalSize;
 	}
 
-	public int getPathWidth() {
+	public synchronized int getPathWidth() {
 		return pathWidth;
 	}
 

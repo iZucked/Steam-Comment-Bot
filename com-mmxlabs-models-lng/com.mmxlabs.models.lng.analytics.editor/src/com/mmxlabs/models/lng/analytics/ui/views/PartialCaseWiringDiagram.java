@@ -101,7 +101,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		this.grid.addPaintListener(this);
 	}
 
-	public int getTerminalSize() {
+	public synchronized int getTerminalSize() {
 		return terminalSize;
 	}
 
@@ -109,7 +109,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		this.terminalSize = terminalSize;
 	}
 
-	public int getPathWidth() {
+	public synchronized int getPathWidth() {
 		return pathWidth;
 	}
 
@@ -272,7 +272,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 					final Color terminalColour = MixedTerminalColour;
 					final Rectangle offsetR = new Rectangle(ca.x + multi_offset, ca.y, ca.width, ca.height);
 
-					drawTerminal(true, false, terminalColour, false, false, offsetR, graphics, midpoint - multi_offset+1);
+					drawTerminal(true, false, terminalColour, false, false, offsetR, graphics, midpoint - multi_offset + 1);
 					drawTerminal(true, false, terminalColour, false, false, ca, graphics, midpoint);
 				}
 
@@ -293,7 +293,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 				} else {
 					final Color terminalColour = MixedTerminalColour;
 					final Rectangle offsetR = new Rectangle(ca.x + multi_offset, ca.y, ca.width, ca.height);
-					drawTerminal(false, true, terminalColour, false, false, offsetR, graphics, midpoint - multi_offset+1);
+					drawTerminal(false, true, terminalColour, false, false, offsetR, graphics, midpoint - multi_offset + 1);
 					drawTerminal(false, true, terminalColour, false, false, ca, graphics, midpoint);
 				}
 
