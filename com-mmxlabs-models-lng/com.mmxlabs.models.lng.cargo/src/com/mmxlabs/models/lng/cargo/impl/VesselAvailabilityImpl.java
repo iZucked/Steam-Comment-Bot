@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
@@ -1167,14 +1168,18 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 */
 	public BallastBonusContract getAvailabilityOrCharterContractBallastBonusContract() {
 		if (this.isSetCharterContract()) {
-			if (this.getCharterContract() != null) {
-				return this.getBallastBonusContract();
-			} else {
-				return null;
+			if (this.getCharterContract() != null && this.getCharterContract() instanceof BallastBonusCharterContract) {
+				if (this.getCharterContract() instanceof BallastBonusCharterContract) {
+					BallastBonusCharterContract bbcc = (BallastBonusCharterContract) this.getCharterContract();
+					if (bbcc.getBallastBonusContract() != null) {
+						return bbcc.getBallastBonusContract();
+					}
+				}
 			}
 		} else {
 			return this.getBallastBonusContract();
 		}
+		return null;
 	}
 
 
