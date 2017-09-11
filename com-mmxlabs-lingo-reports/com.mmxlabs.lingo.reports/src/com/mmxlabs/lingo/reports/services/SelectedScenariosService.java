@@ -351,6 +351,7 @@ public class SelectedScenariosService {
 				ref.close();
 				ref = null;
 			}
+			super.finalize();
 		};
 
 		@NonNull
