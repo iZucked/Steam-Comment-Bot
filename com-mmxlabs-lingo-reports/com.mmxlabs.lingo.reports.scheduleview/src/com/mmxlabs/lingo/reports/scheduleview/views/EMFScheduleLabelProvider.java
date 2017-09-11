@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -177,7 +178,29 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			}
 		} else if (element instanceof CombinedSequence) {
-			return element.toString();
+			final CombinedSequence combinedSequence = (CombinedSequence) element;
+			final Vessel vessel = combinedSequence.getVessel();
+			String seqText = vessel == null ? "<Unallocated>" : vesselFormatter.render(vessel);
+			// Add scenario instance name to field if multiple scenarios are selected
+						final Object input = viewer.getInput();
+						if (input instanceof Collection<?>) {
+							final Collection<?> collection = (Collection<?>) input;
+
+							if (collection.size() > 1) {
+								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+								if (selectedDataProvider != null) {
+									if (selectedScenariosService.getPinnedScenario() != null) {
+										// Do nothing now we have a pin icon
+									} else {
+										final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(combinedSequence.getSequences().get(0));
+										if (scenarioResult != null) {
+											seqText += "\n" + scenarioResult.getModelRecord().getName();
+										}
+									}
+								}
+							}
+						}
+						text = seqText;
 		}
 		return text;
 	}
@@ -261,7 +284,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
 	}
 
-	private String dateToString(final LocalDate date, String defaultString) {
+	private String dateToString(final LocalDate date, final String defaultString) {
 		if (date == null) {
 			return defaultString;
 		}
@@ -291,12 +314,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					final SlotVisit slotVisit = (SlotVisit) element;
 					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 
-					Contract contract = slot.getContract();
+					final Contract contract = slot.getContract();
 					if (contract != null) {
 						tt.append("Contract: " + contract.getName() + " \n");
 					} else if (slot instanceof SpotSlot) {
-						SpotSlot spotSlot = (SpotSlot) slot;
-						SpotMarket market = spotSlot.getMarket();
+						final SpotSlot spotSlot = (SpotSlot) slot;
+						final SpotMarket market = spotSlot.getMarket();
 						tt.append("Spot market: " + market.getName() + " \n");
 					} else {
 						// Spot purchase or sale - leave blank?
@@ -346,7 +369,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 				}
 			} else if (element instanceof CanalBookingEvent) {
-				CanalBookingEvent canalBookingEvent = (CanalBookingEvent) element;
+				final CanalBookingEvent canalBookingEvent = (CanalBookingEvent) element;
 				final Journey journey = canalBookingEvent.getLinkedJourney();
 
 				final CanalBookingSlot canalBooking = journey.getCanalBooking();
