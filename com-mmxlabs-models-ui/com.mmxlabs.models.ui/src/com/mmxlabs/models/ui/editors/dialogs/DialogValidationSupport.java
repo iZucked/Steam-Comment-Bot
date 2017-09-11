@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
@@ -58,7 +59,7 @@ public class DialogValidationSupport {
 	 * @param status
 	 */
 	public static String processMessages(final IStatus status) {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		processMessages(sb, status);
 		return sb.toString();
 
@@ -73,7 +74,7 @@ public class DialogValidationSupport {
 			}
 		} else {
 			if (status instanceof DetailConstraintStatusDecorator) {
-				DetailConstraintStatusDecorator decorator = (DetailConstraintStatusDecorator) status;
+				final DetailConstraintStatusDecorator decorator = (DetailConstraintStatusDecorator) status;
 				sb.append(decorator.getBaseMessage());
 			} else {
 				sb.append(status.getMessage());
@@ -83,7 +84,12 @@ public class DialogValidationSupport {
 	}
 
 	public IStatus validate() {
-		return validationService.runValidation(validator, validationContext, validationTargets);
+		final Collection<? extends EObject> pVvalidationTargets = validationTargets;
+		if (pVvalidationTargets == null) {
+			// Should this be OK or CANCEL/ERROR?
+			return Status.OK_STATUS;
+		}
+		return validationService.runValidation(validator, validationContext, pVvalidationTargets);
 	}
 
 	public DefaultExtraValidationContext getValidationContext() {
@@ -102,7 +108,7 @@ public class DialogValidationSupport {
 		processStatus(status, validationErrors, new DefaultValidationTargetTransformer());
 	}
 
-	public void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors, @NonNull IValiationTargetTransformer vtt) {
+	public void processStatus(@Nullable final IStatus status, @NonNull final Map<Object, IStatus> validationErrors, @NonNull final IValiationTargetTransformer vtt) {
 		if (status == null) {
 			return;
 		}
@@ -140,7 +146,7 @@ public class DialogValidationSupport {
 	public static class DefaultValidationTargetTransformer implements IValiationTargetTransformer {
 
 		@Override
-		public EObject transform(EObject target) {
+		public EObject transform(final EObject target) {
 			return target;
 		}
 
