@@ -69,13 +69,21 @@ public class CharterOutEventMaker {
 	public CharterOutEventMaker withAllowedVessels(Vessel... vessels) {
 
 		event.getAllowedVessels().clear();
+		
 		for (Vessel v : vessels) {
 			event.getAllowedVessels().add(v);
 		}
-
+		
 		return this;
 	}
+	
+	public CharterOutEventMaker withOptional(boolean optional) {
 
+		event.setOptional(optional);
+		
+		return this;
+	}
+	
 	@NonNull
 	public CharterOutEvent build() {
 		cargoModelBuilder.getCargoModel().getVesselEvents().add(event);
