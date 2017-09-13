@@ -76,11 +76,10 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the optional feature on CharterOutEvent
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	protected void add_optionalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-// BugzId: 1036 - NOT YET SUPPORTED
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__OPTIONAL));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__OPTIONAL));
 	}
 
 	/**
