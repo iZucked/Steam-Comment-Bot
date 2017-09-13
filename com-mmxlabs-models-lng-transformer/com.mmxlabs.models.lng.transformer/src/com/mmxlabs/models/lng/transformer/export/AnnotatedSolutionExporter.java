@@ -21,6 +21,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
@@ -339,6 +340,7 @@ public class AnnotatedSolutionExporter {
 		for (final ISequenceElement element : annotatedSolution.getFullSequences().getUnusedElements()) {
 			assert element != null;
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+			
 			if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
 				final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 				if (slot != null) {
@@ -346,7 +348,12 @@ public class AnnotatedSolutionExporter {
 				}
 				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 				openSlotExporter.export(element, annotations);
-			}
+			} else if (slot.getPortType() == PortType.CharterOut) {
+				final CharterOutEvent modelSlot = modelEntityMap.getModelObject(slot, CharterOutEvent.class);
+				output.getUnusedElements().add(modelSlot);
+				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
+				openSlotExporter.export(element, annotations);
+			} 
 			// mtmExporter.export(element, annotations);
 		}
 
