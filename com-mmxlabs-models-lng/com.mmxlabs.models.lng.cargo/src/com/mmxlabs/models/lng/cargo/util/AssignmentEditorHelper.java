@@ -155,12 +155,13 @@ public class AssignmentEditorHelper {
 		return null;
 	}
 
-	public static List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel, @NonNull final SpotMarketsModel spotMarketsModel) {
+	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
+			@NonNull final SpotMarketsModel spotMarketsModel) {
 		return collectAssignments(cargoModel, portModel, spotMarketsModel, null);
 	}
 
-	public static List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
+	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
+			@NonNull final SpotMarketsModel spotMarketsModel, @Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
 
 		// Map the vessel availability to assignents
 		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
@@ -177,10 +178,10 @@ public class AssignmentEditorHelper {
 		final Map<Pair<CharterInMarket, Integer>, List<AssignableElement>> spotGrouping = new HashMap<>();
 		for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
 			for (int i = -1; i < charterInMarket.getSpotCharterCount(); ++i) {
-				final Pair<CharterInMarket, Integer> key = new Pair<CharterInMarket, Integer>(charterInMarket, i);
+				final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, i);
 				charterInMarketKeysOrder.add(key);
 				// Pre-create map values
-				spotGrouping.put(key, new ArrayList<AssignableElement>());
+				spotGrouping.put(key, new ArrayList<>());
 			}
 		}
 
@@ -189,6 +190,27 @@ public class AssignmentEditorHelper {
 		assignableElements.addAll(cargoModel.getCargoes());
 		assignableElements.addAll(cargoModel.getVesselEvents());
 		for (final AssignableElement assignableElement : assignableElements) {
+
+			if (assignableElement instanceof VesselEvent) {
+				final VesselEvent vesselEvent = (VesselEvent) assignableElement;
+				if (vesselEvent.getStartBy() == null || vesselEvent.getStartAfter() == null) {
+					// No date, cannot continue.
+					return null;
+				}
+
+			} else if (assignableElement instanceof Cargo) {
+				final Cargo cargo = (Cargo) assignableElement;
+				if (cargo.getSlots().isEmpty()) {
+					return null;
+				}
+				for (final Slot slot : cargo.getSlots()) {
+					if (slot.getWindowStart() == null) {
+						// No date, cannot continue.
+						return null;
+					}
+				}
+			}
+
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 			if (vesselAssignmentType == null) {
 				continue;
@@ -201,7 +223,7 @@ public class AssignmentEditorHelper {
 
 				if (spotGrouping.containsKey(key) == false) {
 					charterInMarketKeysOrder.add(key);
-					spotGrouping.put(key, new ArrayList<AssignableElement>());
+					spotGrouping.put(key, new ArrayList<>());
 				}
 
 				// Groupings should have been pre-created
@@ -231,33 +253,34 @@ public class AssignmentEditorHelper {
 	}
 
 	public static VesselAvailability findVesselAvailability(@NonNull final Vessel vessel, @NonNull final AssignableElement assignableElement,
-			@NonNull final List<VesselAvailability> vesselAvailabilities, @Nullable Integer charterIndex) {
+			@NonNull final List<VesselAvailability> vesselAvailabilities, @Nullable final Integer charterIndex) {
 
-//		int mightMatchCount = 0;
-//		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-//			if (vesselAvailability.getVessel() == vessel) {
-//				mightMatchCount++;
-//				if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
-//					return vesselAvailability;
-//				}
-//			}
-//		}
-//		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple,
-//		// give up.
-//		if (mightMatchCount == 1) {
-//			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-//				if (vesselAvailability.getVessel() == vessel) {
-//					return vesselAvailability;
-//				}
-//			}
-//		} else {
-			int idx = charterIndex == null ? 1 : charterIndex.intValue();
-			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-				if (vesselAvailability.getVessel() == vessel && vesselAvailability.getCharterNumber() == idx) {
-					return vesselAvailability;
-				}
+		// int mightMatchCount = 0;
+		// for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
+		// if (vesselAvailability.getVessel() == vessel) {
+		// mightMatchCount++;
+		// if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
+		// return vesselAvailability;
+		// }
+		// }
+		// }
+		// // Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If
+		// multiple,
+		// // give up.
+		// if (mightMatchCount == 1) {
+		// for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
+		// if (vesselAvailability.getVessel() == vessel) {
+		// return vesselAvailability;
+		// }
+		// }
+		// } else {
+		final int idx = charterIndex == null ? 1 : charterIndex.intValue();
+		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
+			if (vesselAvailability.getVessel() == vessel && vesselAvailability.getCharterNumber() == idx) {
+				return vesselAvailability;
 			}
-//		}
+		}
+		// }
 
 		return null;
 	}
