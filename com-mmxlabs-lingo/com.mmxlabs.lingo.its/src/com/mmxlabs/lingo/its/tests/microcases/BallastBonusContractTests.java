@@ -350,7 +350,77 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		});
 	}
 
+	@Test
+	@Category({ MicroTest.class })
+	public void testCharterContractLumpSumBallastBonusOn_Matching() throws Exception {
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+		
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+				.build();
 
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
+		vesselAvailability.getEndAt().add(allDischarge);
+		
+		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
+		@NonNull
+		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo.setVesselAssignmentType(vesselAvailability);
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "2000000");
+		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
+		s.setBallastBonusContract(ballastBonusContract);
+		s.setEntity(entity);
+		vesselAvailability.setCharterContract(s);
+		evaluateTest(null, null, scenarioRunner -> {
+			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			final EndEvent end = getEndEvent(vesselAvailability);
+			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), -2_000_000);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 2_000_000);
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testCharterContractLumpSumBallastBonusOn_NotMatching() throws Exception {
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+		
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
+				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
+				.build();
+
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
+		vesselAvailability.getEndAt().add(allDischarge);
+
+		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
+		@NonNull
+		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
+		cargo.setVesselAssignmentType(vesselAvailability);
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Point Fortin"), "2000000");
+		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
+		s.setBallastBonusContract(ballastBonusContract);
+		s.setEntity(entity);
+		vesselAvailability.setCharterContract(s);
+		evaluateTest(null, null, scenarioRunner -> {
+			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			final EndEvent end = getEndEvent(vesselAvailability);
+			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), 0_000_000);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173);
+		});
+	}
+
+	
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
 		final Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
 		final Event event = sequence.getEvents().get(0);
