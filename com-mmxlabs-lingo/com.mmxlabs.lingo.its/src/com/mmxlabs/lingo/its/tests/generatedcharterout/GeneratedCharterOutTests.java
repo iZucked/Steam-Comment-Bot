@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
-public class CharterOutTests extends AbstractOptimisationResultTester {
+public class GeneratedCharterOutTests extends AbstractOptimisationResultTester {
 
 	@Test
 	@Category(MicroTest.class)

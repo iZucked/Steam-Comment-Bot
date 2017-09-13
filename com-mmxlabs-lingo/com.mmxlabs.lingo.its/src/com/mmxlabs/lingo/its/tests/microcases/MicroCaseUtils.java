@@ -31,9 +31,20 @@ import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 
 public class MicroCaseUtils {
-
 	public static void storeToFile(final @NonNull IScenarioDataProvider scenarioDataProvider, final String name) throws IOException {
-		ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(String.format("C://temp//%s.lingo", name)));
+		
+		String path_template;
+		
+		// Check is runtime is Windows, else 'Unix'
+		// TODO: Path should be refactored using the File.path api
+		// Link: https://www.sghill.net/how-do-i-make-cross-platform-file-paths-in-java.html
+		if (System.getProperty("os.name").startsWith("Windows")) {
+			path_template = "C://temp//%s.lingo";
+		} else {
+			path_template = "/tmp/%s.lingo";
+		}
+		
+		ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(String.format(path_template, name)));
 	}
 
 	public static void withInjectorPerChainScope(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Runnable r) {
