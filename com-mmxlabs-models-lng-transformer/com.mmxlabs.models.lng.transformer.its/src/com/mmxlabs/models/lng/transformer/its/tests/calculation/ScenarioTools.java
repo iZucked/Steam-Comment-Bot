@@ -326,7 +326,7 @@ public class ScenarioTools {
 		final LocalDateTime dryDockJourneyStartDate = endCharterOut.plusHours(travelTime);
 
 		final CharterOutEvent charterOut = csc.getScenarioModelBuilder().getCargoModelBuilder()//
-				.makeCharterOutEvent("Charter Out", startCharterOut, startCharterOut, A) //
+				.makeCharterOutEvent("Charter Out", startCharterOut, startCharterOut, A, false) //
 				.withRelocatePort(A) //
 				.withDurationInDays(charterOutTimeDays) //
 				.withAvailableHeelOptions(heelLimit, heelLimit, cvValue, Double.toString(dischargePrice))//

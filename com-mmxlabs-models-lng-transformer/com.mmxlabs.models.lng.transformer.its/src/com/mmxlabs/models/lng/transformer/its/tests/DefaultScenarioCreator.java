@@ -721,7 +721,7 @@ public class DefaultScenarioCreator {
 			final int charterOutDurationDays, final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
 		final CharterOutEvent event = scenarioModelBuilder.getCargoModelBuilder()//
-				.makeCharterOutEvent(id, startCharterOut, startCharterOut, startPort) //
+				.makeCharterOutEvent(id, startCharterOut, startCharterOut, startPort, false) //
 				.withDurationInDays(charterOutDurationDays) //
 				.withAvailableHeelOptions(minHeelLimit, maxHeelLimit, cvValue, Double.toString(dischargePrice)) //
 				.withRepositioningFee(repositioningFee) //

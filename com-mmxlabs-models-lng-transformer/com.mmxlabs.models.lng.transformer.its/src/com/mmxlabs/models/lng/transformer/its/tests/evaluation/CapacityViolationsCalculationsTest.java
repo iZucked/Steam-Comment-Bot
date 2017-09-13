@@ -594,7 +594,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 
-		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort) //
+		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort, false) //
 				.withRelocatePort(msc.originPort) //
 				.withDurationInDays(1) //
 				.withAvailableHeelOptions(2000, 2000, 21.0, "1") //
@@ -683,7 +683,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(msc.loadPort.getZoneId()).toLocalDateTime();
 
-		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort) //
+		CharterOutEvent event = msc.scenarioModelBuilder.getCargoModelBuilder().makeCharterOutEvent("Charter", charterStartAfterDate, charterStartByDate, msc.loadPort, false) //
 				.withRelocatePort(msc.originPort) //
 				.withDurationInDays(1) //
 				.withAvailableHeelOptions(1000, 1000, 21.0, "1") //
