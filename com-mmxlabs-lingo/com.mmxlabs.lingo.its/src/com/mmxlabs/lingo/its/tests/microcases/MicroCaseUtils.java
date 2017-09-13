@@ -40,8 +40,19 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 public class MicroCaseUtils {
 
 	public static void storeToFile(final LNGScenarioModel lngScenarioModel, final String name) throws IOException {
+		String path_template;
+		
+		// Check is runtime is Windows, else 'Unix'
+		// TODO: Path should be refactored using the File.path api
+		// Link: https://www.sghill.net/how-do-i-make-cross-platform-file-paths-in-java.html
+		if (System.getProperty("os.name").startsWith("Windows")) {
+			path_template = "C://temp//%s.lingo";
+		} else {
+			path_template = "/tmp/%s.lingo";
+		}
+	
 		ServiceHelper.withCheckedServiceConsumer(IMigrationRegistry.class, migrationRegistry -> {
-			storeToFile(lngScenarioModel, migrationRegistry, new File(String.format("C://temp//%s.lingo", name)));
+			storeToFile(lngScenarioModel, migrationRegistry, new File(String.format(path_template, name)));
 		});
 	}
 
