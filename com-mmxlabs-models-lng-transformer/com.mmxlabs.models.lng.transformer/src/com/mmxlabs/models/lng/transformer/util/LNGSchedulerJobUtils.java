@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -467,9 +468,16 @@ public class LNGSchedulerJobUtils {
 
 				}
 			}
+			if (eObj instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) eObj;
+				
+				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
+				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
+				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+			}
+
 			// Remove from the unused elements list
 			cmd.append(RemoveCommand.create(domain, schedule, SchedulePackage.eINSTANCE.getSchedule_UnusedElements(), eObj));
-
 		}
 		{
 			// For slots which are no longer used, remove the cargo

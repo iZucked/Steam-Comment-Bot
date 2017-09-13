@@ -529,6 +529,8 @@ public class PeriodTransformer {
 					final VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
 					if (vesselAvailability != null) {
 						event.getAllowedVessels().add(vesselAvailability.getVessel());
+					} else {
+						eventsToRemove.add(event);
 					}
 				}
 			}
