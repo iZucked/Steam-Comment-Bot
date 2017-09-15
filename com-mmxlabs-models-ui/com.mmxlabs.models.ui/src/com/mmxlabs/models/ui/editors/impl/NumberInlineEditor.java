@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import java.util.function.Supplier;
+
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -17,16 +20,24 @@ import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.google.common.base.Objects;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedDoubleFormatter;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedFloatFormatter;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedIntegerFormatter;
+import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedLongFormatter;
 
 /**
  * TODO look at nebula formattedtext
@@ -80,37 +91,78 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 		if (type == EcorePackage.eINSTANCE.getELong()) {
 			defaultValue = Long.parseLong(defaultValueString);
-			formatter = format == null ? new LongFormatter() : new LongFormatter(format) {
-
-				@Override
-				public String getDisplayString() {
-					if (Objects.equal(Long.MAX_VALUE, getValue())) {
-						return "∞";
-					}
-					return super.getDisplayString();
-				};
+			final LongFormatter inner = format == null ? new LongFormatter() : new LongFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
 			};
+			formatter = format == null ? new ExtendedLongFormatter(overrideStringSupplier) : new ExtendedLongFormatter(format, overrideStringSupplier);
+
 		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
 			defaultValue = Integer.parseInt(defaultValueString);
-			formatter = format == null ? new IntegerFormatter() : new IntegerFormatter(format) {
-
-				@Override
-				public String getDisplayString() {
-					if (Objects.equal(Integer.MAX_VALUE, getValue())) {
-						return "∞";
-					}
-					return super.getDisplayString();
-				};
+			final IntegerFormatter inner = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
 			};
+			formatter = format == null ? new ExtendedIntegerFormatter(overrideStringSupplier) : new ExtendedIntegerFormatter(format, overrideStringSupplier);
+
 		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
 			defaultValue = Float.parseFloat(defaultValueString);
-			formatter = format == null ? new FloatFormatter() : new FloatFormatter(format);
+			final FloatFormatter inner = format == null ? new FloatFormatter() : new FloatFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
+			};
+			formatter = format == null ? new ExtendedFloatFormatter(overrideStringSupplier) : new ExtendedFloatFormatter(format, overrideStringSupplier);
 		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
 			defaultValue = Double.parseDouble(defaultValueString);
-			formatter = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
+			final DoubleFormatter inner = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
+			final Supplier<String> overrideStringSupplier = () -> {
+				if (input instanceof MMXObject) {
+					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
+					inner.setValue(v);
+					return inner.getDisplayString();
+				}
+				return null;
+			};
+			formatter = format == null ? new ExtendedDoubleFormatter(overrideStringSupplier) : new ExtendedDoubleFormatter(format, overrideStringSupplier);
 		}
-		if (format == null)
+		if (format == null) {
 			formatter.setFixedLengths(false, false);
+		}
+	}
+
+	@Override
+	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
+		isOverridable = false;
+		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		if (eAnnotation == null) {
+			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+		}
+		if (eAnnotation != null) {
+			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+				if (f.getName().equals(feature.getName() + "Override")) {
+					isOverridable = true;
+				}
+			}
+			if (feature.isUnsettable()) {
+				isOverridable = true;
+			}
+		}
+		return super.createControl(parent, dbc, toolkit);
 	}
 
 	@Override
@@ -132,6 +184,19 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		text.setFormatter(formatter);
 		text.setValue(defaultValue);
 
+		text.getControl().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				updateBackgroundColour(text.isEmpty());
+			}
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+				updateBackgroundColour(false);
+
+			}
+		});
 		text.getControl().addModifyListener(this);
 		text.getControl().addDisposeListener(this);
 
@@ -152,6 +217,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (text != null) {
+			updateBackgroundColour(text.isEmpty());
 			text.setValue(scale(value));
 		}
 	}
@@ -173,8 +239,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	@Override
 	public void modifyText(final ModifyEvent e) {
-		if (text.isValid()) {
-			doSetValue(descale(text.getValue()), false);
+		updateBackgroundColour(text.isEmpty());
+		if (text.isEmpty()) {
+			unsetValue();
+		} else {
+			if (text.isValid()) {
+				doSetValue(descale(text.getValue()), false);
+			}
 		}
 	}
 
@@ -209,6 +280,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
 		if (text != null) {
+			updateBackgroundColour(!controlsEnabled);
 			text.getControl().setEnabled(controlsEnabled);
 		}
 		if (unitPrefixLabel != null) {
@@ -218,6 +290,18 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			unitSuffixLabel.setEnabled(controlsEnabled);
 		}
 		super.setControlsEnabled(controlsEnabled);
+	}
+
+	private void updateBackgroundColour(final boolean controlEmpty) {
+		if (controlEmpty) {
+			if (canOverride()) {
+				text.getControl().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+			} else {
+				text.getControl().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+			}
+		} else {
+			text.getControl().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		}
 	}
 
 	@Override

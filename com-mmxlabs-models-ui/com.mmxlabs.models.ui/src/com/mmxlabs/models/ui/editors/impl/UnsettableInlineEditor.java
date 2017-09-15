@@ -4,7 +4,12 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import java.util.Collection;
+
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
@@ -21,6 +26,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
+import com.mmxlabs.models.ui.editors.util.CommandUtil;
 
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
@@ -32,6 +38,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	/**
 	 */
 	protected EMFDataBindingContext dbc;
+	protected boolean isOverridable;
+	protected boolean isOverridableWithButton;
+	protected EStructuralFeature overrideToggleFeature;
 
 	public UnsettableInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -66,17 +75,20 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	/**
 	 */
 	@Override
-	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
 		this.dbc = dbc;
 		this.toolkit = toolkit;
 		final Control c;
-		if (feature.isUnsettable()) {
+
+		final boolean isUnsettable = feature.isUnsettable();
+
+		if (isOverridableWithButton || !isOverridable && isUnsettable) {
 			// FIXME: too early! Needs to be after/part of display(), once input has been set
 			this.lastSetValue = getInitialUnsetValue();
 			// final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent);
-			GridLayout gl = new GridLayout(2, false);
+			final GridLayout gl = new GridLayout(2, false);
 			gl.marginLeft = 0;
 			gl.marginBottom = 0;
 			gl.marginHeight = 0;
@@ -85,7 +97,25 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			gl.marginWidth = 0;
 			sub.setLayout(gl);
 			// this.setButton = new Button(sub, SWT.CHECK);
-			this.setButton = toolkit.createButton(sub, "", SWT.CHECK);
+			this.setButton = new Button(sub, SWT.CHECK) {
+				@Override
+				protected void checkSubclass() {
+				};
+
+				@Override
+				public void setVisible(final boolean visible) {
+					if (isOverridableWithButton && !canOverride()) {
+						if (!visible) {
+							super.setVisible(visible);
+						} else {
+							super.setVisible(false);
+
+						}
+					} else {
+						super.setVisible(visible);
+					}
+				}
+			};
 			this.inner = createValueControl(sub);
 			setButton.addSelectionListener(new SelectionAdapter() {
 				{
@@ -100,20 +130,36 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					if (setButton.getSelection()) {
-						doSetValue(lastSetValue, true);
-						setControlEnabled(inner, true);
+					if (isOverridableWithButton) {
+						if (setButton.getSelection()) {
+							if (overrideToggleFeature != null) {
+								commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.TRUE), input, overrideToggleFeature);
+							}
+							setControlEnabled(inner, true);
+						} else {
+							unsetValue();
+							setControlEnabled(inner, false);
+						}
 						currentlySettingValue = true;
 						updateValueDisplay(getValue());
 						currentlySettingValue = false;
 					} else {
-						// unset value
-						unsetValue();
-						setControlEnabled(inner, false);
-						if (input instanceof MMXObject) {
+
+						if (setButton.getSelection()) {
+							doSetValue(lastSetValue, true);
+							setControlEnabled(inner, true);
 							currentlySettingValue = true;
 							updateValueDisplay(getValue());
 							currentlySettingValue = false;
+						} else {
+							// unset value
+							unsetValue();
+							setControlEnabled(inner, false);
+							if (input instanceof MMXObject) {
+								currentlySettingValue = true;
+								updateValueDisplay(getValue());
+								currentlySettingValue = false;
+							}
 						}
 					}
 
@@ -134,24 +180,68 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	@Override
-	protected Object getValue() {
-		if (input != null && (!feature.isUnsettable() || input.eIsSet(feature))) {
-			return super.getValue();
-		} else {
-			if (input instanceof MMXObject) {
-				return ((MMXObject) input).getUnsetValue(getFeature());
-			} else {
-				return null;
+	protected Command createSetCommand(final Object value) {
+		if (value == SetCommand.UNSET_VALUE) {
+			final CompoundCommand cmd = new CompoundCommand();
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			if (overrideToggleFeature != null) {
+				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
 			}
+			return cmd;
+		} else {
+			return super.createSetCommand(value);
 		}
 	}
 
 	@Override
+	protected Object getValue() {
+
+		if (input == null) {
+			return null;
+		}
+		if (isOverridableWithButton) {
+			if (!canOverride()) {
+				return super.getValue();
+			} else if (input.eIsSet(feature)) {
+				return super.getValue();
+			} else {
+				if (input instanceof MMXObject) {
+					return ((MMXObject) input).getUnsetValue(getFeature());
+				} else {
+					return null;
+				}
+			}
+		} else if (isOverridable) {
+			// For e.g. numeric inline editor
+			if (!feature.isUnsettable() || input.eIsSet(feature)) {
+				return super.getValue();
+			} else {
+				return null;
+			}
+		} else {
+			// Original code path
+			if (!feature.isUnsettable() || input.eIsSet(feature)) {
+				return super.getValue();
+			} else {
+				if (input instanceof MMXObject) {
+					return ((MMXObject) input).getUnsetValue(getFeature());
+				} else {
+					return null;
+				}
+			}
+		}
+
+	}
+
+	@Override
 	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
-		if (currentlySettingValue)
+		if (currentlySettingValue) {
 			return;
-		if (value != null)
+		}
+
+		if (value != null) {
 			lastSetValue = value; // hold for later checking and unchecking.
+		}
 		// maybe set button when value is changed
 		if (setButton != null && value != null && !setButton.isDisposed()) {
 			setButton.setSelection(true);
@@ -162,8 +252,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	protected boolean valueIsSet() {
-		if (input == null)
+		if (input == null) {
 			return false;
+		}
 		return input.eIsSet(getFeature());
 	}
 
@@ -178,18 +269,37 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			updateValueDisplay(value);
 		}
 		if (setButton != null && !setButton.isDisposed()) {
-			setButton.setSelection(valueIsSet());
-			setButton.setEnabled(isEditorEnabled());
+			if (isOverridableWithButton) {
+				setButton.setEnabled(isEditorEnabled());
+				if (!canOverride()) {
+					setButton.setVisible(false);
+				} else {
+					setButton.setSelection(valueIsSet());
+				}
+			} else {
+				setButton.setSelection(valueIsSet());
+				setButton.setEnabled(isEditorEnabled());
+			}
 		}
 
-		boolean innerEnabled = !isFeatureReadonly() && isEditorEnabled() && !isEditorLocked() && (setButton == null || setButton.getSelection());
+		boolean setEnabled = false;
+		if (setButton == null) {
+			setEnabled = true;
+		} else if (isOverridableWithButton) {
+			setEnabled = !canOverride() || setButton.getSelection();
+
+		} else {
+			setEnabled = setButton.getSelection();
+		}
+
+		final boolean innerEnabled = !isFeatureReadonly() && isEditorEnabled() && !isEditorLocked() && setEnabled;
 		if (inner != null) {
 			setControlEnabled(inner, innerEnabled);
 		}
 	}
 
 	@Override
-	public void setEditorEnabled(boolean enabled) {
+	public void setEditorEnabled(final boolean enabled) {
 		super.setEditorEnabled(enabled);
 	}
 
@@ -214,21 +324,41 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 		super.setControlsVisible(visible);
 		if (setButton != null) {
-			setButton.setVisible(visible);
+			if (isOverridableWithButton) {
+				if (canOverride()) {
+					setButton.setVisible(visible);
+				}
+			} else {
+				setButton.setVisible(visible);
+			}
 		}
 	}
 
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		if (input instanceof MMXObject) {
-			MMXObject mmxinput = (MMXObject) input;
-			DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
+			final MMXObject mmxinput = (MMXObject) input;
+			final DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
 			if (di != null && di.delegatesTo(changedFeature)) {
 				return true;
 			}
 
 		}
-
+		if (changedFeature == overrideToggleFeature) {
+			return true;
+		}
 		return super.updateOnChangeToFeature(changedFeature);
+	}
+
+	protected boolean canOverride() {
+		if (input instanceof MMXObject) {
+			final MMXObject mmxinput = (MMXObject) input;
+			final DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
+			if (di != null && di.getDelegateFeature() == feature) {
+				return true;
+			}
+
+		}
+		return false;
 	}
 }

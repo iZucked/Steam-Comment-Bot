@@ -12,9 +12,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -24,18 +29,21 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
  * @author hinton
  * 
  */
+
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private static final Logger log = LoggerFactory.getLogger(ReferenceInlineEditor.class);
 	/**
@@ -47,10 +55,10 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	/**
 	 */
-	protected final ArrayList<String> nameList = new ArrayList<String>();
+	protected final List<String> nameList = new ArrayList<>();
 	/**
 	 */
-	protected final ArrayList<EObject> valueList = new ArrayList<EObject>();
+	protected final List<EObject> valueList = new ArrayList<>();
 
 	/**
 	 */
@@ -58,6 +66,30 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	public ReferenceInlineEditor(final EStructuralFeature feature) {
 		super(feature);
+	}
+
+	@Override
+	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
+		isOverridable = false;
+		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		if (eAnnotation == null) {
+			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+		}
+		if (eAnnotation != null) {
+			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+				if (f.getName().equals(feature.getName() + "Override")) {
+					isOverridable = true;
+					this.overrideToggleFeature = f;
+				}
+			}
+			if (feature.isUnsettable()) {
+				isOverridable = true;
+			}
+		}
+		if (isOverridable) {
+			isOverridableWithButton = true;
+		}
+		return super.createControl(parent, dbc, toolkit);
 	}
 
 	@Override
@@ -106,12 +138,16 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 			}
 		});
 
-		return combo;
+		return super.wrapControl(combo);
+
 	}
 
 	@Override
 	protected void updateControl() {
 		if (combo == null || combo.isDisposed()) {
+			return;
+		}
+		if (combo.getItemCount() > 0) {
 			return;
 		}
 		final List<Pair<String, EObject>> values = getValues();
@@ -125,6 +161,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 			nameList.add(object.getFirst());
 			combo.add(object.getFirst());
 		}
+		super.updateControl();
 	}
 
 	protected List<Pair<String, EObject>> getValues() {
@@ -159,10 +196,14 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
+
 		if (valueProvider != null) {
-			return valueProvider.updateOnChangeToFeature(changedFeature);
+			boolean b = valueProvider.updateOnChangeToFeature(changedFeature);
+			if (b) {
+				return true;
+			}
 		}
-		return false;
+		return super.updateOnChangeToFeature(changedFeature);
 	}
 
 	@Override

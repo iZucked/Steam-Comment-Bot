@@ -90,6 +90,7 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		return -Integer.MAX_VALUE;
 	}
 
+	@Override
 	protected String renderSetValue(final Object container, final Object setValue) {
 		if (setValue == null) {
 			return null;

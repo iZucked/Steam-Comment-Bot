@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,6 +31,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -56,6 +59,30 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 	 */
 	public MultiReferenceInlineEditor(final EStructuralFeature feature) {
 		super(feature);
+	}
+
+	@Override
+	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
+		isOverridable = false;
+		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		if (eAnnotation == null) {
+			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+		}
+		if (eAnnotation != null) {
+			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+				if (f.getName().equals(feature.getName() + "Override")) {
+					isOverridable = true;
+					this.overrideToggleFeature = f;
+				}
+			}
+			if (feature.isUnsettable()) {
+				isOverridable = true;
+			}
+		}
+		if (isOverridable) {
+			isOverridableWithButton = true;
+		}
+		return super.createControl(parent, dbc, toolkit);
 	}
 
 	@Override
@@ -105,7 +132,13 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected Command createSetCommand(final Object value) {
 		if (value == SetCommand.UNSET_VALUE) {
-			return SetCommand.create(commandHandler.getEditingDomain(), input, feature, value);
+			CompoundCommand cmd = new CompoundCommand();
+
+			cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, feature, value));
+			if (overrideToggleFeature != null) {
+				cmd.append(SetCommand.create(commandHandler.getEditingDomain(), input, overrideToggleFeature, Boolean.FALSE));
+			}
+			return cmd;
 		} else {
 			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
 			return setter;

@@ -32,8 +32,8 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
-	final ArrayList<EObject> valueList = new ArrayList<EObject>();
-	final ArrayList<String> names = new ArrayList<String>();
+	final List<EObject> valueList = new ArrayList<>();
+	final List<String> names = new ArrayList<>();
 
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;

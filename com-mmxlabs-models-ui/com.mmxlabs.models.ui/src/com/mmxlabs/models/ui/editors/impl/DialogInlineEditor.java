@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
+public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 	public DialogInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
@@ -35,7 +35,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	/**
 	 */
 	@Override
-	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public Control createValueControl(final Composite parent) {
 		// final Composite contents = new Composite(parent, SWT.NONE);
 		final Composite contents = toolkit.createComposite(parent);
 		contents.setLayout(new GridLayout(2, false));
@@ -79,7 +79,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
+	protected void updateValueDisplay(final Object value) {
 		if (!description.isDisposed())
 			description.setText(render(value));
 	}

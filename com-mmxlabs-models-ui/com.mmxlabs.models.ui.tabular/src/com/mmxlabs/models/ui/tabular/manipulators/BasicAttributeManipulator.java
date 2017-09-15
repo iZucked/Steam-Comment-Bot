@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -32,11 +34,28 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {
 	protected final EStructuralFeature field;
 	protected final EditingDomain editingDomain;
+	protected boolean isOverridable;
+	private final EAnnotation overrideAnnotation;
 
 	public BasicAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
 		super();
 		this.field = field;
 		this.editingDomain = editingDomain;
+
+		overrideAnnotation = field.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		if (overrideAnnotation != null) {
+			if (field.isUnsettable()) {
+				isOverridable = true;
+			} else {
+				if (field.isMany()) {
+					for (EStructuralFeature f : field.getEContainingClass().getEAllAttributes()) {
+						if (f.getName().equals(field.getName() + "Override")) {
+							isOverridable = true;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -53,6 +72,16 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 
 		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
+			if (isOverridable) {
+				EList<EObject> references = overrideAnnotation.getReferences();
+				for (EObject o : references) {
+					if (o instanceof EStructuralFeature) {
+						EStructuralFeature eStructuralFeature = (EStructuralFeature) o;
+						EObject parent = (EObject) ((EObject) object).eGet(eStructuralFeature);
+						return renderUnsetValue(object, parent.eGet(field));
+					}
+				}
+			}
 			return renderUnsetValue(object, (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null);
 		} else {
 			return renderSetValue(object, getValue(object));
@@ -69,7 +98,10 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	@Override
 	public final void setValue(final Object object, final Object value) {
-		if (value == SetCommand.UNSET_VALUE && field.isUnsettable()) {
+		if (value == null && isOverridable) {
+			runSetCommand(object, SetCommand.UNSET_VALUE);
+
+		} else if (value == SetCommand.UNSET_VALUE && field.isUnsettable()) {
 			runSetCommand(object, value);
 		} else {
 			doSetValue(object, value);

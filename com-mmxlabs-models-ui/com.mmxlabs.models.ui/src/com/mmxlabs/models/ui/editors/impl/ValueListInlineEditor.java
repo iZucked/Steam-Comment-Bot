@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -18,6 +20,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 
@@ -63,6 +66,30 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 		}
 	}
 
+	@Override
+	public Control createControl(Composite parent, EMFDataBindingContext dbc, FormToolkit toolkit) {
+		isOverridable = false;
+		EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		if (eAnnotation == null) {
+			eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+		}
+		if (eAnnotation != null) {
+			for (EStructuralFeature f : feature.getEContainingClass().getEAllAttributes()) {
+				if (f.getName().equals(feature.getName() + "Override")) {
+					isOverridable = true;
+					this.overrideToggleFeature = f;
+				}
+			}
+			if (feature.isUnsettable()) {
+				isOverridable = true;
+			}
+		}
+		if (isOverridable) {
+			isOverridableWithButton = true;
+		}
+		return super.createControl(parent, dbc, toolkit);
+	}
+
 	protected void updateCombo(final List<Pair<String, Object>> values) {
 		this.names.clear();
 		this.values.clear();
@@ -74,9 +101,9 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 			this.names.add(pair.getFirst());
 			this.values.add(pair.getSecond());
 		}
-
-		combo.setItems(names.toArray(new String[names.size()]));
-
+		if (!combo.isDisposed()) {
+			combo.setItems(names.toArray(new String[names.size()]));
+		}
 	}
 
 	@Override
@@ -113,14 +140,18 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		return values.get(0);
+		if (isOverridable) {
+			return null;
+		} else {
+			return values.get(0);
+		}
 	}
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
 		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		if (combo != null) {
+		if (combo != null && !combo.isDisposed()) {
 			combo.setEnabled(controlsEnabled);
 		}
 
@@ -129,9 +160,9 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void setControlsVisible(final boolean visible) {
-
-		combo.setVisible(visible);
-
+		if (!combo.isDisposed()) {
+			combo.setVisible(visible);
+		}
 		super.setControlsVisible(visible);
 	}
 }

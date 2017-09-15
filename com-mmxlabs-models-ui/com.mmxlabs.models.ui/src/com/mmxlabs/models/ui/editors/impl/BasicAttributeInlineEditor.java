@@ -19,6 +19,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -64,7 +65,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	/**
 	 * Adapter factory instance. This contains all factories registered in the global registry.
 	 */
-	private   final ComposedAdapterFactory FACTORY = createAdapterFactory();
+	private final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	protected IMMXContentProposalProvider proposalHelper;
 
@@ -266,6 +267,11 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			// it is a change to our feature
 			doUpdateDisplayWithValue();
 		}
+		// TODO: Annotations!
+		if (msg.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) msg.getFeature()).getName().equals(feature.getName() + "Override")) {
+			// it is a change to our feature
+			doUpdateDisplayWithValue();
+		}
 
 	}
 
@@ -312,7 +318,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	public void processValidation(final IStatus status) {
 		if (status.isOK()) {
 			// No problems, so hide decoration
-			validationDecoration.hide();
+			if (validationDecoration != null) {
+				validationDecoration.hide();
+			}
 		} else {
 			// Default severity
 			int severity = IStatus.OK;
@@ -325,7 +333,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			final String description = sb.toString();
 			if (description.isEmpty()) {
 				// No problems, so hide decoration
-				validationDecoration.hide();
+				if (validationDecoration != null) {
+					validationDecoration.hide();
+				}
 				return;
 			}
 
@@ -550,14 +560,14 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	private void fireNotificationChanged(final Notification notification) {
-		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<IInlineEditorExternalNotificationListener>(listeners);
+		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<>(listeners);
 		for (final IInlineEditorExternalNotificationListener l : copy) {
 			l.notifyChanged(notification);
 		}
 	}
 
 	private void firePostDisplay(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<IInlineEditorExternalNotificationListener>(listeners);
+		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<>(listeners);
 		for (final IInlineEditorExternalNotificationListener l : copy) {
 			try {
 				l.postDisplay(this, dialogContext, context, input, range);

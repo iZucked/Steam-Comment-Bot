@@ -58,7 +58,7 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(final Object value) {
-		if (button.isDisposed())
+		if (button == null || button.isDisposed())
 			return;
 		if (Boolean.TRUE.equals(value)) {
 			this.button.setSelection(true);
@@ -71,7 +71,9 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	protected void setControlsEnabled(final boolean enabled) {
 		boolean controlsEnabled = !isFeatureReadonly() && enabled;
 		super.setControlsEnabled(controlsEnabled);
-		button.setEnabled(controlsEnabled);
+		if (button != null) {
+			button.setEnabled(controlsEnabled);
+		}
 	}
 
 	@Override
