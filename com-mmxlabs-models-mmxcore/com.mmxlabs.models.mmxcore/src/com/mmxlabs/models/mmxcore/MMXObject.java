@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.mmxcore;
 
+import java.util.function.Function;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -36,8 +38,20 @@ public interface MMXObject extends EObject {
 		private final EStructuralFeature delegateFeature;
 		// The value to use when a delegate is absent or there is no delegation
 		private final Object absentDelegateValue;
+		private Function<EObject, MMXObject> swapper;
 		
 		public DelegateInformation(EStructuralFeature delegate, EStructuralFeature delegateFeature, Object value) {
+			this.delegate = delegate;
+			this.delegateFeature = delegateFeature;
+			this.absentDelegateValue = value;
+		}
+		
+		public EStructuralFeature getDelegateFeature() {
+			return delegateFeature;
+		}
+
+		public DelegateInformation(Function<EObject, MMXObject> swapper, EStructuralFeature delegate, EStructuralFeature delegateFeature, Object value) {
+			this.swapper = swapper;
 			this.delegate = delegate;
 			this.delegateFeature = delegateFeature;
 			this.absentDelegateValue = value;
@@ -55,7 +69,12 @@ public interface MMXObject extends EObject {
 		 */
 		public Object getValue(final EObject object) {
 			if (delegate != null) {
-				MMXObject delegateObject = (MMXObject) object.eGet(delegate);
+				MMXObject delegateObject;
+				if (swapper != null) {
+					delegateObject = swapper.apply(object);
+				} else {
+					delegateObject = (MMXObject) object.eGet(delegate);
+				}
 				if (delegateObject != null) {
 					return delegateObject.eGet(delegateFeature);
 				}
