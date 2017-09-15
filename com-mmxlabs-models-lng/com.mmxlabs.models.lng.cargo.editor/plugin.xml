@@ -525,7 +525,7 @@
       <view
             class="com.mmxlabs.models.lng.cargo.editor.editors.routeslots.RouteOptionsEditorView"
             id="com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView"
-            name="Canal Slot Bookings"
+            name="Panama Bookings"
             restorable="true">
       </view>
    </extension>
