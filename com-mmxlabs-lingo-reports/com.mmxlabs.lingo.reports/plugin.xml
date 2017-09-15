@@ -156,7 +156,7 @@
             class="com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport"
             icon="icons/cview16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport"
-            name="Canal Bookings Report"
+            name="Panama Bookings Report"
             restorable="true">
       </view>
    </extension>
