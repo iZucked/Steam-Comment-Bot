@@ -26,7 +26,10 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertSegmentMove;
 import com.mmxlabs.scheduler.optimiser.lso.moves.InsertOptionalElements;
 import com.mmxlabs.scheduler.optimiser.lso.moves.MoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ReplaceMoveAndFill;
@@ -34,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} which handles moves around optional slots.
@@ -50,7 +54,14 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
-
+	
+	@Inject 
+	private IPortSlotProvider portSlotProvider;
+	
+	private enum Action {
+	    INSERT, SWAP, OTHER, NOTHING
+	}
+	
 	@Override
 	public IMove generateMove(@NonNull ISequences rawSequences, @NonNull ILookupManager lookupManager, @NonNull Random random) {
 
@@ -84,10 +95,19 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 
 	public IMove generateAddingMove(final @NonNull ISequenceElement unused, final int unusedIndex, @NonNull final ILookupManager lookupManager, @NonNull final Random random) {
 		// the element is currently not in the solution, so try and add it
-
+		
+		List<ISequenceElement> orderedElements = new ArrayList<>(1);
+		orderedElements.add(unused);
+		
+		IPortSlot portSlot = portSlotProvider.getPortSlot(unused);
+		if (portSlot instanceof IVesselEventPortSlot) {
+			IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot; 
+			orderedElements = vesselEventPortSlot.getEventSequenceElements();
+		}
+		
 		// find something which can go after this element
-		final Followers<@NonNull ISequenceElement> followers = followersAndPreceders.getValidFollowers(unused);
-
+		final Followers<@NonNull ISequenceElement> followers = followersAndPreceders.getValidFollowers(orderedElements.get(orderedElements.size() - 1));
+        
 		if (followers.size() > 0) {
 
 			LOOP_TRIES: for (int t = 0; t < 10; ++t) {
@@ -99,6 +119,7 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 					continue;
 				}
 
+			
 				final IResource resource = followerPosition.getFirst();
 				if (resource != null) {
 					// follower is not currently unused, so we need to find what's before it
@@ -111,24 +132,38 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 						continue LOOP_TRIES;
 					}
 
-					int numChoices = 1;
-					final boolean canInsert = beforeFollowerFollowers.contains(unused);
+					final boolean canInsert = beforeFollowerFollowers.contains(orderedElements.get(0));
 					final boolean canSwap = optionalElementsProvider.getOptionalElements().contains(beforeFollower);
 
+					// TODO: Be able to activate code path manually 
+					// Create the possible choice set depending on insert and swap condition
+					Action choice= Action.NOTHING;
+					List<Action> choices = new ArrayList<>(3);
+					
+					choices.add(Action.NOTHING);
+					
 					if (canInsert) {
-						++numChoices;
+						choices.add(Action.INSERT);
 					}
-					if (canSwap) {
-						++numChoices;
-					}
-					final int choice = random.nextInt(numChoices);
 
-					if ((numChoices == 3 && choice == 0) || numChoices == 2 && choice == 0 && canInsert) {
-						// we can insert directly
-						return new InsertOptionalElements(resource, position - 1, new int[] { unusedIndex });
-					} else if ((numChoices == 3 && choice == 1) || numChoices == 2 && choice == 1 && canSwap) {
-						// We can swap!
-						return new SwapOptionalElements(resource, position - 1, unusedIndex);
+					if (canSwap) {
+						choices.add(Action.SWAP);
+					}
+					
+					if (choices.size() > 0) {
+						choice = RandomHelper.chooseElementFrom(random, choices);
+					}
+					
+					if (choice == Action.INSERT) {
+						final InsertSegmentMove.Builder builder = InsertSegmentMove.Builder.newMove();
+
+						builder.withElements(null, orderedElements)
+							.withInsertBefore(resource, follower); 
+
+						return builder.create();
+					} 
+					else if (choice == Action.SWAP) {
+							return new SwapOptionalElements(resource, position - 1, unusedIndex);
 					} else {
 						// we need to find something else to pop in
 						// which (a) can go after what's currently before f
@@ -137,7 +172,7 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 						for (final ISequenceElement e : beforeFollowerFollowers) {
 							bffSet.add(e);
 						}
-						final Followers<ISequenceElement> unusedPreceeders = followersAndPreceders.getValidPreceders(unused);
+						final Followers<ISequenceElement> unusedPreceeders = followersAndPreceders.getValidPreceders(orderedElements.get(0));
 						final Set<ISequenceElement> upSet = new LinkedHashSet<ISequenceElement>(unusedPreceeders.size());
 						for (final ISequenceElement e : unusedPreceeders) {
 							upSet.add(e);
@@ -158,7 +193,15 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 								if (candidateResource == null) {
 									// candidate is currently spare, and can go between beforeFollower and unused, so we have
 									// [... beforeFollower, +candidate, +unused, follower]
-									return new InsertOptionalElements(resource, position - 1, new int[] { candidatePosition.getSecond(), unusedIndex });
+									
+									final InsertSegmentMove.Builder builder = InsertSegmentMove.Builder.newMove();
+									List<ISequenceElement> sequenceSegment = new ArrayList<>(orderedElements);
+									
+									sequenceSegment.add(0, candidate);
+									builder.withElements(null, sequenceSegment) 
+										.withInsertAfter(resource, beforeFollower); 
+
+									return builder.create();
 								} else {
 									// candidate already exists somewhere else in the solution; we should try and move it and backfill thus:
 									// before move:
@@ -236,7 +279,17 @@ public class InsertOptionalElementMoveHandler implements IMoveGenerator {
 							if (!helper.legacyCheckResource(insertElement, insertResource)) {
 								continue LOOP_ELEMENTS;
 							}
-							return new InsertOptionalElements(insertResource, insertBefore - 1, new int[] { unusedIndex, followerPosition.getSecond() });
+
+							final InsertSegmentMove.Builder builder = InsertSegmentMove.Builder.newMove();
+							
+							List<ISequenceElement> sequenceSegment = new ArrayList<>(orderedElements);
+							sequenceSegment.add(follower);
+							
+							builder.withElements(null, sequenceSegment)
+									.withInsertBefore(insertResource, insertElement);
+							
+							return builder.create();
+
 						}
 					}
 				}
