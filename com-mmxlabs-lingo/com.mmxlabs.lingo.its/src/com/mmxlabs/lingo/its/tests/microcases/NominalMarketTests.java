@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -98,10 +97,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testNominalHeel() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		// Construct the cargo scenario
 
@@ -140,8 +139,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Check safety heel present.
-			Assert.assertEquals(vesselClass.getMinHeel(), firstEvent.getHeelAtStart());
-			Assert.assertEquals(vesselClass.getMinHeel(), lastEvent.getHeelAtEnd());
+			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
+			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), lastEvent.getHeelAtEnd());
 
 		});
 	}
@@ -156,10 +155,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testCharterInHeel() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
 
 		// Construct the cargo scenario
 
@@ -198,8 +197,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			final Event lastEvent = events.get(events.size() - 1);
 
 			// Check safety heel present.
-			Assert.assertEquals(vesselClass.getMinHeel(), firstEvent.getHeelAtStart());
-			Assert.assertEquals(vesselClass.getMinHeel(), lastEvent.getHeelAtEnd());
+			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), firstEvent.getHeelAtStart());
+			Assert.assertEquals(vessel.getVesselOrDelegateSafetyHeel(), lastEvent.getHeelAtEnd());
 
 		});
 	}
@@ -214,9 +213,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testNominalSlotBinding() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		// Construct the cargo scenario
 
@@ -287,11 +286,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testMoveNominalToFleet() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
@@ -341,11 +339,11 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testMoveNominalToFleet_LossMakingCargo_ShipOnly() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, "50000", 0);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		// Half the capacity! So will loose P&L by doing this.
 		vessel.setCapacity(70_000);
 
@@ -405,11 +403,11 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testMoveNominalToFleet_LossMakingCargo() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, "50000", 0);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		// Half the capacity! So will loose P&L by doing this.
 		vessel.setCapacity(70_000);
 
@@ -462,9 +460,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testMoveNominalToOpen() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
 
 		// Construct the cargo scenario
 
@@ -499,9 +497,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testForcePromptNominalToOpen_InPrompt() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
 
 		// Construct the cargo scenario
 
@@ -548,9 +546,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testPromptNominalOptimisedIn_ShipOnly() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 1);
 
 		// Construct the cargo scenario
 
@@ -598,9 +596,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testOutOfPromptButInPeriodNominalOptimisedStaysIn_ShipOnly() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 1);
 
 		// Construct the cargo scenario
 
@@ -650,9 +648,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testOutOfPeriodButInPromptNominalOptimisedStaysNominal() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
 
 		// Construct the cargo scenario
 
@@ -702,12 +700,12 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testForcePromptNominalToOpen_InPrompt_ActionSet() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass1 = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass1, "200000", 0);
-		final CharterInMarket charterInMarket_2a = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2a", vesselClass2, "200000", 1);
-		final CharterInMarket charterInMarket_2b = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2b", vesselClass2, "1000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "200000", 0);
+		final CharterInMarket charterInMarket_2a = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2a", vessel2, "200000", 1);
+		final CharterInMarket charterInMarket_2b = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2b", vessel2, "1000", 1);
 
 		// Construct the cargo scenario
 
@@ -715,7 +713,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withOptional(true) //
-				.withAllowedVessels(vesselClass1) //
+				.withAllowedVessels(vessel1) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "10.0") //
 				.withOptional(true) //
@@ -727,7 +725,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withOptional(true) //
-				.withAllowedVessels(vesselClass1) //
+				.withAllowedVessels(vessel1) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "10") //
 				.withOptional(true) //
@@ -804,9 +802,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testForcePromptNominalToOpen_OutPrompt() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "200000", 0);
 
 		// Construct the cargo scenario
 
@@ -851,12 +849,12 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testMoveMultipleNominalVessels() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		// Second market much cheaper, but should not be used.
-		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, "10000", 0);
+		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vessel, "10000", 0);
 
 		// Construct the cargo scenario
 
@@ -898,10 +896,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testMoveNominalVesselRestriction() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel2, "50000", 0);
 
 		// Construct the cargo scenario
 
@@ -909,7 +907,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				// Forbid vessel class
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel1) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -944,11 +942,9 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 	public void testDoNotMoveFleetToNominal() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "10000", 0);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("100000") // Much more costly than nominal
 				.build();

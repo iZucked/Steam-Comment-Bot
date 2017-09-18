@@ -5,10 +5,11 @@
 package com.mmxlabs.lingo.app.headless.utils;
 
 public abstract class AParameter<T> implements Parameter<T> {
-	public String key;
-	public T value;
-	public T defaultValue;
-	public Class<T> parameterClass;
+	protected String key;
+	protected T value;
+	protected T defaultValue;
+	protected Class<T> parameterClass;
+
 	@Override
 	public String getKey() {
 		return key;
@@ -18,7 +19,7 @@ public abstract class AParameter<T> implements Parameter<T> {
 	public T getDefaultValue() {
 		return defaultValue;
 	}
-	
+
 	@Override
 	public void setValue(Object o) {
 		if (isOfType(o.getClass())) {
@@ -34,14 +35,13 @@ public abstract class AParameter<T> implements Parameter<T> {
 			return value;
 		}
 	}
-	
+
 	@Override
 	public boolean isOfType(Class<?> clazz) {
 		return parameterClass.isAssignableFrom(clazz);
 	}
-	
+
 	public T cast(Object o) {
 		return parameterClass.cast(o);
 	}
-
 }

@@ -27,8 +27,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -69,13 +67,11 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
 
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -158,13 +154,11 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
 
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -246,13 +240,11 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
 
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -330,17 +322,14 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
 
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		// Set a min heel - used in test results later
-		vesselClass.setMinHeel(1000);
-
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		vessel_1.setSafetyHeel(1000);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -424,7 +413,7 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 			Assert.assertEquals(0, opt_cargo2.getSortedSlots().get(1).getAllowedVessels().size());
 
 			// Ensure heel value matches
-			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
+			Assert.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
@@ -452,19 +441,16 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
 
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		// Set a min heel - used in test results later
-		vesselClass.setMinHeel(1000);
+		vessel.setSafetyHeel(1000);
 
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
-
-		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
+		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
 				.withStartWindow(LocalDateTime.of(2016, 8, 01, 0, 0, 0), LocalDateTime.of(2016, 8, 01, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 4, 30, 23, 0, 0), LocalDateTime.of(2017, 4, 30, 23, 0, 0)) //
@@ -558,13 +544,11 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
 
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //

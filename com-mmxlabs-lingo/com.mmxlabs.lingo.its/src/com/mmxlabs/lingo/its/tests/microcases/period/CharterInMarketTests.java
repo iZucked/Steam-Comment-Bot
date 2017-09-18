@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -60,7 +60,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -74,10 +74,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 2);
-		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, "100000", 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 2);
+		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vessel, "100000", 2);
 
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
@@ -86,10 +86,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
 				.withAssignmentFlags(true, false) //
@@ -97,7 +97,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				// .withLocked(true) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7").build() //
@@ -108,10 +108,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L3", LocalDate.of(2016, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.makeDESSale("D3", LocalDate.of(2016, 6, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
 				.withAssignmentFlags(true, false) //
@@ -192,10 +192,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 2);
-		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, "100000", 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 2);
+		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vessel, "100000", 2);
 
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
@@ -204,10 +204,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
 				.withAssignmentFlags(true, false) //
@@ -215,7 +215,7 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				// .withLocked(true) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2016, 1, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7").build() //
@@ -226,10 +226,10 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L3", LocalDate.of(2015, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.makeDESSale("D3", LocalDate.of(2015, 6, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel) //
 				.build() //
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
 				.withAssignmentFlags(true, false) //

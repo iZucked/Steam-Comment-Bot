@@ -19,7 +19,6 @@ import org.junit.Test;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -54,8 +53,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -104,8 +102,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withOptionality(true) //
@@ -135,8 +132,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0), null) //
@@ -191,8 +187,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 1, 0, 0, 0), null) //
@@ -247,8 +242,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(null, LocalDateTime.of(2016, 4, 1, 0, 0, 0)) //
@@ -303,8 +297,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -374,8 +367,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
@@ -460,8 +452,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
@@ -546,8 +537,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 5, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
@@ -632,8 +622,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2016, 1, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2016, 4, 16, 0, 0, 0), LocalDateTime.of(2016, 5, 16, 0, 0, 0)) //
@@ -721,8 +710,7 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 		LocalDate horizon = LocalDate.of(2017, 6, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("80000") //

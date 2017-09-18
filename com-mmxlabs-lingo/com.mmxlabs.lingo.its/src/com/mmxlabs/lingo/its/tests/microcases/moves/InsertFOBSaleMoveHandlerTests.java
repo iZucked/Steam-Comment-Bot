@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -58,9 +57,6 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Test
 	@Category({ MicroTest.class })
 	public void testInsertFOBSaleMove() throws Exception {
-
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
@@ -132,9 +128,9 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertFOBSaleMove_Fail_VesselRestriction() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("My Vessel 2", vesselClass);
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
@@ -192,9 +188,6 @@ public class InsertFOBSaleMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Test
 	@Category({ MicroTest.class })
 	public void testInsertFOBSaleMove_Fail_Timewindows() throws Exception {
-
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //

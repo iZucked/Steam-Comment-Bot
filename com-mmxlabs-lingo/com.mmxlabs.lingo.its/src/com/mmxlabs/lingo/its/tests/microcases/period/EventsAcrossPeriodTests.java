@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -66,7 +65,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -81,8 +80,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -174,7 +172,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -189,8 +187,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -272,7 +269,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -287,8 +284,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -374,7 +370,7 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -389,10 +385,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(1000);
-
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
+		vessel_1.setSafetyHeel(1000);
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -487,8 +481,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 			}
 
 			// Ensure heel value matches
-			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMinVolumeAvailable(), 0.0);
-			Assert.assertEquals(vessel_1.getVesselClass().getMinHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
+			Assert.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMinVolumeAvailable(), 0.0);
+			Assert.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0);
 
 			// Assert initial state can be evaluted
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();

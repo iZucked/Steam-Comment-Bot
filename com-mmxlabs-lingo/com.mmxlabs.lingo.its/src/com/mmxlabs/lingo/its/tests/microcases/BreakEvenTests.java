@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -164,9 +164,9 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_BE_Purchase() throws Exception {
 
-		VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "?") //
@@ -202,14 +202,13 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_BE_Sale() throws Exception {
 
-		VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7") //
-				.withVolumeLimits(0, 140000, VolumeUnits.M3)
-				.build() //
+				.withVolumeLimits(0, 140000, VolumeUnits.M3).build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "?") //
 				.build() //
 				.withVesselAssignment(market, 0, 0) //

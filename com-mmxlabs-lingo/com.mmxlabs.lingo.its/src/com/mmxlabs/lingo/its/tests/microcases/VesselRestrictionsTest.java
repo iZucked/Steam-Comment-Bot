@@ -17,7 +17,6 @@ import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -33,11 +32,9 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testNoRestrictions() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
@@ -77,13 +74,12 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselClassRestrictions_NoInstance() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -94,7 +90,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
@@ -124,13 +120,12 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselClassRestrictions_Fleet() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass2);
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -141,7 +136,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -173,13 +168,12 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselRestrictions_AutoAllocate_NoPossible() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
 		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass2);
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -190,7 +184,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel1) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -213,13 +207,12 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel1, "50000", 1);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass2);
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -230,7 +223,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vessel) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -257,13 +250,13 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselRestrictions_NoInstance() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", source, "50000", 1);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -301,16 +294,15 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testLoadVesselClassRestrictions_SpotOnly() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
 		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$", "day", 50_000);
 		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel2, "50000", 1);
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
@@ -321,7 +313,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass2) // <<<<<< Restrict load to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict load to alternative vessel class
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.build() //
@@ -348,9 +340,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		// Construct the cargo scenario
 
@@ -378,10 +368,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_VesselExists2() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		// Construct the cargo scenario
 
@@ -409,9 +399,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testFOBSaleVesselRestrictions_VesselExists() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		// Construct the cargo scenario
 
@@ -439,10 +427,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testFOBSaleVesselRestrictions_VesselExists2() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		// Construct the cargo scenario
 
@@ -470,10 +458,9 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_WrongVessel() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		// Construct the cargo scenario
 
@@ -501,19 +488,17 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testDESPurchaseVesselRestrictions_WrongVesselClass() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel2 = fleetModelFinder.findVessel("STEAM-138");
 
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel1) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withAllowedVessels(vesselClass2) // <<<<<< Restrict discharge to alternative vessel class
+				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -533,10 +518,10 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 	public void testFOBSaleVesselRestrictions_WrongVessel() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVesselFrom("Vessel1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("Vessel2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		// Construct the cargo scenario
 
@@ -546,39 +531,6 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 				.build() //
 				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
 				.withAllowedVessels(vessel2) // <<<<<< Restrict discharge to alternative vessel class
-				.build() //
-				.withAssignmentFlags(false, false) //
-				.build();
-
-		evaluateWithLSOTest(scenarioRunner -> {
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-
-			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
-
-			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
-		});
-	}
-
-	@Ignore("FOB/DESallowed vessel restrictions not applied in optimiser")
-	@Test
-	@Category({ MicroTest.class })
-	public void testFOBSaleVesselRestrictions_WrongVesselClass() throws Exception {
-
-		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
-
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
-
-		// Construct the cargo scenario
-
-		// Create cargo 1, cargo 2
-		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.build() //
-				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
-				.withAllowedVessels(vesselClass2) // <<<<<< Restrict discharge to alternative vessel class
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();

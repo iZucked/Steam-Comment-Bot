@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -58,9 +57,6 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Test
 	@Category({ MicroTest.class })
 	public void testInsertDESPurchaseMove() throws Exception {
-
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
@@ -132,9 +128,9 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertDESPurchaseMove_Fail_VesselRestriction() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("My Vessel 2", vesselClass);
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, vessel1) //
@@ -155,8 +151,6 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModelEntityMap modelEntityMap = scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap();
 
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
-			final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
 
 			final InsertDESPurchaseMoveHandler handler = injector.getInstance(InsertDESPurchaseMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);
@@ -193,9 +187,6 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertDESPurchaseMove_Fail_Timewindows() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 1), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
 				.build();
@@ -214,8 +205,6 @@ public class InsertDESPurchaseMoveHandlerTests extends AbstractMoveHandlerTest {
 			final ModelEntityMap modelEntityMap = scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap();
 
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-			final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
-			final IVirtualVesselSlotProvider virtualVesselSlotProvider = injector.getInstance(IVirtualVesselSlotProvider.class);
 
 			final InsertDESPurchaseMoveHandler handler = injector.getInstance(InsertDESPurchaseMoveHandler.class);
 			final ILookupManager lookupManager = injector.getInstance(ILookupManager.class);

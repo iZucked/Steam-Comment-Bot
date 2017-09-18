@@ -34,13 +34,13 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.pricing.util.CostModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
@@ -124,9 +124,8 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability getDefaultVesselAvailability() {
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMaxSpeed(16.0);
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(16.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 		return vesselAvailability;
@@ -197,12 +196,12 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		cargoModelBuilder.makeCanalBooking(panama, colon, LocalDate.of(2017, Month.JUNE, 6), null);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
+		vessel.setMaxSpeed(16.0);
 
-		final Vessel vessel2 = fleetModelBuilder.createVessel("vessel2", vesselClass);
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.build();
 
@@ -215,8 +214,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -488,12 +485,13 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		final EntryPoint colon = panama.getNorthEntrance();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
+		vessel.setMaxSpeed(16.0);
 
-		final Vessel vessel2 = fleetModelBuilder.createVessel("vessel2", vesselClass);
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("vessel2", vessel, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.build();
 
@@ -506,8 +504,6 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		// map into same timezone to make expectations easier
 		port1.setTimeZone("UTC");
 		port2.setTimeZone("UTC");
-
-		vesselClass.setMaxSpeed(16.0);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
 		final LocalDateTime dischargeDate = loadDate.plusDays(13);
@@ -916,7 +912,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(0);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.getVessel().getVesselClass().setMaxSpeed(16.0);
+		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
 		@NonNull
 		final Port loadPort = portFinder.findPort("Sabine Pass");
@@ -993,7 +989,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(1);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.getVessel().getVesselClass().setMaxSpeed(16.0);
+		vesselAvailability.getVessel().setMaxSpeed(16.0);
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, 7, 23, 0, 0));
 
 		@NonNull
@@ -1071,7 +1067,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(1);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.getVessel().getVesselClass().setMaxSpeed(16.0);
+		vesselAvailability.getVessel().setMaxSpeed(16.0);
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, 7, 23, 0, 0));
 
 		@NonNull
@@ -1149,7 +1145,7 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(1);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-		vesselAvailability.getVessel().getVesselClass().setMaxSpeed(16.0);
+		vesselAvailability.getVessel().setMaxSpeed(16.0);
 
 		@NonNull
 		final Port loadPort = portFinder.findPort("Sabine Pass");

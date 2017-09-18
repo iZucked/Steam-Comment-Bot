@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -62,8 +61,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSimpleInsertCargoMove() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -136,8 +134,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertDESPurchaseMove_DischargeSide() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
@@ -210,8 +207,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertDESPurchaseMove_LoadSide() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5", 22.6, null) //
@@ -266,8 +262,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertFOBSaleMove_LoadSide() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
@@ -339,8 +334,7 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertFOBSaleMove_DischargeSide() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 11), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
@@ -394,9 +388,6 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Test
 	@Category({ MicroTest.class })
 	public void testCannotInsertFleetOntoDESResource() throws Exception {
-
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
 
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
@@ -457,9 +448,6 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testCannotInsertFleetOntoFOBResource() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-
 		final LoadSlot load1 = cargoModelBuilder//
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.6) //
 				.build();
@@ -519,9 +507,9 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertCargoMove() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("My Vessel 2", vesselClass);
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -614,9 +602,9 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertCargoMove_FailsDueToVesselDate() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("My Vessel 2", vesselClass);
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		// End date cannot accommodate the cargo
 		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
@@ -677,9 +665,10 @@ public class InsertCargoVesselMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testInsertCargoMove_FailsDueToSlotVesselRestriction() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
-		final Vessel vessel2 = fleetModelBuilder.createVessel("My Vessel 2", vesselClass);
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
+
+		final Vessel vessel1 = fleetModelBuilder.createVesselFrom("My Vessel 1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel2 = fleetModelBuilder.createVesselFrom("My Vessel 2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final VesselAvailability vesselAvailability2 = cargoModelBuilder.makeVesselAvailability(vessel2, entity) //
 				.withCharterRate("10000") //

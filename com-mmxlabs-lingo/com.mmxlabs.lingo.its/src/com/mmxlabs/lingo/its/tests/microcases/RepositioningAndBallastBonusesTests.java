@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.swt.internal.C;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -20,7 +19,6 @@ import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -46,10 +44,11 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_CargoOnOptionalVesselNoRepositioning() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withOptionality(true).build();
+				.withOptionality(true) //
+				.build();
 
 		@NonNull
 		final Port port1 = portFinder.findPort("Point Fortin");
@@ -63,7 +62,6 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 
@@ -108,8 +106,7 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_CargoOnOptionalVesselRepositioning() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withOptionality(true).withRepositioning("1000000").build();
 
@@ -125,7 +122,7 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
+		vessel.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 

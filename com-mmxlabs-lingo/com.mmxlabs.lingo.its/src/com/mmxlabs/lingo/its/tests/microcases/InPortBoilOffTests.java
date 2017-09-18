@@ -28,7 +28,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -50,7 +49,6 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 
 	// Need largish epsilon as summed LNG fuel use has rounding applied to each component.
 	final int ROUNDING_EPSILON = 5;
-	VesselClass vesselClass;
 	Vessel vessel;
 	VesselAvailability vesselAvailability1;
 	Cargo cargo1;
@@ -124,9 +122,8 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0)).build();
@@ -142,13 +139,13 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 
 	public void changeBoilOffRates(final double loadPortBoilOff, final double dischargePortBoilOff) {
 
-		attrBal = vesselClass.getBallastAttributes();
+		attrBal = vessel.getBallastAttributes();
 		attrBal.setInPortNBORate(dischargePortBoilOff);
-		vesselClass.setBallastAttributes(attrBal);
+		vessel.setBallastAttributes(attrBal);
 
-		attrLaden = vesselClass.getLadenAttributes();
+		attrLaden = vessel.getLadenAttributes();
 		attrLaden.setInPortNBORate(loadPortBoilOff);
-		vesselClass.setLadenAttributes(attrLaden);
+		vessel.setLadenAttributes(attrLaden);
 	}
 
 	SimpleCargoAllocation runScenario(final boolean compensate, final boolean minMax) {

@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -39,8 +38,9 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testEvent_NoLateness() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
+
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
@@ -56,7 +56,6 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
@@ -87,8 +86,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testEvent_WithLateness() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
@@ -104,7 +102,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
+		vessel.setMaxSpeed(15.0);
 
 		final DryDockEvent event1 = cargoModelBuilder.makeDryDockEvent("drydock1", LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 0, 0), port1) //
 				.withDurationInDays(1) //
@@ -137,8 +135,9 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_NoLateness() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
+
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
@@ -154,7 +153,6 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 
@@ -190,8 +188,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_WithLateness() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
@@ -207,7 +204,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
+		vessel.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99);
 
@@ -244,8 +241,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_WithLatenessInFlex() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
@@ -261,7 +257,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
+		vessel.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 99);
 

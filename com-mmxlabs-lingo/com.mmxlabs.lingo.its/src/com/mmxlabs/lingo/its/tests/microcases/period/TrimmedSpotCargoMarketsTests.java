@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -74,12 +73,11 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		// Build some data to evaluate the scenario with
 		// FIXME: Fix issue to avoid needing this.
 		{
-			final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 			final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					.build();
@@ -187,12 +185,11 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		// Build some data to evaluate the scenario with
 		// FIXME: Fix issue to avoid needing this.
 		{
-			final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 			final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					.build();

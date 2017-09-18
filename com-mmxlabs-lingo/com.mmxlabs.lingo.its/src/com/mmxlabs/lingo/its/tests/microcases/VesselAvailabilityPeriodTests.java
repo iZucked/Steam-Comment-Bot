@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 
@@ -37,10 +36,8 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	@Test
 	public void testContainedAvailability() {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 2, 1, 0, 0)) //
@@ -110,10 +107,8 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	@Test
 	public void testAvailabilityOverlapsEnd() {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 2, 1, 0, 0)) //
@@ -183,10 +178,8 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	@Test
 	public void testAvailabilityLooseCargo1() {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 2, 1, 0, 0)) //
@@ -261,10 +254,8 @@ public class VesselAvailabilityPeriodTests extends AbstractMicroTestCase {
 	@Test
 	public void testAvailabilityLooseCargo2() {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("My Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 2, 1, 0, 0)) //

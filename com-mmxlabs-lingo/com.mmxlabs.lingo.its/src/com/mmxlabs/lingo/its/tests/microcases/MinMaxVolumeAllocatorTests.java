@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -290,11 +290,11 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_MaxTransfer() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		// Very large capacity to cover volume limits
-		vesselClass.setCapacity(250_000);
+		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 20.0) //
@@ -316,7 +316,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(3_500_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
 			Assert.assertEquals(3_500_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
@@ -329,9 +329,8 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_MinTransfer() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
@@ -353,7 +352,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(2_500_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
 			Assert.assertEquals(2_500_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
@@ -366,10 +365,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_MinTransfer_2() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setCapacity(250_000);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 20.0) //
@@ -391,7 +390,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(2_950_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -405,10 +404,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_MinTransfer_WithCVBasedRounding() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setCapacity(250_000);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 23.7) //
@@ -430,7 +429,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(Math.floor(2_950_000.0 / 23.7), cargoAllocation.getLoadAllocation().getVolumeTransferred(), 0.01);
@@ -444,10 +443,10 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testShipped_MinTransferM3_WithCVBasedRounding() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setCapacity(250_000);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(250_000);
 
-		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vesselClass, "100000", 1);
+		final CharterInMarket market = spotMarketsModelBuilder.createCharterInMarket("default", vessel, "100000", 1);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "7", 23.7) //
@@ -469,7 +468,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(150_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
 			Assert.assertEquals(150_000 * 23.7, cargoAllocation.getLoadAllocation().getEnergyTransferred(), 0.0);

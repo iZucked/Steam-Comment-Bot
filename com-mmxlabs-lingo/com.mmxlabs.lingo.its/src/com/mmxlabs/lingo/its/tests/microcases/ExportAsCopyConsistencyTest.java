@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -41,11 +40,10 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	public void testExportAsCopyDoesNotDuplicateReferenceListItems() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -85,7 +83,7 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	public void testExportAsCopyExportsBaseFuelCostsCorrectlyInPeriod() throws Exception {
 
 		evaluateWithLSOTest(false, plan -> {
-			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2016, 5,1));
+			plan.getUserSettings().setPeriodStartDate(LocalDate.of(2016, 5, 1));
 			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 6));
 		}, null, scenarioRunner -> {
 

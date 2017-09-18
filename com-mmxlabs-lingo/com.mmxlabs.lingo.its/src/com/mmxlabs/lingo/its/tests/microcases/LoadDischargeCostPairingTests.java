@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -56,9 +56,9 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 		final LoadSlot load_DES1 = cargoModelBuilder.makeDESPurchase("DES1", false, LocalDate.of(2015, 12, 5), portFinder.findPort("Sakai"), null, entity, "5", 22.8, null).build();
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB1", LocalDate.of(2015, 11, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
 		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB2", LocalDate.of(2015, 11, 4), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();

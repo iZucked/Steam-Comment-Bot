@@ -14,11 +14,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.util.CheckedConsumer;
-import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class CSVTestDataProvider implements ITestDataProvider {
 

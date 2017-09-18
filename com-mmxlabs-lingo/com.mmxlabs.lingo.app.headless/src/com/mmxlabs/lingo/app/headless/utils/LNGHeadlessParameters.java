@@ -9,9 +9,6 @@ import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
-
 public class LNGHeadlessParameters extends HeadlessParameters {
 	public LNGHeadlessParameters() {
 

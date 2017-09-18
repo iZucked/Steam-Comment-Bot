@@ -55,7 +55,6 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -564,8 +563,7 @@ public class CompareViewTests {
 			// Create the required basic elements
 			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final VesselClass vesselClass = maker.fleetModelFinder.findVesselClass("STEAM-145");
-			final Vessel vessel_1 = maker.fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
 
 			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					// .withCharterRate("50000") //
@@ -591,8 +589,7 @@ public class CompareViewTests {
 			// Create the required basic elements
 			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final VesselClass vesselClass = maker.fleetModelFinder.findVesselClass("STEAM-145");
-			final Vessel vessel_1 = maker.fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
 
 			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					// .withCharterRate("50000") //
@@ -663,8 +660,7 @@ public class CompareViewTests {
 			// Create the required basic elements
 			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final VesselClass vesselClass = maker.fleetModelFinder.findVesselClass("STEAM-145");
-			final Vessel vessel_1 = maker.fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
 
 			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					// .withCharterRate("50000") //
@@ -696,8 +692,7 @@ public class CompareViewTests {
 			// Create the required basic elements
 			final BaseLegalEntity entity = maker.commercialModelFinder.findEntity("Shipping");
 
-			final VesselClass vesselClass = maker.fleetModelFinder.findVesselClass("STEAM-145");
-			final Vessel vessel_1 = maker.fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel("STEAM-145");
 
 			final VesselAvailability vesselAvailability = maker.cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 					.build();
@@ -786,9 +781,9 @@ public class CompareViewTests {
 
 		final ScenarioModelRecord pinnedRecord = ScenarioStorageUtil.createFrom("from", fromDP);
 		final ScenarioModelRecord otherRecord = ScenarioStorageUtil.createFrom("to", toDP);
-//
-//		final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
-//		final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
+		//
+		// final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
+		// final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
 		try {
 			//
 			try (ModelReference fromRef = pinnedRecord.aquireReference("CompareViewTests:1")) {
@@ -837,11 +832,11 @@ public class CompareViewTests {
 		} finally {
 			pinnedRecord.dispose();
 			otherRecord.dispose();
-//			System.gc();
-//			System.gc();
-//			System.gc();
-//			SSDataManager.Instance.releaseModelRecord(pinned);
-//			SSDataManager.Instance.releaseModelRecord(other);
+			// System.gc();
+			// System.gc();
+			// System.gc();
+			// SSDataManager.Instance.releaseModelRecord(pinned);
+			// SSDataManager.Instance.releaseModelRecord(other);
 		}
 
 	}

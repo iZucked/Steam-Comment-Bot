@@ -14,7 +14,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.util.CheckedConsumer;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class LiNGOTestDataProvider implements ITestDataProvider {

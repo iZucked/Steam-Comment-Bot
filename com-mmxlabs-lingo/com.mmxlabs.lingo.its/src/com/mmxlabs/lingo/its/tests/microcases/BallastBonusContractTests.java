@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -47,6 +46,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -70,7 +70,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 	}
 
 	@Override
-	public LNGScenarioModel importReferenceData() throws MalformedURLException {
+	public IScenarioDataProvider importReferenceData() throws MalformedURLException {
 		return importReferenceData("/referencedata/reference-data-simple-distances/");
 	}
 
@@ -81,10 +81,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		vessel.setCapacity(140_000);
-
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
@@ -114,9 +111,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		vessel.setCapacity(140_000);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
@@ -136,8 +131,8 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		evaluateTest(null, null, scenarioRunner -> {
 			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
-			Assert.assertEquals(-1_000_000, end.getGroupProfitAndLoss().getProfitAndLoss());
-			Assert.assertEquals(4_988_173 - 1_000_000, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), -1_000_000);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 4_988_173 - 1_000_000);
 		});
 	}
 
@@ -148,10 +143,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		vessel.setCapacity(140_000);
-
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
@@ -183,10 +175,10 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final VesselStateAttributes ballastAttributes = vesselClass.getBallastAttributes();
-		final EList<FuelConsumption> fuelConsumption = ballastAttributes.getFuelConsumption();
+		final VesselStateAttributes ballastAttributes = vessel.getBallastAttributes();
+		final EList<FuelConsumption> fuelConsumption = ballastAttributes.getVesselOrDelegateFuelConsumption();
 		fuelConsumption.clear();
 		final FuelConsumption fc1 = FleetFactory.eINSTANCE.createFuelConsumption();
 		fc1.setSpeed(10);
@@ -201,9 +193,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		fuelConsumption.add(fc1);
 		fuelConsumption.add(fc2);
 		fuelConsumption.add(fc3);
-		vesselClass.setMaxSpeed(20);
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		vessel.setCapacity(140_000);
+		vessel.setMaxSpeed(20);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
@@ -238,10 +228,10 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final VesselStateAttributes ballastAttributes = vesselClass.getBallastAttributes();
-		final EList<FuelConsumption> fuelConsumption = ballastAttributes.getFuelConsumption();
+		final VesselStateAttributes ballastAttributes = vessel.getBallastAttributes();
+		final EList<FuelConsumption> fuelConsumption = ballastAttributes.getVesselOrDelegateFuelConsumption();
 		fuelConsumption.clear();
 		final FuelConsumption fc1 = FleetFactory.eINSTANCE.createFuelConsumption();
 		fc1.setSpeed(10);
@@ -256,10 +246,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		fuelConsumption.add(fc1);
 		fuelConsumption.add(fc2);
 		fuelConsumption.add(fc3);
-		vesselClass.setMaxSpeed(20);
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-		vessel.setCapacity(140_000);
-
+		vessel.setMaxSpeed(20);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
@@ -293,11 +280,9 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setCapacity(140_000);
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(140_000);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);		
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
@@ -327,11 +312,10 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
 		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setCapacity(140_000);
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setCapacity(140_000);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 1);
 		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();

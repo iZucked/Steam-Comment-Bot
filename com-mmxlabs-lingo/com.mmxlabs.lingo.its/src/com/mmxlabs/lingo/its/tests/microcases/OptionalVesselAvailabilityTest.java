@@ -19,7 +19,6 @@ import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
@@ -40,8 +39,8 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_CargoOnNonOptionalVessel() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 
@@ -57,7 +56,6 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 
@@ -93,8 +91,8 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_CargoOnOptionalVessel() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withOptionality(true).build();
 
@@ -110,7 +108,6 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 
@@ -146,8 +143,8 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_NoCargoOnNonOptionalVessel() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withOptionality(false).build();
 
@@ -163,7 +160,6 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 
@@ -185,8 +181,8 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargo_NoCargoOnOptionalVessel() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(15.0);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withOptionality(true).build();
 
@@ -202,7 +198,6 @@ public class OptionalVesselAvailabilityTest extends AbstractMicroTestCase {
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getPortModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
-		vesselClass.setMaxSpeed(15.0);
 
 		final LocalDateTime dischargeDate = LocalDateTime.of(2015, 12, 1, 0, 0, 0).plusHours(24 + 100);
 

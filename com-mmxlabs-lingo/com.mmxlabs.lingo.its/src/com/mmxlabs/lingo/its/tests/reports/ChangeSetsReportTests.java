@@ -17,7 +17,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 

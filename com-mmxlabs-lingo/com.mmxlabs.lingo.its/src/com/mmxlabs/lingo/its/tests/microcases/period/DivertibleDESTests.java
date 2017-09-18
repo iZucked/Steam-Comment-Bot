@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -64,7 +63,7 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		// Load in the basic scenario from CSV
 		final IScenarioDataProvider scenarioDataProvider = importReferenceData();
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
@@ -81,9 +80,7 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		cargoModelBuilder.makeCargo()//
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 4, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "5", vessel_1) //

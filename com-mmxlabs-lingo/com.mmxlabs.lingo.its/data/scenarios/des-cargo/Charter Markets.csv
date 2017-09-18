@@ -1,2 +1,2 @@
-spotCharterCount,minCharterOutDuration,vesselClasses,charterInPrice,kind
-5,30,STEAM-138,Charter_In,CharterCostModel
+name,spotCharterCount,minCharterOutDuration,charterInRate,charterOutRate,kind,vessel,vessels,enabled
+In_STEAM,5,,Charter_In,,CharterInMarket,STEAM-138,,true

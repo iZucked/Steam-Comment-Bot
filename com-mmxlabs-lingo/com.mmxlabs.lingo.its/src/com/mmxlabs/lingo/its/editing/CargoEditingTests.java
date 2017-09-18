@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
 public class CargoEditingTests extends AbstractMicroTestCase {
@@ -36,8 +35,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPort("Point Fortin"))
 				.build();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-138");
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
 
 		helper.assignVesselEventToVesselAvailability("Assign event", vesselEvent, vesselAvailability);
@@ -53,8 +51,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-138");
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity).build();
 		final DryDockEvent vesselEvent = cargoModelBuilder.makeDryDockEvent("DryDock", LocalDateTime.of(2016, 7, 22, 0, 0), LocalDateTime.of(2016, 7, 22, 0, 0), portFinder.findPort("Point Fortin"))//
 				.withVesselAssignment(vesselAvailability, 0)//
@@ -75,8 +72,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final LoadSlot load = cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 7, 22), portFinder.findPort("Sakai"), null, entity, "5", 20.0, null).build();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-138");
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
 
 		helper.assignNominatedVessel("Assign slot", load, vessel);
 
@@ -91,8 +87,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-138");
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
 
 		final LoadSlot load = cargoModelBuilder.makeDESPurchase("L1", false, LocalDate.of(2016, 7, 22), portFinder.findPort("Sakai"), null, entity, "5", 20.0, vessel).build();
 
@@ -111,8 +106,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final DischargeSlot discharge = cargoModelBuilder.makeFOBSale("D1", false, LocalDate.of(2016, 7, 22), portFinder.findPort("Point Fortin"), null, entity, "5", null).build();
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-138");
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
 
 		helper.assignNominatedVessel("Assign slot", discharge, vessel);
 
@@ -127,8 +121,7 @@ public class CargoEditingTests extends AbstractMicroTestCase {
 
 		final CargoEditingHelper helper = new CargoEditingHelper(editingDomain, lngScenarioModel);
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-138");
-		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-138");
 
 		final DischargeSlot discharge = cargoModelBuilder.makeFOBSale("L1", false, LocalDate.of(2016, 7, 22), portFinder.findPort("Point Fortin"), null, entity, "5", vessel).build();
 

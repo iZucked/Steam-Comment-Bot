@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -85,7 +84,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	@Before
 	public void constructor() throws MalformedURLException {
 
-		scenarioDataProvider= importReferenceData();
+		scenarioDataProvider = importReferenceData();
 		lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
@@ -122,10 +121,7 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability createTestVesselAvailability(LocalDateTime startStart, LocalDateTime startEnd, LocalDateTime endStart) {
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final Vessel vessel = fleetModelBuilder.createVessel("vesselName", vesselClass);
-
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(startStart, startEnd) //
@@ -143,8 +139,8 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 	public void testSimpleWindowsCase() throws Exception {
 
 		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "20000", 1);
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "20000", 1);
 		// Construct the cargo scenario
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
@@ -205,12 +201,12 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
 				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-//				try {
-//					MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				// try {
+				// MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
+				// } catch (Exception e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 			});
 		});
 	}

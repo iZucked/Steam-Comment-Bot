@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
@@ -89,7 +88,6 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	private static List<String> requiredFeatures = Lists.newArrayList("optimisation-charter-out-generation");
 	private static List<String> addedFeatures = new LinkedList<>();
 
-	private VesselClass vesselClass;
 	private Vessel vessel;
 	private VesselAvailability vesselAvailability1;
 	private Cargo cargo1;
@@ -153,9 +151,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0))
@@ -315,9 +312,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -391,9 +387,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToEndHeel_Fail_CannotMeetMinEndHeel() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -445,9 +440,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToEndHeel_Fail_CannotMeetMaxStartHeel() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vesselClass.getBallastAttributes().setIdleBaseRate(50);
+		vessel.getBallastAttributes().setIdleBaseRate(50);
 
 		// Build new pricing model with known prices
 		scenarioModelFinder.getCostModelFinder().getCostModel().getBaseFuelCosts().clear();
@@ -456,7 +451,6 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 			scenarioModelBuilder.getCostModelBuilder().createBaseFuelCost(bf, idx);
 		}
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -535,9 +529,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToEndHeel_Fail_NeedToUseLessThanMinHeel() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -591,9 +584,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToDrydockToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -655,9 +647,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToDrydockToEndHeel_Fail_InitialHeelLost_CannotEndCold() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -722,9 +713,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToCharterOutToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -820,10 +810,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToCargoToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -932,10 +921,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToCargoToEndHeelNoBallast_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 4, 4, 0, 0, 0), LocalDateTime.of(2017, 4, 6, 0, 0, 0)) //
@@ -1044,9 +1032,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToCharterOutToEndHeel_FAIL_AssumeNoHeel() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -1141,9 +1128,8 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testStartToCharterOutRedirectToEndHeel_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //
@@ -1260,14 +1246,13 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testGCOAfterCargo_OK() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		@NonNull
-		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vesselClass, "50000", 10);
+		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		charterOutMarket.getAvailablePorts().add(portFinder.findPort("Sakai"));
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
@@ -1388,14 +1373,13 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testGCOAfterStart_OK_TravelThenGCO() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		@NonNull
-		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vesselClass, "50000", 10);
+		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		// charterOutMarket.getAvailablePorts().add(portFinder.findPort("Sakai"));
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
@@ -1479,14 +1463,13 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	public void testGCOAfterStart_OK_GCOThenTravel() throws Exception {
 
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
 		@NonNull
-		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vesselClass, "50000", 10);
+		CharterOutMarket charterOutMarket = spotMarketsModelBuilder.createCharterOutMarket("CharterMarket", vessel, "50000", 10);
 		charterOutMarket.getAvailablePorts().add(portFinder.findPort("Point Fortin"));
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 6, 8, 0, 0, 0)) //
@@ -1585,10 +1568,9 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testCargoToCargo_OK() throws Exception {
 		// Create the required basic elements
-		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMinHeel(500);
+		vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setSafetyHeel(500);
 
-		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 3, 8, 0, 0, 0), LocalDateTime.of(2017, 3, 8, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 5, 8, 0, 0, 0)) //

@@ -34,7 +34,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -51,8 +50,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.IntervalData;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.LadenRouteData;
@@ -130,11 +129,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	}
 
 	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
-
-		final Vessel vessel = fleetModelBuilder.createVessel("vesselName", vesselClass);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
 
 		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -186,8 +183,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
 				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselName, optimiserScenario.getCargoModel().getVesselAvailabilities(),
 						scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
-				@NonNull
-				final IVesselClass o_vesselClass = o_vesselAvailability.getVessel().getVesselClass();
+
+				final @NonNull IVessel o_vessel = o_vesselAvailability.getVessel();
 				/*
 				 * Constants
 				 */
@@ -197,9 +194,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final int loadDuration = 0;
 				final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
 				assert load != null;
-				final long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
+				final long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vessel.getNBORate(VesselState.Laden), o_vessel,
 						load.getCargoCVValue(), equivalenceFactor, lrd[0], 0, true);
-				final long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
+				final long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vessel.getNBORate(VesselState.Laden), o_vessel,
 						load.getCargoCVValue(), equivalenceFactor, lrd[1], 0, true);
 				/*
 				 * Test correct values are being calculated
@@ -210,7 +207,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				 * Test correct route chosen
 				 */
 				final NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd,
-						o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass, load.getCargoCVValue(), true);
+						o_vessel.getNBORate(VesselState.Laden), o_vessel, load.getCargoCVValue(), true);
 				Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[1]);
 				final TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
 				final int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,

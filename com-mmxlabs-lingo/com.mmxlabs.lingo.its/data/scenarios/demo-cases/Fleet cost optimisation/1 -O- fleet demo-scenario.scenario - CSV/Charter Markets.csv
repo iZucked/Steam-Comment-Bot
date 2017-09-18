@@ -1,2 +1,3 @@
-spotCharterCount,minCharterOutDuration,vesselClasses,charterInPrice,charterOutPrice,kind
-0,15,DFDE-162,12MTC,12MTC,CharterCostModel
+name,spotCharterCount,minCharterOutDuration,charterInRate,charterOutRate,kind,vessel,vessels,enabled
+In_DFDE,0,,12MTC,,CharterInMarket,DFDE-162,,true
+Out_DFDE,,15,,12MTC,CharterOutMarket,,VesselGroup:DFDE-162,true

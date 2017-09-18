@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -78,10 +77,10 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
-		final Vessel vessel_2 = fleetModelBuilder.createVessel("Vessel-2", vesselClass);
+		final Vessel vessel_1 = fleetModelBuilder.createVesselFrom("Vessel-1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel_2 = fleetModelBuilder.createVesselFrom("Vessel-2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -171,10 +170,10 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel source = fleetModelFinder.findVessel("STEAM-145");
 
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
-		final Vessel vessel_2 = fleetModelBuilder.createVessel("Vessel-2", vesselClass);
+		final Vessel vessel_1 = fleetModelBuilder.createVesselFrom("Vessel-1", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
+		final Vessel vessel_2 = fleetModelBuilder.createVesselFrom("Vessel-2", source, scenarioModelBuilder.getCostModelBuilder().copyRouteCosts());
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //

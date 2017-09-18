@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -81,8 +80,7 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -164,8 +162,7 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -246,8 +243,7 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -328,8 +324,7 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -431,9 +426,7 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
+		final Vessel vessel_1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability_1 = cargoModelBuilder.makeVesselAvailability(vessel_1, entity) //
 				.withStartPort(portFinder.findPort("Point Fortin")) //
@@ -444,10 +437,10 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		// Create cargo 1,
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2016, 5, 29), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel_1) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2016, 6, 27), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
-				.withAllowedVessels(vesselClass) //
+				.withAllowedVessels(vessel_1) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.withAssignmentFlags(true, false) //

@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -58,8 +57,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapCargoLoadWithUnusedLoad() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -139,8 +137,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapWithinSequence() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -217,8 +214,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapUnusedLoadWithUnusedLoadFails() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -275,8 +271,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapCargoLoadWithDESPurchaseLoadFails() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -356,8 +351,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapCargoDischargeWithUnusedDischarge() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -437,8 +431,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapCargoDischargeWithUsedDischarge() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -531,8 +524,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapCargoLoadWithUsedLoad() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //
@@ -625,8 +617,7 @@ public class SwapSlotMoveHandlerTests extends AbstractMoveHandlerTest {
 	@Category({ MicroTest.class })
 	public void testSwapCargoLoadWithUnusedLoad_WiringLocked() throws Exception {
 
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		final Vessel vessel1 = fleetModelBuilder.createVessel("My Vessel 1", vesselClass);
+		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
 
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
 				.withCharterRate("100000") //

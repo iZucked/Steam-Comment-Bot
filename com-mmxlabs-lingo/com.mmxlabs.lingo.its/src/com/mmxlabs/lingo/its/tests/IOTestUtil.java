@@ -16,7 +16,6 @@ import com.google.common.io.Files;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard;
 import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard.exportInformation;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
