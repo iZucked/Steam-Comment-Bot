@@ -2157,13 +2157,13 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__LADEN = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY__ROUTE = EVENT_FEATURE_COUNT + 3;
+	int JOURNEY__ROUTE_OPTION = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Toll</b></em>' attribute.
@@ -2193,13 +2193,13 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__SPEED = EVENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Canal Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Canal Entrance</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY__CANAL_ENTRY = EVENT_FEATURE_COUNT + 7;
+	int JOURNEY__CANAL_ENTRANCE = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Canal Date</b></em>' attribute.
@@ -2247,13 +2247,22 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__CANAL_BOOKING_PERIOD = EVENT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Canal Entrance Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CANAL_ENTRANCE_PORT = EVENT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Journey</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 13;
+	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6313,15 +6322,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_Laden();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getRouteOption <em>Route Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getRouteOption()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EReference getJourney_Route();
+	EAttribute getJourney_RouteOption();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}'.
@@ -6357,15 +6366,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_Speed();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrance <em>Canal Entrance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Canal Entry</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalEntry()
+	 * @return the meta object for the attribute '<em>Canal Entrance</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalEntrance()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EReference getJourney_CanalEntry();
+	EAttribute getJourney_CanalEntrance();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}'.
@@ -6421,6 +6430,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getJourney_CanalBookingPeriod();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrancePort <em>Canal Entrance Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Canal Entrance Port</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Journey#getCanalEntrancePort()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_CanalEntrancePort();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
@@ -8152,12 +8172,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute JOURNEY__LADEN = eINSTANCE.getJourney_Laden();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
+		EAttribute JOURNEY__ROUTE_OPTION = eINSTANCE.getJourney_RouteOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Toll</b></em>' attribute feature.
@@ -8184,12 +8204,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute JOURNEY__SPEED = eINSTANCE.getJourney_Speed();
 
 		/**
-		 * The meta object literal for the '<em><b>Canal Entry</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Canal Entrance</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference JOURNEY__CANAL_ENTRY = eINSTANCE.getJourney_CanalEntry();
+		EAttribute JOURNEY__CANAL_ENTRANCE = eINSTANCE.getJourney_CanalEntrance();
 
 		/**
 		 * The meta object literal for the '<em><b>Canal Date</b></em>' attribute feature.
@@ -8230,6 +8250,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute JOURNEY__CANAL_BOOKING_PERIOD = eINSTANCE.getJourney_CanalBookingPeriod();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Entrance Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__CANAL_ENTRANCE_PORT = eINSTANCE.getJourney_CanalEntrancePort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.

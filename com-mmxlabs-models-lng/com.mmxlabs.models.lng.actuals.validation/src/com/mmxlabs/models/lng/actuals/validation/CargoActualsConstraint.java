@@ -166,9 +166,9 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						status.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PORT);
 						failures.add(status);
 					}
-					if (slotActuals.getRoute() == null) {
+					if (slotActuals.getRouteOption() == null) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs a route"));
-						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__ROUTE);
+						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__ROUTE_OPTION);
 						failures.add(status);
 					}
 					if (slotActuals.getOperationsStart() == null) {

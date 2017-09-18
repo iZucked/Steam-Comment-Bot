@@ -20,12 +20,15 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 	public static final String viewName = "Options";
@@ -42,6 +45,9 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			}
 
+			IScenarioDataProvider scenarioDataProvider = extraContext.getScenarioDataProvider();
+			ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+			
 			if (partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isDESPurchase()).count() > 0
 					&& partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isFOBSale()).count() > 0) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row with a DES purchase and a FOB Sale", viewName)));
@@ -63,7 +69,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			int lateness = getLateness(portModel, partialCaseRow);
+			int lateness = getLateness(portModel, partialCaseRow, modelDistanceProvider);
 			if (lateness < 0) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IConstraintStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
@@ -99,13 +105,13 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private int getLateness(PortModel portModel, PartialCaseRow row) {
+	private int getLateness(PortModel portModel, PartialCaseRow row, ModelDistanceProvider modelDistanceProvider) {
 		for (BuyOption buyOption : row.getBuyOptions()) {
 			for (SellOption sellOption : row.getSellOptions()) {
 				for (ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, portModel, AnalyticsBuilder.getVessel(option));
+						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, portModel, AnalyticsBuilder.getVessel(option), modelDistanceProvider);
 						if (lateness < 0) {
 							return lateness;
 						}

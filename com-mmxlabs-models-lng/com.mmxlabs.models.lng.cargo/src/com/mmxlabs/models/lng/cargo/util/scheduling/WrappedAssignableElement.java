@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
@@ -40,7 +41,7 @@ public class WrappedAssignableElement {
 	private Pair<ZonedDateTime, ZonedDateTime> endWindow;
 	private int minElementDuration;
 
-	public WrappedAssignableElement(final @NonNull List<Slot> sortedSlots, @Nullable Vessel vessel, final @Nullable PortModel portModel, @Nullable final IAssignableElementDateProvider dateProvider) {
+	public WrappedAssignableElement(final @NonNull List<Slot> sortedSlots, @Nullable Vessel vessel, final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider dateProvider) {
 		this.assignableElement = null;
 		{
 			Slot firstSlot = null;
@@ -66,7 +67,7 @@ public class WrappedAssignableElement {
 					final Port nextPort = slot.getPort();
 					final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
 					if (lastPort != null && lastTime != null) {
-						final int minTravelTime = portModel == null ? 0 : getTravelTime(vessel, portModel, lastPort, nextPort);
+						final int minTravelTime = portModel == null ? 0 : getTravelTime(vessel, portModel, lastPort, nextPort, modelDistanceProvider);
 						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
 
@@ -103,7 +104,7 @@ public class WrappedAssignableElement {
 					final ZonedDateTime slotTime = getWindowEnd(slot, dateProvider);
 					final Port nextPort = slot.getPort();
 					if (lastPort != null && lastTime != null) {
-						final int minTravelTime = portModel == null ? 0 : getTravelTime(vessel, portModel, nextPort, lastPort);
+						final int minTravelTime = portModel == null ? 0 : getTravelTime(vessel, portModel, nextPort, lastPort, modelDistanceProvider);
 						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
 
@@ -159,7 +160,7 @@ public class WrappedAssignableElement {
 		}
 	}
 
-	public WrappedAssignableElement(final @NonNull AssignableElement assignableElement, final @Nullable PortModel portModel, @Nullable final IAssignableElementDateProvider dateProvider) {
+	public WrappedAssignableElement(final @NonNull AssignableElement assignableElement, final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider dateProvider) {
 		this.assignableElement = assignableElement;
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
@@ -189,7 +190,7 @@ public class WrappedAssignableElement {
 					final Port nextPort = slot.getPort();
 					final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
 					if (lastPort != null && lastTime != null) {
-						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, lastPort, nextPort);
+						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, lastPort, nextPort, modelDistanceProvider);
 						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
 
@@ -226,7 +227,7 @@ public class WrappedAssignableElement {
 					final ZonedDateTime slotTime = getWindowEnd(slot, dateProvider);
 					final Port nextPort = slot.getPort();
 					if (lastPort != null && lastTime != null) {
-						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, nextPort, lastPort);
+						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, nextPort, lastPort, modelDistanceProvider);
 						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
 
@@ -357,7 +358,7 @@ public class WrappedAssignableElement {
 		return endWindow;
 	}
 
-	private int getTravelTime(final AssignableElement assignableElement, final PortModel portModel, final Port from, final Port to) {
+	private int getTravelTime(final AssignableElement assignableElement, final PortModel portModel, final Port from, final Port to, ModelDistanceProvider modelDistanceProvider) {
 
 		Vessel vessel = null;
 
@@ -370,11 +371,11 @@ public class WrappedAssignableElement {
 			vessel = charterInMarket.getVessel();
 		}
 
-		return getTravelTime(vessel, portModel, from, to);
+		return getTravelTime(vessel, portModel, from, to, modelDistanceProvider);
 
 	}
 
-	private int getTravelTime(final @Nullable Vessel vessel, final PortModel portModel, final Port from, final Port to) {
+	private int getTravelTime(final @Nullable Vessel vessel, final PortModel portModel, final Port from, final Port to, ModelDistanceProvider modelDistanceProvider) {
 
 		if (vessel == null) {
 			return Integer.MAX_VALUE;
@@ -388,7 +389,7 @@ public class WrappedAssignableElement {
 		int travelTimeInHours = Integer.MAX_VALUE;
 		if (portModel != null) {
 			for (final Route route : portModel.getRoutes()) {
-				int totalTime = TravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to);
+				int totalTime = TravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to, modelDistanceProvider);
 				if (totalTime != Integer.MAX_VALUE) {
 					travelTimeInHours = Math.min(totalTime, travelTimeInHours);
 				}

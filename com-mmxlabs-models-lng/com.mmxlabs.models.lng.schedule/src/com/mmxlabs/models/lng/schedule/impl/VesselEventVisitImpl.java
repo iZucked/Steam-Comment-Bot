@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
@@ -805,9 +806,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		if (attribute == SchedulePackage.Literals.VESSEL_EVENT_VISIT__REDELIVERY_PORT) {
 			Port p = getRedeliveryPort();
 			if (p != null) {
-				if (p.getTimeZone() == null) return "UTC";
-				if (p.getTimeZone().isEmpty()) return "UTC";
-				return p.getTimeZone();
+				Location l = p.getLocation();
+				if (l != null) {
+					if (l.getTimeZone() == null) return "UTC";
+					if (l.getTimeZone().isEmpty()) return "UTC";
+					return l.getTimeZone();
+				}
 			}
 		}
 		return super.getTimeZone(attribute);

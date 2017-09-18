@@ -629,11 +629,6 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 PortFactory.eINSTANCE.createRouteLine()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 PortFactory.eINSTANCE.createPortModel()));
 
 		newChildDescriptors.add

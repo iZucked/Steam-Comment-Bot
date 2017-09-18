@@ -28,7 +28,9 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -46,7 +48,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-
+		@NonNull
+		ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		// Valid slot data checks
 		if (object instanceof Slot) {
 			if (object instanceof LoadSlot) {
@@ -161,9 +164,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									@NonNull
 									PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 									final int ladenTravelTimeInHours = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider,
-											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, true));
+											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, true), modelDistanceProvider);
 									final int ballastTravelTimeInHours = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider,
-											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, false));
+											portModel, vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vessel, false), modelDistanceProvider);
 
 									// Calculate minimum time due to slot windows
 									final int ladenMaxWindowInHours;

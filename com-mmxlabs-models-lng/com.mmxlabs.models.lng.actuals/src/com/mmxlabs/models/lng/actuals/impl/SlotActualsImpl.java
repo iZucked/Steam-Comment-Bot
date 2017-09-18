@@ -23,8 +23,10 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.PenaltyType;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,7 +49,7 @@ import com.mmxlabs.models.lng.port.Route;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortBaseFuelConsumption <em>Port Base Fuel Consumption</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRoute <em>Route</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCrewBonus <em>Crew Bonus</em>}</li>
@@ -299,14 +301,24 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int portBaseFuelConsumption = PORT_BASE_FUEL_CONSUMPTION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
+	 * The default value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRoute()
+	 * @see #getRouteOption()
 	 * @generated
 	 * @ordered
 	 */
-	protected Route route;
+	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.DIRECT;
+
+	/**
+	 * The cached value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDistance() <em>Distance</em>}' attribute.
@@ -576,17 +588,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Route getRoute() {
-		if (route != null && route.eIsProxy()) {
-			InternalEObject oldRoute = (InternalEObject)route;
-			route = (Route)eResolveProxy(oldRoute);
-			if (route != oldRoute) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ActualsPackage.SLOT_ACTUALS__ROUTE, oldRoute, route));
-			}
-		}
-		return route;
+	public RouteOption getRouteOption() {
+		return routeOption;
 	}
 
 	/**
@@ -594,21 +597,11 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route basicGetRoute() {
-		return route;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRoute(Route newRoute) {
-		Route oldRoute = route;
-		route = newRoute;
+	public void setRouteOption(RouteOption newRouteOption) {
+		RouteOption oldRouteOption = routeOption;
+		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__ROUTE, oldRoute, route));
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__ROUTE_OPTION, oldRouteOption, routeOption));
 	}
 
 	/**
@@ -687,10 +680,13 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 */
 	@Override
 	public String getTimeZone(EAttribute attribute) {
-		if (getTitleTransferPoint() == null) return "UTC";
-		if (getTitleTransferPoint().getTimeZone() == null) return "UTC";
-		if (getTitleTransferPoint().getTimeZone().isEmpty()) return "UTC";
-		return getTitleTransferPoint().getTimeZone();
+		Port p = getTitleTransferPoint();
+		if (p == null) return "UTC";
+		Location l = p.getLocation();
+		if (l == null) return "UTC";
+		if (l.getTimeZone() == null) return "UTC";
+		if (l.getTimeZone().isEmpty()) return "UTC";
+		return l.getTimeZone();
 	}
 
 	/**
@@ -993,9 +989,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getBaseFuelConsumption();
 			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
 				return getPortBaseFuelConsumption();
-			case ActualsPackage.SLOT_ACTUALS__ROUTE:
-				if (resolve) return getRoute();
-				return basicGetRoute();
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_OPTION:
+				return getRouteOption();
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				return getDistance();
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
@@ -1057,8 +1052,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
 				setPortBaseFuelConsumption((Integer)newValue);
 				return;
-			case ActualsPackage.SLOT_ACTUALS__ROUTE:
-				setRoute((Route)newValue);
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_OPTION:
+				setRouteOption((RouteOption)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				setDistance((Integer)newValue);
@@ -1126,8 +1121,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
 				setPortBaseFuelConsumption(PORT_BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
-			case ActualsPackage.SLOT_ACTUALS__ROUTE:
-				setRoute((Route)null);
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_OPTION:
+				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
@@ -1182,8 +1177,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
 				return portBaseFuelConsumption != PORT_BASE_FUEL_CONSUMPTION_EDEFAULT;
-			case ActualsPackage.SLOT_ACTUALS__ROUTE:
-				return route != null;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_OPTION:
+				return routeOption != ROUTE_OPTION_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
@@ -1248,6 +1243,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		result.append(baseFuelConsumption);
 		result.append(", portBaseFuelConsumption: ");
 		result.append(portBaseFuelConsumption);
+		result.append(", routeOption: ");
+		result.append(routeOption);
 		result.append(", distance: ");
 		result.append(distance);
 		result.append(", routeCosts: ");

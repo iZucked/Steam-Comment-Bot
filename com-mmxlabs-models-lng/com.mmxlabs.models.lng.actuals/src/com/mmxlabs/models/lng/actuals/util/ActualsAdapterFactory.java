@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.actuals.util;
 
+import com.mmxlabs.models.lng.actuals.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;

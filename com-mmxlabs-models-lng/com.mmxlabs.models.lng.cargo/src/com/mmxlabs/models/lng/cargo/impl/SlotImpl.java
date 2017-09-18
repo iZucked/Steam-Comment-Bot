@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -2191,10 +2192,14 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public String getTimeZone(EAttribute attribute) {
 		final Port p = getPort();
-		if (p == null || p.getTimeZone() == null || p.getTimeZone().isEmpty()) {
+		if (p == null) {
 			return "UTC";
 		}
-		return p.getTimeZone();
+		Location l = p.getLocation();
+		if (l == null || l.getTimeZone() == null || l.getTimeZone().isEmpty()) {
+			return "UTC";
+		}
+		return l.getTimeZone();
 	}
 
 	/**

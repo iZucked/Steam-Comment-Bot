@@ -66,7 +66,7 @@ public class UnitCostMatrixItemProvider
 			addCargoPricePropertyDescriptor(object);
 			addBaseFuelPricePropertyDescriptor(object);
 			addCvValuePropertyDescriptor(object);
-			addAllowedRoutesPropertyDescriptor(object);
+			addAllowedRouteOptionsPropertyDescriptor(object);
 			addRevenueSharePropertyDescriptor(object);
 			addLadenTimeAllowancePropertyDescriptor(object);
 			addBallastTimeAllowancePropertyDescriptor(object);
@@ -405,23 +405,23 @@ public class UnitCostMatrixItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Allowed Routes feature.
+	 * This adds a property descriptor for the Allowed Route Options feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAllowedRoutesPropertyDescriptor(Object object) {
+	protected void addAllowedRouteOptionsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_UnitCostMatrix_allowedRoutes_feature"),
-				 getString("_UI_UnitCostMatrix_allowedRoutes_description"),
-				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTES,
+				 getString("_UI_UnitCostMatrix_allowedRouteOptions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_allowedRouteOptions_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -571,6 +571,7 @@ public class UnitCostMatrixItemProvider
 			case AnalyticsPackage.UNIT_COST_MATRIX__CARGO_PRICE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__BASE_FUEL_PRICE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS:
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE:

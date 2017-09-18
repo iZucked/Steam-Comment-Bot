@@ -21,6 +21,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.EntryPoint;
@@ -88,18 +90,12 @@ public class PortModelImporter implements ISubmodelImporter {
 		};
 
 		protected boolean shouldExportFeature(final org.eclipse.emf.ecore.EStructuralFeature feature) {
-			if (feature == PortPackage.Literals.ROUTE__CANAL) {
+			if (feature == PortPackage.Literals.ROUTE__ROUTE_OPTION) {
 				return false;
 			}
 			if (feature == PortPackage.Literals.ROUTE__LINES) {
 				return false;
-			}
-			if (feature == PortPackage.Literals.ROUTE__ROUTE_OPTION) {
-				return false;
-			}
-			if (feature == PortPackage.Literals.ROUTE__ROUTING_OPTIONS) {
-				return false;
-			}
+			}			
 			return super.shouldExportFeature(feature);
 		}
 	};
@@ -162,6 +158,17 @@ public class PortModelImporter implements ISubmodelImporter {
 				context.registerNamedObject(g);
 			}
 
+			// Set a default MMX ID based on port name
+			for (final Port port : portModel.getPorts()) {
+				Location location = port.getLocation();
+				if (location == null) {
+					location = PortFactory.eINSTANCE.createLocation();
+					port.setLocation(location);
+				}
+				if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
+					location.setMmxId(port.getName());
+				}
+			}
 		}
 		if (inputs.containsKey(PORT_GROUP_KEY)) {
 			final CSVReader reader = inputs.get(PORT_GROUP_KEY);
@@ -179,7 +186,6 @@ public class PortModelImporter implements ISubmodelImporter {
 			if (direct != null) {
 				direct.setName(DIRECT_NAME);
 				direct.setRouteOption(RouteOption.DIRECT);
-				direct.setCanal(false);
 
 				result.getRoutes().add(direct);
 				context.registerNamedObject(direct);
@@ -190,7 +196,6 @@ public class PortModelImporter implements ISubmodelImporter {
 			if (suez != null) {
 				suez.setName(SUEZ_CANAL_NAME);
 				suez.setRouteOption(RouteOption.SUEZ);
-				suez.setCanal(true);
 
 				result.getRoutes().add(suez);
 				context.registerNamedObject(suez);
@@ -202,7 +207,6 @@ public class PortModelImporter implements ISubmodelImporter {
 				if (panama != null) {
 					panama.setName(PANAMA_CANAL_NAME);
 					panama.setRouteOption(RouteOption.PANAMA);
-					panama.setCanal(true);
 
 					result.getRoutes().add(panama);
 					context.registerNamedObject(panama);
@@ -248,29 +252,30 @@ public class PortModelImporter implements ISubmodelImporter {
 							}
 						}
 					}
-				});
+				});	
 			}
-			for (Route route : portModel.getRoutes()) {
+
+			for (final Route route : portModel.getRoutes()) {
 				if (route.getRouteOption() == RouteOption.PANAMA) {
 					if (route.getNorthEntrance() == null) {
-						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						final EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
 						entryPoint.setName("Panama Northside");
 						route.setNorthEntrance(entryPoint);
 					}
 					if (route.getSouthEntrance() == null) {
-						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						final EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
 						entryPoint.setName("Panama Southside");
 						route.setSouthEntrance(entryPoint);
 					}
 				}
 				if (route.getRouteOption() == RouteOption.SUEZ) {
 					if (route.getNorthEntrance() == null) {
-						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						final EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
 						entryPoint.setName("Suez Northside");
 						route.setNorthEntrance(entryPoint);
 					}
 					if (route.getSouthEntrance() == null) {
-						EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
+						final EntryPoint entryPoint = PortFactory.eINSTANCE.createEntryPoint();
 						entryPoint.setName("Suez Southside");
 						route.setSouthEntrance(entryPoint);
 					}
@@ -297,7 +302,6 @@ public class PortModelImporter implements ISubmodelImporter {
 		}
 		output.put(PORT_KEY, portImporter.exportObjects(((PortModel) model).getPorts(), context));
 		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel) model).getPortGroups(), context));
-
 		output.put(CANAL_PORTS_KEY, canalPortsImporter.exportObjects(((PortModel) model).getRoutes(), context));
 	}
 

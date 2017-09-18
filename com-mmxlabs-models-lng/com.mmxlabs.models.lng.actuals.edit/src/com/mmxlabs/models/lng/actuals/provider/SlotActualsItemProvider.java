@@ -76,7 +76,7 @@ public class SlotActualsItemProvider
 			addCVPropertyDescriptor(object);
 			addBaseFuelConsumptionPropertyDescriptor(object);
 			addPortBaseFuelConsumptionPropertyDescriptor(object);
-			addRoutePropertyDescriptor(object);
+			addRouteOptionPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addRouteCostsPropertyDescriptor(object);
 			addCrewBonusPropertyDescriptor(object);
@@ -197,23 +197,23 @@ public class SlotActualsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Route feature.
+	 * This adds a property descriptor for the Route Option feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRoutePropertyDescriptor(Object object) {
+	protected void addRouteOptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SlotActuals_route_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_route_feature", "_UI_SlotActuals_type"),
-				 ActualsPackage.Literals.SLOT_ACTUALS__ROUTE,
+				 getString("_UI_SlotActuals_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_routeOption_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__ROUTE_OPTION,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -571,6 +571,7 @@ public class SlotActualsItemProvider
 			case ActualsPackage.SLOT_ACTUALS__CV:
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_OPTION:
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:

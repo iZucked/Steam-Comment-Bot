@@ -10,10 +10,12 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
@@ -38,44 +40,54 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getRoute <em>Route</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlot <em>Slot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getEntryPoint <em>Entry Point</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getRouteOption <em>Route Option</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingDate <em>Booking Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlot <em>Slot</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingSlot {
 	/**
-	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
+	 * The default value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRoute()
+	 * @see #getRouteOption()
 	 * @generated
 	 * @ordered
 	 */
-	protected Route route;
+	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.DIRECT;
 
 	/**
-	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
+	 * The cached value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSlot()
+	 * @see #getRouteOption()
 	 * @generated
 	 * @ordered
 	 */
-	protected Slot slot;
+	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getEntryPoint() <em>Entry Point</em>}' reference.
+	 * The default value of the '{@link #getCanalEntrance() <em>Canal Entrance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEntryPoint()
+	 * @see #getCanalEntrance()
 	 * @generated
 	 * @ordered
 	 */
-	protected EntryPoint entryPoint;
+	protected static final CanalEntry CANAL_ENTRANCE_EDEFAULT = CanalEntry.NORTHSIDE;
+
+	/**
+	 * The cached value of the '{@link #getCanalEntrance() <em>Canal Entrance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalEntrance()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalEntry canalEntrance = CANAL_ENTRANCE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getBookingDate() <em>Booking Date</em>}' attribute.
@@ -96,6 +108,16 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * @ordered
 	 */
 	protected LocalDate bookingDate = BOOKING_DATE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected Slot slot;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -121,16 +143,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route getRoute() {
-		if (route != null && route.eIsProxy()) {
-			InternalEObject oldRoute = (InternalEObject)route;
-			route = (Route)eResolveProxy(oldRoute);
-			if (route != oldRoute) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CANAL_BOOKING_SLOT__ROUTE, oldRoute, route));
-			}
-		}
-		return route;
+	public RouteOption getRouteOption() {
+		return routeOption;
 	}
 
 	/**
@@ -138,20 +152,53 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route basicGetRoute() {
-		return route;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRoute(Route newRoute) {
-		Route oldRoute = route;
-		route = newRoute;
+	public void setRouteOption(RouteOption newRouteOption) {
+		RouteOption oldRouteOption = routeOption;
+		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__ROUTE, oldRoute, route));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION, oldRouteOption, routeOption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getBookingDate() {
+		return bookingDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBookingDate(LocalDate newBookingDate) {
+		LocalDate oldBookingDate = bookingDate;
+		bookingDate = newBookingDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE, oldBookingDate, bookingDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalEntry getCanalEntrance() {
+		return canalEntrance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalEntrance(CanalEntry newCanalEntrance) {
+		CanalEntry oldCanalEntrance = canalEntrance;
+		canalEntrance = newCanalEntrance == null ? CANAL_ENTRANCE_EDEFAULT : newCanalEntrance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE, oldCanalEntrance, canalEntrance));
 	}
 
 	/**
@@ -197,114 +244,18 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntryPoint getEntryPoint() {
-		if (entryPoint != null && entryPoint.eIsProxy()) {
-			InternalEObject oldEntryPoint = (InternalEObject)entryPoint;
-			entryPoint = (EntryPoint)eResolveProxy(oldEntryPoint);
-			if (entryPoint != oldEntryPoint) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT, oldEntryPoint, entryPoint));
-			}
-		}
-		return entryPoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EntryPoint basicGetEntryPoint() {
-		return entryPoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setEntryPoint(EntryPoint newEntryPoint) {
-		EntryPoint oldEntryPoint = entryPoint;
-		entryPoint = newEntryPoint;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT, oldEntryPoint, entryPoint));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LocalDate getBookingDate() {
-		return bookingDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBookingDate(LocalDate newBookingDate) {
-		LocalDate oldBookingDate = bookingDate;
-		bookingDate = newBookingDate;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE, oldBookingDate, bookingDate));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public ZonedDateTime getBookingDateAsDateTime() {
-		
-		final LocalDate bookingDate = getBookingDate();
-		if (bookingDate == null) {
-			return null;
-		}
-		ZonedDateTime dateTime = bookingDate.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate())));
-		// Assume slots start a 3AM
-		dateTime = dateTime.withHour(CanalBookingSlot.BOOKING_HOURS_OFFSET);
-		return dateTime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String getTimeZone(EAttribute attribute) {
-		final EntryPoint entryPoint = getEntryPoint();
-		if (entryPoint != null) {
-			final Port p = entryPoint.getPort();
-			if (p!= null) {
-				if (p.getTimeZone() != null && !p.getTimeZone().isEmpty()) {
-					return p.getTimeZone();
-				}
-			}
-		}
-		return "UTC";
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE:
-				if (resolve) return getRoute();
-				return basicGetRoute();
+			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION:
+				return getRouteOption();
+			case CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE:
+				return getCanalEntrance();
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
+				return getBookingDate();
 			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
 				if (resolve) return getSlot();
 				return basicGetSlot();
-			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
-				if (resolve) return getEntryPoint();
-				return basicGetEntryPoint();
-			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
-				return getBookingDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -317,17 +268,17 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE:
-				setRoute((Route)newValue);
+			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION:
+				setRouteOption((RouteOption)newValue);
 				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				setSlot((Slot)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
-				setEntryPoint((EntryPoint)newValue);
+			case CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE:
+				setCanalEntrance((CanalEntry)newValue);
 				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				setBookingDate((LocalDate)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
+				setSlot((Slot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -341,17 +292,17 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE:
-				setRoute((Route)null);
+			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION:
+				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				setSlot((Slot)null);
-				return;
-			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
-				setEntryPoint((EntryPoint)null);
+			case CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE:
+				setCanalEntrance(CANAL_ENTRANCE_EDEFAULT);
 				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				setBookingDate(BOOKING_DATE_EDEFAULT);
+				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
+				setSlot((Slot)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -365,48 +316,16 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE:
-				return route != null;
-			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
-				return slot != null;
-			case CargoPackage.CANAL_BOOKING_SLOT__ENTRY_POINT:
-				return entryPoint != null;
+			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION:
+				return routeOption != ROUTE_OPTION_EDEFAULT;
+			case CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE:
+				return canalEntrance != CANAL_ENTRANCE_EDEFAULT;
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				return BOOKING_DATE_EDEFAULT == null ? bookingDate != null : !BOOKING_DATE_EDEFAULT.equals(bookingDate);
+			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
+				return slot != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
-		if (baseClass == ITimezoneProvider.class) {
-			switch (baseOperationID) {
-				case TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE: return CargoPackage.CANAL_BOOKING_SLOT___GET_TIME_ZONE__EATTRIBUTE;
-				default: return -1;
-			}
-		}
-		return super.eDerivedOperationID(baseOperationID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case CargoPackage.CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME:
-				return getBookingDateAsDateTime();
-			case CargoPackage.CANAL_BOOKING_SLOT___GET_TIME_ZONE__EATTRIBUTE:
-				return getTimeZone((EAttribute)arguments.get(0));
-		}
-		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -419,7 +338,11 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (bookingDate: ");
+		result.append(" (routeOption: ");
+		result.append(routeOption);
+		result.append(", canalEntrance: ");
+		result.append(canalEntrance);
+		result.append(", bookingDate: ");
 		result.append(bookingDate);
 		result.append(')');
 		return result.toString();

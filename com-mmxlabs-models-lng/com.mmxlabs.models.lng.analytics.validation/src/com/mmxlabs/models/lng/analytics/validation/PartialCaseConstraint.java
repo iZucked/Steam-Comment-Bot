@@ -214,24 +214,6 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private int getLateness(final IExtraValidationContext extraContext, PartialCaseRow row) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				for (ShippingOption option : row.getShipping()) {
-					// test shipping only
-					if (isFOBPurchase().test(buyOption) && isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, ((LNGScenarioModel) extraContext.getRootObject()).getReferenceModel().getPortModel(),
-								AnalyticsBuilder.getVessel(option));
-						if (lateness < 0) {
-							return lateness;
-						}
-					}
-				}
-			}
-		}
-		return 0;
-	}
-
 	public static Predicate<BuyOption> isFOBPurchase() {
 		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == false)
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == false));

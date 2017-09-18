@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -534,9 +535,11 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	public String getTimeZone(final EAttribute attribute) {
 		Port p = getPort();
 		if (p == null) return "UTC";
-		if (p.getTimeZone() == null) return "UTC";
-		if (p.getTimeZone().isEmpty()) return "UTC";
-		return p.getTimeZone();
+ 		Location l = p.getLocation();
+ 		if (l == null) return "UTC";
+		if (l.getTimeZone() == null) return "UTC";
+		if (l.getTimeZone().isEmpty()) return "UTC";
+		return l.getTimeZone();
 	}
 
 	/**

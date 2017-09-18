@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -50,7 +52,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCostLines <em>Cost Lines</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getAllowedRoutes <em>Allowed Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getAllowedRouteOptions <em>Allowed Route Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getRevenueShare <em>Revenue Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getLadenTimeAllowance <em>Laden Time Allowance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getBallastTimeAllowance <em>Ballast Time Allowance</em>}</li>
@@ -358,14 +360,14 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	protected EList<UnitCostLine> costLines;
 
 	/**
-	 * The cached value of the '{@link #getAllowedRoutes() <em>Allowed Routes</em>}' reference list.
+	 * The cached value of the '{@link #getAllowedRouteOptions() <em>Allowed Route Options</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAllowedRoutes()
+	 * @see #getAllowedRouteOptions()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Route> allowedRoutes;
+	protected EList<RouteOption> allowedRouteOptions;
 
 	/**
 	 * The default value of the '{@link #getRevenueShare() <em>Revenue Share</em>}' attribute.
@@ -865,12 +867,11 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EList<Route> getAllowedRoutes() {
-		if (allowedRoutes == null) {
-			allowedRoutes = new EObjectResolvingEList<Route>(Route.class, this, AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES);
+	public EList<RouteOption> getAllowedRouteOptions() {
+		if (allowedRouteOptions == null) {
+			allowedRouteOptions = new EDataTypeUniqueEList<RouteOption>(RouteOption.class, this, AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS);
 		}
-		return allowedRoutes;
+		return allowedRouteOptions;
 	}
 
 	/**
@@ -997,8 +998,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getCvValue();
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				return getCostLines();
-			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
-				return getAllowedRoutes();
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS:
+				return getAllowedRouteOptions();
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				return getRevenueShare();
 			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
@@ -1069,9 +1070,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				getCostLines().clear();
 				getCostLines().addAll((Collection<? extends UnitCostLine>)newValue);
 				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
-				getAllowedRoutes().clear();
-				getAllowedRoutes().addAll((Collection<? extends Route>)newValue);
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS:
+				getAllowedRouteOptions().clear();
+				getAllowedRouteOptions().addAll((Collection<? extends RouteOption>)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				setRevenueShare((Double)newValue);
@@ -1142,8 +1143,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				getCostLines().clear();
 				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
-				getAllowedRoutes().clear();
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS:
+				getAllowedRouteOptions().clear();
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				setRevenueShare(REVENUE_SHARE_EDEFAULT);
@@ -1198,8 +1199,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return isSetCvValue();
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				return costLines != null && !costLines.isEmpty();
-			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
-				return allowedRoutes != null && !allowedRoutes.isEmpty();
+			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS:
+				return allowedRouteOptions != null && !allowedRouteOptions.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				return revenueShare != REVENUE_SHARE_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
@@ -1276,6 +1277,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		result.append(baseFuelPrice);
 		result.append(", cvValue: ");
 		if (cvValueESet) result.append(cvValue); else result.append("<unset>");
+		result.append(", allowedRouteOptions: ");
+		result.append(allowedRouteOptions);
 		result.append(", revenueShare: ");
 		result.append(revenueShare);
 		result.append(", ladenTimeAllowance: ");

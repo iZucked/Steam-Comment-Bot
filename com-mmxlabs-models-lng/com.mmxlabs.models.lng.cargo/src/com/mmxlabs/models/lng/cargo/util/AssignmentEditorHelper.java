@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -156,12 +157,12 @@ public class AssignmentEditorHelper {
 	}
 
 	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
-			@NonNull final SpotMarketsModel spotMarketsModel) {
-		return collectAssignments(cargoModel, portModel, spotMarketsModel, null);
+			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider) {
+		return collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, null);
 	}
 
 	public static @Nullable List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel,
-			@NonNull final SpotMarketsModel spotMarketsModel, @Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
+			@NonNull final SpotMarketsModel spotMarketsModel, @NonNull ModelDistanceProvider modelDistanceProvider, @Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
 
 		// Map the vessel availability to assignents
 		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
@@ -241,12 +242,12 @@ public class AssignmentEditorHelper {
 
 		// First add in the fleet vessels
 		for (final VesselAvailability vesselAvailability : vesselAvailabilityOrder) {
-			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, portModel, assignableElementDateProvider));
+			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, portModel, modelDistanceProvider, assignableElementDateProvider));
 		}
 
 		// Now add in the spot charter-ins
 		for (final Pair<CharterInMarket, Integer> key : charterInMarketKeysOrder) {
-			result.add(new CollectedAssignment(spotGrouping.get(key), key.getFirst(), key.getSecond(), portModel, assignableElementDateProvider));
+			result.add(new CollectedAssignment(spotGrouping.get(key), key.getFirst(), key.getSecond(), portModel, modelDistanceProvider, assignableElementDateProvider));
 		}
 
 		return result;

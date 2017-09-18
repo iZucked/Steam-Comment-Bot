@@ -51,7 +51,6 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	public CanalBookingSlotComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ITIMEZONE_PROVIDER));
 	}
 	
 	/**
@@ -72,35 +71,20 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_routeEditor(detailComposite, topClass);
-		add_slotEditor(detailComposite, topClass);
-		add_entryPointEditor(detailComposite, topClass);
+		add_routeOptionEditor(detailComposite, topClass);
+		add_canalEntranceEditor(detailComposite, topClass);
 		add_bookingDateEditor(detailComposite, topClass);
+		add_slotEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the route feature on CanalBookingSlot
+	 * Create the editor for the routeOption feature on CanalBookingSlot
 	 *
 	 * @generated
 	 */
-	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE));
+	protected void add_routeOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE_OPTION));
 	}
-	/**
-	 * Create the editor for the slot feature on CanalBookingSlot
-	 *
-	 * @generated
-	 */
-	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT));
-	}
-	/**
-	 * Create the editor for the entryPoint feature on CanalBookingSlot
-	 *
-	 * @generated
-	 */
-	protected void add_entryPointEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__ENTRY_POINT));
-	}
+
 	/**
 	 * Create the editor for the bookingDate feature on CanalBookingSlot
 	 *
@@ -108,5 +92,23 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_bookingDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_DATE));
+	}
+
+	/**
+	 * Create the editor for the canalEntrance feature on CanalBookingSlot
+	 *
+	 * @generated
+	 */
+	protected void add_canalEntranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__CANAL_ENTRANCE));
+	}
+
+	/**
+	 * Create the editor for the slot feature on CanalBookingSlot
+	 *
+	 * @generated
+	 */
+	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT));
 	}
 }

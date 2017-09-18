@@ -54,7 +54,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ActualsPackage.Literals.CARGO_ACTUALS);
+		addEditorsToComposite(detailComposite, ActualsPackage.Literals.CARGO_ACTUALS);	
 	}
 
 	/**
@@ -64,8 +64,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_actualsEditor(detailComposite, topClass);
 		add_returnActualsEditor(detailComposite, topClass);
 		add_contractYearEditor(detailComposite, topClass);

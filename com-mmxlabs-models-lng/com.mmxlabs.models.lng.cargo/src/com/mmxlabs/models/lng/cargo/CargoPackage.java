@@ -5279,31 +5279,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKING_SLOT__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int CANAL_BOOKING_SLOT__ROUTE_OPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * The feature id for the '<em><b>Canal Entrance</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT__SLOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Entry Point</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL_BOOKING_SLOT__ENTRY_POINT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CANAL_BOOKING_SLOT__CANAL_ENTRANCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Booking Date</b></em>' attribute.
@@ -5312,7 +5303,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT__BOOKING_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CANAL_BOOKING_SLOT__BOOKING_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__SLOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Canal Booking Slot</em>' class.
@@ -5351,31 +5351,13 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKING_SLOT___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
-	 * The operation id for the '<em>Get Time Zone</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL_BOOKING_SLOT___GET_TIME_ZONE__EATTRIBUTE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Booking Date As Date Time</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
-
-	/**
 	 * The number of operations of the '<em>Canal Booking Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+	int CANAL_BOOKING_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.
@@ -7363,37 +7345,15 @@ public interface CargoPackage extends EPackage {
 	EClass getCanalBookingSlot();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRouteOption <em>Route Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRoute()
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getRouteOption()
 	 * @see #getCanalBookingSlot()
 	 * @generated
 	 */
-	EReference getCanalBookingSlot_Route();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Slot</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot()
-	 * @see #getCanalBookingSlot()
-	 * @generated
-	 */
-	EReference getCanalBookingSlot_Slot();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getEntryPoint <em>Entry Point</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Entry Point</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getEntryPoint()
-	 * @see #getCanalBookingSlot()
-	 * @generated
-	 */
-	EReference getCanalBookingSlot_EntryPoint();
+	EAttribute getCanalBookingSlot_RouteOption();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}'.
@@ -7407,14 +7367,26 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookingSlot_BookingDate();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDateAsDateTime() <em>Get Booking Date As Date Time</em>}' operation.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getCanalEntrance <em>Canal Entrance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Booking Date As Date Time</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDateAsDateTime()
+	 * @return the meta object for the attribute '<em>Canal Entrance</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getCanalEntrance()
+	 * @see #getCanalBookingSlot()
 	 * @generated
 	 */
-	EOperation getCanalBookingSlot__GetBookingDateAsDateTime();
+	EAttribute getCanalBookingSlot_CanalEntrance();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EReference getCanalBookingSlot_Slot();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
@@ -8959,28 +8931,12 @@ public interface CargoPackage extends EPackage {
 		EClass CANAL_BOOKING_SLOT = eINSTANCE.getCanalBookingSlot();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CANAL_BOOKING_SLOT__ROUTE = eINSTANCE.getCanalBookingSlot_Route();
-
-		/**
-		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CANAL_BOOKING_SLOT__SLOT = eINSTANCE.getCanalBookingSlot_Slot();
-
-		/**
-		 * The meta object literal for the '<em><b>Entry Point</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CANAL_BOOKING_SLOT__ENTRY_POINT = eINSTANCE.getCanalBookingSlot_EntryPoint();
+		EAttribute CANAL_BOOKING_SLOT__ROUTE_OPTION = eINSTANCE.getCanalBookingSlot_RouteOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Booking Date</b></em>' attribute feature.
@@ -8991,12 +8947,20 @@ public interface CargoPackage extends EPackage {
 		EAttribute CANAL_BOOKING_SLOT__BOOKING_DATE = eINSTANCE.getCanalBookingSlot_BookingDate();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Booking Date As Date Time</b></em>' operation.
+		 * The meta object literal for the '<em><b>Canal Entrance</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME = eINSTANCE.getCanalBookingSlot__GetBookingDateAsDateTime();
+		EAttribute CANAL_BOOKING_SLOT__CANAL_ENTRANCE = eINSTANCE.getCanalBookingSlot_CanalEntrance();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_SLOT__SLOT = eINSTANCE.getCanalBookingSlot_Slot();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.

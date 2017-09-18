@@ -66,16 +66,17 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_destinationEditor(detailComposite, topClass);
 		add_ladenEditor(detailComposite, topClass);
-		add_routeEditor(detailComposite, topClass);
+		add_routeOptionEditor(detailComposite, topClass);
 		add_tollEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
 		add_speedEditor(detailComposite, topClass);
-		add_canalEntryEditor(detailComposite, topClass);
+		add_canalEntranceEditor(detailComposite, topClass);
 		add_canalDateEditor(detailComposite, topClass);
 		add_canalBookingEditor(detailComposite, topClass);
 		add_latestPossibleCanalDateEditor(detailComposite, topClass);
 		add_canalArrivalEditor(detailComposite, topClass);
 		add_canalBookingPeriodEditor(detailComposite, topClass);
+		add_canalEntrancePortEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the destination feature on Journey
@@ -94,13 +95,14 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__LADEN));
 	}
 	/**
-	 * Create the editor for the route feature on Journey
+	 * Create the editor for the routeOption feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__ROUTE));
+	protected void add_routeOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__ROUTE_OPTION));
 	}
+
 	/**
 	 * Create the editor for the toll feature on Journey
 	 *
@@ -129,12 +131,12 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the canalEntry feature on Journey
+	 * Create the editor for the canalEntrance feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_canalEntryEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_ENTRY));
+	protected void add_canalEntranceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_ENTRANCE));
 	}
 
 	/**
@@ -180,5 +182,14 @@ public class JourneyComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_canalBookingPeriodEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_BOOKING_PERIOD));
+	}
+
+	/**
+	 * Create the editor for the canalEntrancePort feature on Journey
+	 *
+	 * @generated
+	 */
+	protected void add_canalEntrancePortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.JOURNEY__CANAL_ENTRANCE_PORT));
 	}
 }

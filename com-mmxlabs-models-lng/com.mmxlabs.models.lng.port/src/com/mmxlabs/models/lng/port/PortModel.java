@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getRoutes <em>Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups <em>Port Country Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel()
@@ -108,5 +109,31 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<PortCountryGroup> getPortCountryGroups();
+
+	/**
+	 * Returns the value of the '<em><b>Port Data Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Data Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Data Version</em>' attribute.
+	 * @see #setPortDataVersion(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_PortDataVersion()
+	 * @model
+	 * @generated
+	 */
+	String getPortDataVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Data Version</em>' attribute.
+	 * @see #getPortDataVersion()
+	 * @generated
+	 */
+	void setPortDataVersion(String value);
 
 } // PortModel

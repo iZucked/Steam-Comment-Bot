@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 
 /**
@@ -215,10 +216,13 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 */
 	@Override
 	public String getTimeZone(EAttribute attribute) {
-		if (getTitleTransferPoint() == null) return "UTC";
-		if (getTitleTransferPoint().getTimeZone() == null) return "UTC";
-		if (getTitleTransferPoint().getTimeZone().isEmpty()) return "UTC";
-		return getTitleTransferPoint().getTimeZone();
+		Port p = getTitleTransferPoint();
+		if (p == null) return "UTC";
+		Location l = p.getLocation();
+		if (l == null) return "UTC";
+		if (l.getTimeZone() == null) return "UTC";
+		if (l.getTimeZone().isEmpty()) return "UTC";
+		return l.getTimeZone();
 	}
 
 	/**

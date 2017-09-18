@@ -24,10 +24,10 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -38,7 +38,7 @@ public class CargoTravelTimeUtils {
 	public static final List<RouteOption> EMPTY_ROUTES = Collections.emptyList();
 
 	public static int getDivertableDESMinRouteTimeInHours(final LoadSlot desPurchase, final Slot from, final Slot to, final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider,
-			final PortModel portModel, final Vessel vessel, final double referenceSpeed) {
+			final PortModel portModel, final Vessel vessel, final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
 
 		Collection<Route> allowedRoutes = null;
 		if (shippingDaysSpeedProvider != null) {
@@ -47,33 +47,23 @@ public class CargoTravelTimeUtils {
 		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
 			allowedRoutes = portModel.getRoutes();
 		}
-		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes);
+		final int minDuration = getMinTimeFromAllowedRoutes(from, to, vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
 		return minDuration;
 	}
 
 	public static int getFobMinTimeInHours(final Slot from, final Slot to, final LocalDate date, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final CostModel costModel,
-			final double referenceSpeed) {
+			final double referenceSpeed, final ModelDistanceProvider modelDistanceProvider) {
 		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, date, portModel, costModel);
 		final Pair<Vessel, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
 		final Vessel vessel = vesselAssignmentTypeData.getFirst();
 		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
-		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes);
+		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
-	private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes) {
-		int minDuration = Integer.MAX_VALUE;
-		for (final Route route : allowedRoutes) {
-			assert route != null;
-			final Port fromPort = from.getPort();
-			final Port toPort = to.getPort();
-			if (fromPort != null && toPort != null) {
-				final int totalTime = TravelTimeUtils.getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort);
-				if (totalTime < minDuration) {
-					minDuration = totalTime;
-				}
-			}
-		}
-		return minDuration;
+private static int getMinTimeFromAllowedRoutes(final Slot from, final Slot to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+			final ModelDistanceProvider modelDistanceProvider) {
+
+		return TravelTimeUtils.getMinTimeFromAllowedRoutes(from.getPort(), to.getPort(), vessel, referenceSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
 	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final LocalDate date, final PortModel portModel, final CostModel costModel) {

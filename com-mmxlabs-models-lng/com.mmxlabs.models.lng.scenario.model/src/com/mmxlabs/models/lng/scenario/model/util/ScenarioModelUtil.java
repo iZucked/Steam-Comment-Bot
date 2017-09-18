@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
@@ -366,5 +367,14 @@ public final class ScenarioModelUtil {
 			container = container.eContainer();
 		}
 		return (LNGScenarioModel) container;
+	}
+
+	public static @NonNull ModelDistanceProvider getModelDistanceProvider(@NonNull final IScenarioDataProvider scenarioDataProvider) {
+		@NonNull
+		ModelDistanceProvider extraDataProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+		if (extraDataProvider == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return extraDataProvider;
 	}
 }

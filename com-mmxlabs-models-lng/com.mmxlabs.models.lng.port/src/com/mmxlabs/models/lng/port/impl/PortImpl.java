@@ -23,8 +23,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.impl.APortSetImpl;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.OtherNamesObject;
+import java.time.ZoneId;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,10 +33,9 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getShortName <em>Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getCapabilities <em>Capabilities</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLoadDuration <em>Load Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDischargeDuration <em>Discharge Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getBerths <em>Berths</em>}</li>
@@ -46,12 +44,6 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSize <em>Default Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLocation <em>Location</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getAtobviacCode <em>Atobviac Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDataloyCode <em>Dataloy Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getVesonCode <em>Veson Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getExternalCode <em>External Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getUNLocode <em>UN Locode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
@@ -59,16 +51,6 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * @generated
  */
 public class PortImpl extends APortSetImpl<Port> implements Port {
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
-
 	/**
 	 * The default value of the '{@link #getShortName() <em>Short Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -90,6 +72,16 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	protected String shortName = SHORT_NAME_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getLocation() <em>Location</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected Location location;
+
+	/**
 	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -98,26 +90,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected EList<PortCapability> capabilities;
-
-	/**
-	 * The default value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTimeZone()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TIME_ZONE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTimeZone()
-	 * @generated
-	 * @ordered
-	 */
-	protected String timeZone = TIME_ZONE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLoadDuration() <em>Load Duration</em>}' attribute.
@@ -280,116 +252,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	protected TimePeriod defaultWindowSizeUnits = DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getLocation() <em>Location</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLocation()
-	 * @generated
-	 * @ordered
-	 */
-	protected Location location;
-
-	/**
-	 * The default value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAtobviacCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ATOBVIAC_CODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAtobviacCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String atobviacCode = ATOBVIAC_CODE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDataloyCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String DATALOY_CODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDataloyCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String dataloyCode = DATALOY_CODE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVesonCode() <em>Veson Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesonCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String VESON_CODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getVesonCode() <em>Veson Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesonCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String vesonCode = VESON_CODE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getExternalCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String EXTERNAL_CODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getExternalCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String externalCode = EXTERNAL_CODE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getUNLocode() <em>UN Locode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUNLocode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String UN_LOCODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getUNLocode() <em>UN Locode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUNLocode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String unLocode = UN_LOCODE_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -471,44 +333,11 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, PortPackage.PORT__OTHER_NAMES);
-		}
-		return otherNames;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<PortCapability> getCapabilities() {
 		if (capabilities == null) {
 			capabilities = new EDataTypeUniqueEList<PortCapability>(PortCapability.class, this, PortPackage.PORT__CAPABILITIES);
 		}
 		return capabilities;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getTimeZone() {
-		return timeZone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTimeZone(String newTimeZone) {
-		String oldTimeZone = timeZone;
-		timeZone = newTimeZone;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__TIME_ZONE, oldTimeZone, timeZone));
 	}
 
 	/**
@@ -727,111 +556,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getAtobviacCode() {
-		return atobviacCode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAtobviacCode(String newAtobviacCode) {
-		String oldAtobviacCode = atobviacCode;
-		atobviacCode = newAtobviacCode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__ATOBVIAC_CODE, oldAtobviacCode, atobviacCode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getDataloyCode() {
-		return dataloyCode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDataloyCode(String newDataloyCode) {
-		String oldDataloyCode = dataloyCode;
-		dataloyCode = newDataloyCode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DATALOY_CODE, oldDataloyCode, dataloyCode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getVesonCode() {
-		return vesonCode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVesonCode(String newVesonCode) {
-		String oldVesonCode = vesonCode;
-		vesonCode = newVesonCode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__VESON_CODE, oldVesonCode, vesonCode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getExternalCode() {
-		return externalCode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setExternalCode(String newExternalCode) {
-		String oldExternalCode = externalCode;
-		externalCode = newExternalCode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__EXTERNAL_CODE, oldExternalCode, externalCode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getUNLocode() {
-		return unLocode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setUNLocode(String newUNLocode) {
-		String oldUNLocode = unLocode;
-		unLocode = newUNLocode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__UN_LOCODE, oldUNLocode, unLocode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public double getMinCvValue() {
 		return minCvValue;
 	}
@@ -922,6 +646,15 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public ZoneId getZoneId() {
+		return getLocation().getZoneId();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getShortName() {
@@ -962,14 +695,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PortPackage.PORT__OTHER_NAMES:
-				return getOtherNames();
 			case PortPackage.PORT__SHORT_NAME:
 				return getShortName();
+			case PortPackage.PORT__LOCATION:
+				return getLocation();
 			case PortPackage.PORT__CAPABILITIES:
 				return getCapabilities();
-			case PortPackage.PORT__TIME_ZONE:
-				return getTimeZone();
 			case PortPackage.PORT__LOAD_DURATION:
 				return getLoadDuration();
 			case PortPackage.PORT__DISCHARGE_DURATION:
@@ -986,18 +717,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getDefaultWindowSize();
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
 				return getDefaultWindowSizeUnits();
-			case PortPackage.PORT__LOCATION:
-				return getLocation();
-			case PortPackage.PORT__ATOBVIAC_CODE:
-				return getAtobviacCode();
-			case PortPackage.PORT__DATALOY_CODE:
-				return getDataloyCode();
-			case PortPackage.PORT__VESON_CODE:
-				return getVesonCode();
-			case PortPackage.PORT__EXTERNAL_CODE:
-				return getExternalCode();
-			case PortPackage.PORT__UN_LOCODE:
-				return getUNLocode();
 			case PortPackage.PORT__MIN_CV_VALUE:
 				return getMinCvValue();
 			case PortPackage.PORT__MAX_CV_VALUE:
@@ -1015,19 +734,15 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PortPackage.PORT__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
-				return;
 			case PortPackage.PORT__SHORT_NAME:
 				setShortName((String)newValue);
+				return;
+			case PortPackage.PORT__LOCATION:
+				setLocation((Location)newValue);
 				return;
 			case PortPackage.PORT__CAPABILITIES:
 				getCapabilities().clear();
 				getCapabilities().addAll((Collection<? extends PortCapability>)newValue);
-				return;
-			case PortPackage.PORT__TIME_ZONE:
-				setTimeZone((String)newValue);
 				return;
 			case PortPackage.PORT__LOAD_DURATION:
 				setLoadDuration((Integer)newValue);
@@ -1053,24 +768,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
 				setDefaultWindowSizeUnits((TimePeriod)newValue);
 				return;
-			case PortPackage.PORT__LOCATION:
-				setLocation((Location)newValue);
-				return;
-			case PortPackage.PORT__ATOBVIAC_CODE:
-				setAtobviacCode((String)newValue);
-				return;
-			case PortPackage.PORT__DATALOY_CODE:
-				setDataloyCode((String)newValue);
-				return;
-			case PortPackage.PORT__VESON_CODE:
-				setVesonCode((String)newValue);
-				return;
-			case PortPackage.PORT__EXTERNAL_CODE:
-				setExternalCode((String)newValue);
-				return;
-			case PortPackage.PORT__UN_LOCODE:
-				setUNLocode((String)newValue);
-				return;
 			case PortPackage.PORT__MIN_CV_VALUE:
 				setMinCvValue((Double)newValue);
 				return;
@@ -1089,17 +786,14 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PortPackage.PORT__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case PortPackage.PORT__SHORT_NAME:
 				setShortName(SHORT_NAME_EDEFAULT);
 				return;
+			case PortPackage.PORT__LOCATION:
+				setLocation((Location)null);
+				return;
 			case PortPackage.PORT__CAPABILITIES:
 				getCapabilities().clear();
-				return;
-			case PortPackage.PORT__TIME_ZONE:
-				setTimeZone(TIME_ZONE_EDEFAULT);
 				return;
 			case PortPackage.PORT__LOAD_DURATION:
 				setLoadDuration(LOAD_DURATION_EDEFAULT);
@@ -1125,24 +819,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
 				setDefaultWindowSizeUnits(DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT);
 				return;
-			case PortPackage.PORT__LOCATION:
-				setLocation((Location)null);
-				return;
-			case PortPackage.PORT__ATOBVIAC_CODE:
-				setAtobviacCode(ATOBVIAC_CODE_EDEFAULT);
-				return;
-			case PortPackage.PORT__DATALOY_CODE:
-				setDataloyCode(DATALOY_CODE_EDEFAULT);
-				return;
-			case PortPackage.PORT__VESON_CODE:
-				setVesonCode(VESON_CODE_EDEFAULT);
-				return;
-			case PortPackage.PORT__EXTERNAL_CODE:
-				setExternalCode(EXTERNAL_CODE_EDEFAULT);
-				return;
-			case PortPackage.PORT__UN_LOCODE:
-				setUNLocode(UN_LOCODE_EDEFAULT);
-				return;
 			case PortPackage.PORT__MIN_CV_VALUE:
 				unsetMinCvValue();
 				return;
@@ -1161,14 +837,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PortPackage.PORT__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case PortPackage.PORT__SHORT_NAME:
 				return SHORT_NAME_EDEFAULT == null ? shortName != null : !SHORT_NAME_EDEFAULT.equals(shortName);
+			case PortPackage.PORT__LOCATION:
+				return location != null;
 			case PortPackage.PORT__CAPABILITIES:
 				return capabilities != null && !capabilities.isEmpty();
-			case PortPackage.PORT__TIME_ZONE:
-				return TIME_ZONE_EDEFAULT == null ? timeZone != null : !TIME_ZONE_EDEFAULT.equals(timeZone);
 			case PortPackage.PORT__LOAD_DURATION:
 				return loadDuration != LOAD_DURATION_EDEFAULT;
 			case PortPackage.PORT__DISCHARGE_DURATION:
@@ -1185,18 +859,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return defaultWindowSize != DEFAULT_WINDOW_SIZE_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
 				return defaultWindowSizeUnits != DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT;
-			case PortPackage.PORT__LOCATION:
-				return location != null;
-			case PortPackage.PORT__ATOBVIAC_CODE:
-				return ATOBVIAC_CODE_EDEFAULT == null ? atobviacCode != null : !ATOBVIAC_CODE_EDEFAULT.equals(atobviacCode);
-			case PortPackage.PORT__DATALOY_CODE:
-				return DATALOY_CODE_EDEFAULT == null ? dataloyCode != null : !DATALOY_CODE_EDEFAULT.equals(dataloyCode);
-			case PortPackage.PORT__VESON_CODE:
-				return VESON_CODE_EDEFAULT == null ? vesonCode != null : !VESON_CODE_EDEFAULT.equals(vesonCode);
-			case PortPackage.PORT__EXTERNAL_CODE:
-				return EXTERNAL_CODE_EDEFAULT == null ? externalCode != null : !EXTERNAL_CODE_EDEFAULT.equals(externalCode);
-			case PortPackage.PORT__UN_LOCODE:
-				return UN_LOCODE_EDEFAULT == null ? unLocode != null : !UN_LOCODE_EDEFAULT.equals(unLocode);
 			case PortPackage.PORT__MIN_CV_VALUE:
 				return isSetMinCvValue();
 			case PortPackage.PORT__MAX_CV_VALUE:
@@ -1211,50 +873,14 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == OtherNamesObject.class) {
-			switch (derivedFeatureID) {
-				case PortPackage.PORT__OTHER_NAMES: return MMXCorePackage.OTHER_NAMES_OBJECT__OTHER_NAMES;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == OtherNamesObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.OTHER_NAMES_OBJECT__OTHER_NAMES: return PortPackage.PORT__OTHER_NAMES;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (otherNames: ");
-		result.append(otherNames);
-		result.append(", shortName: ");
+		result.append(" (shortName: ");
 		result.append(shortName);
 		result.append(", capabilities: ");
 		result.append(capabilities);
-		result.append(", timeZone: ");
-		result.append(timeZone);
 		result.append(", loadDuration: ");
 		result.append(loadDuration);
 		result.append(", dischargeDuration: ");
@@ -1271,16 +897,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(defaultWindowSize);
 		result.append(", defaultWindowSizeUnits: ");
 		result.append(defaultWindowSizeUnits);
-		result.append(", atobviacCode: ");
-		result.append(atobviacCode);
-		result.append(", dataloyCode: ");
-		result.append(dataloyCode);
-		result.append(", vesonCode: ");
-		result.append(vesonCode);
-		result.append(", externalCode: ");
-		result.append(externalCode);
-		result.append(", UNLocode: ");
-		result.append(unLocode);
 		result.append(", minCvValue: ");
 		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
 		result.append(", maxCvValue: ");

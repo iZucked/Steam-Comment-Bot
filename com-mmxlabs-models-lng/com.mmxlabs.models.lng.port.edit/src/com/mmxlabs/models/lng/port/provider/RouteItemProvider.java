@@ -53,8 +53,6 @@ public class RouteItemProvider
 
 			addUuidPropertyDescriptor(object);
 			addRouteOptionPropertyDescriptor(object);
-			addCanalPropertyDescriptor(object);
-			addRoutingOptionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,50 +93,6 @@ public class RouteItemProvider
 				 getString("_UI_Route_routeOption_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Route_routeOption_feature", "_UI_Route_type"),
 				 PortPackage.Literals.ROUTE__ROUTE_OPTION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Canal feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCanalPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Route_canal_feature"),
-				 getString("_UI_Route_canal_description"),
-				 PortPackage.Literals.ROUTE__CANAL,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Routing Options feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRoutingOptionsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Route_routingOptions_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Route_routingOptions_feature", "_UI_Route_type"),
-				 PortPackage.Literals.ROUTE__ROUTING_OPTIONS,
 				 true,
 				 false,
 				 false,
@@ -218,8 +172,6 @@ public class RouteItemProvider
 		switch (notification.getFeatureID(Route.class)) {
 			case PortPackage.ROUTE__UUID:
 			case PortPackage.ROUTE__ROUTE_OPTION:
-			case PortPackage.ROUTE__CANAL:
-			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.ROUTE__LINES:

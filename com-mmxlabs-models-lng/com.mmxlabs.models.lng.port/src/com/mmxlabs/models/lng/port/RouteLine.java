@@ -20,7 +20,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getDistance <em>Distance</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getVias <em>Vias</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine()
@@ -105,29 +104,5 @@ public interface RouteLine extends MMXObject {
 	 * @generated
 	 */
 	void setDistance(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Vias</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteLine}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Vias</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vias</em>' reference list.
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine_Vias()
-	 * @model
-	 * @generated
-	 */
-	EList<RouteLine> getVias();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	int getFullDistance();
 
 } // RouteLine

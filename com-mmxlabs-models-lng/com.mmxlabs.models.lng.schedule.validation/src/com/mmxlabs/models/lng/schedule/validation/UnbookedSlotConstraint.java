@@ -14,6 +14,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -68,16 +69,16 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 				for (Event event : sequence.getEvents()) {
 					if (event instanceof Journey) {
 						Journey journey = (Journey) event;
-						final Route route = journey.getRoute();
-						if (route != null) {
-							if (route.getRouteOption() == RouteOption.PANAMA) {
+						final RouteOption routeOption = journey.getRouteOption();
+						if (routeOption != null) {
+							if (routeOption == RouteOption.PANAMA) {
 								if (journey.getCanalBooking() == null) {
 									// No Booking!
 									if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
-										if (journey.getCanalEntry() == route.getNorthEntrance()) {
-											++southboundExcessRelaxedBookings;
-										} else {
+										if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
 											++northboundExcessRelaxedBookings;
+										} else {
+											++southboundExcessRelaxedBookings;
 										}
 									}
 								}
@@ -115,9 +116,9 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 				return Activator.PLUGIN_ID;
 			}
 
-			final Route route = journey.getRoute();
-			if (route != null) {
-				if (route.getRouteOption() == RouteOption.PANAMA) {
+			final RouteOption routeOption = journey.getRouteOption();
+			if (routeOption != null) {
+				if (routeOption == RouteOption.PANAMA) {
 					if (journey.getCanalBooking() == null) {
 						// No Booking!
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT || journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {

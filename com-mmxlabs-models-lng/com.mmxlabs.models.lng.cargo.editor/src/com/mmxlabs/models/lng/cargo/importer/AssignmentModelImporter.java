@@ -11,7 +11,9 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -47,9 +49,10 @@ public class AssignmentModelImporter implements IExtraModelImporter {
 			final SpotMarketsModel spotMarketsModel = lngScenarioModel.getReferenceModel().getSpotMarketsModel();
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+			final ModelDistanceProvider modelDistanceProvider = context.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
 			if (cargoModel != null) {
-				output.put(ASSIGNMENTS, importer.exportObjects(cargoModel, portModel, spotMarketsModel, context));
+				output.put(ASSIGNMENTS, importer.exportObjects(cargoModel, portModel, spotMarketsModel, modelDistanceProvider, context));
 			}
 		}
 	}

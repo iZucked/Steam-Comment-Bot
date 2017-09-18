@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.util.DistanceModelBuilder;
 import com.mmxlabs.models.lng.port.util.PortModelBuilder;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.util.CostModelBuilder;
@@ -44,6 +45,11 @@ public final class ScenarioModelBuilder {
 	private final @NonNull CostModelBuilder costModelBuilder;
 	private final @NonNull SpotMarketsModelBuilder spotMarketsModelBuilder;
 	private final @NonNull CargoModelBuilder cargoModelBuilder;
+	private final @NonNull DistanceModelBuilder distanceModelBuilder;
+
+	public DistanceModelBuilder getDistanceModelBuilder() {
+		return distanceModelBuilder;
+	}
 
 	public static @NonNull ScenarioModelBuilder instantiate() {
 		final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
@@ -62,12 +68,12 @@ public final class ScenarioModelBuilder {
 		rootObject.setReferenceModel(referenceModel);
 
 		return new ScenarioModelBuilder(rootObject);
+
 	}
-	
+
 	public ScenarioModelBuilder(final @NonNull IScenarioDataProvider scenarioDataProvider) {
 		this(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 	}
-	
 
 	public ScenarioModelBuilder(final @NonNull LNGScenarioModel lngScenarioModel) {
 		this.lngScenarioModel = lngScenarioModel;
@@ -80,6 +86,8 @@ public final class ScenarioModelBuilder {
 		this.spotMarketsModelBuilder = new SpotMarketsModelBuilder(ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel));
 
 		this.cargoModelBuilder = new CargoModelBuilder(ScenarioModelUtil.getCargoModel(lngScenarioModel));
+
+		this.distanceModelBuilder = new DistanceModelBuilder(ScenarioModelUtil.getPortModel(lngScenarioModel));
 	}
 
 	@NonNull

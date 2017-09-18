@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -23,13 +23,13 @@ public class PortTimeZoneConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Port) {
-			final Port port = (Port) target;
+		if (target instanceof Location) {
+			final Location location = (Location) target;
 
 			// Check a time zone is specified
-			if (port.getTimeZone() == null || port.getTimeZone().isEmpty()) {
+			if (location.getTimeZone() == null || location.getTimeZone().isEmpty()) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
-				dsd.addEObjectAndFeature(port, PortPackage.eINSTANCE.getPort_TimeZone());
+				dsd.addEObjectAndFeature(location, PortPackage.eINSTANCE.getLocation_TimeZone());
 				return dsd;
 			}
 
@@ -41,9 +41,9 @@ public class PortTimeZoneConstraint extends AbstractModelConstraint {
 				}
 			}
 			// Check specified timezone is valid
-			if (!timeZones.contains(port.getTimeZone())) {
+			if (!timeZones.contains(location.getTimeZone())) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
-				dsd.addEObjectAndFeature(port, PortPackage.eINSTANCE.getPort_TimeZone());
+				dsd.addEObjectAndFeature(location, PortPackage.eINSTANCE.getLocation_TimeZone());
 				return dsd;
 			}
 		}

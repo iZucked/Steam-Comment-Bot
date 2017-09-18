@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import java.time.LocalDate;
 
 /**
@@ -20,16 +22,17 @@ import java.time.LocalDate;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getDestination <em>Destination</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#isLaden <em>Laden</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getSpeed <em>Speed</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalDate <em>Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBooking <em>Canal Booking</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrival <em>Canal Arrival</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrancePort <em>Canal Entrance Port</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney()
@@ -90,30 +93,33 @@ public interface Journey extends Event, FuelUsage {
 	void setLaden(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Route</b></em>' reference.
+	 * Returns the value of the '<em><b>Route Option</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Route</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Route Option</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Route</em>' reference.
-	 * @see #setRoute(Route)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_Route()
-	 * @model
+	 * @return the value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #setRouteOption(RouteOption)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_RouteOption()
+	 * @model required="true"
 	 * @generated
 	 */
-	Route getRoute();
+	RouteOption getRouteOption();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getRouteOption <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Route</em>' reference.
-	 * @see #getRoute()
+	 * @param value the new value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #getRouteOption()
 	 * @generated
 	 */
-	void setRoute(Route value);
+	void setRouteOption(RouteOption value);
 
 	/**
 	 * Returns the value of the '<em><b>Toll</b></em>' attribute.
@@ -194,30 +200,33 @@ public interface Journey extends Event, FuelUsage {
 	void setSpeed(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Canal Entry</b></em>' reference.
+	 * Returns the value of the '<em><b>Canal Entrance</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.CanalEntry}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Canal Entry</em>' reference isn't clear,
+	 * If the meaning of the '<em>Canal Entrance</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Canal Entry</em>' reference.
-	 * @see #setCanalEntry(EntryPoint)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalEntry()
+	 * @return the value of the '<em>Canal Entrance</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.CanalEntry
+	 * @see #setCanalEntrance(CanalEntry)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalEntrance()
 	 * @model
 	 * @generated
 	 */
-	EntryPoint getCanalEntry();
+	CanalEntry getCanalEntrance();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntry <em>Canal Entry</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrance <em>Canal Entrance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Canal Entry</em>' reference.
-	 * @see #getCanalEntry()
+	 * @param value the new value of the '<em>Canal Entrance</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.CanalEntry
+	 * @see #getCanalEntrance()
 	 * @generated
 	 */
-	void setCanalEntry(EntryPoint value);
+	void setCanalEntrance(CanalEntry value);
 
 	/**
 	 * Returns the value of the '<em><b>Canal Date</b></em>' attribute.
@@ -351,6 +360,32 @@ public interface Journey extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setCanalBookingPeriod(PanamaBookingPeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Entrance Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Canal Entrance Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Entrance Port</em>' reference.
+	 * @see #setCanalEntrancePort(Port)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalEntrancePort()
+	 * @model
+	 * @generated
+	 */
+	Port getCanalEntrancePort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrancePort <em>Canal Entrance Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Entrance Port</em>' reference.
+	 * @see #getCanalEntrancePort()
+	 * @generated
+	 */
+	void setCanalEntrancePort(Port value);
 
 } // end of  Journey
 

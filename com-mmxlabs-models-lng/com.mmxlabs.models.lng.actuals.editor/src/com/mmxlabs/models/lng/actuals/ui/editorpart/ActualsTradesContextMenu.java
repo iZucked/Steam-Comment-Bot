@@ -36,12 +36,12 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenu
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -61,6 +61,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ActualsTradesContextMenu implements ITradesTableContextMenuExtension {
 
@@ -129,6 +130,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 			// Step 1: Find or create Actuals model if needed.
 			final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+			final IScenarioDataProvider scenarioDataProvider = scenarioEditingLocation.getScenarioDataProvider();
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGReferenceModel referenceModel = lngScenarioModel.getReferenceModel();
@@ -158,7 +160,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				cargoActuals.setCargo(cargo);
 				cargoActuals.setCargoReference(cargo.getLoadName());
 				if (cargo.getVesselAssignmentType() instanceof VesselAvailability) {
-					VesselAvailability vesselAvailability = (VesselAvailability) cargo.getVesselAssignmentType();
+					final VesselAvailability vesselAvailability = (VesselAvailability) cargo.getVesselAssignmentType();
 					cargoActuals.setVessel(vesselAvailability.getVessel());
 				}
 
@@ -221,8 +223,8 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 							int ladenDistance = 0;
 							int ballastDistance = 0;
-							Route ladenRoute = null;
-							Route ballastRoute = null;
+							RouteOption ladenRoute = null;
+							RouteOption ballastRoute = null;
 							boolean isLaden = false;
 
 							long totalCharterCost = 0;
@@ -249,7 +251,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										ladenDistance += journey.getDistance();
 										ladenRouteCosts += journey.getToll();
 
-										ladenRoute = journey.getRoute();
+										ladenRoute = journey.getRouteOption();
 									} else {
 										ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.BASE_FUEL, FuelUnit.MT);
 										ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.PILOT_LIGHT, FuelUnit.MT);
@@ -257,7 +259,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										ballastDistance += journey.getDistance();
 										ballastRouteCosts += journey.getToll();
 
-										ballastRoute = journey.getRoute();
+										ballastRoute = journey.getRouteOption();
 									}
 
 								} else if (event instanceof Idle) {
@@ -276,22 +278,11 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							// Look up distances for divertable des cargoes
 							if (isDivertableDESPurchase && portModel != null && loadPort != null && dischargePort != null) {
 
+								final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+
 								// Take direct route
-								for (final Route route : portModel.getRoutes()) {
-									if (route.getRouteOption() != RouteOption.DIRECT) {
-										continue;
-									}
-									for (final RouteLine rl : route.getLines()) {
-										if (rl.getFrom() == loadPort && rl.getTo() == dischargePort) {
-											ladenRoute = route;
-											ladenDistance = rl.getDistance();
-										}
-										if (rl.getTo() == loadPort && rl.getFrom() == dischargePort) {
-											ballastRoute = route;
-											ballastDistance = rl.getDistance();
-										}
-									}
-								}
+								ladenDistance = modelDistanceProvider.getDistance(loadPort, dischargePort, RouteOption.DIRECT);
+								ballastDistance = modelDistanceProvider.getDistance(dischargePort, loadPort, RouteOption.DIRECT);
 							}
 
 							for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -314,7 +305,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
 									slotActuals.setRouteCosts(ladenRouteCosts);
 									slotActuals.setDistance(ladenDistance);
-									slotActuals.setRoute(ladenRoute);
+									slotActuals.setRouteOption(ladenRoute);
 
 									// Reset in case of multiple loads/discharges!
 									ladenBaseFuelConsumptionInMT = 0;
@@ -327,7 +318,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
 									slotActuals.setRouteCosts(ballastRouteCosts);
 									slotActuals.setDistance(ballastDistance);
-									slotActuals.setRoute(ballastRoute);
+									slotActuals.setRouteOption(ballastRoute);
 									// Reset in case of multiple loads/discharges!
 									ballastBaseFuelConsumptionInMT = 0;
 									ballastRouteCosts = 0;
@@ -398,7 +389,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 	}
 
 	@Override
-	public void contributeToMenu(@NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull IStructuredSelection selection, @NonNull MenuManager menuManager) {
+	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection selection, @NonNull final MenuManager menuManager) {
 
 	}
 }

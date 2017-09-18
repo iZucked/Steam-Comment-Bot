@@ -51,10 +51,8 @@ public class PortItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addOtherNamesPropertyDescriptor(object);
 			addShortNamePropertyDescriptor(object);
 			addCapabilitiesPropertyDescriptor(object);
-			addTimeZonePropertyDescriptor(object);
 			addLoadDurationPropertyDescriptor(object);
 			addDischargeDurationPropertyDescriptor(object);
 			addBerthsPropertyDescriptor(object);
@@ -63,37 +61,10 @@ public class PortItemProvider
 			addAllowCooldownPropertyDescriptor(object);
 			addDefaultWindowSizePropertyDescriptor(object);
 			addDefaultWindowSizeUnitsPropertyDescriptor(object);
-			addAtobviacCodePropertyDescriptor(object);
-			addDataloyCodePropertyDescriptor(object);
-			addVesonCodePropertyDescriptor(object);
-			addExternalCodePropertyDescriptor(object);
-			addUNLocodePropertyDescriptor(object);
 			addMinCvValuePropertyDescriptor(object);
 			addMaxCvValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Other Names feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_OtherNamesObject_otherNames_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_OtherNamesObject_otherNames_feature", "_UI_OtherNamesObject_type"),
-				 MMXCorePackage.Literals.OTHER_NAMES_OBJECT__OTHER_NAMES,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -110,28 +81,6 @@ public class PortItemProvider
 				 getString("_UI_Port_capabilities_feature"),
 				 getString("_UI_Port_capabilities_description"),
 				 PortPackage.Literals.PORT__CAPABILITIES,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Time Zone feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTimeZonePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_timeZone_feature"),
-				 getString("_UI_Port_timeZone_description"),
-				 PortPackage.Literals.PORT__TIME_ZONE,
 				 true,
 				 false,
 				 false,
@@ -317,116 +266,6 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Atobviac Code feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAtobviacCodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_atobviacCode_feature"),
-				 getString("_UI_Port_atobviacCode_description"),
-				 PortPackage.Literals.PORT__ATOBVIAC_CODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Dataloy Code feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDataloyCodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_dataloyCode_feature"),
-				 getString("_UI_Port_dataloyCode_description"),
-				 PortPackage.Literals.PORT__DATALOY_CODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Veson Code feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVesonCodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_vesonCode_feature"),
-				 getString("_UI_Port_vesonCode_description"),
-				 PortPackage.Literals.PORT__VESON_CODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the External Code feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addExternalCodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_externalCode_feature"),
-				 getString("_UI_Port_externalCode_description"),
-				 PortPackage.Literals.PORT__EXTERNAL_CODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the UN Locode feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUNLocodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_UNLocode_feature"),
-				 getString("_UI_Port_UNLocode_description"),
-				 PortPackage.Literals.PORT__UN_LOCODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Min Cv Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -559,10 +398,8 @@ public class PortItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Port.class)) {
-			case PortPackage.PORT__OTHER_NAMES:
 			case PortPackage.PORT__SHORT_NAME:
 			case PortPackage.PORT__CAPABILITIES:
-			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__LOAD_DURATION:
 			case PortPackage.PORT__DISCHARGE_DURATION:
 			case PortPackage.PORT__BERTHS:
@@ -571,11 +408,6 @@ public class PortItemProvider
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
-			case PortPackage.PORT__ATOBVIAC_CODE:
-			case PortPackage.PORT__DATALOY_CODE:
-			case PortPackage.PORT__VESON_CODE:
-			case PortPackage.PORT__EXTERNAL_CODE:
-			case PortPackage.PORT__UN_LOCODE:
 			case PortPackage.PORT__MIN_CV_VALUE:
 			case PortPackage.PORT__MAX_CV_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -29,7 +29,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getDistance <em>Distance</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getVias <em>Vias</em>}</li>
  * </ul>
  *
  * @generated
@@ -74,16 +73,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * @ordered
 	 */
 	protected int distance = DISTANCE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVias() <em>Vias</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVias()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<RouteLine> vias;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -206,35 +195,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<RouteLine> getVias() {
-		if (vias == null) {
-			vias = new EObjectResolvingEList<RouteLine>(RouteLine.class, this, PortPackage.ROUTE_LINE__VIAS);
-		}
-		return vias;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public int getFullDistance() {
-		if (!getVias().isEmpty()) {
-			// Be careful of circular references!
-			int distance = 0;
-			for (final RouteLine rl : getVias()) {
-				distance += rl.getFullDistance();
-			}
-			return distance;
-		}
-		return getDistance();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -246,8 +206,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return basicGetTo();
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				return getDistance();
-			case PortPackage.ROUTE_LINE__VIAS:
-				return getVias();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -270,10 +228,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				setDistance((Integer)newValue);
 				return;
-			case PortPackage.ROUTE_LINE__VIAS:
-				getVias().clear();
-				getVias().addAll((Collection<? extends RouteLine>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -295,9 +249,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
 				return;
-			case PortPackage.ROUTE_LINE__VIAS:
-				getVias().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -316,8 +267,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return to != null;
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
-			case PortPackage.ROUTE_LINE__VIAS:
-				return vias != null && !vias.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

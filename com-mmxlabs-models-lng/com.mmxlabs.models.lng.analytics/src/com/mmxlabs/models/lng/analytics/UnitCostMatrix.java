@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -36,7 +37,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes <em>Allowed Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRouteOptions <em>Allowed Route Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance <em>Laden Time Allowance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance <em>Ballast Time Allowance</em>}</li>
@@ -471,20 +472,22 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	EList<UnitCostLine> getCostLines();
 
 	/**
-	 * Returns the value of the '<em><b>Allowed Routes</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.port.Route}.
+	 * Returns the value of the '<em><b>Allowed Route Options</b></em>' attribute list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Allowed Routes</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Allowed Route Options</em>' attribute list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Allowed Routes</em>' reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_AllowedRoutes()
+	 * @return the value of the '<em>Allowed Route Options</em>' attribute list.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_AllowedRouteOptions()
 	 * @model
 	 * @generated
 	 */
-	EList<Route> getAllowedRoutes();
+	EList<RouteOption> getAllowedRouteOptions();
 
 	/**
 	 * Returns the value of the '<em><b>Revenue Share</b></em>' attribute.

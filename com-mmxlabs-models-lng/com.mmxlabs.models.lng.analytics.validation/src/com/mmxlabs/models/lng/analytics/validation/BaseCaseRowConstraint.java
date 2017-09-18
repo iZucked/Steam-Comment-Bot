@@ -27,7 +27,9 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -68,12 +70,12 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 						final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) baseCaseRow.getShipping();
 						final Vessel vessel = roundTripShippingOption.getVessel();
 
-						validateTravelTime(ctx, statuses, baseCaseRow, portModel, vessel);
+						validateTravelTime(ctx, extraContext, statuses, baseCaseRow, portModel, vessel);
 					} else if (baseCaseRow.getShipping() instanceof FleetShippingOption) {
 						final FleetShippingOption roundTripShippingOption = (FleetShippingOption) baseCaseRow.getShipping();
 						final Vessel vessel = roundTripShippingOption.getVessel();
 						if (vessel != null) {
-							validateTravelTime(ctx, statuses, baseCaseRow, portModel, vessel);
+							validateTravelTime(ctx, extraContext, statuses, baseCaseRow, portModel, vessel);
 						}
 					}
 
@@ -116,7 +118,8 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private void validateTravelTime(final IValidationContext ctx, final List<IStatus> statuses, final BaseCaseRow baseCaseRow, final PortModel portModel, final Vessel vessel) {
+	private void validateTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, final BaseCaseRow baseCaseRow, final PortModel portModel,
+			final Vessel vessel) {
 		final Port fromPort = AnalyticsBuilder.getPort(baseCaseRow.getBuyOption());
 		final Port toPort = AnalyticsBuilder.getPort(baseCaseRow.getSellOption());
 		if (fromPort != null && toPort != null && vessel != null) {
@@ -126,7 +129,9 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 
 			final double speed = vessel.getVesselOrDelegateMaxSpeed();
 
-			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes());
+			ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+
+			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vessel, speed, portModel.getRoutes(), modelDistanceProvider);
 
 			if (windowStartDate != null && windowEndDate != null) {
 				final int optionDuration = AnalyticsBuilder.getDuration(baseCaseRow.getBuyOption());

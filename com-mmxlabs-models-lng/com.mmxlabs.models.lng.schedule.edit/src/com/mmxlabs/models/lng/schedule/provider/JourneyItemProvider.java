@@ -52,16 +52,17 @@ public class JourneyItemProvider
 
 			addDestinationPropertyDescriptor(object);
 			addLadenPropertyDescriptor(object);
-			addRoutePropertyDescriptor(object);
+			addRouteOptionPropertyDescriptor(object);
 			addTollPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addSpeedPropertyDescriptor(object);
-			addCanalEntryPropertyDescriptor(object);
+			addCanalEntrancePropertyDescriptor(object);
 			addCanalDatePropertyDescriptor(object);
 			addCanalBookingPropertyDescriptor(object);
 			addLatestPossibleCanalDatePropertyDescriptor(object);
 			addCanalArrivalPropertyDescriptor(object);
 			addCanalBookingPeriodPropertyDescriptor(object);
+			addCanalEntrancePortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -111,23 +112,23 @@ public class JourneyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Route feature.
+	 * This adds a property descriptor for the Route Option feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRoutePropertyDescriptor(Object object) {
+	protected void addRouteOptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Journey_route_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_route_feature", "_UI_Journey_type"),
-				 SchedulePackage.Literals.JOURNEY__ROUTE,
+				 getString("_UI_Journey_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_routeOption_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__ROUTE_OPTION,
 				 true,
 				 false,
 				 false,
-				 null,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -199,23 +200,23 @@ public class JourneyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Canal Entry feature.
+	 * This adds a property descriptor for the Canal Entrance feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCanalEntryPropertyDescriptor(Object object) {
+	protected void addCanalEntrancePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Journey_canalEntry_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalEntry_feature", "_UI_Journey_type"),
-				 SchedulePackage.Literals.JOURNEY__CANAL_ENTRY,
+				 getString("_UI_Journey_canalEntrance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalEntrance_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_ENTRANCE,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -331,6 +332,28 @@ public class JourneyItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Canal Entrance Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalEntrancePortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Journey_canalEntrancePort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Journey_canalEntrancePort_feature", "_UI_Journey_type"),
+				 SchedulePackage.Literals.JOURNEY__CANAL_ENTRANCE_PORT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -399,10 +422,11 @@ public class JourneyItemProvider
 
 		switch (notification.getFeatureID(Journey.class)) {
 			case SchedulePackage.JOURNEY__LADEN:
-			case SchedulePackage.JOURNEY__ROUTE:
+			case SchedulePackage.JOURNEY__ROUTE_OPTION:
 			case SchedulePackage.JOURNEY__TOLL:
 			case SchedulePackage.JOURNEY__DISTANCE:
 			case SchedulePackage.JOURNEY__SPEED:
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
 			case SchedulePackage.JOURNEY__CANAL_DATE:
 			case SchedulePackage.JOURNEY__LATEST_POSSIBLE_CANAL_DATE:
 			case SchedulePackage.JOURNEY__CANAL_ARRIVAL:

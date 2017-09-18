@@ -132,7 +132,7 @@ public class DistanceLineViewer extends GridTableViewer {
 			final GridViewerColumn toColumn = new GridViewerColumn(this, SWT.NONE);
 			toColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			toColumn.getColumn().setText(p.getName());
-//			toColumn.getColumn().setWidth(50);
+			// toColumn.getColumn().setWidth(50);
 			toColumn.getColumn().setResizeable(true);
 			toColumn.getColumn().pack();
 
@@ -142,7 +142,7 @@ public class DistanceLineViewer extends GridTableViewer {
 					final Pair<Port, Map<Port, RouteLine>> e = (Pair<Port, Map<Port, RouteLine>>) element;
 					final RouteLine dl = e.getSecond().get(p);
 					if (dl != null) {
-						return "" + dl.getFullDistance();
+						return "" + dl.getDistance();
 					} else {
 						return "";
 					}
@@ -218,9 +218,9 @@ public class DistanceLineViewer extends GridTableViewer {
 				@Override
 				protected boolean canEdit(final Object element) {
 
-					final Pair<Port, Map<Port, RouteLine>> e = (Pair<Port, Map<Port, RouteLine>>) element;
-					final RouteLine dl = e.getSecond().get(p);
-					return dl == null || dl.getVias().isEmpty();
+					// final Pair<Port, Map<Port, RouteLine>> e = (Pair<Port, Map<Port, RouteLine>>) element;
+					// final RouteLine dl = e.getSecond().get(p);
+					return true;// dl == null;
 				}
 			});
 		}
@@ -235,11 +235,7 @@ public class DistanceLineViewer extends GridTableViewer {
 
 				if (element instanceof RouteLine) {
 					final RouteLine routeLine = (RouteLine) element;
-					if (routeLine.getVias().isEmpty()) {
-						cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-					} else {
-						cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
-					}
+					cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 				}
 			}
 		});

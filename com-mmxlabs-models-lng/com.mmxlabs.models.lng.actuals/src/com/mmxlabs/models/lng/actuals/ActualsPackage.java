@@ -229,13 +229,13 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__ROUTE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
+	int SLOT_ACTUALS__ROUTE_OPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Distance</b></em>' attribute.
@@ -609,13 +609,13 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_ACTUALS__ROUTE = SLOT_ACTUALS__ROUTE;
+	int LOAD_ACTUALS__ROUTE_OPTION = SLOT_ACTUALS__ROUTE_OPTION;
 
 	/**
 	 * The feature id for the '<em><b>Distance</b></em>' attribute.
@@ -862,13 +862,13 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_ACTUALS__ROUTE = SLOT_ACTUALS__ROUTE;
+	int DISCHARGE_ACTUALS__ROUTE_OPTION = SLOT_ACTUALS__ROUTE_OPTION;
 
 	/**
 	 * The feature id for the '<em><b>Distance</b></em>' attribute.
@@ -1178,15 +1178,15 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getSlotActuals_PortBaseFuelConsumption();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteOption <em>Route Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Route</em>'.
-	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getRoute()
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getRouteOption()
 	 * @see #getSlotActuals()
 	 * @generated
 	 */
-	EReference getSlotActuals_Route();
+	EAttribute getSlotActuals_RouteOption();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}'.
@@ -1751,12 +1751,12 @@ public interface ActualsPackage extends EPackage {
 		EAttribute SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = eINSTANCE.getSlotActuals_PortBaseFuelConsumption();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SLOT_ACTUALS__ROUTE = eINSTANCE.getSlotActuals_Route();
+		EAttribute SLOT_ACTUALS__ROUTE_OPTION = eINSTANCE.getSlotActuals_RouteOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.

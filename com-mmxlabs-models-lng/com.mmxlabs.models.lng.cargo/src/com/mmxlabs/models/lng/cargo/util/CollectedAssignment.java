@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper.OrderingHint;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -35,20 +36,20 @@ public class CollectedAssignment {
 	private final Integer spotIndex;
 
 	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull VesselAvailability vesselAvailability, final @Nullable PortModel portModel,
-			final @Nullable IAssignableElementDateProvider dateProvider) {
+			@Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {
 		this.vesselAvailability = vesselAvailability;
 		this.charterInMarket = null;
 		this.spotIndex = null;
-		this.assignments = sortAssignments(assignments, portModel, dateProvider);
+		this.assignments = sortAssignments(assignments, portModel, modelDistanceProvider, dateProvider);
 	}
 
 	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull CharterInMarket charterInMarket, final int spotIndex, final @Nullable PortModel portModel,
-			final @Nullable IAssignableElementDateProvider dateProvider) {
+			@Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {
 		this.vesselAvailability = null;
 		this.charterInMarket = charterInMarket;
 		this.spotIndex = spotIndex;
 		// -1 is the nominal cargoes, so no need to sort
-		this.assignments = spotIndex == -1 ? assignments : sortAssignments(assignments, portModel, dateProvider);
+		this.assignments = spotIndex == -1 ? assignments : sortAssignments(assignments, portModel, modelDistanceProvider, dateProvider);
 	}
 
 	public @NonNull List<@NonNull AssignableElement> getAssignedObjects() {
@@ -76,11 +77,11 @@ public class CollectedAssignment {
 	}
 
 	private static @NonNull List<@NonNull AssignableElement> sortAssignments(@NonNull final List<@NonNull AssignableElement> assignments, final @Nullable PortModel portModel,
-			final @Nullable IAssignableElementDateProvider dateProvider) {
+			@Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {
 
 		final @NonNull List<@NonNull WrappedAssignableElement> sortedElements = new LinkedList<>();
 		for (final AssignableElement ae : assignments) {
-			final WrappedAssignableElement e = new WrappedAssignableElement(ae, portModel, dateProvider);
+			final WrappedAssignableElement e = new WrappedAssignableElement(ae, portModel, modelDistanceProvider, dateProvider);
 			sortedElements.add(e);
 		}
 		sortWrappedAssignableElements(sortedElements);

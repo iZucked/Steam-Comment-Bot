@@ -30,9 +30,10 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -375,10 +376,10 @@ public class CargoModelBuilder {
 		return new SlotMaker<SpotDischargeSlot>(this).withMarketFOBSale(name, market, windowStart, port);
 	}
 
-	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull Route route, final @NonNull EntryPoint entryPoint, final @NonNull LocalDate date, @Nullable Slot slot) {
+	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date, @Nullable Slot slot) {
 		final CanalBookingSlot booking = CargoFactory.eINSTANCE.createCanalBookingSlot();
-		booking.setRoute(route);
-		booking.setEntryPoint(entryPoint);
+		booking.setRouteOption(routeOption);
+		booking.setCanalEntrance(canalEntrance);
 		booking.setBookingDate(date);
 		if (slot != null) {
 			booking.setSlot(slot);

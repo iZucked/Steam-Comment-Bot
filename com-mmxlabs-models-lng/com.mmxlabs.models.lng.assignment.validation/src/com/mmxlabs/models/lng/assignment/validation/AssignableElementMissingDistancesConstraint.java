@@ -7,9 +7,7 @@ package com.mmxlabs.models.lng.assignment.validation;
 import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT;
 import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
@@ -18,7 +16,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -33,9 +30,9 @@ import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -58,20 +55,14 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 		final EObject target = ctx.getTarget();
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof CargoModel) {
-			CargoModel cargoModel = (CargoModel) target;
+			final CargoModel cargoModel = (CargoModel) target;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 			// final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+			final ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
-
-			@SuppressWarnings("unchecked")
-			Map<Pair<Port, Port>, Boolean> hasDistanceMap = (Map<Pair<Port, Port>, Boolean>) ctx.getCurrentConstraintData();
-			if (hasDistanceMap == null) {
-				hasDistanceMap = checkDistances(portModel);
-				ctx.putCurrentConstraintData(hasDistanceMap);
-			}
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {
@@ -100,7 +91,6 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 				}
 
 				// Find end port(s)
-
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
 
 					if (assignment instanceof Cargo) {
@@ -108,7 +98,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 						for (final Slot slot : cargo.getSortedSlots()) {
 							final Port currentPort = slot.getPort();
 							if (prevPort != null && currentPort != null) {
-								if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
+								if (!modelDistanceProvider.hasAnyDistance(prevPort, currentPort)) {
 									reportError(ctx, prevObject, prevFeature, prevPort, slot, CargoPackage.Literals.SLOT__PORT, currentPort, statuses);
 								}
 							}
@@ -123,7 +113,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 
 						final Port currentPort = charterOutEvent.getPort();
 						if (prevPort != null && currentPort != null) {
-							if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
+							if (!modelDistanceProvider.hasAnyDistance(prevPort, currentPort)) {
 								reportError(ctx, prevObject, prevFeature, prevPort, charterOutEvent, CargoPackage.Literals.VESSEL_EVENT__PORT, currentPort, statuses);
 							}
 						}
@@ -141,7 +131,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 						// single port
 						final Port currentPort = vesselEvent.getPort();
 						if (prevPort != null && currentPort != null) {
-							if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
+							if (!modelDistanceProvider.hasAnyDistance(prevPort, currentPort)) {
 								reportError(ctx, prevObject, prevFeature, prevPort, vesselEvent, CargoPackage.Literals.VESSEL_EVENT__PORT, currentPort, statuses);
 							}
 							prevPort = currentPort;
@@ -159,7 +149,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 					boolean foundDistance = false;
 					for (final Port p : endPorts) {
 
-						if (hasDistance(hasDistanceMap, prevPort, p)) {
+						if (modelDistanceProvider.hasAnyDistance(prevPort, p)) {
 							foundDistance = true;
 							break;
 						}
@@ -231,31 +221,5 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			return (featureString == "" ? "Vessel " + vesselName : vesselName + featureString);
 		}
 		return "(unknown)";
-	}
-
-	private Map<Pair<Port, Port>, Boolean> checkDistances(final PortModel portModel) {
-
-		final Map<Pair<Port, Port>, Boolean> hasDistanceMap = new HashMap<>();
-		for (final Route route : portModel.getRoutes()) {
-			for (final RouteLine rl : route.getLines()) {
-				if (rl.getDistance() != Integer.MAX_VALUE && rl.getDistance() >= 0) {
-					hasDistanceMap.put(new Pair<>(rl.getFrom(), rl.getTo()), Boolean.TRUE);
-				}
-			}
-		}
-		return hasDistanceMap;
-	}
-
-	private boolean hasDistance(final Map<Pair<Port, Port>, Boolean> map, final Port from, final Port to) {
-
-		if (from == to) {
-			return true;
-		}
-
-		final Pair<Port, Port> key = new Pair<>(from, to);
-		if (map.containsKey(key)) {
-			return map.get(key);
-		}
-		return false;
 	}
 }

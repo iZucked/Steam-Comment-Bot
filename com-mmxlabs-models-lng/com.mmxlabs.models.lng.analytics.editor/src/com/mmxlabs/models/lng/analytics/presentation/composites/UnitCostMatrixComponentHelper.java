@@ -80,7 +80,7 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 		add_baseFuelPriceEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
 		add_costLinesEditor(detailComposite, topClass);
-		add_allowedRoutesEditor(detailComposite, topClass);
+		add_allowedRouteOptionsEditor(detailComposite, topClass);
 		add_revenueShareEditor(detailComposite, topClass);
 		add_ladenTimeAllowanceEditor(detailComposite, topClass);
 		add_ballastTimeAllowanceEditor(detailComposite, topClass);
@@ -236,12 +236,12 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the allowedRoutes feature on UnitCostMatrix
+	 * Create the editor for the allowedRouteOptions feature on UnitCostMatrix
 	 *
 	 * @generated
 	 */
-	protected void add_allowedRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTES));
+	protected void add_allowedRouteOptionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS));
 	}
 
 	/**

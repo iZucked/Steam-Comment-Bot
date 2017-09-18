@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -130,9 +131,10 @@ public class AssignmentImporter {
 		}
 	}
 
-	public Collection<Map<String, String>> exportObjects(final CargoModel cargoModel, final PortModel portModel, final SpotMarketsModel spotMarketsModel, final IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final CargoModel cargoModel, final PortModel portModel, final SpotMarketsModel spotMarketsModel, ModelDistanceProvider modelDistanceProvider,
+			final IExportContext context) {
 		final List<Map<String, String>> result = new LinkedList<>();
-		final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
+		final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		for (final CollectedAssignment collectAssignment : collectAssignments) {
 			final Map<String, String> row = new HashMap<>();
 			if (collectAssignment.getVesselAvailability() != null) {

@@ -72,7 +72,7 @@
                   Checks ports have a valid time zone specified
                </description>
                <target
-                     class="Port">
+                     class="Location">
                </target>
             </constraint>
             <constraint

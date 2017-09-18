@@ -54,7 +54,9 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
@@ -140,9 +142,9 @@ public class BaseCaseEvaluator {
 
 		}
 
-		public <T extends EObject> T getOriginal(@NonNull T copy) {
+		public <T extends EObject> T getOriginal(@NonNull final T copy) {
 
-			for (Map.Entry<EObject, EObject> e : copier.entrySet()) {
+			for (final Map.Entry<EObject, EObject> e : copier.entrySet()) {
 				if (e.getValue() == copy) {
 					return (T) e.getKey();
 				}
@@ -151,7 +153,7 @@ public class BaseCaseEvaluator {
 			return (T) null;
 		}
 
-		public <T extends EObject> T getCopy(@NonNull T original) {
+		public <T extends EObject> T getCopy(@NonNull final T original) {
 			return (T) copier.get(original);
 		}
 	}
@@ -160,6 +162,7 @@ public class BaseCaseEvaluator {
 			final BiConsumer<IScenarioDataProvider, IMapperClass> callback) {
 
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+		final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final EcoreUtil.Copier copier = new Copier();
@@ -179,9 +182,9 @@ public class BaseCaseEvaluator {
 			if (!baseCase.isKeepExistingScenario()) {
 				clearData(clone, clonedModel, clonedBaseCase);
 			}
-			buildScenario(clone, clonedModel, clonedBaseCase, mapper);
-
-			ClonedScenarioDataProvider clonedDataProvider = ClonedScenarioDataProvider.make(clone, scenarioEditingLocation.getScenarioDataProvider());
+			buildScenario(clone, clonedModel, clonedBaseCase, mapper, modelDistanceProvider);
+			// FIXME: Copy distance data too!
+			final ClonedScenarioDataProvider clonedDataProvider = ClonedScenarioDataProvider.make(clone, scenarioEditingLocation.getScenarioDataProvider());
 			callback.accept(clonedDataProvider, mapper);
 
 			return clonedDataProvider;
@@ -204,9 +207,9 @@ public class BaseCaseEvaluator {
 			final IMapperClass mapper = new Mapper(copier);
 
 			clearData(clone, clonedModel, null);
-			Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(clone, clonedModel, mapper);
+			final Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(clone, clonedModel, mapper);
 
-			ClonedScenarioDataProvider clonedDataProvider = ClonedScenarioDataProvider.make(clone, scenarioEditingLocation.getScenarioDataProvider());
+			final ClonedScenarioDataProvider clonedDataProvider = ClonedScenarioDataProvider.make(clone, scenarioEditingLocation.getScenarioDataProvider());
 			callback.accept(clonedDataProvider, shippingMap, mapper);
 
 			return clonedDataProvider;
@@ -229,7 +232,7 @@ public class BaseCaseEvaluator {
 
 	protected static void updateResults(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final @NonNull IScenarioDataProvider cloneDataProvider, final BaseCase baseCase) {
 		@NonNull
-		ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(cloneDataProvider);
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(cloneDataProvider);
 
 		final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(scheduleModel.getSchedule());
 		scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
@@ -250,9 +253,10 @@ public class BaseCaseEvaluator {
 
 	}
 
-	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final @NonNull BaseCase clonedBaseCase, final IMapperClass mapper) {
+	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final @NonNull BaseCase clonedBaseCase, final IMapperClass mapper,
+			final ModelDistanceProvider modelDistanceProvider) {
 
-		Map<FleetShippingOption, VesselAvailability> shippingMap = createShipping(clone, clonedBaseCase);
+		final Map<FleetShippingOption, VesselAvailability> shippingMap = createShipping(clone, clonedBaseCase);
 
 		for (final BaseCaseRow row : clonedBaseCase.getBaseCase()) {
 			final BuyOption buy = row.getBuyOption();
@@ -264,7 +268,7 @@ public class BaseCaseEvaluator {
 			final DischargeSlot dischargeSlot = AnalyticsBuilder.makeDischargeSlot(sell, clone);
 			mapper.addMapping(sell, dischargeSlot);
 
-			Cargo cargo = makeCargo(clone, shippingMap, row, loadSlot, dischargeSlot);
+			final Cargo cargo = makeCargo(clone, shippingMap, row, loadSlot, dischargeSlot, modelDistanceProvider);
 
 			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
 				clone.getCargoModel().getLoadSlots().add(loadSlot);
@@ -292,7 +296,7 @@ public class BaseCaseEvaluator {
 
 	protected static Map<ShippingOption, VesselAssignmentType> buildFullScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final IMapperClass mapper) {
 
-		Map<ShippingOption, VesselAssignmentType> shippingMap = createShipping(clone, clonedModel);
+		final Map<ShippingOption, VesselAssignmentType> shippingMap = createShipping(clone, clonedModel);
 
 		for (final BuyOption buy : clonedModel.getBuys()) {
 			final LoadSlot loadSlot = AnalyticsBuilder.makeLoadSlot(buy, clone);
@@ -311,8 +315,8 @@ public class BaseCaseEvaluator {
 		return shippingMap;
 	}
 
-	public static Cargo makeCargo(final LNGScenarioModel clone, Map<FleetShippingOption, VesselAvailability> shippingMap, final BaseCaseRow row, final LoadSlot loadSlot,
-			final DischargeSlot dischargeSlot) {
+	public static Cargo makeCargo(final LNGScenarioModel clone, final Map<FleetShippingOption, VesselAvailability> shippingMap, final BaseCaseRow row, final LoadSlot loadSlot,
+			final DischargeSlot dischargeSlot, final ModelDistanceProvider modelDistanceProvider) {
 		Cargo cargo = null;
 		if (loadSlot != null && dischargeSlot != null) {
 			if (loadSlot.getCargo() != null) {
@@ -339,12 +343,12 @@ public class BaseCaseEvaluator {
 			}
 		}
 
-		setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone, shippingMap);
+		setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone, shippingMap, modelDistanceProvider);
 		return cargo;
 	}
 
 	protected static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
-			final @NonNull LNGScenarioModel lngScenarioModel, Map<FleetShippingOption, VesselAvailability> shippingMap) {
+			final @NonNull LNGScenarioModel lngScenarioModel, final Map<FleetShippingOption, VesselAvailability> shippingMap, final ModelDistanceProvider modelDistanceProvider) {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
 		if (shipping == null) {
@@ -409,7 +413,7 @@ public class BaseCaseEvaluator {
 
 				// TODO: Calculate time.
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping, modelDistanceProvider);
 					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
 					if (dischargeSlot instanceof SpotSlot) {
@@ -420,7 +424,7 @@ public class BaseCaseEvaluator {
 						dischargeSlot.setWindowStartTime(0);
 					}
 				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping, modelDistanceProvider);
 					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
 					if (loadSlot instanceof SpotSlot) {
@@ -447,7 +451,7 @@ public class BaseCaseEvaluator {
 				cargo.setSpotIndex(-1);
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping, modelDistanceProvider);
 					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 
 					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
@@ -459,7 +463,7 @@ public class BaseCaseEvaluator {
 						dischargeSlot.setWindowStartTime(0);
 					}
 				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping, modelDistanceProvider);
 
 					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
@@ -484,7 +488,7 @@ public class BaseCaseEvaluator {
 	}
 
 	protected static Map<FleetShippingOption, VesselAvailability> createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
-		Map<FleetShippingOption, VesselAvailability> availabilitiesMap = new HashMap<>();
+		final Map<FleetShippingOption, VesselAvailability> availabilitiesMap = new HashMap<>();
 		for (final BaseCaseRow row : clonedBaseCase.getBaseCase()) {
 
 			final ShippingOption shipping = row.getShipping();
@@ -523,7 +527,7 @@ public class BaseCaseEvaluator {
 					vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 				}
 				if (optionalAvailabilityShippingOption.getEndPort() != null) {
-					EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+					final EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 					endAt.clear();
 					endAt.add(optionalAvailabilityShippingOption.getEndPort());
 				}
@@ -565,7 +569,7 @@ public class BaseCaseEvaluator {
 	}
 
 	protected static Map<ShippingOption, VesselAssignmentType> createShipping(final LNGScenarioModel clone, final OptionAnalysisModel model) {
-		Map<ShippingOption, VesselAssignmentType> availabilitiesMap = new HashMap<>();
+		final Map<ShippingOption, VesselAssignmentType> availabilitiesMap = new HashMap<>();
 
 		for (final ShippingOption shipping : model.getShippingTemplates()) {
 
@@ -605,7 +609,7 @@ public class BaseCaseEvaluator {
 					vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 				}
 				if (optionalAvailabilityShippingOption.getEndPort() != null) {
-					EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+					final EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 					endAt.clear();
 					endAt.add(optionalAvailabilityShippingOption.getEndPort());
 				}

@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 /**
@@ -36,7 +37,7 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortBaseFuelConsumption <em>Port Base Fuel Consumption</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus <em>Crew Bonus</em>}</li>
@@ -196,30 +197,33 @@ public interface SlotActuals extends ITimezoneProvider {
 	void setPortBaseFuelConsumption(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Route</b></em>' reference.
+	 * Returns the value of the '<em><b>Route Option</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Route</em>' reference isn't clear,
+	 * If the meaning of the '<em>Route Option</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Route</em>' reference.
-	 * @see #setRoute(Route)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Route()
+	 * @return the value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #setRouteOption(RouteOption)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_RouteOption()
 	 * @model
 	 * @generated
 	 */
-	Route getRoute();
+	RouteOption getRouteOption();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteOption <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Route</em>' reference.
-	 * @see #getRoute()
+	 * @param value the new value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #getRouteOption()
 	 * @generated
 	 */
-	void setRoute(Route value);
+	void setRouteOption(RouteOption value);
 
 	/**
 	 * Returns the value of the '<em><b>Distance</b></em>' attribute.

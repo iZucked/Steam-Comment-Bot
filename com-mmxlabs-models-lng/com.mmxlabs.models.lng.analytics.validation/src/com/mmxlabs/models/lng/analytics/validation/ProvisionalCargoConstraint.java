@@ -4,18 +4,14 @@
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.jws.soap.SOAPBinding.ParameterStyle;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
@@ -23,20 +19,17 @@ import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
 public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 
@@ -120,33 +113,10 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 				return;
 			}
 
+			PortModel portModel = ScenarioModelUtil.getPortModel(scenario);
+			ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 			final double maxSpeedKnots = vessel.getVesselOrDelegateMaxSpeed();
 
-			@SuppressWarnings("unchecked")
-			Map<Pair<Port, Port>, Integer> minTimes = (Map<Pair<Port, Port>, Integer>) ctx.getCurrentConstraintData();
-			if (minTimes == null) {
-				minTimes = new HashMap<Pair<Port, Port>, Integer>();
-
-				PortModel portModel = ScenarioModelUtil.getPortModel(scenario);
-
-				for (final VesselClassRouteParameters parameters : vessel.getVesselOrDelegateRouteParameters()) {
-					for (Route r : portModel.getRoutes()) {
-						if (r.getRouteOption() == parameters.getRouteOption()) {
-							collectMinTimes(minTimes, r, parameters.getExtraTransitTime(), maxSpeedKnots);
-						}
-					}
-				}
-
-				for (final Route route : scenario.getReferenceModel().getPortModel().getRoutes()) {
-					if (route.getRouteOption() == RouteOption.DIRECT) {
-						collectMinTimes(minTimes, route, 0, maxSpeedKnots);
-					}
-				}
-
-				ctx.putCurrentConstraintData(minTimes);
-			}
-
-			// ShippingCostRow lastRow = null;
 			// for (final ShippingCostRow row : plan.getRows()) {
 
 			// if (lastRow != null && lastRow.getPort() != null && row.getPort() != null) {
@@ -176,10 +146,13 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 				}
 
 				else if (!lastRow.getPort().equals(row.getPort())) {
-					final Pair<Port, Port> key = new Pair<Port, Port>(lastRow.getPort(), row.getPort());
-					final Integer time = minTimes.get(key);
+					List<Route> allowedRoutes = portModel.getRoutes().stream() //
+							.filter(r -> !vessel.getVesselOrDelegateInaccessibleRoutes().contains(r.getRouteOption())) //
+							.collect(Collectors.toList());
 
-					if (time == null) {
+					final int time = TravelTimeUtils.getMinTimeFromAllowedRoutes(lastRow.getPort(), row.getPort(), vessel, maxSpeedKnots, allowedRoutes, modelDistanceProvider);
+
+					if (time == Integer.MAX_VALUE) {
 						// distance line is missing
 						final String msg = String.format("Impossible journey between %s and %s.", lastRow.getPort().getName(), row.getPort().getName());
 						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(msg);
@@ -205,16 +178,6 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 		// lastRow = row;
 		// }
 		// }
-	}
-
-	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final double maxSpeed) {
-		for (final RouteLine dl : d.getLines()) {
-			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFrom(), dl.getTo());
-			final int time = Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getFullDistance()) + extraTime;
-			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
-				minTimes.put(p, time);
-			}
-		}
 	}
 
 	private String formatHours(final int hours) {

@@ -17,10 +17,10 @@ import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -86,7 +86,6 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 				Port port = (Port)theEObject;
 				T1 result = casePort(port);
 				if (result == null) result = caseAPortSet(port);
-				if (result == null) result = caseOtherNamesObject(port);
 				if (result == null) result = caseObjectSet(port);
 				if (result == null) result = caseUUIDObject(port);
 				if (result == null) result = caseNamedObject(port);
@@ -143,6 +142,9 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 			case PortPackage.LOCATION: {
 				Location location = (Location)theEObject;
 				T1 result = caseLocation(location);
+				if (result == null) result = caseOtherNamesObject(location);
+				if (result == null) result = caseNamedObject(location);
+				if (result == null) result = caseMMXObject(location);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

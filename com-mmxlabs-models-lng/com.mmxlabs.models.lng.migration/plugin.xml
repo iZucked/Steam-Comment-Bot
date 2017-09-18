@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="80"
+            latestVersion="81"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -610,6 +610,13 @@
              from="79"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV80"
              to="80">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV81"
+             context="com.mmxlabs.lingo"
+             from="80"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV81"
+             to="81">
        </MigrationUnit>
    </extension>
 </plugin>

@@ -11,7 +11,9 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -48,8 +50,31 @@ public class PortModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addPortDataVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Data Version feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortDataVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortModel_portDataVersion_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortModel_portDataVersion_feature", "_UI_PortModel_type"),
+				 PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -123,6 +148,9 @@ public class PortModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PortModel.class)) {
+			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case PortPackage.PORT_MODEL__PORTS:
 			case PortPackage.PORT_MODEL__PORT_GROUPS:
 			case PortPackage.PORT_MODEL__ROUTES:

@@ -29,9 +29,9 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 
 			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withName(ScenarioElementNameHelper.getTypeName(canalBookingSlot));
 
-			if (canalBookingSlot.getRoute() == null) {
+			if (canalBookingSlot.getRouteOption() == null) {
 				statuses.add(baseFactory.copyName() //
-						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE) //
+						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE_OPTION) //
 						.withMessage("Canal must be specified.") //
 						.make(ctx));
 			}
@@ -45,9 +45,9 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 				// TODO: fill in
 			}
 			
-			if (canalBookingSlot.getEntryPoint() == null) {
+			if (canalBookingSlot.getCanalEntrance() == null) {
 				statuses.add(baseFactory.copyName() //
-						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__ENTRY_POINT) //
+						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__CANAL_ENTRANCE) //
 						.withMessage("Entry point must be specified.") //
 						.make(ctx));
 			}

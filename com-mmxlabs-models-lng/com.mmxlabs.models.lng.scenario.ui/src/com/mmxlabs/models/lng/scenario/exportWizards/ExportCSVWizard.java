@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
@@ -120,10 +121,11 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		}
 
 		// generate export files
-		for (final UUIDObject modelInstance : getSubModels(scenarioModel)) {
+		for (final UUIDObject modelInstance : getSubModels(scenarioDataProvider)) {
 			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
 			if (importer != null) {
 				final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
+
 				importer.exportModel(modelInstance, outputs, context);
 
 				for (final String key : outputs.keySet()) {
@@ -154,20 +156,20 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		}
 	}
 
-	private List<UUIDObject> getSubModels(final LNGScenarioModel scenarioModel) {
+	private List<UUIDObject> getSubModels(final IScenarioDataProvider scenarioDataProvider) {
 		final List<UUIDObject> subModels = new ArrayList<UUIDObject>();
 
-		subModels.add(scenarioModel.getReferenceModel().getPortModel());
-		subModels.add(scenarioModel.getReferenceModel().getFleetModel());
-		subModels.add(scenarioModel.getReferenceModel().getPricingModel());
-		subModels.add(scenarioModel.getReferenceModel().getCostModel());
-		subModels.add(scenarioModel.getReferenceModel().getCommercialModel());
-		subModels.add(scenarioModel.getReferenceModel().getSpotMarketsModel());
-		subModels.add(scenarioModel.getAnalyticsModel());
+		subModels.add(ScenarioModelUtil.getPortModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getFleetModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getPricingModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getCostModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getCommercialModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getSpotMarketsModel(scenarioDataProvider));
+		subModels.add(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
 
-		subModels.add(scenarioModel.getCargoModel());
+		subModels.add(ScenarioModelUtil.getCargoModel(scenarioDataProvider));
 		// subModels.add(scenarioModel.getActualsModel());
-		subModels.add(scenarioModel.getScheduleModel());
+		subModels.add(ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 
 		// Remove any null references
 		while (subModels.remove(null))

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import java.util.Collection;
 
@@ -16,7 +17,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
@@ -36,8 +36,6 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getNorthEntrance <em>North Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getSouthEntrance <em>South Entrance</em>}</li>
  * </ul>
@@ -94,36 +92,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * @ordered
 	 */
 	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isCanal() <em>Canal</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isCanal()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean CANAL_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isCanal() <em>Canal</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isCanal()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean canal = CANAL_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getRoutingOptions() <em>Routing Options</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRoutingOptions()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> routingOptions;
 
 	/**
 	 * The cached value of the '{@link #getNorthEntrance() <em>North Entrance</em>}' containment reference.
@@ -216,39 +184,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ROUTE_OPTION, oldRouteOption, routeOption));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isCanal() {
-		return canal;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCanal(boolean newCanal) {
-		boolean oldCanal = canal;
-		canal = newCanal;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__CANAL, oldCanal, canal));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getRoutingOptions() {
-		if (routingOptions == null) {
-			routingOptions = new EDataTypeUniqueEList<String>(String.class, this, PortPackage.ROUTE__ROUTING_OPTIONS);
-		}
-		return routingOptions;
 	}
 
 	/**
@@ -369,10 +304,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return getLines();
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				return getRouteOption();
-			case PortPackage.ROUTE__CANAL:
-				return isCanal();
-			case PortPackage.ROUTE__ROUTING_OPTIONS:
-				return getRoutingOptions();
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				return getNorthEntrance();
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:
@@ -399,13 +330,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return;
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				setRouteOption((RouteOption)newValue);
-				return;
-			case PortPackage.ROUTE__CANAL:
-				setCanal((Boolean)newValue);
-				return;
-			case PortPackage.ROUTE__ROUTING_OPTIONS:
-				getRoutingOptions().clear();
-				getRoutingOptions().addAll((Collection<? extends String>)newValue);
 				return;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				setNorthEntrance((EntryPoint)newValue);
@@ -434,12 +358,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
-			case PortPackage.ROUTE__CANAL:
-				setCanal(CANAL_EDEFAULT);
-				return;
-			case PortPackage.ROUTE__ROUTING_OPTIONS:
-				getRoutingOptions().clear();
-				return;
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				setNorthEntrance((EntryPoint)null);
 				return;
@@ -464,10 +382,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return lines != null && !lines.isEmpty();
 			case PortPackage.ROUTE__ROUTE_OPTION:
 				return routeOption != ROUTE_OPTION_EDEFAULT;
-			case PortPackage.ROUTE__CANAL:
-				return canal != CANAL_EDEFAULT;
-			case PortPackage.ROUTE__ROUTING_OPTIONS:
-				return routingOptions != null && !routingOptions.isEmpty();
 			case PortPackage.ROUTE__NORTH_ENTRANCE:
 				return northEntrance != null;
 			case PortPackage.ROUTE__SOUTH_ENTRANCE:

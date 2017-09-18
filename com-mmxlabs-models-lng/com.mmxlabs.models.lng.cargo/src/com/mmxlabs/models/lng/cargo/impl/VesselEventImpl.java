@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -512,10 +513,14 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * @generated NOT
 	 */
 	public String getTimeZone(EAttribute attribute) {
-		if (getPort() != null) {
-			final String timeZone = getPort().getTimeZone();
-			if (timeZone != null && !timeZone.isEmpty()) {
-				return timeZone;
+		Port p = getPort();
+		if (p != null) {
+			Location l = p.getLocation();
+			if (l != null) {
+				final String timeZone = l.getTimeZone();
+				if (timeZone != null && !timeZone.isEmpty()) {
+					return timeZone;
+				}
 			}
 		}
 		return "UTC";

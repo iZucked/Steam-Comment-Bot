@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 
 /**
  * <!-- begin-user-doc -->
@@ -90,6 +89,8 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 		switch (eDataType.getClassifierID()) {
 			case PortPackage.ROUTE_OPTION:
 				return createRouteOptionFromString(eDataType, initialValue);
+			case PortPackage.CANAL_ENTRY:
+				return createCanalEntryFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -105,6 +106,8 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 		switch (eDataType.getClassifierID()) {
 			case PortPackage.ROUTE_OPTION:
 				return convertRouteOptionToString(eDataType, instanceValue);
+			case PortPackage.CANAL_ENTRY:
+				return convertCanalEntryToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -217,6 +220,26 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 * @generated
 	 */
 	public String convertRouteOptionToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CanalEntry createCanalEntryFromString(EDataType eDataType, String initialValue) {
+		CanalEntry result = CanalEntry.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertCanalEntryToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

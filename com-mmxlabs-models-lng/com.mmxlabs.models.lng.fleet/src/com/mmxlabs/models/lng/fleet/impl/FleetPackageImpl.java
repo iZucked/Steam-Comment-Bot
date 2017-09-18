@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EGenericType;
@@ -132,6 +133,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		TypesPackage.eINSTANCE.eClass();
 		MMXCorePackage.eINSTANCE.eClass();
 		PortPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theFleetPackage.createPackageContents();

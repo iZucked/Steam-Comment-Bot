@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -54,10 +55,13 @@ import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -78,6 +82,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
@@ -1349,31 +1354,22 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private int getTravelTime(final Port from, final Port to, final AVesselSet<? extends Vessel> assignedVessel) {
+	private int getTravelTime(final Port from, final Port to, final @Nullable Vessel vessel) {
 
 		double maxSpeed = 19.0;
-
-		if (assignedVessel instanceof Vessel) {
-			final Vessel vessel = (Vessel) assignedVessel;
+		if (vessel != null) {
 			maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
 		}
 
-		int distance = 0;
-		LOOP_ROUTES: for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
-			if (route.isCanal() == false) {
-				for (final RouteLine dl : route.getLines()) {
-					if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
-						distance = dl.getDistance();
-						break LOOP_ROUTES;
-					}
-				}
-
+		IScenarioDataProvider scenarioDataProvider = scenarioEditingLocation.getScenarioDataProvider();
+		for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
+			if (route.getRouteOption() == RouteOption.DIRECT) {
+				return TravelTimeUtils.getTimeForRoute(vessel, maxSpeed, route, from, to,
+						scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
 			}
 		}
 
-		final int travelTime = (int) Math.round((double) distance / maxSpeed);
-
-		return travelTime;
+		return Integer.MAX_VALUE;
 	}
 
 	private String formatDate(final LocalDate localDate) {

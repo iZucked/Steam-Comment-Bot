@@ -40,7 +40,9 @@ import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -68,6 +70,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+
+			ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
 			// Build up lookup tables
 			final Map<Cargo, CargoActuals> cargoActualsMap = new HashMap<>();
@@ -97,7 +101,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, new ActualsAssignableDateProvider(actualsModel));
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider,
+					new ActualsAssignableDateProvider(actualsModel));
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {

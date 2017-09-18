@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.port.ui.editors.CanalEntryAttributeManipulator;
+import com.mmxlabs.models.lng.port.ui.editors.RouteOptionAttributeManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -130,7 +132,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				final Label lbl = new Label(parametersParent, SWT.NONE);
 				lbl.setText("Strict booking period ends ");
 				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).minSize(1000, -1).create());
-				
+
 				final Composite strictParent = new Composite(parametersParent, SWT.NONE);
 				strictParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
@@ -161,11 +163,10 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			}
 			{
 
-
 				final Label lbl = new Label(parametersParent, SWT.NONE);
 				lbl.setText("Relaxed booking period ends ");
 				lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).minSize(1000, -1).create());
-				
+
 				final Composite relaxParent = new Composite(parametersParent, SWT.NONE);
 				relaxParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 
@@ -197,14 +198,13 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			}
 			{
 
-
 				final Label lbl3 = new Label(parametersParent, SWT.NONE);
 				lbl3.setText("Flexible bookings northbound ");
 				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
-				
+
 				final Composite flexParent = new Composite(parametersParent, SWT.NONE);
 				flexParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
-				
+
 				flexEditorNorthbound = new FormattedText(flexParent);
 				flexEditorNorthbound.setFormatter(new IntegerFormatter());
 				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
@@ -249,10 +249,10 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				final Label lbl4 = new Label(parametersParent, SWT.NONE);
 				lbl4.setText("Arrival margin in hours ");
 				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
-				
+
 				final Composite marginParent = new Composite(parametersParent, SWT.NONE);
 				marginParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
-				
+
 				marginEditor = new FormattedText(marginParent);
 				marginEditor.setFormatter(new IntegerFormatter());
 				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
@@ -280,9 +280,8 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
-		addTypicalColumn("Entry Point",
-				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_EntryPoint(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
-		addTypicalColumn("Canal", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Route(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Entry Point", new CanalEntryAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getEditingDomain()));
+		addTypicalColumn("Canal", new RouteOptionAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_RouteOption(), getEditingDomain()));
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getEditingDomain()));
 		addTypicalColumn("Slot", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Slot(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
 

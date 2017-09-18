@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
+import java.time.ZoneId;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -14,16 +17,70 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.port.Location#getMmxId <em>Mmx Id</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Location#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLon <em>Lon</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getLocation()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"
  * @generated
  */
-public interface Location extends EObject {
+public interface Location extends NamedObject, OtherNamesObject {
+	/**
+	 * Returns the value of the '<em><b>Mmx Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Mmx Id</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mmx Id</em>' attribute.
+	 * @see #setMmxId(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_MmxId()
+	 * @model
+	 * @generated
+	 */
+	String getMmxId();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Location#getMmxId <em>Mmx Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mmx Id</em>' attribute.
+	 * @see #getMmxId()
+	 * @generated
+	 */
+	void setMmxId(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Time Zone</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Time Zone</em>' attribute.
+	 * @see #setTimeZone(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_TimeZone()
+	 * @model required="true"
+	 * @generated
+	 */
+	String getTimeZone();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Location#getTimeZone <em>Time Zone</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Time Zone</em>' attribute.
+	 * @see #getTimeZone()
+	 * @generated
+	 */
+	void setTimeZone(String value);
+
 	/**
 	 * Returns the value of the '<em><b>Country</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -101,6 +158,22 @@ public interface Location extends EObject {
 	 * @generated
 	 */
 	void setLon(double value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.ZoneId"
+	 * @generated
+	 */
+	ZoneId getZoneId();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getTempMMXID();
 
 } // end of  Location
 

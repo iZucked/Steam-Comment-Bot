@@ -67,7 +67,6 @@ public class RouteLineComponentHelper extends BaseComponentHelper {
 		add_fromEditor(detailComposite, topClass);
 		add_toEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
-		add_viasEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the from feature on RouteLine
@@ -92,14 +91,5 @@ public class RouteLineComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_distanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__DISTANCE));
-	}
-
-	/**
-	 * Create the editor for the vias feature on RouteLine
-	 *
-	 * @generated
-	 */
-	protected void add_viasEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__VIAS));
 	}
 }

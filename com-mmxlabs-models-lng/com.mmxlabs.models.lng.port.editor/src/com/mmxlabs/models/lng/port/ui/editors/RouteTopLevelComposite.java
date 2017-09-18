@@ -22,6 +22,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorComposite;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -59,12 +60,12 @@ public class RouteTopLevelComposite extends DefaultTopLevelComposite {
 
 			IDisplayComposite northEntranceComposite = null;
 			IDisplayComposite southEntranceComposite = null;
-			if (route.isCanal()) {
+			if (route.getRouteOption() != RouteOption.DIRECT) {
 				northEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__NORTH_ENTRANCE, route.getNorthEntrance(), "Northern Entrance");
 				southEntranceComposite = createChildArea(root, route, containerComposite, PortPackage.Literals.ROUTE__SOUTH_ENTRANCE, route.getSouthEntrance(), "Southern Entrance");
 			}
 
-			if (route.isCanal()) {
+			if (route.getRouteOption() != RouteOption.DIRECT) {
 				if (northEntranceComposite != null) {
 					northEntranceComposite.display(dialogContext, root, route.getNorthEntrance(), range, dbc);
 				}

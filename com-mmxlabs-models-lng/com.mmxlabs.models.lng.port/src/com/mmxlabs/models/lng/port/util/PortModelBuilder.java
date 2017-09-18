@@ -40,7 +40,7 @@ public class PortModelBuilder {
 	 * Make all existing ports use the UTC timezone. Useful in unit testing
 	 */
 	public void setAllExistingPortsToUTC() {
-		portModel.getPorts().forEach(p -> p.setTimeZone(TIMEZONE_UTC));
+		portModel.getPorts().forEach(p -> p.getLocation().setTimeZone(TIMEZONE_UTC));
 	}
 
 	@NonNull
@@ -48,111 +48,20 @@ public class PortModelBuilder {
 		final Route r = PortFactory.eINSTANCE.createRoute();
 		r.setName(option.getName());
 		r.setRouteOption(option);
-		r.setCanal(option != RouteOption.DIRECT);
 
 		portModel.getRoutes().add(r);
 		return r;
 	}
 
-	public void setPortToPortDistance(final Port from, final Port to, final RouteOption routeOption, final int distance, final boolean biDirectional) {
-		for (final Route route : portModel.getRoutes()) {
-			if (route.getRouteOption() != routeOption) {
-				continue;
-			}
-			boolean foundForwardDistance = false;
-			boolean foundReverseDistance = false;
-			for (final RouteLine routeLine : route.getLines()) {
-				if (routeLine.getFrom() == from && routeLine.getTo() == to) {
-					foundForwardDistance = true;
-					routeLine.setDistance(distance);
-
-				}
-				if (biDirectional) {
-					if (routeLine.getFrom() == to && routeLine.getTo() == from) {
-						foundReverseDistance = true;
-						routeLine.setDistance(distance);
-					}
-				}
-			}
-			// Add missing distance lines if needed
-			if (!foundForwardDistance) {
-				final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-				line.setFrom(from);
-				line.setTo(to);
-				line.setDistance(distance);
-				route.getLines().add(line);
-			}
-			if (biDirectional && !foundReverseDistance) {
-				final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-				line.setFrom(to);
-				line.setTo(from);
-				line.setDistance(distance);
-				route.getLines().add(line);
-			}
-		}
-
-	}
-
-	public void setPortToPortDistance(@NonNull final Port from, @NonNull final Port to, final int directDistance, final int suezDistance, final int panamaDistance, final boolean biDirectional) {
-
-		for (final Route route : portModel.getRoutes()) {
-			boolean foundForwardDistance = false;
-			boolean foundReverseDistance = false;
-			for (final RouteLine routeLine : route.getLines()) {
-				if (routeLine.getFrom() == from && routeLine.getTo() == to) {
-					foundForwardDistance = true;
-					setDistance(directDistance, suezDistance, panamaDistance, route, routeLine);
-				}
-				if (biDirectional) {
-					if (routeLine.getFrom() == to && routeLine.getTo() == from) {
-						foundReverseDistance = true;
-						setDistance(directDistance, suezDistance, panamaDistance, route, routeLine);
-					}
-				}
-			}
-			// Add missing distance lines if needed
-			if (!foundForwardDistance) {
-				final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-				line.setFrom(from);
-				line.setTo(to);
-				setDistance(directDistance, suezDistance, panamaDistance, route, line);
-				route.getLines().add(line);
-			}
-			if (biDirectional && !foundReverseDistance) {
-				final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-				line.setFrom(from);
-				line.setTo(to);
-				setDistance(directDistance, suezDistance, panamaDistance, route, line);
-				route.getLines().add(line);
-			}
-		}
-	}
-
-	protected void setDistance(final int directDistance, final int suezDistance, final int panamaDistance, final @NonNull Route route, @NonNull final RouteLine routeLine) {
-		switch (route.getRouteOption()) {
-		case DIRECT:
-			routeLine.setDistance(directDistance);
-			break;
-		case PANAMA:
-			routeLine.setDistance(panamaDistance);
-			break;
-		case SUEZ:
-			routeLine.setDistance(suezDistance);
-			break;
-		default:
-			throw new IllegalStateException();
-		}
-	}
-
 	@NonNull
-	public Port createPort(@NonNull final String name, @NonNull final String timezoneId, final int defaultWindowStartHourOfDay, final int defaultWindowSize) {
-
-		final Location location = PortFactory.eINSTANCE.createLocation();
+	public Port createPort(@NonNull final String name, @NonNull final String mmxId, @NonNull final String timezoneId, final int defaultWindowStartHourOfDay, final int defaultWindowSize) {
+		Location location = PortFactory.eINSTANCE.createLocation();
+		location.setName(name);
+		location.setMmxId(mmxId);
+		location.setTimeZone(timezoneId);
 
 		final Port port = PortFactory.eINSTANCE.createPort();
-
 		port.setName(name);
-		port.setTimeZone(timezoneId);
 
 		port.setDefaultStartTime(defaultWindowStartHourOfDay);
 		port.setDefaultWindowSize(defaultWindowSize);

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -105,6 +107,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	private EEnum routeOptionEEnum = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum canalEntryEEnum = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -151,7 +160,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
+		DateTimePackage.eINSTANCE.eClass();
 		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		thePortPackage.createPackageContents();
@@ -183,15 +194,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_Capabilities() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_TimeZone() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -273,52 +275,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EReference getPort_Location() {
-		return (EReference)portEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_AtobviacCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_DataloyCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_VesonCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(14);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_ExternalCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(15);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_UNLocode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(16);
+		return (EReference)portEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -327,7 +284,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_MinCvValue() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(17);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -336,7 +293,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_MaxCvValue() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(18);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -380,26 +337,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getRoute_Canal() {
-		return (EAttribute)routeEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRoute_RoutingOptions() {
-		return (EAttribute)routeEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getRoute_NorthEntrance() {
-		return (EReference)routeEClass.getEStructuralFeatures().get(4);
+		return (EReference)routeEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -408,7 +347,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EReference getRoute_SouthEntrance() {
-		return (EReference)routeEClass.getEStructuralFeatures().get(5);
+		return (EReference)routeEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -470,15 +409,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRouteLine_Vias() {
-		return (EReference)routeLineEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getPortModel() {
 		return portModelEClass;
 	}
@@ -533,6 +463,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPortModel_PortDataVersion() {
+		return (EAttribute)portModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCapabilityGroup() {
 		return capabilityGroupEClass;
 	}
@@ -560,7 +499,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLocation_Country() {
+	public EAttribute getLocation_MmxId() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -569,7 +508,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLocation_Lat() {
+	public EAttribute getLocation_TimeZone() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -578,8 +517,26 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLocation_Lon() {
+	public EAttribute getLocation_Country() {
 		return (EAttribute)locationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLocation_Lat() {
+		return (EAttribute)locationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLocation_Lon() {
+		return (EAttribute)locationEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -623,6 +580,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getCanalEntry() {
+		return canalEntryEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -648,8 +614,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Create classes and their features
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__SHORT_NAME);
+		createEReference(portEClass, PORT__LOCATION);
 		createEAttribute(portEClass, PORT__CAPABILITIES);
-		createEAttribute(portEClass, PORT__TIME_ZONE);
 		createEAttribute(portEClass, PORT__LOAD_DURATION);
 		createEAttribute(portEClass, PORT__DISCHARGE_DURATION);
 		createEAttribute(portEClass, PORT__BERTHS);
@@ -658,20 +624,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__ALLOW_COOLDOWN);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE_UNITS);
-		createEReference(portEClass, PORT__LOCATION);
-		createEAttribute(portEClass, PORT__ATOBVIAC_CODE);
-		createEAttribute(portEClass, PORT__DATALOY_CODE);
-		createEAttribute(portEClass, PORT__VESON_CODE);
-		createEAttribute(portEClass, PORT__EXTERNAL_CODE);
-		createEAttribute(portEClass, PORT__UN_LOCODE);
 		createEAttribute(portEClass, PORT__MIN_CV_VALUE);
 		createEAttribute(portEClass, PORT__MAX_CV_VALUE);
 
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
 		createEAttribute(routeEClass, ROUTE__ROUTE_OPTION);
-		createEAttribute(routeEClass, ROUTE__CANAL);
-		createEAttribute(routeEClass, ROUTE__ROUTING_OPTIONS);
 		createEReference(routeEClass, ROUTE__NORTH_ENTRANCE);
 		createEReference(routeEClass, ROUTE__SOUTH_ENTRANCE);
 
@@ -682,7 +640,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(routeLineEClass, ROUTE_LINE__FROM);
 		createEReference(routeLineEClass, ROUTE_LINE__TO);
 		createEAttribute(routeLineEClass, ROUTE_LINE__DISTANCE);
-		createEReference(routeLineEClass, ROUTE_LINE__VIAS);
 
 		portModelEClass = createEClass(PORT_MODEL);
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
@@ -690,11 +647,14 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(portModelEClass, PORT_MODEL__ROUTES);
 		createEReference(portModelEClass, PORT_MODEL__SPECIAL_PORT_GROUPS);
 		createEReference(portModelEClass, PORT_MODEL__PORT_COUNTRY_GROUPS);
+		createEAttribute(portModelEClass, PORT_MODEL__PORT_DATA_VERSION);
 
 		capabilityGroupEClass = createEClass(CAPABILITY_GROUP);
 		createEAttribute(capabilityGroupEClass, CAPABILITY_GROUP__CAPABILITY);
 
 		locationEClass = createEClass(LOCATION);
+		createEAttribute(locationEClass, LOCATION__MMX_ID);
+		createEAttribute(locationEClass, LOCATION__TIME_ZONE);
 		createEAttribute(locationEClass, LOCATION__COUNTRY);
 		createEAttribute(locationEClass, LOCATION__LAT);
 		createEAttribute(locationEClass, LOCATION__LON);
@@ -706,6 +666,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Create enums
 		routeOptionEEnum = createEEnum(ROUTE_OPTION);
+		canalEntryEEnum = createEEnum(CANAL_ENTRY);
 	}
 
 	/**
@@ -733,6 +694,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Obtain other dependent packages
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 
 		// Create type parameters
@@ -743,8 +705,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		EGenericType g1 = createEGenericType(theTypesPackage.getAPortSet());
 		EGenericType g2 = createEGenericType(this.getPort());
 		g1.getETypeArguments().add(g2);
-		portEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(theMMXCorePackage.getOtherNamesObject());
 		portEClass.getEGenericSuperTypes().add(g1);
 		routeEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		routeEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
@@ -758,6 +718,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		g2 = createEGenericType(this.getPort());
 		g1.getETypeArguments().add(g2);
 		capabilityGroupEClass.getEGenericSuperTypes().add(g1);
+		locationEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		locationEClass.getESuperTypes().add(theMMXCorePackage.getOtherNamesObject());
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(this.getPort());
 		g1.getETypeArguments().add(g2);
@@ -769,8 +731,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Initialize classes and features; add operations and parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_ShortName(), ecorePackage.getEString(), "shortName", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_Capabilities(), theTypesPackage.getPortCapability(), "capabilities", null, 0, -1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_LoadDuration(), ecorePackage.getEInt(), "loadDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DischargeDuration(), ecorePackage.getEInt(), "dischargeDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_Berths(), ecorePackage.getEInt(), "berths", "1", 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -779,20 +741,14 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_AllowCooldown(), ecorePackage.getEBoolean(), "allowCooldown", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowSize(), ecorePackage.getEInt(), "defaultWindowSize", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowSizeUnits(), theTypesPackage.getTimePeriod(), "defaultWindowSizeUnits", "HOURS", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_AtobviacCode(), ecorePackage.getEString(), "atobviacCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_DataloyCode(), ecorePackage.getEString(), "dataloyCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_VesonCode(), ecorePackage.getEString(), "vesonCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_ExternalCode(), ecorePackage.getEString(), "externalCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_UNLocode(), ecorePackage.getEString(), "UNLocode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(portEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_RouteOption(), this.getRouteOption(), "routeOption", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRoute_Canal(), ecorePackage.getEBoolean(), "canal", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRoute_RoutingOptions(), ecorePackage.getEString(), "routingOptions", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRoute_NorthEntrance(), this.getEntryPoint(), null, "northEntrance", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRoute_SouthEntrance(), this.getEntryPoint(), null, "southEntrance", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -806,9 +762,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getRouteLine_From(), this.getPort(), null, "from", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRouteLine_To(), this.getPort(), null, "to", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRouteLine_Distance(), ecorePackage.getEInt(), "distance", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRouteLine_Vias(), this.getRouteLine(), null, "vias", null, 0, -1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		addEOperation(routeLineEClass, ecorePackage.getEInt(), "getFullDistance", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(portModelEClass, PortModel.class, "PortModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -816,14 +769,21 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getPortModel_Routes(), this.getRoute(), null, "routes", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_SpecialPortGroups(), this.getCapabilityGroup(), null, "specialPortGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_PortCountryGroups(), this.getPortCountryGroup(), null, "portCountryGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortModel_PortDataVersion(), ecorePackage.getEString(), "portDataVersion", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(capabilityGroupEClass, CapabilityGroup.class, "CapabilityGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCapabilityGroup_Capability(), theTypesPackage.getPortCapability(), "capability", null, 1, 1, CapabilityGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLocation_MmxId(), ecorePackage.getEString(), "mmxId", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLocation_TimeZone(), ecorePackage.getEString(), "timeZone", null, 1, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Country(), ecorePackage.getEString(), "country", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lat(), ecorePackage.getEDouble(), "lat", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lon(), ecorePackage.getEDouble(), "lon", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(locationEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(locationEClass, ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(portCountryGroupEClass, PortCountryGroup.class, "PortCountryGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -836,16 +796,20 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		addEEnumLiteral(routeOptionEEnum, RouteOption.SUEZ);
 		addEEnumLiteral(routeOptionEEnum, RouteOption.PANAMA);
 
+		initEEnum(canalEntryEEnum, CanalEntry.class, "CanalEntry");
+		addEEnumLiteral(canalEntryEEnum, CanalEntry.NORTHSIDE);
+		addEEnumLiteral(canalEntryEEnum, CanalEntry.SOUTHSIDE);
+
 		// Create resource
 		createResource(eNS_URI);
 
 		// Create annotations
-		// http://www.mmxlabs.com/models/mmxcore/annotations/namedobject
-		createNamedobjectAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
 		// http://www.mmxlabs.com/models/csv
 		createCsvAnnotations();
+		// http://www.mmxlabs.com/models/mmxcore/annotations/namedobject
+		createNamedobjectAnnotations();
 	}
 
 	/**
@@ -857,7 +821,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	protected void createNamedobjectAnnotations() {
 		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";	
 		addAnnotation
-		  (portEClass, 
+		  (locationEClass, 
 		   source, 
 		   new String[] {
 			 "showOtherNames", "true"

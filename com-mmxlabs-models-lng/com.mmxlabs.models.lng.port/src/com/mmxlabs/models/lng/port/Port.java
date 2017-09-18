@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
+import java.time.ZoneId;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,8 +22,8 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getShortName <em>Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getCapabilities <em>Capabilities</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLoadDuration <em>Load Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDischargeDuration <em>Discharge Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getBerths <em>Berths</em>}</li>
@@ -31,21 +32,15 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPort()
- * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"
+ * @model
  * @generated
  */
-public interface Port extends APortSet<Port>, OtherNamesObject {
+public interface Port extends APortSet<Port> {
 
 	/**
 	 * Returns the value of the '<em><b>Capabilities</b></em>' attribute list.
@@ -64,32 +59,6 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @generated
 	 */
 	EList<PortCapability> getCapabilities();
-
-	/**
-	 * Returns the value of the '<em><b>Time Zone</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Time Zone</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time Zone</em>' attribute.
-	 * @see #setTimeZone(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_TimeZone()
-	 * @model required="true"
-	 * @generated
-	 */
-	String getTimeZone();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getTimeZone <em>Time Zone</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time Zone</em>' attribute.
-	 * @see #getTimeZone()
-	 * @generated
-	 */
-	void setTimeZone(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Load Duration</b></em>' attribute.
@@ -336,136 +305,6 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	void setLocation(Location value);
 
 	/**
-	 * Returns the value of the '<em><b>Atobviac Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Atobviac Code</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Atobviac Code</em>' attribute.
-	 * @see #setAtobviacCode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_AtobviacCode()
-	 * @model
-	 * @generated
-	 */
-	String getAtobviacCode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Atobviac Code</em>' attribute.
-	 * @see #getAtobviacCode()
-	 * @generated
-	 */
-	void setAtobviacCode(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Dataloy Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dataloy Code</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dataloy Code</em>' attribute.
-	 * @see #setDataloyCode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DataloyCode()
-	 * @model
-	 * @generated
-	 */
-	String getDataloyCode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Dataloy Code</em>' attribute.
-	 * @see #getDataloyCode()
-	 * @generated
-	 */
-	void setDataloyCode(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Veson Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Veson Code</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Veson Code</em>' attribute.
-	 * @see #setVesonCode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_VesonCode()
-	 * @model
-	 * @generated
-	 */
-	String getVesonCode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Veson Code</em>' attribute.
-	 * @see #getVesonCode()
-	 * @generated
-	 */
-	void setVesonCode(String value);
-
-	/**
-	 * Returns the value of the '<em><b>External Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>External Code</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>External Code</em>' attribute.
-	 * @see #setExternalCode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_ExternalCode()
-	 * @model
-	 * @generated
-	 */
-	String getExternalCode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>External Code</em>' attribute.
-	 * @see #getExternalCode()
-	 * @generated
-	 */
-	void setExternalCode(String value);
-
-	/**
-	 * Returns the value of the '<em><b>UN Locode</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>UN Locode</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>UN Locode</em>' attribute.
-	 * @see #setUNLocode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_UNLocode()
-	 * @model
-	 * @generated
-	 */
-	String getUNLocode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>UN Locode</em>' attribute.
-	 * @see #getUNLocode()
-	 * @generated
-	 */
-	void setUNLocode(String value);
-
-	/**
 	 * Returns the value of the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -572,6 +411,14 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @generated
 	 */
 	boolean isSetMaxCvValue();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.ZoneId"
+	 * @generated
+	 */
+	ZoneId getZoneId();
 
 	/**
 	 * Returns the value of the '<em><b>Short Name</b></em>' attribute.

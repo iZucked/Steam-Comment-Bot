@@ -26,9 +26,6 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -439,145 +436,8 @@ public class CargoEditingHelper {
 		verifyModel();
 	}
 
-	// public void createDESSaleSlotForFOBPurchase(@NonNull final String description, @NonNull final LoadSlot loadSlot) {
-	// assert loadSlot.isDESPurchase() == false;
-	//
-	// final Cargo existingCargo = loadSlot.getCargo();
-	// // These slots should have been un-paired from cargo
-	// final List<Slot> slotsToCheck = new LinkedList<>();
-	// if (verifyChanges) {
-	// if (existingCargo != null) {
-	// slotsToCheck.addAll(existingCargo.getSlots());
-	// slotsToCheck.remove(loadSlot);
-	// }
-	// }
-	//
-	// final CompoundCommand cc = new CompoundCommand(description);
-	// final List<Command> setCommands = new LinkedList<Command>();
-	// final List<Command> deleteCommands = new LinkedList<Command>();
-	//
-	// final DischargeSlot dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, false);
-	// setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.SLOT__WINDOW_START, loadSlot.getWindowStart()));
-	//
-	// cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
-	//
-	// setCommands.forEach(c -> cc.append(c));
-	// deleteCommands.forEach(c -> cc.append(c));
-	//
-	// assert cc.canExecute();
-	// editingDomain.getCommandStack().execute(cc);
-	//
-	// if (verifyChanges) {
-	//
-	// }
-	//
-	// verifyModel();
-	// }
-	//
-	// public void createSpotSaleSlotForPurchase(@NonNull final String description, @NonNull final LoadSlot loadSlot, @NonNull DESSalesMarket market) {
-	// assert loadSlot.isDESPurchase() == false;
-	//
-	// final Cargo existingCargo = loadSlot.getCargo();
-	// // These slots should have been un-paired from cargo
-	// final List<Slot> slotsToCheck = new LinkedList<>();
-	// if (verifyChanges) {
-	// if (existingCargo != null) {
-	// slotsToCheck.addAll(existingCargo.getSlots());
-	// slotsToCheck.remove(loadSlot);
-	// }
-	// }
-	//
-	// final CompoundCommand cc = new CompoundCommand(description);
-	// final List<Command> setCommands = new LinkedList<Command>();
-	// final List<Command> deleteCommands = new LinkedList<Command>();
-	//
-	// final SpotDischargeSlot dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, market);
-	//
-	// // Get start of month and create full sized window
-	// ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
-	// // Take into account travel time
-	// if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
-	// final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
-	// cal = cal.plusHours(travelTime);
-	// cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
-	// } else if (!loadSlot.isDESPurchase()) {
-	//
-	// AVesselSet<? extends Vessel> assignedVessel = null;
-	// if (loadSlot.getCargo() != null) {
-	// final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
-	// if (vesselAssignmentType instanceof VesselAvailability) {
-	// assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
-	// } else if (vesselAssignmentType instanceof CharterInMarket) {
-	// assignedVessel = ((CharterInMarket) vesselAssignmentType).getVesselClass();
-	// }
-	// }
-	// final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
-	// cal = cal.plusHours(travelTime);
-	// cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
-	// }
-	//
-	// // Get existing names
-	//
-	// if (dischargeSlot.isFOBSale()) {
-	// setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.Literals.SLOT__PORT, loadSlot.getPort()));
-	// }
-	//
-	// // Set back to start of month
-	// cal = cal.withDayOfMonth(1).withHour(0);
-	// final LocalDate dishargeCal = cal.toLocalDate();
-	//
-	// setSpotSlotWindow(dischargeSlot, dishargeCal, setCommands);
-	//
-	// final Set<String> usedIDStrings = SpotSlotUtils.getUsedDischargeNames(cargoModel);
-	// @NonNull
-	// String slotName = SpotSlotUtils.getSpotSlotName(market, dishargeCal, usedIDStrings);
-	// setCommands.add(SetCommand.create(editingDomain, dischargeSlot, MMXCorePackage.Literals.NAMED_OBJECT__NAME, slotName));
-	//
-	// cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
-	//
-	// setCommands.forEach(c -> cc.append(c));
-	// deleteCommands.forEach(c -> cc.append(c));
-	//
-	// assert cc.canExecute();
-	// editingDomain.getCommandStack().execute(cc);
-	//
-	// if (verifyChanges) {
-	//
-	// }
-	//
-	// verifyModel();
-	// }
-
 	public void verifyModel() {
 		cec.verifyCargoModel(ScenarioModelUtil.getCargoModel(scenarioModel));
-	}
-
-	// TODO: Move in to EMF Distnace PRoivider like API
-	private int getTravelTime(final Port from, final Port to, final AVesselSet<? extends Vessel> assignedVessel) {
-
-		double maxSpeed = 19.0;
-
-		if (assignedVessel instanceof Vessel) {
-			final Vessel vessel = (Vessel) assignedVessel;
-			maxSpeed = vessel.getVesselOrDelegateMaxSpeed();
-		}
-
-		int distance = 0;
-		LOOP_ROUTES: for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
-			if (route.isCanal() == false) {
-				for (final RouteLine dl : route.getLines()) {
-					if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
-						distance = dl.getDistance();
-						break LOOP_ROUTES;
-					}
-				}
-
-			}
-		}
-
-		final int travelTime = (int) Math.round((double) distance / maxSpeed);
-
-		return travelTime;
 	}
 
 	public <T extends SpotSlot & Slot> void setSpotSlotWindow(@NonNull final T slot, @NonNull final LocalDate cal, Collection<Command> setComands) {

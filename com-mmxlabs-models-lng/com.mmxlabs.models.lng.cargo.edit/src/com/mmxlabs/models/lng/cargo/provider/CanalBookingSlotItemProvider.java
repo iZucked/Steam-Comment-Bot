@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.cargo.provider;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -51,76 +52,32 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addRoutePropertyDescriptor(object);
-			addSlotPropertyDescriptor(object);
-			addEntryPointPropertyDescriptor(object);
+			addRouteOptionPropertyDescriptor(object);
+			addCanalEntrancePropertyDescriptor(object);
 			addBookingDatePropertyDescriptor(object);
+			addSlotPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Route feature.
+	 * This adds a property descriptor for the Route Option feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRoutePropertyDescriptor(Object object) {
+	protected void addRouteOptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CanalBookingSlot_route_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_route_feature", "_UI_CanalBookingSlot_type"),
-				 CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE,
+				 getString("_UI_CanalBookingSlot_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_routeOption_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__ROUTE_OPTION,
 				 true,
 				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Slot feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSlotPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CanalBookingSlot_slot_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_slot_feature", "_UI_CanalBookingSlot_type"),
-				 CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT,
-				 true,
 				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Entry Point feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEntryPointPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CanalBookingSlot_entryPoint_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_entryPoint_feature", "_UI_CanalBookingSlot_type"),
-				 CargoPackage.Literals.CANAL_BOOKING_SLOT__ENTRY_POINT,
-				 true,
-				 false,
-				 true,
-				 null,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -148,6 +105,50 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Canal Entrance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCanalEntrancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookingSlot_canalEntrance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_canalEntrance_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__CANAL_ENTRANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Slot feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSlotPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookingSlot_slot_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_slot_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CanalBookingSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -166,7 +167,7 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		LocalDate labelValue = ((CanalBookingSlot)object).getBookingDate();
+		RouteOption labelValue = ((CanalBookingSlot)object).getRouteOption();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_CanalBookingSlot_type") :
@@ -186,6 +187,8 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CanalBookingSlot.class)) {
+			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION:
+			case CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE:
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

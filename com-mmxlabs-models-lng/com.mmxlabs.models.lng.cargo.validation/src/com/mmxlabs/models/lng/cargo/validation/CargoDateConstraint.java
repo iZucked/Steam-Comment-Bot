@@ -7,15 +7,14 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -31,9 +30,9 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -42,8 +41,6 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
 /**
  * Check that the end of any cargo's discharge window is not before the start of its load window.
@@ -148,8 +145,10 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					maxSpeedKnots = Math.max(vessel.getVesselOrDelegateMaxSpeed(), maxSpeedKnots);
 				}
 
+				@NonNull
+				ModelDistanceProvider modelDistanceProvider = extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 				final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(from, to, cargo.getSortedSlots().get(0).getWindowStart(), cargo.getVesselAssignmentType(),
-						lngScenarioModel.getReferenceModel().getPortModel(), lngScenarioModel.getReferenceModel().getCostModel(), maxSpeedKnots);
+						ScenarioModelUtil.getPortModel(lngScenarioModel), ScenarioModelUtil.getCostModel(lngScenarioModel), maxSpeedKnots, modelDistanceProvider);
 				int severity = IStatus.ERROR;
 				if (minTime == null) {
 					// distance line is missing
@@ -177,20 +176,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 
 				}
-			}
-		}
-	}
-
-	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final double maxSpeed) {
-		if (d == null) {
-			return;
-		}
-
-		for (final RouteLine dl : d.getLines()) {
-			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFrom(), dl.getTo());
-			final int time = ((dl.getFullDistance() == 0) ? 0 : Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getFullDistance())) + extraTime;
-			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
-				minTimes.put(p, time);
 			}
 		}
 	}
@@ -291,7 +276,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			ServiceHelper.withCheckedServiceConsumer(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
 				int travelTime = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
-						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true));
+						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel, true),
+						extraContext.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class));
 				if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 					final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s",
 							from.getName(), to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()),

@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
-import com.mmxlabs.models.lng.port.EntryPoint;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -20,8 +18,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.port.CanalEntry;
+import com.mmxlabs.models.lng.port.EntryPoint;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -43,16 +46,17 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getDestination <em>Destination</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#isLaden <em>Laden</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getRoute <em>Route</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getToll <em>Toll</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getSpeed <em>Speed</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntry <em>Canal Entry</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalDate <em>Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBooking <em>Canal Booking</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getLatestPossibleCanalDate <em>Latest Possible Canal Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalArrival <em>Canal Arrival</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntrancePort <em>Canal Entrance Port</em>}</li>
  * </ul>
  *
  * @generated
@@ -99,14 +103,24 @@ public class JourneyImpl extends EventImpl implements Journey {
 	protected boolean laden = LADEN_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
+	 * The default value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRoute()
+	 * @see #getRouteOption()
 	 * @generated
 	 * @ordered
 	 */
-	protected Route route;
+	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.DIRECT;
+
+	/**
+	 * The cached value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getToll() <em>Toll</em>}' attribute.
@@ -169,14 +183,24 @@ public class JourneyImpl extends EventImpl implements Journey {
 	protected double speed = SPEED_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getCanalEntry() <em>Canal Entry</em>}' reference.
+	 * The default value of the '{@link #getCanalEntrance() <em>Canal Entrance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCanalEntry()
+	 * @see #getCanalEntrance()
 	 * @generated
 	 * @ordered
 	 */
-	protected EntryPoint canalEntry;
+	protected static final CanalEntry CANAL_ENTRANCE_EDEFAULT = CanalEntry.NORTHSIDE;
+
+	/**
+	 * The cached value of the '{@link #getCanalEntrance() <em>Canal Entrance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalEntrance()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalEntry canalEntrance = CANAL_ENTRANCE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCanalDate() <em>Canal Date</em>}' attribute.
@@ -267,6 +291,16 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @ordered
 	 */
 	protected PanamaBookingPeriod canalBookingPeriod = CANAL_BOOKING_PERIOD_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCanalEntrancePort() <em>Canal Entrance Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalEntrancePort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port canalEntrancePort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -363,16 +397,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route getRoute() {
-		if (route != null && route.eIsProxy()) {
-			InternalEObject oldRoute = (InternalEObject)route;
-			route = (Route)eResolveProxy(oldRoute);
-			if (route != oldRoute) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.JOURNEY__ROUTE, oldRoute, route));
-			}
-		}
-		return route;
+	public RouteOption getRouteOption() {
+		return routeOption;
 	}
 
 	/**
@@ -380,20 +406,11 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Route basicGetRoute() {
-		return route;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRoute(Route newRoute) {
-		Route oldRoute = route;
-		route = newRoute;
+	public void setRouteOption(RouteOption newRouteOption) {
+		RouteOption oldRouteOption = routeOption;
+		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__ROUTE, oldRoute, route));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__ROUTE_OPTION, oldRouteOption, routeOption));
 	}
 
 	/**
@@ -464,16 +481,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntryPoint getCanalEntry() {
-		if (canalEntry != null && canalEntry.eIsProxy()) {
-			InternalEObject oldCanalEntry = (InternalEObject)canalEntry;
-			canalEntry = (EntryPoint)eResolveProxy(oldCanalEntry);
-			if (canalEntry != oldCanalEntry) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.JOURNEY__CANAL_ENTRY, oldCanalEntry, canalEntry));
-			}
-		}
-		return canalEntry;
+	public CanalEntry getCanalEntrance() {
+		return canalEntrance;
 	}
 
 	/**
@@ -481,20 +490,11 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntryPoint basicGetCanalEntry() {
-		return canalEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCanalEntry(EntryPoint newCanalEntry) {
-		EntryPoint oldCanalEntry = canalEntry;
-		canalEntry = newCanalEntry;
+	public void setCanalEntrance(CanalEntry newCanalEntrance) {
+		CanalEntry oldCanalEntrance = canalEntrance;
+		canalEntrance = newCanalEntrance == null ? CANAL_ENTRANCE_EDEFAULT : newCanalEntrance;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ENTRY, oldCanalEntry, canalEntry));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ENTRANCE, oldCanalEntrance, canalEntrance));
 	}
 
 	/**
@@ -622,6 +622,44 @@ public class JourneyImpl extends EventImpl implements Journey {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port getCanalEntrancePort() {
+		if (canalEntrancePort != null && canalEntrancePort.eIsProxy()) {
+			InternalEObject oldCanalEntrancePort = (InternalEObject)canalEntrancePort;
+			canalEntrancePort = (Port)eResolveProxy(oldCanalEntrancePort);
+			if (canalEntrancePort != oldCanalEntrancePort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT, oldCanalEntrancePort, canalEntrancePort));
+			}
+		}
+		return canalEntrancePort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetCanalEntrancePort() {
+		return canalEntrancePort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCanalEntrancePort(Port newCanalEntrancePort) {
+		Port oldCanalEntrancePort = canalEntrancePort;
+		canalEntrancePort = newCanalEntrancePort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT, oldCanalEntrancePort, canalEntrancePort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getFuelCost() {
@@ -661,18 +699,16 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return basicGetDestination();
 			case SchedulePackage.JOURNEY__LADEN:
 				return isLaden();
-			case SchedulePackage.JOURNEY__ROUTE:
-				if (resolve) return getRoute();
-				return basicGetRoute();
+			case SchedulePackage.JOURNEY__ROUTE_OPTION:
+				return getRouteOption();
 			case SchedulePackage.JOURNEY__TOLL:
 				return getToll();
 			case SchedulePackage.JOURNEY__DISTANCE:
 				return getDistance();
 			case SchedulePackage.JOURNEY__SPEED:
 				return getSpeed();
-			case SchedulePackage.JOURNEY__CANAL_ENTRY:
-				if (resolve) return getCanalEntry();
-				return basicGetCanalEntry();
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
+				return getCanalEntrance();
 			case SchedulePackage.JOURNEY__CANAL_DATE:
 				return getCanalDate();
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
@@ -684,6 +720,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return getCanalArrival();
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				return getCanalBookingPeriod();
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
+				if (resolve) return getCanalEntrancePort();
+				return basicGetCanalEntrancePort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -707,8 +746,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__LADEN:
 				setLaden((Boolean)newValue);
 				return;
-			case SchedulePackage.JOURNEY__ROUTE:
-				setRoute((Route)newValue);
+			case SchedulePackage.JOURNEY__ROUTE_OPTION:
+				setRouteOption((RouteOption)newValue);
 				return;
 			case SchedulePackage.JOURNEY__TOLL:
 				setToll((Integer)newValue);
@@ -719,8 +758,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__SPEED:
 				setSpeed((Double)newValue);
 				return;
-			case SchedulePackage.JOURNEY__CANAL_ENTRY:
-				setCanalEntry((EntryPoint)newValue);
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
+				setCanalEntrance((CanalEntry)newValue);
 				return;
 			case SchedulePackage.JOURNEY__CANAL_DATE:
 				setCanalDate((LocalDate)newValue);
@@ -736,6 +775,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return;
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				setCanalBookingPeriod((PanamaBookingPeriod)newValue);
+				return;
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
+				setCanalEntrancePort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -758,8 +800,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__LADEN:
 				setLaden(LADEN_EDEFAULT);
 				return;
-			case SchedulePackage.JOURNEY__ROUTE:
-				setRoute((Route)null);
+			case SchedulePackage.JOURNEY__ROUTE_OPTION:
+				setRouteOption(ROUTE_OPTION_EDEFAULT);
 				return;
 			case SchedulePackage.JOURNEY__TOLL:
 				setToll(TOLL_EDEFAULT);
@@ -770,8 +812,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__SPEED:
 				setSpeed(SPEED_EDEFAULT);
 				return;
-			case SchedulePackage.JOURNEY__CANAL_ENTRY:
-				setCanalEntry((EntryPoint)null);
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
+				setCanalEntrance(CANAL_ENTRANCE_EDEFAULT);
 				return;
 			case SchedulePackage.JOURNEY__CANAL_DATE:
 				setCanalDate(CANAL_DATE_EDEFAULT);
@@ -787,6 +829,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return;
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				setCanalBookingPeriod(CANAL_BOOKING_PERIOD_EDEFAULT);
+				return;
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
+				setCanalEntrancePort((Port)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -806,16 +851,16 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return destination != null;
 			case SchedulePackage.JOURNEY__LADEN:
 				return laden != LADEN_EDEFAULT;
-			case SchedulePackage.JOURNEY__ROUTE:
-				return route != null;
+			case SchedulePackage.JOURNEY__ROUTE_OPTION:
+				return routeOption != ROUTE_OPTION_EDEFAULT;
 			case SchedulePackage.JOURNEY__TOLL:
 				return toll != TOLL_EDEFAULT;
 			case SchedulePackage.JOURNEY__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
 			case SchedulePackage.JOURNEY__SPEED:
 				return speed != SPEED_EDEFAULT;
-			case SchedulePackage.JOURNEY__CANAL_ENTRY:
-				return canalEntry != null;
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE:
+				return canalEntrance != CANAL_ENTRANCE_EDEFAULT;
 			case SchedulePackage.JOURNEY__CANAL_DATE:
 				return CANAL_DATE_EDEFAULT == null ? canalDate != null : !CANAL_DATE_EDEFAULT.equals(canalDate);
 			case SchedulePackage.JOURNEY__CANAL_BOOKING:
@@ -826,6 +871,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return CANAL_ARRIVAL_EDEFAULT == null ? canalArrival != null : !CANAL_ARRIVAL_EDEFAULT.equals(canalArrival);
 			case SchedulePackage.JOURNEY__CANAL_BOOKING_PERIOD:
 				return canalBookingPeriod != CANAL_BOOKING_PERIOD_EDEFAULT;
+			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
+				return canalEntrancePort != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -904,12 +951,16 @@ public class JourneyImpl extends EventImpl implements Journey {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (laden: ");
 		result.append(laden);
+		result.append(", routeOption: ");
+		result.append(routeOption);
 		result.append(", toll: ");
 		result.append(toll);
 		result.append(", distance: ");
 		result.append(distance);
 		result.append(", speed: ");
 		result.append(speed);
+		result.append(", canalEntrance: ");
+		result.append(canalEntrance);
 		result.append(", canalDate: ");
 		result.append(canalDate);
 		result.append(", latestPossibleCanalDate: ");
@@ -963,20 +1014,24 @@ public class JourneyImpl extends EventImpl implements Journey {
 	public String getTimeZone(EAttribute attribute) {
 		if (attribute == SchedulePackage.Literals.EVENT__END) {
 			final Port p = getDestination();
-			if (p == null || p.getTimeZone() == null || p.getTimeZone().isEmpty()) {
+			if (p == null) {
 				return "UTC";
 			}
-			return p.getTimeZone();
-		} else	if (attribute == SchedulePackage.Literals.JOURNEY__CANAL_DATE || attribute == SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE) {
-			final EntryPoint entryPoint = getCanalEntry();
-			if (entryPoint != null) {
-				final Port p = entryPoint.getPort();
-				if (p == null || p.getTimeZone() == null || p.getTimeZone().isEmpty()) {
-					return "UTC";
-				}
-				return p.getTimeZone();
+			Location l = p.getLocation();
+			if (l == null || l.getTimeZone() == null || l.getTimeZone().isEmpty()) {
+				return "UTC";
 			}
-			return "UTC";
+			return l.getTimeZone();
+		} else	if (attribute == SchedulePackage.Literals.JOURNEY__CANAL_DATE || attribute == SchedulePackage.Literals.JOURNEY__LATEST_POSSIBLE_CANAL_DATE) {
+			final Port p = getCanalEntrancePort();
+			if (p == null) {
+				return "UTC";
+			}
+			Location l = p.getLocation();
+			if (l == null || l.getTimeZone() == null || l.getTimeZone().isEmpty()) {
+				return "UTC";
+			}
+			return l.getTimeZone();
 		} else {
 			return super.getTimeZone(attribute);
 		}

@@ -699,9 +699,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EReference getUnitCostMatrix_AllowedRoutes() {
-		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(15);
+	public EAttribute getUnitCostMatrix_AllowedRouteOptions() {
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -2422,7 +2421,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__BASE_FUEL_PRICE);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__CV_VALUE);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__COST_LINES);
-		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__ALLOWED_ROUTES);
+		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__ALLOWED_ROUTE_OPTIONS);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__REVENUE_SHARE);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE);
@@ -2745,7 +2744,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getUnitCostMatrix_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getUnitCostMatrix_CostLines(), this.getUnitCostLine(), null, "costLines", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitCostMatrix_AllowedRoutes(), thePortPackage.getRoute(), null, "allowedRoutes", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnitCostMatrix_AllowedRouteOptions(), thePortPackage.getRouteOption(), "allowedRouteOptions", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_RevenueShare(), ecorePackage.getEDouble(), "revenueShare", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_LadenTimeAllowance(), ecorePackage.getEDouble(), "ladenTimeAllowance", "0.06", 0, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_BallastTimeAllowance(), ecorePackage.getEDouble(), "ballastTimeAllowance", "0.06", 0, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

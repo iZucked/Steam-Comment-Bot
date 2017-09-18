@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.fleet.util;
 
 import java.util.Collection;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -17,16 +16,16 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 
 public class TravelTimeUtils {
 
-	public static int getMinTimeFromAllowedRoutes(final Port fromPort, final Port toPort, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes) {
+	public static int getMinTimeFromAllowedRoutes(final Port fromPort, final Port toPort, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes, ModelDistanceProvider modelDistanceProvider) {
 		int minDuration = Integer.MAX_VALUE;
 		if (fromPort != null && toPort != null) {
 			for (final Route route : allowedRoutes) {
 				assert route != null;
-				final int totalTime = TravelTimeUtils.getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort);
+				final int totalTime = TravelTimeUtils.getTimeForRoute(vessel, referenceSpeed, route, fromPort, toPort, modelDistanceProvider);
 				if (totalTime < minDuration) {
 					minDuration = totalTime;
 				}
@@ -36,10 +35,10 @@ public class TravelTimeUtils {
 	}
 
 	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull RouteOption routeOption, final @NonNull Port fromPort, final @NonNull Port toPort,
-			@NonNull final PortModel portModel) {
+			@NonNull final PortModel portModel, ModelDistanceProvider modelDistanceProvider) {
 		for (final Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() == routeOption) {
-				final int distance = getDistance(route, fromPort, toPort);
+				final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
 
 				int extraTime = 0;
 				if (vessel != null) {
@@ -61,9 +60,9 @@ public class TravelTimeUtils {
 		return Integer.MAX_VALUE;
 	}
 
-	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort) {
+	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort, ModelDistanceProvider modelDistanceProvider) {
 
-		final int distance = getDistance(route, fromPort, toPort);
+		final int distance = getDistance(route, fromPort, toPort, modelDistanceProvider);
 
 		int extraTime = 0;
 		if (vessel != null) {
@@ -82,23 +81,9 @@ public class TravelTimeUtils {
 		return totalTime;
 	}
 
-	public static int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to) {
+	public static int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
 
-		if (Platform.isRunning()) {
-
-			final RouteDistanceLineCache cache = (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName());
-			if (cache != null) {
-				return cache.getDistance(from, to);
-			}
-		} else {
-			for (final RouteLine dl : route.getLines()) {
-				if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
-					return dl.getDistance();
-				}
-			}
-			return Integer.MAX_VALUE;
-		}
-		return Integer.MAX_VALUE;
+		return modelDistanceProvider.getDistance(from, to, route.getRouteOption());
 	}
 
 	public static String formatHours(final long hours) {

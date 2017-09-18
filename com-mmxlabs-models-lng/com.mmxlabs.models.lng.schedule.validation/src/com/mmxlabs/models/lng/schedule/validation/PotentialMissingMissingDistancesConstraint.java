@@ -32,12 +32,11 @@ import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -47,6 +46,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Note: This is in the schedule plugin's as we do not have a top level whole scenario validation plug-in
@@ -64,20 +64,16 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 		final EObject target = ctx.getTarget();
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
+		IScenarioDataProvider scenarioDataProvider = extraContext.getScenarioDataProvider();
 		if (target instanceof PortModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
 			final SpotMarketsModel spotMarketsModel = referenceModel.getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
-			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
-			Map<RouteOption, RouteDistanceLineCache> caches = new EnumMap<>(RouteOption.class);
-			for (final Route route : portModel.getRoutes()) {
-				caches.put(route.getRouteOption(), (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName()));
-			}
-			final RouteDistanceLineCache fCache = caches.get(RouteOption.DIRECT);
-			if (fCache == null) {
-				// No direct matrix?
+			ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+			if (modelDistanceProvider == null) {
+				// No distanceprovider?
 				return Activator.PLUGIN_ID;
 			}
 
@@ -89,7 +85,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 								.filter(to -> to != null) //
 								// Skip identity distance
 								.filter(to -> !from.equals(to)) //
-								.filter(to -> !fCache.hasDistance(from, to)) //
+								.filter(to -> !modelDistanceProvider.hasDistance(from, to, RouteOption.DIRECT)) //
 								.map(to -> new Pair<Port, Port>(from, to))) //
 						.collect(Collectors.toSet());
 			};
@@ -231,9 +227,8 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				for (Port to : dischargePorts) {
 					if (from != to) {
 						for (RouteOption route : RouteOption.values()) {
-							final RouteDistanceLineCache cache = caches.get(route);
-							if (cache != null && cache.hasDistance(from, to)) {
-								if (!cache.hasDistance(to, from)) {
+							if (modelDistanceProvider.hasDistance(from, to, route)) {
+								if (!modelDistanceProvider.hasDistance(to, from, route)) {
 									final String msg = String.format("Missing distance between %s and %s for %s route.", getPortName(to), getPortName(from), route);
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 									failure.addEObjectAndFeature(from, MMXCorePackage.Literals.NAMED_OBJECT__NAME);

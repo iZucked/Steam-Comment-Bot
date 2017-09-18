@@ -14,7 +14,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.editor.actions.MergePorts;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
@@ -43,11 +42,6 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(),
 					PortPackage.eINSTANCE.getPortModel_Ports() }), null, getModelReference());
 			pane.getViewer().setInput(getRootObject());
-
-			// Add action to create and edit cargo groups
-			pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
-			
-			pane.getToolBarManager().update(true);
 		}
 	}
 

@@ -40,7 +40,9 @@ import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -150,12 +152,14 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								final Port toPort = AnalyticsBuilder.getPort(row.getSellOption());
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 								final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+								final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+										ModelDistanceProvider.class);
 								final ZonedDateTime sellDate = AnalyticsBuilder.getWindowStartDate(row.getSellOption());
 
 								if (vessel != null && fromPort != null && toPort != null && sellDate != null) {
 									final MenuManager dateMenu = new MenuManager("Set date using");
 									dateMenu.add(new RunnableAction("max speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
+										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel, modelDistanceProvider);
 
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -169,7 +173,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 										dateMenu.add(new RunnableAction("service speed", () -> {
 											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-													portModel);
+													portModel, modelDistanceProvider);
 
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
@@ -237,12 +241,14 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								final Port toPort = AnalyticsBuilder.getPort(row.getSellOption());
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 								final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+								final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+										ModelDistanceProvider.class);
 								final ZonedDateTime buyDate = AnalyticsBuilder.getWindowStartDate(row.getBuyOption());
 
 								if (vessel != null && fromPort != null && toPort != null && buyDate != null) {
 									final MenuManager dateMenu = new MenuManager("Set date using");
 									dateMenu.add(new RunnableAction("max speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel);
+										final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getVesselOrDelegateMaxSpeed(), RouteOption.DIRECT, fromPort, toPort, portModel, modelDistanceProvider);
 
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
@@ -256,7 +262,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 										dateMenu.add(new RunnableAction("service speed", () -> {
 											final int travelHours = TravelTimeUtils.getTimeForRoute(vessel, vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-													portModel);
+													portModel, modelDistanceProvider);
 
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
