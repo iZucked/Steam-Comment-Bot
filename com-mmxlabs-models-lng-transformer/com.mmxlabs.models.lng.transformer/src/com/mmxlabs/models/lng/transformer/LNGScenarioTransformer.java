@@ -170,7 +170,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculat
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
-import com.mmxlabs.scheduler.optimiser.contracts.ICalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -2719,8 +2718,39 @@ public class LNGScenarioTransformer {
 			if (vessel != null) {
 				optimiserVessels.add(vessel);
 			}
+
+		}
+		// Register group based costs first
+		{
+			for (final RouteCost routeCost : costModel.getRouteCosts()) {
+				if (routeCost.getRouteOption() == RouteOption.DIRECT) {
+					continue;
+				}
+				for (final AVesselSet<Vessel> vesselSet : routeCost.getVessels()) {
+					if (vesselSet instanceof Vessel) {
+						// Skip for now
+					} else {
+						final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
+						for (final Vessel eVessel : SetUtils.getObjects(vesselSet)) {
+
+							final IVessel oVessel = vesselAssociation.lookup(eVessel);
+							assert oVessel != null;
+							builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Laden,
+									new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
+
+							builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Ballast,
+									new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+
+							builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.RoundTripBallast,
+									new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+						}
+					}
+				}
+			}
+
 		}
 
+		// Next apply formula
 		final boolean usedPanamaFormula = false;
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
@@ -2744,51 +2774,31 @@ public class LNGScenarioTransformer {
 			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
 		}
 
-		final Map<Vessel, RouteCost> vesselToSuezRouteCostMap = new HashMap<>();
-		final Map<Vessel, RouteCost> vesselToPanamRouteCostMap = new HashMap<>();
-
-		// Register specific costs first (these override formula)
-		for (final RouteCost routeCost : costModel.getRouteCosts()) {
-			if (routeCost.getRouteOption() == RouteOption.DIRECT) {
-				continue;
-			}
-			for (final AVesselSet<Vessel> vesselSet : routeCost.getVessels()) {
-				if (vesselSet instanceof Vessel) {
-					if (routeCost.getRouteOption() == RouteOption.SUEZ) {
-						vesselToSuezRouteCostMap.put((Vessel) vesselSet, routeCost);
-					} else if (routeCost.getRouteOption() == RouteOption.PANAMA) {
-						vesselToPanamRouteCostMap.put((Vessel) vesselSet, routeCost);
-					}
-				}
-			}
-		}
-
-		// Register vessel groups next, ignoring already registered vessels. Cost formulas override generic values.
-		for (final RouteCost routeCost : costModel.getRouteCosts()) {
-			if (routeCost.getRouteOption() == RouteOption.DIRECT) {
-				continue;
-			}
-			if (routeCost.getRouteOption() == RouteOption.PANAMA) {
-				if (usedPanamaFormula) {
+		// Finally register specific costs to override anything else
+		{
+			for (final RouteCost routeCost : costModel.getRouteCosts()) {
+				if (routeCost.getRouteOption() == RouteOption.DIRECT) {
 					continue;
 				}
-			}
-			for (final Vessel vessel : SetUtils.getObjects(routeCost.getVessels())) {
-				if (routeCost.getRouteOption() == RouteOption.SUEZ) {
-					if (vessel.getVesselOrDelegateSCNT() != 0 && usedSuezFormula) {
-						continue;
-					}
-					if (!vesselToSuezRouteCostMap.containsKey(vessel)) {
-						vesselToSuezRouteCostMap.put(vessel, routeCost);
-					}
-				} else if (routeCost.getRouteOption() == RouteOption.PANAMA) {
-					if (!vesselToPanamRouteCostMap.containsKey(vessel)) {
-						vesselToPanamRouteCostMap.put(vessel, routeCost);
+				for (final AVesselSet<Vessel> vesselSet : routeCost.getVessels()) {
+					if (vesselSet instanceof Vessel) {
+						Vessel eVessel = (Vessel) vesselSet;
+						final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
+						final IVessel oVessel = vesselAssociation.lookup(eVessel);
+						assert oVessel != null;
+						builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
+
+						builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Ballast,
+								new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
+
+						builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.RoundTripBallast,
+								new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
 					}
 				}
 			}
 		}
 
+		// Register route parameters
 		for (final IVessel oVessel : optimiserVessels) {
 			assert oVessel != null;
 			final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
@@ -2801,29 +2811,6 @@ public class LNGScenarioTransformer {
 
 				builder.setVesselRouteFuel(mappedRouteOption, oVessel, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
 						OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-			}
-
-			if (vesselToSuezRouteCostMap.containsKey(eVessel)) {
-				final RouteCost routeCost = vesselToSuezRouteCostMap.get(eVessel);
-
-				final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
-				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
-
-				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Ballast, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
-
-				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.RoundTripBallast,
-						new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
-			}
-			if (vesselToPanamRouteCostMap.containsKey(eVessel)) {
-				final RouteCost routeCost = vesselToPanamRouteCostMap.get(eVessel);
-
-				final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
-				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
-
-				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.Ballast, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
-
-				builder.setVesselRouteCost(mappedRouteOption, oVessel, CostType.RoundTripBallast,
-						new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
 			}
 		}
 	}
