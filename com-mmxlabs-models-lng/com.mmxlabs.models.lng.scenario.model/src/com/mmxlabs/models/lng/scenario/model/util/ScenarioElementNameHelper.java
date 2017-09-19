@@ -27,7 +27,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * Class, intended primarily for the validation framework, to help generate consistent name/id strings
@@ -119,12 +121,12 @@ public class ScenarioElementNameHelper {
 		return defaultName;
 	}
 
-	public static @NonNull String getName(final @Nullable Collection<AVesselSet<Vessel>> vessels, final @NonNull String defaultName) {
-		if (vessels == null || vessels.isEmpty()) {
+	public static < U extends NamedObject> @NonNull String getName(final @Nullable Collection<U> namedObjects, final @NonNull String defaultName) {
+		if (namedObjects == null || namedObjects.isEmpty()) {
 			return defaultName;
 		}
 		final List<String> parts = new LinkedList<>();
-		for (final AVesselSet<Vessel> v : vessels) {
+		for (final NamedObject v : namedObjects) {
 			parts.add(v.getName());
 		}
 
