@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
+import java.util.Collection;
 import java.util.function.BiConsumer;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -15,6 +16,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.RouteOption;
 
@@ -30,12 +32,33 @@ public class FleetModelBuilder {
 	}
 
 	@NonNull
+	public VesselGroup makeVesselGroup(@NonNull final String name, @NonNull final Vessel... vessels) {
+		final VesselGroup vesselGroup = FleetFactory.eINSTANCE.createVesselGroup();
+		vesselGroup.setName(name);
+		for (final Vessel vessel : vessels) {
+			vesselGroup.getVessels().add(vessel);
+		}
+		fleetModel.getVesselGroups().add(vesselGroup);
+		return vesselGroup;
+	}
+
+	@NonNull
+	public VesselGroup makeVesselGroup(@NonNull final String name, @NonNull final Collection<Vessel> vessels) {
+		final VesselGroup vesselGroup = FleetFactory.eINSTANCE.createVesselGroup();
+		vesselGroup.setName(name);
+		vesselGroup.getVessels().addAll(vessels);
+		fleetModel.getVesselGroups().add(vesselGroup);
+		return vesselGroup;
+	}
+
+	@NonNull
 	public Vessel createVesselFrom(@NonNull final String name, final Vessel source, BiConsumer<Vessel, Vessel> costCloner) {
 		final Vessel copy = EcoreUtil.copy(source);
 		copy.setName(name);
 
-		costCloner.accept(source, copy);
-
+		if (costCloner != null) {
+			costCloner.accept(source, copy);
+		}
 		fleetModel.getVessels().add(copy);
 
 		return copy;

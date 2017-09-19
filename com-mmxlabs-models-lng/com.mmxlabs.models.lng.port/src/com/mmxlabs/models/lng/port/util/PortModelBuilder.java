@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.util;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -218,6 +219,15 @@ public class PortModelBuilder {
 		for (final Port port : ports) {
 			portGroup.getContents().add(port);
 		}
+		portModel.getPortGroups().add(portGroup);
+		return portGroup;
+	}
+
+	@NonNull
+	public PortGroup makePortGroup(@NonNull final String name, @NonNull final Collection<Port> ports) {
+		final PortGroup portGroup = PortFactory.eINSTANCE.createPortGroup();
+		portGroup.setName(name);
+		portGroup.getContents().addAll(ports);
 		portModel.getPortGroups().add(portGroup);
 		return portGroup;
 	}
