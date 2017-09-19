@@ -310,7 +310,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		final FleetModel fleetModel = scenarioModelBuilder.getFleetModelBuilder().getFleetModel();
 		for (final Vessel vc : fleetModel.getVessels()) {
 			scenarioModelBuilder.getFleetModelBuilder().setRouteParameters(vc, canalOption, canalTransitFuelDays, canalTransitFuelDays, canalNBORateDays, canalNBORateDays, canalTransitTime);
-			scenarioModelBuilder.getCostModelBuilder().setRouteCost(vc, canalOption, canalLadenCost, canalUnladenCost);
+			scenarioModelBuilder.getCostModelBuilder().createRouteCost(vc, canalOption, canalLadenCost, canalUnladenCost);
 		}
 	}
 
