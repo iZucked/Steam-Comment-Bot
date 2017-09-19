@@ -501,7 +501,7 @@ public class FeasibleTimeWindowTrimmer {
 								Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselMaxSpeed)) + panamaBookingsProvider.getMargin() + visitDuration[index - 1];
 						if (isRoundTripSequence) {
 							// // Normal behaviour
-						} else if (potentialBooking.isPresent()) {
+						} else if (potentialBooking.isPresent() && isBetterThroughPanama(windowStartTime[index - 1], windowStartTime[index], panamaTravelTime, Math.min(directTravelTime, suezTravelTime))) {
 							// window has a booking
 							currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
 							// currentPortTimeRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
@@ -617,6 +617,30 @@ public class FeasibleTimeWindowTrimmer {
 			}
 		}
 
+	}
+
+	/**
+	 * Check whether we should go through Panama if we've made a booking.
+	 * For example, we shouldn't go through if we will be late through Panama
+	 * and can arrive on time direct or suez.
+	 * @param start
+	 * @param end
+	 * @param panamaTravelTime
+	 * @param minOtherTravel
+	 * @return
+	 */
+	private boolean isBetterThroughPanama(int start, int end, int panamaTravelTime, int minOtherTravel) {
+		if (minOtherTravel == Integer.MAX_VALUE) {
+			return true;
+		} else if (panamaTravelTime == Integer.MAX_VALUE) {
+			return false;
+		} else if ((start + panamaTravelTime) < end) {
+			return true;
+		} else if (panamaTravelTime <= minOtherTravel) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
