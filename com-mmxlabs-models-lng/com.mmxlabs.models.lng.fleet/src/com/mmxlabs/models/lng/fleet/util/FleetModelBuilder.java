@@ -137,17 +137,19 @@ public class FleetModelBuilder {
 	public void setVesselStateAttributesCurve(@NonNull final Vessel vessel, final boolean isLaden, final double speed, final double consumption) {
 		final VesselStateAttributes attributes = isLaden ? vessel.getLadenAttributes() : vessel.getBallastAttributes();
 
-		for (final FuelConsumption fuelConsumption : attributes.getVesselOrDelegateFuelConsumption()) {
+		for (final FuelConsumption fuelConsumption : attributes.getFuelConsumption()) {
 			if (fuelConsumption.getSpeed() == speed) {
 				fuelConsumption.setConsumption(consumption);
 				return;
 			}
 		}
 
+		attributes.setFuelConsumptionOverride(true);
+
 		final FuelConsumption fuelConsumption = FleetFactory.eINSTANCE.createFuelConsumption();
 		fuelConsumption.setSpeed(speed);
 		fuelConsumption.setConsumption(consumption);
-		attributes.getVesselOrDelegateFuelConsumption().add(fuelConsumption);
+		attributes.getFuelConsumption().add(fuelConsumption);
 	}
 
 }
