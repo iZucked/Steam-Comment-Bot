@@ -420,6 +420,36 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 		});
 	}
 
+	/**
+	 * Show that cargo is optimised on to charter with charter in contract
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void sanityCheckTestCharterContractOptimises() throws Exception {
+		lngScenarioModel.getCargoModel().getVesselAvailabilities().clear();
+		lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("vessel", vesselClass);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8).build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPort("Sakai"), null, entity, "7").build();
+
+		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
+		@NonNull
+		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPort("Sakai"), "2000000");
+		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
+		s.setBallastBonusContract(ballastBonusContract);
+		s.setEntity(entity);
+		charterInMarket_1.setCharterContract(s);
+		optimiseWithLSOTest(scenarioRunner -> {
+			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
+			final EndEvent end = getEndEvent(charterInMarket_1);
+			Assert.assertEquals(-2_000_000, end.getGroupProfitAndLoss().getProfitAndLoss());
+		});
+	}
+
 	
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
 		final Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
