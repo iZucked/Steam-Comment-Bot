@@ -16,6 +16,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -26,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scheduler.optimiser.components.impl.RouteOptionBooking;
@@ -46,9 +49,10 @@ public class CanalBookingsReportTransformer {
 		public final RouteOption routeOption;
 		public final CanalBookingSlot booking;
 		public final String period;
+		public final Slot nextSlot;
 
 		public RowData(final @NonNull String scheduleName, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period) {
+				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period, final @Nullable Slot nextSlot) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
@@ -58,7 +62,8 @@ public class CanalBookingsReportTransformer {
 			this.entryPoint = entryPoint;
 			this.event = usedSlot;
 			this.period = period;
-
+			this.nextSlot = nextSlot;
+			
 			this.dummy = false;
 		}
 
@@ -72,6 +77,7 @@ public class CanalBookingsReportTransformer {
 			this.routeOption = null;
 			this.preBooked = false;
 			this.period = "";
+			this.nextSlot = null;
 
 			this.dummy = true;
 		}
@@ -141,15 +147,27 @@ public class CanalBookingsReportTransformer {
 //					} else {
 //						period = "Strict";
 //					}
-
+					Event nextEvent = evt.getNextEvent();
+					Slot nextSlot = null;
+					while (nextEvent != null) {
+						if (nextEvent instanceof SlotVisit) {
+							SlotVisit nextSlotVisit = (SlotVisit) nextEvent;
+							Slot slot = nextSlotVisit.getSlotAllocation().getSlot();
+							if (slot != null) {
+								nextSlot = slot;
+							}
+							break;
+						}
+						nextEvent = nextEvent.getNextEvent();
+					}
 					if (journey.getCanalBooking() != null) {
 						CanalBookingSlot booking = journey.getCanalBooking();
 						result.add(new RowData(scenarioInstance.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
-								(PortVisit) journey.getPreviousEvent(), period));
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot));
 						existingBookings.remove(booking);
 					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
 						result.add(new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
-								(PortVisit) journey.getPreviousEvent(), period));
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot));
 					}
 				}
 			}
@@ -157,7 +175,7 @@ public class CanalBookingsReportTransformer {
 
 		// unused options
 		for (CanalBookingSlot booking : existingBookings) {
-			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused"));
+			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused", null));
 		}
 
 		return result;
