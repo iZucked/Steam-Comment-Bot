@@ -3216,9 +3216,9 @@ public class LNGScenarioTransformer {
 	private IEndRequirement createDefaultCharterInEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap,
 			final IVesselClass oVesselClass) {
 		@NonNull
-		final IEndRequirement allDischargeCharterInEndRequirement = createEndRequirement(builder, portAssociation, null, null,
+		final IEndRequirement allDischargeCharterInEndRequirement = createSpotEndRequirement(builder, portAssociation,
 				modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()),
-				new HeelOptionConsumer(oVesselClass.getSafetyHeel(), oVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
+				new HeelOptionConsumer(oVesselClass.getSafetyHeel(), oVesselClass.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)));
 		return allDischargeCharterInEndRequirement;
 	}
 
@@ -3300,6 +3300,32 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	@NonNull
+	private IEndRequirement createSpotEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final Set<Port> ports,
+			final IHeelOptionConsumer heelConsumer) {
+
+		final Set<IPort> portSet = new LinkedHashSet<>();
+		for (final Port p : ports) {
+			portSet.add(portAssociation.lookup(p));
+		}
+		// Is the availability open ended or do we force the end rule?
+		if (ports.isEmpty()) {
+			return builder.createEndRequirement(null, false, null, heelConsumer, false);
+		} else {
+			return builder.createEndRequirement(portSet, false, null, heelConsumer, false);
+		}
+
+	}
+
+	/**
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
+	 * 
+	 * @param builder
+	 * @param portAssociation
+	 * @param force
+	 * @param pat
+	 * @return
+	 */
+	@NonNull
 	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
 			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final IHeelOptionConsumer heelConsumer, final boolean forceHireCostOnlyEndRule) {
 		final ITimeWindow window;
@@ -3319,7 +3345,7 @@ public class LNGScenarioTransformer {
 			window = new MutableTimeWindow();
 		}
 
-		final Set<IPort> portSet = new LinkedHashSet<IPort>();
+		final Set<IPort> portSet = new LinkedHashSet<>();
 		for (final Port p : ports) {
 			portSet.add(portAssociation.lookup(p));
 		}
