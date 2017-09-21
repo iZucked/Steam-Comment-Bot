@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.importer.CharterContractBallastBonusImporterExtraImporter;
 import com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -116,6 +117,8 @@ public class CSVImporter {
 	public void importContractData(@NonNull final String urlRoot) throws MalformedURLException {
 		dataMap.put(CommercialModelImporter.PURCHASE_CON_KEY, createURL(urlRoot, "Purchase Contracts.csv"));
 		dataMap.put(CommercialModelImporter.SALES_CON_KEY, createURL(urlRoot, "Sales Contracts.csv"));
+		dataMap.put(CommercialModelImporter.CHARTER_CON_KEY, createURL(urlRoot, "Charter Contracts.csv"));
+		dataMap.put(CharterContractBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURL(urlRoot, "Charter Contracts--Ballast Bonus.csv"));
 
 	}
 
