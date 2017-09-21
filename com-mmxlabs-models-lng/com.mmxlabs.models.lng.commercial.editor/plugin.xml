@@ -297,6 +297,19 @@
             eClassName="com.mmxlabs.models.lng.commercial.Contract"
             inheritable="true">
       </classImporter>
+      <classImporter
+            ID="com.mmxlabs.models.lng.commercial.importer.CharterContractImporter"
+            classImporterClass="com.mmxlabs.models.lng.commercial.importer.CharterContractImporter"
+            eClassName="com.mmxlabs.models.lng.commercial.CharterContract"
+            inheritable="true">
+      </classImporter>
+
+   </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.extramodelimporters">
+      <extramodelimporter
+            class="com.mmxlabs.models.lng.commercial.importer.CharterContractBallastBonusImporterExtraImporter">
+      </extramodelimporter>
    </extension>
 
 </plugin>

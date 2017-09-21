@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.commercial.importer;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -16,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -36,6 +36,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	public static final String ENTITY_BOOKS_KEY = "ENTITYBOOKS";
 	public static final String SALES_CON_KEY = "SALES";
 	public static final String PURCHASE_CON_KEY = "PURCHASE";
+	public static final String CHARTER_CON_KEY = "CHARTER";
 	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
 
 	@Inject
@@ -45,12 +46,14 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	private LegalEntityBookImporter entityBookImporter;
 	private IClassImporter purchaseImporter;
 	private IClassImporter salesImporter;
+	private IClassImporter charterImporter;
 
 	static {
 		inputs.put(ENTITIES_KEY, "Entities");
 		inputs.put(ENTITY_BOOKS_KEY, "Entity Books");
 		inputs.put(PURCHASE_CON_KEY, "Purchase Contracts");
 		inputs.put(SALES_CON_KEY, "Sales Contracts");
+		inputs.put(CHARTER_CON_KEY, "Charter Contracts");
 	}
 
 	/**
@@ -72,6 +75,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
+			charterImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getCharterContract());
 		}
 	}
 
@@ -112,8 +116,12 @@ public class CommercialModelImporter implements ISubmodelImporter {
 					.addAll((Collection<? extends SalesContract>) salesImporter.importObjects(CommercialPackage.eINSTANCE.getSalesContract(), inputs.get(SALES_CON_KEY), context));
 		}
 		if (inputs.containsKey(PURCHASE_CON_KEY)) {
-			commercial.getPurchaseContracts().addAll(
-					(Collection<? extends PurchaseContract>) purchaseImporter.importObjects(CommercialPackage.eINSTANCE.getPurchaseContract(), inputs.get(PURCHASE_CON_KEY), context));
+			commercial.getPurchaseContracts()
+					.addAll((Collection<? extends PurchaseContract>) purchaseImporter.importObjects(CommercialPackage.eINSTANCE.getPurchaseContract(), inputs.get(PURCHASE_CON_KEY), context));
+		}
+		if (inputs.containsKey(CHARTER_CON_KEY)) {
+			commercial.getCharteringContracts()
+					.addAll((Collection<? extends CharterContract>) charterImporter.importObjects(CommercialPackage.eINSTANCE.getCharterContract(), inputs.get(CHARTER_CON_KEY), context));
 		}
 		return commercial;
 	}
@@ -123,17 +131,9 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		final CommercialModel cm = (CommercialModel) model;
 		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities(), context));
 		output.put(ENTITY_BOOKS_KEY, entityBookImporter.exportObjects(cm.getEntities(), context));
-
-		final LinkedList<PurchaseContract> purchase = new LinkedList<PurchaseContract>();
-		final LinkedList<SalesContract> sales = new LinkedList<SalesContract>();
-		for (final SalesContract c : cm.getSalesContracts()) {
-			sales.add(c);
-		}
-		for (final PurchaseContract c : cm.getPurchaseContracts()) {
-			purchase.add(c);
-		}
-		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales, context));
-		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase, context));
+		output.put(SALES_CON_KEY, salesImporter.exportObjects(cm.getSalesContracts(), context));
+		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(cm.getPurchaseContracts(), context));
+		output.put(CHARTER_CON_KEY, charterImporter.exportObjects(cm.getCharteringContracts(), context));
 	}
 
 	@Override
