@@ -1538,7 +1538,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final IVesselAvailability virtualVesselAvailability = virtualVesselAvailabilityMap.get(desElement);
 
 			if (virtualVesselAvailability == null) {
-				throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
+				throw new IllegalArgumentException("DES Purchase is not linked to a virtual vessel");
 			}
 			// Allow the DES Purchase on it's own resource
 			@NonNull
@@ -1589,7 +1589,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// Look up virtual vessel
 			final IVesselAvailability virtualVesselAvailability = virtualVesselAvailabilityMap.get(fobElement);
 			if (virtualVesselAvailability == null) {
-				throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
+				throw new IllegalArgumentException("FOB Sale is not linked to a virtual vessel");
 			}
 
 			// Allow the FOB Sale on it's own resource
