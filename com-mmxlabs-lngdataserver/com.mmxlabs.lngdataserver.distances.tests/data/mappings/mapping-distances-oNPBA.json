@@ -1,0 +1,16 @@
+{
+  "id" : "c0999d0f-ba86-33b5-83d1-01917dbff16b",
+  "request" : {
+    "url" : "/distances?open=SUZ",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-distances-oNPBA.json",
+    "headers" : {
+      "Date" : "Thu, 29 Jun 2017 15:40:37 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "c0999d0f-ba86-33b5-83d1-01917dbff16b"
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+<!--
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="scn"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.scnfile"
+            name="SCN File"
+            priority="normal">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.mmxlabs.models.ui.editorpart.JointModelEditorPart"
+            contributorClass="com.mmxlabs.models.ui.editorpart.JointModelEditorContributor"
+            default="true"
+            extensions="scn,sc2"
+            id="com.mmxlabs.models.lng.demo.scneditor"
+            name="SCN Editor">
+         <contentTypeBinding
+               contentTypeId="com.mmxlabs.shiplingo.platform.models.manifest.scnfile">
+         </contentTypeBinding>
+      </editor>
+   </extension> -->
+     <extension
+           point="org.eclipse.ui.menus">
+         
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=dataStart">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.distances"
+                  label="Import distances"
+                  style="push">
+            </command>
+         </menuContribution>
+
+
+     </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.lngdataserver.lng.importers.distances.ui.ImportDistancesWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.distances"
+               name="Bulk import charter curves from CSV">
+         </command>
+      </extension>
+</plugin>

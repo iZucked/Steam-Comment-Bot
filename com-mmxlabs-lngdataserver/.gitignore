@@ -1,0 +1,12 @@
+#MongoDB
+com.mmxlabs.lngdataserver.distances.backend/mongo_data/diagnostic.data/
+com.mmxlabs.lngdataserver.distances.backend/mongo_data/mongod.lock
+
+
+*.orig
+*.rej
+*.swp
+bin/
+target/
+*~
+
