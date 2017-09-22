@@ -46,11 +46,11 @@ public class AbstractVesselEventPortSlot extends PortSlot implements IVesselEven
 
 	@Override
 	public List<ISequenceElement> getEventSequenceElements() {
-		return eventSequenceElements;
+		return Collections.unmodifiableList(eventSequenceElements);
 	}
 
 	@Override
 	public List<IPortSlot> getEventPortSlots() {
-		return eventPortSlots;
+		return Collections.unmodifiableList(eventPortSlots);
 	}
 }
