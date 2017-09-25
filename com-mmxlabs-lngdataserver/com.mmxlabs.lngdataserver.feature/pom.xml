@@ -5,11 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
-		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>4.1.5-SNAPSHOT</version>
+		<groupId>com.mmxlabs.lngdataserver</groupId>
+		<version>4.3.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.feature</artifactId>
-	<version>4.1.5-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 

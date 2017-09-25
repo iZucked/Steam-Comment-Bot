@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Dataserver: Distances
-Bundle-SymbolicName: com.mmxlabs.lng.dataserver.distances;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Name: Dataserver: Distances API
+Bundle-SymbolicName: com.mmxlabs.lngdataserver.distances;singleton:=true
+Bundle-Version: 4.3.2.qualifier
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.osgi.services,
  org.eclipse.core.resources,

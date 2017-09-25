@@ -6,10 +6,9 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>4.3.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.lngdataserver.distances.repository.csv.tests</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-	<packaging>eclipse-plugin</packaging>
+	<artifactId>com.mmxlabs.lngdataserver.distances.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 </project>

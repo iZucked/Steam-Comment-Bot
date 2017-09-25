@@ -4,12 +4,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.1.5-SNAPSHOT</version>
+		<version>4.3.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.lngdataserver.p2</artifactId>
-	<version>4.1.5-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 	<name>LNG Data Server: p2 Repository</name>
 </project>
