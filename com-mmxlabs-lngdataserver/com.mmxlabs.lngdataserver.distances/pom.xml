@@ -9,6 +9,6 @@
 		<version>4.3.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.lng.dataserver.distances</artifactId>
+	<artifactId>com.mmxlabs.lngdataserver.distances</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>

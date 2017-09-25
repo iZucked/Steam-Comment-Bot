@@ -10,4 +10,5 @@
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.lib</artifactId>
 	<packaging>eclipse-plugin</packaging>
+	
 </project>

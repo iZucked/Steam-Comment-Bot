@@ -10,11 +10,8 @@
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-
-
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-source-feature-plugin</artifactId>
@@ -26,23 +23,19 @@
 						<goals>
 							<goal>source-feature</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<plugin id="com.mmxlabs.lngdataserver.lib.source" />
+								<plugin id="com.mmxlabs.lngdataserver.lib" />
+							</excludes>
+							<labelSuffix></labelSuffix>
+						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<labelSuffix></labelSuffix>
+				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attached-p2-metadata</id>
-						<phase>package</phase>
-						<goals>
-							<goal>p2-metadata</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>
