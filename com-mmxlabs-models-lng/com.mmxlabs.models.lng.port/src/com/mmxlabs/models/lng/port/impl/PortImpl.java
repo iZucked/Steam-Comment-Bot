@@ -655,6 +655,18 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getTempMMXID() {
+		if (getLocation() != null) {
+			return getLocation().getTempMMXID();
+		}
+		return getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getShortName() {

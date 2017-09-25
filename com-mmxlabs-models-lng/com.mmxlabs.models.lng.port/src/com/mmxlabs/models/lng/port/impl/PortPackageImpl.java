@@ -746,6 +746,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		addEOperation(portEClass, theDateTimePackage.getZoneId(), "getZoneId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		addEOperation(portEClass, ecorePackage.getEString(), "getTempMMXID", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_RouteOption(), this.getRouteOption(), "routeOption", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

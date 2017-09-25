@@ -421,6 +421,14 @@ public interface Port extends APortSet<Port> {
 	ZoneId getZoneId();
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getTempMMXID();
+
+	/**
 	 * Returns the value of the '<em><b>Short Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
