@@ -183,6 +183,14 @@ public class CanalBookingsReport extends AbstractReportView {
 
 		createColumn(sortingSupport, "Event", rowData -> (rowData.event == null) ? "" : rowData.event.name(), rowData -> (rowData.event == null) ? "" : rowData.event.name());
 
+		createColumn(sortingSupport, "Next Slot", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()), rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()));
+
+		createColumn(sortingSupport, "Next Slot Port", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()), rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()));
+
+		createColumn(sortingSupport, "Next Slot Window Start", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart())), rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowStart()));
+
+		createColumn(sortingSupport, "Next Slot Window End", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart().plusDays(rowData.nextSlot.getWindowSizeInHours()/24))), rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowSizeInHours()/24));
+
 		createColumn(sortingSupport, "Period", rowData -> rowData.period, rowData -> rowData.period);
 
 		viewer.getGrid().setLinesVisible(true);

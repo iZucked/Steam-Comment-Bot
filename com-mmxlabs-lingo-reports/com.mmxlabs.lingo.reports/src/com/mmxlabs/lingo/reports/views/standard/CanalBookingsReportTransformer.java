@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -44,9 +46,10 @@ public class CanalBookingsReportTransformer {
 		public final RouteOption routeOption;
 		public final CanalBookingSlot booking;
 		public final String period;
+		public final Slot nextSlot;
 
 		public RowData(final @NonNull String scheduleName, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period) {
+				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
@@ -56,7 +59,8 @@ public class CanalBookingsReportTransformer {
 			this.entryPointName = entryPointName;
 			this.event = usedSlot;
 			this.period = period;
-
+			this.nextSlot = nextSlot;
+			
 			this.dummy = false;
 		}
 
@@ -70,6 +74,7 @@ public class CanalBookingsReportTransformer {
 			this.routeOption = null;
 			this.preBooked = false;
 			this.period = "";
+			this.nextSlot = null;
 
 			this.dummy = true;
 		}
@@ -142,15 +147,29 @@ public class CanalBookingsReportTransformer {
 					// period = "Strict";
 					// }
 
+					Event nextEvent = evt.getNextEvent();
+					Slot nextSlot = null;
+					while (nextEvent != null) {
+						if (nextEvent instanceof SlotVisit) {
+							SlotVisit nextSlotVisit = (SlotVisit) nextEvent;
+							Slot slot = nextSlotVisit.getSlotAllocation().getSlot();
+							if (slot != null) {
+								nextSlot = slot;
+							}
+							break;
+						}
+						nextEvent = nextEvent.getNextEvent();
+					}
+
 					if (journey.getCanalBooking() != null) {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
 						result.add(
-								new RowData(modelRecord.getName(), true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period));
+								new RowData(modelRecord.getName(), true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period, nextSlot));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
-						result.add(new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period));
+						result.add(new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period, nextSlot));
 					}
 				}
 			}
@@ -159,7 +178,7 @@ public class CanalBookingsReportTransformer {
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
 			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
-			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRouteOption(), booking.getBookingDate(), entryPointName, null, "Unused"));
+			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRouteOption(), booking.getBookingDate(), entryPointName, null, "Unused", null));
 		}
 
 		return result;
