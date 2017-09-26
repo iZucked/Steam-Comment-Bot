@@ -37,8 +37,10 @@ public class DataServerEndPointExtensionUtil {
 					result.add(instance);
 				}
 			}
+			System.out.printf("Found %d extensions\n", result.size());
 			return result.toArray();
 		}
+		System.out.printf("Found no extensions\n");
 		return null;
 
 	}
