@@ -212,6 +212,32 @@ public class SlotInsertionOptimiser {
 			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, null, null);
 			if (metrics == null) {
 				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
+				
+				// Re-check sequences
+				{
+					// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
+					for (final ISequenceElement slot : slots) {
+						if (optionalElementsProvider.isElementRequired(slot) || optionalElementsProvider.getSoftRequiredElements().contains(slot)) {
+							if (currentSequences.getUnusedElements().contains(slot)) {
+								System.out.println("Generated move does not include target element");
+								return null;
+							}
+						}
+					}
+				}
+				{
+					// Make sure we have not swapped unused, compulsory elements
+					for (final ISequenceElement e : currentSequences.getUnusedElements()) {
+						if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
+							if (!state.initiallyUnused.contains(e)) {
+								System.out.println("New required element is in  unused list");
+								return null;
+							}
+						}
+					}
+				}
+				
+				
 				return new Pair<>(currentSequences, currentPNL);
 			}
 			return new Pair<>(simpleSeq, metrics[MetricType.PNL.ordinal()]);
