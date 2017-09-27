@@ -230,10 +230,6 @@
           commandProvider="com.mmxlabs.models.lng.port.ui.commands.PortCountryGroupCommandProvider"
           id="com.mmxlabs.models.lng.port.ui.commands.PortCountryGroupCommandProvider">
     </ModelCommandProvider>
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.port.ui.commands.PortVersionCommandProvider"
-          id="com.mmxlabs.models.lng.port.ui.commands.PortVersionCommandProvider">
-    </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated port -->
@@ -260,6 +256,12 @@
                attributeTypeURI="http://www.mmxlabs.com/models/lng/port/1/">
          </dataType>
       </attributeImporter>
+   </extension>
+   <extension
+         point="com.mmxlabs.scenario.service.model.WrappedCommandExtension">
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.port.ui.commands.PortVersionCommandWrapper">
+      </WrappedCommandExtension>
    </extension>
 
 </plugin>
