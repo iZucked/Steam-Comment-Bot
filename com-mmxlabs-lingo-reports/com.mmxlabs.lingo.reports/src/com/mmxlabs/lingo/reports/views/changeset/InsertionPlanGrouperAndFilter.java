@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -176,6 +178,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 					{
 						for (final ChangeSetRowData d : afterData.getMembers()) {
+							if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
+
 							if (d.getLoadAllocation() != null) {
 								if (d.getDischargeAllocation() != null) {
 									final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getLhsName(), UserFilter.FilterSlotType.BY_ID);
@@ -258,7 +262,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 									}
 								}
 							}
-
+							}
 						}
 					}
 
@@ -273,12 +277,12 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							break;
 						} else if (d.getLhsEvent() instanceof VesselEventVisit) {
 							VesselEventVisit vesselEventVisit = (VesselEventVisit) d.getLhsEvent();
-							if (vesselEventVisit.getVesselEvent() == target ){
+							if (vesselEventVisit.getVesselEvent() == target) {
 								assert targetRow == null;
 								targetRow = row;
 								targetRowData = d;
 								break;
-							} 
+							}
 						}
 					}
 				}
@@ -443,11 +447,25 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		return userFilters;
 	}
 
-	public boolean generateMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows) {
+	public boolean generateMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets,
+			@Nullable Object targetElement) {
 		if (filterActive) {
+
+			if (helper.hasActions()) {
+				helper.addSeparator();
+			}
+
+			if (directSelectedRows.size() == 0) {
+				generateInsertionSubMenus_ExploreAll(helper, viewer);
+
+			}
+			if (selectedSets.size() > 0) {
+				generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets, targetElement);
+			}
 			if (directSelectedRows.size() == 1) {
 				generateInsertionSubMenus_Explore(helper, viewer, directSelectedRows);
-				generateInsertionSubMenus(helper, viewer, directSelectedRows);
+				generateInsertionSubMenus_FilterOn(helper, viewer, false, directSelectedRows);
+				generateInsertionSubMenus_FilterOn(helper, viewer, true, directSelectedRows);
 			}
 			if (getUserFilters().size() > 0) {
 				final SubLocalMenuHelper remove = new SubLocalMenuHelper("Remove filter...");
@@ -470,15 +488,19 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		return false;
 	}
 
-	private void generateInsertionSubMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows) {
+	private void generateInsertionSubMenus_FilterOn(final LocalMenuHelper helper, final GridTreeViewer viewer, boolean exclude, final Set<ChangeSetTableRow> directSelectedRows) {
 
 		final boolean showLHSActions = true;
 		final boolean showRHSActions = true;
 
-		// SAME AGAIN, BUT "EXPOLORE"
-
-		final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Filter on...");
+		final SubLocalMenuHelper showFromMenu;
+		if (exclude) {
+			showFromMenu = new SubLocalMenuHelper("Exclude related...");
+		} else {
+			showFromMenu = new SubLocalMenuHelper("Show related...");
+		}
 		helper.addSubMenu(showFromMenu);
+
 		{
 			final ChangeSetTableRow row = directSelectedRows.iterator().next();
 			if (showLHSActions && row.isLhsSlot()) {
@@ -494,6 +516,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.lhsType = FilterSlotType.BY_ID;
 								f.rhsKey = row.getRhsName();
 								f.rhsType = FilterSlotType.BY_ID;
+								f.rhsNegate = exclude;
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
@@ -508,11 +531,192 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								f.lhsType = FilterSlotType.BY_ID;
 								f.rhsKey = contract.getName();
 								f.rhsType = FilterSlotType.BY_CONTRACT;
+								f.rhsNegate = exclude;
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 
 							}));
 						}
+						if (discharge instanceof SpotSlot) {
+							final SpotSlot spotSlot = (SpotSlot) discharge;
+							final SpotMarket market = spotSlot.getMarket();
+							if (market != null) {
+								final String label1 = row.getLhsName() + " to spot";
+								showFromMenu.addAction(new RunnableAction(label1, () -> {
+									final UserFilter f = new UserFilter(label1);
+									f.lhsKey = row.getLhsName();
+									f.lhsType = FilterSlotType.BY_ID;
+									f.rhsKey = null;
+									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
+									f.rhsNegate = exclude;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+								}));
+								final String label2 = row.getLhsName() + " to " + market.getName();
+								showFromMenu.addAction(new RunnableAction(label2, () -> {
+									final UserFilter f = new UserFilter(label2);
+									f.lhsKey = row.getLhsName();
+									f.lhsType = FilterSlotType.BY_ID;
+									f.rhsKey = market.getName();
+									f.rhsType = FilterSlotType.BY_SPOT_MARKET;
+									f.rhsNegate = exclude;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+								}));
+							}
+						}
+
+					} else {
+						final String label = row.getLhsName() + " to open";
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsKey = row.getLhsName();
+							f.lhsType = FilterSlotType.BY_ID;
+							f.rhsType = FilterSlotType.BY_OPEN;
+							f.rhsNegate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						}));
+					}
+				}
+				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
+					final String label = row.getLhsName() + " on " + row.getAfterVesselName();
+					showFromMenu.addAction(new RunnableAction(label, () -> {
+						final UserFilter f = new UserFilter(label);
+						f.lhsKey = row.getLhsName();
+						f.lhsType = FilterSlotType.BY_ID;
+						f.vesselType = FilterVesselType.BY_NAME;
+						f.vesselKey = row.getAfterVesselName();
+						f.vesselNegate = exclude;
+						mergeFilter(f);
+						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+					}));
+				}
+			}
+			if (showRHSActions && row.isRhsSlot()) {
+				final Slot slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+				if (slot != null) {
+
+					if (showFromMenu.hasActions()) {
+						showFromMenu.addSeparator();
+					}
+
+					if (row.isLhsSlot()) {
+						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
+						if (!showLHSActions) {
+							final String label = load.getName() + " to " + row.getRhsName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								f.lhsNegate = exclude;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
+						}
+						final Contract contract = load.getContract();
+						if (contract != null) {
+							final String label = contract.getName() + " to " + row.getRhsName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = contract.getName();
+								f.lhsType = FilterSlotType.BY_CONTRACT;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								f.lhsNegate = exclude;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
+						}
+						if (load instanceof SpotSlot) {
+							final SpotSlot spotSlot = (SpotSlot) load;
+							final SpotMarket market = spotSlot.getMarket();
+							if (market != null) {
+								final String label1 = "Spot to " + row.getRhsName();
+								showFromMenu.addAction(new RunnableAction(label1, () -> {
+									final UserFilter f = new UserFilter(label1);
+									f.lhsKey = null;
+									f.lhsType = FilterSlotType.BY_SPOT_MARKET;
+									f.rhsKey = row.getRhsName();
+									f.rhsType = FilterSlotType.BY_ID;
+									f.lhsNegate = exclude;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								}));
+								final String label2 = market.getName() + " to " + row.getRhsName();
+								showFromMenu.addAction(new RunnableAction(label2, () -> {
+									final UserFilter f = new UserFilter(label2);
+									f.lhsKey = market.getName();
+									f.lhsType = FilterSlotType.BY_SPOT_MARKET;
+									f.rhsKey = row.getRhsName();
+									f.rhsType = FilterSlotType.BY_ID;
+									f.lhsNegate = exclude;
+									mergeFilter(f);
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+								}));
+							}
+						}
+
+					} else {
+						final String label = "Open to " + row.getRhsName();
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.lhsType = FilterSlotType.BY_OPEN;
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							f.lhsNegate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						}));
+					}
+				}
+				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
+
+					if (showFromMenu.hasActions()) {
+						showFromMenu.addSeparator();
+					}
+
+					{
+
+						final String label = row.getRhsName() + " on " + row.getAfterVesselName();
+						showFromMenu.addAction(new RunnableAction(label, () -> {
+							final UserFilter f = new UserFilter(label);
+							f.rhsKey = row.getRhsName();
+							f.rhsType = FilterSlotType.BY_ID;
+							f.vesselType = FilterVesselType.BY_NAME;
+							f.vesselKey = row.getAfterVesselName();
+							f.vesselNegate = exclude;
+							mergeFilter(f);
+							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+						}));
+					}
+
+				}
+			}
+		}
+	}
+
+	private void generateInsertionSubMenus_FilterSets(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableGroup> selectedSets, @Nullable Object targetElement) {
+
+		final boolean showLHSActions = true;
+		final boolean showRHSActions = true;
+
+		final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Show all...");
+		helper.addSubMenu(showFromMenu);
+		{
+
+			final ChangeSetTableGroup group = selectedSets.iterator().next();
+			for (ChangeSetTableRow row : group.getRows()) {
+				if (row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() == targetElement) {
+					if (row.isRhsSlot()) {
+						final Slot discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+						final Contract contract = discharge.getContract();
+
 						if (discharge instanceof SpotSlot) {
 							final SpotSlot spotSlot = (SpotSlot) discharge;
 							final SpotMarket market = spotSlot.getMarket();
@@ -540,6 +744,30 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 								}));
 							}
+						} else if (contract != null) {
+							final String label = row.getLhsName() + " to " + contract.getName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = contract.getName();
+								f.rhsType = FilterSlotType.BY_CONTRACT;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+							}));
+						} else {
+							final String label = row.getLhsName() + " to " + discharge.getName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+
+							}));
 						}
 
 					} else {
@@ -553,55 +781,15 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 						}));
 					}
-				}
-				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
-					final String label = row.getLhsName() + " on " + row.getAfterVesselName();
-					showFromMenu.addAction(new RunnableAction(label, () -> {
-						final UserFilter f = new UserFilter(label);
-						f.lhsKey = row.getLhsName();
-						f.lhsType = FilterSlotType.BY_ID;
-						f.vesselType = FilterVesselType.BY_NAME;
-						f.vesselKey = row.getAfterVesselName();
-						mergeFilter(f);
-						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-					}));
-				}
-			}
-			if (showRHSActions && row.isRhsSlot()) {
-				final Slot slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
-				if (slot != null) {
-
-					if (showFromMenu.hasActions()) {
-						showFromMenu.addSeparator();
-					}
+				} else if (row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot() == targetElement) {
+					int ii = 0;
+					// final Slot slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
+					// if (slot != null) {
 
 					if (row.isLhsSlot()) {
 						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
-						if (!showLHSActions) {
-							final String label = load.getName() + " to " + row.getRhsName();
-							showFromMenu.addAction(new RunnableAction(label, () -> {
-								final UserFilter f = new UserFilter(label);
-								f.lhsKey = row.getLhsName();
-								f.lhsType = FilterSlotType.BY_ID;
-								f.rhsKey = row.getRhsName();
-								f.rhsType = FilterSlotType.BY_ID;
-								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-							}));
-						}
 						final Contract contract = load.getContract();
-						if (contract != null) {
-							final String label = contract.getName() + " to " + row.getRhsName();
-							showFromMenu.addAction(new RunnableAction(label, () -> {
-								final UserFilter f = new UserFilter(label);
-								f.lhsKey = contract.getName();
-								f.lhsType = FilterSlotType.BY_CONTRACT;
-								f.rhsKey = row.getRhsName();
-								f.rhsType = FilterSlotType.BY_ID;
-								mergeFilter(f);
-								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-							}));
-						}
+
 						if (load instanceof SpotSlot) {
 							final SpotSlot spotSlot = (SpotSlot) load;
 							final SpotMarket market = spotSlot.getMarket();
@@ -628,6 +816,29 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 								}));
 							}
+						} else if (contract != null) {
+							final String label = contract.getName() + " to " + row.getRhsName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = contract.getName();
+								f.lhsType = FilterSlotType.BY_CONTRACT;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
+						} else {
+
+							final String label = load.getName() + " to " + row.getRhsName();
+							showFromMenu.addAction(new RunnableAction(label, () -> {
+								final UserFilter f = new UserFilter(label);
+								f.lhsKey = row.getLhsName();
+								f.lhsType = FilterSlotType.BY_ID;
+								f.rhsKey = row.getRhsName();
+								f.rhsType = FilterSlotType.BY_ID;
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
 						}
 
 					} else {
@@ -641,29 +852,10 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 						}));
 					}
-				}
-				if (row.getAfterVesselName() != null && !row.getAfterVesselName().isEmpty()) {
-
-					if (showFromMenu.hasActions()) {
-						showFromMenu.addSeparator();
-					}
-
-					{
-
-						final String label = row.getRhsName() + " on " + row.getAfterVesselName();
-						showFromMenu.addAction(new RunnableAction(label, () -> {
-							final UserFilter f = new UserFilter(label);
-							f.rhsKey = row.getRhsName();
-							f.rhsType = FilterSlotType.BY_ID;
-							f.vesselType = FilterVesselType.BY_NAME;
-							f.vesselKey = row.getAfterVesselName();
-							mergeFilter(f);
-							ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-						}));
-					}
 
 				}
 			}
+
 		}
 	}
 
@@ -674,7 +866,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 		{
 			// TODO: Make this delayed?
-			final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Explore...");
+			final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Explore related...");
 			helper.addSubMenu(showFromMenu);
 			{
 				final ChangeSetTableRow row = directSelectedRows.iterator().next();
@@ -702,7 +894,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							}
 							if (menu != null) {
 								menu.addAction(new RunnableAction(f.label, () -> {
-									clearFilter();
+//									clearFilter();
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
@@ -748,7 +940,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							}
 							if (menu != null) {
 								menu.addAction(new RunnableAction(f.label, () -> {
-									clearFilter();
+//									clearFilter();
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
@@ -771,5 +963,161 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				}
 			}
 		}
+	}
+
+	private void generateInsertionSubMenus_ExploreAll(final LocalMenuHelper helper, final GridTreeViewer viewer) {
+
+		{
+			// TODO: Make this delayed?
+			final SubLocalMenuHelper showFromMenuParent = new SubLocalMenuHelper("Explore...");
+			helper.addSubMenu(showFromMenuParent);
+			// {
+			List<Pair<String, SubLocalMenuHelper>> items = new ArrayList<>(exploreSlotOptions.size());
+
+			for (Pair<String, UserFilter.FilterSlotType> key : exploreSlotOptions.keySet()) {
+				if (key.getSecond() != UserFilter.FilterSlotType.BY_ID) {
+					continue;
+				}
+				String lhsName = key.getFirst();
+				final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper(lhsName + "...");
+
+				final SubLocalMenuHelper loadMenuContract = new SubLocalMenuHelper("by contract");
+				final SubLocalMenuHelper loadMenuSlot = new SubLocalMenuHelper("by slot");
+				final SubLocalMenuHelper loadMenuMarket = new SubLocalMenuHelper("by spot market");
+				final SubLocalMenuHelper loadMenuVessel = new SubLocalMenuHelper("by vessel");
+
+				// final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(row.getLhsName(), UserFilter.FilterSlotType.BY_ID);
+
+				final Collection<UserFilter> filters = exploreSlotOptions.get(key);
+				if (filters != null) {
+					for (final UserFilter f : filters) {
+
+						SubLocalMenuHelper menu = null;
+						if (f.vesselType == FilterVesselType.BY_NAME) {
+							menu = loadMenuVessel;
+						} else if (f.rhsType == FilterSlotType.BY_ID) {
+							menu = loadMenuSlot;
+						} else if (f.rhsType == FilterSlotType.BY_CONTRACT) {
+							menu = loadMenuContract;
+						} else if (f.rhsType == FilterSlotType.BY_SPOT_MARKET) {
+							menu = loadMenuMarket;
+						}
+						if (menu != null) {
+							menu.addAction(new RunnableAction(f.label, () -> {
+//								clearFilter();
+								mergeFilter(f);
+								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+							}));
+						}
+					}
+				}
+				boolean addToParent = false;
+				if (loadMenuContract.hasActions()) {
+					showFromMenu.addSubMenu(loadMenuContract);
+					addToParent = true;
+				}
+				if (loadMenuSlot.hasActions()) {
+					showFromMenu.addSubMenu(loadMenuSlot);
+					addToParent = true;
+				}
+				if (loadMenuMarket.hasActions()) {
+					showFromMenu.addSubMenu(loadMenuMarket);
+					addToParent = true;
+				}
+				if (loadMenuVessel.hasActions()) {
+					showFromMenu.addSubMenu(loadMenuVessel);
+					addToParent = true;
+				}
+				if (addToParent) {
+					items.add(new Pair<>(lhsName, showFromMenu));
+
+				}
+			}
+
+			items.sort((a, b) -> a.getFirst().compareTo(b.getFirst()));
+			if (items.size() > 15) {
+				int counter = 0;
+				SubLocalMenuHelper m = new SubLocalMenuHelper("");
+				String firstEntry = null;
+				String lastEntry = null;
+				for (final Pair<String, SubLocalMenuHelper> p : items) {
+
+					m.addSubMenu(p.getSecond());
+					counter++;
+					if (firstEntry == null) {
+						firstEntry = p.getFirst();
+					}
+					lastEntry = p.getFirst();
+
+					if (counter == 15) {
+						final String title = String.format("%s ... %s", firstEntry, lastEntry);
+						m.setTitle(title);
+						showFromMenuParent.addSubMenu(m);
+						m = new SubLocalMenuHelper("");
+						counter = 0;
+						firstEntry = null;
+						lastEntry = null;
+					}
+				}
+				if (counter > 0) {
+					final String title = String.format("%s ... %s", firstEntry, lastEntry);
+					m.setTitle(title);
+					showFromMenuParent.addSubMenu(m);
+				}
+
+			} else {
+				items.forEach(p -> showFromMenuParent.addSubMenu(p.getSecond()));
+			}
+			// {
+
+			//
+			// if (showFromMenu.hasActions()) {
+			// showFromMenu.addSeparator();
+			// }
+			// rhsName
+			// final SubLocalMenuHelper dischargeMenuContract = new SubLocalMenuHelper(rhsName+ " by contract");
+			// final SubLocalMenuHelper dischargeMenuSlot = new SubLocalMenuHelper(rhsName + " by slot");
+			// final SubLocalMenuHelper dischargeMenuMarket = new SubLocalMenuHelper(rhsName + " by spot market");
+			// final SubLocalMenuHelper dischargeMenuVessel = new SubLocalMenuHelper(rhsName + " by vessel");
+			// final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(rhsName, UserFilter.FilterSlotType.BY_ID);
+			// final Collection<UserFilter> filters = exploreSlotOptions.get(key);
+			// if (filters != null) {
+			// for (final UserFilter f : filters) {
+			//
+			// SubLocalMenuHelper menu = null;
+			// if (f.vesselType == FilterVesselType.BY_NAME) {
+			// menu = dischargeMenuVessel;
+			// } else if (f.lhsType == FilterSlotType.BY_ID) {
+			// menu = dischargeMenuSlot;
+			// } else if (f.lhsType == FilterSlotType.BY_CONTRACT) {
+			// menu = dischargeMenuContract;
+			// } else if (f.lhsType == FilterSlotType.BY_SPOT_MARKET) {
+			// menu = dischargeMenuMarket;
+			// }
+			// if (menu != null) {
+			// menu.addAction(new RunnableAction(f.label, () -> {
+			// clearFilter();
+			// mergeFilter(f);
+			// ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+			// }));
+			// }
+			// }
+			// }
+
+			// if (dischargeMenuContract.hasActions()) {
+			// showFromMenu.addSubMenu(dischargeMenuContract);
+			// }
+			// if (dischargeMenuSlot.hasActions()) {
+			// showFromMenu.addSubMenu(dischargeMenuSlot);
+			// }
+			// if (dischargeMenuMarket.hasActions()) {
+			// showFromMenu.addSubMenu(dischargeMenuMarket);
+			// }
+			// if (dischargeMenuVessel.hasActions()) {
+			// showFromMenu.addSubMenu(dischargeMenuVessel);
+			// }
+			// }
+		}
+		// }
 	}
 }

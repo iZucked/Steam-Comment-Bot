@@ -957,7 +957,7 @@ public class ChangeSetView implements IAdaptable {
 							helper.addAction(new ExportChangeAction(changeSetTableGroup));
 							showMenu = true;
 						}
-						// Experimental code to generate a sandbox scenario.						
+						// Experimental code to generate a sandbox scenario.
 						if (false && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
 							// This does not work as insertion scenario is read-only. Data model is also unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
@@ -976,10 +976,14 @@ public class ChangeSetView implements IAdaptable {
 
 				if (directSelectedRows.size() == 1) {
 				}
-			}
-			// Experimental user filters hook.
-			if (false) {
-				showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows);
+				// Experimental user filters hook.
+				if (true) {
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
+				}
+			} else {
+				if (true) {
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+				}
 			}
 
 			if (showMenu) {
@@ -996,7 +1000,7 @@ public class ChangeSetView implements IAdaptable {
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
 		this.viewMode = ViewMode.OLD_ACTION_SET;
 		this.persistAnalyticsSolution = true;
-		
+
 		final ViewState viewState = new ViewState();
 		viewState.lastSolution = solution;
 
