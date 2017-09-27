@@ -60,10 +60,6 @@ public class EvaluationHelper {
 	@NonNull
 	private ISequencesManipulator sequenceManipulator;
 
-	// @Inject
-	// @NonNull
-	// private IPortTypeProvider portTypeProvider;
-
 	@Inject
 	@NonNull
 	private IOptionalElementsProvider optionalElementsProvider;
@@ -82,7 +78,7 @@ public class EvaluationHelper {
 		this.isReevaluating = isReevaluating;
 	}
 
-	public void setFlexibleViolationCount(final int flexibleSoftViolations) {
+	public void setFlexibleCapacityViolationCount(final int flexibleSoftViolations) {
 
 		flexibleViolationCount = flexibleSoftViolations;
 		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
