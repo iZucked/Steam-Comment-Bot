@@ -53,13 +53,11 @@ public final class ScenarioServiceUtils {
 		return newName;
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	public static String getForkName(@NonNull final String currentName) {
 		return String.format("%s%s", FORK_PREFIX, currentName);
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	public static String getOptimisedName(@NonNull final String currentName) {
 		return String.format("%s%s", OPTIMISED_PREFIX, currentName);

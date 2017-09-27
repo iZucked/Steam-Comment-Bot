@@ -30,6 +30,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipher
 
 public final class ResourceHelper {
 
+	@SuppressWarnings({ "unused", "null" })
 	public static @NonNull ResourceSet createResourceSet(@Nullable IScenarioCipherProvider scenarioCipherProvider) {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 

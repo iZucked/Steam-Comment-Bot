@@ -23,7 +23,6 @@ public class ScenarioEncryptionExceptionReasonProviderApaterFactory implements I
 					return "Scenario Encryption Fault";
 				}
 
-				@SuppressWarnings("null")
 				@Override
 				public Throwable getThrowable() {
 					return exception.getCause();

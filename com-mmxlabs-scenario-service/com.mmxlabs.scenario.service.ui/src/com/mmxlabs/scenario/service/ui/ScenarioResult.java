@@ -35,8 +35,9 @@ public class ScenarioResult {
 			ref[0] = s.getDefaultResult(modelRecord);
 			return ref[0] == null;
 		});
-		if (ref[0] != null) {
-			return ref[0];
+		final MMXResultRoot mmxResultRoot = ref[0];
+		if (mmxResultRoot != null) {
+			return mmxResultRoot;
 		}
 		throw new IllegalArgumentException("No default result root for instance");
 	}
@@ -47,7 +48,7 @@ public class ScenarioResult {
 	 * @param modelRecord
 	 * @param resultRoot
 	 */
-	public ScenarioResult(final ScenarioModelRecord modelRecord) {
+	public ScenarioResult(final @NonNull ScenarioModelRecord modelRecord) {
 		this.modelRecord = modelRecord;
 		this.scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
 		this.resultRoot = getDefaultRoot(modelRecord, this.scenarioDataProvider);
@@ -60,7 +61,7 @@ public class ScenarioResult {
 	 * @param modelRecord
 	 * @param resultRoot
 	 */
-	public ScenarioResult(final ScenarioModelRecord modelRecord, @NonNull final MMXResultRoot resultRoot) {
+	public ScenarioResult(final @NonNull ScenarioModelRecord modelRecord, @NonNull final MMXResultRoot resultRoot) {
 		this.modelRecord = modelRecord;
 		this.resultRoot = resultRoot;
 		this.hash = Objects.hash(modelRecord, resultRoot);
@@ -72,7 +73,7 @@ public class ScenarioResult {
 		this.scenarioInstance = instance;
 	}
 
-	public ScenarioResult(@NonNull ScenarioInstance instance) {
+	public ScenarioResult(@NonNull final ScenarioInstance instance) {
 		this(SSDataManager.Instance.getModelRecord(instance));
 		this.scenarioInstance = instance;
 	}
@@ -93,7 +94,8 @@ public class ScenarioResult {
 		super.finalize();
 	}
 
-	public <T extends MMXRootObject> @Nullable T getTypedRoot(final Class<T> cls) {
+	@SuppressWarnings("null")
+	public <T extends MMXRootObject> @Nullable T getTypedRoot(final @NonNull Class<T> cls) {
 		return scenarioDataProvider.getTypedScenario(cls);
 	}
 
