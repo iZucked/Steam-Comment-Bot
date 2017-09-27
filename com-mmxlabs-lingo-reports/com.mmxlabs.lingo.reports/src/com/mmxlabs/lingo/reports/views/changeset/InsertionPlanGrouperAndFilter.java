@@ -511,7 +511,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					if (row.isRhsSlot()) {
 						final Slot discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
 						{
-							final String label = row.getLhsName() + " to " + discharge.getName();
+							final String label = row.getLhsName() + " to " + row.getRhsName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
 								final UserFilter f = new UserFilter(label);
 								f.lhsKey = row.getLhsName();
@@ -608,7 +608,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					if (row.isLhsSlot()) {
 						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
 						if (!showLHSActions) {
-							final String label = load.getName() + " to " + row.getRhsName();
+							final String label = row.getLhsName() + " to " + row.getRhsName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
 								final UserFilter f = new UserFilter(label);
 								f.lhsKey = row.getLhsName();
@@ -705,9 +705,6 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	private void generateInsertionSubMenus_FilterSets(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableGroup> selectedSets, @Nullable Object targetElement) {
 
-		final boolean showLHSActions = true;
-		final boolean showRHSActions = true;
-
 		final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Show all...");
 		helper.addSubMenu(showFromMenu);
 		{
@@ -759,7 +756,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 							}));
 						} else {
-							final String label = row.getLhsName() + " to " + discharge.getName();
+							final String label = row.getLhsName() + " to " + row.getRhsName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
 								final UserFilter f = new UserFilter(label);
 								f.lhsKey = row.getLhsName();
