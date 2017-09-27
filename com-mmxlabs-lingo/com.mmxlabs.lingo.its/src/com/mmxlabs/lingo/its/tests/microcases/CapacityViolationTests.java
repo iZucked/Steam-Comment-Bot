@@ -43,12 +43,19 @@ import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
@@ -1711,6 +1718,71 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 				}
 			});
 		});
+	}
+
+	/**
+	 * If we have a min/max load/discharge violation on a nominal cargo in the prompt, we will often remove this from the initial solution. Make sure we can place it back on the fleet. 8
+	 * 
+	 * @throws Exception
+	 */
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testNominalCargoViolationCanMoveToVessel() throws Exception {
+		LicenseFeatures.addFeatureEnablements("no-nominal-in-prompt");
+		try {
+
+			scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 9, 1), LocalDate.of(2018, 1, 1));
+			// Create the required basic elements
+			vessel = fleetModelFinder.findVessel("STEAM-145");
+
+			vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 9, 1, 0, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2018, 1, 1, 0, 0, 0)) //
+					.withStartHeel(0, 10_000, 22.5, "0") //
+					.withEndHeel(0, 10_000, EVesselTankState.EITHER, null) //
+					.build();
+
+			final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
+
+			// Create a nominal cargo in the prompt
+			final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+					.makeFOBPurchase("L1", LocalDate.of(2017, 9, 2), portFinder.findPort("Point Fortin"), null, entity, "5") //
+					.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.M3) //
+					.build() //
+					.makeDESSale("D1", LocalDate.of(2017, 10, 2), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+					.withVolumeLimits(0, 140_000, VolumeUnits.M3) //
+					.build() //
+					.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+					.withAssignmentFlags(false, false) //
+					.build();
+
+			optimiseWithLSOTest(scenarioRunner -> {
+
+				Assert.assertEquals(vesselAvailability1, cargo1.getVesselAssignmentType());
+
+				// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
+				final Schedule schedule = scenarioRunner.getSchedule();
+				Assert.assertNotNull(schedule);
+
+				final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
+				Assert.assertNotNull(cargoAllocation);
+
+				boolean foundViolation = false;
+				// Is there is min/max load or discharge violation?
+				// At the time of writing this is a MIN_LOAD violation. It could be something else along these lines if the volume allocator changes.
+				for (SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
+						foundViolation |= allocation.getSlotVisit().getViolations().containsKey(com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_LOAD);
+					}
+
+				}
+				Assert.assertTrue(foundViolation);
+			});
+
+		} finally {
+			LicenseFeatures.removeFeatureEnablements("no-nominal-in-prompt");
+		}
 	}
 
 }
