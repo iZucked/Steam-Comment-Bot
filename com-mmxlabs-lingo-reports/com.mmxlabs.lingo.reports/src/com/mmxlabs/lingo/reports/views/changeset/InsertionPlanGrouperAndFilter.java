@@ -180,88 +180,88 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						for (final ChangeSetRowData d : afterData.getMembers()) {
 							if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
 
-							if (d.getLoadAllocation() != null) {
-								if (d.getDischargeAllocation() != null) {
-									final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getLhsName(), UserFilter.FilterSlotType.BY_ID);
-									if (d.getDischargeAllocation().isSetSpotMarket()) {
-										{
-											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getSpotMarket().getName());
-											f.lhsKey = d.getLhsName();
-											f.lhsType = UserFilter.FilterSlotType.BY_ID;
-											f.rhsKey = d.getDischargeAllocation().getSpotMarket().getName();
-											f.rhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
-										}
-									} else {
-										{
-											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getRhsName());
-											f.lhsKey = d.getLhsName();
-											f.lhsType = UserFilter.FilterSlotType.BY_ID;
-											f.rhsKey = d.getRhsName();
-											f.rhsType = UserFilter.FilterSlotType.BY_ID;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
-										}
-										if (d.getDischargeAllocation().getContract() != null) {
-											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getContract().getName());
-											f.lhsKey = d.getLhsName();
-											f.lhsType = UserFilter.FilterSlotType.BY_ID;
-											f.rhsKey = d.getDischargeAllocation().getContract().getName();
-											f.rhsType = UserFilter.FilterSlotType.BY_CONTRACT;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
-										}
-									}
-									if (d.getVesselName() != null) {
-										final UserFilter f = new UserFilter(d.getLhsName() + " on " + d.getVesselName());
-										f.lhsKey = d.getLhsName();
-										f.lhsType = UserFilter.FilterSlotType.BY_ID;
-										f.vesselKey = d.getVesselName();
-										f.vesselType = UserFilter.FilterVesselType.BY_NAME;
-										exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
-									}
-								}
-							}
-
-							// Discharge side
-							if (d.getDischargeAllocation() != null) {
 								if (d.getLoadAllocation() != null) {
-									final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getRhsName(), UserFilter.FilterSlotType.BY_ID);
-									if (d.getLoadAllocation().isSetSpotMarket()) {
-										{
-											final UserFilter f = new UserFilter(d.getLoadAllocation().getSpotMarket().getName() + " to " + d.getRhsName());
-											f.rhsKey = d.getRhsName();
-											f.rhsType = UserFilter.FilterSlotType.BY_ID;
-											f.lhsKey = d.getLoadAllocation().getSpotMarket().getName();
-											f.lhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+									if (d.getDischargeAllocation() != null) {
+										final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getLhsName(), UserFilter.FilterSlotType.BY_ID);
+										if (d.getDischargeAllocation().isSetSpotMarket()) {
+											{
+												final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getSpotMarket().getName());
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.rhsKey = d.getDischargeAllocation().getSpotMarket().getName();
+												f.rhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
+												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+											}
+										} else {
+											{
+												final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getRhsName());
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+											}
+											if (d.getDischargeAllocation().getContract() != null) {
+												final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getDischargeAllocation().getContract().getName());
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.rhsKey = d.getDischargeAllocation().getContract().getName();
+												f.rhsType = UserFilter.FilterSlotType.BY_CONTRACT;
+												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+											}
 										}
-									} else {
-										{
-											final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getRhsName());
+										if (d.getVesselName() != null) {
+											final UserFilter f = new UserFilter(d.getLhsName() + " on " + d.getVesselName());
 											f.lhsKey = d.getLhsName();
 											f.lhsType = UserFilter.FilterSlotType.BY_ID;
-											f.rhsKey = d.getRhsName();
-											f.rhsType = UserFilter.FilterSlotType.BY_ID;
+											f.vesselKey = d.getVesselName();
+											f.vesselType = UserFilter.FilterVesselType.BY_NAME;
 											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
 										}
-										if (d.getLoadAllocation().getContract() != null) {
-											final UserFilter f = new UserFilter(d.getLoadAllocation().getContract().getName() + " to " + d.getRhsName());
-											f.lhsKey = d.getLoadAllocation().getContract().getName();
-											f.lhsType = UserFilter.FilterSlotType.BY_CONTRACT;
-											f.rhsKey = d.getRhsName();
-											f.rhsType = UserFilter.FilterSlotType.BY_ID;
-											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
-										}
-									}
-									if (d.getVesselName() != null) {
-										final UserFilter f = new UserFilter(d.getRhsName() + " on " + d.getVesselName());
-										f.rhsKey = d.getRhsName();
-										f.rhsType = UserFilter.FilterSlotType.BY_ID;
-										f.vesselKey = d.getVesselName();
-										f.vesselType = UserFilter.FilterVesselType.BY_NAME;
-										exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
 									}
 								}
-							}
+
+								// Discharge side
+								if (d.getDischargeAllocation() != null) {
+									if (d.getLoadAllocation() != null) {
+										final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(d.getRhsName(), UserFilter.FilterSlotType.BY_ID);
+										if (d.getLoadAllocation().isSetSpotMarket()) {
+											{
+												final UserFilter f = new UserFilter(d.getLoadAllocation().getSpotMarket().getName() + " to " + d.getRhsName());
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												f.lhsKey = d.getLoadAllocation().getSpotMarket().getName();
+												f.lhsType = UserFilter.FilterSlotType.BY_SPOT_MARKET;
+												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+											}
+										} else {
+											{
+												final UserFilter f = new UserFilter(d.getLhsName() + " to " + d.getRhsName());
+												f.lhsKey = d.getLhsName();
+												f.lhsType = UserFilter.FilterSlotType.BY_ID;
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+											}
+											if (d.getLoadAllocation().getContract() != null) {
+												final UserFilter f = new UserFilter(d.getLoadAllocation().getContract().getName() + " to " + d.getRhsName());
+												f.lhsKey = d.getLoadAllocation().getContract().getName();
+												f.lhsType = UserFilter.FilterSlotType.BY_CONTRACT;
+												f.rhsKey = d.getRhsName();
+												f.rhsType = UserFilter.FilterSlotType.BY_ID;
+												exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+											}
+										}
+										if (d.getVesselName() != null) {
+											final UserFilter f = new UserFilter(d.getRhsName() + " on " + d.getVesselName());
+											f.rhsKey = d.getRhsName();
+											f.rhsType = UserFilter.FilterSlotType.BY_ID;
+											f.vesselKey = d.getVesselName();
+											f.vesselType = UserFilter.FilterVesselType.BY_NAME;
+											exploreSlotOptions.computeIfAbsent(key, (k) -> new HashSet<>()).add(f);
+										}
+									}
+								}
 							}
 						}
 					}
@@ -436,7 +436,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	}
 
 	public void mergeFilter(final UserFilter filter) {
-		userFilters.add(filter);
+		if (!userFilters.contains(filter)) {
+			userFilters.add(filter);
+		}
 	}
 
 	public void clearFilter() {
@@ -459,7 +461,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				generateInsertionSubMenus_ExploreAll(helper, viewer);
 
 			}
-			if (selectedSets.size() > 0) {
+			if (selectedSets.size() > 0 && directSelectedRows.size() == 0) {
 				generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets, targetElement);
 			}
 			if (directSelectedRows.size() == 1) {
@@ -476,7 +478,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					}));
 				}
 				for (final UserFilter f : getUserFilters()) {
-					remove.addAction(new RunnableAction(f.label, () -> {
+					remove.addAction(new RunnableAction(f.getLabel(), () -> {
 						getUserFilters().remove(f);
 						ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 					}));
@@ -893,8 +895,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								menu = loadMenuMarket;
 							}
 							if (menu != null) {
-								menu.addAction(new RunnableAction(f.label, () -> {
-//									clearFilter();
+								menu.addAction(new RunnableAction(f.getLabel(), () -> {
+									// clearFilter();
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
@@ -939,8 +941,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								menu = dischargeMenuMarket;
 							}
 							if (menu != null) {
-								menu.addAction(new RunnableAction(f.label, () -> {
-//									clearFilter();
+								menu.addAction(new RunnableAction(f.getLabel(), () -> {
+									// clearFilter();
 									mergeFilter(f);
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
@@ -969,7 +971,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 		{
 			// TODO: Make this delayed?
-			final SubLocalMenuHelper showFromMenuParent = new SubLocalMenuHelper("Explore...");
+			final SubLocalMenuHelper showFromMenuParent = new SubLocalMenuHelper("Explore all...");
 			helper.addSubMenu(showFromMenuParent);
 			// {
 			List<Pair<String, SubLocalMenuHelper>> items = new ArrayList<>(exploreSlotOptions.size());
@@ -1003,8 +1005,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							menu = loadMenuMarket;
 						}
 						if (menu != null) {
-							menu.addAction(new RunnableAction(f.label, () -> {
-//								clearFilter();
+							menu.addAction(new RunnableAction(f.getLabel(), () -> {
+								// clearFilter();
 								mergeFilter(f);
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 							}));
