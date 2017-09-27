@@ -23,7 +23,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
  * @author Simon Goodall
  * 
  */
-public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
+public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 	private CommandProviderAwareEditingDomain editingDomain;
 	private final Object lockableObject = new Object();
 	private InstanceData instanceData;
@@ -40,6 +40,7 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	}
 
 	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, @Nullable IReadOnlyProvider readOnlyProvider) {
+		super(editingDomain);
 		this.editingDomain = editingDomain;
 		this.readOnlyProvider = readOnlyProvider;
 	}
@@ -201,6 +202,7 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	public void setEditingDomain(final CommandProviderAwareEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
+		super.setEditingDomain(editingDomain);
 	}
 
 	public InstanceData getInstanceData() {
