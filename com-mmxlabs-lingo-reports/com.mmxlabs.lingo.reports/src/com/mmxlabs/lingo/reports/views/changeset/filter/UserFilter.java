@@ -33,11 +33,19 @@ public class UserFilter {
 	public FilterVesselType vesselType;
 	public String vesselKey;
 	public boolean vesselNegate;
-	public String label;
+	private String label;
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(label, lhsType, lhsKey, lhsNegate, rhsType, rhsKey, rhsNegate, vesselType, vesselKey, vesselNegate);
+	}
+
+	public String getLabel() {
+		if (lhsNegate || rhsNegate || vesselNegate) {
+			return label + " (exclude)";
+		}
+		return label;
+
 	}
 
 	@Override

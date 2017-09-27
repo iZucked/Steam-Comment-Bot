@@ -976,10 +976,14 @@ public class ChangeSetView implements IAdaptable {
 
 				if (directSelectedRows.size() == 1) {
 				}
-			}
-			// Experimental user filters hook.
-			if (false) {
-				showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows);
+				// Experimental user filters hook.
+				if (true) {
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, directSelectedRows, selectedSets, currentViewState.lastTargetSlot);
+				}
+			} else {
+				if (true) {
+					showMenu |= insertionPlanFilter.generateMenus(helper, viewer, Collections.emptySet(), Collections.emptySet(), currentViewState.lastTargetSlot);
+				}
 			}
 
 			if (showMenu) {

@@ -745,18 +745,18 @@ public class ChangeSetViewColumnHelper {
 					if (originalAllocation != null) {
 						final ZonedDateTime slotDate = originalAllocation.getSlotVisit().getStart();
 						if (slotDate != null) {
-							if (newLine) {
-								sb.append("\n");
-							}
 							sb.append(String.format("Before: %s ", slotDate.format(formatter)));
+							newLine = true;
 							hasDate = true;
 						}
 					}
 					if (newAllocation != null) {
 						final ZonedDateTime slotDate = newAllocation.getSlotVisit().getStart();
 						if (slotDate != null) {
+							if (newLine) {
+								sb.append("\n");
+							}
 							sb.append(String.format("After: %s ", slotDate.format(formatter)));
-							newLine = true;
 							hasDate = true;
 						}
 					}
