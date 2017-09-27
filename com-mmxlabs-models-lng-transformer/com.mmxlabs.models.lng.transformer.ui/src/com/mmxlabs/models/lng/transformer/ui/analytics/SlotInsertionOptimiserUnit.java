@@ -80,7 +80,8 @@ public class SlotInsertionOptimiserUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, SlotInsertionOptimiser> threadCache = new ConcurrentHashMap<>(100);
+	private final Map<Thread, SlotInsertionOptimiser> threadCache_SlotInsertionOptimiser = new ConcurrentHashMap<>(100);
+	private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
 
 	private @NonNull ExecutorService executorService;
 
@@ -110,25 +111,33 @@ public class SlotInsertionOptimiserUnit {
 			}
 
 			@Provides
-			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating) {
-				final EvaluationHelper helper = new EvaluationHelper(isReevaluating);
-				injector.injectMembers(helper);
-				
-				helper.setFlexibleViolationCount(Integer.MAX_VALUE);
-				
+			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
+					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
+
+				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
+				if (helper == null) {
+					helper = new EvaluationHelper(isReevaluating);
+					injector.injectMembers(helper);
+
+					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
+
+					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
+					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
+				}
 				return helper;
 			}
 
 			@Provides
 			private SlotInsertionOptimiser providePerThreadOptimiser(@NonNull final Injector injector) {
 
-				SlotInsertionOptimiser optimiser = threadCache.get(Thread.currentThread());
+				SlotInsertionOptimiser optimiser = threadCache_SlotInsertionOptimiser.get(Thread.currentThread());
 				if (optimiser == null) {
 					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
 					scope.enter();
 					optimiser = new SlotInsertionOptimiser();
 					injector.injectMembers(optimiser);
-					threadCache.put(Thread.currentThread(), optimiser);
+					threadCache_SlotInsertionOptimiser.put(Thread.currentThread(), optimiser);
 				}
 				return optimiser;
 			}
@@ -203,12 +212,14 @@ public class SlotInsertionOptimiserUnit {
 							for (final ISequenceElement e : segment) {
 								modifiableSequence.remove(e);
 								tmpRawSequences.getModifiableUnusedElements().add(e);
+
+								// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots at
+								// once.
+								if (optionalElementsProvider.isElementRequired(e)) {
+									++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
+								}
 							}
 
-							// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots at once.
-							if (optionalElementsProvider.isElementRequired(element)) {
-								++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
-							}
 						}
 					}
 					state.startingPointRawSequences = tmpRawSequences;
@@ -285,10 +296,12 @@ public class SlotInsertionOptimiserUnit {
 			final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
 
 			// Clean up thread-locals created in the scope object
-			for (final Thread thread : threadCache.keySet()) {
+			for (final Thread thread : threadCache_SlotInsertionOptimiser.keySet()) {
 				scope.exit(thread);
 			}
-			threadCache.clear();
+			threadCache_SlotInsertionOptimiser.clear();
+
+			threadCache_EvaluationHelper.clear();
 		}
 	}
 }
