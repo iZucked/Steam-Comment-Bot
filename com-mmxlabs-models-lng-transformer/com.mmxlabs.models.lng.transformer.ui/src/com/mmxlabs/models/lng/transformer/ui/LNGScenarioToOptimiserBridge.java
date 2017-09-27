@@ -238,7 +238,8 @@ public class LNGScenarioToOptimiserBridge {
 			assert cmd != null;
 			cc.append(cmd);
 			originalEditingDomain.getCommandStack().execute(cc);
-			previousOverwriteCommand = cc;
+			// CC may have been wrapped
+			previousOverwriteCommand = originalEditingDomain.getCommandStack().getMostRecentCommand();
 			++overwriteCommandStackCounter;
 
 			canExportAsCopy = currentProgress == 0;
