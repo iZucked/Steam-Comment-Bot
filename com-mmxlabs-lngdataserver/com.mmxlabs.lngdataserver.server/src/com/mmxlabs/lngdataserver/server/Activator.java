@@ -50,8 +50,8 @@ public class Activator implements BundleActivator {
 		
 		mongoService = new MongoDBService();
 		mongoService.setEmbeddedBinariesLocation(binariesPath);
-		mongoService.setEmbeddedDataLocation("C:/Temp/Mongo");
-	int port = 	mongoService.start();
+		mongoService.setEmbeddedDataLocation("/Users/roberterdin/tmp/mongo_data");
+		int port = 	mongoService.start();
 		
 		
 		
