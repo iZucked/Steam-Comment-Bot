@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 public class AssignmentLabelProvider {
-	
+
 	public static String getLabelFor(final VesselAvailability vesselAvailability) {
 
 		final Vessel vessel = vesselAvailability.getVessel();
@@ -25,7 +25,7 @@ public class AssignmentLabelProvider {
 		int capacity = vesselClass == null ? 0 : vesselClass.getCapacity();
 		String type;
 		if (spotIndex >= 0) {
-			type = "model";
+			type = String.format("option %d", spotIndex + 1);
 		} else if (spotIndex == -1) {
 			type = "nominal";
 		} else {

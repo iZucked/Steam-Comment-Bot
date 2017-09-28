@@ -49,7 +49,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
 		if (storage == null) {
-			storage = new ArrayList<Pair<String, EObject>>();
+			storage = new ArrayList<>();
 		} else {
 			storage.clear();
 		}
@@ -70,7 +70,14 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselAvailability));
 			} else if (p.getSecond() instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) p.getSecond();
-				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, -2));
+				
+				int spotIndex = -2;
+				if (target instanceof AssignableElement) {
+					AssignableElement assignableElement = (AssignableElement) target;
+					spotIndex = assignableElement.getSpotIndex();
+				}
+				
+				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarket, spotIndex));
 			}
 		});
 
