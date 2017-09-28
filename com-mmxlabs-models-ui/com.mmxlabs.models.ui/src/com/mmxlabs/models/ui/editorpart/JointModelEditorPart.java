@@ -358,7 +358,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			}
 
 			modelRecord = SSDataManager.Instance.getModelRecord(instance);
-			ProgressMonitorDialog dialog = new ProgressMonitorDialog(site.getShell());
+			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 			dialog.run(true, false, (monitor) -> modelReference = modelRecord.aquireReference("JointModelEditorPart", monitor));
 
 			final EObject ro = modelReference.getInstance();
