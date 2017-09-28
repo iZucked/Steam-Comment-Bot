@@ -263,6 +263,12 @@
            ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
            referenceEClass="com.mmxlabs.models.lng.port.Route">
      </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingSlotValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingSlotValueProviderFactory_Slot"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
+           referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+     </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
