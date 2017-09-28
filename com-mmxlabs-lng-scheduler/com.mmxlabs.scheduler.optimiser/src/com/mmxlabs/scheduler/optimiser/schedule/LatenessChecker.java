@@ -9,9 +9,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
@@ -85,9 +87,13 @@ public class LatenessChecker {
 			// For fitness component
 			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours);
 
+			// Check for max duration violation
+			final int latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
 			
-			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0) {
-				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours, latenessWithoutFlexInHours);
+			// For own just add the max duration viloation to the general lateness
+			// TODO: report max duration lateness as a separate 
+			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0 || latenessMaxDurationInHours != 0) {
+				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours, latenessWithoutFlexInHours + latenessMaxDurationInHours);
 			}
 
 			if (annotatedSolution != null) {
@@ -97,7 +103,28 @@ public class LatenessChecker {
 			}
 		}
 	}
+	
+	private int getLatenessMaxDurationInHours(VolumeAllocatedSequence volumeAllocatedSequence, @NonNull final IResource resource) {	
+		final IPortSlot startSlot = volumeAllocatedSequence.getSequenceSlots().get(0);
+		final IPortSlot endSlot = volumeAllocatedSequence.getSequenceSlots().get(volumeAllocatedSequence.getSequenceSlots().size() - 1);
 
+		int maxDeltaInHours = volumeAllocatedSequence.getArrivalTime(endSlot) - volumeAllocatedSequence.getArrivalTime(startSlot);
+		int maxDurationInHours = 0;
+		
+		final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
+		if (req != null) {
+			if (req.isMaxDurationSet()) {
+				maxDurationInHours = req.getMaxDuration() * 24;
+
+				if (maxDeltaInHours > maxDurationInHours) {
+					return maxDeltaInHours - maxDurationInHours;
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
 	private @Nullable ITimeWindow getTW(@NonNull final IPortSlot portSlot, @NonNull final IResource resource) {
 		ITimeWindow tw = null;
 

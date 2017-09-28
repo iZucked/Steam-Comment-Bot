@@ -21,12 +21,14 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
@@ -242,8 +244,12 @@ public class FeasibleTimeWindowTrimmer {
 
 				window = timeWindow;
 			} else if (portTypeProvider.getPortType(element) == PortType.End) {
-				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
-				window = endRequirement.getTimeWindow();
+				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+				if (endRequirement.isMaxDurationSet()) {
+					window = getTrimmedWindowBasedOnMaxDuration(endRequirement, portSlot, index);
+				} else {  
+					window = endRequirement.getTimeWindow();
+				}
 				assert window != null;// End requirements should always have a window.
 			} else if (thisPortSlot instanceof RoundTripCargoEnd) {
 				isRoundTripEnd[index] = true;
@@ -378,6 +384,10 @@ public class FeasibleTimeWindowTrimmer {
 			prevElement = element;
 			prevPortSlot = thisPortSlot;
 		}
+
+		// Apply max duration cutoff to the last element of the sequence
+		trimBasedOnMaxDuration(resource, size - 1, prevPortSlot);
+		
 		// add the last time window
 		// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 		// now perform reverse-pass to trim any overly late end times
@@ -398,8 +408,14 @@ public class FeasibleTimeWindowTrimmer {
 
 			// Make sure end if >= start - this may shift the end forward again violating min travel time.
 			windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
+		}			
+		
+		// Try to trim down the start event upper bound given the minimal duration if it is set
+		if (sequence.size() > 0) {
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(sequence.get(sequence.size() - 1));
+			trimBasedOnMinDuration(resource, portSlot);
 		}
-
+		
 		// For charter outs where event, virtual, other, copy the event window forward
 		for (index = 1; index < size; ++index) {
 			if (isVirtual[index] || isVirtual[index - 1]) {
@@ -407,7 +423,6 @@ public class FeasibleTimeWindowTrimmer {
 				windowEndTime[index] = windowEndTime[index - 1];
 			}
 		}
-
 	}
 
 	protected final void trimBasedOnPanamaCanal(final IResource resource, final ISequence sequence, final List<IPortTimeWindowsRecord> portTimeWindowRecords, final MinTravelTimeData travelTimeData,
@@ -600,6 +615,10 @@ public class FeasibleTimeWindowTrimmer {
 			prevElement = element;
 			prevPortSlot = thisPortSlot;
 		}
+
+		// Apply max duration cutoff to the last element of the sequence
+		trimBasedOnMaxDuration(resource, size - 1, prevPortSlot);
+		
 		// add the last time window
 		// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 		// now perform reverse-pass to trim any overly late end times
@@ -621,7 +640,12 @@ public class FeasibleTimeWindowTrimmer {
 			// Make sure end if >= start - this may shift the end forward again violating min travel time.
 			windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
 		}
-
+		
+		if (sequence.size() > 0) {
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(sequence.get(sequence.size() - 1));
+			trimBasedOnMinDuration(resource, portSlot);
+		}
+		
 		// For charter outs where event, virtual, other, copy the event window forward
 		for (index = 1; index < size; ++index) {
 			if (isVirtual[index] || isVirtual[index - 1]) {
@@ -633,8 +657,9 @@ public class FeasibleTimeWindowTrimmer {
 	}
 
 	/**
-	 * Check whether we should go through Panama if we've made a booking. For example, we shouldn't go through if we will be late through Panama and can arrive on time direct or suez.
-	 * 
+	 * Check whether we should go through Panama if we've made a booking.
+	 * For example, we shouldn't go through if we will be late through Panama
+	 * and can arrive on time direct or suez.
 	 * @param start
 	 * @param end
 	 * @param panamaTravelTime
@@ -806,4 +831,88 @@ public class FeasibleTimeWindowTrimmer {
 	public void setTrimByPanamaCanalBookings(final boolean value) {
 		checkPanamaCanalBookings = value;
 	}
+	
+	protected final void trimBasedOnMinDuration(final IResource resource, final IPortSlot portSlot) {
+		final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
+		if (requirement != null) {
+			if (requirement.isMinDurationSet()) {
+				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+				ITimeWindow window = getTrimmedWindowBasedOnMinDuration(requirement, portSlot);
+				windowStartTime[windowStartTime.length -1] = Math.max(windowStartTime[windowStartTime.length - 1], window.getInclusiveStart());
+				windowEndTime[windowEndTime.length - 1] = Math.max(windowEndTime[windowStartTime.length - 1], window.getInclusiveStart() + 1);
+			}
+		}
+	}
+	
+	protected final void trimBasedOnMaxDuration(final IResource resource, final int index, final IPortSlot portSlot) {
+		final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
+		
+		if (requirement != null) {
+			if (requirement.isMaxDurationSet()) {
+				ITimeWindow window = getTrimmedWindowBasedOnMaxDuration(requirement, portSlot, index);
+				windowEndTime[index] = Math.min(windowEndTime[index], window.getExclusiveEnd());
+				windowStartTime[index] = Math.min(windowStartTime[index], window.getInclusiveStart());
+			}
+		}
+	}
+
+	protected final ITimeWindow getTrimmedWindowBasedOnMaxDuration(final IStartEndRequirement requirement, IPortSlot portSlot, final int index) {
+		EndRequirement endRequirement = ((EndRequirement) requirement);
+		
+		int upperBound = Integer.MAX_VALUE;
+		int lowerBound = Integer.MIN_VALUE;
+	    	
+		if (endRequirement.hasTimeRequirement()) {
+			upperBound = endRequirement.getTimeWindow().getExclusiveEnd();
+			lowerBound = endRequirement.getTimeWindow().getInclusiveStart();
+		} else {
+			upperBound = windowEndTime[index];
+			lowerBound = windowStartTime[index];
+		}
+		
+		//TODO: upper bound instead
+		final int maxUpperBound = windowEndTime[0] + endRequirement.getMaxDuration() * 24;
+		
+		// Take the min as the end window upper bound, since we try to trim it down
+		assert upperBound != Integer.MAX_VALUE: "Missing upper bound when trimming with max duration";
+		assert lowerBound != Integer.MIN_VALUE: "Missing lower bound when trimming with max duration";
+		
+		upperBound = Math.min(upperBound, maxUpperBound);
+		lowerBound = Math.min(lowerBound, upperBound - 1);
+		return new TimeWindow(lowerBound, upperBound);
+	}
+
+	protected final ITimeWindow getTrimmedWindowBasedOnMinDuration(final IEndRequirement requirement, IPortSlot portSlot) {
+		int upperBound = Integer.MAX_VALUE;
+		int lowerBound = Integer.MIN_VALUE;
+	    	
+		if (requirement.hasTimeRequirement()) {
+			upperBound = requirement.getTimeWindow().getExclusiveEnd();
+			lowerBound = requirement.getTimeWindow().getInclusiveStart();
+		} else {
+			upperBound = portSlot.getTimeWindow().getInclusiveStart();
+			lowerBound = portSlot.getTimeWindow().getInclusiveStart();
+		}
+
+		final int minLowerBound = windowStartTime[0] + requirement.getMinDuration() * 24;
+		
+		// Take the min as the end window upper bound, since we try to trim it down
+		assert upperBound != Integer.MAX_VALUE: "Missing upper bound when trimming with max duration";
+		assert lowerBound != Integer.MIN_VALUE: "Missing lower bound when trimming with max duration";
+	
+		lowerBound = Math.max(lowerBound, minLowerBound);
+		
+		// Be sure that the end window will never get past the EndBy date if set 
+		if (requirement.hasTimeRequirement()) {
+			lowerBound = Math.min(lowerBound, requirement.getTimeWindow().getExclusiveEnd());	
+		}
+		
+		if (lowerBound > upperBound) {
+			upperBound = lowerBound; 
+			lowerBound -= 1;
+		}
+		
+		return new TimeWindow(lowerBound, upperBound);
+	}
+	
 }

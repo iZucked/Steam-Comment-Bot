@@ -17,8 +17,10 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
@@ -170,7 +172,8 @@ public class PortTimesRecordMaker {
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
-
+		boolean updateEndEvent = false;
+		
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 
 		// The expected arrival based on min travel time as set by the previously seen element.
@@ -182,13 +185,15 @@ public class PortTimesRecordMaker {
 		Runnable recordUpdate = () -> {
 			IPortTimesRecord firstRecord = portTimesRecords.get(0);
 			IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindows.get(0);
+			IPortTimeWindowsRecord portTimeWindowsRecordLast = trimmedWindows.get(trimmedWindows.size() - 1);
 			IPortSlot from = firstRecord.getFirstSlot();
 			IPortSlot to = firstRecord.getSlots().size() > 1 ? firstRecord.getSlots().get(1) : firstRecord.getReturnSlot();
 			if (to != null) {
 				int time = firstRecord.getSlotTime(to);
 				int minTravelTime = travelTimeData.getMinTravelTime(0);
 				int ideal = time - minTravelTime;
-
+				
+								
 				ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
 				if (ideal < time) {
 					// Earlier than current feasible time, so ignore
@@ -199,6 +204,71 @@ public class PortTimesRecordMaker {
 				} else {
 					// Still within window, so set to this time.
 					firstRecord.setSlotTime(from, ideal);
+				}
+				
+				/** Min requirement padding
+				 * In case we don't meet the minimal duration but still have some
+				 * time left after the end or before the start 
+				 * **/
+				IStartEndRequirement req = vesselAvailability.getEndRequirement();
+				if (req instanceof IEndRequirement) {
+					IEndRequirement endReq = (IEndRequirement) req;
+					
+					if (endReq.isMinDurationSet()) {
+						IPortTimesRecord lastRecord = portTimesRecords.get(portTimesRecords.size() - 1);
+						IPortSlot lastPort = lastRecord.getFirstSlot();
+						if (lastPort != null && lastPort.getPortType() == PortType.End) {
+							
+       						// Get delta and remaining hours to fill 
+							int endTime = lastRecord.getSlotTime(lastPort);
+							int minDeltaInHours = endTime - ideal;
+							int minDurationInHours = endReq.getMinDuration() * 24;
+							int remainingHours = minDurationInHours - minDeltaInHours;
+							
+							if (minDeltaInHours < minDurationInHours) {
+								remainingHours -= minDeltaInHours;
+								
+								// Add padding to end event if possible 
+								ITimeWindow windowEnd = portTimeWindowsRecordLast.getSlotFeasibleTimeWindow(lastPort);
+								int endLeftOver = windowEnd.getExclusiveEnd() - endTime - 1;
+								if (endLeftOver > 0) {
+										// Can we take care of the remaining time in one go ?
+									if (endLeftOver > minDeltaInHours) {
+										lastRecord.setSlotTime(lastPort, endTime + remainingHours);
+										remainingHours = 0;
+									} else {
+										remainingHours -= endLeftOver;
+										lastRecord.setSlotTime(lastPort, endTime + endLeftOver);
+									}
+								}
+								
+								// Add padding to start event if possible 
+								if (remainingHours > 0) {
+									ITimeWindow windowStart = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
+									int startLeftOver = ideal - windowStart.getInclusiveStart();
+									if (startLeftOver > 0) {
+										// Can we take care of the remaining time in one go ?
+										if (startLeftOver > remainingHours) {
+											firstRecord.setSlotTime(from, ideal - remainingHours);
+											remainingHours = 0;
+										} else {
+											// Set new end time
+											firstRecord.setSlotTime(from, ideal - startLeftOver);
+											remainingHours -= startLeftOver;
+										}
+									}
+								}
+								
+								// Do we still have some time to pad at the end
+								// (Will trigger window/time requirement violation)
+								if (remainingHours > 0) {
+									// Get the updated endTime
+									endTime = lastRecord.getSlotTime(lastPort);
+									lastRecord.setSlotTime(lastPort, endTime + minDeltaInHours);
+								}
+							}
+						}
+					}
 				}
 			}
 		};
@@ -266,7 +336,26 @@ public class PortTimesRecordMaker {
 					// Pick based on earliest time
 					// TODO: Extract into injectable component
 					int arrivalTime = window == null ? lastNextExpectedArrivalTime : Math.max(window.getInclusiveStart(), lastNextExpectedArrivalTime);
-
+					
+					/**
+					 * Make sure we satisfy the max duration 
+					 * **/
+					IStartEndRequirement req = vesselAvailability.getEndRequirement();
+					if (req instanceof IEndRequirement) {
+						IEndRequirement endReq = (IEndRequirement) req;
+						if (endReq.isMaxDurationSet()) {
+							// Get the actual time of the start event
+							IPortTimesRecord firstRecord = portTimesRecords.get(0);
+							IPortSlot startSlot = firstRecord.getFirstSlot();
+							
+							int startTime = firstRecord.getSlotTime(startSlot);
+							int maxTime = startTime + endReq.getMaxDuration() * 24;
+							
+							arrivalTime = Math.max(maxTime, lastNextExpectedArrivalTime);
+						}
+					}
+					
+				
 					// Only one voyage plan, we need to set the start time before adjustending end event.
 					if (updateFirstRecordStartTime) {
 						portTimesRecord.setReturnSlotTime(returnSlot, arrivalTime);
@@ -276,6 +365,10 @@ public class PortTimesRecordMaker {
 
 					// Delegate to the end event schedule to determine correct end time.
 					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTime, returnSlot));
+					updateEndEvent = true;
+					
+					// We need to update the start time after the end event is scheduled, to make the min/max duration adjustments 
+					recordUpdate.run();
 				} else {
 					// portTimesRecord.setReturnSlotTime(thisPortSlot, list[idx]);
 					recordToUpdateReturnTime = portTimesRecord;

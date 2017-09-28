@@ -8,8 +8,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -35,8 +36,8 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	
 	private ILongCurve ballastBonus;
 
-	private IStartEndRequirement startRequirement;
-	private IStartEndRequirement endRequirement;
+	private IStartRequirement startRequirement;
+	private IEndRequirement endRequirement;
 
 	private ISpotCharterInMarket spotCharterInMarket;
 
@@ -78,20 +79,20 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
-	public IStartEndRequirement getStartRequirement() {
+	public IStartRequirement getStartRequirement() {
 		return startRequirement;
 	}
 
-	public void setStartRequirement(final IStartEndRequirement startRequirement) {
+	public void setStartRequirement(final IStartRequirement startRequirement) {
 		this.startRequirement = startRequirement;
 	}
 
 	@Override
-	public IStartEndRequirement getEndRequirement() {
+	public IEndRequirement getEndRequirement() {
 		return endRequirement;
 	}
 
-	public void setEndRequirement(final IStartEndRequirement endRequirement) {
+	public void setEndRequirement(final IEndRequirement endRequirement) {
 		this.endRequirement = endRequirement;
 	}
 

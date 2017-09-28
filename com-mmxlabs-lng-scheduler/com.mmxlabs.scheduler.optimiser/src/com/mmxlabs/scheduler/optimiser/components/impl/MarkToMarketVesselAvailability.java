@@ -10,11 +10,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -82,13 +83,13 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 
 	@Override
 	@Nullable
-	public IStartEndRequirement getStartRequirement() {
+	public IStartRequirement getStartRequirement() {
 		return null;
 	}
 
 	@Override
 	@Nullable
-	public IStartEndRequirement getEndRequirement() {
+	public IEndRequirement getEndRequirement() {
 		return null;
 	}
 
