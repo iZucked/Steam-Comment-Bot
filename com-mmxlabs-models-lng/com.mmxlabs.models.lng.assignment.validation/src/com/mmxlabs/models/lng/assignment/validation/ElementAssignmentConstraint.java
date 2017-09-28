@@ -69,20 +69,29 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 					} else if (vesselAssignmentType instanceof CharterInMarket) {
 						CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 						if (assignableElement.getSpotIndex() == -1) {
-							final MMXRootObject rootObject = extraContext.getRootObject();
-							if (rootObject instanceof LNGScenarioModel) {
-								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-								final LocalDate promptPeriodEnd = lngScenarioModel.getPromptPeriodEnd();
-								if (promptPeriodEnd != null) {
-									final List<Slot> sortedSlots = cargo.getSortedSlots();
-									if (!sortedSlots.isEmpty()) {
-										final Slot slot = sortedSlots.get(0);
-										if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
-											final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-													(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment in the prompt."), IStatus.WARNING);
-											failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 
-											failures.add(failure);
+							if (!charterInMarket.isNominal()) {
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+										(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment but the charter market does not permit nominal vessels."), IStatus.ERROR);
+								failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+
+								failures.add(failure);
+							} else {
+								final MMXRootObject rootObject = extraContext.getRootObject();
+								if (rootObject instanceof LNGScenarioModel) {
+									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+									final LocalDate promptPeriodEnd = lngScenarioModel.getPromptPeriodEnd();
+									if (promptPeriodEnd != null) {
+										final List<Slot> sortedSlots = cargo.getSortedSlots();
+										if (!sortedSlots.isEmpty()) {
+											final Slot slot = sortedSlots.get(0);
+											if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
+												final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+														(IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getLoadName() + " has nominal vessel assignment in the prompt."), IStatus.WARNING);
+												failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+
+												failures.add(failure);
+											}
 										}
 									}
 								}

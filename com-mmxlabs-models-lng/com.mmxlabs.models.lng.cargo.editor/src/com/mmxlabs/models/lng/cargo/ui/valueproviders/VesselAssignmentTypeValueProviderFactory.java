@@ -198,6 +198,11 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 									// show the option if the cargo allows vessels of this class
 									|| (vc != null && expandedVessels.contains(vc)));
 
+							// Hide disable markets
+							if (!charterInMarket.isEnabled() && !charterInMarket.isNominal()) {
+								display = false;
+							}
+							
 							// Always show the option if the option is the null option
 							// or the current value for the cargo is set to this vessel-set
 							if (Equality.isEqual(charterInMarket, currentValue) || charterInMarket == null) {

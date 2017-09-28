@@ -398,10 +398,11 @@ public class CargoEditorMenuHelper {
 					final CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
 					final VesselClass vesselClass = charterInMarket.getVesselClass();
 					final int capacity = vesselClass == null ? 0 : vesselClass.getCapacity();
-					nominalMenuUsed = true;
-					nominalMenu.add(new RunnableAction(String.format("%s (%dk)", charterInMarket.getName(), capacity / 1000),
-							() -> helper.assignCargoToSpotCharterIn(String.format("Assign to %s", charterInMarket.getName()), cargo, charterInMarket, -1)));
-
+					if (charterInMarket.isNominal()) {
+						nominalMenuUsed = true;
+						nominalMenu.add(new RunnableAction(String.format("%s (%dk)", charterInMarket.getName(), capacity / 1000),
+								() -> helper.assignCargoToSpotCharterIn(String.format("Assign to %s", charterInMarket.getName()), cargo, charterInMarket, -1)));
+					}
 					if (charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
 
 						if (charterInMarket.getSpotCharterCount() == 1) {
