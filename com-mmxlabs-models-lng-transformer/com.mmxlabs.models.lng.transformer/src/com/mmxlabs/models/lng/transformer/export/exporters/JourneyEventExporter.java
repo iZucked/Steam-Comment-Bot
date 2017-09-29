@@ -161,8 +161,7 @@ public class JourneyEventExporter {
 						canalEntry, //
 						toCanalSpeed) + marginHours;
 
-				final int departureTime = portTimesRecord.getSlotTime(fromPortSlot) + portTimesRecord.getSlotDuration(fromPortSlot);
-				estimatedArrival = modelEntityMap.getDateFromHours(departureTime + toCanal, canalEntry);
+				estimatedArrival = modelEntityMap.getDateFromHours(currentTime + toCanal, canalEntry);
 				journey.setCanalArrival(estimatedArrival.toLocalDate());
 			}
 
