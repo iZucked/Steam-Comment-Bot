@@ -344,7 +344,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							if (journey.getCanalDate() != null && journey.getCanalDate().equals(journey.getLatestPossibleCanalDate())) {
 								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
 							} else if (journey.getCanalDate() != null && journey.getLatestPossibleCanalDate() != null && journey.getLatestPossibleCanalDate().isBefore(journey.getCanalDate())) {
-								eventText.append(String.format("Infeasible booking required: %s\n", direction));
+//								eventText.append(String.format("Infeasible booking required: %s\n", direction));
+								// May be infeasible. However we do not start hour of day, so checks are not fully accurate
+								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"), direction));
 							} else {
 								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDate(), "<date unknown>"),
 										dateToString(journey.getLatestPossibleCanalDate(), "<date unknown>"), direction));
