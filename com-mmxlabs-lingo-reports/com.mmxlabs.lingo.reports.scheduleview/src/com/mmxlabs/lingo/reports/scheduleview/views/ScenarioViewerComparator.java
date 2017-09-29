@@ -94,7 +94,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			final String name = s.getVesselAvailability() == null ? s.getName() : s.getVesselAvailability().getVessel().getName();
 
 			if (name != null) {
-				return name;
+				return name + s.getSpotIndex();
 			}
 		}
 		return "";
