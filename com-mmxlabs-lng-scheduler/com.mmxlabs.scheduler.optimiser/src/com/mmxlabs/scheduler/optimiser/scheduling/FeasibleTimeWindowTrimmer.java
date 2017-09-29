@@ -523,7 +523,7 @@ public class FeasibleTimeWindowTrimmer {
 
 							if (bookingAllocated) {
 								// No further checks.
-							} else if (windowStartTime[index] > panamaBookingsProvider.getRelaxedBoundary()) {
+							} else if (panamaPeriod == PanamaPeriod.Beyond) {
 								// assume a Panama booking because it's far enough in the future
 								currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
 							} else if (windowStartTime[index - 1] + directTravelTime < windowEndTime[index]
@@ -560,6 +560,9 @@ public class FeasibleTimeWindowTrimmer {
 											currentBookings.assignedBookings.get(panamaEntry).add(booking);
 											set.remove(booking);
 											foundBooking = true;
+
+											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
+
 											break;
 										}
 									}
