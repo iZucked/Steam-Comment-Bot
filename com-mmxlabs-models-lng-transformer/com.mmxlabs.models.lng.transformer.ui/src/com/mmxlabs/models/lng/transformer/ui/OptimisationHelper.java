@@ -1021,16 +1021,21 @@ public final class OptimisationHelper {
 		if (status.isOK() == false) {
 
 			// See if this command was executed in the UI thread - if so fire up the dialog box.
-			if (Display.getCurrent() != null) {
-
-				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
+			final boolean[] res = new boolean[1];
+			Display.getDefault().syncExec(() -> {
+				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getDefault().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
 
 				// Wait for use to press a button before continuing.
 				dialog.setBlockOnOpen(true);
 
 				if (dialog.open() == Window.CANCEL) {
-					return false;
+					res[0] = false;
+				} else {
+					res[0] = true;
 				}
+			});
+			if (res[0] == false) {
+				return false;
 			}
 		}
 
