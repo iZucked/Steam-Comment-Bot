@@ -3309,9 +3309,9 @@ public class LNGScenarioTransformer {
 		}
 		// Is the availability open ended or do we force the end rule?
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, false, null, heelConsumer, false);
+			return builder.createEndRequirement(null, false, new TimeWindow(0,  Integer.MAX_VALUE), heelConsumer, false);
 		} else {
-			return builder.createEndRequirement(portSet, false, null, heelConsumer, false);
+			return builder.createEndRequirement(portSet, false, new TimeWindow(0,  Integer.MAX_VALUE), heelConsumer, false);
 		}
 
 	}
@@ -3335,14 +3335,14 @@ public class LNGScenarioTransformer {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to), 0, false);
 		} else if (from != null && to == null) {
 			// Set a default window end date which is valid change later
-			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(from), 0, true);
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), Integer.MAX_VALUE, 0, true);
 			builder.addPartiallyOpenEndWindow((MutableTimeWindow) window);
 		} else if (from != null && to != null) {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
 		} else {
 			// No window
 			isOpenEnded = true;
-			window = new MutableTimeWindow();
+			window = new MutableTimeWindow(0, Integer.MAX_VALUE);
 		}
 
 		final Set<IPort> portSet = new LinkedHashSet<>();
