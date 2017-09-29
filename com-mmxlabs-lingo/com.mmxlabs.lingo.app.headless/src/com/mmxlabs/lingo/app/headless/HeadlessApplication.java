@@ -101,7 +101,7 @@ public class HeadlessApplication implements IApplication {
 
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
-
+			System.err.println("Licence is invalid");
 			return IApplication.EXIT_OK;
 		}
 
@@ -112,6 +112,7 @@ public class HeadlessApplication implements IApplication {
 		commandLineArgs = filterCommandLineArgs(commandLineArgs);
 		final SettingsOverride overrideSettings = new SettingsOverride();
 		if (!parseOptions(commandLineArgs, overrideSettings, exporters)) {
+			System.err.println("Error parsing the command line settings");
 			return IApplication.EXIT_OK;
 		}
 
