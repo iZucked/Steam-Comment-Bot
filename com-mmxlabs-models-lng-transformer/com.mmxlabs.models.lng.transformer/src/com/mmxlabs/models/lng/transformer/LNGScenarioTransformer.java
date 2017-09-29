@@ -172,6 +172,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotMarket;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
@@ -3051,7 +3052,17 @@ public class LNGScenarioTransformer {
 			final IHeelOptionConsumer heelConsumer = createHeelConsumer(eVesselAvailability.getEndHeel());
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), heelConsumer,
 					forceHireCostOnlyEndRule);
-
+			
+			int minDuration = eVesselAvailability.getAvailabilityOrContractMinDuration();
+			if (minDuration != 0) {
+				endRequirement.setMinDuration(minDuration);
+			}
+			
+			int maxDuration = eVesselAvailability.getAvailabilityOrContractMaxDuration();
+			if (maxDuration != 0) {
+				endRequirement.setMaxDuration(maxDuration);
+			}
+			
 			final ILongCurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
 				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
