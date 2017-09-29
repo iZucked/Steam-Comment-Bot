@@ -80,7 +80,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		public final long vesselCharterInRatePerDay;
 		public final long[] startHeelRangeInM3;
 
-		public final @Nullable IResource resource;
+		public final @Nullable IResource resource; // May be null for notional voyage calculations
 	}
 
 	static class InternalState {
@@ -139,12 +139,13 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				if (useVPOSpeedStepping) {
 					final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
-					final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
+					final int extraExtent = (window == null || window.getExclusiveEnd() == Integer.MAX_VALUE) ? 30 * RELAXATION_STEP
+							: (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
 					// If this is non-zero then our end event rules will have
 					// kicked in and we should not engage the speed step code.
 					evaluateVoyagePlan(record, state, extraExtent);
 				} else {
-					// assume already determined and no search neccessary
+					// assume already determined and no search necessary
 					evaluateVoyagePlan(record, state, 0);
 				}
 				return;
@@ -360,7 +361,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			cost += plan.getTotalFuelCost(fuel);
 		}
 		cost += plan.getStartHeelCost();
-//		cost -= plan.getStartHeelCost();
+		// cost -= plan.getStartHeelCost();
 
 		cost += plan.getTotalRouteCost();
 		return cost;

@@ -259,7 +259,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
+	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
 			boolean isOpenEnded);
 
 	/**
