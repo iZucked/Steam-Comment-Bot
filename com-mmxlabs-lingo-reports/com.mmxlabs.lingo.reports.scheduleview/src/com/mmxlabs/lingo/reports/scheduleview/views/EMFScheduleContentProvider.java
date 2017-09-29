@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -134,6 +135,13 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 							canal.setLinkedJourney(journey);
 							canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
 							canal.setEnd(canal.getStart().plusDays(1));
+							if (journey.getCanalBooking() == null) {
+								if (journey.getLatestPossibleCanalDate() != null) {
+									ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
+									int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
+									canal.setEnd(canal.getStart().plusDays(days));
+								}
+							}
 							canal.setPort(journey.getCanalEntry().getPort());
 							newEvents.add(canal);
 						}
@@ -162,6 +170,14 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 								canal.setLinkedJourney(journey);
 								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
 								canal.setEnd(canal.getStart().plusDays(1));
+								if (journey.getCanalBooking() == null) {
+									if (journey.getLatestPossibleCanalDate() != null) {
+										ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
+										int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
+										canal.setEnd(canal.getStart().plusDays(days));
+
+									}
+								}
 								canal.setPort(journey.getCanalEntry().getPort());
 								newEvents.add(canal);
 							}
