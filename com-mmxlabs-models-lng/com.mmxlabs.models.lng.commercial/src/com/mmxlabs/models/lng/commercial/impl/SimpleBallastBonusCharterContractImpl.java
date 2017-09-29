@@ -30,6 +30,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getMinDuration <em>Min Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl#getEntity <em>Entity</em>}</li>
  * </ul>
@@ -37,6 +39,64 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl implements SimpleBallastBonusCharterContract {
+	/**
+	 * The default value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minDuration = MIN_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Min Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minDurationESet;
+
+	/**
+	 * The default value of the '{@link #getMaxDuration() <em>Max Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxDuration() <em>Max Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxDuration = MAX_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Max Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxDurationESet;
+
 	/**
 	 * The cached value of the '{@link #getBallastBonusContract() <em>Ballast Bonus Contract</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -74,6 +134,98 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	@Override
 	protected EClass eStaticClass() {
 		return CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMinDuration() {
+		return minDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinDuration(int newMinDuration) {
+		int oldMinDuration = minDuration;
+		minDuration = newMinDuration;
+		boolean oldMinDurationESet = minDurationESet;
+		minDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION, oldMinDuration, minDuration, !oldMinDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMinDuration() {
+		int oldMinDuration = minDuration;
+		boolean oldMinDurationESet = minDurationESet;
+		minDuration = MIN_DURATION_EDEFAULT;
+		minDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION, oldMinDuration, MIN_DURATION_EDEFAULT, oldMinDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMinDuration() {
+		return minDurationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMaxDuration() {
+		return maxDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxDuration(int newMaxDuration) {
+		int oldMaxDuration = maxDuration;
+		maxDuration = newMaxDuration;
+		boolean oldMaxDurationESet = maxDurationESet;
+		maxDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION, oldMaxDuration, maxDuration, !oldMaxDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxDuration() {
+		int oldMaxDuration = maxDuration;
+		boolean oldMaxDurationESet = maxDurationESet;
+		maxDuration = MAX_DURATION_EDEFAULT;
+		maxDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION, oldMaxDuration, MAX_DURATION_EDEFAULT, oldMaxDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxDuration() {
+		return maxDurationESet;
 	}
 
 	/**
@@ -179,6 +331,10 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION:
+				return getMinDuration();
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION:
+				return getMaxDuration();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				return getBallastBonusContract();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
@@ -196,6 +352,12 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION:
+				setMinDuration((Integer)newValue);
+				return;
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION:
+				setMaxDuration((Integer)newValue);
+				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				setBallastBonusContract((BallastBonusContract)newValue);
 				return;
@@ -214,6 +376,12 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION:
+				unsetMinDuration();
+				return;
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION:
+				unsetMaxDuration();
+				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				setBallastBonusContract((BallastBonusContract)null);
 				return;
@@ -232,12 +400,34 @@ public class SimpleBallastBonusCharterContractImpl extends NamedObjectImpl imple
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION:
+				return isSetMinDuration();
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION:
+				return isSetMaxDuration();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				return ballastBonusContract != null;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__ENTITY:
 				return entity != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (minDuration: ");
+		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
+		result.append(", maxDuration: ");
+		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
 	}
 
 } //SimpleBallastBonusCharterContractImpl

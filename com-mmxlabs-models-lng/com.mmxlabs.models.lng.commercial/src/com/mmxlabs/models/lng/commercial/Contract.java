@@ -74,7 +74,7 @@ public interface Contract extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Ports</em>' reference list isn't clear,
@@ -242,7 +242,7 @@ public interface Contract extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,

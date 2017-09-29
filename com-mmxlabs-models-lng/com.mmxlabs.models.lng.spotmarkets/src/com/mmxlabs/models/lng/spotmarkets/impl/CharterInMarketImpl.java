@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
 import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
 
@@ -39,12 +40,15 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterInRate <em>Charter In Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterContract <em>Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isNominal <em>Nominal</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMinDuration <em>Min Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMaxDuration <em>Max Duration</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,6 +83,16 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected Vessel vessel;
 
 	/**
 	 * The default value of the '{@link #getCharterInRate() <em>Charter In Rate</em>}' attribute.
@@ -190,6 +204,64 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	protected boolean nominal = NOMINAL_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minDuration = MIN_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Min Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minDurationESet;
+
+	/**
+	 * The default value of the '{@link #getMaxDuration() <em>Max Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxDuration() <em>Max Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxDuration = MAX_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Max Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxDurationESet;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -246,6 +318,44 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Vessel getVessel() {
+		if (vessel != null && vessel.eIsProxy()) {
+			InternalEObject oldVessel = (InternalEObject)vessel;
+			vessel = (Vessel)eResolveProxy(oldVessel);
+			if (vessel != oldVessel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_IN_MARKET__VESSEL, oldVessel, vessel));
+			}
+		}
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vessel basicGetVessel() {
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVessel(Vessel newVessel) {
+		Vessel oldVessel = vessel;
+		vessel = newVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__VESSEL, oldVessel, vessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isNominal() {
 		return nominal;
 	}
@@ -260,6 +370,120 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		nominal = newNominal;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL, oldNominal, nominal));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMinDuration() {
+		return minDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinDuration(int newMinDuration) {
+		int oldMinDuration = minDuration;
+		minDuration = newMinDuration;
+		boolean oldMinDurationESet = minDurationESet;
+		minDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION, oldMinDuration, minDuration, !oldMinDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMinDuration() {
+		int oldMinDuration = minDuration;
+		boolean oldMinDurationESet = minDurationESet;
+		minDuration = MIN_DURATION_EDEFAULT;
+		minDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION, oldMinDuration, MIN_DURATION_EDEFAULT, oldMinDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMinDuration() {
+		return minDurationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMaxDuration() {
+		return maxDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxDuration(int newMaxDuration) {
+		int oldMaxDuration = maxDuration;
+		maxDuration = newMaxDuration;
+		boolean oldMaxDurationESet = maxDurationESet;
+		maxDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION, oldMaxDuration, maxDuration, !oldMaxDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxDuration() {
+		int oldMaxDuration = maxDuration;
+		boolean oldMaxDurationESet = maxDurationESet;
+		maxDuration = MAX_DURATION_EDEFAULT;
+		maxDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION, oldMaxDuration, MAX_DURATION_EDEFAULT, oldMaxDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxDuration() {
+		return maxDurationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMarketOrContractMinDuration() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMarketOrContractMaxDuration() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -464,6 +688,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return getExtensions();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				return getName();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
 				return getCharterInRate();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
@@ -477,6 +704,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return basicGetCharterContract();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				return isNominal();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
+				return getMinDuration();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
+				return getMaxDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -497,6 +728,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				setName((String)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__VESSEL:
+				setVessel((Vessel)newValue);
+				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
 				setCharterInRate((String)newValue);
 				return;
@@ -516,6 +750,12 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				setNominal((Boolean)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
+				setMinDuration((Integer)newValue);
+				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
+				setMaxDuration((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -533,6 +773,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				setName(NAME_EDEFAULT);
+				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__VESSEL:
+				setVessel((Vessel)null);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
 				setCharterInRate(CHARTER_IN_RATE_EDEFAULT);
@@ -552,6 +795,12 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				setNominal(NOMINAL_EDEFAULT);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
+				unsetMinDuration();
+				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
+				unsetMaxDuration();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -568,6 +817,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return extensions != null && !extensions.isEmpty();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case SpotMarketsPackage.CHARTER_IN_MARKET__VESSEL:
+				return vessel != null;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
 				return CHARTER_IN_RATE_EDEFAULT == null ? charterInRate != null : !CHARTER_IN_RATE_EDEFAULT.equals(charterInRate);
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
@@ -580,6 +831,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return isSetCharterContract();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				return nominal != NOMINAL_EDEFAULT;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
+				return isSetMinDuration();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
+				return isSetMaxDuration();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -660,6 +915,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		result.append(inaccessibleRoutes);
 		result.append(", nominal: ");
 		result.append(nominal);
+		result.append(", minDuration: ");
+		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
+		result.append(", maxDuration: ");
+		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

@@ -3800,13 +3800,31 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3881,13 +3899,31 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
+	 * The operation id for the '<em>Get Availability Or Contract Min Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Availability Or Contract Max Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
+
+	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -6741,6 +6777,28 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselAvailability_CharterContract();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration <em>Min Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Duration</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_MinDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMaxDuration <em>Max Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Duration</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getMaxDuration()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_MaxDuration();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6789,6 +6847,26 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMinDuration() <em>Get Availability Or Contract Min Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Availability Or Contract Min Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMinDuration()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetAvailabilityOrContractMinDuration();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMaxDuration() <em>Get Availability Or Contract Max Duration</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Availability Or Contract Max Duration</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getAvailabilityOrContractMaxDuration()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetAvailabilityOrContractMaxDuration();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
@@ -8495,6 +8573,22 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_AVAILABILITY__CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_CharterContract();
 
 		/**
+		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__MIN_DURATION = eINSTANCE.getVesselAvailability_MinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__MAX_DURATION = eINSTANCE.getVesselAvailability_MaxDuration();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8533,6 +8627,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Availability Or Contract Min Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION = eINSTANCE.getVesselAvailability__GetAvailabilityOrContractMinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Availability Or Contract Max Duration</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION = eINSTANCE.getVesselAvailability__GetAvailabilityOrContractMaxDuration();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.

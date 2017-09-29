@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -26,10 +27,19 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Checks to test if slot and vessel event dates are consistent with the start / end dates of the assigned vessel.
+ * Checks to test if slot and vessel event dates are consistent with the start /
+ * end dates of the assigned vessel.
  * 
  */
 public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
+
+	void createErrorMessage(final String message, final IValidationContext ctx, List<IStatus> failures, EObject obj, final EStructuralFeature... features) {
+		final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
+		for (EStructuralFeature feature : features) {
+			failure.addEObjectAndFeature(obj, feature);
+		}
+		failures.add(failure);
+	}
 
 	@Override
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
@@ -94,8 +104,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 						failures.add(failure);
 					}
 				}
-			}
 
+			}
 		}
 		return Activator.PLUGIN_ID;
 	}

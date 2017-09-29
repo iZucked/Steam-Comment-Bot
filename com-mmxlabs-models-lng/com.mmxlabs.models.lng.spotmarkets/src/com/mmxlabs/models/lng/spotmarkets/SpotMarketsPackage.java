@@ -1234,13 +1234,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__NAME = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__VESSEL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Charter In Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_IN_RATE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+	int CHARTER_IN_MARKET__CHARTER_IN_RATE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -1249,7 +1258,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
+	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
@@ -1258,7 +1267,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
+	int CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -1267,7 +1276,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
+	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
@@ -1276,7 +1285,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
+	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Nominal</b></em>' attribute.
@@ -1285,7 +1294,25 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
+	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__MIN_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__MAX_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
@@ -1294,7 +1321,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
@@ -1792,6 +1819,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EClass getCharterInMarket();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getVessel()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EReference getCharterInMarket_Vessel();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1801,6 +1839,28 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCharterInMarket_Nominal();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration <em>Min Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Duration</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_MinDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration <em>Max Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Duration</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_MaxDuration();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}'.
@@ -2304,12 +2364,36 @@ public interface SpotMarketsPackage extends EPackage {
 		EClass CHARTER_IN_MARKET = eINSTANCE.getCharterInMarket();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET__VESSEL = eINSTANCE.getCharterInMarket_Vessel();
+
+		/**
 		 * The meta object literal for the '<em><b>Nominal</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__NOMINAL = eINSTANCE.getCharterInMarket_Nominal();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__MIN_DURATION = eINSTANCE.getCharterInMarket_MinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__MAX_DURATION = eINSTANCE.getCharterInMarket_MaxDuration();
 
 		/**
 		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.

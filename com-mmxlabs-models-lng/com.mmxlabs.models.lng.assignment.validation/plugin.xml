@@ -127,6 +127,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityMinMaxConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Availability Duration Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityOptionalFleetConstraint"
                   id="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityOptionalFleetConstraint"
                   isEnabledByDefault="true"

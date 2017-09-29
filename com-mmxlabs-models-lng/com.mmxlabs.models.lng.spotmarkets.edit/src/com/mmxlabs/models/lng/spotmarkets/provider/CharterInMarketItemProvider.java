@@ -53,12 +53,15 @@ public class CharterInMarketItemProvider
 
 			addExtensionsPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
 			addCharterInRatePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
 			addOverrideInaccessibleRoutesPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
 			addCharterContractPropertyDescriptor(object);
 			addNominalPropertyDescriptor(object);
+			addMinDurationPropertyDescriptor(object);
+			addMaxDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -108,6 +111,28 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_vessel_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Nominal feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -125,6 +150,50 @@ public class CharterInMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Min Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_minDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_minDuration_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MIN_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_maxDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_maxDuration_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MAX_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -312,6 +381,8 @@ public class CharterInMarketItemProvider
 			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__EXTENSIONS:
