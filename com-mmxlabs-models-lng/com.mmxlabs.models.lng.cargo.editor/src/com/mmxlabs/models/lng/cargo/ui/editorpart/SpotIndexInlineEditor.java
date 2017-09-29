@@ -49,13 +49,13 @@ public class SpotIndexInlineEditor extends ValueListInlineEditor {
 	}
 
 	private static @NonNull List<Pair<String, Object>> getDefaultValues() {
-		final ArrayList<Pair<String, Object>> result = new ArrayList<Pair<String, Object>>();
+		final ArrayList<Pair<String, Object>> result = new ArrayList<>();
 		result.add(new Pair<String, Object>("Unknown", Integer.valueOf(0)));
 		return result;
 	}
 
 	private static @NonNull List<Pair<String, Object>> getValues(final CharterInMarket market, final int currentIndex) {
-		final ArrayList<Pair<String, Object>> result = new ArrayList<Pair<String, Object>>();
+		final ArrayList<Pair<String, Object>> result = new ArrayList<>();
 		// Always show nominal if current index, even if not licensed otherwise we may get null pointer or array index exceptions.
 		if (currentIndex == -1 || (LicenseFeatures.isPermitted("features:nominals") && market.isNominal())) {
 			result.add(new Pair<String, Object>("Nominal", Integer.valueOf(-1)));
