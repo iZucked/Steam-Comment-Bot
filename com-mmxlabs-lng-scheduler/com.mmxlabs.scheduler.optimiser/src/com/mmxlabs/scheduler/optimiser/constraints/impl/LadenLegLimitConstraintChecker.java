@@ -151,7 +151,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			if ((tw1 == null) || (tw2 == null)) {
 				return true; // if the time windows are null, there is no effective constraint
 			}
-
+			assert tw1.getExclusiveEnd() != Integer.MAX_VALUE;
 			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
 				return false;
 			}

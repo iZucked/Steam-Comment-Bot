@@ -125,7 +125,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			cur = iter.next();
 			if (prev != null && cur != null) {
 				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed)) {
-					checkPairwiseConstraint(prev, cur, resource, maxSpeed);
 					return false;
 				}
 			}

@@ -969,10 +969,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				final ITimeWindow timeWindow = end.getTimeWindow();
 				if (timeWindow != null) {
 					final int endOfDischargeWindow = timeWindow.getExclusiveEnd();
-					if (endOfDischargeWindow > latestDischarge) {
-						latestDischarge = endOfDischargeWindow;
-						loadPort = endMinus1.getPort();
-						dischargePort = end.getPort();
+					if (endOfDischargeWindow != Integer.MAX_VALUE) {
+						if (endOfDischargeWindow > latestDischarge) {
+							latestDischarge = endOfDischargeWindow;
+							loadPort = endMinus1.getPort();
+							dischargePort = end.getPort();
+						}
 					}
 				}
 			}
@@ -1047,6 +1049,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
 						.map(element -> portSlotsProvider.getPortSlot(element)) //
 						.filter(portSlot -> portSlot.getTimeWindow() != null) //
+						.filter(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()  != Integer.MAX_VALUE) //
 						.mapToInt(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()) //
 						.max();
 				final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;

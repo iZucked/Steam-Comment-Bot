@@ -417,7 +417,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		log.debug(chunks + "");
 
 		final ChunkChecker chunkChecker = new ChunkChecker(checker);
-		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<IResource, List<SequenceChunk>>();
+		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<>();
 
 		if (suggestion == null) {
 			log.debug("No suggested start solution - constructing one");
@@ -467,7 +467,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			// copy suggestion state into one-element chunks.
 			log.debug("Starting with suggested solution");
 			for (final IResource resource : suggestion.getResources()) {
-				final List<SequenceChunk> sequence = new ArrayList<SequenceChunk>();
+				final List<SequenceChunk> sequence = new ArrayList<>();
 				sequences.put(resource, sequence);
 
 				// Create a chunk for the given sequence suggestion.
