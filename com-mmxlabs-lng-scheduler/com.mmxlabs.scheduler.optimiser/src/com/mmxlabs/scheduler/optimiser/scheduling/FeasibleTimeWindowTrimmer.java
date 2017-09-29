@@ -526,11 +526,16 @@ public class FeasibleTimeWindowTrimmer {
 							} else if (panamaPeriod == PanamaPeriod.Beyond) {
 								// assume a Panama booking because it's far enough in the future
 								currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
-							} else if (windowStartTime[index - 1] + directTravelTime < windowEndTime[index]
-									|| (windowStartTime[index - 1] + suezTravelTime < windowEndTime[index] && suezTravelTime != Integer.MAX_VALUE) || directTravelTime <= panamaTravelTime) {
+							} else if (windowStartTime[index - 1] + directTravelTime < windowEndTime[index] //
+									|| (windowStartTime[index - 1] + suezTravelTime < windowEndTime[index] && suezTravelTime != Integer.MAX_VALUE) //
+									|| directTravelTime <= panamaTravelTime) {
 								// journey can be made direct (or it does not go across Panama)
 								travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
 								currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+
+								// TODO: We could perform an additional pass and allocate a spare booking slot and set the rouce choice to optimal and let the schedule determine best route.
+								// TODO: Note this would require the MinTravelTimeData object to be passed around for time calculations rather than use the distance provider to get non-booking time.
+								// TODO: Or we could re-calculate the travel time using the booking. (Maybe add API to distance provider to get travel time via booking?).
 							} else {
 								// go through panama, figure out if there is an unassigned booking
 								currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
@@ -560,9 +565,6 @@ public class FeasibleTimeWindowTrimmer {
 											currentBookings.assignedBookings.get(panamaEntry).add(booking);
 											set.remove(booking);
 											foundBooking = true;
-
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
-
 											break;
 										}
 									}
