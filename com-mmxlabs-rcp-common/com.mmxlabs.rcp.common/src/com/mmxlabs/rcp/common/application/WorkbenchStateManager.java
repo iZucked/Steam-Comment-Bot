@@ -130,6 +130,13 @@ public class WorkbenchStateManager {
 			} else if (viewIdsToReplace.containsKey(viewId)) {
 				changed = true;
 				nContent.setNodeValue(viewIdsToReplace.get(viewId));
+			} else {
+				if (viewId.contains(":")) {
+					final String subId = viewId.split(":")[0];
+					if (viewIdsToRemove.contains(subId)) {
+						nodesToRemove.add(nPage);
+					}
+				}
 			}
 		}
 
