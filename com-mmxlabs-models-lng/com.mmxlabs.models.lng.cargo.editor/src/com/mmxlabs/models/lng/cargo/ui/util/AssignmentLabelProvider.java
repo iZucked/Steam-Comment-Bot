@@ -24,7 +24,7 @@ public class AssignmentLabelProvider {
 		int capacity = vessel == null ? 0 : vessel.getVesselOrDelegateCapacity();
 		String type;
 		if (spotIndex >= 0) {
-			type = "model";
+			type = String.format("option %d", spotIndex + 1);
 		} else if (spotIndex == -1) {
 			type = "nominal";
 		} else {

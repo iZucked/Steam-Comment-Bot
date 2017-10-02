@@ -48,20 +48,27 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 				final int spotCharterCount = charterInMarket.getSpotCharterCount();
 
 				final int diff = currentIndex == -1 ? 0 : (currentIndex >= spotCharterCount ? 1 : 0);
-				options = new String[1 + spotCharterCount + diff];
+				int offset = 0;
+
+				if (charterInMarket.isNominal()) {
+					offset = 1;
+				}
+
+				options = new String[offset + spotCharterCount + diff];
 				optionValues = new int[options.length];
 
-				// Install nominal option
-				options[0] = nominalOption;
-				optionValues[0] = -1;
-
+				if (charterInMarket.isNominal()) {
+					// Install nominal option
+					options[0] = nominalOption;
+					optionValues[0] = -1;
+				}
 				for (int i = 0; i < spotCharterCount; ++i) {
-					options[1 + i] = String.format("%d", 1 + i);
-					optionValues[1 + i] = i;
+					options[offset + i] = String.format("%d", 1 + i);
+					optionValues[offset + i] = i;
 				}
 
 				if (currentIndex >= spotCharterCount) {
-					final int idx = options.length - 1;
+					final int idx = options.length - offset;
 					options[idx] = String.format("%d", 1 + currentIndex);
 					optionValues[idx] = currentIndex;
 				}

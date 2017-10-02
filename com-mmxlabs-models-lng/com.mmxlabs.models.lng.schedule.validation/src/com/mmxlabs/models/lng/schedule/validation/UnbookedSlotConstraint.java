@@ -99,9 +99,9 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 			}
 			if (southboundExcessRelaxedBookings > canalBookings.getFlexibleBookingAmountSouthbound()) {
 				DetailConstraintStatusFactory f = DetailConstraintStatusFactory.makeStatus() //
-						.withPrefix("[Evaluated State]") //
-						.withMessage(String.format("Panama canal: There are %d flexible sorthbound voyages but only %d permitted.", southboundExcessRelaxedBookings,
-								canalBookings.getFlexibleBookingAmountSouthbound())) //
+						.withPrefix("[Evaluated State] ") //
+						.withMessage(String.format("Panama canal: There are %d unbooked southbound voyages but only %d are permitted (%s over).", southboundExcessRelaxedBookings,
+								canalBookings.getFlexibleBookingAmountSouthbound(), southboundExcessRelaxedBookings - canalBookings.getFlexibleBookingAmountSouthbound())) //
 						.withObjectAndFeature(canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) //
 				;
 				statuses.add(f.withSeverity(IStatus.ERROR).make(ctx));

@@ -49,21 +49,23 @@ public class SpotIndexInlineEditor extends ValueListInlineEditor {
 	}
 
 	private static @NonNull List<Pair<String, Object>> getDefaultValues() {
-		final ArrayList<Pair<String, Object>> result = new ArrayList<Pair<String, Object>>();
+		final ArrayList<Pair<String, Object>> result = new ArrayList<>();
 		result.add(new Pair<String, Object>("Unknown", Integer.valueOf(0)));
 		return result;
 	}
 
 	private static @NonNull List<Pair<String, Object>> getValues(final CharterInMarket market, final int currentIndex) {
-		final ArrayList<Pair<String, Object>> result = new ArrayList<Pair<String, Object>>();
+		final ArrayList<Pair<String, Object>> result = new ArrayList<>();
 		// Always show nominal if current index, even if not licensed otherwise we may get null pointer or array index exceptions.
-		if (currentIndex == -1 || LicenseFeatures.isPermitted("features:nominals")) {
+		if (currentIndex == -1 || (LicenseFeatures.isPermitted("features:nominals") && market.isNominal())) {
 			result.add(new Pair<String, Object>("Nominal", Integer.valueOf(-1)));
 		}
-		for (int i = 0; i < market.getSpotCharterCount(); ++i) {
-			result.add(new Pair<String, Object>(String.format("%d", 1 + i), Integer.valueOf(i)));
+		if (market.isEnabled()) {
+			for (int i = 0; i < market.getSpotCharterCount(); ++i) {
+				result.add(new Pair<String, Object>(String.format("%d", 1 + i), Integer.valueOf(i)));
+			}
 		}
-		if (currentIndex >= market.getSpotCharterCount()) {
+		if (currentIndex != -1 && (!market.isEnabled() || currentIndex >= market.getSpotCharterCount())) {
 			result.add(new Pair<String, Object>(String.format("%d", 1 + currentIndex), Integer.valueOf(currentIndex)));
 		}
 		return result;
