@@ -943,5 +943,11 @@
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="com.mmxlabs.rcp.common.ViewPartRewrite">
+      <ViewPartRewrite
+            oldViewID="com.mmxlabs.lingo.reports.views.changeset.CustomChangeSetView:">
+      </ViewPartRewrite>
+   </extension>
 
 </plugin>
