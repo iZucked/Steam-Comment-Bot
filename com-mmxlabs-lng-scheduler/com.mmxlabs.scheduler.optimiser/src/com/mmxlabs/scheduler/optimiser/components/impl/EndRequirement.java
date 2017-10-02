@@ -20,6 +20,7 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final boolean hasTimeRequirement, final ITimeWindow timeWindow,
 			final @NonNull IHeelOptionConsumer heelOptions, final boolean isHireCostOnlyEndRule) {
 		super(portSet.size() == 1 ? portSet.iterator().next() : null, portSet, portIsSpecified, hasTimeRequirement, timeWindow);
+		assert timeWindow != null;
 		this.heelOptions = heelOptions;
 		this.isHireCostOnlyEndRule = isHireCostOnlyEndRule;
 	}

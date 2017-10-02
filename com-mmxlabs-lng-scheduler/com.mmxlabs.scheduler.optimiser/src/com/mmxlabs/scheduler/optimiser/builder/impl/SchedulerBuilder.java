@@ -29,6 +29,7 @@ import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
@@ -737,7 +738,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (spotCharterInMarket.getEndRequirement() != null) {
 			end = spotCharterInMarket.getEndRequirement();
 		} else {
-			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
+			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),
 					createHeelConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 		}
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
@@ -876,11 +877,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	public IEndRequirement createEndRequirement() {
-		return createEndRequirement(Collections.singletonList(ANYWHERE), false, null, createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0)), false);
+		return createEndRequirement(Collections.singletonList(ANYWHERE), false, new MutableTimeWindow(0, Integer.MAX_VALUE), createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0)), false);
 	}
 
 	@Override
-	public @NonNull IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
+	public @NonNull IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
 			boolean isOpenEnded) {
 
 		if (portSet == null || portSet.isEmpty()) {
@@ -945,10 +946,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				final ITimeWindow timeWindow = end.getTimeWindow();
 				if (timeWindow != null) {
 					final int endOfDischargeWindow = timeWindow.getExclusiveEnd();
-					if (endOfDischargeWindow > latestDischarge) {
-						latestDischarge = endOfDischargeWindow;
-						loadPort = endMinus1.getPort();
-						dischargePort = end.getPort();
+					if (endOfDischargeWindow != Integer.MAX_VALUE) {
+						if (endOfDischargeWindow > latestDischarge) {
+							latestDischarge = endOfDischargeWindow;
+							loadPort = endMinus1.getPort();
+							dischargePort = end.getPort();
+						}
 					}
 				}
 			}
@@ -1023,6 +1026,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
 						.map(element -> portSlotsProvider.getPortSlot(element)) //
 						.filter(portSlot -> portSlot.getTimeWindow() != null) //
+						.filter(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()  != Integer.MAX_VALUE) //
 						.mapToInt(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()) //
 						.max();
 				final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
@@ -1876,7 +1880,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final IStartRequirement start = createStartRequirement(ANYWHERE, false, null,
 				createHeelSupplier(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0)));
-		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, null,
+		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),
 				createHeelConsumer(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0)), false);
 
 		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP, start, end,

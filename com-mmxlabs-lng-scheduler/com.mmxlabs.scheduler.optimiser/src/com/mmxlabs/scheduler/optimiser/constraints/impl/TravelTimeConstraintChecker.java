@@ -105,6 +105,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource)) {
+				checkSequence(sequence, resource);
 				return false;
 			}
 		}
@@ -244,7 +245,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		int travelTime = quickestTravelTime.getSecond();
 
 		final int earliestArrivalTime = voyageStartTime + travelTime;
-		final int latestAllowableTime = tw2.getExclusiveEnd() - 1 + maxLateness;
+		final int latestAllowableTime = (tw2.getExclusiveEnd() == Integer.MAX_VALUE) ? Integer.MAX_VALUE : tw2.getExclusiveEnd() - 1 + maxLateness;
 
 		return earliestArrivalTime <= latestAllowableTime;
 	}
