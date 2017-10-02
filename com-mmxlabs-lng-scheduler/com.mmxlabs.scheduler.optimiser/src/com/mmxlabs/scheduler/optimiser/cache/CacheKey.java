@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -23,6 +24,7 @@ public final class CacheKey<T> {
 	private final @NonNull IPortTimesRecord portTimesRecord;
 	private final long startHeelInM3;
 	private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
+	private final @NonNull List<IRouteOptionBooking> canalBookings = new LinkedList<>();
 	private final @NonNull List<Integer> slotTimes = new LinkedList<>();
 
 	private final @NonNull T record;
@@ -44,11 +46,12 @@ public final class CacheKey<T> {
 		this.dependencyKeys = dependencyKeys;
 		portTimesRecord.getSlots().forEach(slot -> voyageKeys.add(portTimesRecord.getSlotNextVoyageOptions(slot)));
 		portTimesRecord.getSlots().forEach(slot -> slotTimes.add(portTimesRecord.getSlotTime(slot)));
+		portTimesRecord.getSlots().forEach(slot -> canalBookings.add(portTimesRecord.getRouteOptionBooking(slot)));
 		if (portTimesRecord.getReturnSlot() != null) {
 			slotTimes.add(portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot()));
 		}
 		this.hash = Objects.hash(startHeelInM3, vesselAvailability, portTimesRecord.getSlots().stream().map(IPortSlot::getId).collect(Collectors.toList()), portTimesRecord.getFirstSlotTime(),
-				dependencyKeys, slotTimes, voyageKeys);
+				dependencyKeys, slotTimes, canalBookings, voyageKeys);
 
 	}
 
@@ -82,6 +85,9 @@ public final class CacheKey<T> {
 						return false;
 					}
 					if (portTimesRecord.getSlotTime(slot) != other.portTimesRecord.getSlotTime(slot)) {
+						return false;
+					}
+					if (portTimesRecord.getRouteOptionBooking(slot) != other.portTimesRecord.getRouteOptionBooking(slot)) {
 						return false;
 					}
 				}

@@ -46,6 +46,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 				return startTime == other.startTime //
 						&& duration == other.duration //
 						&& nextVoyageRoute == other.nextVoyageRoute //
+						&& panamaPeriod == other.panamaPeriod //
 						&& Objects.equals(routeOptionBooking, other.routeOptionBooking);
 			}
 			return false;

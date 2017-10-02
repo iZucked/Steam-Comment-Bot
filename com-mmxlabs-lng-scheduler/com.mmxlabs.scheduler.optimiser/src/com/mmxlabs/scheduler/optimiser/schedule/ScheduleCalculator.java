@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -69,6 +70,7 @@ public class ScheduleCalculator {
 		private final @NonNull ISequence sequence;
 		private final @Nullable List<@NonNull IPortTimesRecord> portTimesRecords;
 		private final @NonNull List<AvailableRouteChoices> voyageKeys = new LinkedList<>();
+		private final @NonNull List<IRouteOptionBooking> canalBookings = new LinkedList<>();
 		private final @NonNull List<Integer> slotTimes = new LinkedList<>();
 
 		public Key(final @NonNull IResource resource, final @NonNull ISequence sequence, final @Nullable List<@NonNull IPortTimesRecord> portTimesRecords) {
@@ -77,13 +79,14 @@ public class ScheduleCalculator {
 			this.portTimesRecords = portTimesRecords;
 			if (portTimesRecords != null) {
 				portTimesRecords.forEach(ptr -> ptr.getSlots().forEach(slot -> voyageKeys.add(ptr.getSlotNextVoyageOptions(slot))));
+				portTimesRecords.forEach(ptr -> ptr.getSlots().forEach(slot -> canalBookings.add(ptr.getRouteOptionBooking(slot))));
 				portTimesRecords.forEach(ptr -> ptr.getSlots().forEach(slot -> slotTimes.add(ptr.getSlotTime(slot))));
 			}
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(resource, sequence, slotTimes, voyageKeys);
+			return Objects.hash(resource, sequence, slotTimes, voyageKeys, canalBookings);
 		}
 
 		@Override
@@ -97,6 +100,7 @@ public class ScheduleCalculator {
 				return Objects.equals(this.resource, other.resource) //
 						&& Objects.equals(this.sequence, other.sequence) //
 						&& Objects.equals(this.slotTimes, other.slotTimes) //
+						&& Objects.equals(this.canalBookings, other.canalBookings) //
 						&& Objects.equals(this.voyageKeys, other.voyageKeys);
 			}
 			return false;
