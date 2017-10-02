@@ -30,6 +30,7 @@ import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CooldownBindingProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.EventGroupingOverlapProcessor;
@@ -226,6 +227,7 @@ public class ScenarioComparisonServiceTransformer {
 					diffProcessors.add(new LadenVoyageProcessor());
 					diffProcessors.add(new EventGroupingOverlapProcessor());
 					diffProcessors.add(new StartEventProcessor());
+					diffProcessors.add(new CooldownBindingProcessor());
 				}
 			}
 
