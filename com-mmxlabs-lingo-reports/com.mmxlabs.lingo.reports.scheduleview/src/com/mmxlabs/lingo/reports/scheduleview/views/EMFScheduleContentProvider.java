@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -141,6 +142,13 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 								canal.setLinkedJourney(journey);
 								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
 								canal.setEnd(canal.getStart().plusDays(1));
+								if (journey.getCanalBooking() == null) {
+									if (journey.getLatestPossibleCanalDate() != null) {
+										ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
+										int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
+										canal.setEnd(canal.getStart().plusDays(days));
+									}
+								}
 								canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
 								newEvents.add(canal);
 							}
@@ -172,6 +180,14 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 								canal.setLinkedJourney(journey);
 								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
 								canal.setEnd(canal.getStart().plusDays(1));
+								if (journey.getCanalBooking() == null) {
+									if (journey.getLatestPossibleCanalDate() != null) {
+										ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
+										int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
+										canal.setEnd(canal.getStart().plusDays(days));
+
+									}
+								}
 								canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
 								newEvents.add(canal);
 							}
