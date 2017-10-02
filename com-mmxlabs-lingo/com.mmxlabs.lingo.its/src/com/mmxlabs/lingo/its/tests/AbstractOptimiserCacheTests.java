@@ -13,7 +13,7 @@ import org.junit.Assume;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
+import com.mmxlabs.lingo.its.tests.category.CacheTest;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
@@ -33,7 +33,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_VPO_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Verify, CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Off),
@@ -41,7 +41,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_TimeWindow_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Verify, CacheMode.Off, CacheMode.Off, CacheMode.Off),
@@ -49,7 +49,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_VolumeAllocator_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Off, CacheMode.Verify, CacheMode.Off, CacheMode.Off),
@@ -57,7 +57,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_PNL_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Verify, CacheMode.Off),
@@ -65,7 +65,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_VolumeAllocatedSequence_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Verify),
@@ -73,7 +73,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_GCO_VPO_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Verify, CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Off),
@@ -81,7 +81,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_GCO_TimeWindow_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Verify, CacheMode.Off, CacheMode.Off, CacheMode.Off),
@@ -89,7 +89,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_GCO_VolumeAllocator_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Off, CacheMode.Verify, CacheMode.Off, CacheMode.Off),
@@ -97,7 +97,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_GCO_PNL_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Verify, CacheMode.Off),
@@ -105,7 +105,7 @@ public abstract class AbstractOptimiserCacheTests extends AbstractAdvancedOptimi
 	}
 
 	@Test
-	@Category(OptimisationTest.class)
+	@Category(CacheTest.class)
 	public void advancedOptimisation_Limited_GCO_VolumeAllocatedSequence_Verify() throws Exception {
 		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap == TestMode.Run);
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false, withCacheSettings(CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Off, CacheMode.Verify),
