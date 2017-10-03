@@ -48,14 +48,10 @@ public class CooldownBindingProcessor implements IDiffProcessor {
 			if (!(referenceElement instanceof SlotAllocation)) {
 				continue;
 			}
-			SlotAllocation ref_Allocation = (SlotAllocation)referenceElement;
-			SlotVisit ref_slotVisit = ref_Allocation.getSlotVisit();
-			
-			if (ref_Allocation.getName().contains("CMI_55_1")) {
-				int ii = 0; 
-			}
-			
-			boolean ref_hasCooldownViolation = ref_slotVisit.getViolations().containsKey(CapacityViolationType.FORCED_COOLDOWN);
+			final SlotAllocation ref_Allocation = (SlotAllocation) referenceElement;
+			final SlotVisit ref_slotVisit = ref_Allocation.getSlotVisit();
+
+			final boolean ref_hasCooldownViolation = ref_slotVisit.getViolations().containsKey(CapacityViolationType.FORCED_COOLDOWN);
 
 			final Collection<EObject> equivalents = equivalancesMap.get(referenceElement);
 			if (equivalents == null || equivalents.isEmpty()) {
@@ -66,9 +62,9 @@ public class CooldownBindingProcessor implements IDiffProcessor {
 				if (!(equivalent instanceof SlotAllocation)) {
 					continue;
 				}
-				SlotAllocation other_Allocation = (SlotAllocation)equivalent;
-				SlotVisit other_slotVisit = other_Allocation.getSlotVisit();
-				boolean other_hasCooldownViolation = other_slotVisit.getViolations().containsKey(CapacityViolationType.FORCED_COOLDOWN);
+				final SlotAllocation other_Allocation = (SlotAllocation) equivalent;
+				final SlotVisit other_slotVisit = other_Allocation.getSlotVisit();
+				final boolean other_hasCooldownViolation = other_slotVisit.getViolations().containsKey(CapacityViolationType.FORCED_COOLDOWN);
 
 				if (ref_hasCooldownViolation != other_hasCooldownViolation) {
 					// Bind reference together.
@@ -79,7 +75,7 @@ public class CooldownBindingProcessor implements IDiffProcessor {
 							evt = evt.getPreviousEvent();
 						}
 						if (evt != null) {
-							Row previousRow = elementToRowMap.get(evt);
+							final Row previousRow = elementToRowMap.get(evt);
 							for (final EObject element : equivalents) {
 								final Row elementRow = elementToRowMap.get(element);
 								if (elementRow != null) {
@@ -100,7 +96,7 @@ public class CooldownBindingProcessor implements IDiffProcessor {
 							evt = evt.getPreviousEvent();
 						}
 						if (evt != null) {
-							Row previousRow = elementToRowMap.get(evt);
+							final Row previousRow = elementToRowMap.get(evt);
 							for (final EObject element : equivalents) {
 								final Row elementRow = elementToRowMap.get(element);
 								if (elementRow != null) {
