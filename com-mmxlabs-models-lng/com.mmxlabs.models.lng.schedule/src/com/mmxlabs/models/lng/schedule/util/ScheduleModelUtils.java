@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -130,10 +129,7 @@ public class ScheduleModelUtils {
 		}
 		if (scheduleModelObject instanceof SlotAllocation) {
 			final SlotAllocation slotAllocation = (SlotAllocation) scheduleModelObject;
-			final Slot slot = slotAllocation.getSlot();
-			if (slot instanceof LoadSlot) {
-				return slotAllocation.getSlotVisit();
-			}
+			return slotAllocation.getSlotVisit();
 		} else if (scheduleModelObject instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) scheduleModelObject;
 			return vesselEventVisit;
