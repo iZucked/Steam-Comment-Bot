@@ -89,6 +89,8 @@ public class ScenarioTools {
 		B.setLocation(PortFactory.eINSTANCE.createLocation());
 		A.getLocation().setTimeZone("UTC");
 		B.getLocation().setTimeZone("UTC");
+		A.getLocation().setName("A");
+		B.getLocation().setName("B");
 		A.getLocation().setMmxId("A");
 		B.getLocation().setMmxId("B");
 		A.getCapabilities().add(PortCapability.LOAD);
@@ -593,6 +595,7 @@ public class ScenarioTools {
 		port.getCapabilities().add(PortCapability.MAINTENANCE);
 
 		port.setLocation(PortFactory.eINSTANCE.createLocation());
+		port.getLocation().setName(name);
 		port.getLocation().setMmxId(name);
 
 		return port;

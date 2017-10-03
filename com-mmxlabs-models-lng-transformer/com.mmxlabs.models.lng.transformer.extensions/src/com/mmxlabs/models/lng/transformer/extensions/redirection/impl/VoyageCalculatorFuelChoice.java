@@ -4,6 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection.impl;
 
-public enum FuelChoice {
+public enum VoyageCalculatorFuelChoice {
 	FBO, Base, Optimal, LadenBaseBallastOptimal, LadenFBOBallastOptimal
 }

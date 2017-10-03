@@ -9,8 +9,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.mmxlabs.models.lng.transformer.extensions.redirection.impl.FuelChoice;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.impl.FuelChoiceVoyageCostCalculator;
+import com.mmxlabs.models.lng.transformer.extensions.redirection.impl.VoyageCalculatorFuelChoice;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -56,7 +57,7 @@ public class ContractNotionalVoyageUtils {
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Nullable
-	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final FuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
+	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final VoyageCalculatorFuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
 			@NonNull final IVesselAvailability resourceVesselAvailability, final int vesselCharterInRatePerDay, final long startHeelInM3, final long loadVolumeInMMBTu, @NonNull final ILoadOption buy,
 			final int loadTime, @NonNull final IPort destinationPort, final int dischargeTime, final int dischargeDuration, final int salesPricePerMMBTu, final int baseFuelCostPerMT,
 			@NonNull final VoyagePlan actualVoyagePlan, final int notionalSpeed, @Nullable final ShippingAnnotation shipAnnotation) {
@@ -81,7 +82,7 @@ public class ContractNotionalVoyageUtils {
 	}
 
 	@Nullable
-	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final FuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
+	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final VoyageCalculatorFuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
 			@NonNull final IVesselAvailability resourceVesselAvailability, final long vesselCharterInRatePerDay, final long startHeelInM3, final long loadVolumeInMMBTu, @NonNull final ILoadOption buy,
 			final int loadTime, final int loadDuration, @NonNull final IPort destinationPort, final int dischargeTime, final int dischargeDuration, final int salesPricePerMMBTu,
 			final int baseFuelCostPerMT, @NonNull final VoyagePlan actualVoyagePlan, @NonNull VoyagePlan notionalVoyagePlan, final int notionalSpeed,
@@ -147,7 +148,7 @@ public class ContractNotionalVoyageUtils {
 		public long ballastBunkerCosts = 0;
 		public long ballastHireCosts = 0;
 		public long ballastShippingCosts = 0;
-		public FuelChoice fuelChoice = FuelChoice.Base;
+		public TravelFuelChoice fuelChoice = TravelFuelChoice.BUNKERS;
 		public long ladenRouteCost = 0;
 		public long ballastRouteCost = 0;
 		public long ballastNBOInMMBTu = 0;
@@ -199,7 +200,7 @@ public class ContractNotionalVoyageUtils {
 		final long[] voyageBaseFuelInMT = new long[2];
 		final long[] voyageIdleBaseFuelInMT = new long[2];
 
-		FuelChoice fuelChoice = null;
+		TravelFuelChoice fuelChoice = null;
 		final Object[] sequence = voyagePlan.getSequence();
 		// Skip last element
 		for (int idx = 0; idx < sequence.length - 1; ++idx) {
@@ -261,7 +262,7 @@ public class ContractNotionalVoyageUtils {
 				speed[arrayIdx] = voyageDetails.getSpeed();
 				routeCosts[arrayIdx] = voyageDetails.getOptions().getRouteCost();
 				if (fuelChoice == null) {
-					fuelChoice = voyageDetails.getOptions().useFBOForSupplement() ? FuelChoice.FBO : FuelChoice.Base;
+					fuelChoice = voyageDetails.getOptions().getTravelFuelChoice();
 				}
 			} else {
 				throw new IllegalStateException("Unexpected element type in VoyagePlan sequence");

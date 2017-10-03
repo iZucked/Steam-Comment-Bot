@@ -17,10 +17,10 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
@@ -28,17 +28,18 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.TravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
@@ -48,8 +49,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * A {@link IVoyageCostCalculator} allowing control over fuel choices. This implementation links the FBO choice between laden and ballast legs (assumes NBO all through the ballast). The fuel choice be
- * be set by the user by calling {@link #setFuelChoice(FuelChoice)} - and indeed must be called prior to calling
- * {@link #calculateShippingCosts(IPort, IPort, int, int, int, int, int, IVessel, long, int, String, int, int)}. If {@link FuelChoice#Optimal} is used, a {@link IVoyagePlanOptimiser} is used to pick
+ * be set by the user by calling {@link #setFuelChoice(VoyageCalculatorFuelChoice)} - and indeed must be called prior to calling
+ * {@link #calculateShippingCosts(IPort, IPort, int, int, int, int, int, IVessel, long, int, String, int, int)}. If {@link VoyageCalculatorFuelChoice#Optimal} is used, a {@link IVoyagePlanOptimiser} is used to pick
  * the optimal choice and this can be returned via {@link #getFuelChoice()}.
  * 
  * Note: This class is *NOT* thread safe
@@ -65,7 +66,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 	@Inject
 	private Provider<VoyagePlanOptimiser> vpoProvider;
 
-	private FuelChoice fuelChoice = null;
+	private VoyageCalculatorFuelChoice fuelChoice = null;
 
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
@@ -120,7 +121,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		assert fuelChoice != null;
 		// When assert is not enabled, default to FuelChoice#Optimal
 		if (fuelChoice == null) {
-			fuelChoice = FuelChoice.Optimal;
+			fuelChoice = VoyageCalculatorFuelChoice.Optimal;
 		}
 
 		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
@@ -154,7 +155,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		assert fuelChoice != null;
 		// When assert is not enabled, default to FuelChoice#Optimal
 		if (fuelChoice == null) {
-			fuelChoice = FuelChoice.Optimal;
+			fuelChoice = VoyageCalculatorFuelChoice.Optimal;
 		}
 
 		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
@@ -206,12 +207,12 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 			switch (fuelChoice) {
 			case Base:
-				ladenOptions.setUseFBOForSupplement(false);
-				ballastOptions.setUseFBOForSupplement(false);
+				ladenOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+				ballastOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 				break;
 			case FBO:
-				ladenOptions.setUseFBOForSupplement(true);
-				ballastOptions.setUseFBOForSupplement(true);
+				ladenOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+				ballastOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 				break;
 			case Optimal:
 				vpoChoices.add(new LinkedFBOVoyagePlanChoice(ladenOptions, ballastOptions));
@@ -221,20 +222,18 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 				// vpo.addChoice(new IdleNBOVoyagePlanChoice(ballastOptions));
 				break;
 			case LadenBaseBallastOptimal:
-				ladenOptions.setUseFBOForSupplement(false);
+				ladenOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 				if (!vessel.hasReliqCapability()) {
-					vpoChoices.add(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
-					vpoChoices.add(new FBOVoyagePlanChoice(ballastOptions));
+					vpoChoices.add(new TravelVoyagePlanChoice(ladenOptions, ballastOptions));
 					vpoChoices.add(new IdleNBOVoyagePlanChoice(ballastOptions));
 				} else {
 					vpoChoices.add(new ReliqVoyagePlanChoice(ladenOptions, ballastOptions));
 				}
 				break;
 			case LadenFBOBallastOptimal:
-				ladenOptions.setUseFBOForSupplement(true);
+				ladenOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 				if (!vessel.hasReliqCapability()) {
-					vpoChoices.add(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
-					vpoChoices.add(new FBOVoyagePlanChoice(ballastOptions));
+					vpoChoices.add(new TravelVoyagePlanChoice(ladenOptions, ballastOptions));
 					vpoChoices.add(new IdleNBOVoyagePlanChoice(ballastOptions));
 				} else {
 					vpoChoices.add(new ReliqVoyagePlanChoice(ladenOptions, ballastOptions));
@@ -272,11 +271,11 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		}
 	}
 
-	public FuelChoice getFuelChoice() {
+	public VoyageCalculatorFuelChoice getFuelChoice() {
 		return fuelChoice;
 	}
 
-	public void setFuelChoice(final FuelChoice fuelChoice) {
+	public void setFuelChoice(final VoyageCalculatorFuelChoice fuelChoice) {
 		this.fuelChoice = fuelChoice;
 	}
 }

@@ -46,12 +46,12 @@ public class SharedDataTransformerService implements ISharedDataTransformerServi
 			IPortAndDistanceData value = null;
 			if (ref != null) {
 				value = ref.get();
-				System.out.println("Hit for " + cacheKey);
+				// System.out.println("Hit for " + cacheKey);
 			}
 			if (value == null) {
 				value = createData(portModel, modelDistanceProvder);
 				cache.put(cacheKey, new SoftReference<>(value));
-				System.out.println("Miss for " + cacheKey);
+				// System.out.println("Miss for " + cacheKey);
 			}
 			return value;
 		}
