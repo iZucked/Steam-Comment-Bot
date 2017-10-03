@@ -356,7 +356,7 @@ public class ChangeSetViewColumnHelper {
 		{
 			column_Violations = new GridViewerColumn(viewer, SWT.CENTER);
 			column_Violations.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			column_Violations.getColumn().setText("Violations");
+			column_Violations.getColumn().setText("Issues");
 			column_Violations.getColumn().setHeaderTooltip("Capacity Violations");
 			column_Violations.getColumn().setWidth(50);
 			column_Violations.setLabelProvider(createViolationsDeltaLabelProvider());
