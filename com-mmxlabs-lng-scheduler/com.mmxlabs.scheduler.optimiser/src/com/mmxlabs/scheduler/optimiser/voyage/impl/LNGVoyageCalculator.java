@@ -35,6 +35,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 /**
  * Implementation of {@link ILNGVoyageCalculator}.
@@ -122,10 +124,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			// Work out how long we have been warming up
 			long warmingHours = 0;
-			if (!options.useNBOForIdle()) {
+			if (options.getIdleFuelChoice() == IdleFuelChoice.BUNKERS) {
 				warmingHours += idleTimeInHours;
 			}
-			if (!options.useNBOForTravel()) {
+			if (options.getTravelFuelChoice() == TravelFuelChoice.BUNKERS) {
 				warmingHours += travelTimeInHours;
 			}
 			if (options.isWarm() || (warmingHours > vessel.getWarmupTime())) {
@@ -153,7 +155,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		if (routeRequiredConsumptionInMT > 0) {
 
-			if (options.useNBOForTravel()) {
+			if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 
 				final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vessel, vesselState);
 
@@ -188,7 +190,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				if (routeNboProvidedInMT < routeRequiredConsumptionInMT) {
 					// Need to supplement
-					if (options.useFBOForSupplement()) {
+					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
 						routeDiffInMT = 0;
 						routeFboProvidedInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
 						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
@@ -197,6 +199,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
 
 					} else {
+						assert options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_BUNKERS;
+
 						// Reliq vessels should not use base fuel supplement.
 						assert (!vessel.hasReliqCapability());
 
@@ -231,7 +235,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 
 		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
-		if (options.useNBOForTravel()) {
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 			if (output.getRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
 				output.setRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, minBaseFuelConsumptionInMT);
 			}
@@ -250,7 +254,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (!options.isCharterOutIdleTime()) {
 			final long idleNBORateInM3PerDay = vessel.getIdleNBORate(vesselState);
 
-			if (options.useNBOForIdle()) {
+			if (options.getIdleFuelChoice() == IdleFuelChoice.NBO) {
 				final int cargoCVValue = options.getCargoCVValue();
 				final long nboRequiredInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, idleTimeInHours) / 24L;
 				final long nboRequiredInMT = Calculator.convertM3ToMT(nboRequiredInM3, cargoCVValue, equivalenceFactorM3ToMT);
@@ -290,7 +294,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, travelTimeInHours) / 24L;
 
-		if (options.useNBOForTravel()) {
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 			final int cargoCVValue = options.getCargoCVValue();
 
 			final long nboRateInM3PerDay = vessel.getNBORate(vesselState);
@@ -308,13 +312,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				 * How many MT of base-fuel-or-equivalent are required after the NBO amount has been used
 				 */
 				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
-				if (options.useFBOForSupplement()) {
+				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
 					// Use FBO for remaining quantity
 					final long diffInM3 = Calculator.convertMTToM3(diffInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, diffInM3);
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, diffInMT);
 					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 0);
 				} else {
+					assert options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_BUNKERS;
 					// Use base for remaining quantity
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, 0);
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
@@ -342,7 +347,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 
 		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), travelTimeInHours) / 24L;
-		if (options.useNBOForTravel()) {
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 			if (output.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
 				output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, minBaseFuelConsumptionInMT);
 			}
@@ -381,7 +386,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			if (distance != 0) {
 				// Check NBO speed
-				if (options.useNBOForTravel()) {
+				if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
 					final int nboSpeed = options.getNBOSpeed();
 					if (speed < nboSpeed) {
 						// Always go fast enough to consume all the NBO

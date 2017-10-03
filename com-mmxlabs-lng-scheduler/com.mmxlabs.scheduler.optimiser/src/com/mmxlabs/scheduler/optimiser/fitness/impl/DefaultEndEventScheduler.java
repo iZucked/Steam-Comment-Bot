@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -33,13 +34,15 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
-import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -237,7 +240,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				}
 
 				// We are not considering idle time here
-				finalOptions.setUseNBOForIdle(false);
+				finalOptions.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 				finalOptions.setShouldBeCold(endRequirement.getHeelOptions().getExpectedTankState());
 				finalOptions.setAllowCooldown(false);
@@ -262,8 +265,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 			long bestCost = Long.MAX_VALUE;
 			int bestSpeed = 0;
 			boolean bestViolation = true;
-			boolean bestNBO = false;
-			boolean bestFBO = true;
+			TravelFuelChoice bestFuelChoice = TravelFuelChoice.BUNKERS;
 
 			DistanceMatrixEntry bestRoute = null;
 			LOOP_ROUTE: for (final DistanceMatrixEntry distanceOption : distanceProvider.getAllDistanceValues(from, to)) {
@@ -274,29 +276,27 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				final long routeCost = routeCostProvider.getRouteCost(route, vessel, departureTime, CostType.Ballast);
 				finalOptions.setRoute(route, distance, routeCost);
 
-				for (final boolean useNBO : new boolean[] { true, false }) {
+				for (final TravelFuelChoice fuelChoice : TravelFuelChoice.TravelChoices) {
 
-					if (finalOptions.isWarm() && useNBO) {
+					if (finalOptions.isWarm() && fuelChoice != TravelFuelChoice.BUNKERS) {
 						continue;
 					}
+
+					// // If NBO is enabled for a reliq vessel, then force FBO too
+					if (isReliq && fuelChoice == TravelFuelChoice.NBO_PLUS_BUNKERS) {
+						continue;
+					}
+
 					// If we need to end cold and have found a valid plan, do not evaluate options to end warm
-					if (bestCost != Long.MAX_VALUE && !useNBO && endRequirement.getHeelOptions().getExpectedTankState() == VesselTankState.MUST_BE_COLD) {
+					if (bestCost != Long.MAX_VALUE && fuelChoice == TravelFuelChoice.BUNKERS && endRequirement.getHeelOptions().getExpectedTankState() == VesselTankState.MUST_BE_COLD) {
 						continue;
 					}
 
-					finalOptions.setUseNBOForTravel(useNBO);
-
-					for (final boolean useFBO : new boolean[] { true, false }) {
-						// // Determined by voyage plan optimiser
-						// // If NBO is enabled for a reliq vessel, then force FBO too
-						finalOptions.setUseFBOForSupplement(useFBO);
-
-						if (isReliq && useNBO != useFBO) {
-							continue;
-						}
+					finalOptions.setTravelFuelChoice(fuelChoice);
+					{
 
 						// Reverse the iterator, max speed to min/nboSpeed. Increment will floor at NBO if needed
-						final int loopMinSpeed = useNBO ? finalOptions.getNBOSpeed() : minSpeed;
+						final int loopMinSpeed = fuelChoice != TravelFuelChoice.BUNKERS ? finalOptions.getNBOSpeed() : minSpeed;
 						for (int speed = maxSpeed; speed >= loopMinSpeed; speed -= Math.min(100, Math.max(1, speed - loopMinSpeed))) {
 							final int availableTime = Calculator.getTimeFromSpeedDistance(speed, distance) + routeCostProvider.getRouteTransitTime(route, vessel);
 							/// Too soon, keep slowing down...
@@ -354,8 +354,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 								bestRoute = distanceOption;
 								bestCost = cost;
 								bestViolation = violation;
-								bestNBO = useNBO;
-								bestFBO = useFBO;
+								bestFuelChoice = fuelChoice;
 							}
 						}
 					}

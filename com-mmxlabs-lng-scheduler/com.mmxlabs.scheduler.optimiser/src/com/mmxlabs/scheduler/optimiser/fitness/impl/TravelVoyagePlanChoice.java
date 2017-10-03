@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -16,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  * @author Simon Goodall
  * 
  */
-public final class ReliqVoyagePlanChoice implements IVoyagePlanChoice {
+public final class TravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int choice;
 
@@ -24,7 +23,7 @@ public final class ReliqVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 
-	public ReliqVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
+	public TravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 	}
@@ -54,17 +53,20 @@ public final class ReliqVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final int numChoices() {
 
-		return TravelFuelChoice.TravelChoicesForReliq.length;
+		return TravelFuelChoice.TravelChoices.length;
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
+		
+		if (options.getFromPortSlot().getId().contains("149")) {
+			int ii = 0;
+		}
+		
 		this.choice = choice;
-		final TravelFuelChoice fuelChoice = TravelFuelChoice.TravelChoicesForReliq[choice];
-		final IdleFuelChoice idleFuelChoice = fuelChoice == TravelFuelChoice.BUNKERS ? IdleFuelChoice.BUNKERS : IdleFuelChoice.NBO;
+		final TravelFuelChoice fuelChoice = TravelFuelChoice.TravelChoices[choice];
 
 		options.setTravelFuelChoice(fuelChoice);
-		options.setIdleFuelChoice(idleFuelChoice);
 
 		if (fuelChoice != TravelFuelChoice.BUNKERS && (previousOptions != null)) {
 			return previousOptions.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
@@ -83,9 +85,9 @@ public final class ReliqVoyagePlanChoice implements IVoyagePlanChoice {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof ReliqVoyagePlanChoice) {
+		if (obj instanceof TravelVoyagePlanChoice) {
 
-			final ReliqVoyagePlanChoice other = (ReliqVoyagePlanChoice) obj;
+			final TravelVoyagePlanChoice other = (TravelVoyagePlanChoice) obj;
 
 			if (!Equality.isEqual(options, other.options)) {
 				return false;

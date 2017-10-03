@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -14,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
  * @author Simon Goodall
  * 
  */
-public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
+public final class TravelSupplementVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int choice;
 
@@ -22,7 +23,7 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 
-	public NBOTravelVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
+	public TravelSupplementVoyagePlanChoice(final VoyageOptions previousOptions, final VoyageOptions options) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 	}
@@ -52,22 +53,27 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final int numChoices() {
 
-		return 2;
+		return TravelFuelChoice.TravelSupplementChoices.length;
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
+		
+		if (options.getFromPortSlot().getId().contains("149")) {
+			int ii = 0;
+		}
+		
 		this.choice = choice;
-		final boolean useNBO = choice == 0;
+		final TravelFuelChoice fuelChoice = TravelFuelChoice.TravelChoices[choice];
 
-		options.setUseNBOForTravel(useNBO);
+		options.setTravelFuelChoice(fuelChoice);
 
-		if (useNBO && (previousOptions != null)) {
-			return previousOptions.useNBOForTravel();
+		if (fuelChoice != TravelFuelChoice.BUNKERS && (previousOptions != null)) {
+			return previousOptions.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
 		}
 
 		// Ensure NBO is always true when state is laden
-		if (!useNBO && (options.getVesselState() == VesselState.Laden)) {
+		if (fuelChoice == TravelFuelChoice.BUNKERS && (options.getVesselState() == VesselState.Laden)) {
 			return false;
 		}
 
@@ -79,9 +85,9 @@ public final class NBOTravelVoyagePlanChoice implements IVoyagePlanChoice {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof NBOTravelVoyagePlanChoice) {
+		if (obj instanceof TravelSupplementVoyagePlanChoice) {
 
-			final NBOTravelVoyagePlanChoice other = (NBOTravelVoyagePlanChoice) obj;
+			final TravelSupplementVoyagePlanChoice other = (TravelSupplementVoyagePlanChoice) obj;
 
 			if (!Equality.isEqual(options, other.options)) {
 				return false;

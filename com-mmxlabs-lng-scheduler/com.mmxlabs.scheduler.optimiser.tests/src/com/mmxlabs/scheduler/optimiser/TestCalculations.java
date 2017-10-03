@@ -146,7 +146,7 @@ public class TestCalculations {
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
 			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
-			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
+			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
 			ladenKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.4));
 			final InterpolatingConsumptionRateCalculator ladenConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ladenKeypoints);
@@ -156,7 +156,7 @@ public class TestCalculations {
 			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(48);
 			builder.setVesselStateParameters(vessel1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator, 0,
 					laden_inPortNBORateInM3PerHour);
-			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
+			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 			ballastKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.3));
 			final InterpolatingConsumptionRateCalculator ballastConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ballastKeypoints);
@@ -470,7 +470,7 @@ public class TestCalculations {
 
 			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
-			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
+			final TreeMap<Integer, Long> ladenKeypoints =new TreeMap<>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
 			ladenKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.4));
 			final InterpolatingConsumptionRateCalculator ladenConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ladenKeypoints);
@@ -483,7 +483,7 @@ public class TestCalculations {
 			builder.setVesselStateParameters(vessel1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator, 0,
 					laden_inPortNBORateInM3PerHour);
 
-			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
+			final TreeMap<Integer, Long> ballastKeypoints =new TreeMap<>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 			ballastKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.3));
 			final InterpolatingConsumptionRateCalculator ballastConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ballastKeypoints);
@@ -802,7 +802,7 @@ public class TestCalculations {
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
 			final IVessel vessel1 = builder.createVessel("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
-			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
+			final TreeMap<Integer, Long> ladenKeypoints =new TreeMap<>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
 			ladenKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.4));
 			final InterpolatingConsumptionRateCalculator ladenConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ladenKeypoints);
@@ -815,7 +815,7 @@ public class TestCalculations {
 			builder.setVesselStateParameters(vessel1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator, 0,
 					laden_inPortNBORateInM3PerHour);
 
-			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
+			final TreeMap<Integer, Long> ballastKeypoints =new TreeMap<>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 			ballastKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.3));
 			final InterpolatingConsumptionRateCalculator ballastConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ballastKeypoints);

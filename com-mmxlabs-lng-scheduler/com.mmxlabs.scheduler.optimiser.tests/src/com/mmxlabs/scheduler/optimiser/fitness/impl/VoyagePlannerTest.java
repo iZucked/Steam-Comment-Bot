@@ -63,6 +63,8 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.impl.DefaultDistanceMatrixEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -182,9 +184,8 @@ public final class VoyagePlannerTest {
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions(loadSlot1, dischargeSlot1);
 		expectedVoyageOptions1.setAvailableTime(4);
-		expectedVoyageOptions1.setUseNBOForTravel(true);
-		expectedVoyageOptions1.setUseNBOForIdle(false);
-		expectedVoyageOptions1.setUseFBOForSupplement(false);
+		expectedVoyageOptions1.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		expectedVoyageOptions1.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 		expectedVoyageOptions1.setVessel(vessel);
 		expectedVoyageOptions1.setVesselState(VesselState.Laden);
 		expectedVoyageOptions1.setNBOSpeed(15000);
@@ -196,9 +197,8 @@ public final class VoyagePlannerTest {
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions(dischargeSlot1, loadSlot2);
 		expectedVoyageOptions2.setAvailableTime(4);
-		expectedVoyageOptions2.setUseFBOForSupplement(false);
-		expectedVoyageOptions2.setUseNBOForIdle(false);
-		expectedVoyageOptions2.setUseNBOForTravel(true);
+		expectedVoyageOptions2.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		expectedVoyageOptions2.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 		expectedVoyageOptions2.setVessel(vessel);
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
@@ -208,9 +208,8 @@ public final class VoyagePlannerTest {
 
 		final VoyageOptions expectedVoyageOptions3 = new VoyageOptions(loadSlot2, dischargeSlot2);
 		expectedVoyageOptions3.setAvailableTime(4);
-		expectedVoyageOptions3.setUseFBOForSupplement(false);
-		expectedVoyageOptions3.setUseNBOForIdle(false);
-		expectedVoyageOptions3.setUseNBOForTravel(true);
+		expectedVoyageOptions3.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		expectedVoyageOptions3.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 		expectedVoyageOptions3.setVessel(vessel);
 		expectedVoyageOptions3.setVesselState(VesselState.Laden);
 		expectedVoyageOptions3.setNBOSpeed(15000);
@@ -275,13 +274,12 @@ public final class VoyagePlannerTest {
 		List<IVoyagePlanChoice> vpoChoices1 = new LinkedList<>();
 		List<IVoyagePlanChoice> vpoChoices2 = new LinkedList<>();
 
-		vpoChoices1.add(new FBOVoyagePlanChoice(expectedVoyageOptions1));
+		vpoChoices1.add(new TravelSupplementVoyagePlanChoice(null, expectedVoyageOptions1));
 		vpoChoices1.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1));
-		vpoChoices1.add(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2));
-		vpoChoices1.add(new FBOVoyagePlanChoice(expectedVoyageOptions2));
+		vpoChoices1.add(new TravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2));
 		vpoChoices1.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2));
 
-		vpoChoices2.add(new FBOVoyagePlanChoice(expectedVoyageOptions3));
+		vpoChoices2.add(new TravelSupplementVoyagePlanChoice(null, expectedVoyageOptions3));
 		vpoChoices2.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions3));
 
 		// Matchers.eq!!

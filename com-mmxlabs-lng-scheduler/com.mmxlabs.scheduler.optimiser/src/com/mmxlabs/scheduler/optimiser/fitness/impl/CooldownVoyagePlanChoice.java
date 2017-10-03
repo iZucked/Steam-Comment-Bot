@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -34,7 +35,7 @@ public class CooldownVoyagePlanChoice implements IVoyagePlanChoice {
 		if (!cooldown) {
 			// if we are not allowing a cooldown, we have to be using NBO for
 			// travel.
-			return options.useNBOForTravel();
+			return options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
 		}
 
 		return true;

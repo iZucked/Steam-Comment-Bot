@@ -58,6 +58,8 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvide
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 public class LNGVoyageCalculatorTest {
 
@@ -69,9 +71,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
 		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
@@ -109,9 +110,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
 		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
@@ -149,9 +149,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(96);
 		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
@@ -189,9 +188,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
-		options.setUseNBOForIdle(false);
-		options.setUseFBOForSupplement(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		options.setAvailableTime(96);
 		final ERouteOption route = ERouteOption.DIRECT;
@@ -231,9 +229,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(false);
-		options.setUseFBOForSupplement(false);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		options.setAvailableTime(120);
 		final int expectedTravelTime = 48;
@@ -278,9 +275,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(36);
 		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
@@ -317,9 +313,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(false);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(36);
 		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
@@ -358,9 +353,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(20);
 		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
@@ -417,9 +411,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
 		options.setRoute(ERouteOption.DIRECT, 0, 0L);
@@ -458,9 +451,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
 		final ERouteOption routeName = ERouteOption.SUEZ;
@@ -510,9 +502,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
-		options.setUseNBOForIdle(false);
-		options.setUseFBOForSupplement(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		options.setAvailableTime(48);
 		final ERouteOption routeName = ERouteOption.SUEZ;
@@ -1014,7 +1005,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final Vessel vessel = (Vessel)options.getVessel();
+		final Vessel vessel = (Vessel) options.getVessel();
 
 		vessel.setInPortConsumptionRateInMTPerDay(portType, consumptionRate);
 

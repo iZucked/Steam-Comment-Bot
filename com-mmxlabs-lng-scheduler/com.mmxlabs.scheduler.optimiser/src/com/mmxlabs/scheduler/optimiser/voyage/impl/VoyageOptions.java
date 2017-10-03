@@ -7,11 +7,13 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 /**
  * Default implementation of {@link VoyageOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
@@ -28,10 +30,24 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	private @NonNull IPortSlot toPortSlot;
 	private int nboSpeed;
 
-	private boolean useNBOForIdle;
-	private boolean useNBOForTravel;
+	private @NonNull TravelFuelChoice travelFuelChoice = TravelFuelChoice.BUNKERS;
+	private @NonNull IdleFuelChoice idleFuelChoice = IdleFuelChoice.BUNKERS;
 
-	private boolean useFBOForSupplement;
+	public @NonNull IdleFuelChoice getIdleFuelChoice() {
+		return idleFuelChoice;
+	}
+
+	public void setIdleFuelChoice(@NonNull IdleFuelChoice idleFuelChoice) {
+		this.idleFuelChoice = idleFuelChoice;
+	}
+
+	public @NonNull TravelFuelChoice getTravelFuelChoice() {
+		return travelFuelChoice;
+	}
+
+	public void setTravelFuelChoice(@NonNull TravelFuelChoice travelFuelChoice) {
+		this.travelFuelChoice = travelFuelChoice;
+	}
 
 	private boolean charterOutIdleTime;
 
@@ -69,9 +85,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		setAvailableTime(options.getAvailableTime());
 		setVessel(options.getVessel());
 		setNBOSpeed(options.getNBOSpeed());
-		setUseNBOForTravel(options.useNBOForTravel());
-		setUseFBOForSupplement(options.useFBOForSupplement());
-		setUseNBOForIdle(options.useNBOForIdle());
+		setTravelFuelChoice(options.getTravelFuelChoice());
+		setIdleFuelChoice(options.getIdleFuelChoice());
 		setRoute(options.getRoute(), options.getDistance(), options.getRouteCost());
 		setVesselState(options.getVesselState());
 		setAllowCooldown(options.getAllowCooldown());
@@ -117,32 +132,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return vesselState;
 	}
 
-	public final boolean useFBOForSupplement() {
-		return useFBOForSupplement;
-	}
-
-	public final boolean useNBOForIdle() {
-		return useNBOForIdle;
-	}
-
-	public final boolean useNBOForTravel() {
-		return useNBOForTravel;
-	}
-
 	public final void setNBOSpeed(final int nboSpeed) {
 		this.nboSpeed = nboSpeed;
-	}
-
-	public final void setUseNBOForIdle(final boolean useNBOForIdle) {
-		this.useNBOForIdle = useNBOForIdle;
-	}
-
-	public final void setUseNBOForTravel(final boolean useNBOForTravel) {
-		this.useNBOForTravel = useNBOForTravel;
-	}
-
-	public final void setUseFBOForSupplement(final boolean useFBOForSupplement) {
-		this.useFBOForSupplement = useFBOForSupplement;
 	}
 
 	public final void setAvailableTime(final int availableTime) {
@@ -210,9 +201,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 			// @formatter:off
 			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime)
-				&& Objects.equal(useNBOForIdle, vo.useNBOForIdle)
-				&& Objects.equal(useNBOForTravel, vo.useNBOForTravel)
-				&& Objects.equal(useFBOForSupplement, vo.useFBOForSupplement)
+				&& Objects.equal(travelFuelChoice, vo.travelFuelChoice)
+				&& Objects.equal(idleFuelChoice, vo.idleFuelChoice)
 				&& Objects.equal(availableTime, vo.availableTime)
 				&& Objects.equal(distance, vo.distance)
 				&& Objects.equal(routeCost, vo.routeCost)
@@ -249,9 +239,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 				.add("fromPortSlot", fromPortSlot)
 				.add("toPortSlot", toPortSlot)
 				.add("nboSpeed", nboSpeed)
-				.add("useNBOForIdle", useNBOForIdle)
-				.add("useNBOForTravel", useNBOForTravel)
-				.add("useFBOForSupplement", useFBOForSupplement)
+				.add("travelFuelChoide", travelFuelChoice)
+				.add("idleFuelChoice", idleFuelChoice)
 				.add("cargoCV", cargoCV)
 				.add("cooldown", cooldown)
 				.add("shouldBeCold", shouldBeCold)

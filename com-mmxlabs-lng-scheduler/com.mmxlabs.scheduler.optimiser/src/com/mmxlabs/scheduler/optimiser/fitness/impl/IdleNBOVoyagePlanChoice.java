@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -49,23 +51,27 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public final int numChoices() {
-		return 2;
+		return IdleFuelChoice.values().length;
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
+		if (options.getFromPortSlot().getId().contains("149")) {
+			int ii = 0;
+		}
+		
 		this.choice = choice;
-		final boolean useNBOForIdle = choice == 0;
-		options.setUseNBOForIdle(useNBOForIdle);
+		final IdleFuelChoice idleFuelChoice = IdleFuelChoice.values()[choice];
+		options.setIdleFuelChoice(idleFuelChoice);
 
 		// We have to use idle NBO when laden
-		if (!useNBOForIdle && (options.getVesselState() == VesselState.Laden)) {
+		if (idleFuelChoice == IdleFuelChoice.BUNKERS && (options.getVesselState() == VesselState.Laden)) {
 			return false;
 		}
 
-		if (useNBOForIdle) {
+		if (idleFuelChoice == IdleFuelChoice.NBO) {
 			// Only a valid choice if NBO is enabled.
-			return options.useNBOForTravel();
+			return options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
 		}
 
 		return true;

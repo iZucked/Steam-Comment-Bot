@@ -56,6 +56,8 @@ import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
@@ -150,6 +152,8 @@ public class VoyagePlanner {
 
 		final boolean isReliq = vessel.hasReliqCapability();
 
+		boolean doDebug = prevPortSlot.getId().contains("149");
+		
 		if (prevPortType == PortType.Load) {
 			useNBO = true;
 			forceNBO = true;
@@ -176,6 +180,11 @@ public class VoyagePlanner {
 			assert previousOptions != null;
 			cargoCV = previousOptions.getCargoCVValue();
 		}
+		
+		if (doDebug) {
+			System.out.printf("BEGIN %s\n", thisPortSlot.getId());
+			System.out.printf("%s: useNBO %s forceNBO %s\n", thisPortSlot.getId(), useNBO, forceNBO);
+		}
 
 		if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {
 			options.setWarm(true);
@@ -191,12 +200,34 @@ public class VoyagePlanner {
 			final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
 			options.setNBOSpeed(nboSpeed);
 		}
-		// Determined by voyage plan optimiser
-		options.setUseNBOForTravel(useNBO);
-		// If NBO is enabled for a reliq vessel, then force FBO too
-		options.setUseFBOForSupplement(useNBO && isReliq);
+		// Can be determined by voyage plan optimiser
+		if (isReliq && (useNBO || forceNBO)) {
+			if (doDebug) {
+				System.out.printf("%s = Travel FBO\n", thisPortSlot.getId());
+			}
+
+			// If NBO is enabled for a reliq vessel, then force FBO too
+			options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
+		} else {
+			if (doDebug) {
+				System.out.printf("%s = Travel Bunkers\n", thisPortSlot.getId());
+			}
+
+			options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		}
 		// If not forced, then a choice may be added later
-		options.setUseNBOForIdle((useNBO && isReliq) || forceNBO);
+		if (vesselState == VesselState.Laden || (useNBO && isReliq) || forceNBO) {
+			if (doDebug) {
+				System.out.printf("%s = Idle NBO\n", thisPortSlot.getId());
+			}
+			options.setIdleFuelChoice(IdleFuelChoice.NBO);
+		} else {
+			if (doDebug) {
+				System.out.printf("%s = Idle Bunkers\n", thisPortSlot.getId());
+			}
+
+			options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
+		}
 
 		if (thisPortSlot.getPortType() == PortType.Load) {
 			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
@@ -246,14 +277,34 @@ public class VoyagePlanner {
 
 			if (isReliq) {
 				if (vesselState == VesselState.Ballast && !forceNBO) {
+					if (doDebug) {
+						System.out.printf("%s = Reliq chouce\n", thisPortSlot.getId());
+					}
+
 					vpoChoices.add(new ReliqVoyagePlanChoice(previousOptions, options));
 				}
 			} else {
 				if (vesselState == VesselState.Ballast && !forceNBO) {
-					vpoChoices.add(new NBOTravelVoyagePlanChoice(previousOptions, options));
+					if (doDebug) {
+						System.out.printf("%s = Travel choice\n", thisPortSlot.getId());
+					}
+
+					vpoChoices.add(new TravelVoyagePlanChoice(previousOptions, options));
+				} else {
+					// Set an NBO based choice so that the useNBO value in the next call is correct
+					// TODO: This probably does not cover all possible cases...
+					if (doDebug) {
+						System.out.printf("%s = Travel choice (default +bunkers)\n", thisPortSlot.getId());
+					}
+
+					options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+					vpoChoices.add(new TravelSupplementVoyagePlanChoice(previousOptions, options));
 				}
-				vpoChoices.add(new FBOVoyagePlanChoice(options));
 				if (!forceNBO) {
+					if (doDebug) {
+						System.out.printf("%s = Idle choice\n", thisPortSlot.getId());
+					}
+
 					vpoChoices.add(new IdleNBOVoyagePlanChoice(options));
 				}
 			}
@@ -441,7 +492,7 @@ public class VoyagePlanner {
 					final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
 					final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot,
 							previousOptions, vpoChoices, useNBO);
-					useNBO = options.useNBOForTravel();
+					useNBO = options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
 					voyageOrPortOptions.add(options);
 					previousOptions = options;
 				}
@@ -899,7 +950,7 @@ public class VoyagePlanner {
 				final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
 				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot,
 						previousOptions, vpoChoices, useNBO);
-				useNBO = options.useNBOForTravel();
+				useNBO = options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
 				voyageOrPortOptions.add(options);
 				previousOptions = options;
 			}

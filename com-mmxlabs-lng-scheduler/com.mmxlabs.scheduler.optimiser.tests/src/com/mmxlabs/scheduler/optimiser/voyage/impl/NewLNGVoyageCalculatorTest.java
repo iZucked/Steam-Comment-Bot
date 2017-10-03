@@ -37,6 +37,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 public class NewLNGVoyageCalculatorTest {
 
@@ -51,7 +53,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options - no NBO to avoid min NBO trigger
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		// Set distance/time to give the expected speed exactly
 		final int expectedSpeed = VESSEL_NBO_SPEED + 1;
@@ -78,7 +80,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedMinSpeed = VESSEL_MIN_SPEED;
 
 		// Populate options
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 * 3);
@@ -109,7 +111,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedMinSpeed = VESSEL_NBO_SPEED;
 
 		// Populate options
-		options.setUseNBOForTravel(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 * 15);
@@ -140,7 +142,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedMaxSpeed = VESSEL_MAX_SPEED;
 
 		// Populate options
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 / 2);
@@ -169,7 +171,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options - no NBO to avoid min NBO trigger
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		// No distance, no speed!
 		final int expectedSpeed = 0;
@@ -195,7 +197,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options - no NBO to avoid min NBO trigger
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		// Small distance, expect to hit min speed!
 		// Min Speed is 10 - See createSampleVesselClass
@@ -224,7 +226,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -268,8 +270,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 
 		final VesselState vesselState = VesselState.Laden;
 		final int speed = VESSEL_NBO_SPEED + 1;
@@ -319,8 +320,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseFBOForSupplement(false);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 		final int speed = VESSEL_NBO_SPEED + 1;
@@ -368,7 +368,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 		final int speed = VESSEL_NBO_SPEED + 1;
@@ -410,8 +410,8 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -449,8 +449,8 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
-		options.setUseNBOForIdle(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -485,8 +485,8 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
-		options.setUseNBOForIdle(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -518,8 +518,8 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
-		options.setUseNBOForIdle(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -551,8 +551,8 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -579,8 +579,8 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(false);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
+		options.setIdleFuelChoice(IdleFuelChoice.BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 
@@ -612,8 +612,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 
 		final VesselState vesselState = VesselState.Laden;
 		final IRouteCostProvider.CostType costType = IRouteCostProvider.CostType.Laden;
@@ -663,8 +662,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseFBOForSupplement(true);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 
 		final VesselState vesselState = VesselState.Laden;
 		final IRouteCostProvider.CostType costType = IRouteCostProvider.CostType.Laden;
@@ -713,8 +711,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseFBOForSupplement(false);
+		options.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 		final IRouteCostProvider.CostType costType = IRouteCostProvider.CostType.Laden;
@@ -762,7 +759,7 @@ public class NewLNGVoyageCalculatorTest {
 		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
-		options.setUseNBOForTravel(false);
+		options.setTravelFuelChoice(TravelFuelChoice.BUNKERS);
 
 		final VesselState vesselState = VesselState.Laden;
 		final IRouteCostProvider.CostType costType = IRouteCostProvider.CostType.Laden;

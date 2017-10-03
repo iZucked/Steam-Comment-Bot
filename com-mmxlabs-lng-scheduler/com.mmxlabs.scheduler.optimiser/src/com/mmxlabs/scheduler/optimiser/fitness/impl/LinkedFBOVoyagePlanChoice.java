@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -48,21 +49,15 @@ public class LinkedFBOVoyagePlanChoice implements IVoyagePlanChoice {
 	@Override
 	public final int numChoices() {
 
-		return 2;
+		return TravelFuelChoice.TravelSupplementChoices.length;
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
 		this.choice = choice;
-		final boolean useFBOForSupplement = choice == 0;
+		final TravelFuelChoice fuelChoice = TravelFuelChoice.TravelSupplementChoices[choice];
 		for (final VoyageOptions option : options) {
-			option.setUseFBOForSupplement(useFBOForSupplement);
-			if (useFBOForSupplement) {
-				// Only a valid choice if NBO is enabled.
-				if (!option.useNBOForTravel()) {
-					return false;
-				}
-			}
+			option.setTravelFuelChoice(fuelChoice);
 		}
 
 		return true;
@@ -70,9 +65,7 @@ public class LinkedFBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public final boolean equals(final Object obj) {
-		if (obj == this) {
-			return true;
-		}
+
 		if (obj instanceof LinkedFBOVoyagePlanChoice) {
 
 			final LinkedFBOVoyagePlanChoice other = (LinkedFBOVoyagePlanChoice) obj;

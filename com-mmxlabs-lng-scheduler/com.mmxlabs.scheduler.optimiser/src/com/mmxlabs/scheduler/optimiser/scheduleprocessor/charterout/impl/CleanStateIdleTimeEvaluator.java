@@ -37,12 +37,11 @@ import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.TravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -540,12 +539,10 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
 		if (!vessel.hasReliqCapability()) {
 			// Add in NBO etc choices (ballast 1)
-			vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
-			vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getToCharter()));
+			vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
 			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
 			// Add in NBO etc choices (ballast 2)
-			vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
-			vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getFromCharter()));
+			vpoChoices.add(new TravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
 			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
 		} else {
 			// Add in NBO etc choices (ballast 1)
