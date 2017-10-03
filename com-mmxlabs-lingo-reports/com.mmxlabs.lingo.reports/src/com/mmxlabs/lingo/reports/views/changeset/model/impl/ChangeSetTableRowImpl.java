@@ -8,8 +8,8 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -51,6 +51,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isRhsOptional <em>Rhs Optional</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isRhsValid <em>Rhs Valid</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getBeforeVesselType <em>Before Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getAfterVesselType <em>After Vessel Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -475,6 +477,46 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected boolean rhsNonShipped = RHS_NON_SHIPPED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBeforeVesselType() <em>Before Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBeforeVesselType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ChangeSetVesselType BEFORE_VESSEL_TYPE_EDEFAULT = ChangeSetVesselType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getBeforeVesselType() <em>Before Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBeforeVesselType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeSetVesselType beforeVesselType = BEFORE_VESSEL_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getAfterVesselType() <em>After Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAfterVesselType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ChangeSetVesselType AFTER_VESSEL_TYPE_EDEFAULT = ChangeSetVesselType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getAfterVesselType() <em>After Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAfterVesselType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeSetVesselType afterVesselType = AFTER_VESSEL_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1150,6 +1192,48 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ChangeSetVesselType getBeforeVesselType() {
+		return beforeVesselType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBeforeVesselType(ChangeSetVesselType newBeforeVesselType) {
+		ChangeSetVesselType oldBeforeVesselType = beforeVesselType;
+		beforeVesselType = newBeforeVesselType == null ? BEFORE_VESSEL_TYPE_EDEFAULT : newBeforeVesselType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE, oldBeforeVesselType, beforeVesselType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetVesselType getAfterVesselType() {
+		return afterVesselType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAfterVesselType(ChangeSetVesselType newAfterVesselType) {
+		ChangeSetVesselType oldAfterVesselType = afterVesselType;
+		afterVesselType = newAfterVesselType == null ? AFTER_VESSEL_TYPE_EDEFAULT : newAfterVesselType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE, oldAfterVesselType, afterVesselType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -1243,6 +1327,10 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return isRhsValid();
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED:
 				return isRhsNonShipped();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE:
+				return getBeforeVesselType();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
+				return getAfterVesselType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1326,6 +1414,12 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED:
 				setRhsNonShipped((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE:
+				setBeforeVesselType((ChangeSetVesselType)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
+				setAfterVesselType((ChangeSetVesselType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1411,6 +1505,12 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED:
 				setRhsNonShipped(RHS_NON_SHIPPED_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE:
+				setBeforeVesselType(BEFORE_VESSEL_TYPE_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
+				setAfterVesselType(AFTER_VESSEL_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1471,6 +1571,10 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return rhsValid != RHS_VALID_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED:
 				return rhsNonShipped != RHS_NON_SHIPPED_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE:
+				return beforeVesselType != BEFORE_VESSEL_TYPE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE:
+				return afterVesselType != AFTER_VESSEL_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1521,6 +1625,10 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 		result.append(rhsValid);
 		result.append(", rhsNonShipped: ");
 		result.append(rhsNonShipped);
+		result.append(", beforeVesselType: ");
+		result.append(beforeVesselType);
+		result.append(", afterVesselType: ");
+		result.append(afterVesselType);
 		result.append(')');
 		return result.toString();
 	}

@@ -32,6 +32,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
@@ -194,6 +195,7 @@ public final class ChangeSetTransformerUtil {
 						row.setEventGrouping(cargoAllocation);
 						row.setVesselName(ChangeSetTransformerUtil.getName(cargoAllocation.getSequence()));
 						row.setVesselShortName(ChangeSetTransformerUtil.getShortName(cargoAllocation.getSequence()));
+						row.setVesselType(ChangeSetTransformerUtil.getVesselType(cargoAllocation.getSequence()));
 					}
 
 					if (i < loadAllocations.size()) {
@@ -764,6 +766,22 @@ public final class ChangeSetTransformerUtil {
 				return "";
 			}
 		}
+	}
+
+	@NonNull
+	public static ChangeSetVesselType getVesselType(@NonNull final Sequence sequence) {
+		if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
+			return ChangeSetVesselType.DES;
+		} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+			return ChangeSetVesselType.FOB;
+		} else if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+			return ChangeSetVesselType.NOMINAL;
+		} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+			return ChangeSetVesselType.MARKET;
+		} else if (sequence.getSequenceType() == SequenceType.VESSEL) {
+			return ChangeSetVesselType.FLEET;
+		}
+		throw new IllegalArgumentException("Unknown sequence type");
 	}
 
 	@NonNull

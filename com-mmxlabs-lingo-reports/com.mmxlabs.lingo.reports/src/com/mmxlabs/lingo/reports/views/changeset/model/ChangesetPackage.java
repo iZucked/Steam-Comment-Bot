@@ -9,6 +9,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -475,13 +476,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW_DATA__VESSEL_SHORT_NAME = 4;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__VESSEL_TYPE = 5;
+
+	/**
 	 * The feature id for the '<em><b>Lhs Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_NAME = 5;
+	int CHANGE_SET_ROW_DATA__LHS_NAME = 6;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Name</b></em>' attribute.
@@ -490,7 +500,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_NAME = 6;
+	int CHANGE_SET_ROW_DATA__RHS_NAME = 7;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Link</b></em>' reference.
@@ -499,7 +509,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_LINK = 7;
+	int CHANGE_SET_ROW_DATA__LHS_LINK = 8;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Link</b></em>' reference.
@@ -508,7 +518,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_LINK = 8;
+	int CHANGE_SET_ROW_DATA__RHS_LINK = 9;
 
 	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
@@ -517,7 +527,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LOAD_SLOT = 9;
+	int CHANGE_SET_ROW_DATA__LOAD_SLOT = 10;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
@@ -526,7 +536,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__DISCHARGE_SLOT = 10;
+	int CHANGE_SET_ROW_DATA__DISCHARGE_SLOT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
@@ -535,7 +545,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LOAD_ALLOCATION = 11;
+	int CHANGE_SET_ROW_DATA__LOAD_ALLOCATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -544,7 +554,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION = 12;
+	int CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Open Load Allocation</b></em>' reference.
@@ -553,7 +563,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__OPEN_LOAD_ALLOCATION = 13;
+	int CHANGE_SET_ROW_DATA__OPEN_LOAD_ALLOCATION = 14;
 
 	/**
 	 * The feature id for the '<em><b>Open Discharge Allocation</b></em>' reference.
@@ -562,7 +572,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__OPEN_DISCHARGE_ALLOCATION = 14;
+	int CHANGE_SET_ROW_DATA__OPEN_DISCHARGE_ALLOCATION = 15;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Event</b></em>' reference.
@@ -571,7 +581,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_EVENT = 15;
+	int CHANGE_SET_ROW_DATA__LHS_EVENT = 16;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Event</b></em>' reference.
@@ -580,7 +590,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_EVENT = 16;
+	int CHANGE_SET_ROW_DATA__RHS_EVENT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Group Profit And Loss</b></em>' reference.
@@ -589,7 +599,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_GROUP_PROFIT_AND_LOSS = 17;
+	int CHANGE_SET_ROW_DATA__LHS_GROUP_PROFIT_AND_LOSS = 18;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Group Profit And Loss</b></em>' reference.
@@ -598,7 +608,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS = 18;
+	int CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS = 19;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Row Data</em>' class.
@@ -607,7 +617,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 19;
+	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 20;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row Data</em>' class.
@@ -919,13 +929,31 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED = 23;
 
 	/**
+	 * The feature id for the '<em><b>Before Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE = 24;
+
+	/**
+	 * The feature id for the '<em><b>After Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = 25;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Table Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 24;
+	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 26;
 
 	/**
 	 * The number of operations of the '<em>Change Set Table Row</em>' class.
@@ -974,6 +1002,16 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_ROOT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType <em>Change Set Vessel Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetVesselType()
+	 * @generated
+	 */
+	int CHANGE_SET_VESSEL_TYPE = 10;
+
+	/**
 	 * The meta object id for the '<em>Scenario Result</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -981,7 +1019,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getScenarioResult()
 	 * @generated
 	 */
-	int SCENARIO_RESULT = 10;
+	int SCENARIO_RESULT = 11;
 
 
 	/**
@@ -1790,6 +1828,28 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableRow_RhsNonShipped();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Before Vessel Type</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType()
+	 * @see #getChangeSetTableRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableRow_BeforeVesselType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>After Vessel Type</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType()
+	 * @see #getChangeSetTableRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableRow_AfterVesselType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot <em>Change Set Table Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1809,6 +1869,16 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getChangeSetTableRoot_Groups();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType <em>Change Set Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Change Set Vessel Type</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @generated
+	 */
+	EEnum getChangeSetVesselType();
 
 	/**
 	 * Returns the meta object for the container reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRowDataGroup <em>Row Data Group</em>}'.
@@ -1853,6 +1923,17 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getChangeSetRowData_VesselShortName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselType()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_VesselType();
 
 	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.ui.ScenarioResult <em>Scenario Result</em>}'.
@@ -2499,6 +2580,22 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED = eINSTANCE.getChangeSetTableRow_RhsNonShipped();
 
 		/**
+		 * The meta object literal for the '<em><b>Before Vessel Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow_BeforeVesselType();
+
+		/**
+		 * The meta object literal for the '<em><b>After Vessel Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow_AfterVesselType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRootImpl <em>Change Set Table Root</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2515,6 +2612,16 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_TABLE_ROOT__GROUPS = eINSTANCE.getChangeSetTableRoot_Groups();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType <em>Change Set Vessel Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetVesselType()
+		 * @generated
+		 */
+		EEnum CHANGE_SET_VESSEL_TYPE = eINSTANCE.getChangeSetVesselType();
 
 		/**
 		 * The meta object literal for the '<em><b>Row Data Group</b></em>' container reference feature.
@@ -2547,6 +2654,14 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET_ROW_DATA__VESSEL_SHORT_NAME = eINSTANCE.getChangeSetRowData_VesselShortName();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__VESSEL_TYPE = eINSTANCE.getChangeSetRowData_VesselType();
 
 		/**
 		 * The meta object literal for the '<em>Scenario Result</em>' data type.

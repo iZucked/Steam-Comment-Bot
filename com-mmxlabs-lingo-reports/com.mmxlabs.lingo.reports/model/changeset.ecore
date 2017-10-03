@@ -52,6 +52,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventGrouping" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselShortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselType" eType="#//ChangeSetVesselType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="lhsLink" eType="#//ChangeSetRowData"/>
@@ -109,9 +110,18 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsOptional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsNonShipped" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beforeVesselType" eType="#//ChangeSetVesselType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="afterVesselType" eType="#//ChangeSetVesselType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSetTableRoot">
     <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
         eType="#//ChangeSetTableGroup" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ChangeSetVesselType">
+    <eLiterals name="Fleet"/>
+    <eLiterals name="Market" value="1"/>
+    <eLiterals name="Nominal" value="2"/>
+    <eLiterals name="FOB" value="3"/>
+    <eLiterals name="DES" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

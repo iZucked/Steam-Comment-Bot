@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getEventGrouping <em>Event Grouping</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselName <em>Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselShortName <em>Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselType <em>Vessel Type</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsName <em>Lhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsName <em>Rhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsLink <em>Lhs Link</em>}</li>
@@ -183,6 +184,35 @@ public interface ChangeSetRowData extends EObject {
 	 * @generated
 	 */
 	void setVesselShortName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see #setVesselType(ChangeSetVesselType)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_VesselType()
+	 * @model
+	 * @generated
+	 */
+	ChangeSetVesselType getVesselType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselType <em>Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see #getVesselType()
+	 * @generated
+	 */
+	void setVesselType(ChangeSetVesselType value);
 
 	/**
 	 * Returns the value of the '<em><b>Lhs Name</b></em>' attribute.

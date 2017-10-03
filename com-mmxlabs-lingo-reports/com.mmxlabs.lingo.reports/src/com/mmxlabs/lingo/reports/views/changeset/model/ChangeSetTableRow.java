@@ -41,6 +41,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsOptional <em>Rhs Optional</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsValid <em>Rhs Valid</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow()
@@ -675,5 +677,63 @@ public interface ChangeSetTableRow extends EObject {
 	 * @generated
 	 */
 	void setRhsNonShipped(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Before Vessel Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Before Vessel Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Before Vessel Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see #setBeforeVesselType(ChangeSetVesselType)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_BeforeVesselType()
+	 * @model
+	 * @generated
+	 */
+	ChangeSetVesselType getBeforeVesselType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Before Vessel Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see #getBeforeVesselType()
+	 * @generated
+	 */
+	void setBeforeVesselType(ChangeSetVesselType value);
+
+	/**
+	 * Returns the value of the '<em><b>After Vessel Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>After Vessel Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>After Vessel Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see #setAfterVesselType(ChangeSetVesselType)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_AfterVesselType()
+	 * @model
+	 * @generated
+	 */
+	ChangeSetVesselType getAfterVesselType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>After Vessel Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
+	 * @see #getAfterVesselType()
+	 * @generated
+	 */
+	void setAfterVesselType(ChangeSetVesselType value);
 
 } // ChangeSetTableRow

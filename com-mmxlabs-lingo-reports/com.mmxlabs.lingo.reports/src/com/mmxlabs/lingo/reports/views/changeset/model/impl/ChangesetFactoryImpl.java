@@ -90,6 +90,8 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
+			case ChangesetPackage.CHANGE_SET_VESSEL_TYPE:
+				return createChangeSetVesselTypeFromString(eDataType, initialValue);
 			case ChangesetPackage.SCENARIO_RESULT:
 				return createScenarioResultFromString(eDataType, initialValue);
 			default:
@@ -105,6 +107,8 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
+			case ChangesetPackage.CHANGE_SET_VESSEL_TYPE:
+				return convertChangeSetVesselTypeToString(eDataType, instanceValue);
 			case ChangesetPackage.SCENARIO_RESULT:
 				return convertScenarioResultToString(eDataType, instanceValue);
 			default:
@@ -210,6 +214,26 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	public ChangeSetTableRoot createChangeSetTableRoot() {
 		ChangeSetTableRootImpl changeSetTableRoot = new ChangeSetTableRootImpl();
 		return changeSetTableRoot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeSetVesselType createChangeSetVesselTypeFromString(EDataType eDataType, String initialValue) {
+		ChangeSetVesselType result = ChangeSetVesselType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertChangeSetVesselTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**
