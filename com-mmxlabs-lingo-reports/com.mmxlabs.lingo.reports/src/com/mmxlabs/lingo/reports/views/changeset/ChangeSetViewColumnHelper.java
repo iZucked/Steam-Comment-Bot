@@ -240,7 +240,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
 		}
-		{
+		if (LicenseFeatures.isPermitted("features:report-ship-des")) {
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
