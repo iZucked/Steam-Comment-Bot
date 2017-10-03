@@ -78,6 +78,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
 import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.MergeChangesAction;
@@ -254,18 +255,15 @@ public class ChangeSetView implements IAdaptable {
 			scenarioComparisonService.setSelectedElements(Collections.emptySet());
 
 			// TODO: Extract vessel columns and generate.
-			final Set<String> vesselnames = new LinkedHashSet<>();
-			final Map<String, String> shortNameMap = new HashMap<>();
+
+			final Set<VesselData> vesselnames = new LinkedHashSet<>();
 
 			final ChangeSetTableRoot csDdiffToBase = newViewState.tableRootToBase;
 			if (csDdiffToBase != null) {
 				for (final ChangeSetTableGroup group : csDdiffToBase.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
-						vesselnames.add(csr.getBeforeVesselName());
-						vesselnames.add(csr.getAfterVesselName());
-
-						shortNameMap.put(csr.getBeforeVesselName(), csr.getBeforeVesselShortName());
-						shortNameMap.put(csr.getAfterVesselName(), csr.getAfterVesselShortName());
+						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType()));
+						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType()));
 					}
 				}
 			}
@@ -273,21 +271,13 @@ public class ChangeSetView implements IAdaptable {
 			if (csdiffToPrevious != null) {
 				for (final ChangeSetTableGroup group : csdiffToPrevious.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
-						vesselnames.add(csr.getBeforeVesselName());
-						vesselnames.add(csr.getAfterVesselName());
-
-						shortNameMap.put(csr.getBeforeVesselName(), csr.getBeforeVesselShortName());
-						shortNameMap.put(csr.getAfterVesselName(), csr.getAfterVesselShortName());
+						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType()));
+						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType()));
 					}
 				}
 			}
-			vesselnames.remove(null);
-			vesselnames.remove("");
 
-			final List<String> sortedNames = new ArrayList<>(vesselnames);
-			Collections.sort(sortedNames);
-
-			columnHelper.updateVesselColumns(sortedNames, shortNameMap);
+			columnHelper.updateVesselColumns(vesselnames);
 
 			// Force header size recalculation
 			viewer.getGrid().recalculateHeader();

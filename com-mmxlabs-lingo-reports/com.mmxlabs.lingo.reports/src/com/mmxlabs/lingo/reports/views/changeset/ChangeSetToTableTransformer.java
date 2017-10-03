@@ -161,10 +161,12 @@ public class ChangeSetToTableTransformer {
 					if (after != null) {
 						changeSetTableRow.setAfterVesselName(after.getVesselName());
 						changeSetTableRow.setAfterVesselShortName(after.getVesselShortName());
+						changeSetTableRow.setAfterVesselType(after.getVesselType());
 					}
 					if (before != null) {
 						changeSetTableRow.setBeforeVesselName(before.getVesselName());
 						changeSetTableRow.setBeforeVesselShortName(before.getVesselShortName());
+						changeSetTableRow.setBeforeVesselType(before.getVesselType());
 					}
 				} else {
 					changeSetTableRow.setWiringChange(primaryIsWiring);

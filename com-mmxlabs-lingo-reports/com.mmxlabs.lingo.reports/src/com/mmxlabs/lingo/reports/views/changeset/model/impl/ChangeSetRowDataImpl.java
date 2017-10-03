@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getEventGrouping <em>Event Grouping</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselName <em>Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselShortName <em>Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselType <em>Vessel Type</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsName <em>Lhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsName <em>Rhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsLink <em>Lhs Link</em>}</li>
@@ -129,6 +131,26 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected String vesselShortName = VESSEL_SHORT_NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVesselType() <em>Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ChangeSetVesselType VESSEL_TYPE_EDEFAULT = ChangeSetVesselType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getVesselType() <em>Vessel Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeSetVesselType vesselType = VESSEL_TYPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLhsName() <em>Lhs Name</em>}' attribute.
@@ -954,6 +976,27 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ChangeSetVesselType getVesselType() {
+		return vesselType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselType(ChangeSetVesselType newVesselType) {
+		ChangeSetVesselType oldVesselType = vesselType;
+		vesselType = newVesselType == null ? VESSEL_TYPE_EDEFAULT : newVesselType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE, oldVesselType, vesselType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -1012,6 +1055,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return getVesselName();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_SHORT_NAME:
 				return getVesselShortName();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
+				return getVesselType();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				return getLhsName();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NAME:
@@ -1078,6 +1123,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_SHORT_NAME:
 				setVesselShortName((String)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
+				setVesselType((ChangeSetVesselType)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				setLhsName((String)newValue);
@@ -1148,6 +1196,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_SHORT_NAME:
 				setVesselShortName(VESSEL_SHORT_NAME_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
+				setVesselType(VESSEL_TYPE_EDEFAULT);
+				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				setLhsName(LHS_NAME_EDEFAULT);
 				return;
@@ -1212,6 +1263,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return VESSEL_NAME_EDEFAULT == null ? vesselName != null : !VESSEL_NAME_EDEFAULT.equals(vesselName);
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_SHORT_NAME:
 				return VESSEL_SHORT_NAME_EDEFAULT == null ? vesselShortName != null : !VESSEL_SHORT_NAME_EDEFAULT.equals(vesselShortName);
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
+				return vesselType != VESSEL_TYPE_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				return LHS_NAME_EDEFAULT == null ? lhsName != null : !LHS_NAME_EDEFAULT.equals(lhsName);
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NAME:
@@ -1260,6 +1313,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 		result.append(vesselName);
 		result.append(", vesselShortName: ");
 		result.append(vesselShortName);
+		result.append(", vesselType: ");
+		result.append(vesselType);
 		result.append(", lhsName: ");
 		result.append(lhsName);
 		result.append(", rhsName: ");

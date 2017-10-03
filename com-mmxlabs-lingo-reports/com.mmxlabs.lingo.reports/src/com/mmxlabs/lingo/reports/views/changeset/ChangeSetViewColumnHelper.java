@@ -8,7 +8,9 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,10 +41,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -55,6 +59,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
@@ -82,6 +87,7 @@ public class ChangeSetViewColumnHelper {
 
 	private Image imageHalfCircle;
 	private Image imageOpenCircle;
+	private Color colour_VesselTypeColumn;
 
 	private final ChangeSetView view;
 	private final GridTreeViewer viewer;
@@ -134,6 +140,7 @@ public class ChangeSetViewColumnHelper {
 		final FontData fontData = systemFont.getFontData()[0];
 		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 
+		colour_VesselTypeColumn = new Color(Display.getDefault(), new RGB(240, 240, 240));
 	}
 
 	public void makeColumns() {
@@ -233,7 +240,7 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(false);
 		}
-		{
+		if (LicenseFeatures.isPermitted("features:report-ship-des")) {
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
@@ -349,7 +356,7 @@ public class ChangeSetViewColumnHelper {
 		{
 			column_Violations = new GridViewerColumn(viewer, SWT.CENTER);
 			column_Violations.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			column_Violations.getColumn().setText("Violations");
+			column_Violations.getColumn().setText("Issues");
 			column_Violations.getColumn().setHeaderTooltip("Capacity Violations");
 			column_Violations.getColumn().setWidth(50);
 			column_Violations.setLabelProvider(createViolationsDeltaLabelProvider());
@@ -499,37 +506,111 @@ public class ChangeSetViewColumnHelper {
 
 	}
 
-	public void updateVesselColumns(final Collection<String> sortedNames, final Map<String, String> shortNameMap) {
-		for (final String name : sortedNames) {
-			assert name != null;
-			final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText(shortNameMap.get(name));
-			gvc.getColumn().setHeaderTooltip(name);
-			gvc.getColumn().setWidth(22);
-			gvc.getColumn().setResizeable(false);
-			gvc.setLabelProvider(createVesselLabelProvider(name));
-			gvc.getColumn().setHeaderRenderer(new VesselNameColumnHeaderRenderer());
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(true);
-			gvc.getColumn().setSummary(false);
-			gvc.getColumn().addSelectionListener(new SelectionListener() {
+	public static class VesselData {
 
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					if (viewer.getData(DATA_SELECTED_COLUMN) == gc) {
-						viewer.setData(DATA_SELECTED_COLUMN, null);
-					} else {
-						viewer.setData(DATA_SELECTED_COLUMN, gc);
+		public VesselData(final String name, final String shortName, final ChangeSetVesselType vesselType) {
+			this.name = name;
+			this.shortName = shortName;
+			this.type = vesselType;
+		}
+
+		public final String name;
+		public final String shortName;
+		public final ChangeSetVesselType type;
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(name, shortName, type);
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			if (obj == this) {
+				return true;
+
+			}
+			if (obj instanceof VesselData) {
+				final VesselData other = (VesselData) obj;
+
+				return type == other.type //
+						&& Objects.equals(shortName, other.shortName) //
+						&& Objects.equals(name, other.name) //
+				;
+			}
+			return false;
+		}
+	}
+
+	private static ChangeSetVesselType[] displayedVesselType = { ChangeSetVesselType.FLEET, ChangeSetVesselType.MARKET, ChangeSetVesselType.NOMINAL };
+
+	public void updateVesselColumns(final Collection<VesselData> data) {
+		final Map<ChangeSetVesselType, List<VesselData>> colData = data.stream() //
+				.filter(a -> a.name != null && !a.name.isEmpty()) // Ignore empty names
+				.sorted((a, b) -> (a.name.compareTo(b.name))) // Sort alphabetically
+				.collect(Collectors.groupingBy(d -> d.type)); // Group by type
+
+		boolean showSpacer = true;
+		for (final ChangeSetVesselType type : displayedVesselType) {
+			if (colData.containsKey(type)) {
+				final List<VesselData> vesselDataList = colData.get(type);
+				if (vesselDataList != null && !vesselDataList.isEmpty()) {
+					if (showSpacer) {
+						final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
+						final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+						gvc.getColumn().setHeaderRenderer(new VesselNameColumnHeaderRenderer());
+						gvc.getColumn().setText("");
+						if (type == ChangeSetVesselType.FLEET) {
+							gvc.getColumn().setText("Fleet");
+						} else if (type == ChangeSetVesselType.MARKET) {
+							gvc.getColumn().setText("Mkt.");
+						} else if (type == ChangeSetVesselType.NOMINAL) {
+							gvc.getColumn().setText("Nom.");
+						}
+
+						gvc.getColumn().setResizeable(false);
+						gvc.getColumn().setWidth(22);
+						gvc.setLabelProvider(createStubLabelProvider());
+						gvc.getColumn().setCellRenderer(createGrayCellRenderer());
+						gvc.getColumn().setHeaderFont(boldFont);
+						gvc.getColumn().setDetail(true);
+						gvc.getColumn().setSummary(false);
+						gvc.getColumn().setSummary(false);
+					}
+
+					for (final VesselData d : vesselDataList) {
+						assert d.name != null;
+						final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
+						final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+						gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+						gvc.getColumn().setText(d.shortName);
+						gvc.getColumn().setHeaderTooltip(d.name);
+						gvc.getColumn().setWidth(22);
+						gvc.getColumn().setResizeable(false);
+						gvc.setLabelProvider(createVesselLabelProvider(d.name));
+						gvc.getColumn().setHeaderRenderer(new VesselNameColumnHeaderRenderer());
+						gvc.getColumn().setCellRenderer(createCellRenderer());
+						gvc.getColumn().setDetail(true);
+						gvc.getColumn().setSummary(false);
+						gvc.getColumn().addSelectionListener(new SelectionListener() {
+
+							@Override
+							public void widgetSelected(final SelectionEvent e) {
+								if (viewer.getData(DATA_SELECTED_COLUMN) == gc) {
+									viewer.setData(DATA_SELECTED_COLUMN, null);
+								} else {
+									viewer.setData(DATA_SELECTED_COLUMN, gc);
+								}
+							}
+
+							@Override
+							public void widgetDefaultSelected(final SelectionEvent e) {
+
+							}
+						});
+						showSpacer = true;
 					}
 				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-
-				}
-			});
+			}
 		}
 
 		{
@@ -654,6 +735,20 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	@SuppressWarnings("restriction")
+	protected DefaultCellRenderer createGrayCellRenderer() {
+		return new DefaultCellRenderer() {
+
+			@Override
+			public void paint(final GC gc, final Object value) {
+				gc.setBackground(colour_VesselTypeColumn);
+				gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+
+			}
+		};
+
+	}
+
+	@SuppressWarnings("restriction")
 	private void createWordWrapRenderer(final GridViewerColumn gvc) {
 		final WrappingColumnHeaderRenderer renderer = new WrappingColumnHeaderRenderer();
 		renderer.setWordWrap(true);
@@ -721,12 +816,12 @@ public class ChangeSetViewColumnHelper {
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
 			@Override
-			public String getToolTipText(Object element) {
+			public String getToolTipText(final Object element) {
 
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
 
-					StringBuilder sb = new StringBuilder();
+					final StringBuilder sb = new StringBuilder();
 					sb.append("Scheduled dates:\n");
 
 					final SlotAllocation originalAllocation;
@@ -1074,7 +1169,7 @@ public class ChangeSetViewColumnHelper {
 		return new CellLabelProvider() {
 
 			@Override
-			public String getToolTipText(Object element) {
+			public String getToolTipText(final Object element) {
 
 				if (element instanceof ChangeSetTableRow) {
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
@@ -1082,9 +1177,9 @@ public class ChangeSetViewColumnHelper {
 					final Set<CapacityViolationType> beforeViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
 					final Set<CapacityViolationType> afterViolatios = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
 
-					Set<CapacityViolationType> tmp = new HashSet<>(afterViolatios);
+					final Set<CapacityViolationType> tmp = new HashSet<>(afterViolatios);
 					tmp.removeAll(beforeViolatios);
-					StringBuilder sb = new StringBuilder();
+					final StringBuilder sb = new StringBuilder();
 					boolean newLine = false;
 					if (!tmp.isEmpty()) {
 						sb.append(String.format("Caused %s violation%s", generateDisplayString(tmp), tmp.size() > 1 ? "s" : ""));
@@ -1106,7 +1201,7 @@ public class ChangeSetViewColumnHelper {
 				return super.getToolTipText(element);
 			}
 
-			private Map<CapacityViolationType, String> nameMap = new HashMap<>();
+			private final Map<CapacityViolationType, String> nameMap = new HashMap<>();
 			{
 				nameMap.put(CapacityViolationType.FORCED_COOLDOWN, "forced cooldown");
 				nameMap.put(CapacityViolationType.LOST_HEEL, "lost heel");
@@ -1119,8 +1214,8 @@ public class ChangeSetViewColumnHelper {
 				nameMap.put(CapacityViolationType.VESSEL_CAPACITY, "vessel capacity");
 			}
 
-			private String generateDisplayString(Set<CapacityViolationType> tmp) {
-				List<String> sorted = tmp.stream() //
+			private String generateDisplayString(final Set<CapacityViolationType> tmp) {
+				final List<String> sorted = tmp.stream() //
 						.map(cvt -> nameMap.get(cvt)) //
 						.sorted() // .
 						.collect(Collectors.toList());
@@ -1190,26 +1285,26 @@ public class ChangeSetViewColumnHelper {
 		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before), change -> ChangeSetKPIUtil.getShipping(change, ResultType.After));
 	}
 
-	private CellLabelProvider createShippingDaysDeltaLabelProvider(ShippingCostType shippingCostType) {
+	private CellLabelProvider createShippingDaysDeltaLabelProvider(final ShippingCostType shippingCostType) {
 		return createLambdaDaysLabelProvider(change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
-	private CellLabelProvider createShippingCostDeltaLabelProvider(ShippingCostType shippingCostType) {
+	private CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType shippingCostType) {
 		return createLambdaLabelProvider(true, false, change -> ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType),
 				change -> ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType));
 	}
 
-	private CellLabelProvider createShippingCostDeltaLabelProvider(ShippingCostType... shippingCostTypes) {
+	private CellLabelProvider createShippingCostDeltaLabelProvider(final ShippingCostType... shippingCostTypes) {
 		return createLambdaLabelProvider(true, false, change -> {
 			long sum = 0L;
-			for (ShippingCostType shippingCostType : shippingCostTypes) {
+			for (final ShippingCostType shippingCostType : shippingCostTypes) {
 				sum += ChangeSetKPIUtil.getShipping(change, ResultType.Before, shippingCostType);
 			}
 			return (Number) Long.valueOf(sum);
 		}, change -> {
 			long sum = 0L;
-			for (ShippingCostType shippingCostType : shippingCostTypes) {
+			for (final ShippingCostType shippingCostType : shippingCostTypes) {
 				sum += ChangeSetKPIUtil.getShipping(change, ResultType.After, shippingCostType);
 			}
 			return (Number) Long.valueOf(sum);
@@ -1642,6 +1737,10 @@ public class ChangeSetViewColumnHelper {
 		if (imageClosedCircle != null) {
 			imageClosedCircle.dispose();
 			imageClosedCircle = null;
+		}
+		if (colour_VesselTypeColumn != null) {
+			colour_VesselTypeColumn.dispose();
+			colour_VesselTypeColumn = null;
 		}
 
 	}
