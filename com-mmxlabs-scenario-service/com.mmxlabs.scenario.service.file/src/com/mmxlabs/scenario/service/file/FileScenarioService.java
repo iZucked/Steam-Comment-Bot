@@ -420,6 +420,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		modelRecord.setScenarioInstance(newInstance);
 		modelRecord.setName(newInstance.getName());
 		SSDataManager.Instance.register(newInstance, modelRecord);
+		newInstance.setManifest(modelRecord.getManifest());
 
 		// Finally add to node in the service model.
 		parent.getElements().add(newInstance);
@@ -587,6 +588,7 @@ public class FileScenarioService extends AbstractScenarioService {
 						modelRecord.setScenarioInstance(scenarioInstance);
 						SSDataManager.Instance.register(scenarioInstance, modelRecord);
 						scenarioInstance.setRootObjectURI(archiveURI.toString());
+						scenarioInstance.setManifest(modelRecord.getManifest());
 					}
 				} catch (Exception ex) {
 					// ex.printStackTrace();

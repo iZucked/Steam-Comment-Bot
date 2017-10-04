@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -30,6 +31,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getManifest <em>Manifest</em>}</li>
  * </ul>
  *
  * @generated
@@ -189,6 +191,24 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 */
 	public void setValidationStatusCode(int newValidationStatusCode) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), newValidationStatusCode);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Manifest getManifest() {
+		return (Manifest) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setManifest(Manifest newManifest) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest(), newManifest);
 	}
 
 	/**

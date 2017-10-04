@@ -497,6 +497,15 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Manifest</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__MANIFEST = CONTAINER_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @Note: Compatibility filter created
@@ -504,7 +513,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 10;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -936,6 +945,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioInstance_ValidationStatusCode();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getManifest <em>Manifest</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Manifest</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getManifest()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EReference getScenarioInstance_Manifest();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientScenarioVersion <em>Client Scenario Version</em>}'.

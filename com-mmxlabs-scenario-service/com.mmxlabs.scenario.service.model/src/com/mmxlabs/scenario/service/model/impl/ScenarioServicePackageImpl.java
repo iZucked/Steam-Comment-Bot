@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
@@ -128,9 +129,13 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 		// Obtain or create and register package
 		ScenarioServicePackageImpl theScenarioServicePackage = (ScenarioServicePackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ScenarioServicePackageImpl
-				? EPackage.Registry.INSTANCE.get(eNS_URI) : new ScenarioServicePackageImpl());
+				? EPackage.Registry.INSTANCE.get(eNS_URI)
+				: new ScenarioServicePackageImpl());
 
 		isInited = true;
+
+		// Initialize simple dependencies
+		ManifestPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theScenarioServicePackage.createPackageContents();
@@ -394,6 +399,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getScenarioInstance_Manifest() {
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getScenarioInstance_ClientScenarioVersion() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(5);
 	}
@@ -586,6 +600,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__FRAGMENTS);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__READONLY);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VALIDATION_STATUS_CODE);
+		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__MANIFEST);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -628,6 +643,9 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		setName(eNAME);
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
+
+		// Obtain other dependent packages
+		ManifestPackage theManifestPackage = (ManifestPackage) EPackage.Registry.INSTANCE.getEPackage(ManifestPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -698,6 +716,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_ValidationStatusCode(), ecorePackage.getEInt(), "validationStatusCode", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Manifest(), theManifestPackage.getManifest(), null, "manifest", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 

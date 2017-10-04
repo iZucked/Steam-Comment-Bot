@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model;
 
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -26,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getManifest <em>Manifest</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance()
@@ -230,6 +232,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setValidationStatusCode(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Manifest</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Manifest</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Manifest</em>' reference.
+	 * @see #setManifest(Manifest)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Manifest()
+	 * @model transient="true"
+	 * @generated
+	 */
+	Manifest getManifest();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getManifest <em>Manifest</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Manifest</em>' reference.
+	 * @see #getManifest()
+	 * @generated
+	 */
+	void setManifest(Manifest value);
 
 	/**
 	 * Returns the value of the '<em><b>Client Scenario Version</b></em>' attribute.

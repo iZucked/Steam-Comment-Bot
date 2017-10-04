@@ -55,6 +55,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 			addClientVersionContextPropertyDescriptor(object);
 			addReadonlyPropertyDescriptor(object);
 			addValidationStatusCodePropertyDescriptor(object);
+			addManifestPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -129,6 +130,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_validationStatusCode_feature"), getString("_UI_ScenarioInstance_validationStatusCode_description"),
 				ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), false, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Manifest feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addManifestPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_manifest_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_manifest_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Manifest(), true, false, true, null, null, null));
 	}
 
 	/**

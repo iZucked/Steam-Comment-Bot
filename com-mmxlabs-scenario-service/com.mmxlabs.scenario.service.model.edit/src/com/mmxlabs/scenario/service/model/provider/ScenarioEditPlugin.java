@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
+import com.mmxlabs.scenario.service.manifest.provider.ScenariomanifestEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -37,7 +38,7 @@ public final class ScenarioEditPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public ScenarioEditPlugin() {
-		super(new ResourceLocator[] {});
+		super(new ResourceLocator[] { ScenariomanifestEditPlugin.INSTANCE, });
 	}
 
 	/**

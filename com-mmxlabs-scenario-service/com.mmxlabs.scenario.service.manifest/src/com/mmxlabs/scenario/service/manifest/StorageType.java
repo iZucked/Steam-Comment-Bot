@@ -36,7 +36,15 @@ public enum StorageType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	EXTERNAL(1, "EXTERNAL", "EXTERNAL");
+	EXTERNAL(1, "EXTERNAL", "EXTERNAL"), /**
+	 * The '<em><b>INTERNAL</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #INTERNAL_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INTERNAL(2, "INTERNAL", "INTERNAL");
 
 	/**
 	 * The '<em><b>COLOCATED</b></em>' literal value.
@@ -69,6 +77,21 @@ public enum StorageType implements Enumerator {
 	public static final int EXTERNAL_VALUE = 1;
 
 	/**
+	 * The '<em><b>INTERNAL</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>INTERNAL</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #INTERNAL
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INTERNAL_VALUE = 2;
+
+	/**
 	 * An array of all the '<em><b>Storage Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -78,6 +101,7 @@ public enum StorageType implements Enumerator {
 		new StorageType[] {
 			COLOCATED,
 			EXTERNAL,
+			INTERNAL,
 		};
 
 	/**
@@ -136,6 +160,7 @@ public enum StorageType implements Enumerator {
 		switch (value) {
 			case COLOCATED_VALUE: return COLOCATED;
 			case EXTERNAL_VALUE: return EXTERNAL;
+			case INTERNAL_VALUE: return INTERNAL;
 		}
 		return null;
 	}

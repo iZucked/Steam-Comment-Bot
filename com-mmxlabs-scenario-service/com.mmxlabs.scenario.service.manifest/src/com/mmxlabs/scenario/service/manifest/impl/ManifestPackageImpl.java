@@ -378,6 +378,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		initEEnum(storageTypeEEnum, StorageType.class, "StorageType");
 		addEEnumLiteral(storageTypeEEnum, StorageType.COLOCATED);
 		addEEnumLiteral(storageTypeEEnum, StorageType.EXTERNAL);
+		addEEnumLiteral(storageTypeEEnum, StorageType.INTERNAL);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -307,8 +307,8 @@ public class ScenarioStorageUtil {
 										};
 										final Consumer<InstanceData> l_closeCallback = createCloseCallback(extraDataTmp);
 
-										final ModelRecord l_r = new ModelRecord(loadFromReadWriteURI(uri, resourceSet, artifact.getPath(), copyToTemp, allowSave, extraDataTmp, scenarioCipherProvider,
-												l_saveCallback, l_closeCallback, null));
+										final ModelRecord l_r = new ModelRecord(loadFromReadWriteURI(uri, manifest, resourceSet, artifact.getPath(), copyToTemp, allowSave, extraDataTmp,
+												scenarioCipherProvider, l_saveCallback, l_closeCallback, null));
 
 										mr.addExtraDataRecord(artifactKey, l_r);
 									}
@@ -316,8 +316,8 @@ public class ScenarioStorageUtil {
 							}
 						};
 
-						modelRecord = new ScenarioModelRecord(manifest, loadFromReadWriteURI(archiveURI, resourceSet, PATH_ROOT_OBJECT, copyToTemp, allowSave, tmpFilesList, scenarioCipherProvider,
-								saveCallback, closeCallback, migrationCallback));
+						modelRecord = new ScenarioModelRecord(manifest, loadFromReadWriteURI(archiveURI, manifest, resourceSet, PATH_ROOT_OBJECT, copyToTemp, allowSave, tmpFilesList,
+								scenarioCipherProvider, saveCallback, closeCallback, migrationCallback));
 						modelRecord.setName(name);
 					}
 
@@ -330,8 +330,8 @@ public class ScenarioStorageUtil {
 						};
 						final Consumer<InstanceData> closeCallback = createCloseCallback(extraDataTmp);
 
-						final ModelRecord r = new ModelRecord(
-								loadFromReadWriteURI(archiveURI, resourceSet, artifact.getPath(), copyToTemp, allowSave, extraDataTmp, scenarioCipherProvider, saveCallback, closeCallback, null));
+						final ModelRecord r = new ModelRecord(loadFromReadWriteURI(archiveURI, manifest, resourceSet, artifact.getPath(), copyToTemp, allowSave, extraDataTmp, scenarioCipherProvider,
+								saveCallback, closeCallback, null));
 
 						modelRecord.addExtraDataRecord(ISharedDataModelType.registry().lookup(artifact.getKey()), r);
 					}
@@ -382,7 +382,8 @@ public class ScenarioStorageUtil {
 		});
 	}
 
-	public static Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> initEditingDomain(final ResourceSet resourceSet, final EObject rootObject) {
+	public static Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> initEditingDomain(Manifest manifest, final ResourceSet resourceSet,
+			final EObject rootObject) {
 
 		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack();
 
@@ -404,14 +405,14 @@ public class ScenarioStorageUtil {
 
 		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, resourceSet);
 
-		commandStack.setEditingDomain(editingDomain);
+		commandStack.setEditingDomain(manifest, editingDomain);
 
 		return new Pair<>(editingDomain, commandStack);
 	}
 
-	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromReadWriteURI(final URI originalArchiveURI, ResourceSet resourceSet, final String path, final boolean copyToTemp,
-			final boolean allowSave, final List<File> tempFiles, @Nullable final IScenarioCipherProvider scenarioCipherProvider, final BiConsumer<ModelRecord, InstanceData> saveCallback,
-			final Consumer<InstanceData> closeCallback, final TriConsumer<ModelRecord, URI, IProgressMonitor> migrationCallback) {
+	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromReadWriteURI(final URI originalArchiveURI, Manifest manifest, ResourceSet resourceSet, final String path,
+			final boolean copyToTemp, final boolean allowSave, final List<File> tempFiles, @Nullable final IScenarioCipherProvider scenarioCipherProvider,
+			final BiConsumer<ModelRecord, InstanceData> saveCallback, final Consumer<InstanceData> closeCallback, final TriConsumer<ModelRecord, URI, IProgressMonitor> migrationCallback) {
 		return (modelRecord, monitor) -> {
 			try {
 				monitor.beginTask("Loading scenario", 100);
@@ -460,7 +461,7 @@ public class ScenarioStorageUtil {
 					throw new IOException("Null value for model instance " + rootObjectURI);
 				}
 
-				final Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> p = initEditingDomain(resourceSet, implementation);
+				final Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> p = initEditingDomain(manifest, resourceSet, implementation);
 				final EditingDomain domain = p.getFirst();
 
 				final InstanceData data = new InstanceData(modelRecord, implementation, domain, p.getSecond(), saveCallback, (d) -> {
@@ -609,7 +610,7 @@ public class ScenarioStorageUtil {
 		return ResourceHelper.createResourceSet(cipherProvider);
 	}
 
-	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromInstance(final EObject rootObject, final String path) {
+	private static BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFromInstance(Manifest manifest, final EObject rootObject, final String path) {
 		return (record, monitor) -> {
 			try {
 
@@ -619,7 +620,7 @@ public class ScenarioStorageUtil {
 				final Resource r = resourceSet.createResource(URI.createURI(path));
 				r.getContents().add(rootObject);
 
-				final Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> p = initEditingDomain(resourceSet, rootObject);
+				final Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> p = initEditingDomain(manifest, resourceSet, rootObject);
 
 				final InstanceData data = new InstanceData(record, rootObject, p.getFirst(), p.getSecond(), (mr, d) -> {
 					// Save callback - no permitted
@@ -644,13 +645,13 @@ public class ScenarioStorageUtil {
 
 		final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
 		@NonNull
-		final ScenarioModelRecord modelRecord = new ScenarioModelRecord(manifest, loadFromInstance(rootObject, PATH_ROOT_OBJECT));
+		final ScenarioModelRecord modelRecord = new ScenarioModelRecord(manifest, loadFromInstance(manifest, rootObject, PATH_ROOT_OBJECT));
 
 		// TODO: This data may change after loading/migration
 		for (final ModelArtifact artifact : manifest.getModelDependencies()) {
 			if (artifact.getStorageType() == StorageType.COLOCATED) {
 				final ISharedDataModelType<?> key = ISharedDataModelType.registry().lookup(artifact.getKey());
-				final ModelRecord r = new ModelRecord(loadFromInstance(EcoreUtil.copy((EObject) scenarioDataProvider.getExtraData(key)), artifact.getPath()));
+				final ModelRecord r = new ModelRecord(loadFromInstance(manifest, EcoreUtil.copy((EObject) scenarioDataProvider.getExtraData(key)), artifact.getPath()));
 				modelRecord.addExtraDataRecord(key, r);
 			}
 		}
@@ -674,13 +675,13 @@ public class ScenarioStorageUtil {
 
 		final EObject rootObject = scenarioDataProvider.getScenario();
 		@NonNull
-		final ScenarioModelRecord modelRecord = new ScenarioModelRecord(manifest, loadFromInstance(rootObject, PATH_ROOT_OBJECT));
+		final ScenarioModelRecord modelRecord = new ScenarioModelRecord(manifest, loadFromInstance(manifest, rootObject, PATH_ROOT_OBJECT));
 
 		// TODO: This data may change after loading/migration
 		for (final ModelArtifact artifact : manifest.getModelDependencies()) {
 			if (artifact.getStorageType() == StorageType.COLOCATED) {
 				final ISharedDataModelType<?> key = ISharedDataModelType.registry().lookup(artifact.getKey());
-				final ModelRecord r = new ModelRecord(loadFromInstance((EObject) scenarioDataProvider.getExtraData(key), artifact.getPath()));
+				final ModelRecord r = new ModelRecord(loadFromInstance(manifest, (EObject) scenarioDataProvider.getExtraData(key), artifact.getPath()));
 				modelRecord.addExtraDataRecord(key, r);
 			}
 		}

@@ -89,6 +89,9 @@
                <instanceof
                      value="com.mmxlabs.scenario.service.model.Container">
                </instanceof>
+               <instanceof
+                     value="com.mmxlabs.scenario.service.manifest.Manifest">
+               </instanceof>
             </or>
          </possibleChildren>
          <commonSorter

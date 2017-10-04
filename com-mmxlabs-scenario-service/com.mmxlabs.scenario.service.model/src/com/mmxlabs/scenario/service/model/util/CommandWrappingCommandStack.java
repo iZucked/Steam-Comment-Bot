@@ -8,6 +8,7 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.util.extpoint.IWrappedCommandProvider;
 import com.mmxlabs.scenario.service.model.util.extpoint.WrappedCommandProviderExtensionUtil;
 
@@ -23,16 +24,16 @@ public class CommandWrappingCommandStack extends BasicCommandStack {
 	private EditingDomain editingDomain;
 
 	public CommandWrappingCommandStack() {
-		this(null);
+		this(null, null);
 	}
 
-	public CommandWrappingCommandStack(final EditingDomain editignDomain) {
+	public CommandWrappingCommandStack(Manifest manifest, final EditingDomain editignDomain) {
 		super();
 		editingDomain = editignDomain;
 		extensions = WrappedCommandProviderExtensionUtil.getExtensions();
 		if (editignDomain != null) {
 			for (final IWrappedCommandProvider provider : extensions) {
-				provider.registerEditingDomain(editignDomain);
+				provider.registerEditingDomain(manifest, editignDomain);
 			}
 		}
 
@@ -55,16 +56,16 @@ public class CommandWrappingCommandStack extends BasicCommandStack {
 		return editingDomain;
 	}
 
-	public void setEditingDomain(final EditingDomain editingDomain) {
+	public void setEditingDomain(Manifest manifest, final EditingDomain editingDomain) {
 		if (this.editingDomain != null) {
 			for (final IWrappedCommandProvider provider : extensions) {
-				provider.deregisterEditingDomain(this.editingDomain);
+				provider.deregisterEditingDomain(manifest, this.editingDomain);
 			}
 		}
 		this.editingDomain = editingDomain;
 		if (this.editingDomain != null) {
 			for (final IWrappedCommandProvider provider : extensions) {
-				provider.registerEditingDomain(this.editingDomain);
+				provider.registerEditingDomain(manifest, this.editingDomain);
 			}
 		}
 	}

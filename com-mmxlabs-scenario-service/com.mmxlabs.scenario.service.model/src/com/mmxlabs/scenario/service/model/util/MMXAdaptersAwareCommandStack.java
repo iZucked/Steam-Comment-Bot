@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.manager.InstanceData;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
@@ -36,11 +37,11 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 	private @Nullable IReadOnlyProvider readOnlyProvider;
 
 	public MMXAdaptersAwareCommandStack() {
-		this(null, null);
+		this(null, null, null);
 	}
 
-	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, @Nullable IReadOnlyProvider readOnlyProvider) {
-		super(editingDomain);
+	public MMXAdaptersAwareCommandStack(Manifest manifest, final CommandProviderAwareEditingDomain editingDomain, @Nullable IReadOnlyProvider readOnlyProvider) {
+		super(manifest, editingDomain);
 		this.editingDomain = editingDomain;
 		this.readOnlyProvider = readOnlyProvider;
 	}
@@ -200,9 +201,9 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 		return editingDomain;
 	}
 
-	public void setEditingDomain(final CommandProviderAwareEditingDomain editingDomain) {
+	public void setEditingDomain(Manifest manifest, final CommandProviderAwareEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
-		super.setEditingDomain(editingDomain);
+		super.setEditingDomain(manifest, editingDomain);
 	}
 
 	public InstanceData getInstanceData() {

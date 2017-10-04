@@ -25,6 +25,7 @@ import org.eclipse.ui.navigator.SaveablesProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -201,6 +202,14 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			final List<Object> l = new LinkedList<>();
 			l.addAll(scenarioInstance.getElements());
 			l.addAll(scenarioInstance.getFragments());
+			if (scenarioInstance.getManifest() != null) {
+			l.add(scenarioInstance.getManifest());
+			}
+			return l.toArray();
+		} else if (object instanceof Manifest) {
+			Manifest manifest = (Manifest) object;
+			final List<Object> l = new LinkedList<>();
+			l.addAll(manifest.getModelDependencies());
 			return l.toArray();
 		} else if (object instanceof Container) {
 			final Container container = (Container) object;
@@ -302,6 +311,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else if (e instanceof ScenarioServiceRegistry) {
 				filtered = false;
 			} else if (e instanceof ScenarioFragment) {
+				filtered = false;
+			} else if (e instanceof Manifest) {
 				filtered = false;
 			} else {
 				filtered = true;
