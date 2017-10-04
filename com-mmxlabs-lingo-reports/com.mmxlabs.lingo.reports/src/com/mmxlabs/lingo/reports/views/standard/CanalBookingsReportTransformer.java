@@ -19,11 +19,13 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.EntryPoint;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -50,6 +52,7 @@ public class CanalBookingsReportTransformer {
 		public final CanalBookingSlot booking;
 		public final String period;
 		public final Slot nextSlot;
+		public boolean warn;
 
 		public RowData(final @NonNull String scheduleName, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
 				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period, final @Nullable Slot nextSlot) {
@@ -63,7 +66,8 @@ public class CanalBookingsReportTransformer {
 			this.event = usedSlot;
 			this.period = period;
 			this.nextSlot = nextSlot;
-			
+			this.warn = false;
+
 			this.dummy = false;
 		}
 
@@ -78,7 +82,7 @@ public class CanalBookingsReportTransformer {
 			this.preBooked = false;
 			this.period = "";
 			this.nextSlot = null;
-
+			this.warn = false;
 			this.dummy = true;
 		}
 	}
@@ -108,6 +112,9 @@ public class CanalBookingsReportTransformer {
 
 		List<RowData> result = new LinkedList<>();
 
+		List<RowData> relaxedSouthbound = new LinkedList<>();
+		List<RowData> relaxedNorthbound = new LinkedList<>();
+
 		for (final Sequence seq : schedule.getSequences()) {
 
 			for (final Event evt : seq.getEvents()) {
@@ -116,7 +123,7 @@ public class CanalBookingsReportTransformer {
 					Journey journey = (Journey) evt;
 
 					String period = "";
-					
+
 					switch (journey.getCanalBookingPeriod()) {
 					case BEYOND:
 						period = "Open";
@@ -133,20 +140,20 @@ public class CanalBookingsReportTransformer {
 					default:
 						period = "Open";
 						break;
-					
+
 					}
-//					
-//					if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
-//						period = "Nominal";
-//					} else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
-//						period = "Open";
-//					} else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
-//						period = "Open";
-//					} else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
-//						period = "Relaxed";
-//					} else {
-//						period = "Strict";
-//					}
+					//
+					// if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
+					// period = "Nominal";
+					// } else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
+					// period = "Open";
+					// } else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
+					// period = "Open";
+					// } else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
+					// period = "Relaxed";
+					// } else {
+					// period = "Strict";
+					// }
 					Event nextEvent = evt.getNextEvent();
 					Slot nextSlot = null;
 					while (nextEvent != null) {
@@ -166,13 +173,29 @@ public class CanalBookingsReportTransformer {
 								(PortVisit) journey.getPreviousEvent(), period, nextSlot));
 						existingBookings.remove(booking);
 					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-						result.add(new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
-								(PortVisit) journey.getPreviousEvent(), period, nextSlot));
+						RowData rowData = new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot);
+
+						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
+							if (journey.getCanalEntry().eContainingFeature() == PortPackage.Literals.ROUTE__NORTH_ENTRANCE) {
+								relaxedSouthbound.add(rowData);
+							} else {
+								relaxedNorthbound.add(rowData);
+							}
+						}
+						result.add(rowData);
 					}
 				}
 			}
 		}
-
+		if (cargoModel.getCanalBookings() != null) {
+			if (relaxedNorthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountNorthbound()) {
+				relaxedNorthbound.forEach(d -> d.warn = true);
+			}
+			if (relaxedSouthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountSouthbound()) {
+				relaxedSouthbound.forEach(d -> d.warn = true);
+			}
+		}
 		// unused options
 		for (CanalBookingSlot booking : existingBookings) {
 			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused", null));
