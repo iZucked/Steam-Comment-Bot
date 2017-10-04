@@ -11,7 +11,9 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -48,8 +50,31 @@ public class PricingModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addMarketCurveDataVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Market Curve Data Version feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketCurveDataVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PricingModel_marketCurveDataVersion_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PricingModel_marketCurveDataVersion_feature", "_UI_PricingModel_type"),
+				 PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -123,6 +148,9 @@ public class PricingModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PricingModel.class)) {
+			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
 			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:

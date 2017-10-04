@@ -100,21 +100,21 @@ public class MigrateToV81 extends AbstractMigrationUnit {
 						throw new RuntimeException("No ID for " + name);
 					}
 					assert mmxId != null;
-					
+
 					if (preferredNameMap.containsKey(mmxId)) {
 						List<String> newNames = new LinkedList<>();
 						if (otherNamesList != null) {
 							newNames.addAll(otherNamesList);
 						}
 						if (!newNames.contains(name)) {
-							newNames.add(0, (String)name);
+							newNames.add(0, (String) name);
 							location.setAttrib("otherNames", newNames);
 						}
 						String preferredName = preferredNameMap.get(mmxId);
 						location.setAttrib("name", preferredName);
 						port.setAttrib("name", preferredName);
 					}
-					
+
 					if (!seenIDs.add(mmxId)) {
 
 						final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(Collections.singleton(port), model);
@@ -267,6 +267,13 @@ public class MigrateToV81 extends AbstractMigrationUnit {
 		}
 
 		portModel.setAttrib("portDataVersion", "private-" + EcoreUtil.generateUUID());
+		portModel.setAttrib("distanceDataVersion", "private-" + EcoreUtil.generateUUID());
+
+		final EObjectWrapper pricingModel = referenceModel.getRef("pricingModel");
+		pricingModel.setAttrib("marketCurveDataVersion", "private-" + EcoreUtil.generateUUID());
+		
+		final EObjectWrapper fleetModel = referenceModel.getRef("fleetModel");
+		fleetModel.setAttrib("fleetDataVersion", "private-" + EcoreUtil.generateUUID());
 	}
 
 	public static Map<String, String> buildPreferredNameData() {

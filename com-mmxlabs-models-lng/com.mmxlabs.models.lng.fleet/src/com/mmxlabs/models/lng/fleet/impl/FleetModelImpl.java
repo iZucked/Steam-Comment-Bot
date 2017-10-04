@@ -5,10 +5,12 @@
 package com.mmxlabs.models.lng.fleet.impl;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -30,6 +32,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroups <em>Vessel Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getFleetDataVersion <em>Fleet Data Version</em>}</li>
  * </ul>
  *
  * @generated
@@ -64,6 +67,26 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @ordered
 	 */
 	protected EList<VesselGroup> vesselGroups;
+
+	/**
+	 * The default value of the '{@link #getFleetDataVersion() <em>Fleet Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFleetDataVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String FLEET_DATA_VERSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getFleetDataVersion() <em>Fleet Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFleetDataVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected String fleetDataVersion = FLEET_DATA_VERSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -125,6 +148,27 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getFleetDataVersion() {
+		return fleetDataVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFleetDataVersion(String newFleetDataVersion) {
+		String oldFleetDataVersion = fleetDataVersion;
+		fleetDataVersion = newFleetDataVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION, oldFleetDataVersion, fleetDataVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -152,6 +196,8 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return getBaseFuels();
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				return getVesselGroups();
+			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
+				return getFleetDataVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -177,6 +223,9 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				getVesselGroups().clear();
 				getVesselGroups().addAll((Collection<? extends VesselGroup>)newValue);
 				return;
+			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
+				setFleetDataVersion((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -198,6 +247,9 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				getVesselGroups().clear();
 				return;
+			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
+				setFleetDataVersion(FLEET_DATA_VERSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -216,8 +268,26 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return baseFuels != null && !baseFuels.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
 				return vesselGroups != null && !vesselGroups.isEmpty();
+			case FleetPackage.FLEET_MODEL__FLEET_DATA_VERSION:
+				return FLEET_DATA_VERSION_EDEFAULT == null ? fleetDataVersion != null : !FLEET_DATA_VERSION_EDEFAULT.equals(fleetDataVersion);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (fleetDataVersion: ");
+		result.append(fleetDataVersion);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of FleetModelImpl

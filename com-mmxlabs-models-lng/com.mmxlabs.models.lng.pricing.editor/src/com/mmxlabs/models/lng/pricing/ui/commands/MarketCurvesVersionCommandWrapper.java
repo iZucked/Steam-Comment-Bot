@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.port.ui.commands;
+package com.mmxlabs.models.lng.pricing.ui.commands;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -22,12 +22,17 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -41,12 +46,12 @@ import com.mmxlabs.scenario.service.model.util.extpoint.IWrappedCommandProvider;
  * @author Simon Goodall
  * 
  */
-public class PortVersionCommandWrapper implements IWrappedCommandProvider {
+public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvider {
 
 	private EditingDomain editingDomain;
 	private final boolean[] changedRef = new boolean[1];
 	private final Adapter adapter = createAdapter(changedRef);
-	private PortModel portModel;
+	private PricingModel pricingModel;
 	private ModelArtifact modelArtifact;
 
 	@Override
@@ -78,8 +83,8 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			public void execute() {
 				if (changedRef[0]) {
 					String newID = "private-" + EcoreUtil.generateUUID();
-					System.out.println("Generate Port Version ID " + newID);
-					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION, newID);
+					System.out.println("Generate Pricing Model Version ID " + newID);
+					final Command cmd = SetCommand.create(editingDomain, pricingModel, PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, newID);
 					appendAndExecute(cmd);
 				}
 			}
@@ -93,21 +98,28 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getNotifier() instanceof Location) {
+				if (notification.getNotifier() instanceof NamedIndexContainer) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Route) {
+				} else if (notification.getNotifier() instanceof Index) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Port) {
-					// Strictly port__location + port__name
+				} else if (notification.getNotifier() instanceof IndexPoint) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
+				} else if (notification.getNotifier() instanceof UnitConversion) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__ROUTES) {
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES) {
 					changedRef[0] = true;
 				}
 
 				// Reset!
-				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION) {
+				if (notification.getFeature() == PricingPackage.Literals.PRICING_MODEL__MARKET_CURVE_DATA_VERSION) {
 
 					if (modelArtifact != null) {
 						modelArtifact.setDataVersion(notification.getNewStringValue());
@@ -123,14 +135,16 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			protected void setTarget(final EObject target) {
 				basicSetTarget(target);
-				if (target instanceof PortModel) {
+				if (target instanceof PricingModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof UnitConversion //
+								|| notifier instanceof NamedIndexContainer //
+						) {
 							addAdapter(notifier);
 						}
 					}
-				} else if (target instanceof Port) {
+				} else if (target instanceof NamedIndexContainer) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -144,10 +158,12 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			protected void unsetTarget(final EObject target) {
 				basicUnsetTarget(target);
-				if (target instanceof PortModel) {
+				if (target instanceof PricingModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof UnitConversion //
+								|| notifier instanceof NamedIndexContainer //
+						) {
 							removeAdapter(notifier, false, true);
 						}
 					}
@@ -174,21 +190,21 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				for (final EObject obj : r.getContents()) {
 					if (obj instanceof LNGScenarioModel) {
 						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) obj;
-						portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+						pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 					}
 				}
 			}
 		}
 		modelArtifact = null;
-		if (portModel != null) {
-			portModel.eAdapters().add(adapter);
+		if (pricingModel != null) {
+			pricingModel.eAdapters().add(adapter);
 			for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-				if (LNGScenarioSharedModelTypes.LOCATIONS.getID().equals(artifact.getKey())) {
+				if (LNGScenarioSharedModelTypes.MARKET_CURVES.getID().equals(artifact.getKey())) {
 					if (artifact.getStorageType() == StorageType.INTERNAL) {
 						this.modelArtifact = artifact;
 						// Update version if needed.
-						if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getPortDataVersion())) {
-							this.modelArtifact.setDataVersion(portModel.getPortDataVersion());
+						if (!Objects.equals(this.modelArtifact.getDataVersion(), pricingModel.getMarketCurveDataVersion())) {
+							this.modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
 						}
 						break;
 					}
@@ -196,10 +212,10 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			}
 			if (modelArtifact == null) {
 				modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-				modelArtifact.setDataVersion(portModel.getPortDataVersion());
+				modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
 				modelArtifact.setStorageType(StorageType.INTERNAL);
 				modelArtifact.setType("EOBJECT");
-				modelArtifact.setKey(LNGScenarioSharedModelTypes.LOCATIONS.getID());
+				modelArtifact.setKey(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
 				manifest.getModelDependencies().add(modelArtifact);
 			}
 		}
@@ -211,9 +227,9 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			throw new IllegalStateException("A different editigin domain has been registered");
 		}
 
-		if (portModel != null) {
-			portModel.eAdapters().remove(adapter);
-			portModel = null;
+		if (pricingModel != null) {
+			pricingModel.eAdapters().remove(adapter);
+			pricingModel = null;
 		}
 
 		modelArtifact = null;

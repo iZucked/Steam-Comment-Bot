@@ -150,7 +150,7 @@ public class ModelDistanceProvider extends EContentAdapter {
 		// if (distanceProvider != null) {
 		// return distanceProvider.getVersion();
 		// } else {
-		return portModel.getPortDataVersion();
+		return portModel.getDistanceDataVersion();
 		// }
 	}
 	// public static Via mapVia(final RouteOption routeOption) {

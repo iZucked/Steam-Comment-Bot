@@ -5,10 +5,12 @@
 package com.mmxlabs.models.lng.pricing.impl;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -34,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCharterIndices <em>Charter Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getConversionFactors <em>Conversion Factors</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,6 +91,26 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected EList<UnitConversion> conversionFactors;
+
+	/**
+	 * The default value of the '{@link #getMarketCurveDataVersion() <em>Market Curve Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketCurveDataVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String MARKET_CURVE_DATA_VERSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getMarketCurveDataVersion() <em>Market Curve Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarketCurveDataVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected String marketCurveDataVersion = MARKET_CURVE_DATA_VERSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -173,6 +196,27 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getMarketCurveDataVersion() {
+		return marketCurveDataVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMarketCurveDataVersion(String newMarketCurveDataVersion) {
+		String oldMarketCurveDataVersion = marketCurveDataVersion;
+		marketCurveDataVersion = newMarketCurveDataVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION, oldMarketCurveDataVersion, marketCurveDataVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -208,6 +252,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getBaseFuelPrices();
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return getConversionFactors();
+			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
+				return getMarketCurveDataVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -241,6 +287,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getConversionFactors().clear();
 				getConversionFactors().addAll((Collection<? extends UnitConversion>)newValue);
 				return;
+			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
+				setMarketCurveDataVersion((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -268,6 +317,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				getConversionFactors().clear();
 				return;
+			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
+				setMarketCurveDataVersion(MARKET_CURVE_DATA_VERSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -290,8 +342,26 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return baseFuelPrices != null && !baseFuelPrices.isEmpty();
 			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				return conversionFactors != null && !conversionFactors.isEmpty();
+			case PricingPackage.PRICING_MODEL__MARKET_CURVE_DATA_VERSION:
+				return MARKET_CURVE_DATA_VERSION_EDEFAULT == null ? marketCurveDataVersion != null : !MARKET_CURVE_DATA_VERSION_EDEFAULT.equals(marketCurveDataVersion);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (marketCurveDataVersion: ");
+		result.append(marketCurveDataVersion);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of PricingModelImpl

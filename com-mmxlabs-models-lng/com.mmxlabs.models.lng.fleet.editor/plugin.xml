@@ -196,6 +196,12 @@
             id="com.mmxlabs.models.lng.fleet.ui.commandprovider.VesselBasedOnCommandProvider">
       </ModelCommandProvider>
    </extension>
+   <extension
+         point="com.mmxlabs.scenario.service.model.WrappedCommandExtension">
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.fleet.ui.commandprovider.FleetVersionCommandWrapper">
+      </WrappedCommandExtension>
+   </extension>
 
 
 </plugin>

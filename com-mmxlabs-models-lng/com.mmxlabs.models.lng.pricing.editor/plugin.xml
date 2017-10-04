@@ -370,4 +370,10 @@
             contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
       </editor>
    </extension>
+   <extension
+         point="com.mmxlabs.scenario.service.model.WrappedCommandExtension">
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.pricing.ui.commands.MarketCurvesVersionCommandWrapper">
+      </WrappedCommandExtension>
+   </extension>
 </plugin>

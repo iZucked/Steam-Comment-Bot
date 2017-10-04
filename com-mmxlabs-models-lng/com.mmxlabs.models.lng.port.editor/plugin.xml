@@ -262,6 +262,9 @@
       <WrappedCommandExtension
             class="com.mmxlabs.models.lng.port.ui.commands.PortVersionCommandWrapper">
       </WrappedCommandExtension>
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.port.ui.commands.DistanceVersionCommandWrapper">
+      </WrappedCommandExtension>
    </extension>
 
 </plugin>

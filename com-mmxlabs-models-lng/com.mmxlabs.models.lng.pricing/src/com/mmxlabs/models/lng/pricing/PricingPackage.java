@@ -133,13 +133,22 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__CONVERSION_FACTORS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Market Curve Data Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__MARKET_CURVE_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -1555,6 +1564,17 @@ public interface PricingPackage extends EPackage {
 	EReference getPricingModel_ConversionFactors();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Market Curve Data Version</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EAttribute getPricingModel_MarketCurveDataVersion();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2513,6 +2533,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__CONVERSION_FACTORS = eINSTANCE.getPricingModel_ConversionFactors();
+
+		/**
+		 * The meta object literal for the '<em><b>Market Curve Data Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PRICING_MODEL__MARKET_CURVE_DATA_VERSION = eINSTANCE.getPricingModel_MarketCurveDataVersion();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.

@@ -499,13 +499,22 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__PORT_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Distance Data Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__DISTANCE_DATA_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
@@ -1113,6 +1122,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPortModel_PortDataVersion();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance Data Version</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EAttribute getPortModel_DistanceDataVersion();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1536,6 +1556,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT_MODEL__PORT_DATA_VERSION = eINSTANCE.getPortModel_PortDataVersion();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance Data Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_MODEL__DISTANCE_DATA_VERSION = eINSTANCE.getPortModel_DistanceDataVersion();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.

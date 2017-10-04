@@ -22,8 +22,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
@@ -41,7 +39,7 @@ import com.mmxlabs.scenario.service.model.util.extpoint.IWrappedCommandProvider;
  * @author Simon Goodall
  * 
  */
-public class PortVersionCommandWrapper implements IWrappedCommandProvider {
+public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 
 	private EditingDomain editingDomain;
 	private final boolean[] changedRef = new boolean[1];
@@ -78,8 +76,8 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			public void execute() {
 				if (changedRef[0]) {
 					String newID = "private-" + EcoreUtil.generateUUID();
-					System.out.println("Generate Port Version ID " + newID);
-					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION, newID);
+					System.out.println("Generate Distance Version ID " + newID);
+					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION, newID);
 					appendAndExecute(cmd);
 				}
 			}
@@ -93,21 +91,16 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getNotifier() instanceof Location) {
+				if (notification.getNotifier() instanceof RouteLine) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Route) {
-					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Port) {
-					// Strictly port__location + port__name
-					changedRef[0] = true;
-				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
+				} else if (notification.getFeature() == PortPackage.Literals.ROUTE__LINES) {
 					changedRef[0] = true;
 				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__ROUTES) {
 					changedRef[0] = true;
 				}
 
 				// Reset!
-				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION) {
+				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION) {
 
 					if (modelArtifact != null) {
 						modelArtifact.setDataVersion(notification.getNewStringValue());
@@ -126,11 +119,11 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				if (target instanceof PortModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof Route) {
 							addAdapter(notifier);
 						}
 					}
-				} else if (target instanceof Port) {
+				} else if (target instanceof Route) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -147,11 +140,11 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				if (target instanceof PortModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof Route) {
 							removeAdapter(notifier, false, true);
 						}
 					}
-				} else if (target instanceof Port) {
+				} else if (target instanceof Route) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						removeAdapter(notifier, false, true);
@@ -183,12 +176,12 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 		if (portModel != null) {
 			portModel.eAdapters().add(adapter);
 			for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-				if (LNGScenarioSharedModelTypes.LOCATIONS.getID().equals(artifact.getKey())) {
+				if (LNGScenarioSharedModelTypes.DISTANCES.getID().equals(artifact.getKey())) {
 					if (artifact.getStorageType() == StorageType.INTERNAL) {
 						this.modelArtifact = artifact;
 						// Update version if needed.
-						if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getPortDataVersion())) {
-							this.modelArtifact.setDataVersion(portModel.getPortDataVersion());
+						if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getDistanceDataVersion())) {
+							this.modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
 						}
 						break;
 					}
@@ -196,10 +189,10 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			}
 			if (modelArtifact == null) {
 				modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-				modelArtifact.setDataVersion(portModel.getPortDataVersion());
+				modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
 				modelArtifact.setStorageType(StorageType.INTERNAL);
 				modelArtifact.setType("EOBJECT");
-				modelArtifact.setKey(LNGScenarioSharedModelTypes.LOCATIONS.getID());
+				modelArtifact.setKey(LNGScenarioSharedModelTypes.DISTANCES.getID());
 				manifest.getModelDependencies().add(modelArtifact);
 			}
 		}

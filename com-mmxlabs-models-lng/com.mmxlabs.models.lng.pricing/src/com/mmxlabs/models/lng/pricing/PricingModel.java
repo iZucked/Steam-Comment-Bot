@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterIndices <em>Charter Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel()
@@ -107,6 +108,32 @@ public interface PricingModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<UnitConversion> getConversionFactors();
+
+	/**
+	 * Returns the value of the '<em><b>Market Curve Data Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market Curve Data Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market Curve Data Version</em>' attribute.
+	 * @see #setMarketCurveDataVersion(String)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_MarketCurveDataVersion()
+	 * @model
+	 * @generated
+	 */
+	String getMarketCurveDataVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.PricingModel#getMarketCurveDataVersion <em>Market Curve Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Market Curve Data Version</em>' attribute.
+	 * @see #getMarketCurveDataVersion()
+	 * @generated
+	 */
+	void setMarketCurveDataVersion(String value);
 
 } // end of  PricingModel
 

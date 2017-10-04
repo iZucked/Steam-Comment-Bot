@@ -38,6 +38,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortCountryGroups <em>Port Country Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortDataVersion <em>Port Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getDistanceDataVersion <em>Distance Data Version</em>}</li>
  * </ul>
  *
  * @generated
@@ -112,6 +113,26 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected String portDataVersion = PORT_DATA_VERSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDistanceDataVersion() <em>Distance Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistanceDataVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DISTANCE_DATA_VERSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDistanceDataVersion() <em>Distance Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistanceDataVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected String distanceDataVersion = DISTANCE_DATA_VERSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -218,6 +239,27 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getDistanceDataVersion() {
+		return distanceDataVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDistanceDataVersion(String newDistanceDataVersion) {
+		String oldDistanceDataVersion = distanceDataVersion;
+		distanceDataVersion = newDistanceDataVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION, oldDistanceDataVersion, distanceDataVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -255,6 +297,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getPortCountryGroups();
 			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
 				return getPortDataVersion();
+			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
+				return getDistanceDataVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -291,6 +335,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
 				setPortDataVersion((String)newValue);
 				return;
+			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
+				setDistanceDataVersion((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -321,6 +368,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
 				setPortDataVersion(PORT_DATA_VERSION_EDEFAULT);
 				return;
+			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
+				setDistanceDataVersion(DISTANCE_DATA_VERSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -345,6 +395,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return portCountryGroups != null && !portCountryGroups.isEmpty();
 			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
 				return PORT_DATA_VERSION_EDEFAULT == null ? portDataVersion != null : !PORT_DATA_VERSION_EDEFAULT.equals(portDataVersion);
+			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
+				return DISTANCE_DATA_VERSION_EDEFAULT == null ? distanceDataVersion != null : !DISTANCE_DATA_VERSION_EDEFAULT.equals(distanceDataVersion);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -361,6 +413,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (portDataVersion: ");
 		result.append(portDataVersion);
+		result.append(", distanceDataVersion: ");
+		result.append(distanceDataVersion);
 		result.append(')');
 		return result.toString();
 	}

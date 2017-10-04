@@ -51,6 +51,7 @@ public class PortModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortDataVersionPropertyDescriptor(object);
+			addDistanceDataVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -69,6 +70,28 @@ public class PortModelItemProvider
 				 getString("_UI_PortModel_portDataVersion_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PortModel_portDataVersion_feature", "_UI_PortModel_type"),
 				 PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Distance Data Version feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDistanceDataVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortModel_distanceDataVersion_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortModel_distanceDataVersion_feature", "_UI_PortModel_type"),
+				 PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION,
 				 true,
 				 false,
 				 false,
@@ -149,6 +172,7 @@ public class PortModelItemProvider
 
 		switch (notification.getFeatureID(PortModel.class)) {
 			case PortPackage.PORT_MODEL__PORT_DATA_VERSION:
+			case PortPackage.PORT_MODEL__DISTANCE_DATA_VERSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT_MODEL__PORTS:

@@ -23,6 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups <em>Port Country Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortDataVersion <em>Port Data Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel()
@@ -135,5 +136,31 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	void setPortDataVersion(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Distance Data Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Distance Data Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Distance Data Version</em>' attribute.
+	 * @see #setDistanceDataVersion(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_DistanceDataVersion()
+	 * @model
+	 * @generated
+	 */
+	String getDistanceDataVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getDistanceDataVersion <em>Distance Data Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Distance Data Version</em>' attribute.
+	 * @see #getDistanceDataVersion()
+	 * @generated
+	 */
+	void setDistanceDataVersion(String value);
 
 } // PortModel

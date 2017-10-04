@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.port.ui.commands;
+package com.mmxlabs.models.lng.fleet.ui.commandprovider;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -22,12 +22,12 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -41,12 +41,12 @@ import com.mmxlabs.scenario.service.model.util.extpoint.IWrappedCommandProvider;
  * @author Simon Goodall
  * 
  */
-public class PortVersionCommandWrapper implements IWrappedCommandProvider {
+public class FleetVersionCommandWrapper implements IWrappedCommandProvider {
 
 	private EditingDomain editingDomain;
 	private final boolean[] changedRef = new boolean[1];
 	private final Adapter adapter = createAdapter(changedRef);
-	private PortModel portModel;
+	private FleetModel fleetModel;
 	private ModelArtifact modelArtifact;
 
 	@Override
@@ -78,8 +78,8 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			public void execute() {
 				if (changedRef[0]) {
 					String newID = "private-" + EcoreUtil.generateUUID();
-					System.out.println("Generate Port Version ID " + newID);
-					final Command cmd = SetCommand.create(editingDomain, portModel, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION, newID);
+					System.out.println("Generate Fleet Model Version ID " + newID);
+					final Command cmd = SetCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION, newID);
 					appendAndExecute(cmd);
 				}
 			}
@@ -93,21 +93,22 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getNotifier() instanceof Location) {
+				if (notification.getNotifier() instanceof Vessel) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Route) {
+				} else if (notification.getNotifier() instanceof VesselStateAttributes) {
 					changedRef[0] = true;
-				} else if (notification.getNotifier() instanceof Port) {
-					// Strictly port__location + port__name
+				} else if (notification.getNotifier() instanceof VesselClassRouteParameters) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORTS) {
+				} else if (notification.getNotifier() instanceof BaseFuel) {
 					changedRef[0] = true;
-				} else if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__ROUTES) {
+				} else if (notification.getFeature() == FleetPackage.Literals.FLEET_MODEL__VESSELS) {
+					changedRef[0] = true;
+				} else if (notification.getFeature() == FleetPackage.Literals.FLEET_MODEL__BASE_FUELS) {
 					changedRef[0] = true;
 				}
 
 				// Reset!
-				if (notification.getFeature() == PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION) {
+				if (notification.getFeature() == FleetPackage.Literals.FLEET_MODEL__FLEET_DATA_VERSION) {
 
 					if (modelArtifact != null) {
 						modelArtifact.setDataVersion(notification.getNewStringValue());
@@ -123,14 +124,16 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			protected void setTarget(final EObject target) {
 				basicSetTarget(target);
-				if (target instanceof PortModel) {
+				if (target instanceof FleetModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof Vessel //
+								|| notifier instanceof BaseFuel //
+						) {
 							addAdapter(notifier);
 						}
 					}
-				} else if (target instanceof Port) {
+				} else if (target instanceof Vessel || target instanceof BaseFuel || target instanceof VesselStateAttributes || target instanceof VesselClassRouteParameters) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						addAdapter(notifier);
@@ -144,14 +147,16 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			@Override
 			protected void unsetTarget(final EObject target) {
 				basicUnsetTarget(target);
-				if (target instanceof PortModel) {
+				if (target instanceof FleetModel) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
-						if (notifier instanceof Route || notifier instanceof Port) {
+						if (notifier instanceof Vessel //
+								|| notifier instanceof BaseFuel //
+						) {
 							removeAdapter(notifier, false, true);
 						}
 					}
-				} else if (target instanceof Port) {
+				} else if (target instanceof Vessel || target instanceof BaseFuel || target instanceof VesselStateAttributes || target instanceof VesselClassRouteParameters) {
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
 						removeAdapter(notifier, false, true);
@@ -174,21 +179,21 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 				for (final EObject obj : r.getContents()) {
 					if (obj instanceof LNGScenarioModel) {
 						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) obj;
-						portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+						fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 					}
 				}
 			}
 		}
 		modelArtifact = null;
-		if (portModel != null) {
-			portModel.eAdapters().add(adapter);
+		if (fleetModel != null) {
+			fleetModel.eAdapters().add(adapter);
 			for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-				if (LNGScenarioSharedModelTypes.LOCATIONS.getID().equals(artifact.getKey())) {
+				if (LNGScenarioSharedModelTypes.FLEET.getID().equals(artifact.getKey())) {
 					if (artifact.getStorageType() == StorageType.INTERNAL) {
 						this.modelArtifact = artifact;
 						// Update version if needed.
-						if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getPortDataVersion())) {
-							this.modelArtifact.setDataVersion(portModel.getPortDataVersion());
+						if (!Objects.equals(this.modelArtifact.getDataVersion(), fleetModel.getFleetDataVersion())) {
+							this.modelArtifact.setDataVersion(fleetModel.getFleetDataVersion());
 						}
 						break;
 					}
@@ -196,10 +201,10 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			}
 			if (modelArtifact == null) {
 				modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-				modelArtifact.setDataVersion(portModel.getPortDataVersion());
+				modelArtifact.setDataVersion(fleetModel.getFleetDataVersion());
 				modelArtifact.setStorageType(StorageType.INTERNAL);
 				modelArtifact.setType("EOBJECT");
-				modelArtifact.setKey(LNGScenarioSharedModelTypes.LOCATIONS.getID());
+				modelArtifact.setKey(LNGScenarioSharedModelTypes.FLEET.getID());
 				manifest.getModelDependencies().add(modelArtifact);
 			}
 		}
@@ -211,9 +216,9 @@ public class PortVersionCommandWrapper implements IWrappedCommandProvider {
 			throw new IllegalStateException("A different editigin domain has been registered");
 		}
 
-		if (portModel != null) {
-			portModel.eAdapters().remove(adapter);
-			portModel = null;
+		if (fleetModel != null) {
+			fleetModel.eAdapters().remove(adapter);
+			fleetModel = null;
 		}
 
 		modelArtifact = null;

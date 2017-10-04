@@ -70,6 +70,7 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 		add_specialPortGroupsEditor(detailComposite, topClass);
 		add_portCountryGroupsEditor(detailComposite, topClass);
 		add_portDataVersionEditor(detailComposite, topClass);
+		add_distanceDataVersionEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortModel
@@ -122,5 +123,14 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_portDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORT_DATA_VERSION));
+	}
+
+	/**
+	 * Create the editor for the distanceDataVersion feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_distanceDataVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__DISTANCE_DATA_VERSION));
 	}
 }
