@@ -315,7 +315,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(charterInMarket_1);
 			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), -2_000_000);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 3_927_658 - 2_000_000);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 3_957_658 - 2_000_000);
 		});
 	}
 
@@ -346,7 +346,7 @@ public class BallastBonusContractTests extends AbstractMicroTestCase {
 			final EList<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(charterInMarket_1);
 			Assert.assertEquals(end.getGroupProfitAndLoss().getProfitAndLoss(), 0_000_000);
-			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 3_927_658);
+			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 3_957_658);
 		});
 	}
 
