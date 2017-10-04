@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -185,11 +186,15 @@ public class CanalBookingsReport extends AbstractReportView {
 
 		createColumn(sortingSupport, "Next Slot", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()), rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()));
 
-		createColumn(sortingSupport, "Next Slot Port", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()), rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()));
+		createColumn(sortingSupport, "Next Slot Port", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()),
+				rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()));
 
-		createColumn(sortingSupport, "Next Slot Window Start", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart())), rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowStart()));
+		createColumn(sortingSupport, "Next Slot Window Start", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart())),
+				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowStart()));
 
-		createColumn(sortingSupport, "Next Slot Window End", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart().plusDays(rowData.nextSlot.getWindowSizeInHours()/24))), rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowSizeInHours()/24));
+		createColumn(sortingSupport, "Next Slot Window End",
+				rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart().plusDays(rowData.nextSlot.getWindowSizeInHours() / 24))),
+				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowSizeInHours() / 24));
 
 		createColumn(sortingSupport, "Period", rowData -> rowData.period, rowData -> rowData.period);
 
@@ -212,9 +217,14 @@ public class CanalBookingsReport extends AbstractReportView {
 			public void update(final ViewerCell cell) {
 
 				final Object element = cell.getElement();
+				cell.setBackground(null);
 				if (element instanceof RowData) {
 					final RowData rowData = (RowData) element;
 					cell.setText(labelProvider.apply(rowData));
+
+					if (rowData.warn) {
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW));
+					}
 				} else {
 					cell.setText("");
 				}

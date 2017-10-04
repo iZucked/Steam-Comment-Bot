@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -23,6 +24,7 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -47,6 +49,7 @@ public class CanalBookingsReportTransformer {
 		public final CanalBookingSlot booking;
 		public final String period;
 		public final Slot nextSlot;
+		public boolean warn;
 
 		public RowData(final @NonNull String scheduleName, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption, final @NonNull LocalDate bookingDate,
 				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot) {
@@ -60,7 +63,8 @@ public class CanalBookingsReportTransformer {
 			this.event = usedSlot;
 			this.period = period;
 			this.nextSlot = nextSlot;
-			
+			this.warn = false;
+
 			this.dummy = false;
 		}
 
@@ -75,7 +79,7 @@ public class CanalBookingsReportTransformer {
 			this.preBooked = false;
 			this.period = "";
 			this.nextSlot = null;
-
+			this.warn = false;
 			this.dummy = true;
 		}
 	}
@@ -106,6 +110,9 @@ public class CanalBookingsReportTransformer {
 		}
 
 		final List<RowData> result = new LinkedList<>();
+
+		List<RowData> relaxedSouthbound = new LinkedList<>();
+		List<RowData> relaxedNorthbound = new LinkedList<>();
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -164,17 +171,34 @@ public class CanalBookingsReportTransformer {
 					if (journey.getCanalBooking() != null) {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
-						result.add(
-								new RowData(modelRecord.getName(), true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period, nextSlot));
+						result.add(new RowData(modelRecord.getName(), true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period,
+								nextSlot));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
-						result.add(new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period, nextSlot));
+
+						RowData rowData = new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName, (PortVisit) journey.getPreviousEvent(),
+								period, nextSlot);
+						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
+							if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
+								relaxedSouthbound.add(rowData);
+							} else {
+								relaxedNorthbound.add(rowData);
+							}
+						}
+						result.add(rowData);
 					}
 				}
 			}
 		}
-
+		if (cargoModel.getCanalBookings() != null) {
+			if (relaxedNorthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountNorthbound()) {
+				relaxedNorthbound.forEach(d -> d.warn = true);
+			}
+			if (relaxedSouthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountSouthbound()) {
+				relaxedSouthbound.forEach(d -> d.warn = true);
+			}
+		}
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
 			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
