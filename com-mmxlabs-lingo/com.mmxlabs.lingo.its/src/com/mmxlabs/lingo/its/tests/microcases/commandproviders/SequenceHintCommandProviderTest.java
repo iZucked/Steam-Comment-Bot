@@ -237,7 +237,7 @@ public class SequenceHintCommandProviderTest extends AbstractMicroTestCase {
 		r.getContents().add(scenarioModel);
 		resourceSet.getResources().add(r);
 
-		return ScenarioStorageUtil.initEditingDomain(resourceSet, scenarioModel).getFirst();
+		return ScenarioStorageUtil.initEditingDomain(null, resourceSet, scenarioModel).getFirst();
 	}
 
 }
