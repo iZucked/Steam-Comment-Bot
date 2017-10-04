@@ -6,13 +6,13 @@ package com.mmxlabs.models.lng.scenario.model.util;
 
 import java.util.function.Function;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ISharedDataModelType;
 
@@ -40,9 +40,8 @@ public final class LNGScenarioSharedModelTypes {
 
 	public static Function<IScenarioDataProvider, Object> makeMarketCurvesProvider() {
 		return (scenarioDataProvider) -> {
-			// final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
-			// return new ModelDistanceProvider(portModel);
-			return (@NonNull Object) null;
+			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+			return new ModelMarketCurveProvider(pricingModel);
 		};
 	}
 

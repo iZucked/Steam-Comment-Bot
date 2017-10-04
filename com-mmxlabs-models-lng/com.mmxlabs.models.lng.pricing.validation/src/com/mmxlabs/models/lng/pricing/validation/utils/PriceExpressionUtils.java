@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -27,17 +26,19 @@ import com.mmxlabs.common.parser.series.UnknownSeriesException;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.util.MarketIndexCache;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * 
@@ -240,45 +241,31 @@ public class PriceExpressionUtils {
 		}
 	}
 
-	public static @Nullable PricingModel getPricingModel() {
+	public static @NonNull ModelMarketCurveProvider getMarketCurveProvider() {
 		final Activator activator = Activator.getDefault();
-		if (activator == null) {
-			return null;
-		}
-		final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
-		if (extraValidationContext != null) {
-			final MMXRootObject rootObject = extraValidationContext.getRootObject();
-
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-				return ScenarioModelUtil.getPricingModel(lngScenarioModel);
+		if (activator != null) {
+			final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
+			if (extraValidationContext != null) {
+				IScenarioDataProvider scenarioDataProvider = extraValidationContext.getScenarioDataProvider();
+				if (scenarioDataProvider != null) {
+					ModelMarketCurveProvider provider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
+					if (provider != null) {
+						return provider;
+					}
+				}
 			}
 		}
-		return null;
+		throw new IllegalStateException("Unable to get market curve provider");
 	}
 
 	public static SeriesParser getIndexParser(final @NonNull PriceIndexType priceIndexType) {
-		final PricingModel pricingModel = getPricingModel();
-		if (pricingModel == null) {
-			return null;
-		}
-		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
-		if (cache == null) {
-			throw new IllegalStateException("Unable to get market index cache");
-		}
-		return cache.getSeriesParser(priceIndexType);
+		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
+		return modelMarketCurveProvider.getSeriesParser(priceIndexType);
 	}
 
 	public static @Nullable YearMonth getEarliestCurveDate(final @NonNull NamedIndexContainer<?> index) {
-		final PricingModel pricingModel = getPricingModel();
-		if (pricingModel == null) {
-			return null;
-		}
-		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
-		if (cache == null) {
-			throw new IllegalStateException("Unable to get market index cache");
-		}
-		return cache.getEarliestDate(index);
+		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
+		return modelMarketCurveProvider.getEarliestDate(index);
 	}
 
 	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, final T target,
@@ -329,15 +316,22 @@ public class PriceExpressionUtils {
 	}
 
 	public static Collection<@NonNull NamedIndexContainer<?>> getLinkedCurves(final String priceExpression) {
-		final PricingModel pricingModel = getPricingModel();
-		if (pricingModel == null) {
-			return null;
+		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
+		return modelMarketCurveProvider.getLinkedCurves(priceExpression);
+
+	}
+
+	public static PriceIndexType getPriceIndexType(NamedIndexContainer<?> namedIndexContainer) {
+		if (namedIndexContainer instanceof CommodityIndex) {
+			return PriceIndexType.COMMODITY;
+		} else if (namedIndexContainer instanceof CurrencyIndex) {
+			return PriceIndexType.CURRENCY;
+		} else if (namedIndexContainer instanceof CharterIndex) {
+			return PriceIndexType.CHARTER;
+		} else if (namedIndexContainer instanceof BaseFuelIndex) {
+			return PriceIndexType.BUNKERS;
 		}
-		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
-		if (cache == null) {
-			throw new IllegalStateException("Unable to get market index cache");
-		}
-		return cache.getLinkedCurves(priceExpression);
+		return null;
 
 	}
 }

@@ -50,7 +50,7 @@ public class PriceIndexUtils {
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
-	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
+	private static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
 
 		final SeriesParser indices = new SeriesParser();
 		indices.setShiftMapper((date, shift) -> {

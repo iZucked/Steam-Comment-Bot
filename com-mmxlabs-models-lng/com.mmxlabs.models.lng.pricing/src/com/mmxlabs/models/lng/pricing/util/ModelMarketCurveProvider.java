@@ -1,10 +1,3 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
- * All rights reserved.
- */
-/**
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.pricing.util;
 
 import java.lang.ref.SoftReference;
@@ -19,8 +12,10 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.IExpression;
@@ -39,7 +34,9 @@ import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
-public class MarketIndexCache extends EContentAdapter {
+public class ModelMarketCurveProvider extends EContentAdapter {
+
+	private final @NonNull PricingModel pricingModel;
 
 	private SoftReference<Map<@NonNull PriceIndexType, @NonNull SeriesParser>> cache = new SoftReference<>(null);
 
@@ -47,23 +44,33 @@ public class MarketIndexCache extends EContentAdapter {
 
 	private SoftReference<LookupData> expressionToIndexUseCache = new SoftReference<>(null);
 
-	private final @NonNull PricingModel pricingModel;
-
-	public MarketIndexCache(final @NonNull PricingModel pricingModel) {
+	public ModelMarketCurveProvider(final @NonNull PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
 	}
 
+	public String getVersion() {
+		return pricingModel.getMarketCurveDataVersion();
+	}
+
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(final @Nullable Notification notification) {
+
 		super.notifyChanged(notification);
 
 		if (notification.isTouch()) {
 			return;
 		}
-		if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
-			return;
-		}
 		clearCache();
+	}
+
+	@Override
+	public @Nullable Notifier getTarget() {
+		return null;
+	}
+
+	@Override
+	public void setTarget(final @Nullable Notifier newTarget) {
+
 	}
 
 	public synchronized Map<@NonNull PriceIndexType, @NonNull SeriesParser> buildCache() {
