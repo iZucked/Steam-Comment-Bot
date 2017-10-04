@@ -11,12 +11,14 @@ import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
+import com.mmxlabs.lingo.its.tests.category.ReportTest;
 
 public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 
@@ -43,6 +45,7 @@ public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testBonnyProblemsDiff() throws Exception {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.lingo");
 		final URL refScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/2 -O- late and lost-DES backfill -F- Bonny.lingo");
@@ -51,6 +54,7 @@ public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testDrydockDiff() throws Exception {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/0 base.lingo");
 		final URL refScenarioURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/5 charter-in generated - rewire for shorter one -O- -F- -F- base.lingo");
