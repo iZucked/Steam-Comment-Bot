@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -136,7 +137,7 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 
 			// Build up a list of all valid insertion points. For all valid elements that can go before the first element in the insertion list, see if it's following element could also follow the
 			// last element in the insert sequence
-			final List<Pair<ISequenceElement, ISequenceElement>> validInsertionPairs = new LinkedList<>();
+			final List<Triple<ISequenceElement, ISequenceElement, Boolean>> validInsertionPairs = new LinkedList<>();
 			LOOP_PRECEDER: for (final ISequenceElement preceder : preceders) {
 				final Pair<IResource, Integer> precederLocation = lookupManager.lookup(preceder);
 				// Element Unused? Skip as we can't insert after it.
@@ -150,11 +151,20 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 				}
 
 				final ISequence targetSequence = sequences.getSequence(precederLocation.getFirst());
-				final int followerIndex = precederLocation.getSecond() + 1;
+				int followerIndex = precederLocation.getSecond() + 1;
+				int segSize = 0;
 				if (followerIndex < targetSequence.size()) {
-					final ISequenceElement followerElement = targetSequence.get(followerIndex);
-					if (followers.contains(followerElement)) {
-						validInsertionPairs.add(new Pair<>(preceder, followerElement));
+					final ISequenceElement firstFollowerElement = targetSequence.get(followerIndex);
+					// If we can't insert here, what if we skip a segment? If so, we mark the segment as a problem.
+					// 5 is an arbitrary upper limit. We are really only interested in the next segment.
+					while (followerIndex < targetSequence.size() && segSize < 5) {
+						final ISequenceElement followerElement = targetSequence.get(followerIndex);
+						if (followers.contains(followerElement)) {
+							validInsertionPairs.add(new Triple<>(preceder, firstFollowerElement, segSize != 0));
+							break;
+						}
+						++followerIndex;
+						++segSize;
 					}
 				}
 			}
@@ -169,7 +179,7 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 			// TODO: The hint manager could be used here to order by known shipping length
 			// Pick the first random insertion point
 			Collections.shuffle(validInsertionPairs, random);
-			for (final Pair<ISequenceElement, ISequenceElement> insertionPair : validInsertionPairs) {
+			for (final Triple<ISequenceElement, ISequenceElement, Boolean> insertionPair : validInsertionPairs) {
 
 				final Pair<IResource, Integer> location = lookupManager.lookup(insertionPair.getFirst());
 
@@ -178,6 +188,11 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 
 				// Suggest element before and after as possible change targets
 				hints.addSuggestedElements(insertionPair.getFirst(), insertionPair.getSecond());
+				if (insertionPair.getThird()) {
+					// This element was marked as a problem.
+					hints.addProblemElement(insertionPair.getSecond());
+				}
+
 				break;
 			}
 

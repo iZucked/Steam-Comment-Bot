@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.insertion;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -15,11 +16,15 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -31,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator.MoveResult;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -55,7 +61,10 @@ public class SlotInsertionOptimiser {
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
 
-	private @Nullable Pair<ISequences, Long> insert(SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> slots) {
+	@Inject
+	private IMoveHandlerHelper moveHandlerHelper;
+
+	private @Nullable Pair<ISequences, Long> insert(final SlotInsertionOptimiserInitialState state, final int seed, final List<ISequenceElement> _slots) {
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 
@@ -65,6 +74,9 @@ public class SlotInsertionOptimiser {
 
 		final long[] initialMetrics = state.initialMetrics;
 
+		// Randomise the insertion order
+		final List<ISequenceElement> slots = new ArrayList<ISequenceElement>(_slots);
+		Collections.shuffle(slots, new Random(seed));
 		long currentPNL = 0L;
 		for (final ISequenceElement slot : slots) {
 			if (!currentSequences.getUnusedElements().contains(slot)) {
@@ -126,10 +138,52 @@ public class SlotInsertionOptimiser {
 
 		if (true) {
 
+			// Some check, have the inserted slots done something different?
+			{
+				boolean sameSolutionBasis = true;
+
+				final LookupManager beforeManager = new LookupManager(state.originalRawSequences);
+				final LookupManager afterManager = new LookupManager(currentSequences);
+				for (final ISequenceElement slot : slots) {
+					IResource afterResource;
+					List<ISequenceElement> afterSegment;
+					{
+						final Pair<IResource, Integer> lookup = afterManager.lookup(slot);
+						if (lookup == null || lookup.getFirst() == null) {
+							afterResource = null;
+							afterSegment = null;
+						} else {
+							afterResource = lookup.getFirst();
+							afterSegment = moveHandlerHelper.extractSegment(currentSequences.getSequence(afterResource), slot);
+						}
+					}
+					IResource beforeResource;
+					List<ISequenceElement> beforeSegment;
+					{
+						final Pair<IResource, Integer> lookup = beforeManager.lookup(slot);
+						if (lookup == null || lookup.getFirst() == null) {
+							beforeResource = null;
+							beforeSegment = null;
+						} else {
+							beforeResource = lookup.getFirst();
+							beforeSegment = moveHandlerHelper.extractSegment(state.originalRawSequences.getSequence(beforeResource), slot);
+						}
+					}
+					if (beforeResource != afterResource || !Objects.equal(beforeSegment, afterSegment)) {
+						sameSolutionBasis = false;
+						break;
+					}
+				}
+				if (sameSolutionBasis) {
+					// Insertion slots still in the same place as the original solution, reject output.
+					return null;
+				}
+			}
+
 			// Try and remove any hitch-hikers that may have arisen during the search.
 			@NonNull
 			final ISequences simpleSeq = sequencesHelper.undoUnrelatedChanges(state.originalRawSequences, currentSequences, slots);
-
+			boolean valid = true;			
 			{
 				// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
 				for (final ISequenceElement slot : slots) {
@@ -152,14 +206,19 @@ public class SlotInsertionOptimiser {
 					}
 				}
 			}
+			long[] metrics = null;
+			if (valid) {
+				@NonNull
+				final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
 
-			@NonNull
-			final IModifiableSequences simpleSeqFull = manipulator.createManipulatedSequences(simpleSeq);
-
-			final long[] metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, null, null);
-			if (metrics == null) {
+				metrics = evaluationHelper.evaluateState(simpleSeq, simpleSeqFull, null, true, null, null);
+				if (metrics == null) {
+					valid = false;
+				}
+			}
+			if (!valid) {
 				System.err.println("Unable to remove hitch-hikers from solution, returning full solution");
-				
+
 				// Re-check sequences
 				{
 					// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
@@ -183,8 +242,7 @@ public class SlotInsertionOptimiser {
 						}
 					}
 				}
-				
-				
+
 				return new Pair<>(currentSequences, currentPNL);
 			}
 			return new Pair<>(simpleSeq, metrics[MetricType.PNL.ordinal()]);
