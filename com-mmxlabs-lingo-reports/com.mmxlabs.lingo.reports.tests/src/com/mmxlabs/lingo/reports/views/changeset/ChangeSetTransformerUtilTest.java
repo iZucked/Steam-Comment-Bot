@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -1290,6 +1291,7 @@ public class ChangeSetTransformerUtilTest {
 		final EList<Event> events = new BasicEList<>();
 		Mockito.when(sequence.getName()).thenReturn(name);
 		Mockito.when(sequence.getEvents()).thenReturn(events);
+		Mockito.when(sequence.getSequenceType()).thenReturn(SequenceType.VESSEL);
 
 		return sequence;
 	}
