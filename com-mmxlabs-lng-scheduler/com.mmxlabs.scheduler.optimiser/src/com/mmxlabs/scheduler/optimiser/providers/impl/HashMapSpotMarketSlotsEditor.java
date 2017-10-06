@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,6 +34,8 @@ public final class HashMapSpotMarketSlotsEditor implements ISpotMarketSlotsProvi
 
 	private final Map<ISequenceElement, Record> elementMap = new HashMap<>();
 	private final Map<IPortSlot, Record> portSlotMap = new HashMap<>();
+	private final Map<ISpotMarket, List<ISequenceElement>> marketToElementsMap = new HashMap<>();
+	private final Map<ISpotMarket, List<IPortSlot>> marketToPortSlotsMap = new HashMap<>();
 
 	@Override
 	public void setSpotMarketSlot(final ISequenceElement sequenceElement, final IPortSlot portSlot, final ISpotMarket spotMarket, final String dateKey) {
@@ -38,6 +43,9 @@ public final class HashMapSpotMarketSlotsEditor implements ISpotMarketSlotsProvi
 
 		elementMap.put(sequenceElement, record);
 		portSlotMap.put(portSlot, record);
+
+		marketToElementsMap.computeIfAbsent(spotMarket, m -> new LinkedList<>()).add(sequenceElement);
+		marketToPortSlotsMap.computeIfAbsent(spotMarket, m -> new LinkedList<>()).add(portSlot);
 	}
 
 	@Override
@@ -69,5 +77,15 @@ public final class HashMapSpotMarketSlotsEditor implements ISpotMarketSlotsProvi
 	@Override
 	public @NonNull ISpotMarket getSpotMarket(@NonNull final IPortSlot portSlot) {
 		return portSlotMap.get(portSlot).spotMarket;
+	}
+
+	@Override
+	public List<ISequenceElement> getElementsFor(final ISpotMarket market) {
+		return Collections.unmodifiableList(marketToElementsMap.getOrDefault(market, Collections.emptyList()));
+	}
+
+	@Override
+	public List<IPortSlot> getPortSlotsFor(final ISpotMarket market) {
+		return Collections.unmodifiableList(marketToPortSlotsMap.getOrDefault(market, Collections.emptyList()));
 	}
 }

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -31,4 +33,8 @@ public interface ISpotMarketSlotsProvider extends IDataComponentProvider {
 	ISpotMarket getSpotMarket(ISequenceElement element);
 
 	ISpotMarket getSpotMarket(IPortSlot portSlot);
+
+	List<ISequenceElement> getElementsFor(ISpotMarket market);
+
+	List<IPortSlot> getPortSlotsFor(ISpotMarket market);
 }
