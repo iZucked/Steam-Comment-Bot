@@ -18,6 +18,7 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -41,9 +42,9 @@ public class SequencesHitchHikerHelper {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private ISpotMarketSlotsProvider spotMarketSlotsProvider;
+	private IOptionalElementsProvider optionalElementsProvider;
 
-	public ISequences undoUnrelatedChanges(final ISequences source, final ISequences target, final Collection<ISequenceElement> initialElements) {
+	private ISequences __undoUnrelatedChanges(final ISequences source, final ISequences target, final Collection<ISequenceElement> initialElements) {
 
 		final ILookupManager sourceLookup = new LookupManager(source);
 		final ILookupManager targetLookup = new LookupManager(target);
@@ -187,6 +188,30 @@ public class SequencesHitchHikerHelper {
 
 			return revertedSeq;
 		}
+	}
+
+	public ISequences undoUnrelatedChanges(final ISequences source, final ISequences target, final Collection<ISequenceElement> initialElements) {
+
+		ISequences revertedSeq = __undoUnrelatedChanges(source, target, initialElements);
+
+		// Loop a few times to make sure we include everything. After first pass it is possible elements moved out of a sequence have not been re-included.
+		for (int i = 0; i < 4; ++i) {
+			final List<ISequenceElement> recheck = new LinkedList<>();
+			for (final ISequenceElement slot : revertedSeq.getUnusedElements()) {
+				if (optionalElementsProvider.isElementRequired(slot) || optionalElementsProvider.getSoftRequiredElements().contains(slot)) {
+					if (!target.getUnusedElements().contains(slot)) {
+						recheck.add(slot);
+					}
+				}
+			}
+			if (recheck.isEmpty()) {
+				return revertedSeq;
+			}
+			revertedSeq = __undoUnrelatedChanges(revertedSeq, target, recheck);
+
+		}
+		// failed
+		return target;
 
 	}
 
@@ -195,7 +220,7 @@ public class SequencesHitchHikerHelper {
 	 * 
 	 * @param sequences
 	 */
-	public static boolean checkValidSequences(final @NonNull ISequences sequences) {
+	public static boolean checkValidSequences(final ISequences sequences) {
 		final Set<ISequenceElement> seenElements = new HashSet<>();
 
 		for (final IResource r : sequences.getResources()) {
