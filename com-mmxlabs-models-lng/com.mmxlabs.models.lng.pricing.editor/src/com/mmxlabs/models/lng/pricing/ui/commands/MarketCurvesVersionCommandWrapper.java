@@ -198,25 +198,27 @@ public class MarketCurvesVersionCommandWrapper implements IWrappedCommandProvide
 		modelArtifact = null;
 		if (pricingModel != null) {
 			pricingModel.eAdapters().add(adapter);
-			for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-				if (LNGScenarioSharedModelTypes.MARKET_CURVES.getID().equals(artifact.getKey())) {
-					if (artifact.getStorageType() == StorageType.INTERNAL) {
-						this.modelArtifact = artifact;
-						// Update version if needed.
-						if (!Objects.equals(this.modelArtifact.getDataVersion(), pricingModel.getMarketCurveDataVersion())) {
-							this.modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
+			if (manifest != null) {
+				for (final ModelArtifact artifact : manifest.getModelDependencies()) {
+					if (LNGScenarioSharedModelTypes.MARKET_CURVES.getID().equals(artifact.getKey())) {
+						if (artifact.getStorageType() == StorageType.INTERNAL) {
+							this.modelArtifact = artifact;
+							// Update version if needed.
+							if (!Objects.equals(this.modelArtifact.getDataVersion(), pricingModel.getMarketCurveDataVersion())) {
+								this.modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
+							}
+							break;
 						}
-						break;
 					}
 				}
-			}
-			if (modelArtifact == null) {
-				modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-				modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
-				modelArtifact.setStorageType(StorageType.INTERNAL);
-				modelArtifact.setType("EOBJECT");
-				modelArtifact.setKey(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
-				manifest.getModelDependencies().add(modelArtifact);
+				if (modelArtifact == null) {
+					modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
+					modelArtifact.setDataVersion(pricingModel.getMarketCurveDataVersion());
+					modelArtifact.setStorageType(StorageType.INTERNAL);
+					modelArtifact.setType("EOBJECT");
+					modelArtifact.setKey(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
+					manifest.getModelDependencies().add(modelArtifact);
+				}
 			}
 		}
 	}

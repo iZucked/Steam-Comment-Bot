@@ -187,25 +187,27 @@ public class FleetVersionCommandWrapper implements IWrappedCommandProvider {
 		modelArtifact = null;
 		if (fleetModel != null) {
 			fleetModel.eAdapters().add(adapter);
-			for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-				if (LNGScenarioSharedModelTypes.FLEET.getID().equals(artifact.getKey())) {
-					if (artifact.getStorageType() == StorageType.INTERNAL) {
-						this.modelArtifact = artifact;
-						// Update version if needed.
-						if (!Objects.equals(this.modelArtifact.getDataVersion(), fleetModel.getFleetDataVersion())) {
-							this.modelArtifact.setDataVersion(fleetModel.getFleetDataVersion());
+			if (manifest != null) {
+				for (final ModelArtifact artifact : manifest.getModelDependencies()) {
+					if (LNGScenarioSharedModelTypes.FLEET.getID().equals(artifact.getKey())) {
+						if (artifact.getStorageType() == StorageType.INTERNAL) {
+							this.modelArtifact = artifact;
+							// Update version if needed.
+							if (!Objects.equals(this.modelArtifact.getDataVersion(), fleetModel.getFleetDataVersion())) {
+								this.modelArtifact.setDataVersion(fleetModel.getFleetDataVersion());
+							}
+							break;
 						}
-						break;
 					}
 				}
-			}
-			if (modelArtifact == null) {
-				modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-				modelArtifact.setDataVersion(fleetModel.getFleetDataVersion());
-				modelArtifact.setStorageType(StorageType.INTERNAL);
-				modelArtifact.setType("EOBJECT");
-				modelArtifact.setKey(LNGScenarioSharedModelTypes.FLEET.getID());
-				manifest.getModelDependencies().add(modelArtifact);
+				if (modelArtifact == null) {
+					modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
+					modelArtifact.setDataVersion(fleetModel.getFleetDataVersion());
+					modelArtifact.setStorageType(StorageType.INTERNAL);
+					modelArtifact.setType("EOBJECT");
+					modelArtifact.setKey(LNGScenarioSharedModelTypes.FLEET.getID());
+					manifest.getModelDependencies().add(modelArtifact);
+				}
 			}
 		}
 	}

@@ -175,25 +175,27 @@ public class DistanceVersionCommandWrapper implements IWrappedCommandProvider {
 		modelArtifact = null;
 		if (portModel != null) {
 			portModel.eAdapters().add(adapter);
-			for (final ModelArtifact artifact : manifest.getModelDependencies()) {
-				if (LNGScenarioSharedModelTypes.DISTANCES.getID().equals(artifact.getKey())) {
-					if (artifact.getStorageType() == StorageType.INTERNAL) {
-						this.modelArtifact = artifact;
-						// Update version if needed.
-						if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getDistanceDataVersion())) {
-							this.modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
+			if (manifest != null) {
+				for (final ModelArtifact artifact : manifest.getModelDependencies()) {
+					if (LNGScenarioSharedModelTypes.DISTANCES.getID().equals(artifact.getKey())) {
+						if (artifact.getStorageType() == StorageType.INTERNAL) {
+							this.modelArtifact = artifact;
+							// Update version if needed.
+							if (!Objects.equals(this.modelArtifact.getDataVersion(), portModel.getDistanceDataVersion())) {
+								this.modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
+							}
+							break;
 						}
-						break;
 					}
 				}
-			}
-			if (modelArtifact == null) {
-				modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
-				modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
-				modelArtifact.setStorageType(StorageType.INTERNAL);
-				modelArtifact.setType("EOBJECT");
-				modelArtifact.setKey(LNGScenarioSharedModelTypes.DISTANCES.getID());
-				manifest.getModelDependencies().add(modelArtifact);
+				if (modelArtifact == null) {
+					modelArtifact = ManifestFactory.eINSTANCE.createModelArtifact();
+					modelArtifact.setDataVersion(portModel.getDistanceDataVersion());
+					modelArtifact.setStorageType(StorageType.INTERNAL);
+					modelArtifact.setType("EOBJECT");
+					modelArtifact.setKey(LNGScenarioSharedModelTypes.DISTANCES.getID());
+					manifest.getModelDependencies().add(modelArtifact);
+				}
 			}
 		}
 	}
