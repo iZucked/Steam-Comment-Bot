@@ -519,15 +519,18 @@ public class PeriodTransformer {
 			if (event instanceof CharterOutEvent) {
 				// If in boundary, limit available vessels to assigned vessel
 
+				CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 				@NonNull
 				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
 				if (p.getFirst() != InclusionType.In) {
-					event.getAllowedVessels().clear();
-					final VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
+					charterOutEvent.getAllowedVessels().clear();
+					final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
 					if (vesselAvailability != null) {
-						event.getAllowedVessels().add(vesselAvailability.getVessel());
+						charterOutEvent.getAllowedVessels().add(vesselAvailability.getVessel());
 					} else {
-						eventsToRemove.add(event);
+						if (charterOutEvent.isOptional()) {
+							eventsToRemove.add(event);
+						}
 					}
 				}
 			}
