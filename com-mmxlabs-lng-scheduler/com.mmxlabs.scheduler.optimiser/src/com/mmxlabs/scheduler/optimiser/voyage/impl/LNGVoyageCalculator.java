@@ -874,6 +874,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			violationsCount += 300;
 			return violationsCount;
 		}
+		if (expectedEndHeelState == STATE_WARM || expectedEndHeelState == STATE_COLD_COOLDOWN) {
+			if (remainingHeelInM3 > 0) {
+				voyagePlan.setStartingHeelInM3(lngCommitmentInM3);
+				voyagePlan.setRemainingHeelInM3(0);
+				++violationsCount;
+			}
+		}
 
 		if (voyageDuration > 0 && lngCommitmentInM3 == 0 && startHeelRangeInM3[0] > 0) {
 			// Voyage option selected without any LNG use. But heel is available. This is a bad combination.
