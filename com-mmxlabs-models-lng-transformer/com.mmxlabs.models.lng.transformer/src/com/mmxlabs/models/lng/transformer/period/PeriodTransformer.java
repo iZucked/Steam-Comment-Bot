@@ -301,8 +301,8 @@ public class PeriodTransformer {
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
 
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, modelDistanceProvider, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(),
-				objectToPortVisitMap, mapping);
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, modelDistanceProvider, startConditionMap, endConditionMap, eventDependencies.getFirst(),
+				eventDependencies.getSecond(), objectToPortVisitMap, mapping);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 
 		if (extensions != null) {
@@ -522,15 +522,18 @@ public class PeriodTransformer {
 			if (event instanceof CharterOutEvent) {
 				// If in boundary, limit available vessels to assigned vessel
 
+				CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 				@NonNull
 				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
 				if (p.getFirst() != InclusionType.In) {
-					event.getAllowedVessels().clear();
-					final VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
+					charterOutEvent.getAllowedVessels().clear();
+					final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
 					if (vesselAvailability != null) {
-						event.getAllowedVessels().add(vesselAvailability.getVessel());
+						charterOutEvent.getAllowedVessels().add(vesselAvailability.getVessel());
 					} else {
-						eventsToRemove.add(event);
+						if (charterOutEvent.isOptional()) {
+							eventsToRemove.add(event);
+						}
 					}
 				}
 			}
@@ -870,8 +873,9 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final PortModel portModel, @NonNull ModelDistanceProvider modelDistanceProvider, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
-			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
+			@NonNull final PortModel portModel, @NonNull ModelDistanceProvider modelDistanceProvider, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
+			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep,
+			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, IScenarioEntityMapping mapping) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		assert collectedAssignments != null;
