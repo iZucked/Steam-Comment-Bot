@@ -70,7 +70,7 @@ public class AbstractOptimisationResultTester {
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
-	protected static final TestMode storeFitnessMap = TestMode.Run;
+	public static final TestMode storeFitnessMap = TestMode.Run;
 
 	/**
 	 * Subclasses can set to false to disable properties file generation for test cases which check other things.

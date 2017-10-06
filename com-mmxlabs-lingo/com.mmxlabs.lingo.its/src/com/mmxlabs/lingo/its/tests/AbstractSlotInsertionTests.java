@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -36,23 +36,22 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJob
 import com.mmxlabs.models.lng.transformer.ui.analytics.SlotInsertionOptimiserUnit;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
 public class AbstractSlotInsertionTests {
 
-	protected void runTest(final URL scenarioURL, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
-			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final Consumer<IMultiStateResult> solutionChecker) throws Exception {
+	protected void runTest(final URL scenarioURL, final LocalDate periodStart, final YearMonth periodEnd, final int iterations, final Function<LNGScenarioModel, List<EObject>> objectInsertionGetter,
+			final BiConsumer<LNGScenarioRunner, IMultiStateResult> solutionChecker) throws Exception {
 		final LiNGOTestDataProvider provider = new LiNGOTestDataProvider(scenarioURL);
 		provider.execute(originalScenario -> {
 			runScenario(originalScenario, periodStart, periodEnd, iterations, objectInsertionGetter, solutionChecker);
 		});
 	}
 
-	protected void runScenario(final IScenarioDataProvider scenarioDataProvider, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
-			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final Consumer<IMultiStateResult> solutionChecker) {
+	protected void runScenario(final LNGScenarioModel originalScenario, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
+			final Function<LNGScenarioModel, List<EObject>> objectInsertionGetter, final BiConsumer<LNGScenarioRunner, IMultiStateResult> solutionChecker) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 
 		if (periodStart != null) {
@@ -69,7 +68,7 @@ public class AbstractSlotInsertionTests {
 
 		userSettings.setWithSpotCargoMarkets(true);
 
-		final List<EObject> objectsToInsert = objectInsertionGetter.apply(scenarioDataProvider);
+		final List<EObject> objectsToInsert = objectInsertionGetter.apply(originalScenario);
 
 		final List<Slot> targetSlots = new LinkedList<>();
 		final List<VesselEvent> targetEvents = new LinkedList<>();
@@ -85,14 +84,14 @@ public class AbstractSlotInsertionTests {
 
 		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
-			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(executorService, null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(),
-					userSettings, targetSlots, targetEvents);
+			final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(executorService, null, originalScenario, LNGSchedulerJobUtils.createLocalEditingDomain(), userSettings,
+					targetSlots, targetEvents);
 
 			runner.prepare();
 
 			final IMultiStateResult results = runner.runInsertion(iterations, new NullProgressMonitor());
 
-			solutionChecker.accept(results);
+			solutionChecker.accept(runner.getLNGScenarioRunner(), results);
 		} finally {
 			executorService.shutdownNow();
 		}
