@@ -9,8 +9,6 @@ import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -27,8 +25,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(LNGSchedulerInsertSlotJobControl.class);
 
 	private final LNGSlotInsertionJobDescriptor jobDescriptor;
 	private final IScenarioDataProvider scenarioDataProvider;

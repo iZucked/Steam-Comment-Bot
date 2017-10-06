@@ -358,4 +358,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 			monitor.done();
 		}
 	}
+
+	public LNGScenarioRunner getLNGScenarioRunner() {
+		return scenarioRunner;
+	}
 }
