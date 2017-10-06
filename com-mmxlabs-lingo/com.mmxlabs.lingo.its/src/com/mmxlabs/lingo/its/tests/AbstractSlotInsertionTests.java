@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -44,7 +45,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissio
 public class AbstractSlotInsertionTests {
 
 	protected void runTest(final URL scenarioURL, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
-			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final Consumer<IMultiStateResult> solutionChecker) throws Exception {
+			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final BiConsumer<LNGScenarioRunner, IMultiStateResult> solutionChecker) throws Exception {
 		final LiNGOTestDataProvider provider = new LiNGOTestDataProvider(scenarioURL);
 		provider.execute(originalScenario -> {
 			runScenario(originalScenario, periodStart, periodEnd, iterations, objectInsertionGetter, solutionChecker);
@@ -52,7 +53,7 @@ public class AbstractSlotInsertionTests {
 	}
 
 	protected void runScenario(final IScenarioDataProvider scenarioDataProvider, final LocalDate periodStart, final YearMonth periodEnd, final int iterations,
-			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final Consumer<IMultiStateResult> solutionChecker) {
+			final Function<IScenarioDataProvider, List<EObject>> objectInsertionGetter, final BiConsumer<LNGScenarioRunner, IMultiStateResult> solutionChecker) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 
 		if (periodStart != null) {
@@ -92,7 +93,7 @@ public class AbstractSlotInsertionTests {
 
 			final IMultiStateResult results = runner.runInsertion(iterations, new NullProgressMonitor());
 
-			solutionChecker.accept(results);
+			solutionChecker.accept(runner.getLNGScenarioRunner(), results);
 		} finally {
 			executorService.shutdownNow();
 		}
