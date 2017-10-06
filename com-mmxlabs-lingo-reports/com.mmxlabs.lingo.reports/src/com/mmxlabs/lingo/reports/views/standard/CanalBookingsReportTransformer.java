@@ -52,10 +52,11 @@ public class CanalBookingsReportTransformer {
 		public final CanalBookingSlot booking;
 		public final String period;
 		public final Slot nextSlot;
+		public final String notes;
 		public boolean warn;
 
 		public RowData(final @NonNull String scheduleName, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period, final @Nullable Slot nextSlot) {
+				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period, final @Nullable Slot nextSlot, @Nullable final String notes) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
@@ -66,6 +67,7 @@ public class CanalBookingsReportTransformer {
 			this.event = usedSlot;
 			this.period = period;
 			this.nextSlot = nextSlot;
+			this.notes = notes == null ? "" : notes;
 			this.warn = false;
 
 			this.dummy = false;
@@ -83,6 +85,7 @@ public class CanalBookingsReportTransformer {
 			this.period = "";
 			this.nextSlot = null;
 			this.warn = false;
+			this.notes = "";
 			this.dummy = true;
 		}
 	}
@@ -170,11 +173,11 @@ public class CanalBookingsReportTransformer {
 					if (journey.getCanalBooking() != null) {
 						CanalBookingSlot booking = journey.getCanalBooking();
 						result.add(new RowData(scenarioInstance.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
-								(PortVisit) journey.getPreviousEvent(), period, nextSlot));
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot, booking.getNotes()));
 						existingBookings.remove(booking);
 					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
 						RowData rowData = new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
-								(PortVisit) journey.getPreviousEvent(), period, nextSlot);
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot, "");
 
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 							if (journey.getCanalEntry().eContainingFeature() == PortPackage.Literals.ROUTE__NORTH_ENTRANCE) {
@@ -198,7 +201,7 @@ public class CanalBookingsReportTransformer {
 		}
 		// unused options
 		for (CanalBookingSlot booking : existingBookings) {
-			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused", null));
+			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused", null, booking.getNotes()));
 		}
 
 		return result;
