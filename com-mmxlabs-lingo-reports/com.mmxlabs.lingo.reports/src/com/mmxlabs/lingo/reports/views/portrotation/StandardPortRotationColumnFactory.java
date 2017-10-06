@@ -65,12 +65,13 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			if (o != null) {
 				final Event other = o.event;
 				if (other != null) {
+					if (event.getPreviousEvent() != null && event.getPreviousEvent().equals(other)) {
+						return 1;
+					} else if (event.getNextEvent() != null && event.getNextEvent().equals(other)) {
+						return -1;
+					}
 					if (event.getStart().equals(other.getStart())) {
-						if (event.getPreviousEvent() != null && event.getPreviousEvent().equals(other)) {
-							return 1;
-						} else if (event.getNextEvent() != null && event.getNextEvent().equals(other)) {
-							return -1;
-						}
+						return event.getEnd().compareTo(other.getEnd());
 					} else {
 						return event.getStart().compareTo(other.getStart());
 					}
@@ -461,8 +462,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 						Route route = journey.getRoute();
 						if (route != null && route.getRouteOption() == RouteOption.PANAMA) {
 							CanalBookingSlot canalBooking = journey.getCanalBooking();
-							
-							
+
 							if (canalBooking != null) {
 								return "Yes";
 							} else {
@@ -471,7 +471,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 								}
 								return "No";
 							}
-//							return canalBooking != null;
+							// return canalBooking != null;
 						}
 					}
 					return null;
@@ -481,7 +481,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				public @Nullable String render(Object object) {
 					String value = getValue(object);
 					if (value != null) {
-						return value ;//? "Yes" : "No";
+						return value;// ? "Yes" : "No";
 					}
 					return "";
 				}
