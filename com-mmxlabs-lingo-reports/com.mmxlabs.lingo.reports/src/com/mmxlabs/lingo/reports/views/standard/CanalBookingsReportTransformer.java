@@ -49,10 +49,11 @@ public class CanalBookingsReportTransformer {
 		public final CanalBookingSlot booking;
 		public final String period;
 		public final Slot nextSlot;
+		public final String notes;
 		public boolean warn;
 
 		public RowData(final @NonNull String scheduleName, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption, final @NonNull LocalDate bookingDate,
-				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot) {
+				final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot, @Nullable final String notes) {
 			super();
 			this.scheduleName = scheduleName;
 			this.preBooked = preBooked;
@@ -63,6 +64,7 @@ public class CanalBookingsReportTransformer {
 			this.event = usedSlot;
 			this.period = period;
 			this.nextSlot = nextSlot;
+			this.notes = notes == null ? "" : notes;
 			this.warn = false;
 
 			this.dummy = false;
@@ -80,6 +82,7 @@ public class CanalBookingsReportTransformer {
 			this.period = "";
 			this.nextSlot = null;
 			this.warn = false;
+			this.notes = "";
 			this.dummy = true;
 		}
 	}
@@ -111,8 +114,8 @@ public class CanalBookingsReportTransformer {
 
 		final List<RowData> result = new LinkedList<>();
 
-		List<RowData> relaxedSouthbound = new LinkedList<>();
-		List<RowData> relaxedNorthbound = new LinkedList<>();
+		final List<RowData> relaxedSouthbound = new LinkedList<>();
+		final List<RowData> relaxedNorthbound = new LinkedList<>();
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -158,8 +161,8 @@ public class CanalBookingsReportTransformer {
 					Slot nextSlot = null;
 					while (nextEvent != null) {
 						if (nextEvent instanceof SlotVisit) {
-							SlotVisit nextSlotVisit = (SlotVisit) nextEvent;
-							Slot slot = nextSlotVisit.getSlotAllocation().getSlot();
+							final SlotVisit nextSlotVisit = (SlotVisit) nextEvent;
+							final Slot slot = nextSlotVisit.getSlotAllocation().getSlot();
 							if (slot != null) {
 								nextSlot = slot;
 							}
@@ -172,13 +175,13 @@ public class CanalBookingsReportTransformer {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
 						result.add(new RowData(modelRecord.getName(), true, booking, journey.getRouteOption(), booking.getBookingDate(), entryPointName, (PortVisit) journey.getPreviousEvent(), period,
-								nextSlot));
+								nextSlot, booking.getNotes()));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
 
-						RowData rowData = new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName, (PortVisit) journey.getPreviousEvent(),
-								period, nextSlot);
+						final RowData rowData = new RowData(modelRecord.getName(), false, null, journey.getRouteOption(), journey.getCanalDate(), entryPointName,
+								(PortVisit) journey.getPreviousEvent(), period, nextSlot, "");
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 							if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
 								relaxedSouthbound.add(rowData);
@@ -202,7 +205,7 @@ public class CanalBookingsReportTransformer {
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
 			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
-			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRouteOption(), booking.getBookingDate(), entryPointName, null, "Unused", null));
+			result.add(new RowData(modelRecord.getName(), true, booking, booking.getRouteOption(), booking.getBookingDate(), entryPointName, null, "Unused", null, booking.getNotes()));
 		}
 
 		return result;

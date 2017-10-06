@@ -198,6 +198,8 @@ public class CanalBookingsReport extends AbstractReportView {
 
 		createColumn(sortingSupport, "Period", rowData -> rowData.period, rowData -> rowData.period);
 
+		createColumn(sortingSupport, "Notes", rowData -> rowData.notes, rowData -> rowData.notes);
+
 		viewer.getGrid().setLinesVisible(true);
 
 		makeActions();
