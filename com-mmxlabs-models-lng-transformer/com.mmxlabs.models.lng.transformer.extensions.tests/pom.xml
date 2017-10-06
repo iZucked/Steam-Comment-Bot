@@ -6,30 +6,14 @@
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
 		<version>4.3.6-SNAPSHOT</version>
 	</parent>
-	<artifactId>com.mmxlabs.models.lng.transformer.extensions.tests</artifactId>
+	<artifactId>com.mmxlabs.models.lng.transformer.extensions.tests
+	</artifactId>
 	<version>4.3.6-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
 
 		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<configuration>
-
-					<dependency-resolution>
-						<extraRequirements>
-							<requirement>
-								<type>eclipse-plugin</type>
-								<id>org.hamcrest</id>
-								<versionRange>0.0.0</versionRange>
-							</requirement>
-						</extraRequirements>
-					</dependency-resolution>
-					
-				</configuration>
-			</plugin>
 
 
 			<plugin>
