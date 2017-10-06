@@ -568,7 +568,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (cargoCV: ");
 		if (cargoCVESet) result.append(cargoCV); else result.append("<unset>");
 		result.append(", arriveCold: ");

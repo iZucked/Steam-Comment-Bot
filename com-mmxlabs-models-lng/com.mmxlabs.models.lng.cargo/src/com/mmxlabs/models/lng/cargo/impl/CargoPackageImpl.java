@@ -275,7 +275,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 *
+	 * 
 	 * <p>This method is used to initialize {@link CargoPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -289,8 +289,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		if (isInited) return (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 
 		// Obtain or create and register package
-		Object registeredCargoPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		CargoPackageImpl theCargoPackage = registeredCargoPackage instanceof CargoPackageImpl ? (CargoPackageImpl)registeredCargoPackage : new CargoPackageImpl();
+		CargoPackageImpl theCargoPackage = (CargoPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof CargoPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new CargoPackageImpl());
 
 		isInited = true;
 
@@ -313,6 +312,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Mark meta-data to indicate it can't be changed
 		theCargoPackage.freeze();
 
+  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(CargoPackage.eNS_URI, theCargoPackage);
 		return theCargoPackage;
@@ -1889,6 +1889,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCanalBookingSlot_Notes() {
+		return (EAttribute)canalBookingSlotEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getCanalBookingSlot__GetBookingDateAsDateTime() {
 		return canalBookingSlotEClass.getEOperations().get(0);
 	}
@@ -2224,6 +2233,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__SLOT);
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__ENTRY_POINT);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__BOOKING_DATE);
+		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__NOTES);
 		createEOperation(canalBookingSlotEClass, CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME);
 
 		canalBookingsEClass = createEClass(CANAL_BOOKINGS);
@@ -2552,6 +2562,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCanalBookingSlot_Slot(), this.getSlot(), null, "slot", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookingSlot_EntryPoint(), thePortPackage.getEntryPoint(), null, "entryPoint", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookingSlot_BookingDate(), theDateTimePackage.getLocalDate(), "bookingDate", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookingSlot_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCanalBookingSlot__GetBookingDateAsDateTime(), theDateTimePackage.getDateTime(), "getBookingDateAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2605,18 +2616,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	protected void createNamedObjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";
+		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";	
 		addAnnotation
-		  (getCargoModel_LoadSlots(),
-		   source,
+		  (getCargoModel_LoadSlots(), 
+		   source, 
 		   new String[] {
-			   "nonUniqueChildren", "true"
-		   });
+			 "nonUniqueChildren", "true"
+		   });	
 		addAnnotation
-		  (getCargoModel_DischargeSlots(),
-		   source,
+		  (getCargoModel_DischargeSlots(), 
+		   source, 
 		   new String[] {
-			   "nonUniqueChildren", "true"
+			 "nonUniqueChildren", "true"
 		   });
 	}
 
@@ -2627,167 +2638,167 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
-		  (getSlot_WindowSize(),
-		   source,
+		  (getSlot_WindowSize(), 
+		   source, 
 		   new String[] {
-			   "formatString", "##,##0"
-		   });
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getSlot_WindowSizeUnits(),
-		   source,
+		  (getSlot_WindowSizeUnits(), 
+		   source, 
 		   new String[] {
-			   "formatString", "##,##0"
-		   });
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getSlot_WindowFlex(),
-		   source,
+		  (getSlot_WindowFlex(), 
+		   source, 
 		   new String[] {
-			   "formatString", "-##0"
-		   });
+			 "formatString", "-##0"
+		   });	
 		addAnnotation
-		  (getSlot_WindowFlexUnits(),
-		   source,
+		  (getSlot_WindowFlexUnits(), 
+		   source, 
 		   new String[] {
-			   "formatString", "##,##0"
-		   });
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getSlot_Duration(),
-		   source,
+		  (getSlot_Duration(), 
+		   source, 
 		   new String[] {
-			   "formatString", "##,##0"
-		   });
+			 "formatString", "##,##0"
+		   });	
 		addAnnotation
-		  (getSlot_MinQuantity(),
-		   source,
+		  (getSlot_MinQuantity(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#,###,##0"
-		   });
+			 "formatString", "#,###,##0"
+		   });	
 		addAnnotation
-		  (getSlot_MaxQuantity(),
-		   source,
+		  (getSlot_MaxQuantity(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#,###,##0"
-		   });
+			 "formatString", "#,###,##0"
+		   });	
 		addAnnotation
-		  (getSlot_ShippingDaysRestriction(),
-		   source,
+		  (getSlot_ShippingDaysRestriction(), 
+		   source, 
 		   new String[] {
-			   "unit", "days",
-			   "formatString", "###"
-		   });
+			 "unit", "days",
+			 "formatString", "###"
+		   });	
 		addAnnotation
-		  (getSlot_Hedges(),
-		   source,
+		  (getSlot_Hedges(), 
+		   source, 
 		   new String[] {
-			   "unitPrefix", "$",
-			   "formatString", "-###,###,##0"
-		   });
+			 "unitPrefix", "$",
+			 "formatString", "-###,###,##0"
+		   });	
 		addAnnotation
-		  (getSlot_MiscCosts(),
-		   source,
+		  (getSlot_MiscCosts(), 
+		   source, 
 		   new String[] {
-			   "unitPrefix", "$",
-			   "formatString", "-###,###,##0"
-		   });
+			 "unitPrefix", "$",
+			 "formatString", "-###,###,##0"
+		   });	
 		addAnnotation
-		  (getLoadSlot_CargoCV(),
-		   source,
+		  (getLoadSlot_CargoCV(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#0.###"
-		   });
+			 "formatString", "#0.###"
+		   });	
 		addAnnotation
-		  (getDischargeSlot_MinCvValue(),
-		   source,
+		  (getDischargeSlot_MinCvValue(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#0.###"
-		   });
+			 "formatString", "#0.###"
+		   });	
 		addAnnotation
-		  (getDischargeSlot_MaxCvValue(),
-		   source,
+		  (getDischargeSlot_MaxCvValue(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#0.###"
-		   });
+			 "formatString", "#0.###"
+		   });	
 		addAnnotation
-		  (getVesselAvailability_CharterNumber(),
-		   source,
+		  (getVesselAvailability_CharterNumber(), 
+		   source, 
 		   new String[] {
-			   "formatString", "#0"
-		   });
+			 "formatString", "#0"
+		   });	
 		addAnnotation
-		  (getVesselAvailability_TimeCharterRate(),
-		   source,
+		  (getVesselAvailability_TimeCharterRate(), 
+		   source, 
 		   new String[] {
-			   "unit", "$/day"
-		   });
+			 "unit", "$/day"
+		   });	
 		addAnnotation
-		  (getVesselAvailability_RepositioningFee(),
-		   source,
+		  (getVesselAvailability_RepositioningFee(), 
+		   source, 
 		   new String[] {
-			   "unit", "$/day"
-		   });
+			 "unit", "$/day"
+		   });	
 		addAnnotation
-		  (getVesselEvent_DurationInDays(),
-		   source,
+		  (getVesselEvent_DurationInDays(), 
+		   source, 
 		   new String[] {
-			   "unit", "days",
-			   "formatString", "##0"
-		   });
+			 "unit", "days",
+			 "formatString", "##0"
+		   });	
 		addAnnotation
-		  (getCharterOutEvent_HireRate(),
-		   source,
+		  (getCharterOutEvent_HireRate(), 
+		   source, 
 		   new String[] {
-			   "unit", "$/day",
-			   "formatString", "###,##0"
-		   });
+			 "unit", "$/day",
+			 "formatString", "###,##0"
+		   });	
 		addAnnotation
-		  (getCharterOutEvent_BallastBonus(),
-		   source,
+		  (getCharterOutEvent_BallastBonus(), 
+		   source, 
 		   new String[] {
-			   "unit", "$"
-		   });
+			 "unit", "$"
+		   });	
 		addAnnotation
-		  (getCharterOutEvent_RepositioningFee(),
-		   source,
+		  (getCharterOutEvent_RepositioningFee(), 
+		   source, 
 		   new String[] {
-			   "unit", "$",
-			   "formatString", "###,##0"
-		   });
+			 "unit", "$",
+			 "formatString", "###,##0"
+		   });	
 		addAnnotation
-		  (getEndHeelOptions_MinimumEndHeel(),
-		   source,
+		  (getEndHeelOptions_MinimumEndHeel(), 
+		   source, 
 		   new String[] {
-			   "unit", "m\u00b3",
-			   "formatString", "###,##0.###"
-		   });
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
+		   });	
 		addAnnotation
-		  (getEndHeelOptions_MaximumEndHeel(),
-		   source,
+		  (getEndHeelOptions_MaximumEndHeel(), 
+		   source, 
 		   new String[] {
-			   "unit", "m\u00b3",
-			   "formatString", "###,##0.###"
-		   });
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
+		   });	
 		addAnnotation
-		  (getStartHeelOptions_CvValue(),
-		   source,
+		  (getStartHeelOptions_CvValue(), 
+		   source, 
 		   new String[] {
-			   "unit", "mmBtu/m\u00b3",
-			   "formatString", "#0.######"
-		   });
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.######"
+		   });	
 		addAnnotation
-		  (getStartHeelOptions_MinVolumeAvailable(),
-		   source,
+		  (getStartHeelOptions_MinVolumeAvailable(), 
+		   source, 
 		   new String[] {
-			   "unit", "m\u00b3",
-			   "formatString", "###,##0.###"
-		   });
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
+		   });	
 		addAnnotation
-		  (getStartHeelOptions_MaxVolumeAvailable(),
-		   source,
+		  (getStartHeelOptions_MaxVolumeAvailable(), 
+		   source, 
 		   new String[] {
-			   "unit", "m\u00b3",
-			   "formatString", "###,##0.###"
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0.###"
 		   });
 	}
 
@@ -2798,48 +2809,48 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	protected void createExpressionTypeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/pricing/expressionType";
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
 		addAnnotation
-		  (getSlot_PriceExpression(),
-		   source,
+		  (getSlot_PriceExpression(), 
+		   source, 
 		   new String[] {
-			   "type", "commodity"
-		   });
+			 "type", "commodity"
+		   });	
 		addAnnotation
-		  (getSlot_CancellationExpression(),
-		   source,
+		  (getSlot_CancellationExpression(), 
+		   source, 
 		   new String[] {
-			   "type", "commodity"
-		   });
+			 "type", "commodity"
+		   });	
 		addAnnotation
-		  (getVesselAvailability_TimeCharterRate(),
-		   source,
+		  (getVesselAvailability_TimeCharterRate(), 
+		   source, 
 		   new String[] {
-			   "type", "charter"
-		   });
+			 "type", "charter"
+		   });	
 		addAnnotation
-		  (getVesselAvailability_RepositioningFee(),
-		   source,
+		  (getVesselAvailability_RepositioningFee(), 
+		   source, 
 		   new String[] {
-			   "type", "charter"
-		   });
+			 "type", "charter"
+		   });	
 		addAnnotation
-		  (getCharterOutEvent_HireRate(),
-		   source,
+		  (getCharterOutEvent_HireRate(), 
+		   source, 
 		   new String[] {
-			   "type", "charter"
-		   });
+			 "type", "charter"
+		   });	
 		addAnnotation
-		  (getEndHeelOptions_PriceExpression(),
-		   source,
+		  (getEndHeelOptions_PriceExpression(), 
+		   source, 
 		   new String[] {
-			   "type", "commodity"
-		   });
+			 "type", "commodity"
+		   });	
 		addAnnotation
-		  (getStartHeelOptions_PriceExpression(),
-		   source,
+		  (getStartHeelOptions_PriceExpression(), 
+		   source, 
 		   new String[] {
-			   "type", "commodity"
+			 "type", "commodity"
 		   });
 	}
 

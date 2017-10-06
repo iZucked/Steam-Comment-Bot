@@ -628,7 +628,7 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (optional: ");
 		result.append(optional);
 		result.append(", hireRate: ");

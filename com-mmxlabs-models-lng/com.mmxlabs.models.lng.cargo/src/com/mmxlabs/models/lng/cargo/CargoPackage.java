@@ -5315,13 +5315,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKING_SLOT__BOOKING_DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__NOTES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Canal Booking Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CANAL_BOOKING_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7426,6 +7435,17 @@ public interface CargoPackage extends EPackage {
 	EOperation getCanalBookingSlot__GetBookingDateAsDateTime();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getNotes()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EAttribute getCanalBookingSlot_Notes();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9017,6 +9037,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CANAL_BOOKING_SLOT___GET_BOOKING_DATE_AS_DATE_TIME = eINSTANCE.getCanalBookingSlot__GetBookingDateAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKING_SLOT__NOTES = eINSTANCE.getCanalBookingSlot_Notes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.

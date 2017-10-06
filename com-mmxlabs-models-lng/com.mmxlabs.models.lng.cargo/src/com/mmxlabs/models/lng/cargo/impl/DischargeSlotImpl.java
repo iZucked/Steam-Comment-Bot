@@ -571,7 +571,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (FOBSale: ");
 		result.append(fobSale);
 		result.append(", PurchaseDeliveryType: ");
