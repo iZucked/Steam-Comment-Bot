@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingDate <em>Booking Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getNotes <em>Notes</em>}</li>
  * </ul>
  *
  * @generated
@@ -118,6 +119,26 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * @ordered
 	 */
 	protected Slot slot;
+
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -244,6 +265,27 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__NOTES, oldNotes, notes));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -256,6 +298,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
 				if (resolve) return getSlot();
 				return basicGetSlot();
+			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
+				return getNotes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -279,6 +323,9 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
 				setSlot((Slot)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
+				setNotes((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -304,6 +351,9 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
 				setSlot((Slot)null);
 				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -324,6 +374,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return BOOKING_DATE_EDEFAULT == null ? bookingDate != null : !BOOKING_DATE_EDEFAULT.equals(bookingDate);
 			case CargoPackage.CANAL_BOOKING_SLOT__SLOT:
 				return slot != null;
+			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -344,6 +396,8 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 		result.append(canalEntrance);
 		result.append(", bookingDate: ");
 		result.append(bookingDate);
+		result.append(", notes: ");
+		result.append(notes);
 		result.append(')');
 		return result.toString();
 	}

@@ -42,7 +42,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
@@ -284,6 +286,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Canal", new RouteOptionAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_RouteOption(), getEditingDomain()));
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getEditingDomain()));
 		addTypicalColumn("Slot", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Slot(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Notes", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Notes(), getEditingDomain())));
 
 		defaultSetTitle("Canal Bookings");
 

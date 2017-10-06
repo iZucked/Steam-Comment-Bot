@@ -1889,6 +1889,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCanalBookingSlot_Notes() {
+		return (EAttribute)canalBookingSlotEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCanalBookings() {
 		return canalBookingsEClass;
 	}
@@ -2206,6 +2215,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__CANAL_ENTRANCE);
 		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__BOOKING_DATE);
 		createEReference(canalBookingSlotEClass, CANAL_BOOKING_SLOT__SLOT);
+		createEAttribute(canalBookingSlotEClass, CANAL_BOOKING_SLOT__NOTES);
 
 		canalBookingsEClass = createEClass(CANAL_BOOKINGS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
@@ -2531,6 +2541,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCanalBookingSlot_CanalEntrance(), thePortPackage.getCanalEntry(), "canalEntrance", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookingSlot_BookingDate(), theDateTimePackage.getLocalDate(), "bookingDate", null, 1, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookingSlot_Slot(), this.getSlot(), null, "slot", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookingSlot_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, CanalBookingSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(canalBookingsEClass, CanalBookings.class, "CanalBookings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCanalBookings_CanalBookingSlots(), this.getCanalBookingSlot(), null, "canalBookingSlots", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

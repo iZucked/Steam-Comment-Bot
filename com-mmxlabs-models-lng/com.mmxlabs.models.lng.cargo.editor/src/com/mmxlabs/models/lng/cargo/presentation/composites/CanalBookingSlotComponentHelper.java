@@ -15,7 +15,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -75,6 +75,7 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 		add_canalEntranceEditor(detailComposite, topClass);
 		add_bookingDateEditor(detailComposite, topClass);
 		add_slotEditor(detailComposite, topClass);
+		add_notesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the routeOption feature on CanalBookingSlot
@@ -110,5 +111,14 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT));
+	}
+
+	/**
+	 * Create the editor for the notes feature on CanalBookingSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new MultiTextInlineEditor(CargoPackage.Literals.CANAL_BOOKING_SLOT__NOTES));
 	}
 }

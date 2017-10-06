@@ -56,6 +56,7 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 			addCanalEntrancePropertyDescriptor(object);
 			addBookingDatePropertyDescriptor(object);
 			addSlotPropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -149,6 +150,28 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookingSlot_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_notes_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CanalBookingSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -190,6 +213,7 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 			case CargoPackage.CANAL_BOOKING_SLOT__ROUTE_OPTION:
 			case CargoPackage.CANAL_BOOKING_SLOT__CANAL_ENTRANCE:
 			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_DATE:
+			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

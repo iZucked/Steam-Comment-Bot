@@ -29,6 +29,7 @@ import java.time.ZonedDateTime;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getCanalEntrance <em>Canal Entrance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getNotes <em>Notes</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookingSlot()
@@ -151,5 +152,31 @@ public interface CanalBookingSlot extends MMXObject {
 	 * @generated
 	 */
 	void setSlot(Slot value);
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Notes</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Notes</em>' attribute.
+	 * @see #setNotes(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookingSlot_Notes()
+	 * @model
+	 * @generated
+	 */
+	String getNotes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getNotes <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Notes</em>' attribute.
+	 * @see #getNotes()
+	 * @generated
+	 */
+	void setNotes(String value);
 
 } // CanalBookingSlot
