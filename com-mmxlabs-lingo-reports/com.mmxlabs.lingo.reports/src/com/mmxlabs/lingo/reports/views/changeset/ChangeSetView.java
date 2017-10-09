@@ -37,6 +37,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -70,12 +71,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.services.ChangeSetViewCreatorService;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
@@ -415,7 +420,51 @@ public class ChangeSetView implements IAdaptable {
 				return (T) viewer.getGrid();
 			}
 		}
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return (T) new IReportContentsGenerator() {
 
+				public String getStringContents(ScenarioResult pin, ScenarioResult other) {
+					try {
+						columnHelper.setTextualVesselMarkers(true);
+						// Need to refresh the view to trigger creation of the text labels
+						final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+						scheduleDiffUtils.setCheckAssignmentDifferences(true);
+						scheduleDiffUtils.setCheckSpotMarketDifferences(true);
+						scheduleDiffUtils.setCheckNextPortDifferences(true);
+
+						ISelectedDataProvider selectedDataProvider = SelectedScenariosService.createTestingSelectedDataProvider(pin, other);
+						ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pin, Collections.singletonList(other), selectedDataProvider,
+								scheduleDiffUtils, Collections.emptyList());
+						result.selectedDataProvider = selectedDataProvider;
+						final Table table = result.table;
+
+						// Take a copy of current diff options
+						// table.setOptions(EcoreUtil.copy(diffOptions));
+
+						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
+
+							final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
+							final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, result.equivalancesMap, table, pin, other, monitor);
+
+							return new ViewState(newRoot);
+						}, false, null);
+						ViewerHelper.refresh(viewer, true);
+
+						final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+
+						final String contents = util.convert();
+
+						ChangeSetView.this.setEmptyData();
+						// Prefix this header for rendering purposes
+						return "<meta charset=\"UTF-8\"/>" + contents;
+
+					} finally {
+						columnHelper.setTextualVesselMarkers(false);
+					}
+				}
+			};
+
+		}
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			try {
@@ -695,6 +744,10 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final @Nullable String targetSlotId) {
+		setNewDataData(target, action, true, targetSlotId);
+	}
+
+	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, boolean runAsync, final @Nullable String targetSlotId) {
 
 		columnHelper.cleanUpVesselColumns();
 
@@ -704,7 +757,7 @@ public class ChangeSetView implements IAdaptable {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
 			try {
-				d.run(true, false, new IRunnableWithProgress() {
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -712,9 +765,19 @@ public class ChangeSetView implements IAdaptable {
 						final ViewState newViewState = action.apply(monitor, targetSlotId);
 						newViewState.tableRootToBase = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot);
 						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot);
-						display.asyncExec(new ViewUpdateRunnable(newViewState));
+						if (runAsync) {
+							display.asyncExec(new ViewUpdateRunnable(newViewState));
+						} else {
+							display.syncExec(new ViewUpdateRunnable(newViewState));
+						}
+
 					}
-				});
+				};
+				if (runAsync) {
+					d.run(true, false, runnable);
+				} else {
+					runnable.run(new NullProgressMonitor());
+				}
 			} catch (InvocationTargetException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

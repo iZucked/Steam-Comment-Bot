@@ -155,7 +155,7 @@ public class ScenarioComparisonServiceTransformer {
 		public final Table table;
 		public final List<LNGScenarioModel> rootObjects;
 		public final Map<EObject, Set<EObject>> equivalancesMap;
-		ISelectedDataProvider selectedDataProvider;
+		public ISelectedDataProvider selectedDataProvider;
 		final ScenarioResult pinned;
 		final Collection<ScenarioResult> others;
 

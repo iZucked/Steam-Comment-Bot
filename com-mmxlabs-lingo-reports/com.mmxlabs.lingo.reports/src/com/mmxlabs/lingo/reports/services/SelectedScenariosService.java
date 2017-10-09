@@ -375,8 +375,13 @@ public class SelectedScenariosService {
 		}
 	}
 
+	/**
+	 * 
+	 * @param scenarioResult
+	 * @return
+	 */
 	@Nullable
-	private KeyValueRecord createKeyValueRecord(@NonNull final ScenarioResult scenarioResult) {
+	private static KeyValueRecord createKeyValueRecord(@NonNull final ScenarioResult scenarioResult) {
 
 		@NonNull
 		final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
@@ -485,5 +490,21 @@ public class SelectedScenariosService {
 			return pProvider.getPinnedInstance();
 		}
 		return null;
+	}
+
+	public static ISelectedDataProvider createTestingSelectedDataProvider(ScenarioResult pin, ScenarioResult other) {
+
+		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+		{
+			final KeyValueRecord record = createKeyValueRecord(pin);
+			provider.addScenario(record.getScenarioResult(), record.getSchedule(), record.getChildren());
+			provider.setPinnedScenarioInstance(pin);
+		}
+		{
+			final KeyValueRecord record = createKeyValueRecord(other);
+			provider.addScenario(record.getScenarioResult(), record.getSchedule(), record.getChildren());
+
+		}
+		return provider;
 	}
 }
