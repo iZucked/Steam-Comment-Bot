@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -87,5 +88,17 @@ public final class HashMapSpotMarketSlotsEditor implements ISpotMarketSlotsProvi
 	@Override
 	public List<IPortSlot> getPortSlotsFor(final ISpotMarket market) {
 		return Collections.unmodifiableList(marketToPortSlotsMap.getOrDefault(market, Collections.emptyList()));
+	}
+
+	@Override
+	public boolean isEquivalentOption(final ISequenceElement a, final ISequenceElement b) {
+
+		if (getSpotMarket(a) == getSpotMarket(b)) {
+			final String key_a = getMarketDateKey(a);
+			final String key_b = getMarketDateKey(b);
+			return Objects.equals(key_a, key_b);
+		}
+
+		return false;
 	}
 }

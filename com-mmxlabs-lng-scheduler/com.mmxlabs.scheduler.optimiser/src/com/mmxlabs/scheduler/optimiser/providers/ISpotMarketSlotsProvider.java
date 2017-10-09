@@ -37,4 +37,12 @@ public interface ISpotMarketSlotsProvider extends IDataComponentProvider {
 	List<ISequenceElement> getElementsFor(ISpotMarket market);
 
 	List<IPortSlot> getPortSlotsFor(ISpotMarket market);
+
+	/**
+	 * Returns true if the element is same market and has the same date key. 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	boolean isEquivalentOption(ISequenceElement a, ISequenceElement b);
 }
