@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -194,7 +195,7 @@ public class ReportTesterHelper {
 				// Step two set the new selection, release UI thread
 				Thread.sleep(1000);
 				Thread.yield();
-	
+
 				RunnerHelper.exec(() -> {
 					callable.updateSelection(view[0], provider);
 				}, true);
@@ -233,6 +234,90 @@ public class ReportTesterHelper {
 			}
 
 			return contents[0];
+		});
+	}
+
+	public <U> void runReportTest(final String reportID, final @Nullable IScenarioSelection callable, final @Nullable IScenarioSelection cleanUp, Class<U> adapterClass, Consumer<U> consumer)
+			throws InterruptedException {
+
+		// Get reference to the selection provider service
+
+		ServiceHelper.withCheckedServiceConsumer(IScenarioServiceSelectionProvider.class, provider -> {
+
+			final IViewPart[] view = new IViewPart[1];
+			try {
+				// Step 1 open the view, release UI thread
+				Display.getDefault().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						Assert.assertNotNull(activePage);
+						try {
+							// Close the existing view reference. E.g. because we have changed the license features.
+							final IViewReference ref = activePage.findViewReference(reportID);
+							if (ref != null) {
+								// This will dispose the view
+								activePage.hideView(ref);
+							}
+
+							// Clear existing selection so newly opened view does not pick up any prior data.
+							provider.deselectAll(true);
+
+							view[0] = activePage.showView(reportID);
+							Assert.assertNotNull(view[0]);
+							activePage.activate(view[0]);
+
+						} catch (final PartInitException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
+				// Step two set the new selection, release UI thread
+				Thread.sleep(1000);
+				Thread.yield();
+
+				if (callable != null) {
+					RunnerHelper.exec(() -> {
+						callable.updateSelection(view[0], provider);
+					}, true);
+					Thread.yield();
+					Thread.sleep(1000);
+				}
+				// Step 3, obtain report contents
+				Display.getDefault().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						U contents = (U) view[0].getAdapter(adapterClass);
+						if (contents == null) {
+							if (view[0] instanceof E4PartWrapper) {
+								final E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
+								final IViewSite viewSite = view[0].getViewSite();
+								final EPartService service = (EPartService) viewSite.getService(EPartService.class);
+								final MPart p = service.findPart(reportID);
+								if (p != null) {
+									final Object o = p.getObject();
+									if (o instanceof IAdaptable) {
+										final IAdaptable adaptable = (IAdaptable) o;
+										contents = (U) adaptable.getAdapter(adapterClass);
+									}
+								}
+								// EModelService
+								// EPartService
+							}
+						}
+						consumer.accept(contents);
+					}
+				});
+			} finally {
+				if (cleanUp != null) {
+					RunnerHelper.exec(() -> {
+						cleanUp.updateSelection(view[0], provider);
+					}, true);
+				}
+			}
 		});
 	}
 }

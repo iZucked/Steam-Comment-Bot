@@ -30,6 +30,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -168,10 +169,14 @@ public class ReportTester {
 				ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
 
 				final ReportTesterHelper reportTester = new ReportTesterHelper();
-				final IReportContents reportContents = reportTester.getReportContents(pinResult, refResult, reportID);
+				final String result[] = new String[1];
 
-				Assert.assertNotNull(reportContents);
-				final String actualContents = reportContents.getStringContents();
+				reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
+					result[0] = generator.getStringContents(pinResult, refResult);
+				});
+
+				Assert.assertNotNull(result[0]);
+				final String actualContents = result[0];
 				Assert.assertNotNull(actualContents);
 				if (storeReports == TestMode.Generate) {
 
