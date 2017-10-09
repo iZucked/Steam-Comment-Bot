@@ -210,14 +210,14 @@ public class LNGSchedulerInsertSlotJobRunner {
 		scenarioRunner.evaluateInitialState();
 	}
 
-	public SlotInsertionOptions doRunJob(final IProgressMonitor progressMonitor) {
+	public SlotInsertionOptions doRunJob(int iterations, final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
 		SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);
 		try {
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
 			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
 
-			final IMultiStateResult results = runInsertion(1_000_000, subMonitor.split(90));
+			final IMultiStateResult results = runInsertion(iterations, subMonitor.split(90));
 			if (results == null) {
 				System.out.printf("Found no solutions\n");
 				return null;
