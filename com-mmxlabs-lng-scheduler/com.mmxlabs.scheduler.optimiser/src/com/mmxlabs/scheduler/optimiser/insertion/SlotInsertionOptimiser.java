@@ -183,7 +183,7 @@ public class SlotInsertionOptimiser {
 			// Try and remove any hitch-hikers that may have arisen during the search.
 			@NonNull
 			final ISequences simpleSeq = sequencesHelper.undoUnrelatedChanges(state.originalRawSequences, currentSequences, slots);
-			boolean valid = true;			
+			boolean valid = true;
 			{
 				// First check any non-optional input elements have been included. This can happen in a multi slot insertion where subsequent moves undo earlier moves.
 				for (final ISequenceElement slot : slots) {
@@ -257,6 +257,10 @@ public class SlotInsertionOptimiser {
 		final List<ISequenceElement> elements = portSlots.stream() //
 				.map(s -> portSlotProvider.getElement(s)) //
 				.collect(Collectors.toList());
-		return insert(state, seed, elements);
+		final Pair<ISequences, Long> result = insert(state, seed, elements);
+		if (result != null) {
+			result.setFirst(sequencesHelper.undoSpotMarketSwaps(state.originalRawSequences, result.getFirst()));
+		}
+		return result;
 	}
 }
