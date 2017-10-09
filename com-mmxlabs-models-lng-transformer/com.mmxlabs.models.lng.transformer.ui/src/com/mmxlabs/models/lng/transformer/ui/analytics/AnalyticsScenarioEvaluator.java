@@ -209,7 +209,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					}
 
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge, load, discharge);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge.getDataTransformer(), load, discharge);
 						m_preCreated.put(p.getFirst(), p.getSecond());
 
 						continue;
@@ -245,13 +245,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					final VesselAssignmentType t = e.getKey();
 					if (t instanceof VesselAvailability) {
 						final VesselAvailability vesselAvailability = (VesselAvailability) t;
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, vesselAvailability, orderedSlots);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge.getDataTransformer(), vesselAvailability, orderedSlots);
 						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
 						assert old == null;
 
 					} else if (t instanceof CharterInMarket) {
 						final CharterInMarket charterInMarket = (CharterInMarket) t;
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, charterInMarket, -1, orderedSlots);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge.getDataTransformer(), charterInMarket, -1, orderedSlots);
 						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
 						assert old == null;
 					}
