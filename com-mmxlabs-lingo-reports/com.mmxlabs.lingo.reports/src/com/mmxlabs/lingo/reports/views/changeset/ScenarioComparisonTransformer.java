@@ -241,9 +241,9 @@ public class ScenarioComparisonTransformer {
 
 						else if (event instanceof StartEvent //
 								|| event instanceof EndEvent) {
-							if (sequence.getSequenceType() == SequenceType.VESSEL) {
-								// Only include these for fleet vessels.
-
+							if (sequence.getSequenceType() == SequenceType.VESSEL //
+									|| sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+								// Only include these for fleet or spot vessels.
 							} else {
 								continue;
 							}
