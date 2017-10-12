@@ -86,8 +86,10 @@ public class ColumnHandler {
 	}
 
 	public void destroy() {
-		columnFactory.destroy(column);
-		column = null;
+		if (column != null) {
+			columnFactory.destroy(column);
+			column = null;
+		}
 	}
 
 	public void setColumnFactory(IColumnFactory columnFactory) {

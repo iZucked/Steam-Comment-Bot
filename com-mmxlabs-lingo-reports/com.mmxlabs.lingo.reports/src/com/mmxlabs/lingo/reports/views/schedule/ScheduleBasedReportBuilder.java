@@ -230,6 +230,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			if (handler != null) {
 				final GridColumn column = handler.createColumn().getColumn();
 				column.setVisible(handler.block.getVisible());
+				// SG 2017-10-11 - This triggered an IllegalArgumentException!
 				column.pack();
 			}
 		}
