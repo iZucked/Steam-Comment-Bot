@@ -31,6 +31,8 @@ import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -54,16 +56,20 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiser;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserInitialState;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
+import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.LookupManager;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 public class SlotInsertionOptimiserUnit {
@@ -173,6 +179,7 @@ public class SlotInsertionOptimiserUnit {
 				final IOptionalElementsProvider optionalElementsProvider = injector.getInstance(IOptionalElementsProvider.class);
 				final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
 				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+				final IFollowersAndPreceders followersAndPreceders = injector.getInstance(IFollowersAndPreceders.class);
 
 				{
 					// Calculate the initial metrics
@@ -223,6 +230,31 @@ public class SlotInsertionOptimiserUnit {
 						}
 					}
 					state.startingPointRawSequences = tmpRawSequences;
+				}
+				// check for insertion feasibility
+				{
+					List<ISequenceElement> sequenceElements = optionElements.stream().map(e->portSlotProvider.getElement(e)).collect(Collectors.toList());
+					boolean isFeasible = true;
+					for (IPortSlot portSlot : optionElements) {
+						ISequenceElement element = portSlotProvider.getElement(portSlot);
+						String slotName = "";
+						if (portSlot instanceof ILoadOption) {
+							Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
+							isFeasible = validFollowers.size() > 1;
+							LoadSlot load = modelEntityMap.getModelObject(portSlot, LoadSlot.class);
+							slotName = load.getName();
+						} else if (portSlot instanceof IDischargeOption) {
+							Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
+							DischargeSlot discharge = modelEntityMap.getModelObject(portSlot, DischargeSlot.class);
+							slotName = discharge.getName();
+							isFeasible = validPreceders.size() > 1;
+						}
+						if (!isFeasible) {
+							
+							throw new UserFeedbackException(
+									String.format("Unable to perform insertion on this scenario. This is caused by the slot %s having no possible pairings.", slotName));
+						}
+					}
 				}
 			}
 
