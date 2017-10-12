@@ -35,6 +35,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	private ImmutableMap<IPort, ImmutableList<IRouteOptionBooking>> panamaBookings;
 	private int strictBoundary;
 	private int relaxedBoundary;
+	private int northboundMaxIdleDays;
 	private int relaxedBookingsCountAtEntryA;
 	private int relaxedBookingsCountAtEntryB;
 	private int arrivalMargin;
@@ -100,7 +101,6 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 		return strictBoundary;
 	}
 
-	@Override
 	public int getRelaxedBookingCountNorthbound() {
 		return relaxedBookingsCountAtEntryA;
 	}
@@ -148,5 +148,15 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	@Override
 	public void setArrivalMargin(final int margin) {
 		arrivalMargin = margin;
+	}
+
+	@Override
+	public int getNorthboundMaxIdleDays() {
+		return northboundMaxIdleDays;
+	}
+
+	@Override
+	public void setNorthboundMaxIdleDays(int maxIdleDays) {
+		northboundMaxIdleDays = maxIdleDays;
 	}
 }

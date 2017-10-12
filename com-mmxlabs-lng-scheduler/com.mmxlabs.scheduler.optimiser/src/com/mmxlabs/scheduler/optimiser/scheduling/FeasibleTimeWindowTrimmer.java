@@ -569,11 +569,25 @@ public class FeasibleTimeWindowTrimmer {
 										}
 									}
 								}
-
-								// if no booking was assigned and we are within the strict boundary, set time to direct
-								if (!foundBooking && panamaPeriod == PanamaPeriod.Strict) {
-									travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
-									currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+								
+								if (!foundBooking) {
+									
+									boolean northBound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
+									int delayedPanamaTravelTime = panamaTravelTime + panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+									
+									// if no booking was assigned and we are within the strict boundary, set time to direct
+									if (!northBound && panamaPeriod == PanamaPeriod.Strict) {
+										travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
+										currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+									}
+									
+									if(northBound && delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)){
+										travelTimeData.setMinTravelTime(index - 1, delayedPanamaTravelTime);
+										currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
+									}else if (northBound) {
+										travelTimeData.setMinTravelTime(index - 1, Math.min(directTravelTime, suezTravelTime));
+										currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+									}
 								}
 							}
 						}
