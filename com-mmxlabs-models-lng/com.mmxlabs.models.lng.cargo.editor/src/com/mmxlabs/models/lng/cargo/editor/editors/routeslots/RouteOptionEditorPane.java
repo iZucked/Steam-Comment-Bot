@@ -50,8 +50,9 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	private static final Logger log = LoggerFactory.getLogger(RouteOptionEditorPane.class);
 	private FormattedText strictEditor;
 	private FormattedText relaxedEditor;
-	private FormattedText flexEditorNorthbound;
+//	private FormattedText flexEditorNorthbound;
 	private FormattedText flexEditorSouthbound;
+	private FormattedText maxIdleNorthboundEditor;
 	private FormattedText marginEditor;
 
 	private Label todayLabel_Strict;
@@ -67,8 +68,8 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			if (msg.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}
-			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND) {
-				flexEditorNorthbound.setValue(msg.getNewValue());
+			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS) {
+				maxIdleNorthboundEditor.setValue(msg.getNewValue());
 				return;
 			}
 			if (msg.getFeature() == CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND) {
@@ -197,36 +198,13 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 				todayLabel_Relaxed.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 			}
 			{
-
-
-				final Label lbl3 = new Label(parametersParent, SWT.NONE);
-				lbl3.setText("Flexible bookings northbound ");
-				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+				final Label lbl4 = new Label(parametersParent, SWT.NONE);
+				lbl4.setText("Flexible bookings southbound ");
+				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 				
 				final Composite flexParent = new Composite(parametersParent, SWT.NONE);
 				flexParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
 				
-				flexEditorNorthbound = new FormattedText(flexParent);
-				flexEditorNorthbound.setFormatter(new IntegerFormatter());
-				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-				flexEditorNorthbound.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
-				flexEditorNorthbound.getControl().addModifyListener(new ModifyListener() {
-
-					@Override
-					public void modifyText(ModifyEvent e) {
-						Object newValue = flexEditorNorthbound.getValue();
-						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleBookingAmountNorthbound())) {
-							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleBookingAmountNorthbound(), newValue);
-							getEditingDomain().getCommandStack().execute(cmd);
-						}
-					}
-
-				});
-				flexEditorNorthbound.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
-
-				final Label lbl3b = new Label(flexParent, SWT.NONE);
-				lbl3b.setText(" southbound ");
-				lbl3b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
 				flexEditorSouthbound = new FormattedText(flexParent);
 				flexEditorSouthbound.setFormatter(new IntegerFormatter());
 				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
@@ -247,9 +225,67 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 			}
 			{
 
-				final Label lbl4 = new Label(parametersParent, SWT.NONE);
-				lbl4.setText("Arrival margin in hours ");
-				lbl4.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+
+//				final Label lbl3 = new Label(parametersParent, SWT.NONE);
+//				lbl3.setText("Flexible bookings northbound ");
+//				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+//				
+//				final Composite flexParent = new Composite(parametersParent, SWT.NONE);
+//				flexParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
+//				
+//				flexEditorNorthbound = new FormattedText(flexParent);
+//				flexEditorNorthbound.setFormatter(new IntegerFormatter());
+//				// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+//				flexEditorNorthbound.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+//				flexEditorNorthbound.getControl().addModifyListener(new ModifyListener() {
+//
+//					@Override
+//					public void modifyText(ModifyEvent e) {
+//						Object newValue = flexEditorNorthbound.getValue();
+//						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getFlexibleBookingAmountNorthbound())) {
+//							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_FlexibleBookingAmountNorthbound(), newValue);
+//							getEditingDomain().getCommandStack().execute(cmd);
+//						}
+//					}
+//
+//				});
+//				flexEditorNorthbound.getControl().setToolTipText("Number of permitted panama voyages without a booking in the relaxed period.");
+
+				
+				final Label lbl3 = new Label(parametersParent, SWT.NONE);
+				lbl3.setText("Northbound maximum idle");
+				lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
+				
+				final Composite northParent = new Composite(parametersParent, SWT.NONE);
+				northParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
+				
+				maxIdleNorthboundEditor = new FormattedText(northParent);
+				maxIdleNorthboundEditor.setFormatter(new IntegerFormatter());
+				maxIdleNorthboundEditor.getControl().setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).hint(30, SWT.DEFAULT).create());
+				maxIdleNorthboundEditor.getControl().addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Object newValue = maxIdleNorthboundEditor.getValue();
+						if (canalBookingsModel != null && newValue instanceof Integer && !Objects.equals(newValue, canalBookingsModel.getNorthboundMaxIdleDays())) {
+							final Command cmd = SetCommand.create(getEditingDomain(), canalBookingsModel, CargoPackage.eINSTANCE.getCanalBookings_NorthboundMaxIdleDays(), newValue);
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					}
+
+				});
+				maxIdleNorthboundEditor.getControl().setToolTipText("The amount of days a vessel will idle at the canal in order to try and get a spontanous booking.");
+				
+				final Label lbl3b = new Label(northParent, SWT.NONE);
+				lbl3b.setText(" days");
+				lbl3b.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).create());
+
+			}
+			{
+
+				final Label lbl5 = new Label(parametersParent, SWT.NONE);
+				lbl5.setText("Arrival margin in hours ");
+				lbl5.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create());
 				
 				final Composite marginParent = new Composite(parametersParent, SWT.NONE);
 				marginParent.setLayout(GridLayoutFactory.fillDefaults().numColumns(5).equalWidth(false).spacing(3, 0).margins(0, 7).create());
@@ -307,7 +343,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		if (canalBookingsModel != null) {
 			strictEditor.setValue(canalBookingsModel.getStrictBoundaryOffsetDays());
 			relaxedEditor.setValue(canalBookingsModel.getRelaxedBoundaryOffsetDays());
-			flexEditorNorthbound.setValue(canalBookingsModel.getFlexibleBookingAmountNorthbound());
+			maxIdleNorthboundEditor.setValue(canalBookingsModel.getNorthboundMaxIdleDays());
 			flexEditorSouthbound.setValue(canalBookingsModel.getFlexibleBookingAmountSouthbound());
 			marginEditor.setValue(canalBookingsModel.getArrivalMarginHours());
 			{
@@ -320,7 +356,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		} else {
 			strictEditor.setValue(0);
 			relaxedEditor.setValue(0);
-			flexEditorNorthbound.setValue(0);
+			maxIdleNorthboundEditor.setValue(0);
 			flexEditorSouthbound.setValue(0);
 			marginEditor.setValue(0);
 		}

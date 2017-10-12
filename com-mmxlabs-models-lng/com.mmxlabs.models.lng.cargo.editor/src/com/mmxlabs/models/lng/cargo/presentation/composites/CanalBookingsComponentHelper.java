@@ -75,6 +75,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		add_arrivalMarginHoursEditor(detailComposite, topClass);
 		add_flexibleBookingAmountNorthboundEditor(detailComposite, topClass);
 		add_flexibleBookingAmountSouthboundEditor(detailComposite, topClass);
+		add_northboundMaxIdleDaysEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the canalBookingSlots feature on CanalBookings
@@ -125,5 +126,14 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_flexibleBookingAmountSouthboundEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND));
+	}
+
+	/**
+	 * Create the editor for the northboundMaxIdleDays feature on CanalBookings
+	 *
+	 * @generated
+	 */
+	protected void add_northboundMaxIdleDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS));
 	}
 }

@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -178,5 +179,31 @@ public interface CanalBookings extends MMXObject {
 	 * @generated
 	 */
 	void setFlexibleBookingAmountSouthbound(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Northbound Max Idle Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Northbound Max Idle Days</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Northbound Max Idle Days</em>' attribute.
+	 * @see #setNorthboundMaxIdleDays(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_NorthboundMaxIdleDays()
+	 * @model
+	 * @generated
+	 */
+	int getNorthboundMaxIdleDays();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Northbound Max Idle Days</em>' attribute.
+	 * @see #getNorthboundMaxIdleDays()
+	 * @generated
+	 */
+	void setNorthboundMaxIdleDays(int value);
 
 } // CanalBookings

@@ -5451,13 +5451,22 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Northbound Max Idle Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7493,6 +7502,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_FlexibleBookingAmountSouthbound();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Northbound Max Idle Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EAttribute getCanalBookings_NorthboundMaxIdleDays();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9055,6 +9075,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND = eINSTANCE.getCanalBookings_FlexibleBookingAmountSouthbound();
+
+		/**
+		 * The meta object literal for the '<em><b>Northbound Max Idle Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_NorthboundMaxIdleDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

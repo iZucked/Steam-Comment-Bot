@@ -550,7 +550,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (sequenceHint: ");
 		result.append(sequenceHint);
 		result.append(", spotIndex: ");

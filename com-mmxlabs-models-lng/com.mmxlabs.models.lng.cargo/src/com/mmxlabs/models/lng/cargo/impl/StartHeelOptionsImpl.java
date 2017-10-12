@@ -314,7 +314,7 @@ public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOpti
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (cvValue: ");
 		result.append(cvValue);
 		result.append(", minVolumeAvailable: ");

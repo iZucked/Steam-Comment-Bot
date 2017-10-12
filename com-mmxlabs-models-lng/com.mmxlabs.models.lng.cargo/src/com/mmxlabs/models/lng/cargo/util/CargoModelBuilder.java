@@ -333,7 +333,7 @@ public class CargoModelBuilder {
 
 	private void validatePortCapability(@NonNull final Port port, @NonNull final PortCapability portCapability) {
 		if (!port.getCapabilities().contains(portCapability)) {
-			throw new IllegalArgumentException("Port does not have required capability");
+			throw new IllegalArgumentException("Port does not have required capability " + portCapability);
 		}
 	}
 
