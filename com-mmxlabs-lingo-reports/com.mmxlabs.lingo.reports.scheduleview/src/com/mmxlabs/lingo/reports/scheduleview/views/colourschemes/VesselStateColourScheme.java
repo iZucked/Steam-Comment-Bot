@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -122,7 +123,7 @@ public class VesselStateColourScheme extends ColourScheme {
 			if (event instanceof CanalBookingEvent) {
 				CanalBookingEvent canalBookingEvent = (CanalBookingEvent) event;
 				Journey linkedJourney = canalBookingEvent.getLinkedJourney();
-				if (linkedJourney.getCanalBooking() == null) {
+				if (linkedJourney.getCanalBooking() == null && linkedJourney.getCanalEntry() != null && linkedJourney.getCanalEntry().eContainingFeature() == PortPackage.Literals.ROUTE__NORTH_ENTRANCE) {
 					if (linkedJourney.getCanalBookingPeriod() == PanamaBookingPeriod.STRICT || linkedJourney.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 						return ColourPalette.getInstance().getColour(new RGB(255, 0, 0));
 					}
