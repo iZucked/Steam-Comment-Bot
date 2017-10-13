@@ -246,15 +246,15 @@ public class PortTimesRecordMaker {
 								// Add padding to start event if possible
 								if (remainingHours > 0) {
 									ITimeWindow windowStart = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);
-									int startLeftOver = ideal - windowStart.getInclusiveStart();
+									int startLeftOver = newStartTime - windowStart.getInclusiveStart();
 									if (startLeftOver > 0) {
 										// Can we take care of the remaining time in one go ?
 										if (startLeftOver > remainingHours) {
-											firstRecord.setSlotTime(from, ideal - remainingHours);
+											firstRecord.setSlotTime(from, newStartTime - remainingHours);
 											remainingHours = 0;
 										} else {
 											// Set new end time
-											firstRecord.setSlotTime(from, ideal - startLeftOver);
+											firstRecord.setSlotTime(from, newStartTime - startLeftOver);
 											remainingHours -= startLeftOver;
 										}
 									}
@@ -357,8 +357,15 @@ public class PortTimesRecordMaker {
 
 							int startTime = firstRecord.getSlotTime(startSlot);
 							int maxTime = startTime + endReq.getMaxDuration() * 24;
-
-							arrivalTime = Math.max(maxTime, lastNextExpectedArrivalTime);
+							
+							if (maxTime < lastNextExpectedArrivalTime) {
+								// Trigger an error if the end is before the arrival at max speed
+								// Will pick up as a lateness violation
+								arrivalTime = lastNextExpectedArrivalTime;
+							} else {
+								
+								arrivalTime = Math.min(maxTime, arrivalTime);
+							}
 						}
 					}
 
