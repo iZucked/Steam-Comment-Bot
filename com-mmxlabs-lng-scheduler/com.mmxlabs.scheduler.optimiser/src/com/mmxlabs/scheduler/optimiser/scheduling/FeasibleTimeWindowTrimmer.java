@@ -867,6 +867,12 @@ public class FeasibleTimeWindowTrimmer {
 			lowerBound = endRequirement.getTimeWindow().getInclusiveStart();
 		} else {
 			upperBound = windowEndTime[index];
+			
+			// Charter In Vessel have MAX_VALUE upperBound
+			if (upperBound == Integer.MAX_VALUE) {
+				upperBound -= 1;
+			}
+			
 			lowerBound = windowStartTime[index];
 		}
 		
