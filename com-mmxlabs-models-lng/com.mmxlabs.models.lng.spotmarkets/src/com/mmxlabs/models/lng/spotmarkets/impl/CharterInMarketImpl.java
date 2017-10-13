@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
 import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
@@ -922,6 +923,14 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		SpotMarketsPackage marketsPackage = SpotMarketsPackage.eINSTANCE;
+		CommercialPackage commercial = CommercialPackage.eINSTANCE;
+		if (marketsPackage.getCharterInMarket_MinDuration() == feature) {
+			return new DelegateInformation(marketsPackage.getCharterInMarket_CharterContract(), commercial.getCharterContract_MinDuration(), (Integer) 0);
+		} else if (marketsPackage.getCharterInMarket_MaxDuration() == feature) {
+			return new DelegateInformation(marketsPackage.getCharterInMarket_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
+		}
+		
 		return new DelegateInformation(null, null, null);
 	}
 
