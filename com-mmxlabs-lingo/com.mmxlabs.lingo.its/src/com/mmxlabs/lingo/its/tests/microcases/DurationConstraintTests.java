@@ -360,8 +360,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				// FIXME: Off by one (+1)
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
-				assertEquals(24 * 90 + 2, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 90 + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				assertEquals(24 * 90, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				assertEquals(24 * 90 - 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 			}
 		});
 	}
@@ -456,10 +456,11 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final IResource r0 = initialSequences.getResources().get(0);
 
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(0);
+				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 
 				// Assert expected result (Truncated start AND end windows)
-				assertEquals(24 * 39 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 24, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getReturnSlot()).getInclusiveStart());
+				assertEquals(24 * 39 + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				assertEquals(24 * 24, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 
 				assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
 				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
@@ -674,7 +675,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 			final EndEvent endEvent = MicroTestUtils.findVesselEndEvent(lngScenarioModel);
 			final PortVisitLateness lateness = endEvent.getLateness();
 			assertNotNull(lateness);
-			assertEquals(48 + 1, lateness.getLatenessInHours());
+			assertEquals(48, lateness.getLatenessInHours());
 		});
 	}
 
@@ -728,5 +729,163 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		assertTrue(start.getStart().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0)));
 		assertTrue(end.getEnd().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 28, 0, 0, 0)));
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void minDurationSatisfiedEmptyVesselTest() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+
+		// Set the end requirement's time window and max duration
+		vesselAvailability.setMinDuration(27);
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+		});
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
+		Event start = schedule.getSequences().get(0).getEvents().get(0);
+		Event end = schedule.getSequences().get(0).getEvents().get(2);
+		final long startTimestamp = start.getStart().toEpochSecond();
+		final long endTimestamp = end.getStart().toEpochSecond();
+		
+		final long minDeltaInSeconds = endTimestamp - startTimestamp;
+		final long minDeltaInHours = (minDeltaInSeconds / 3600) ;
+		
+		if (minDeltaInHours < (27 * 24)) {
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void maxDurationSatisfiedEmptyVesselTest() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+
+		// Set the end requirement's time window and max duration
+		vesselAvailability.setMaxDuration(27);
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+		});
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
+		Event start = schedule.getSequences().get(0).getEvents().get(0);
+		Event end = schedule.getSequences().get(0).getEvents().get(2);
+		final long startTimestamp = start.getStart().toEpochSecond();
+		final long endTimestamp = end.getStart().toEpochSecond();
+		
+		final long minDeltaInSeconds = endTimestamp - startTimestamp;
+		final long minDeltaInHours = (minDeltaInSeconds / 3600) ;
+		
+		if (minDeltaInHours > (27 * 24)) {
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void minDurationSatisfiedCargoVesselTest() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+
+		// Set the end requirement's time window and max duration
+		vesselAvailability.setMinDuration(27);
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+
+		// Construct the cargo
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Manzanillo");
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 27), port1, null, entity, "7") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+		});
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
+		Event start = schedule.getSequences().get(0).getEvents().get(0);
+		Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
+		final long startTimestamp = start.getStart().toEpochSecond();
+		final long endTimestamp = end.getStart().toEpochSecond();
+		
+		final long minDeltaInSeconds = endTimestamp - startTimestamp;
+		final long minDeltaInHours = (minDeltaInSeconds / 3600) ;
+		
+		if (minDeltaInHours < (27 * 24)) {
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void maxDurationSatisfiedCargoVesselTest() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
+
+		// Set the end requirement's time window and max duration
+		vesselAvailability.setMaxDuration(27);
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		
+		// Construct the cargo
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Manzanillo");
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 25), port1, null, entity, "7") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 26), port2, null, entity, "7") //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+		});
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
+		Event start = schedule.getSequences().get(0).getEvents().get(0);
+		Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 2);
+		final long startTimestamp = start.getStart().toEpochSecond();
+		final long endTimestamp = end.getStart().toEpochSecond();
+		
+		final long minDeltaInSeconds = endTimestamp - startTimestamp;
+		final long minDeltaInHours = (minDeltaInSeconds / 3600) ;
+		
+		if (minDeltaInHours > (27 * 24)) {
+			assertTrue(false);
+		}
 	}
 }
