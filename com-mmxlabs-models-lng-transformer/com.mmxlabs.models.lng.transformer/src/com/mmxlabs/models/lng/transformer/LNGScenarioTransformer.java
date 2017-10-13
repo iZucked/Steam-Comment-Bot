@@ -3172,6 +3172,19 @@ public class LNGScenarioTransformer {
 
 						vesselToAvailabilities.put(spotAvailability.getVessel(), Collections.singleton(spotAvailability));
 
+						IStartEndRequirement req = spotAvailability.getEndRequirement();
+						IEndRequirement endReq = (IEndRequirement) req;
+						
+						int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
+						if (maxDurationInDays != 0) {
+							endReq.setMaxDuration(maxDurationInDays);
+						}
+
+						int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
+						if (minDurationInDays != 0) {
+							endReq.setMinDuration(minDurationInDays);
+						}
+						
 						/*
 						 * set up inaccessible routes
 						 */
