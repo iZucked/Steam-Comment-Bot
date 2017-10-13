@@ -467,23 +467,20 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public int getMarketOrContractMinDuration() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return (Integer) eGetWithDefault(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MIN_DURATION);
+
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public int getMarketOrContractMaxDuration() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return (Integer) eGetWithDefault(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MAX_DURATION);
 	}
 
 	/**
