@@ -23,11 +23,11 @@ public class DetailCompositeDialogUtil {
 		return editSingleObject(scenarioEditingLocation, target, null);
 	}
 
-	public static int editSingleObject(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final EObject target, @Nullable Runnable notOkRunnable) {
+	public static int editSingleObject(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final EObject target, @Nullable final Runnable notOkRunnable) {
 
 		return editInlock(scenarioEditingLocation, () -> {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-			int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
+			final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
 			if (ret != Window.OK) {
 				if (notOkRunnable != null) {
 					notOkRunnable.run();
@@ -42,13 +42,13 @@ public class DetailCompositeDialogUtil {
 		return editSelection(scenarioEditingLocation, structuredSelection, null);
 	}
 
-	public static int editSelection(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection structuredSelection, @Nullable Runnable notOKAction) {
+	public static int editSelection(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final IStructuredSelection structuredSelection, @Nullable final Runnable notOKAction) {
 
 		if (structuredSelection.isEmpty() == false) {
 			if (structuredSelection.size() == 1) {
 				return editInlock(scenarioEditingLocation, () -> {
 					final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-					int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioEditingLocation.isLocked());
+					final int ret = dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioEditingLocation.isLocked());
 					if (ret != Window.OK) {
 						if (notOKAction != null) {
 							notOKAction.run();
@@ -60,7 +60,7 @@ public class DetailCompositeDialogUtil {
 				return editInlock(scenarioEditingLocation, () -> {
 					final MultiDetailDialog mdd = new MultiDetailDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getRootObject(),
 							scenarioEditingLocation.getDefaultCommandHandler());
-					int ret = mdd.open(scenarioEditingLocation, structuredSelection.toList());
+					final int ret = mdd.open(scenarioEditingLocation, structuredSelection.toList());
 					if (ret != Window.OK) {
 						if (notOKAction != null) {
 							notOKAction.run();
@@ -75,16 +75,18 @@ public class DetailCompositeDialogUtil {
 
 	public static int editInlock(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final IntSupplier editFunc) {
 		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-		editorLock.lock();
-		try {
-			scenarioEditingLocation.setDisableUpdates(true);
+		if (editorLock.tryLock(500)) {
 			try {
-				return editFunc.getAsInt();
+				scenarioEditingLocation.setDisableUpdates(true);
+				try {
+					return editFunc.getAsInt();
+				} finally {
+					scenarioEditingLocation.setDisableUpdates(false);
+				}
 			} finally {
-				scenarioEditingLocation.setDisableUpdates(false);
+				editorLock.unlock();
 			}
-		} finally {
-			editorLock.unlock();
 		}
+		return Window.CANCEL;
 	}
 }
