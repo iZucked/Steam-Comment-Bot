@@ -226,8 +226,6 @@ public class PortTimesRecordMaker {
 							int remainingHours = minDurationInHours - minDeltaInHours;
 							
 							if (minDeltaInHours < minDurationInHours) {
-								remainingHours -= minDeltaInHours;
-								
 								// Add padding to end event if possible 
 								ITimeWindow windowEnd = portTimeWindowsRecordLast.getSlotFeasibleTimeWindow(lastPort);
 								int endLeftOver = windowEnd.getExclusiveEnd() - endTime - 1;
