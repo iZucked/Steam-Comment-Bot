@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service.model.manager;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -40,6 +41,19 @@ public final class ScenarioLock {
 			fireLockStateChanged(true);
 		}
 		return r;
+	}
+
+	public boolean tryLock(int timeOutInMillis) {
+		boolean r;
+		try {
+			r = readWriteLock.writeLock().tryLock(timeOutInMillis, TimeUnit.MILLISECONDS);
+			if (r) {
+				fireLockStateChanged(true);
+			}
+			return r;
+		} catch (InterruptedException e) {
+			return false;
+		}
 	}
 
 	public boolean isLocked() {
