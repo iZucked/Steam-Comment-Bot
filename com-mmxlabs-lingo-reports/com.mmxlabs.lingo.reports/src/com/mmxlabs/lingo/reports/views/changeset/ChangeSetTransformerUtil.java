@@ -304,6 +304,8 @@ public final class ChangeSetTransformerUtil {
 				}
 				row.setVesselName(ChangeSetTransformerUtil.getName(event.getSequence()));
 				row.setVesselShortName(ChangeSetTransformerUtil.getShortName(event.getSequence()));
+				row.setVesselType(ChangeSetTransformerUtil.getVesselType(event.getSequence()));
+
 			}
 		}
 
