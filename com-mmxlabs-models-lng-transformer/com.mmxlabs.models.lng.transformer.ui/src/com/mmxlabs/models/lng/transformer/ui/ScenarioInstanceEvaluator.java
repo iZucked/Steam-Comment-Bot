@@ -44,6 +44,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 					RunnerHelper.syncExecDisplayOptional(() -> {
 						editingDomain.getCommandStack().execute(cmd);
 					});
+					modelReference.setLastEvaluationFailed(true);
 
 					final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenarioModel, null, p, editingDomain, (IRunnerHook) null, true);
 					runner.evaluateInitialState();
