@@ -55,6 +55,20 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 					failures.add(dsd);
 				}
 			}
+			
+			int minDurationInHours = spotMarket.getMarketOrContractMinDuration();
+			int maxDurationInHours = spotMarket.getMarketOrContractMaxDuration();
+			
+			if (minDurationInHours != 0 && maxDurationInHours != 0) {
+				if (minDurationInHours > maxDurationInHours) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] has min duration superior to the max duration.", spotMarket.getName())));
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_MinDuration());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_MaxDuration());
+					failures.add(dsd);
+				}
+			}
+			
 		}
 		final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
 		for (final IStatus s : failures) {
