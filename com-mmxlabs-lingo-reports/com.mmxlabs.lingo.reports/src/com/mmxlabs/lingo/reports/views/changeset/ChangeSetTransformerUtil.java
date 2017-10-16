@@ -535,6 +535,7 @@ public final class ChangeSetTransformerUtil {
 					if (!foundSpotMatch) {
 						// TODO: This may need to be replicated above to the other cases e.g. spot loads.
 						// Try and find a match within the current group to link up to (head -> tail matching)
+						// This case can occur if we have two wiring groups both involving the same spot market/month combio
 						if (fromData.getDischargeSlot() instanceof SpotDischargeSlot) {
 							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
 							final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
