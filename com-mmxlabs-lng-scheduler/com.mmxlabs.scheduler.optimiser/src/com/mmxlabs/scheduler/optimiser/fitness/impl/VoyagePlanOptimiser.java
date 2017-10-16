@@ -22,6 +22,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalLoadSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -138,11 +141,22 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 						window = requirement.getTimeWindow();
 					}
 				}
-
+				
 				if (useVPOSpeedStepping) {
 					final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
-					final int extraExtent = (window == null || window.getExclusiveEnd() == Integer.MAX_VALUE) ? 30 * RELAXATION_STEP
+					int extraExtent = (window == null || window.getExclusiveEnd() == Integer.MAX_VALUE) ? 30 * RELAXATION_STEP
 							: (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
+					
+					// No max duration for Notional cargoes
+					if (slot instanceof NotionalEndPortSlot || slot instanceof NotionalLoadSlot || slot instanceof NotionalDischargeSlot) {
+						final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
+						if (record.startingTime != Integer.MAX_VALUE && requirement.isMaxDurationSet()) {
+							if (lastArrivalTime > record.startingTime + requirement.getMaxDuration() * 24) {
+								extraExtent = 0;
+							}
+						}
+					}
+					
 					// If this is non-zero then our end event rules will have
 					// kicked in and we should not engage the speed step code.
 					evaluateVoyagePlan(record, state, extraExtent);
