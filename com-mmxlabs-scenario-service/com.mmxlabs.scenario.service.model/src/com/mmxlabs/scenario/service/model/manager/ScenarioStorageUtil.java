@@ -203,6 +203,8 @@ public class ScenarioStorageUtil {
 		final URI rootObjectURI = createArtifactURI(archiveURI, PATH_ROOT_OBJECT);
 
 		final Resource r = ResourceHelper.createResource(resourceSet, rootObjectURI);
+		assert rootObject.eResource() == null;
+
 		r.getContents().add(rootObject);
 
 		ResourceHelper.saveResource(r);
@@ -618,6 +620,7 @@ public class ScenarioStorageUtil {
 				final ResourceSet resourceSet = ResourceHelper.createResourceSet(null);
 
 				final Resource r = resourceSet.createResource(URI.createURI(path));
+				assert rootObject.eResource() == null;
 				r.getContents().add(rootObject);
 
 				final Pair<CommandProviderAwareEditingDomain, MMXAdaptersAwareCommandStack> p = initEditingDomain(manifest, resourceSet, rootObject);
