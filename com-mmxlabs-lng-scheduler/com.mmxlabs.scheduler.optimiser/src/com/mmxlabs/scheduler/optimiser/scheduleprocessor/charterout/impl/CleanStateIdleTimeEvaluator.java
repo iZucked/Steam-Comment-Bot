@@ -166,7 +166,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelVolumeRangeInM3, bigSequence);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelVolumeRangeInM3, bigSequence, vesselStartTime);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -518,11 +518,12 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	 * 
 	 * @param vessel
 	 * @param originalVoyagePlan
-	 * @param startHeelInM3
 	 * @param bigSequence
+	 * @param startingTime TODO
+	 * @param startHeelInM3
 	 * @return
 	 */
-	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence) {
+	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final long[] startHeelVolumeRangeInM3, final ExtendedCharterOutSequence bigSequence, int startingTime) {
 		// // We will use the VPO to optimise fuel and route choices
 		// vpo.reset();
 		//
@@ -557,7 +558,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
 		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
-				bigSequence.getSequence(), vpoChoices);
+				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
 	}

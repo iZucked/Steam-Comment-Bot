@@ -56,7 +56,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public static class Record {
 
 		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
-				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
+				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 			this.resource = resource;
 			this.vessel = vessel;
 			this.startHeelRangeInM3 = startHeelRangeInM3;
@@ -65,6 +65,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.portTimesRecord = portTimesRecord;
 			this.basicSequence = basicSequence;
 			this.choices = choices;
+			this.startingTime = startingTime;
 		}
 
 		public final List<@NonNull IVoyagePlanChoice> choices;// = new ArrayList<>();
@@ -79,7 +80,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public final long vesselCharterInRatePerDay;
 		public final long[] startHeelRangeInM3;
-
+		
+		public final int startingTime;
 		public final @Nullable IResource resource; // May be null for notional voyage calculations
 	}
 
@@ -109,9 +111,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	@Override
 	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
-			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
+			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 
-		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
 
 		InternalState state = new InternalState();
 		runLoop(record, state, 0);

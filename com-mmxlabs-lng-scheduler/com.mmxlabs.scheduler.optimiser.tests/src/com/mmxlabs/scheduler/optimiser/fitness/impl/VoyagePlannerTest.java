@@ -288,8 +288,8 @@ public final class VoyagePlannerTest {
 		vpoChoices2.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions3));
 
 		// Matchers.eq!!
-		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, 0, 0, portTimesRecord1, expectedBasicSequence1, vpoChoices1)).thenReturn(testVoyagePlan);
-		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, 0, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2)).thenReturn(testVoyagePlan);
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, 0, 0, portTimesRecord1, expectedBasicSequence1, vpoChoices1, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, new long[] { 0L, 0L }, 0, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2, Integer.MAX_VALUE)).thenReturn(testVoyagePlan);
 
 		// Schedule sequence
 		final List<Pair<VoyagePlan, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);

@@ -189,7 +189,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
 			} else {
 				final long[] startingHeelRange = new long[] { startingHeelInM3, startingHeelInM3 };
-				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelRange);
+				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelRange, vesselStartTime);
 			}
 			assert newVoyagePlan != null;
 			newVoyagePlan.setIgnoreEnd(vp.isIgnoreEnd());
@@ -213,7 +213,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
 		} else {
 			final long[] startingHeelRange = new long[] { startHeelInM3, startHeelInM3 };
-			newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelRange);
+			newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelRange, vesselStartTime);
 		}
 		assert newVoyagePlan != null;
 

@@ -168,7 +168,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
-			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelVolumeRangeInM3, bigSequence);
+			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelVolumeRangeInM3, bigSequence, vesselStartTime);
 
 			final long remainingHeelInM3 = bigVoyagePlan.getRemainingHeelInM3();
 
@@ -550,7 +550,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @return
 	 */
 	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final @NonNull VoyagePlan originalVoyagePlan, final long @NonNull [] startHeelRangeInM3,
-			final @NonNull ExtendedCharterOutSequence bigSequence) {
+			final @NonNull ExtendedCharterOutSequence bigSequence, final int startingTime) {
 		// // We will use the VPO to optimise fuel and route choices
 		// vpo.reset();
 		//
@@ -585,7 +585,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
 		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
-				bigSequence.getSequence(), vpoChoices);
+				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
 	}
