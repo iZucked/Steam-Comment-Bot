@@ -135,6 +135,8 @@ public abstract class AbstractClientMigrationUnit implements IClientMigrationUni
 
 		for (Triple<String, EObject, ISharedDataModelType<?>> newData : migrationModelRecord.getNewEObjectData()) {
 			Resource r = resourceSet.createResource(ScenarioStorageUtil.createArtifactURI(dataManifest.getArchiveURI(), newData.getFirst()));
+			assert newData.getSecond().eResource() == null;
+
 			r.getContents().add(newData.getSecond());
 			ResourceHelper.saveResource(r);
 			dataManifest.add(newData.getThird(), newData.getFirst(), "1");
