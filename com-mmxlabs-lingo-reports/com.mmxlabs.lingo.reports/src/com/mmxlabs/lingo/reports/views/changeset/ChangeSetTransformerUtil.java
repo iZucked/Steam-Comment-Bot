@@ -540,6 +540,11 @@ public final class ChangeSetTransformerUtil {
 							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
 							final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
 							final List<ChangeSetRowData> afterDataList = afterMapping.rhsRowMarketMap.get(mKey);
+							
+							if (afterDataList == null) {
+								continue;
+							}
+							
 							for (ChangeSetRowData d : afterDataList) {
 								if (d.getRhsLink() != null) {
 									// Assert false?
