@@ -3056,12 +3056,12 @@ public class LNGScenarioTransformer {
 			
 			int minDuration = eVesselAvailability.getAvailabilityOrContractMinDuration();
 			if (minDuration != 0) {
-				endRequirement.setMinDuration(minDuration);
+				endRequirement.setMinDurationInDays(minDuration);
 			}
 			
 			int maxDuration = eVesselAvailability.getAvailabilityOrContractMaxDuration();
 			if (maxDuration != 0) {
-				endRequirement.setMaxDuration(maxDuration);
+				endRequirement.setMaxDurationInDays(maxDuration);
 			}
 			
 			final ILongCurve dailyCharterInCurve;
@@ -3178,12 +3178,12 @@ public class LNGScenarioTransformer {
 						
 						int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
 						if (maxDurationInDays != 0) {
-							endReq.setMaxDuration(maxDurationInDays);
+							endReq.setMaxDurationInDays(maxDurationInDays);
 						}
 
 						int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
 						if (minDurationInDays != 0) {
-							endReq.setMinDuration(minDurationInDays);
+							endReq.setMinDurationInDays(minDurationInDays);
 						}
 						
 						/*
