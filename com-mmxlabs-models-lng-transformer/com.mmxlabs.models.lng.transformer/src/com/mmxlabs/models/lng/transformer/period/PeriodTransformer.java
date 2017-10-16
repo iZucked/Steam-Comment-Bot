@@ -262,19 +262,17 @@ public class PeriodTransformer {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
 			if (endEvent != null) {
 				if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
-					// FIXME: This should probably be the optimisation period end.
-					if (output.isSetSchedulingEndDate() && output.getPromptPeriodEnd() != null && output.getSchedulingEndDate().isBefore(output.getPromptPeriodEnd())) {
+					if (output.isSetSchedulingEndDate() && periodRecord.upperBoundary != null && output.getSchedulingEndDate().isBefore(periodRecord.upperBoundary.toLocalDate())) {
 						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
-						vesselAvailability.setEndBy(output.getPromptPeriodEnd().atStartOfDay());
+						vesselAvailability.setEndBy(periodRecord.upperBoundary.toLocalDateTime());
 					} else {
-
 						vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 						vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 					}
 
 					vesselAvailability.setForceHireCostOnlyEndRule(true);
 				} else if (vesselAvailability.isSetEndAfter()) {
-					if (output.isSetSchedulingEndDate() && output.getPromptPeriodEnd() != null && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
+					if (output.isSetSchedulingEndDate() && periodRecord.upperBoundary != null && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
 						if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
 							vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
 							vesselAvailability.setForceHireCostOnlyEndRule(true);
