@@ -64,13 +64,16 @@ public final class ResourceHelper {
 
 	public static Resource loadResource(@NonNull final ResourceSet resourceSet, @NonNull final URI uri) throws IOException {
 
-		final Resource resource = resourceSet.createResource(uri);
-		if (resource instanceof ResourceImpl) {
-			// This helps speed up model loading
-			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
-			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+		// Check for existing resource before creating otherwise we can get multiple resources for the same URI
+		Resource resource = resourceSet.getResource(uri, false);
+		if (resource == null) {
+			resource = resourceSet.createResource(uri);
+			if (resource instanceof ResourceImpl) {
+				// This helps speed up model loading
+				final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<>();
+				((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+			}
 		}
-
 		Map<Object, Object> loadOptions = new HashMap<>(resourceSet.getLoadOptions());
 		boolean disabledCipher = false;
 		boolean disabledIDMap = false;

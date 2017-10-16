@@ -40,6 +40,8 @@ public class SimpleScenarioDataProvider implements IScenarioDataProvider {
 		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
 		final Resource r = new ResourceImpl();
+		assert rootModel.eResource() == null;
+
 		r.getContents().add(rootModel);
 
 		editingDomain.getResourceSet().getResources().add(r);

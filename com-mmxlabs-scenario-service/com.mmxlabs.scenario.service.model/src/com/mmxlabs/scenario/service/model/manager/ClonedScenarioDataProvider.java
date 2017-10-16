@@ -33,6 +33,7 @@ public class ClonedScenarioDataProvider implements IScenarioDataProvider {
 		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
 		final Resource r = new ResourceImpl();
+		assert scenarioModel.eResource() == null;
 		r.getContents().add(scenarioModel);
 
 		editingDomain.getResourceSet().getResources().add(r);
