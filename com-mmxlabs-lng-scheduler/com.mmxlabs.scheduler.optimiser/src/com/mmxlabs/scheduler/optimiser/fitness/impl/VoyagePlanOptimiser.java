@@ -151,7 +151,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					if (slot instanceof NotionalEndPortSlot || slot instanceof NotionalLoadSlot || slot instanceof NotionalDischargeSlot) {
 						final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
 						if (record.startingTime != Integer.MAX_VALUE && requirement.isMaxDurationSet()) {
-							if (lastArrivalTime > record.startingTime + requirement.getMaxDuration() * 24) {
+							if (lastArrivalTime > record.startingTime + requirement.getMaxDurationInHours()) {
 								extraExtent = 0;
 							}
 						}

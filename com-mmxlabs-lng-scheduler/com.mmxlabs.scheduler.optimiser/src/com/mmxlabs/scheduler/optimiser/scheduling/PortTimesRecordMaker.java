@@ -216,7 +216,7 @@ public class PortTimesRecordMaker {
 						// Get delta and remaining hours to fill
 						int endTime = lastRecord.getSlotTime(lastPort);
 						final int minDeltaInHours = endTime - newStartTime;
-						final int minDurationInHours = endReq.getMinDuration() * 24;
+						final int minDurationInHours = endReq.getMinDurationInHours();
 						int remainingHours = minDurationInHours - minDeltaInHours;
 
 						// Updated end time used to set previous record return time
@@ -349,7 +349,7 @@ public class PortTimesRecordMaker {
 						final IPortSlot startSlot = firstRecord.getFirstSlot();
 
 						final int startTime = firstRecord.getSlotTime(startSlot);
-						final int maxTime = startTime + endReq.getMaxDuration() * 24;
+						final int maxTime = startTime + endReq.getMaxDurationInHours();
 
 						if (maxTime < lastNextExpectedArrivalTime) {
 							// Trigger an error if the end is before the arrival at max speed

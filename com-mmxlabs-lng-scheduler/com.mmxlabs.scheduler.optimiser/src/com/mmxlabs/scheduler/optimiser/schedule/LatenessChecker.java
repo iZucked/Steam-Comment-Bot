@@ -114,7 +114,7 @@ public class LatenessChecker {
 		final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
 		if (req != null) {
 			if (req.isMaxDurationSet()) {
-				maxDurationInHours = req.getMaxDuration() * 24;
+				maxDurationInHours = req.getMaxDurationInDays() * 24;
 
 				if (maxDeltaInHours > maxDurationInHours) {
 					return maxDeltaInHours - maxDurationInHours;

@@ -152,7 +152,7 @@ public class TimeWindowsTrimming {
 
 		if (req.isMaxDurationSet()) {
 			ITimeWindow tw = portTimeWindowRecordStart.getFirstSlotFeasibleTimeWindow();
-			final int maxUpperBound = tw.getExclusiveEnd() + req.getMaxDuration() * 24;
+			final int maxUpperBound = tw.getExclusiveEnd() + req.getMaxDurationInHours();
 			feasibleEnd = Math.min(maxUpperBound, feasibleEnd);
 			
 			// Sanity check
@@ -161,7 +161,7 @@ public class TimeWindowsTrimming {
 		
 		if (req.isMinDurationSet()) {
 			ITimeWindow tw = portTimeWindowRecordStart.getFirstSlotFeasibleTimeWindow();
-			final int minLowerBound = tw.getInclusiveStart() + req.getMinDuration() * 24;
+			final int minLowerBound = tw.getInclusiveStart() + req.getMinDurationInHours();
 
 			feasibleStart = Math.max(minLowerBound, feasibleStart);
 			

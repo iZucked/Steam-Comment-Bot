@@ -115,7 +115,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 		
 		if (req.isMaxDurationSet()) {
 			final IPortSlot firstPortSlot = partialPortTimesRecord.getSlots().get(0);
-			final int maxPossibleTime = partialPortTimesRecord.getSlotTime(firstPortSlot) + req.getMaxDuration() * 24;
+			final int maxPossibleTime = partialPortTimesRecord.getSlotTime(firstPortSlot) + req.getMaxDurationInDays() * 24;
 			int maxTime = 0;
 			
 			if (maxPossibleTime < shortCargoReturnArrivalTime) {

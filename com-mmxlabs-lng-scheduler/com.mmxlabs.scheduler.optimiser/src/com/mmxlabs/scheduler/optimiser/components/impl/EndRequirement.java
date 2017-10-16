@@ -18,8 +18,8 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 	private final boolean isHireCostOnlyEndRule;
 	private boolean isMinimalDurationSet;
 	private boolean isMaximalDurationSet;
-	private int minimalDuration;
-	private int maximalDuration;
+	private int minimalDurationInDays;
+	private int maximalDurationInDays;
 	
 	
 	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final boolean hasTimeRequirement, final ITimeWindow timeWindow,
@@ -30,8 +30,8 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 		this.isHireCostOnlyEndRule = isHireCostOnlyEndRule;
 		this.isMaximalDurationSet = false;
 		this.isMinimalDurationSet = false;
-		this.minimalDuration = 0;
-		this.maximalDuration = 0;
+		this.minimalDurationInDays = 0;
+		this.maximalDurationInDays = 0;
 	}
 
 	@Override
@@ -44,30 +44,38 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 		return heelOptions;
 	}
 	
-	public int getMinDuration() {
-		return minimalDuration;
+	public int getMinDurationInDays() {
+		return minimalDurationInDays;
 	}
 	
-	public int getMaxDuration() {
-		return maximalDuration;
+	public int getMaxDurationInDays() {
+		return maximalDurationInDays;
 	}
 	
-	public void setMinDuration(int value) {
+	public int getMinDurationInHours() {
+		return minimalDurationInDays * 24;
+	}
+	
+	public int getMaxDurationInHours() {
+		return maximalDurationInDays * 24;
+	}
+	
+	public void setMinDurationInDays(int value) {
 		if (isMaximalDurationSet) {
-			assert value <= maximalDuration : "Minimal duration is superior the the max possible duration, min:" + value + ", max: " + maximalDuration;
+			assert value <= maximalDurationInDays : "Minimal duration is superior the the max possible duration, min:" + value + ", max: " + maximalDurationInDays;
 		}
 		
 		this.isMinimalDurationSet = true;
-		this.minimalDuration = value;
+		this.minimalDurationInDays = value;
 	}
 	
-	public void setMaxDuration(int value) {
+	public void setMaxDurationInDays(int value) {
 		if (isMinimalDurationSet) {
-			assert value >= maximalDuration : "Maximal duration is inferior the the min duration, max:" + value + ", min: " + minimalDuration;
+			assert value >= maximalDurationInDays : "Maximal duration is inferior the the min duration, max:" + value + ", min: " + minimalDurationInDays;
 		}
 		
 		this.isMaximalDurationSet = true;
-		this.maximalDuration = value;
+		this.maximalDurationInDays = value;
 	}
 
 	public boolean isMinDurationSet() {

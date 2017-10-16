@@ -877,7 +877,7 @@ public class FeasibleTimeWindowTrimmer {
 		}
 		
 		//TODO: upper bound instead
-		final int maxUpperBound = windowEndTime[0] + endRequirement.getMaxDuration() * 24;
+		final int maxUpperBound = windowEndTime[0] + endRequirement.getMaxDurationInHours();
 		
 		// Take the min as the end window upper bound, since we try to trim it down
 		assert upperBound != Integer.MAX_VALUE: "Missing upper bound when trimming with max duration";
@@ -900,7 +900,7 @@ public class FeasibleTimeWindowTrimmer {
 			lowerBound = portSlot.getTimeWindow().getInclusiveStart();
 		}
 
-		final int minLowerBound = windowStartTime[0] + requirement.getMinDuration() * 24;
+		final int minLowerBound = windowStartTime[0] + requirement.getMinDurationInHours();
 		
 		// Take the min as the end window upper bound, since we try to trim it down
 		assert upperBound != Integer.MAX_VALUE: "Missing upper bound when trimming with max duration";
