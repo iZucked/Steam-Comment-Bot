@@ -111,22 +111,6 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), partialPortTimesRecord.getSlotNextVoyageOptions(prevPortSlot)).getSecond();
 		final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 		
-		IEndRequirement req = vesselAvailability.getEndRequirement();
-		
-		if (req.isMaxDurationSet()) {
-			final IPortSlot firstPortSlot = partialPortTimesRecord.getSlots().get(0);
-			final int maxPossibleTime = partialPortTimesRecord.getSlotTime(firstPortSlot) + req.getMaxDurationInDays() * 24;
-			int maxTime = 0;
-			
-			if (maxPossibleTime < shortCargoReturnArrivalTime) {
-				// Trigger an error if the end is before the arrival at max speed
-				// Will pick up as a lateness violation
-				maxTime = shortCargoReturnArrivalTime;
-			} else {
-				maxTime = Math.min(maxPossibleTime, shortCargoReturnArrivalTime);
-			}
-		}
-		
 		partialPortTimesRecord.setReturnSlotTime(endEventSlot, shortCargoReturnArrivalTime);
 		partialPortTimesRecord.setSlotDuration(endEventSlot, 0);
 
