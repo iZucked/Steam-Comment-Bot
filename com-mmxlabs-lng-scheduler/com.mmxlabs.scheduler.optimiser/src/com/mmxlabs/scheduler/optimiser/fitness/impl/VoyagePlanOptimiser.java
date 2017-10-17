@@ -158,9 +158,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 								} else {
 									// Threshold the extraExtent by max duration remaining hours
 									final int maxDeltaInHours = maxTime - lastArrivalTime;
-									extraExtent %= maxDeltaInHours;
+									extraExtent = Math.min(extraExtent, maxDeltaInHours);
 								}
-								
 							}
 						}
 					}
@@ -215,8 +214,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		VoyageOptions optionsToRestore = null;
 		int availableTimeToRestore = 0;
-
-		if (timeExtent / RELAXATION_STEP > 0 && record.basicSequence.size() > 1) {
+		
+		if ((timeExtent > 0) && (record.basicSequence.size() > 1)) {
 
 			// There are some cases where we wish to evaluate the best time to
 			// end the sequence, rather than the specified value. Typically
@@ -244,7 +243,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int bestAvailableTime = options.getAvailableTime();
 
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
-			for (int i = 0; i < timeExtent / RELAXATION_STEP; i++) {
+			final int steps = (timeExtent % RELAXATION_STEP > 0) ? (timeExtent / RELAXATION_STEP + 1): (timeExtent / RELAXATION_STEP);
+			for (int i = 0; i < steps; i++) {
 
 				currentPlan = calculateVoyagePlan(record);
 
