@@ -148,11 +148,19 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 							: (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
 					
 					// No max duration for Notional cargoes
-					if (slot instanceof NotionalEndPortSlot || slot instanceof NotionalLoadSlot || slot instanceof NotionalDischargeSlot) {
-						final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
-						if (record.startingTime != Integer.MAX_VALUE && requirement.isMaxDurationSet()) {
-							if (lastArrivalTime > record.startingTime + requirement.getMaxDurationInHours()) {
-								extraExtent = 0;
+					if (resource != null) {
+						if (!(slot instanceof NotionalEndPortSlot)) {
+							final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
+							if (record.startingTime != Integer.MAX_VALUE && requirement.isMaxDurationSet()) {
+								final int maxTime = record.startingTime + requirement.getMaxDurationInHours();
+								if (lastArrivalTime > maxTime) {
+									extraExtent = 0;
+								} else {
+									// Threshold the extraExtent by max duration remaining hours
+									final int maxDeltaInHours = maxTime - lastArrivalTime;
+									extraExtent %= maxDeltaInHours;
+								}
+								
 							}
 						}
 					}
