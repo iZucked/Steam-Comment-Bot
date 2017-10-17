@@ -166,6 +166,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				return dischargePrice == other.dischargePrice//
 						&& baseFuelPricePerMT == other.baseFuelPricePerMT//
 						&& startCV == other.startCV //
+						&& startingTime == other.startingTime //
 						&& (vessel == other.vessel) //
 						&& Arrays.equals(startHeelRangeInM3, other.startHeelRangeInM3) //
 						&& Arrays.equals(voyageTimes, other.voyageTimes) //
