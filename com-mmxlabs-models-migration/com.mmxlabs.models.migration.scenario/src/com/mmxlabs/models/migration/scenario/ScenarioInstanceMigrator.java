@@ -100,14 +100,16 @@ public class ScenarioInstanceMigrator {
 			final URI manifestURI = ScenarioStorageUtil.createArtifactURI(tmpArchiveURI, ScenarioStorageUtil.PATH_MANIFEST_OBJECT);
 			{
 
-//				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
-//				final Resource r = resourceSet.getResource(manifestURI, true);
-//
-//				final Manifest manifest = (Manifest) r.getContents().get(0);
+				// final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
+				// final Resource r = resourceSet.getResource(manifestURI, true);
+				//
+				// final Manifest manifest = (Manifest) r.getContents().get(0);
 
 				final List<ModelArtifact> modelDependencies = manifest.getModelDependencies();
 				for (final ModelArtifact artifact : modelDependencies) {
-					if (artifact.getStorageType() == StorageType.COLOCATED && artifact.getType().equals("EOBJECT")) {
+					if (artifact.getStorageType() == StorageType.INTERNAL) {
+						continue;
+					} else if (artifact.getStorageType() == StorageType.COLOCATED && artifact.getType().equals("EOBJECT")) {
 						final ISharedDataModelType<?> key = ISharedDataModelType.registry().lookup(artifact.getKey());
 						dataManifest.add(key, artifact.getPath(), artifact.getDataVersion());
 					} else {
@@ -162,11 +164,11 @@ public class ScenarioInstanceMigrator {
 
 				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 				final Resource r = ResourceHelper.loadResource(resourceSet, manifestURI);
-				
+
 				r.getContents().clear();
 				r.getContents().add(manifest);
-				
-//				final Manifest manifest = (Manifest) r.getContents().get(0);
+
+				// final Manifest manifest = (Manifest) r.getContents().get(0);
 
 				manifest.getModelDependencies().clear();
 
