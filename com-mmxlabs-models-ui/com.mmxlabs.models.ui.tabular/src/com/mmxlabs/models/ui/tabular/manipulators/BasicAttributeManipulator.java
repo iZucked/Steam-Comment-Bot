@@ -42,7 +42,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		this.field = field;
 		this.editingDomain = editingDomain;
 
-		overrideAnnotation = field.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+		overrideAnnotation = field == null ? null : field.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
 		if (overrideAnnotation != null) {
 			if (field.isUnsettable()) {
 				isOverridable = true;
