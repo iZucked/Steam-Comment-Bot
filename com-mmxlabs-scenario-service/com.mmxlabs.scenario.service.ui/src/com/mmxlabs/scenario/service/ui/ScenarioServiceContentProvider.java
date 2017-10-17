@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.Saveable;
 import org.eclipse.ui.navigator.SaveablesProvider;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
@@ -132,13 +134,10 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 
 		public void fireDirtyChange(final Saveable... models) {
-			Display.getDefault().asyncExec(new Runnable() {
 
-				@Override
-				public void run() {
-					if (!disposed) {
-						fireSaveablesDirtyChanged(models);
-					}
+			RunnerHelper.asyncExec(() -> {
+				if (!disposed) {
+					fireSaveablesDirtyChanged(models);
 				}
 			});
 		}
@@ -153,6 +152,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	private boolean showReadOnlyElements = true;
 	private boolean showOnlyCapsImport = false;
 	private boolean showOnlyCapsForking = false;
+	private boolean showManifest = false;
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
 
@@ -202,12 +202,12 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			final List<Object> l = new LinkedList<>();
 			l.addAll(scenarioInstance.getElements());
 			l.addAll(scenarioInstance.getFragments());
-			if (scenarioInstance.getManifest() != null) {
-			l.add(scenarioInstance.getManifest());
+			if (showManifest &&  scenarioInstance.getManifest() != null) {
+				l.add(scenarioInstance.getManifest());
 			}
 			return l.toArray();
 		} else if (object instanceof Manifest) {
-			Manifest manifest = (Manifest) object;
+			final Manifest manifest = (Manifest) object;
 			final List<Object> l = new LinkedList<>();
 			l.addAll(manifest.getModelDependencies());
 			return l.toArray();
@@ -313,7 +313,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else if (e instanceof ScenarioFragment) {
 				filtered = false;
 			} else if (e instanceof Manifest) {
-				filtered = false;
+				filtered = !showManifest;
 			} else {
 				filtered = true;
 			}
@@ -349,12 +349,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		// partial update
 		final Object notifier = arg0.getNotifier();
 		if (filteredElements.containsKey(notifier)) {
-			viewer.getControl().getDisplay().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					viewer.refresh();
-				}
-			});
+			ViewerHelper.refresh(viewer, false);
 		}
 	}
 
