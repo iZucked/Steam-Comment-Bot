@@ -30,7 +30,8 @@ public final class Move4over1GeneratorUnit implements IRandomMoveGeneratorUnit {
 			return null;
 		}
 
-		final int resource = random.nextInt(numResources);
+		final int resourceIdx = random.nextInt(numResources);
+		final IResource resource = resources.get(resourceIdx);
 
 		final ISequence sequence = sequences.getSequence(resource);
 
@@ -41,7 +42,7 @@ public final class Move4over1GeneratorUnit implements IRandomMoveGeneratorUnit {
 		final Move4over1 move = new Move4over1();
 
 		// Set resources
-		move.setResource(resources.get(resource));
+		move.setResource(resource);
 
 		// Set break points
 		move.setSegment1Start(segmentBreakPoints[0]);
