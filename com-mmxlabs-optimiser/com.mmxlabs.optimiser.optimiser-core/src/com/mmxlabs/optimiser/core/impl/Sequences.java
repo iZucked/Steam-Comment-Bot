@@ -31,7 +31,7 @@ public final class Sequences implements ISequences {
 
 	private final Map<@NonNull IResource, @NonNull ISequence> sequenceMap;
 
-	final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
+	private final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
 
 	/**
 	 * Constructor taking a list of {@link IResource} instances. The {@link ISequence} instances will be created automatically. The resources list is copied to maintain internal consistency with the
@@ -57,6 +57,12 @@ public final class Sequences implements ISequences {
 	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
+	}
+
+	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap, final @NonNull List<@NonNull ISequenceElement> unusedElements) {
+		this.resources = resources;
+		this.sequenceMap = sequenceMap;
+		this.unusedElements.addAll(unusedElements);
 	}
 
 	/**
