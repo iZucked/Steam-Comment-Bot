@@ -409,7 +409,7 @@ public class ScenarioStorageUtil {
 	public static @NonNull Pair<@NonNull ScenarioInstance, @NonNull ModelReference> load(final @NonNull ScenarioInstance original, @NonNull IProgressMonitor monitor) throws Exception {
 		monitor.beginTask("Load Scenario", 13);
 		try {
-			return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			return ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
 				// Handle migration
 				final List<File> tmpFiles = new ArrayList<File>();
@@ -420,7 +420,7 @@ public class ScenarioStorageUtil {
 					// Create a copy of the data to avoid modifying it unexpectedly. E.g. this could come from a scenario data file on filesystem which should be left unchanged.
 					final ScenarioInstance cpy = EcoreUtil.copy(original);
 
-					{
+					try {
 						final String subModelURI = original.getRootObjectURI();
 						final File f = File.createTempFile("migration-ssu", ".xmi");
 						tmpFiles.add(f);
@@ -435,7 +435,9 @@ public class ScenarioStorageUtil {
 							tempFiles.add(f);
 						}
 					}
-
+					catch (final Exception e) {
+						throw new RuntimeException("Error migrating scenario", e);
+					}
 					// Perform the migration!
 					if (scenarioMigrationService != null) {
 						try {
