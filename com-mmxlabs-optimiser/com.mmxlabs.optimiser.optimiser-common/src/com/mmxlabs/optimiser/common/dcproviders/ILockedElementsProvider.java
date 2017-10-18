@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
@@ -13,6 +15,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * @author achurchill
  * 
  */
+@NonNullByDefault
 public interface ILockedElementsProvider extends IDataComponentProvider {
 	/**
 	 * Returns true if the given element is allowed to be moved in a sequence.

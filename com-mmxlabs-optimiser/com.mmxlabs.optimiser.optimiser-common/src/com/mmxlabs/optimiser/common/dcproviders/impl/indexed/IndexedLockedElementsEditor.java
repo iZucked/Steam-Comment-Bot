@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.common.indexedobjects.IIndexBits;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexBits;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProviderEditor;
@@ -15,9 +17,10 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author achurchill
  * 
  */
+@NonNullByDefault
 public class IndexedLockedElementsEditor implements ILockedElementsProviderEditor {
 
-	private final IIndexBits<ISequenceElement> lockedElements = new ArrayIndexBits<ISequenceElement>();
+	private final IIndexBits<ISequenceElement> lockedElements = new ArrayIndexBits<>();
 
 	@Override
 	public boolean isElementLocked(final ISequenceElement element) {
@@ -32,5 +35,4 @@ public class IndexedLockedElementsEditor implements ILockedElementsProviderEdito
 			lockedElements.clear(element);
 		}
 	}
-
 }

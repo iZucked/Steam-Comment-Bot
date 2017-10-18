@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
@@ -12,6 +14,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author achurchill
  * 
  */
+@NonNullByDefault
 public interface ILockedElementsProviderEditor extends ILockedElementsProvider {
 	/**
 	 * Set whether the given element is locked (true if it is, false if it isn't).
