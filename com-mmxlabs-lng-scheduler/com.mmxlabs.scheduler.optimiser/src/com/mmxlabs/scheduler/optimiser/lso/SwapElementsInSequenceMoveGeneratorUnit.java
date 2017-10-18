@@ -46,12 +46,13 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IMoveGenerator {
 		IResource resource = null;
 		for (int i = 0; i < sequences.size(); ++i) {
 			final int idx = RandomHelper.nextIntBetween(random, 0, sequences.size() - 1);
-			final ISequence s = sequences.getSequence(idx);
+			final IResource r = sequences.getResources().get(idx);
+			final ISequence s = sequences.getSequence(r);
 			if (s.size() < 2) {
 				continue;
 			}
 			sequence = s;
-			resource = sequences.getResources().get(idx);
+			resource = r;
 			break;
 		}
 		if (sequence == null) {
