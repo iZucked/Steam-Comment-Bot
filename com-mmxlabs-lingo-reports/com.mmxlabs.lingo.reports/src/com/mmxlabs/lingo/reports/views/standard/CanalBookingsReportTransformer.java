@@ -195,9 +195,9 @@ public class CanalBookingsReportTransformer {
 			}
 		}
 		if (cargoModel.getCanalBookings() != null) {
-			if (relaxedNorthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountNorthbound()) {
-				relaxedNorthbound.forEach(d -> d.warn = true);
-			}
+			//if (relaxedNorthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountNorthbound()) {
+			//	relaxedNorthbound.forEach(d -> d.warn = true);
+			//}
 			if (relaxedSouthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountSouthbound()) {
 				relaxedSouthbound.forEach(d -> d.warn = true);
 			}

@@ -122,9 +122,9 @@ public final class ChangeSetTransformerUtil {
 
 					else if (event instanceof StartEvent //
 							|| event instanceof EndEvent) {
-						if (sequence.getSequenceType() == SequenceType.VESSEL) {
-							// Only include these for fleet vessels.
-
+						if (sequence.getSequenceType() == SequenceType.VESSEL //
+								|| sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+							// Only include these for fleet or spot vessels.
 						} else {
 							continue;
 						}
@@ -307,6 +307,8 @@ public final class ChangeSetTransformerUtil {
 				}
 				row.setVesselName(ChangeSetTransformerUtil.getName(event.getSequence()));
 				row.setVesselShortName(ChangeSetTransformerUtil.getShortName(event.getSequence()));
+				row.setVesselType(ChangeSetTransformerUtil.getVesselType(event.getSequence()));
+
 			}
 		}
 
@@ -450,7 +452,7 @@ public final class ChangeSetTransformerUtil {
 		// Pass 1: search for the equivalent spot market slots.
 		for (int pass = 0; pass < 2; ++pass) {
 			final Iterator<String> itr = tmp_rhsKeys.iterator();
-			while (itr.hasNext()) {
+			LOOP_MAIN: while (itr.hasNext()) {
 				final String rhsKey = itr.next();
 				final ChangeSetRowData fromData = beforeMapping.rhsRowMap.get(rhsKey);
 				final ChangeSetRowData toData = afterMapping.rhsRowMap.get(rhsKey);
@@ -497,6 +499,7 @@ public final class ChangeSetTransformerUtil {
 							continue;
 						}
 					}
+
 					if (!foundSpotMatch) {
 						final ChangeSetRowData d = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 						beforeMapping.rhsRowMap.put(rhsKey, d);
@@ -533,6 +536,51 @@ public final class ChangeSetTransformerUtil {
 						}
 					}
 					if (!foundSpotMatch) {
+						// TODO: This may need to be replicated above to the other cases e.g. spot loads.
+						// Try and find a match within the current group to link up to (head -> tail matching)
+						// This case can occur if we have two wiring groups both involving the same spot market/month combio
+						if (fromData.getDischargeSlot() instanceof SpotDischargeSlot) {
+							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
+							final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
+							final List<ChangeSetRowData> afterDataList = afterMapping.rhsRowMarketMap.get(mKey);
+							
+							if (afterDataList == null) {
+								continue;
+							}
+							
+							for (ChangeSetRowData d : afterDataList) {
+								if (d.getRhsLink() != null) {
+									// Assert false?
+									continue;
+								}
+
+								ChangeSetRowData d2 = d.getLhsLink();
+								boolean partOfGroup = false;
+								while (d2 != null) {
+									if (d2 == fromData) {
+										partOfGroup = true;
+									}
+									if (d2.getRhsLink() != null) {
+										// Find next toData equiv in chain
+										d2 = d2.getRhsLink().getLhsLink();
+									} else {
+										d2 = null;
+									}
+								}
+								if (partOfGroup) {
+									d.setRhsLink(fromData);
+									fromData.setRhsLink(d);
+
+									afterDataList.remove(d);
+									beforeDataList.remove(fromData);
+
+									foundSpotMatch = true;
+
+									continue LOOP_MAIN;
+								}
+							}
+						}
+
 						final ChangeSetRowData d = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 						afterMapping.rhsRowMap.put(rhsKey, d);
 						d.setPrimaryRecord(true);

@@ -203,10 +203,12 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 	@Override
 	public void destroy(final GridViewerColumn gvc) {
 		// filterSupport.removeColum(column);
-		if (sortingSupport != null) {
-			sortingSupport.removeSortableColumn(gvc.getColumn());
+		if (gvc != null) {
+			if (sortingSupport != null) {
+				sortingSupport.removeSortableColumn(gvc.getColumn());
+			}
+			gvc.getColumn().dispose();
 		}
-		gvc.getColumn().dispose();
 	}
 
 	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, Object element) {
