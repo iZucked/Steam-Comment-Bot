@@ -40,6 +40,8 @@ public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 	 * @return
 	 */
 	void setRelaxedBookingCountSouthbound(int bookingCount);
+	
+	void setNorthboundMaxIdleDays(int maxIdleDays);
 
 	/**
 	 * All dates after this boundary don't need a Panama booking. Inclusive

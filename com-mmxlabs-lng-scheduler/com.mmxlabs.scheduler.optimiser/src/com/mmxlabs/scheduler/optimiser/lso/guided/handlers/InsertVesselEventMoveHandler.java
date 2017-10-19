@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -28,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertSegmentMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -43,8 +45,11 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
+	@Inject
+	private @NonNull IMoveHandlerHelper moveHandlerHelper;
+
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
+	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull final Random random, @NonNull final GuideMoveGeneratorOptions options,
 			@NonNull final Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = lookupManager.getRawSequences();
 
@@ -62,7 +67,7 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 		//// Find possible element pairings which can be used to make a shipped cargo (FOB Purchase to DES Sale)
 
 		assert helper.isVesselEvent(element);
-		IVesselEventPortSlot portSlot = (IVesselEventPortSlot) portSlotProvider.getPortSlot(element);
+		final IVesselEventPortSlot portSlot = (IVesselEventPortSlot) portSlotProvider.getPortSlot(element);
 		final List<ISequenceElement> orderedElements = portSlot.getEventSequenceElements();
 
 		// Assume we can, in principle, use any fleet vessel
@@ -93,7 +98,7 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 
 		// Build up a list of all valid insertion points. For all valid elements that can go before the first element in the insertion list, see if it's following element could also follow the
 		// last element in the insert sequence
-		final List<Pair<ISequenceElement, ISequenceElement>> validInsertionPairs = new LinkedList<>();
+		final List<Triple<ISequenceElement, ISequenceElement, Boolean>> validInsertionPairs = new LinkedList<>();
 		LOOP_PRECEDER: for (final ISequenceElement preceder : preceders) {
 			final Pair<IResource, Integer> precederLocation = lookupManager.lookup(preceder);
 			// Element Unused? Skip as we can't insert after it.
@@ -107,11 +112,22 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 			}
 
 			final ISequence targetSequence = sequences.getSequence(precederLocation.getFirst());
-			final int followerIndex = precederLocation.getSecond() + 1;
+			int followerIndex = precederLocation.getSecond() + 1;
+			int segSize = 0;
 			if (followerIndex < targetSequence.size()) {
-				final ISequenceElement followerElement = targetSequence.get(followerIndex);
-				if (followers.contains(followerElement)) {
-					validInsertionPairs.add(new Pair<>(preceder, followerElement));
+				final ISequenceElement firstFollowerElement = targetSequence.get(followerIndex);
+				// Seg size of 2 is can we insert before the next cargo (or event) or the one after.
+				while (followerIndex < targetSequence.size() && segSize < 2) {
+					final ISequenceElement followerElement = targetSequence.get(followerIndex);
+					if (followers.contains(followerElement)) {
+						// If this is not the next cargo, mark the next cargo as a problem
+						validInsertionPairs.add(new Triple<>(preceder, firstFollowerElement, segSize != 0));
+						break;
+					}
+					// Skip the whole segment
+					final List<ISequenceElement> followerSegment = moveHandlerHelper.extractSegment(targetSequence, followerElement);
+					followerIndex += followerSegment.size();
+					++segSize;
 				}
 			}
 		}
@@ -126,7 +142,7 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 		// TODO: The hint manager could be used here to order by known shipping length
 		// Pick the first random insertion point
 		Collections.shuffle(validInsertionPairs, random);
-		for (final Pair<ISequenceElement, ISequenceElement> insertionPair : validInsertionPairs) {
+		for (final Triple<ISequenceElement, ISequenceElement, Boolean> insertionPair : validInsertionPairs) {
 
 			final Pair<IResource, Integer> location = lookupManager.lookup(insertionPair.getFirst());
 
@@ -135,6 +151,10 @@ public class InsertVesselEventMoveHandler implements IGuidedMoveHandler {
 
 			// Suggest element before and after as possible change targets
 			hints.addSuggestedElements(insertionPair.getFirst(), insertionPair.getSecond());
+			if (insertionPair.getThird()) {
+				// This element was marked as a problem.
+				hints.addProblemElement(insertionPair.getSecond());
+			}
 			break;
 		}
 

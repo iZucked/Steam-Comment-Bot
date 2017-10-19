@@ -9,7 +9,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 
@@ -34,7 +35,7 @@ public class DefaultVesselAvailabilityTest {
 
 		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
 		Assert.assertNull(vesselAvailavility.getStartRequirement());
-		final IStartEndRequirement requirement = Mockito.mock(IStartEndRequirement.class);
+		final IStartRequirement requirement = Mockito.mock(IStartRequirement.class);
 		vesselAvailavility.setStartRequirement(requirement);
 		Assert.assertSame(requirement, vesselAvailavility.getStartRequirement());
 	}
@@ -46,7 +47,7 @@ public class DefaultVesselAvailabilityTest {
 
 		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
 		Assert.assertNull(vesselAvailavility.getEndRequirement());
-		final IStartEndRequirement requirement = Mockito.mock(IStartEndRequirement.class);
+		final IEndRequirement requirement = Mockito.mock(IEndRequirement.class);
 		vesselAvailavility.setEndRequirement(requirement);
 		Assert.assertSame(requirement, vesselAvailavility.getEndRequirement());
 	}

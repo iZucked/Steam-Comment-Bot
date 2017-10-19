@@ -32,6 +32,6 @@ public interface IVoyagePlanOptimiser {
 	 */
 	@Nullable
 	VoyagePlan optimise(@Nullable IResource resource, IVessel vessel, long[] heelVolumeRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
-			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices);
+			List<IOptionsSequenceElement> basicSequence, List<IVoyagePlanChoice> choices, int startingTime);
 
 }

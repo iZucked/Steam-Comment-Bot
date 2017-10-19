@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuideMoveGeneratorOptions;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertSegmentMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
+import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHandlerHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
@@ -40,6 +41,9 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
+
+	@Inject
+	private @NonNull IMoveHandlerHelper moveHandlerHelper;
 
 	@Override
 	public Pair<IMove, Hints> handleMove(final @NonNull ILookupManager lookupManager, final ISequenceElement element, @NonNull Random random, @NonNull GuideMoveGeneratorOptions options,
@@ -156,14 +160,16 @@ public class InsertSegmentMoveHandler implements IGuidedMoveHandler {
 				if (followerIndex < targetSequence.size()) {
 					final ISequenceElement firstFollowerElement = targetSequence.get(followerIndex);
 					// If we can't insert here, what if we skip a segment? If so, we mark the segment as a problem.
-					// 5 is an arbitrary upper limit. We are really only interested in the next segment.
-					while (followerIndex < targetSequence.size() && segSize < 5) {
+					// Seg size of 2 is can we insert before the next cargo (or event) or the one after.
+					while (followerIndex < targetSequence.size() && segSize < 2) {
 						final ISequenceElement followerElement = targetSequence.get(followerIndex);
 						if (followers.contains(followerElement)) {
 							validInsertionPairs.add(new Triple<>(preceder, firstFollowerElement, segSize != 0));
 							break;
 						}
-						++followerIndex;
+						// Skip the whole segment
+						final List<ISequenceElement> followerSegment = moveHandlerHelper.extractSegment(targetSequence, followerElement);
+						followerIndex += followerSegment.size();
 						++segSize;
 					}
 				}

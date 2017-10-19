@@ -555,7 +555,7 @@ public class VoyagePlanner {
 					if (!roundTripCargoEnd) {
 
 						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, vesselCharterInRatePerDay,
-								vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices);
+								vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices, portTimesRecords.get(0).getFirstSlotTime());
 
 						if (plan == null) {
 							return null;
@@ -887,8 +887,8 @@ public class VoyagePlanner {
 	 * @return
 	 */
 	@Nullable
-	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final long vesselCharterInRatePerDay, @NonNull final IPortTimesRecord portTimesRecord, final long[] heelVolumeRangeInM3) {
-		return makeVoyage(resource, vesselCharterInRatePerDay, portTimesRecord, heelVolumeRangeInM3, voyagePlanOptimiserProvider.get());
+	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final long vesselCharterInRatePerDay, @NonNull final IPortTimesRecord portTimesRecord, final long[] heelVolumeRangeInM3, int startingTime) {
+		return makeVoyage(resource, vesselCharterInRatePerDay, portTimesRecord, heelVolumeRangeInM3, voyagePlanOptimiserProvider.get(), startingTime);
 	}
 
 	/**
@@ -901,7 +901,7 @@ public class VoyagePlanner {
 	 */
 	@Nullable
 	final public VoyagePlan makeVoyage(@NonNull final IResource resource, final long vesselCharterInRatePerDay, @NonNull final IPortTimesRecord portTimesRecord, long[] initialHeelVolumeRangeInM3,
-			@NonNull final IVoyagePlanOptimiser voyagePlanOptimiser) {
+			@NonNull final IVoyagePlanOptimiser voyagePlanOptimiser, int startingTime) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
@@ -998,7 +998,7 @@ public class VoyagePlanner {
 			// set base fuel price in VPO
 			final Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
 			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, vesselCharterInRatePerDay,
-					vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices);
+					vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices, startingTime);
 			// voyagePlanOptimiser.reset();
 			if (plan == null) {
 				return null;
@@ -1114,11 +1114,11 @@ public class VoyagePlanner {
 	@Nullable
 	final public VoyagePlan getOptimisedVoyagePlan(final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final @NonNull IPortTimesRecord portTimesRecord,
 			final @NonNull IVoyagePlanOptimiser optimiser, final long @NonNull [] heelVolumeRangeInM3, final long vesselCharterInRatePerDay, final @NonNull VesselInstanceType vesselInstanceType,
-			final Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> vesselTriple, @NonNull final List<@NonNull IVoyagePlanChoice> vpoChoices) {
+			final Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> vesselTriple, @NonNull final List<@NonNull IVoyagePlanChoice> vpoChoices, int startingTime) {
 
 		// Run sequencer evaluation
 		final VoyagePlan result = optimiser.optimise(vesselTriple.getSecond(), vesselTriple.getFirst(), heelVolumeRangeInM3.clone(), vesselTriple.getThird(), vesselCharterInRatePerDay,
-				portTimesRecord, voyageOrPortOptionsSubsequence, vpoChoices);
+				portTimesRecord, voyageOrPortOptionsSubsequence, vpoChoices, startingTime);
 
 		if (result == null) {
 			return null;

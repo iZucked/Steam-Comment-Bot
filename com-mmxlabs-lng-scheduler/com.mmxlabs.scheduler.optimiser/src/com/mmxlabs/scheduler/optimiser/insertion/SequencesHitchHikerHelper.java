@@ -296,6 +296,9 @@ public class SequencesHitchHikerHelper {
 							// If e is a load, this is the original load for the linked discharge.
 							// Likewise if e is a discharge, this is the original discharge for the linked load
 							final ISequenceElement originalElement = originalSeq.get(p.getSecond() - offset);
+							if (!spotMarketSlotsProvider.isSpotMarketSlot(originalElement)) {
+								continue;
+							}
 							if (originalElement == e) {
 								// Same element, no change
 							} else if (spotMarketSlotsProvider.isEquivalentOption(originalElement, e)) {

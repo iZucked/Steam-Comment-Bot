@@ -96,6 +96,12 @@ public interface IDistanceProvider extends IDataComponentProvider {
 		NORTHBOUND, SOUTHBOUND
 	};
 
+	/**
+	 * Returns the {@link RouteOptionDirection} for the route, given the <b>source</b> port.
+	 * @param port The source port
+	 * @param routeOption
+	 * @return
+	 */
 	RouteOptionDirection getRouteOptionDirection(IPort port, ERouteOption routeOption);
 
 	ECanalEntry getRouteOptionCanalEntrance(@NonNull IPort port, ERouteOption routeOption);

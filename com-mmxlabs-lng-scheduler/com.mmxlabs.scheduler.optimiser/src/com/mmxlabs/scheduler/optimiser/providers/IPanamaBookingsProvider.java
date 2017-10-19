@@ -25,12 +25,12 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	 */
 	int getStrictBoundary();
 
-	/**
-	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
-	 * 
-	 * @return
-	 */
-	int getRelaxedBookingCountNorthbound();
+//	/**
+//	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
+//	 * 
+//	 * @return
+//	 */
+//	int getRelaxedBookingCountNorthbound();
 
 	/**
 	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
@@ -59,6 +59,12 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getMargin();
+	
+	/**
+	 * The amount of days a vessel will idle in front of the canal on a NORTHBOUND in order to try and get a spontaneous booking.
+	 * @return
+	 */
+	int getNorthboundMaxIdleDays();
 
 	// Sorted
 	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAssignedBookings();

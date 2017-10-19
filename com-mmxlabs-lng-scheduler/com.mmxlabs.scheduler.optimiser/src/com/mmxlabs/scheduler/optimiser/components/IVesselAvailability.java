@@ -38,9 +38,9 @@ public interface IVesselAvailability {
 	@NonNull
 	VesselInstanceType getVesselInstanceType();
 
-	IStartEndRequirement getStartRequirement();
+	IStartRequirement getStartRequirement();
 
-	IStartEndRequirement getEndRequirement();
+	IEndRequirement getEndRequirement();
 
 	/**
 	 * Returns the repositioning fee of the vessel.

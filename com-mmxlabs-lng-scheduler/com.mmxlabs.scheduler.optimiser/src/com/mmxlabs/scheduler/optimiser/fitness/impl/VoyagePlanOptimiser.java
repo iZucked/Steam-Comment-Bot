@@ -22,6 +22,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.NotionalLoadSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -56,7 +59,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public static class Record {
 
 		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
-				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
+				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 			this.resource = resource;
 			this.vessel = vessel;
 			this.startHeelRangeInM3 = startHeelRangeInM3;
@@ -65,6 +68,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.portTimesRecord = portTimesRecord;
 			this.basicSequence = basicSequence;
 			this.choices = choices;
+			this.startingTime = startingTime;
 		}
 
 		public final List<@NonNull IVoyagePlanChoice> choices;// = new ArrayList<>();
@@ -79,7 +83,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public final long vesselCharterInRatePerDay;
 		public final long[] startHeelRangeInM3;
-
+		
+		public final int startingTime;
 		public final @Nullable IResource resource; // May be null for notional voyage calculations
 	}
 
@@ -109,9 +114,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	@Override
 	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
-			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
+			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 
-		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
 
 		InternalState state = new InternalState();
 		runLoop(record, state, 0);
@@ -136,11 +141,29 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 						window = requirement.getTimeWindow();
 					}
 				}
-
+				
 				if (useVPOSpeedStepping) {
 					final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
-					final int extraExtent = (window == null || window.getExclusiveEnd() == Integer.MAX_VALUE) ? 30 * RELAXATION_STEP
+					int extraExtent = (window == null || window.getExclusiveEnd() == Integer.MAX_VALUE) ? 30 * RELAXATION_STEP
 							: (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
+					
+					// No max duration for Notional cargoes
+					if (resource != null) {
+						if (!(slot instanceof NotionalEndPortSlot)) {
+							final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
+							if (record.startingTime != Integer.MAX_VALUE && requirement.isMaxDurationSet()) {
+								final int maxTime = record.startingTime + requirement.getMaxDurationInHours();
+								if (lastArrivalTime > maxTime) {
+									extraExtent = 0;
+								} else {
+									// Threshold the extraExtent by max duration remaining hours
+									final int maxDeltaInHours = maxTime - lastArrivalTime;
+									extraExtent = Math.min(extraExtent, maxDeltaInHours);
+								}
+							}
+						}
+					}
+					
 					// If this is non-zero then our end event rules will have
 					// kicked in and we should not engage the speed step code.
 					evaluateVoyagePlan(record, state, extraExtent);
@@ -191,8 +214,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		VoyageOptions optionsToRestore = null;
 		int availableTimeToRestore = 0;
-
-		if (timeExtent / RELAXATION_STEP > 0 && record.basicSequence.size() > 1) {
+		
+		if ((timeExtent > 0) && (record.basicSequence.size() > 1)) {
 
 			// There are some cases where we wish to evaluate the best time to
 			// end the sequence, rather than the specified value. Typically
@@ -220,7 +243,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int bestAvailableTime = options.getAvailableTime();
 
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
-			for (int i = 0; i < timeExtent / RELAXATION_STEP; i++) {
+			final int steps = (timeExtent % RELAXATION_STEP > 0) ? (timeExtent / RELAXATION_STEP + 1): (timeExtent / RELAXATION_STEP);
+			for (int i = 0; i < steps; i++) {
 
 				currentPlan = calculateVoyagePlan(record);
 
