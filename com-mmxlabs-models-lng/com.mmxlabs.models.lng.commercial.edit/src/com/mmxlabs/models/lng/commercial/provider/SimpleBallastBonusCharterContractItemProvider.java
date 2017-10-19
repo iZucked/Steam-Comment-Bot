@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
@@ -52,9 +53,55 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addMinDurationPropertyDescriptor(object);
+			addMaxDurationPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Min Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterContract_minDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterContract_minDuration_feature", "_UI_CharterContract_type"),
+				 CommercialPackage.Literals.CHARTER_CONTRACT__MIN_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterContract_maxDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterContract_maxDuration_feature", "_UI_CharterContract_type"),
+				 CommercialPackage.Literals.CHARTER_CONTRACT__MAX_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -147,6 +194,10 @@ public class SimpleBallastBonusCharterContractItemProvider extends NamedObjectIt
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SimpleBallastBonusCharterContract.class)) {
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION:
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;

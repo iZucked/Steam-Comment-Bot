@@ -1313,6 +1313,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVesselAvailability_MinDuration() {
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselAvailability_MaxDuration() {
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getVesselAvailability__GetStartByAsDateTime() {
 		return vesselAvailabilityEClass.getEOperations().get(0);
 	}
@@ -1351,6 +1369,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EOperation getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract() {
 		return vesselAvailabilityEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselAvailability__GetAvailabilityOrContractMinDuration() {
+		return vesselAvailabilityEClass.getEOperations().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselAvailability__GetAvailabilityOrContractMaxDuration() {
+		return vesselAvailabilityEClass.getEOperations().get(6);
 	}
 
 	/**
@@ -1961,6 +1997,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCanalBookings_NorthboundMaxIdleDays() {
+		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -2140,11 +2185,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__REPOSITIONING_FEE);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CHARTER_CONTRACT);
+		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__MIN_DURATION);
+		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__MAX_DURATION);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION);
 
 		vesselEventEClass = createEClass(VESSEL_EVENT);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__DURATION_IN_DAYS);
@@ -2224,6 +2273,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
+		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
@@ -2455,6 +2505,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getVesselAvailability_RepositioningFee(), ecorePackage.getEString(), "repositioningFee", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_BallastBonusContract(), theCommercialPackage.getBallastBonusContract(), null, "ballastBonusContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_CharterContract(), theCommercialPackage.getCharterContract(), null, "charterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselAvailability__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2465,6 +2517,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getVesselAvailability__GetEndAfterAsDateTime(), theDateTimePackage.getDateTime(), "getEndAfterAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getVesselAvailability__GetAvailabilityOrCharterContractBallastBonusContract(), theCommercialPackage.getBallastBonusContract(), "getAvailabilityOrCharterContractBallastBonusContract", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__GetAvailabilityOrContractMinDuration(), ecorePackage.getEInt(), "getAvailabilityOrContractMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__GetAvailabilityOrContractMaxDuration(), ecorePackage.getEInt(), "getAvailabilityOrContractMaxDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(vesselEventEClass, VesselEvent.class, "VesselEvent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVesselEvent_DurationInDays(), ecorePackage.getEInt(), "durationInDays", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2550,6 +2606,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCanalBookings_ArrivalMarginHours(), ecorePackage.getEInt(), "arrivalMarginHours", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_FlexibleBookingAmountNorthbound(), ecorePackage.getEInt(), "flexibleBookingAmountNorthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_FlexibleBookingAmountSouthbound(), ecorePackage.getEInt(), "flexibleBookingAmountSouthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalBookings_NorthboundMaxIdleDays(), ecorePackage.getEInt(), "northboundMaxIdleDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
@@ -2713,6 +2770,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "unit", "$/day"
+		   });	
+		addAnnotation
+		  (getVesselAvailability_MinDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
+		   });	
+		addAnnotation
+		  (getVesselAvailability_MaxDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
 		   });	
 		addAnnotation
 		  (getVesselEvent_DurationInDays(), 

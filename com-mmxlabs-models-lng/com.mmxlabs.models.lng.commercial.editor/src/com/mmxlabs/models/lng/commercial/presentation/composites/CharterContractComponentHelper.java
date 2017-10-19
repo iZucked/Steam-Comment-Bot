@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 
@@ -69,5 +70,25 @@ public class CharterContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_minDurationEditor(detailComposite, topClass);
+		add_maxDurationEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the minDuration feature on CharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_minDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CHARTER_CONTRACT__MIN_DURATION));
+	}
+
+	/**
+	 * Create the editor for the maxDuration feature on CharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_maxDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CHARTER_CONTRACT__MAX_DURATION));
 	}
 }

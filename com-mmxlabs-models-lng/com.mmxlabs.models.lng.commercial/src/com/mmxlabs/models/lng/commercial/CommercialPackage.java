@@ -1567,13 +1567,31 @@ public interface CommercialPackage extends EPackage {
 	int CHARTER_CONTRACT__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CONTRACT__MIN_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_CONTRACT__MAX_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Charter Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl <em>Simple Charter Contract</em>}' class.
@@ -1602,6 +1620,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SIMPLE_CHARTER_CONTRACT__NAME = CHARTER_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_CHARTER_CONTRACT__MIN_DURATION = CHARTER_CONTRACT__MIN_DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_CHARTER_CONTRACT__MAX_DURATION = CHARTER_CONTRACT__MAX_DURATION;
 
 	/**
 	 * The number of structural features of the '<em>Simple Charter Contract</em>' class.
@@ -1639,6 +1675,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int BALLAST_BONUS_CHARTER_CONTRACT__NAME = CHARTER_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION = CHARTER_CONTRACT__MIN_DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION = CHARTER_CONTRACT__MAX_DURATION;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
@@ -1694,6 +1748,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__NAME = BALLAST_BONUS_CHARTER_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION = BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION = BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
@@ -2470,6 +2542,28 @@ public interface CommercialPackage extends EPackage {
 	EClass getCharterContract();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.CharterContract#getMinDuration <em>Min Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Duration</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CharterContract#getMinDuration()
+	 * @see #getCharterContract()
+	 * @generated
+	 */
+	EAttribute getCharterContract_MinDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.CharterContract#getMaxDuration <em>Max Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Duration</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CharterContract#getMaxDuration()
+	 * @see #getCharterContract()
+	 * @generated
+	 */
+	EAttribute getCharterContract_MaxDuration();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleCharterContract <em>Simple Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3148,6 +3242,22 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHARTER_CONTRACT = eINSTANCE.getCharterContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_CONTRACT__MIN_DURATION = eINSTANCE.getCharterContract_MinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_CONTRACT__MAX_DURATION = eINSTANCE.getCharterContract_MaxDuration();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl <em>Simple Charter Contract</em>}' class.

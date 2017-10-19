@@ -1279,13 +1279,31 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__NOMINAL = SPOT_CHARTER_MARKET_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__MIN_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__MAX_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 9;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
@@ -1816,6 +1834,28 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getCharterInMarket_Nominal();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration <em>Min Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Duration</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_MinDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration <em>Max Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Duration</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_MaxDuration();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2328,6 +2368,22 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__NOMINAL = eINSTANCE.getCharterInMarket_Nominal();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__MIN_DURATION = eINSTANCE.getCharterInMarket_MinDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__MAX_DURATION = eINSTANCE.getCharterInMarket_MaxDuration();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.

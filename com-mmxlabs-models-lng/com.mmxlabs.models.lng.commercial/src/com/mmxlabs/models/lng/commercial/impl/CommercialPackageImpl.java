@@ -283,6 +283,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		// Initialize simple dependencies
 		DateTimePackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
 		PortPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
@@ -917,6 +919,24 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterContract_MinDuration() {
+		return (EAttribute)charterContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterContract_MaxDuration() {
+		return (EAttribute)charterContractEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSimpleCharterContract() {
 		return simpleCharterContractEClass;
 	}
@@ -1091,6 +1111,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalJourneyBallastBonusContractLineEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL);
 
 		charterContractEClass = createEClass(CHARTER_CONTRACT);
+		createEAttribute(charterContractEClass, CHARTER_CONTRACT__MIN_DURATION);
+		createEAttribute(charterContractEClass, CHARTER_CONTRACT__MAX_DURATION);
 
 		simpleCharterContractEClass = createEClass(SIMPLE_CHARTER_CONTRACT);
 
@@ -1263,6 +1285,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getNotionalJourneyBallastBonusContractLine_IncludeCanal(), ecorePackage.getEBoolean(), "includeCanal", null, 0, 1, NotionalJourneyBallastBonusContractLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterContractEClass, CharterContract.class, "CharterContract", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCharterContract_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, CharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterContract_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, CharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(simpleCharterContractEClass, SimpleCharterContract.class, "SimpleCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1355,6 +1379,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source, 
 		   new String[] {
 			 "unit", "$/day"
+		   });	
+		addAnnotation
+		  (getCharterContract_MinDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
+		   });	
+		addAnnotation
+		  (getCharterContract_MaxDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
 		   });
 	}
 

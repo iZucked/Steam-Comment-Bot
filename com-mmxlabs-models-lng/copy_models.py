@@ -6,7 +6,8 @@
 import shutil, os
 #####################################
 path_to_ws = os.getcwd()
-version = 81
+version = 82
+#####################################
 
 root = "{0}/com.mmxlabs.models.lng.".format(path_to_ws)
 files = ["port",

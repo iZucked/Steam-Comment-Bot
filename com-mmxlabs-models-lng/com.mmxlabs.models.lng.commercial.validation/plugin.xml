@@ -168,6 +168,22 @@
                      class="CharterContract">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.CharterContractConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.CharterContractConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="CharterContract"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CharterContract">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

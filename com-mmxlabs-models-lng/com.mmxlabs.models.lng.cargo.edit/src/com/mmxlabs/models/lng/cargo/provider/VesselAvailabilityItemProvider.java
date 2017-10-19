@@ -71,6 +71,8 @@ public class VesselAvailabilityItemProvider
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
 			addRepositioningFeePropertyDescriptor(object);
 			addCharterContractPropertyDescriptor(object);
+			addMinDurationPropertyDescriptor(object);
+			addMaxDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -361,6 +363,50 @@ public class VesselAvailabilityItemProvider
 				 null));
 	}
 	/**
+	 * This adds a property descriptor for the Min Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_minDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_minDuration_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_maxDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_maxDuration_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Charter Number feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -495,6 +541,8 @@ public class VesselAvailabilityItemProvider
 			case CargoPackage.VESSEL_AVAILABILITY__END_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
+			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
+			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:

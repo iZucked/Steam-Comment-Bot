@@ -87,6 +87,8 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_repositioningFeeEditor(detailComposite, topClass);
 		add_ballastBonusContractEditor(detailComposite, topClass);
 		add_charterContractEditor(detailComposite, topClass);
+		add_minDurationEditor(detailComposite, topClass);
+		add_maxDurationEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fleet feature on VesselAvailability
@@ -239,6 +241,24 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_charterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT));
+	}
+
+	/**
+	 * Create the editor for the minDuration feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_minDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION));
+	}
+
+	/**
+	 * Create the editor for the maxDuration feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_maxDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION));
 	}
 
 	/**

@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.commercial.provider;
 
 
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
 
 import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
@@ -16,7 +17,10 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleCharterContract} object.
@@ -46,8 +50,54 @@ public class SimpleCharterContractItemProvider extends NamedObjectItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addMinDurationPropertyDescriptor(object);
+			addMaxDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Min Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterContract_minDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterContract_minDuration_feature", "_UI_CharterContract_type"),
+				 CommercialPackage.Literals.CHARTER_CONTRACT__MIN_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Duration feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterContract_maxDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterContract_maxDuration_feature", "_UI_CharterContract_type"),
+				 CommercialPackage.Literals.CHARTER_CONTRACT__MAX_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -86,6 +136,13 @@ public class SimpleCharterContractItemProvider extends NamedObjectItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(SimpleCharterContract.class)) {
+			case CommercialPackage.SIMPLE_CHARTER_CONTRACT__MIN_DURATION:
+			case CommercialPackage.SIMPLE_CHARTER_CONTRACT__MAX_DURATION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

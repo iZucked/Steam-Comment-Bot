@@ -16,6 +16,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -28,9 +29,14 @@ import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -59,6 +65,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getMinDuration <em>Min Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getMaxDuration <em>Max Duration</em>}</li>
  * </ul>
  *
  * @generated
@@ -397,6 +405,64 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected boolean charterContractESet;
+
+	/**
+	 * The default value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minDuration = MIN_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Min Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minDurationESet;
+
+	/**
+	 * The default value of the '{@link #getMaxDuration() <em>Max Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxDuration() <em>Max Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxDuration = MAX_DURATION_EDEFAULT;
+
+	/**
+	 * This is true if the Max Duration attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxDurationESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1103,6 +1169,98 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMinDuration() {
+		return minDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinDuration(int newMinDuration) {
+		int oldMinDuration = minDuration;
+		minDuration = newMinDuration;
+		boolean oldMinDurationESet = minDurationESet;
+		minDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION, oldMinDuration, minDuration, !oldMinDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMinDuration() {
+		int oldMinDuration = minDuration;
+		boolean oldMinDurationESet = minDurationESet;
+		minDuration = MIN_DURATION_EDEFAULT;
+		minDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION, oldMinDuration, MIN_DURATION_EDEFAULT, oldMinDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMinDuration() {
+		return minDurationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMaxDuration() {
+		return maxDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxDuration(int newMaxDuration) {
+		int oldMaxDuration = maxDuration;
+		maxDuration = newMaxDuration;
+		boolean oldMaxDurationESet = maxDurationESet;
+		maxDurationESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION, oldMaxDuration, maxDuration, !oldMaxDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxDuration() {
+		int oldMaxDuration = maxDuration;
+		boolean oldMaxDurationESet = maxDurationESet;
+		maxDuration = MAX_DURATION_EDEFAULT;
+		maxDurationESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION, oldMaxDuration, MAX_DURATION_EDEFAULT, oldMaxDurationESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxDuration() {
+		return maxDurationESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZonedDateTime getStartByAsDateTime() {
@@ -1182,6 +1340,25 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		return null;
 	}
 
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getAvailabilityOrContractMinDuration() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION);
+
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getAvailabilityOrContractMaxDuration() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1290,6 +1467,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
 				if (resolve) return getCharterContract();
 				return basicGetCharterContract();
+			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
+				return getMinDuration();
+			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
+				return getMaxDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1358,6 +1539,12 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
 				setCharterContract((CharterContract)newValue);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
+				setMinDuration((Integer)newValue);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
+				setMaxDuration((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1424,6 +1611,12 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
 				unsetCharterContract();
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
+				unsetMinDuration();
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
+				unsetMaxDuration();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1472,6 +1665,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return ballastBonusContract != null;
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
 				return isSetCharterContract();
+			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
+				return isSetMinDuration();
+			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
+				return isSetMaxDuration();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1494,6 +1691,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return getEndAfterAsDateTime();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CHARTER_CONTRACT_BALLAST_BONUS_CONTRACT:
 				return getAvailabilityOrCharterContractBallastBonusContract();
+			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MIN_DURATION:
+				return getAvailabilityOrContractMinDuration();
+			case CargoPackage.VESSEL_AVAILABILITY___GET_AVAILABILITY_OR_CONTRACT_MAX_DURATION:
+				return getAvailabilityOrContractMaxDuration();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -1528,8 +1729,23 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		result.append(forceHireCostOnlyEndRule);
 		result.append(", repositioningFee: ");
 		result.append(repositioningFee);
+		result.append(", minDuration: ");
+		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
+		result.append(", maxDuration: ");
+		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
-
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		CargoPackage cargo = CargoPackage.eINSTANCE;
+		CommercialPackage commercial = CommercialPackage.eINSTANCE;
+		if (cargo.getVesselAvailability_MinDuration() == feature) {
+			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MinDuration(), (Integer) 0);
+		} else if (cargo.getVesselAvailability_MaxDuration() == feature) {
+			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
+		}
+		
+		return super.getUnsetValueOrDelegate(feature);
+	}	
 } //VesselAvailabilityImpl

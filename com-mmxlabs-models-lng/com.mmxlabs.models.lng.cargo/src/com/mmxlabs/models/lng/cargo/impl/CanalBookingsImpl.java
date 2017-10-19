@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
  * </ul>
  *
  * @generated
@@ -153,6 +154,26 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected int flexibleBookingAmountSouthbound = FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getNorthboundMaxIdleDays() <em>Northbound Max Idle Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNorthboundMaxIdleDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getNorthboundMaxIdleDays() <em>Northbound Max Idle Days</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNorthboundMaxIdleDays()
+	 * @generated
+	 * @ordered
+	 */
+	protected int northboundMaxIdleDays = NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -295,6 +316,27 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getNorthboundMaxIdleDays() {
+		return northboundMaxIdleDays;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNorthboundMaxIdleDays(int newNorthboundMaxIdleDays) {
+		int oldNorthboundMaxIdleDays = northboundMaxIdleDays;
+		northboundMaxIdleDays = newNorthboundMaxIdleDays;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS, oldNorthboundMaxIdleDays, northboundMaxIdleDays));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -324,6 +366,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return getFlexibleBookingAmountNorthbound();
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				return getFlexibleBookingAmountSouthbound();
+			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
+				return getNorthboundMaxIdleDays();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -356,6 +400,9 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				setFlexibleBookingAmountSouthbound((Integer)newValue);
 				return;
+			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
+				setNorthboundMaxIdleDays((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -386,6 +433,9 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				setFlexibleBookingAmountSouthbound(FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT);
 				return;
+			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
+				setNorthboundMaxIdleDays(NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -410,6 +460,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return flexibleBookingAmountNorthbound != FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				return flexibleBookingAmountSouthbound != FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
+			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
+				return northboundMaxIdleDays != NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -434,6 +486,8 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		result.append(flexibleBookingAmountNorthbound);
 		result.append(", flexibleBookingAmountSouthbound: ");
 		result.append(flexibleBookingAmountSouthbound);
+		result.append(", northboundMaxIdleDays: ");
+		result.append(northboundMaxIdleDays);
 		result.append(')');
 		return result.toString();
 	}
