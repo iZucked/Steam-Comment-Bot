@@ -262,7 +262,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 					returnOptions);
 
 			final VoyagePlan notionalPlan = vpo.optimise(null, vessel, new long[] { startHeelInM3, startHeelInM3 }, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence,
-					vpoChoices);
+					vpoChoices, Integer.MAX_VALUE);
 
 			// Set to null to trigger assert at start of method if API is not being correctly used.
 			fuelChoice = null;

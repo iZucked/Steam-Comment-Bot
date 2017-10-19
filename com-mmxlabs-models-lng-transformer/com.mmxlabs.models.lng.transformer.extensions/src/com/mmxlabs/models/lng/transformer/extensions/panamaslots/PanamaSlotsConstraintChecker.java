@@ -194,15 +194,15 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 				final int whitelistedSlotCountNorthbound = (countBeforeNorthbound - countAfterNorthbound); // 6
 
 				// What is out upper limit?
-				final int relaxedSlotCountNorthbound = panamaSlotsProvider.getRelaxedBookingCountNorthbound(); // 5
+//				final int relaxedSlotCountNorthbound = panamaSlotsProvider.getRelaxedBookingCountNorthbound(); // 5
 
 				// Calculate the adjusted upper bound. Total flex, minus the previously seen stuff. This gives us the remaining flex for new slots. This may be negative meaning we have no further
 				// flex.
-				final int adjustedFlexCountNorthbound = relaxedSlotCountNorthbound - whitelistedSlotCountNorthbound; // -1
+//				final int adjustedFlexCountNorthbound = relaxedSlotCountNorthbound - whitelistedSlotCountNorthbound; // -1
 
 				// If count is zero, then there are no new slots in the relaxed period over the initial solution => accept.
 				// Otherwise if the current excess is less than or equal to the adjusted flex => accept.
-				northboundIsValid = countAfterNorthbound == 0 || countAfterNorthbound <= adjustedFlexCountNorthbound;
+//				northboundIsValid = countAfterNorthbound == 0 || countAfterNorthbound <= adjustedFlexCountNorthbound;
 			}
 			{
 				final int countBeforeSouthbound = currentUnbookedSlotsSouthboundInRelaxed.size(); // 0
@@ -215,7 +215,8 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 
 				southboundIsValid = countAfterSouthbound == 0 || countAfterSouthbound <= adjustedCountSouthbound;
 			}
-			return northboundIsValid && southboundIsValid;
+//			return northboundIsValid && southboundIsValid;
+			return southboundIsValid;
 		} else {
 			unbookedSlotsNorthbound = currentUnbookedSlotsNorthbound;
 			unbookedSlotsSouthbound = currentUnbookedSlotsSouthbound;

@@ -861,9 +861,7 @@ public class LNGScenarioTransformer {
 		// freeze any frozen assignments
 		freezeAssignmentModel(builder, modelEntityMap);
 
-		for (
-
-		final ITransformerExtension extension : allTransformerExtensions) {
+		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
 		}
 
@@ -2782,7 +2780,7 @@ public class LNGScenarioTransformer {
 				}
 				for (final AVesselSet<Vessel> vesselSet : routeCost.getVessels()) {
 					if (vesselSet instanceof Vessel) {
-						Vessel eVessel = (Vessel) vesselSet;
+						final Vessel eVessel = (Vessel) vesselSet;
 						final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
 						final IVessel oVessel = vesselAssociation.lookup(eVessel);
 						assert oVessel != null;
@@ -3058,6 +3056,16 @@ public class LNGScenarioTransformer {
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, SetUtils.getObjects(eVesselAvailability.getEndAt()), heelConsumer,
 					forceHireCostOnlyEndRule);
 
+			final int minDuration = eVesselAvailability.getAvailabilityOrContractMinDuration();
+			if (minDuration != 0) {
+				endRequirement.setMinDurationInDays(minDuration);
+			}
+
+			final int maxDuration = eVesselAvailability.getAvailabilityOrContractMaxDuration();
+			if (maxDuration != 0) {
+				endRequirement.setMaxDurationInDays(maxDuration);
+			}
+
 			final ILongCurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
 				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
@@ -3155,6 +3163,18 @@ public class LNGScenarioTransformer {
 						final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, i);
 						final IVesselAvailability spotAvailability = spots.get(i);
 						spotCharterInToAvailability.put(key, spotAvailability);
+
+						final IEndRequirement endReq = spotAvailability.getEndRequirement();
+
+						final int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
+						if (maxDurationInDays != 0) {
+							endReq.setMaxDurationInDays(maxDurationInDays);
+						}
+
+						final int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
+						if (minDurationInDays != 0) {
+							endReq.setMinDurationInDays(minDurationInDays);
+						}
 
 						/*
 						 * set up inaccessible routes
@@ -3274,9 +3294,9 @@ public class LNGScenarioTransformer {
 		}
 		// Is the availability open ended or do we force the end rule?
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, false, new TimeWindow(0,  Integer.MAX_VALUE), heelConsumer, false);
+			return builder.createEndRequirement(null, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer, false);
 		} else {
-			return builder.createEndRequirement(portSet, false, new TimeWindow(0,  Integer.MAX_VALUE), heelConsumer, false);
+			return builder.createEndRequirement(portSet, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer, false);
 		}
 
 	}

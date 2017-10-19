@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
@@ -104,26 +105,37 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			return;
 		}
 		{
-			final List<Slot> slots = new LinkedList<>();
+			List<Slot> slots = new LinkedList<>();
 			final Iterator<?> itr = selection.iterator();
+			boolean noCargoSelected = true;
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof RowData) {
 					final RowData rowData = (RowData) obj;
 					final LoadSlot load = rowData.getLoadSlot();
-					if (load != null && load.getCargo() == null) {
-						slots.add(load);
-						break;
+					if (load != null) {
+						if (load.getCargo() != null) {
+							noCargoSelected = false;
+						} else {
+							slots.add(load);
+						}
 					}
 					final DischargeSlot discharge = rowData.getDischargeSlot();
-					if (discharge != null && discharge.getCargo() == null) {
-						slots.add(discharge);
-						break;
+					if (discharge != null) {
+						if (discharge.getCargo() != null) {
+							noCargoSelected = false;
+						} else {
+							slots.add(discharge);
+						}
 					}
 				}
 			}
 
-			if (slots.size() > 0) {
+			if (noCargoSelected && slots.size() > 0) {
+				if (slots.size() != 2 || (slots.size() == 2 && !(slots.stream().filter(s -> (s instanceof LoadSlot)).findAny().isPresent() &&
+						slots.stream().filter(s -> (s instanceof DischargeSlot)).findAny().isPresent()))) {
+					slots = Lists.newArrayList(slots.get(0));
+				}
 				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
 				for (final Slot slot : slots) {

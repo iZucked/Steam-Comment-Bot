@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -143,12 +144,18 @@ public class JourneyEventExporter {
 					marginHours = 0;
 				}
 
-				ZonedDateTime latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
-				journey.setLatestPossibleCanalDate(latestCanalEntry.toLocalDate());
-
-				if (latestCanalEntry.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
-					// slot can't be reached that day, set to previous day
-					journey.setLatestPossibleCanalDate(latestCanalEntry.minusDays(1).toLocalDate());
+				boolean southBound = distanceProvider.getRouteOptionDirection(options.getFromPortSlot().getPort(), ERouteOption.PANAMA) == RouteOptionDirection.SOUTHBOUND;
+				ZonedDateTime latestCanalEntry;
+				if (southBound) {
+					latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
+					journey.setLatestPossibleCanalDate(latestCanalEntry.toLocalDate());
+					if (latestCanalEntry.getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
+						// slot can't be reached that day, set to previous day
+						journey.setLatestPossibleCanalDate(latestCanalEntry.minusDays(1).toLocalDate());
+					}
+				} else {
+					latestCanalEntry = endTime.minusHours(fromCanalEntry);
+					journey.setLatestPossibleCanalDate(latestCanalEntry.toLocalDate());
 				}
 
 				// set canal arrival
@@ -156,7 +163,11 @@ public class JourneyEventExporter {
 						options.getVessel(), //
 						options.getFromPortSlot().getPort(), //
 						canalEntry, //
-						toCanalSpeed) + marginHours;
+						toCanalSpeed);
+
+				if (southBound) {
+					toCanal = toCanal + marginHours;
+				}
 
 				estimatedArrival = modelEntityMap.getDateFromHours(currentTime + toCanal, canalEntry);
 				journey.setCanalArrival(estimatedArrival.toLocalDate());

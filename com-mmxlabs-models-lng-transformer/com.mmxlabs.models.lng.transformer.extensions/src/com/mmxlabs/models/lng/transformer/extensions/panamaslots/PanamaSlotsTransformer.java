@@ -73,6 +73,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 	private final List<CanalBookingSlot> providedPanamaBookings = new ArrayList<>();
 	private int relaxedBoundaryOffsetDays;
 	private int relaxedBookingsCountNorthbound;
+	private int northBoundMaxIdleDays;
 	private int relaxedBookingsCountSouthbound;
 	private int strictBoundaryOffsetDays;
 	private int arrivalMargin;
@@ -95,6 +96,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		strictBoundaryOffsetDays = canalBookings.getStrictBoundaryOffsetDays();
 		relaxedBoundaryOffsetDays = canalBookings.getRelaxedBoundaryOffsetDays();
 		relaxedBookingsCountNorthbound = canalBookings.getFlexibleBookingAmountNorthbound();
+		northBoundMaxIdleDays = canalBookings.getNorthboundMaxIdleDays();
 		relaxedBookingsCountSouthbound = canalBookings.getFlexibleBookingAmountSouthbound();
 		arrivalMargin = canalBookings.getArrivalMarginHours();
 	}
@@ -127,6 +129,7 @@ public class PanamaSlotsTransformer implements IContractTransformer {
 		panamaBookingsProviderEditor.setStrictBoundary(promptPeriodProvider.getStartOfPromptPeriod() + strictBoundaryOffsetDays * 24);
 		panamaBookingsProviderEditor.setRelaxedBoundary(promptPeriodProvider.getStartOfPromptPeriod() + relaxedBoundaryOffsetDays * 24);
 		panamaBookingsProviderEditor.setRelaxedBookingCountNorthbound(relaxedBookingsCountNorthbound);
+		panamaBookingsProviderEditor.setNorthboundMaxIdleDays(northBoundMaxIdleDays);
 		panamaBookingsProviderEditor.setRelaxedBookingCountSouthbound(relaxedBookingsCountSouthbound);
 		panamaBookingsProviderEditor.setArrivalMargin(arrivalMargin);
 	}
