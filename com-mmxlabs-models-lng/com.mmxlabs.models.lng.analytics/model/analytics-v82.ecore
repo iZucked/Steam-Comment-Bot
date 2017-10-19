@@ -87,8 +87,8 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="costLines" upperBound="-1"
         eType="#//UnitCostLine" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="allowedRoutes" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allowedRoutes" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowedRouteOptions" upperBound="-1" eType="ecore:EDataType ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="revenueShare" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -147,6 +147,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Voyage" eSuperTypes="#//CostComponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="route" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="ecore:EDataType ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -353,7 +354,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RoundTripShippingOption" eSuperTypes="#//ShippingOption">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hireCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
         <details key="type" value="charter"/>

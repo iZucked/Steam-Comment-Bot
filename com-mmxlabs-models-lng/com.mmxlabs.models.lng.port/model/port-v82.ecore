@@ -5,6 +5,7 @@
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject">
       <details key="showOtherNames" value="true"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmxID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capabilities" upperBound="-1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
@@ -75,6 +76,7 @@
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXIdentifiable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
@@ -120,6 +122,8 @@
         eType="#//CapabilityGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portCountryGroups" upperBound="-1"
         eType="#//PortCountryGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="distanceDataVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CapabilityGroup">
     <eAnnotations source="http://www.mmxlabs.com/models/csv">
@@ -131,7 +135,13 @@
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Location">
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject">
+      <details key="showOtherNames" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmxId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -150,6 +160,10 @@
     <eLiterals name="DIRECT"/>
     <eLiterals name="SUEZ" value="1"/>
     <eLiterals name="PANAMA" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CanalEntry">
+    <eLiterals name="Northside"/>
+    <eLiterals name="Southside" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortCountryGroup">
     <eAnnotations source="http://www.mmxlabs.com/models/csv">
