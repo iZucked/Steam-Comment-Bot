@@ -37,12 +37,12 @@ public class EObjectTableViewerSortingSupport {
 	 * Overridding sort order of objects. Any change in column sort order will set this back to null.
 	 */
 	private List<Object> fixedSortOrder = null;
-	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
+	private final List<GridColumn> columnSortOrder = new ArrayList< >();
 
 	private boolean sortDescending = false;
 
 	public void removeSortableColumn(final GridColumn tColumn) {
-		getColumnSortOrder().remove(tColumn);
+		columnSortOrder.remove(tColumn);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class EObjectTableViewerSortingSupport {
 		return sortDescending;
 	}
 
-	public ArrayList<GridColumn> getColumnSortOrder() {
+	public List<GridColumn> getColumnSortOrder() {
 		return columnSortOrder;
 	}
 
