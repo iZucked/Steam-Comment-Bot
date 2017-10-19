@@ -129,21 +129,22 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					Journey journey = (Journey) event;
 					if (journey.getCanalDate() != null) {
 						if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-
-							CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
-							canal.setLinkedSequence(journey.getSequence());
-							canal.setLinkedJourney(journey);
-							canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
-							canal.setEnd(canal.getStart().plusDays(1));
-							if (journey.getCanalBooking() == null) {
-								if (journey.getLatestPossibleCanalDate() != null) {
-									ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
-									int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
-									canal.setEnd(canal.getStart().plusDays(days));
+							if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
+								CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+								canal.setLinkedSequence(journey.getSequence());
+								canal.setLinkedJourney(journey);
+								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+								canal.setEnd(canal.getStart().plusDays(1));
+								if (journey.getCanalBooking() == null) {
+									if (journey.getLatestPossibleCanalDate() != null) {
+										ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
+										int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
+										canal.setEnd(canal.getStart().plusDays(days));
+									}
 								}
+								canal.setPort(journey.getCanalEntry().getPort());
+								newEvents.add(canal);
 							}
-							canal.setPort(journey.getCanalEntry().getPort());
-							newEvents.add(canal);
 						}
 					}
 				}
@@ -164,22 +165,25 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 						Journey journey = (Journey) event;
 						if (journey.getCanalDate() != null) {
 							if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
+								if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
 
-								CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
-								canal.setLinkedSequence(journey.getSequence());
-								canal.setLinkedJourney(journey);
-								canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
-								canal.setEnd(canal.getStart().plusDays(1));
-								if (journey.getCanalBooking() == null) {
-									if (journey.getLatestPossibleCanalDate() != null) {
-										ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
-										int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
-										canal.setEnd(canal.getStart().plusDays(days));
+									CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+									canal.setLinkedSequence(journey.getSequence());
+									canal.setLinkedJourney(journey);
+									canal.setStart(journey.getCanalDate().atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE))));
+									canal.setEnd(canal.getStart().plusDays(1));
+									if (journey.getCanalBooking() == null) {
+										if (journey.getLatestPossibleCanalDate() != null) {
+											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDate()
+													.atStartOfDay(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE)));
+											int days = Math.max(1, Days.between(canal.getStart(), atStartOfDay));
+											canal.setEnd(canal.getStart().plusDays(days));
 
+										}
 									}
+									canal.setPort(journey.getCanalEntry().getPort());
+									newEvents.add(canal);
 								}
-								canal.setPort(journey.getCanalEntry().getPort());
-								newEvents.add(canal);
 							}
 						}
 					}
