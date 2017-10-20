@@ -175,9 +175,6 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withAllowedVessels(vessel) //
 				.build();
 
-		File tmp = new File("/tmp/scenario.lingo");
-		ScenarioStorageUtil.storeCopyToFile(this.scenarioDataProvider, tmp);
-
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -300,9 +297,6 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 
-		File tmp = new File("/tmp/scenario_end.lingo");
-		ScenarioStorageUtil.storeCopyToFile(this.scenarioDataProvider, tmp);
-
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -364,9 +358,6 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 
-		File tmp = new File("/tmp/scenario_end_assignment.lingo");
-		ScenarioStorageUtil.storeCopyToFile(this.scenarioDataProvider, tmp);
-
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -424,8 +415,6 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withAllowedVessels(vessel) //
 				.build();
 
-		File tmp = new File("/tmp/scenario_best.lingo");
-		ScenarioStorageUtil.storeCopyToFile(this.scenarioDataProvider, tmp);
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();

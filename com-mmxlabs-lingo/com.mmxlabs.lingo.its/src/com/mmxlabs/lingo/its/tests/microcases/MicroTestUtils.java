@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -242,6 +243,23 @@ public class MicroTestUtils {
 			}
 		}
 		Assert.fail("Slot not found");
+		throw new IllegalStateException();
+	}
+	
+	public static @NonNull EndEvent findVesselEndEvent(@NonNull final LNGScenarioModel lngScenarioModel) {
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
+		Assert.assertNotNull(schedule);
+
+		for (final Sequence sequence : schedule.getSequences()) {
+			for (final Event event : sequence.getEvents()) {
+				if (event instanceof EndEvent) {
+					return (EndEvent) event;
+				}
+			}
+		}
+		Assert.fail("End Event not found");
 		throw new IllegalStateException();
 	}
 }
