@@ -188,7 +188,6 @@ public class PeriodTransformer {
 	@NonNull
 	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final PeriodRecord periodRecord,
 			@NonNull final IScenarioEntityMapping mapping) {
-
 		// assert - passed validation
 
 		// Take a copy to manipulate.
@@ -207,6 +206,11 @@ public class PeriodTransformer {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(output);
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(output);
 		final PortModel portModel = ScenarioModelUtil.getPortModel(output);
+
+		// Init extensions
+		for (IPeriodTransformerExtension extension : extensions) {
+			extension.init(cargoModel, ScenarioModelUtil.getScheduleModel(output).getSchedule());
+		}
 
 		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
