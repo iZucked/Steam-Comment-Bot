@@ -943,6 +943,7 @@ public class PeriodTransformer {
 				}
 			}
 			
+			// The rounding is over-constraining the problem
 			if (vesselAvailability != null) {
 				if (vesselAvailability.getAvailabilityOrContractMinDuration() != 0) {
 					int minDurationInDays = vesselAvailability.getAvailabilityOrContractMinDuration();
@@ -950,7 +951,8 @@ public class PeriodTransformer {
 					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
 						vesselAvailability.setMinDuration(0);
 					} else {
-						minDurationInDays -= Math.ceil((double) ((double) hoursBeforeNewStart / (double) 24));
+						final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd; 
+						minDurationInDays -= Math.ceil((double) ((double) hoursAlreadyUsed / (double) 24));
 						minDurationInDays = Math.max(minDurationInDays, 0);
 
 						vesselAvailability.setMinDuration(minDurationInDays);
@@ -962,7 +964,8 @@ public class PeriodTransformer {
 					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
 						vesselAvailability.setMaxDuration(0);
 					} else {
-						maxDurationInDays -= Math.floor((double) ((double) hoursAfterNewEnd / (double) 24));
+						final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd; 
+						maxDurationInDays -= Math.floor((double) ((double) hoursAlreadyUsed / (double) 24));
 						maxDurationInDays = Math.max(maxDurationInDays, 0);
 					
 						vesselAvailability.setMaxDuration(maxDurationInDays);
