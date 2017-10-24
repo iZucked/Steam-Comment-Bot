@@ -938,7 +938,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -986,7 +986,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1067,7 +1067,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1194,7 +1194,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1272,7 +1272,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1330,7 +1330,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1381,7 +1381,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1433,7 +1433,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1490,7 +1490,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -1553,7 +1553,7 @@ public class PeriodTransformerTests {
 
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots, removedCargoes,
-				slotAllocationMap, objectToPortVisitMap);
+				slotAllocationMap, objectToPortVisitMap, asdf, asdfg);
 
 		// Verify relevant slots and cargoes marked as remove
 		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
@@ -2331,7 +2331,7 @@ public class PeriodTransformerTests {
 		slotAllocationMap.put(loadSlot1, loadAllocation);
 		slotAllocationMap.put(dischargeSlot1, dischargeAllocation);
 
-		transformer.lockDownCargoDates(slotAllocationMap, cargo1);
+		transformer.lockDownCargoDates(slotAllocationMap, cargo1, asdfd);
 
 		Assert.assertFalse(cargo1.isAllowRewiring());
 		Assert.assertTrue(cargo1.isLocked());
