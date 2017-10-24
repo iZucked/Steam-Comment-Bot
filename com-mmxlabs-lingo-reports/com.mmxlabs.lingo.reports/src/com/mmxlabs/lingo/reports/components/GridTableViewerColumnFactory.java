@@ -21,6 +21,7 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -100,8 +101,12 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					setRowSpan(formatter, cell, element);
 				}
 				cell.setText(formatter.render(element));
+				cell.setImage(null);
 				if (formatter instanceof IImageProvider) {
-					cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
+					Image image = ((IImageProvider) formatter).getImage(cell.getElement());
+					if (image != null && !image.isDisposed()) {
+						cell.setImage(image);
+					}
 				}
 			}
 		});

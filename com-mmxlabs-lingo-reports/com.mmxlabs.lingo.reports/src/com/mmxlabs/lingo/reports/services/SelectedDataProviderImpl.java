@@ -55,6 +55,11 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 		return Objects.equals(getScenarioResult(eObject), pinnedScenarioInstance);
 	}
 
+	@Override
+	public ScenarioResult getPinnedScenarioResult() {
+		return pinnedScenarioInstance;
+	}
+
 	public void setPinnedScenarioInstance(ScenarioResult pinnedScenarioInstance) {
 		this.pinnedScenarioInstance = pinnedScenarioInstance;
 	}

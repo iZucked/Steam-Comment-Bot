@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -36,6 +35,7 @@ import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
@@ -50,7 +50,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -109,24 +108,25 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
-
-		private final Map<Object, ScenarioResult> _elementToInstanceMap = new HashMap<>();
-		private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
+		//
+		// private final Map<Object, ScenarioResult> _elementToInstanceMap = new HashMap<>();
+		// private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
 
 		@Override
 		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
 				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
-			processInputs(table.getRows());
+
+			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+			processInputs(table.getRows(), newSelectedDataProvider);
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
 					handler.setViewState(true, true);
 				}
 			}
-
-			updateElementMaps(selectedDataProvider, table);
+			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
 			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
@@ -137,7 +137,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			clearInputEquivalents();
 
 			builder.refreshPNLColumns(rootObjects);
-			processInputs(table.getRows());
+			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+			processInputs(table.getRows(), newSelectedDataProvider);
 
 			final int numberOfSchedules = others.size();
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
@@ -145,29 +146,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 					handler.setViewState(numberOfSchedules > 1, false);
 				}
 			}
-			updateElementMaps(selectedDataProvider, table);
 
+			setCurrentSelectedDataProvider(newSelectedDataProvider);
 			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
-		}
-
-		private void updateElementMaps(final ISelectedDataProvider selectedDataProvider, final Table table) {
-			_elementToInstanceMap.clear();
-			_elementToModelMap.clear();
-			for (final Row row : table.getRows()) {
-				@Nullable
-				final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(row.getSchedule());
-				if (scenarioResult != null) {
-					final LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
-					_elementToModelMap.put(row.getSchedule(), scenarioModel);
-					_elementToInstanceMap.put(row.getSchedule(), scenarioResult);
-					row.getInputEquivalents().forEach(e -> {
-						_elementToInstanceMap.put(e, scenarioResult);
-						_elementToModelMap.put(e, scenarioModel);
-					});
-				}
-			}
-
-			mapInputs(_elementToInstanceMap, _elementToModelMap);
 		}
 
 		@Override
@@ -370,10 +351,14 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		}
 	}
 
-	public void processInputs(final List<Row> result) {
+	public void processInputs(final List<Row> result, TransformedSelectedDataProvider currentSelectedDataProvider) {
 		clearInputEquivalents();
 		for (final Row row : result) {
 			setInputEquivalents(row, row.getInputEquivalents());
+			ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(row.getSchedule());
+			if (scenarioResult != null) {
+				currentSelectedDataProvider.addExtraData(row, scenarioResult, row.getSchedule());
+			}
 		}
 	}
 

@@ -6,9 +6,7 @@ package com.mmxlabs.lingo.reports.views.portrotation;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
@@ -29,8 +27,6 @@ public class PortRotationsReportTransformer {
 
 			private int numberOfSchedules;
 			private boolean isPinned;
-			private final Map<Object, ScenarioResult> _elementToInstanceMap = new HashMap<>();
-			private final Map<Object, LNGScenarioModel> _elementToModelMap = new HashMap<>();
 			private final List<Object> elementList = new ArrayList<>();
 
 			@Override
@@ -41,8 +37,6 @@ public class PortRotationsReportTransformer {
 				numberOfSchedules = 0;
 				isPinned = false;
 
-				_elementToInstanceMap.clear();
-				_elementToModelMap.clear();
 				elementList.clear();
 			}
 
@@ -52,12 +46,6 @@ public class PortRotationsReportTransformer {
 				isPinned |= pinned;
 				final Collection<? extends Object> collectElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
-				_elementToInstanceMap.put(schedule, scenarioResult);
-				_elementToModelMap.put(schedule, scenarioModel);
-				for (final Object element : collectElements) {
-					_elementToInstanceMap.put(element, scenarioResult);
-					_elementToModelMap.put(element, scenarioModel);
-				}
 				return collectElements;
 			}
 
@@ -74,9 +62,8 @@ public class PortRotationsReportTransformer {
 				super.endCollecting();
 
 				viewer.processInputs(elements);
-				viewer.mapInputs(_elementToInstanceMap, _elementToModelMap);
+			
 				elements.addAll(elementList);
-				// viewer.setInput(elements);
 			}
 		};
 	}

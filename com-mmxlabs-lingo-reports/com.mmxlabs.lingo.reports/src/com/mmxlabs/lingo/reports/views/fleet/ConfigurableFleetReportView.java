@@ -37,6 +37,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
@@ -191,6 +192,8 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 						elementCollector.collectElements(other, false);
 					}
 					elementCollector.endCollecting();
+
+					setCurrentSelectedDataProvider(new TransformedSelectedDataProvider(selectedDataProvider));
 					ViewerHelper.setInput(viewer, true, table.getRows());
 				}
 			};

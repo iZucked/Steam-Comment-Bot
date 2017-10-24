@@ -43,7 +43,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public abstract class AbstractReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	protected final Map<Object, WeakReference<ScenarioResult>> elementMapping = new WeakHashMap<>();
+//	protected final Map<Object, WeakReference<ScenarioResult>> elementMapping = new WeakHashMap<>();
 
 	private SelectedScenariosService selectedScenariosService;
 
@@ -58,7 +58,7 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 				@Override
 				public void run() {
 					clearInputEquivalents();
-					elementMapping.clear();
+//					elementMapping.clear();
 
 					final Object newInput = doSelectionChanged(selectedDataProvider, pinned, others);
 
@@ -81,15 +81,15 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 					if (instance != null) {
 						return instance.getScenarioInstance().getName();
 					}
-					if (elementMapping.containsKey(eObject)) {
-						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
-						if (ref != null) {
-							instance = ref.get();
-						}
-						if (instance != null) {
-							return instance.getScenarioInstance().getName();
-						}
-					}
+//					if (elementMapping.containsKey(eObject)) {
+//						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
+//						if (ref != null) {
+//							instance = ref.get();
+//						}
+//						if (instance != null) {
+//							return instance.getScenarioInstance().getName();
+//						}
+//					}
 				}
 			}
 			return null;
@@ -108,9 +108,9 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 		contents.add(input);
 	}
 
-	public void addElementMapping(final Object element, final ScenarioResult scenarioResult) {
-		elementMapping.put(element, new WeakReference<>(scenarioResult));
-	}
+//	public void addElementMapping(final Object element, final ScenarioResult scenarioResult) {
+//		elementMapping.put(element, new WeakReference<>(scenarioResult));
+//	}
 
 	protected void clearInputEquivalents() {
 		equivalents.clear();
@@ -236,7 +236,7 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 	public void dispose() {
 
 		clearInputEquivalents();
-		elementMapping.clear();
+//		elementMapping.clear();
 
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);

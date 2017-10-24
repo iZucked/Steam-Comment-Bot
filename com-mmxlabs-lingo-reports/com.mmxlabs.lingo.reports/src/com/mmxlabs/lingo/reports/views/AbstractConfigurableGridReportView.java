@@ -9,12 +9,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -42,9 +43,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -68,6 +67,8 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
@@ -101,8 +102,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private boolean customisableReport = true;
 
-	protected Map<Object, ScenarioResult> elementToInstanceMap;
-	protected Map<Object, LNGScenarioModel> elementToModelMap;
+	protected @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	public AbstractConfigurableGridReportView(final String helpContextID) {
 		this.helpContextId = helpContextID;
@@ -773,21 +773,25 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		return blockManager;
 	}
 
-	public void mapInputs(final Map<Object, ScenarioResult> elementToInstanceMap, final Map<Object, LNGScenarioModel> elementToModelMap) {
-		this.elementToInstanceMap = elementToInstanceMap;
-		this.elementToModelMap = elementToModelMap;
+	public void setCurrentSelectedDataProvider(@NonNull TransformedSelectedDataProvider newSelectedDataProvider) {
+		currentSelectedDataProvider = newSelectedDataProvider;
 	}
 
-	public ScenarioResult getScenarioInstance(final Object key) {
-		if (elementToInstanceMap != null) {
-			return elementToInstanceMap.get(key);
+	public ISelectedDataProvider getCurrentSelectedDataProvider() {
+		return currentSelectedDataProvider;
+	}
+
+	public ScenarioResult getScenarioResult(final EObject key) {
+		if (currentSelectedDataProvider != null) {
+			return currentSelectedDataProvider.getScenarioResult(key);
 		}
 		return null;
 	}
 
-	public LNGScenarioModel getScenarioModel(final Object key) {
-		if (elementToModelMap != null) {
-			return elementToModelMap.get(key);
+	public LNGScenarioModel getScenarioModel(final EObject key) {
+		ScenarioResult result = getScenarioResult(key);
+		if (result != null) {
+			return result.getTypedRoot(LNGScenarioModel.class);
 		}
 		return null;
 	}

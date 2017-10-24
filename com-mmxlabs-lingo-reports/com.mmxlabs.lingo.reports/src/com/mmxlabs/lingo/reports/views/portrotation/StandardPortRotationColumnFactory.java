@@ -9,6 +9,7 @@ import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
@@ -116,13 +118,30 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.schedule":
 			final PinnedScheduleFormatter containingScheduleFormatter = new PinnedScheduleFormatter(pinImage) {
+
+				@Override
+				public Image getImage(Object element) {
+					if (element instanceof EObject) {
+						ISelectedDataProvider selectedDataProvider = builder.getReport().getCurrentSelectedDataProvider();
+						if (selectedDataProvider != null) {
+							if (selectedDataProvider.isPinnedObject((EObject) element)) {
+								return pinImage;
+							}
+						}
+					}
+
+					return null;
+				}
+
 				@Override
 				public String render(final Object object) {
-					final ScenarioResult scenarioResult = builder.getReport().getScenarioInstance(object);
-					if (scenarioResult != null) {
-						final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-						if (scenarioInstance != null) {
-							return scenarioInstance.getName();
+					if (object instanceof EObject) {
+						final ScenarioResult scenarioResult = builder.getReport().getScenarioResult((EObject) object);
+						if (scenarioResult != null) {
+							final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+							if (scenarioInstance != null) {
+								return scenarioInstance.getName();
+							}
 						}
 					}
 					return null;

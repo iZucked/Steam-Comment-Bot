@@ -54,11 +54,13 @@ public class CanalBookingsReportTransformer {
 		public final Slot nextSlot;
 		public final String notes;
 		public boolean warn;
+		public boolean pinned;
 
-		public RowData(final @NonNull String scheduleName, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
+		public RowData(final @NonNull String scheduleName, boolean pinned, boolean preBooked, CanalBookingSlot booking, RouteOption routeOption, final @NonNull LocalDate bookingDate,
 				final @NonNull EntryPoint entryPoint, final @Nullable PortVisit usedSlot, String period, final @Nullable Slot nextSlot, @Nullable final String notes) {
 			super();
 			this.scheduleName = scheduleName;
+			this.pinned = pinned;
 			this.preBooked = preBooked;
 			this.booking = booking;
 			this.routeOption = routeOption;
@@ -76,6 +78,7 @@ public class CanalBookingsReportTransformer {
 		public RowData() {
 			super();
 			this.scheduleName = "";
+			this.pinned = false;
 			this.booking = null;
 			this.bookingDate = null;
 			this.entryPoint = null;
@@ -91,7 +94,7 @@ public class CanalBookingsReportTransformer {
 	}
 
 	@NonNull
-	public List<RowData> transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult) {
+	public List<RowData> transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult, boolean pinned) {
 
 		ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 
@@ -172,11 +175,11 @@ public class CanalBookingsReportTransformer {
 					}
 					if (journey.getCanalBooking() != null) {
 						CanalBookingSlot booking = journey.getCanalBooking();
-						result.add(new RowData(scenarioInstance.getName(), true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
+						result.add(new RowData(scenarioInstance.getName(), pinned, true, booking, journey.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(),
 								(PortVisit) journey.getPreviousEvent(), period, nextSlot, booking.getNotes()));
 						existingBookings.remove(booking);
 					} else if (journey.getRoute() != null && journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
-						RowData rowData = new RowData(scenarioInstance.getName(), false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
+						RowData rowData = new RowData(scenarioInstance.getName(), pinned, false, null, journey.getRoute().getRouteOption(), journey.getCanalDate(), journey.getCanalEntry(),
 								(PortVisit) journey.getPreviousEvent(), period, nextSlot, "");
 
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
@@ -201,7 +204,7 @@ public class CanalBookingsReportTransformer {
 		}
 		// unused options
 		for (CanalBookingSlot booking : existingBookings) {
-			result.add(new RowData(scenarioInstance.getName(), true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused", null, booking.getNotes()));
+			result.add(new RowData(scenarioInstance.getName(),pinned, true, booking, booking.getRoute().getRouteOption(), booking.getBookingDate(), booking.getEntryPoint(), null, "Unused", null, booking.getNotes()));
 		}
 
 		return result;

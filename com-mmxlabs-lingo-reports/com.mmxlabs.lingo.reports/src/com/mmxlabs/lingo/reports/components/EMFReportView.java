@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -37,6 +35,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -54,15 +53,19 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -88,11 +91,13 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<>();
 	private final Map<String, Integer> keyPresentInSchedulesCount = new LinkedHashMap<>();
-	private final Map<Object, WeakReference<ScenarioResult>> elementMapping = new WeakHashMap<>();
 
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
 	private SelectedScenariosService selectedScenariosService;
+	private @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
+
+	protected Image pinImage;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -102,6 +107,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
+					currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 					// Add Difference/Change columns when in Pin/Diff mode
 					final boolean pinDiffMode = !others.isEmpty() && pinned != null;
 					final int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
@@ -116,17 +122,13 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
 						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
-						for (final Object e : elements) {
-							elementMapping.put(e, new WeakReference<>(pinned));
-						}
 						rowElements.addAll(elements);
+						elements.forEach(r -> currentSelectedDataProvider.addExtraData(r, pinned, pinned.getTypedResult(ScheduleModel.class).getSchedule()));
 					}
 					for (final ScenarioResult other : others) {
 						final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
-						for (final Object e : elements) {
-							elementMapping.put(e, new WeakReference<>(other));
-						}
 						rowElements.addAll(elements);
+						elements.forEach(r -> currentSelectedDataProvider.addExtraData(r, other, other.getTypedResult(ScheduleModel.class).getSchedule()));
 					}
 					elementCollector.endCollecting();
 					ViewerHelper.setInput(viewer, true, rowElements);
@@ -141,31 +143,31 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		this.helpContextId = helpContextId;
 	}
 
-	protected final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
+	protected class PinnedScheduleFormatter extends BaseFormatter implements IImageProvider {
+
+		@Override
+		public Image getImage(Object element) {
+
+			if (currentSelectedDataProvider.isPinnedObject(element)) {
+				return pinImage;
+			}
+
+			return null;
+		}
+
 		@Override
 		public String render(final Object object) {
-			if (object instanceof EObject) {
-				final EObject eObject = (EObject) object;
-				final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-				if (selectedDataProvider != null) {
-					ScenarioResult instance = selectedDataProvider.getScenarioResult(eObject);
-					if (instance != null) {
-						return instance.getScenarioInstance().getName();
-					}
-					if (elementMapping.containsKey(eObject)) {
-						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
-						if (ref != null) {
-							instance = ref.get();
-						}
-						if (instance != null) {
-							return instance.getScenarioInstance().getName();
-						}
-					}
-				}
+
+			ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(object);
+			if (scenarioResult != null) {
+				return scenarioResult.getScenarioInstance().getName();
 			}
 			return null;
 		}
-	};
+
+	}
+
+	protected final ICellRenderer containingScheduleFormatter = new PinnedScheduleFormatter();
 
 	/**
 	 */
@@ -245,7 +247,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 				} else {
 					if (inputElement instanceof Collection<?>) {
 						final Collection<?> collection = (Collection<?>) inputElement;
-						return collection.toArray();
+						result = collection.toArray();
 					} else {
 						result = new Object[0];
 					}
@@ -372,6 +374,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
+
 		final Composite container = new Composite(parent, SWT.NONE);
 		filterField = new FilterField(container);
 		final GridLayout layout = new GridLayout(1, false);
@@ -537,17 +542,6 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
-
-		// BE
-		// sortModeAction = new Action("S", IAction.AS_CHECK_BOX) {
-		// @Override
-		// public void run() {
-		// log.error("hello");
-		// viewer.setInput(viewer.getInput());
-		// viewer.refresh();
-		// }
-		// };
-		// BE
 	}
 
 	@Override

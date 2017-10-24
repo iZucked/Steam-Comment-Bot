@@ -231,7 +231,7 @@ public class PortRotationActualsColumnFactory implements IPortRotationColumnFact
 	}
 
 	private ActualsModel getActualsModel(final PortRotationReportView report, final EObject target) {
-		final ScenarioResult scenarioResult = report.getScenarioInstance(target);
+		final ScenarioResult scenarioResult = report.getScenarioResult(target);
 		if (scenarioResult != null) {
 			LNGScenarioModel lngScenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 			if (lngScenarioModel != null) {

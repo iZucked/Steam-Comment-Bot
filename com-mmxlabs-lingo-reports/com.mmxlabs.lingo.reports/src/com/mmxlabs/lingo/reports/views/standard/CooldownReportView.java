@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -13,6 +14,7 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
@@ -209,5 +211,17 @@ public class CooldownReportView extends EMFReportView {
 
 		}
 		return super.getAdapter(adapter);
+	}
+
+	@Override
+	protected void processInputs(final Object[] result) {
+
+		for (final Object obj : result) {
+			if (obj instanceof Cooldown) {
+				final Cooldown row = (Cooldown) obj;
+				// Not managed to get this working correctly. Probably need to find the previous slot?
+				// setInputEquivalents(row, CollectionsUtil.makeArrayList(row, row.getPreviousEvent(), row.getNextEvent()));
+			}
+		}
 	}
 }
