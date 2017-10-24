@@ -40,6 +40,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -888,6 +889,11 @@ public class PeriodTransformer {
 		COLLECTED_ASSIGNMENT_LOOP: for (final CollectedAssignment collectedAssignment : collectedAssignments) {
 
 			final List<AssignableElement> assignedObjects = collectedAssignment.getAssignedObjects();
+
+			VesselAvailability vesselAvailability = null;
+			int hoursBeforeNewStart = 0;
+			int hoursAfterNewEnd = 0;
+			
 			for (final AssignableElement assignedObject : assignedObjects) {
 				assert assignedObject != null;
 				if (assignedObject instanceof Cargo) {
@@ -907,7 +913,7 @@ public class PeriodTransformer {
 					}
 					if (result.getFirst() == InclusionType.Out) {
 						final Position position = result.getSecond();
-
+						
 						// This *should* be working in sorted order. Thus keep that last #Before case and terminate loop at the first #After case
 						if (position == Position.Before) {
 							mapping.setLastTrimmedAfter(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
@@ -917,19 +923,56 @@ public class PeriodTransformer {
 						}
 					}
 				} else {
-					final VesselAvailability vesselAvailability = collectedAssignment.getVesselAvailability();
+					vesselAvailability = collectedAssignment.getVesselAvailability();
+					
 					if (vesselAvailability != null) {
 						if (result.getFirst() == InclusionType.Out) {
 							final Position position = result.getSecond();
-
+							PortVisit startPortVisit = startConditionMap.get(assignedObject);
+							PortVisit endPortVisit = endConditionMap.get(assignedObject);
+						    
+							int duration = Hours.between(endPortVisit.getStart(), startPortVisit.getStart());	
+							
 							if (position == Position.Before) {
 								// Update availability start heel
+								hoursBeforeNewStart += duration;
 								updateStartConditions(vesselAvailability, assignedObject, startConditionMap, mapping);
 							} else if (position == Position.After) {
 								// Update availability end heel
+								hoursAfterNewEnd += duration;
 								updateEndConditions(vesselAvailability, assignedObject, endConditionMap, mapping);
 							}
 						}
+					}
+				}
+			}
+			
+			// The rounding is over-constraining the problem
+			if (vesselAvailability != null) {
+				if (vesselAvailability.getAvailabilityOrContractMinDuration() != 0) {
+					int minDurationInDays = vesselAvailability.getAvailabilityOrContractMinDuration();
+					
+					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
+						vesselAvailability.setMinDuration(0);
+					} else {
+						final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd; 
+						minDurationInDays -= Math.ceil((double) ((double) hoursAlreadyUsed / (double) 24));
+						minDurationInDays = Math.max(minDurationInDays, 0);
+
+						vesselAvailability.setMinDuration(minDurationInDays);
+					}
+				}
+				if (vesselAvailability.getAvailabilityOrContractMaxDuration()  != 0) {
+					int maxDurationInDays = vesselAvailability.getAvailabilityOrContractMaxDuration();
+					
+					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
+						vesselAvailability.setMaxDuration(0);
+					} else {
+						final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd; 
+						maxDurationInDays -= Math.floor((double) ((double) hoursAlreadyUsed / (double) 24));
+						maxDurationInDays = Math.max(maxDurationInDays, 0);
+					
+						vesselAvailability.setMaxDuration(maxDurationInDays);
 					}
 				}
 			}
