@@ -550,7 +550,7 @@ public class FeasibleTimeWindowTrimmer {
 										// currentPortTimeRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
 
 										// check if it can be reached in time
-										if (windowStartTime[index - 1] + toCanal < potentialBooking.get().getBookingDate()) {
+										if (windowStartTime[index - 1] + toCanal <= potentialBooking.get().getBookingDate()) {
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
 											currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
 
