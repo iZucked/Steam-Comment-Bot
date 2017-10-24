@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -103,6 +104,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	private boolean performBreakEven;
 
+	private OptimisationPlan plan;
+
 	public LNGSchedulerInsertSlotJobRunner(final ExecutorService executorService, @Nullable final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel,
 			final EditingDomain editingDomain, final UserSettings userSettings, final List<Slot> targetSlots, final List<VesselEvent> targetEvents) {
 
@@ -111,10 +114,30 @@ public class LNGSchedulerInsertSlotJobRunner {
 		this.targetSlots = targetSlots;
 		this.targetEvents = targetEvents;
 
-		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
+		plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 		plan.setUserSettings(EcoreUtil.copy(userSettings));
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
+		plan = LNGScenarioRunnerUtils.createExtendedSettings(plan, true, false);
+		
+		{
+			// TODO: Filter
+			ConstraintAndFitnessSettings constraintAndFitnessSettings = plan.getSolutionBuilderSettings().getConstraintAndFitnessSettings();
+			final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
+			while (iterator.hasNext()) {
+				final Constraint constraint = iterator.next();
+				if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+					iterator.remove();
+				}
+				if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
+					iterator.remove();
+				}
+
+			}
+			// Enable if not already done so.
+			ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
+		}
+		
 		final IOptimiserInjectorService extraService = buildSpotSlotLimitModule();
 
 		boolean isBreakEven = false;
@@ -245,20 +268,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	public IMultiStateResult runInsertion(final int iterations, final IProgressMonitor progressMonitor) {
 
-		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
-		// TODO: Filter
-		final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
-		while (iterator.hasNext()) {
-			final Constraint constraint = iterator.next();
-			if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
-			if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
-
-		}
-		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
+		final ConstraintAndFitnessSettings constraintAndFitnessSettings = plan.getSolutionBuilderSettings().getConstraintAndFitnessSettings(); 
 
 		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), constraintAndFitnessSettings,
 				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
