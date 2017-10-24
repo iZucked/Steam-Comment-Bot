@@ -540,44 +540,42 @@ public final class ChangeSetTransformerUtil {
 							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
 							final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
 							final List<ChangeSetRowData> afterDataList = afterMapping.rhsRowMarketMap.get(mKey);
-							
-							if (afterDataList == null) {
-								continue;
-							}
-							
-							for (ChangeSetRowData d : afterDataList) {
-								if (d.getRhsLink() != null) {
-									// Assert false?
-									continue;
-								}
 
-								ChangeSetRowData d2 = d.getLhsLink();
-								boolean partOfGroup = false;
-								while (d2 != null) {
-									if (d2 == fromData) {
-										partOfGroup = true;
+							if (afterDataList != null) {
+
+								for (ChangeSetRowData d : afterDataList) {
+									if (d.getRhsLink() != null) {
+										// Assert false?
+										continue;
 									}
-									if (d2.getRhsLink() != null) {
-										// Find next toData equiv in chain
-										d2 = d2.getRhsLink().getLhsLink();
-									} else {
-										d2 = null;
+
+									ChangeSetRowData d2 = d.getLhsLink();
+									boolean partOfGroup = false;
+									while (d2 != null) {
+										if (d2 == fromData) {
+											partOfGroup = true;
+										}
+										if (d2.getRhsLink() != null) {
+											// Find next toData equiv in chain
+											d2 = d2.getRhsLink().getLhsLink();
+										} else {
+											d2 = null;
+										}
 									}
-								}
-								if (partOfGroup) {
-									d.setRhsLink(fromData);
-									fromData.setRhsLink(d);
+									if (partOfGroup) {
+										d.setRhsLink(fromData);
+										fromData.setRhsLink(d);
 
-									afterDataList.remove(d);
-									beforeDataList.remove(fromData);
+										afterDataList.remove(d);
+										beforeDataList.remove(fromData);
 
-									foundSpotMatch = true;
+										foundSpotMatch = true;
 
-									continue LOOP_MAIN;
+										continue LOOP_MAIN;
+									}
 								}
 							}
 						}
-
 						final ChangeSetRowData d = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 						afterMapping.rhsRowMap.put(rhsKey, d);
 						d.setPrimaryRecord(true);
