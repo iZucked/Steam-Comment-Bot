@@ -5,6 +5,8 @@
 package com.mmxlabs.common.time;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
+import java.util.function.BiPredicate;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -13,17 +15,21 @@ import com.mmxlabs.common.NonNullPair;
 
 public class TimeUtils {
 	public static boolean overlaps(@Nullable final NonNullPair<ZonedDateTime, ZonedDateTime> a, @Nullable final NonNullPair<ZonedDateTime, ZonedDateTime> b) {
+		return overlaps(a, b, ZonedDateTime::isBefore);
+	}
+
+	public static <T extends Temporal> boolean overlaps(@Nullable final NonNullPair<T, T> a, @Nullable final NonNullPair<T, T> b, BiPredicate<T, T> beforeFunction) {
 		if (a == null || b == null) {
 			return false;
 		}
 
-		return within(a, b.getFirst()) ||
-//				within(a, b.getSecond()) || 
-				within(b, a.getFirst());// || within(b, a.getSecond());
+		return within(a, b.getFirst(), beforeFunction) ||
+		// within(a, b.getSecond()) ||
+				within(b, a.getFirst(), beforeFunction);// || within(b, a.getSecond());
 	}
 
-	private static boolean within(final NonNullPair<ZonedDateTime, ZonedDateTime> p, @NonNull ZonedDateTime date) {
-		return (!date.isBefore(p.getFirst()) && date.isBefore(p.getSecond()));
+	public static <T extends Temporal> boolean within(final NonNullPair<T, T> p, @NonNull T date, BiPredicate<T, T> beforeFunction) {
+		return (!beforeFunction.test(date, p.getFirst()) && beforeFunction.test(date, p.getSecond()));
 	}
 
 	@NonNull
