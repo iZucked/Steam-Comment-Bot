@@ -79,6 +79,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -95,7 +96,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 	@Inject
 	private SelectedScenariosService selectedScenariosService;
-
+	private List<Object> selectedObjects;
+		
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -111,6 +113,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 	private Image pinImage = null;
 
+
+	private boolean compareMode = true;
+	private boolean onlyDiffMode = false;
+	
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
 
@@ -156,6 +162,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			pinImage = null;
 
 		}
+		selectedObjects.clear();
 		for (final Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener> p : selectionListeners) {
 			if (p.getFirst() == null) {
 				selectionService.removePostSelectionListener(p.getSecond());
@@ -170,6 +177,15 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
 	}
+	
+	public void setSelectedObject(Collection<Object> objects) {
+		selectedObjects = new ArrayList(objects);
+	}
+	
+	public List<Object> getSelectedObject() {
+		return selectedObjects;
+	}
+
 
 	/**
 	 * The {@link FieldType} is the row data. Each enum is a different row. Currently there is no table sorter so enum order is display order
@@ -254,6 +270,19 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		}
 	}
 
+	public void toggleShowDiffOnly() {
+		onlyDiffMode = !onlyDiffMode;
+	}
+	public void toggleCompare() {
+		final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+		ScenarioResult scenario = selectedScenariosService.getPinnedScenario();
+		
+		if (scenario != null) {
+			compareMode = true;
+		} else  {
+			compareMode = false; 
+		}
+	}
 	/**
 	 * This method processes an {@link ISelection} object and return a list of objects that this report knows how to process. Currently we try to find associated {@link CargoAllocation} objects.
 	 * 
@@ -376,7 +405,137 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	public GridTableViewer getViewer() {
 		return viewer;
 	}
+	
+	public abstract static class DeltaPair {
+	
+	}
+	
+	public static class CargoAllocationPair extends DeltaPair {
+		private CargoAllocation first;
+		private CargoAllocation second;
+		
+		CargoAllocationPair(CargoAllocation first, CargoAllocation second) {
+			this.first = first;
+			this.second = second;
+		}
+		
+		public CargoAllocation first() {
+			return first;
+		}
+		
+		public CargoAllocation second() {
+			return second;
+		}
 
+		static public List<CargoAllocationPair> generateCargoPair(List<CargoAllocation> cargoAllocations) {
+			Collections.sort(cargoAllocations, (a, b) -> a.getName().compareTo(b.getName()));
+			List<CargoAllocationPair> pairs = new ArrayList<>();
+			
+			for(int i = 0; i < cargoAllocations.size() - 1; i++) {
+				CargoAllocation a = cargoAllocations.get(i);
+				CargoAllocation b = cargoAllocations.get(i + 1);
+				
+				if (a.getName().equals(b.getName())) {
+					pairs.add(new CargoAllocationPair(a, b));
+					i++;
+				} else {
+					pairs.add(new CargoAllocationPair(a, null));
+				}
+			}
+			return pairs;
+		}
+		
+		String getName() {
+			return first.getName();
+		}
+	}
+	
+	public static class VesselEventVisitPair extends DeltaPair{
+		private VesselEventVisit first;
+		private VesselEventVisit second;
+		
+		VesselEventVisitPair(VesselEventVisit first, VesselEventVisit second) {
+			this.first = first;
+			this.second = second;
+		}
+		
+		public VesselEventVisit first() {
+			return first;
+		}
+		
+		public VesselEventVisit second() {
+			return second;
+		}
+
+		static public List<VesselEventVisitPair> generateVesselEventPair(List<VesselEventVisit> vesselEventVisits) {
+			Collections.sort(vesselEventVisits, (a, b) -> a.name().compareTo(b.name()));
+			List<VesselEventVisitPair> pairs = new ArrayList<>();
+			
+			for(int i = 0; i < vesselEventVisits.size() - 1; i++) {
+				VesselEventVisit a = vesselEventVisits.get(i);
+				VesselEventVisit b = vesselEventVisits.get(i + 1);
+				
+				if (a.name().equals(b.name())) {
+					pairs.add(new VesselEventVisitPair(a, b));
+					i++;
+				} else {
+					pairs.add(new VesselEventVisitPair(a, null));
+				}
+			}
+			return pairs;
+		}
+		
+		String getName() {
+			return first.name();
+		}
+	}
+		
+	public <T> int comparator(T a, T  b) {
+		String aName = "";
+		String bName = "";
+		
+		if (a != null && b != null) {
+			if (a instanceof CargoAllocation) {
+				aName = ((CargoAllocation) a).getName();
+			} else if (a instanceof VesselEventVisit) {
+				aName = ((VesselEventVisit) a).name();
+			} else if (a instanceof CargoAllocationPair) {
+				aName = ((CargoAllocationPair) a).first().getName();
+			} else if (a instanceof VesselEventVisitPair) {
+				aName = ((VesselEventVisitPair) a).first().name();
+			}
+			
+			if (b instanceof CargoAllocation) {
+				bName = ((CargoAllocation) b).getName();
+			} else if (b instanceof VesselEventVisit) {
+				bName = ((VesselEventVisit) b).name();
+			} else if (b instanceof CargoAllocationPair) {
+				bName = ((CargoAllocationPair) b).first().getName();
+			} else if (b instanceof VesselEventVisitPair) {
+				bName = ((VesselEventVisitPair) b).first().name();
+			}
+			
+			if (aName != null && bName != null) {
+				int res = aName.compareTo(bName);
+				
+				if (res == 0 && !(a instanceof CargoAllocationPair || b instanceof CargoAllocationPair || a instanceof VesselEventVisitPair || b instanceof VesselEventVisitPair)) {
+					@Nullable
+					final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+					if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject((EObject) a)) {
+						res--;
+					}
+
+					if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject((EObject) b)) {
+						res++;
+					}
+				}
+				return res;
+			}
+		}
+		
+		return Integer.MAX_VALUE;
+	}
+	
 	/**
 	 * Adds a selection listener for the given partID. Listens to everything if null
 	 */
@@ -399,85 +558,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				}
 
 				final ISelection selection = SelectionHelper.adaptSelection(selectedObjects);
-
-				// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
-				final List<GridViewerColumn> oldColumns = new ArrayList<GridViewerColumn>(dataColumns);
-				dataColumns.clear();
-				for (final GridViewerColumn gvc : oldColumns) {
-					gvc.getColumn().dispose();
-				}
-
+				
 				// Find valid, selected objects
-
 				final Collection<Object> validObjects = CargoEconsReportComponent.this.processSelection(e3part, selection);
+				setSelectedObject(validObjects);
 
-				final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
-				ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
-					rows.addAll(factory.createRows(options, validObjects));
-					return true;
-				});
-				Collections.sort(rows, (a, b) -> a.order - b.order);
-
-				viewer.setInput(rows);
-
-				for (final Object selectedObject : validObjects) {
-
-					// Currently only CargoAllocations
-					if (selectedObject instanceof CargoAllocation) {
-						final CargoAllocation cargoAllocation = (CargoAllocation) selectedObject;
-
-						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-						GridViewerHelper.configureLookAndFeel(gvc);
-						// Mark column for disposal on selection change
-						dataColumns.add(gvc);
-						gvc.getColumn().setText(cargoAllocation.getName());
-						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
-						gvc.getColumn().setWidth(100);
-						@Nullable
-						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
-							gvc.getColumn().setImage(pinImage);
-						}
-					} else if (selectedObject instanceof VesselEventVisit) {
-						final VesselEventVisit vesselEventVisit = (VesselEventVisit) selectedObject;
-
-						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-						GridViewerHelper.configureLookAndFeel(gvc);
-						// Mark column for disposal on selection change
-						dataColumns.add(gvc);
-						gvc.getColumn().setText(vesselEventVisit.name());
-						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
-						gvc.getColumn().setWidth(100);
-						@Nullable
-						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(vesselEventVisit)) {
-							gvc.getColumn().setImage(pinImage);
-						}
-					} else if (selectedObject instanceof MarketAllocation) {
-						final MarketAllocation cargoAllocation = (MarketAllocation) selectedObject;
-
-						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-						GridViewerHelper.configureLookAndFeel(gvc);
-
-						// Mark column for disposal on selection change
-						dataColumns.add(gvc);
-						gvc.getColumn().setText(cargoAllocation.getSlot().getName());
-						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(cargoAllocation));
-
-						gvc.getColumn().setWidth(100);
-
-						@Nullable
-						final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-						if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
-							gvc.getColumn().setImage(pinImage);
-						}
-					}
-				}
-
-				// Trigger view refresh
-				ViewerHelper.refresh(viewer, true);
-				// ViewerHelper.setInput(viewer, true, CargoEconsReportRow.getFilteredValues());
-
+				rebuild();
 			}
 		};
 		if (partId != null) {
@@ -553,5 +639,167 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 
 		}
 		return null;
+	}
+
+	public void rebuild() {
+		Collection<Object> validObjects = new ArrayList<Object>(getSelectedObject());
+		toggleCompare();
+		// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
+		final List<GridViewerColumn> oldColumns = new ArrayList<GridViewerColumn>(dataColumns);
+		dataColumns.clear();
+		for (final GridViewerColumn gvc : oldColumns) {
+			gvc.getColumn().dispose();
+		}
+		
+		if (validObjects == null || validObjects.size() == 0) {
+			return;
+		}
+		
+		if (compareMode == true) {
+
+			List<CargoAllocation> cargoAllocations = new ArrayList<>();
+			for (final Object obj: validObjects) {
+				if (obj instanceof CargoAllocation) {
+					cargoAllocations.add((CargoAllocation) obj);
+				}
+			}
+			
+			List<VesselEventVisit> vesselEventVisits = new ArrayList<>();
+			for (final Object obj: validObjects) {
+				if (obj instanceof VesselEventVisit) {
+					vesselEventVisits.add((VesselEventVisit) obj);
+				}
+			}
+			
+			if (onlyDiffMode == true) {
+				validObjects.clear();
+			}
+			
+			List<CargoAllocationPair> cargoAllocationPairs = CargoAllocationPair.generateCargoPair(cargoAllocations);
+			List<VesselEventVisitPair> vesselEventVisitsPairs = VesselEventVisitPair.generateVesselEventPair(vesselEventVisits);
+			validObjects.addAll(cargoAllocationPairs);
+			validObjects.addAll(vesselEventVisitsPairs);
+			
+			List<Object> sortedObjects = new ArrayList<>(validObjects.size());
+			
+			// Create a new list to sort the elements and replace the content of the 
+			// LinkedHashMap with it (insert-order)
+			sortedObjects.addAll(validObjects);
+			Collections.sort(sortedObjects, (a, b) -> comparator(a, b));
+			
+			validObjects.clear();
+			validObjects.addAll(sortedObjects);
+			
+			List<DeltaPair> aggregateList = new ArrayList(cargoAllocationPairs.size() + vesselEventVisitsPairs.size());
+			
+			// The finals aggregated elements
+			if (cargoAllocationPairs.size() > 0) {
+				aggregateList.addAll(cargoAllocationPairs);
+			}
+			
+			if (vesselEventVisitsPairs.size() > 0) {
+				aggregateList.addAll(vesselEventVisitsPairs);
+			}
+			
+			validObjects.add(aggregateList);
+		}
+		// Create the row object
+		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
+			rows.addAll(factory.createRows(options, validObjects));
+			return true;
+		});
+
+		Collections.sort(rows, (a, b) -> a.order - b.order);
+		
+		viewer.setInput(rows);
+
+		// Feed the element to be displayed
+		for (final Object selectedObject : validObjects) {
+			// Currently only CargoAllocations
+			if (selectedObject instanceof CargoAllocation) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) selectedObject;
+
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				gvc.getColumn().setText(cargoAllocation.getName());
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+					gvc.getColumn().setImage(pinImage);
+				}
+			// Diff of cargo
+			} else if (selectedObject instanceof CargoAllocationPair) {
+				final CargoAllocationPair cargoAllocationPair = (CargoAllocationPair) selectedObject;
+
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				gvc.getColumn().setText("𝚫 " + cargoAllocationPair.getName());
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+			// Diff of VesselEvent
+			} else if (selectedObject instanceof VesselEventVisitPair) {
+				final VesselEventVisitPair vesselEventVisitsPair = (VesselEventVisitPair) selectedObject;
+
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				gvc.getColumn().setText("𝚫 " + vesselEventVisitsPair.getName());
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+			// The aggregate element
+			} else if (selectedObject instanceof List<?>) {
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				gvc.getColumn().setText("𝚫 Aggregate");
+
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+			} else if (selectedObject instanceof VesselEventVisit) {
+				final VesselEventVisit vesselEventVisit = (VesselEventVisit) selectedObject;
+
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				gvc.getColumn().setText(vesselEventVisit.name());
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(vesselEventVisit)) {
+					gvc.getColumn().setImage(pinImage);
+				}
+			} else if (selectedObject instanceof MarketAllocation) {
+				final MarketAllocation cargoAllocation = (MarketAllocation) selectedObject;
+
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+				GridViewerHelper.configureLookAndFeel(gvc);
+
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				gvc.getColumn().setText(cargoAllocation.getSlot().getName());
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(cargoAllocation));
+
+				gvc.getColumn().setWidth(100);
+
+				@Nullable
+				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
+					gvc.getColumn().setImage(pinImage);
+				}
+			}
+		}
+		// Trigger view refresh
+		ViewerHelper.refresh(viewer, true);
 	}
 }
