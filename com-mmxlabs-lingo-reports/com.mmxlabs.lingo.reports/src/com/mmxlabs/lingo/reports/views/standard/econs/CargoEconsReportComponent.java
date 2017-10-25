@@ -693,15 +693,13 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			List<DeltaPair> aggregateList = new ArrayList(cargoAllocationPairs.size() + vesselEventVisitsPairs.size());
 			
 			// The finals aggregated elements
-			if (cargoAllocationPairs.size() > 0) {
-				aggregateList.addAll(cargoAllocationPairs);
-			}
+			aggregateList.addAll(cargoAllocationPairs);
+			aggregateList.addAll(vesselEventVisitsPairs);
 			
-			if (vesselEventVisitsPairs.size() > 0) {
-				aggregateList.addAll(vesselEventVisitsPairs);
+			// Only create aggregate if more than one element
+			if (aggregateList.size() > 0) {
+				validObjects.add(aggregateList);
 			}
-			
-			validObjects.add(aggregateList);
 		}
 		// Create the row object
 		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
@@ -735,25 +733,28 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			// Diff of cargo
 			} else if (selectedObject instanceof CargoAllocationPair) {
 				final CargoAllocationPair cargoAllocationPair = (CargoAllocationPair) selectedObject;
-
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-				GridViewerHelper.configureLookAndFeel(gvc);
-				// Mark column for disposal on selection change
-				dataColumns.add(gvc);
-				gvc.getColumn().setText("𝚫 " + cargoAllocationPair.getName());
-				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
-				gvc.getColumn().setWidth(100);
+				if (cargoAllocationPair.second() != null) {
+					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+					GridViewerHelper.configureLookAndFeel(gvc);
+					// Mark column for disposal on selection change
+					dataColumns.add(gvc);
+					gvc.getColumn().setText("𝚫 " + cargoAllocationPair.getName());
+					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+					gvc.getColumn().setWidth(100);
+				}
 			// Diff of VesselEvent
 			} else if (selectedObject instanceof VesselEventVisitPair) {
 				final VesselEventVisitPair vesselEventVisitsPair = (VesselEventVisitPair) selectedObject;
 
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-				GridViewerHelper.configureLookAndFeel(gvc);
-				// Mark column for disposal on selection change
-				dataColumns.add(gvc);
-				gvc.getColumn().setText("𝚫 " + vesselEventVisitsPair.getName());
-				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
-				gvc.getColumn().setWidth(100);
+				if (vesselEventVisitsPair.second() != null) {
+					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+					GridViewerHelper.configureLookAndFeel(gvc);
+					// Mark column for disposal on selection change
+					dataColumns.add(gvc);
+					gvc.getColumn().setText("𝚫 " + vesselEventVisitsPair.getName());
+					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+					gvc.getColumn().setWidth(100);
+				}
 			// The aggregate element
 			} else if (selectedObject instanceof List<?>) {
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
