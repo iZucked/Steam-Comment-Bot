@@ -431,6 +431,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			Collections.sort(cargoAllocations, (a, b) -> a.getName().compareTo(b.getName()));
 			List<CargoAllocationPair> pairs = new ArrayList<>();
 			
+			// Edge case, only one lonely element in the list
+			if (cargoAllocations.size() == 1) {
+				CargoAllocation a = cargoAllocations.get(0);
+				pairs.add(new CargoAllocationPair(a, null));
+			}
+			
 			for(int i = 0; i < cargoAllocations.size() - 1; i++) {
 				CargoAllocation a = cargoAllocations.get(i);
 				CargoAllocation b = cargoAllocations.get(i + 1);
@@ -441,6 +447,13 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				} else {
 					pairs.add(new CargoAllocationPair(a, null));
 				}
+				
+				// Process possible final lonely element
+				if (i == (cargoAllocations.size() - 1)) {
+					CargoAllocation last = cargoAllocations.get(i);
+					pairs.add(new CargoAllocationPair(last, null));
+				}
+				
 			}
 			return pairs;
 		}
@@ -671,6 +684,16 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				}
 			}
 			
+			// Create the row object
+			final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+			ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
+				rows.addAll(factory.createRows(options, validObjects));
+				return true;
+			});
+			Collections.sort(rows, (a, b) -> a.order - b.order);
+			
+			viewer.setInput(rows);
+
 			if (onlyDiffMode == true) {
 				validObjects.clear();
 			}
@@ -697,20 +720,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			aggregateList.addAll(vesselEventVisitsPairs);
 			
 			// Only create aggregate if more than one element
-			if (aggregateList.size() > 0) {
+			if (aggregateList.size() > 1) {
 				validObjects.add(aggregateList);
 			}
 		}
-		// Create the row object
-		final List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
-		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
-			rows.addAll(factory.createRows(options, validObjects));
-			return true;
-		});
-
-		Collections.sort(rows, (a, b) -> a.order - b.order);
-		
-		viewer.setInput(rows);
 
 		// Feed the element to be displayed
 		for (final Object selectedObject : validObjects) {
@@ -733,7 +746,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			// Diff of cargo
 			} else if (selectedObject instanceof CargoAllocationPair) {
 				final CargoAllocationPair cargoAllocationPair = (CargoAllocationPair) selectedObject;
-				if (cargoAllocationPair.second() != null) {
+				if (cargoAllocationPair.second() != null || onlyDiffMode == true) {
 					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 					GridViewerHelper.configureLookAndFeel(gvc);
 					// Mark column for disposal on selection change
@@ -746,7 +759,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			} else if (selectedObject instanceof VesselEventVisitPair) {
 				final VesselEventVisitPair vesselEventVisitsPair = (VesselEventVisitPair) selectedObject;
 
-				if (vesselEventVisitsPair.second() != null) {
+				if (vesselEventVisitsPair.second() != null || onlyDiffMode == true) {
 					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 					GridViewerHelper.configureLookAndFeel(gvc);
 					// Mark column for disposal on selection change
