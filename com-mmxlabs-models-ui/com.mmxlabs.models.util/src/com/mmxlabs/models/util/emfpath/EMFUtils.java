@@ -353,8 +353,8 @@ public class EMFUtils {
 			// For debugging.
 			final Map<EObject, Collection<Setting>> findAll = EcoreUtil.UsageCrossReferencer.findAll(referredToElements, root);
 			for (final EObject obj : referredToElements) {
-				final Collection<Setting> settomgs = findAll.get(obj);
-				for (final Setting s : settomgs) {
+				final Collection<Setting> settings = findAll.get(obj);
+				for (final Setting s : settings) {
 					final int ii = 0;
 				}
 			}
