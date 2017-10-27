@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Utility class for to create java.util Collections objects.
@@ -216,6 +217,14 @@ public final class CollectionsUtil {
 			set.addAll(Arrays.asList(items));
 			return set;
 		}
+	}
+	
+	public static <T> @Nullable T getFirstElement(List<T> list) {
+		return list.size() > 0 ? list.get(0) : null;
+	}
+
+	public static <T> @Nullable T getLastElement(List<T> list) {
+		return list.size() > 0 ? list.get(list.size() - 1) : null;
 	}
 
 }

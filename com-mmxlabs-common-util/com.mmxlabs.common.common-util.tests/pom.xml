@@ -4,12 +4,12 @@
 
 	<artifactId>com.mmxlabs.common.common-util.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.3.7-SNAPSHOT</version>
+	<version>4.3.9-SNAPSHOT</version>
 	<name>common-util: Tests</name>
 
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>4.3.7-SNAPSHOT</version>
+		<version>4.3.9-SNAPSHOT</version>
 	</parent>
 </project>
