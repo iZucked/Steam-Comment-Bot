@@ -35,4 +35,7 @@ public interface IPeriodTransformerExtension {
 	 * @param excludedCargoes
 	 */
 	void processSlotInclusionsAndExclusions(@NonNull CargoModel cargoModel, @NonNull Schedule schedule, @NonNull Collection<Slot> excludedSlots, @NonNull Collection<Cargo> excludedCargoes);
+	
+	default void init(@NonNull CargoModel cargoModel, @NonNull Schedule schedule) {
+	}
 }

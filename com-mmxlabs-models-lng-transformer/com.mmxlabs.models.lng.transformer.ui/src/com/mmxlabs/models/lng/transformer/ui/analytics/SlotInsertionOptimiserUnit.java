@@ -179,12 +179,13 @@ public class SlotInsertionOptimiserUnit {
 				final IOptionalElementsProvider optionalElementsProvider = injector.getInstance(IOptionalElementsProvider.class);
 				final IMoveHandlerHelper moveHandlerHelper = injector.getInstance(IMoveHandlerHelper.class);
 				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-				final IFollowersAndPreceders followersAndPreceders = injector.getInstance(IFollowersAndPreceders.class);
 
-				{
-					// Calculate the initial metrics
-					try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-						scope.enter();
+				// Calculate the initial metrics
+				try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+					scope.enter();
+					final IFollowersAndPreceders followersAndPreceders = injector.getInstance(IFollowersAndPreceders.class);
+
+					{
 						ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 						final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 						final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
@@ -195,64 +196,66 @@ public class SlotInsertionOptimiserUnit {
 						}
 						state.originalRawSequences = initialRawSequences;
 					}
-				}
-				{
-					final IModifiableSequences tmpRawSequences = new ModifiableSequences(state.originalRawSequences);
 
-					for (ISequenceElement e : tmpRawSequences.getUnusedElements()) {
-						if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
-							state.initiallyUnused.add(e);
-						}
-					}
+					{
+						final IModifiableSequences tmpRawSequences = new ModifiableSequences(state.originalRawSequences);
 
-					// Makes sure target slots are not contained in the solution.
-					for (final IPortSlot portSlot : optionElements) {
-						final ISequenceElement element = portSlotProvider.getElement(portSlot);
-
-						final LookupManager lookupManager = new LookupManager(tmpRawSequences);
-						final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(element);
-						if (lookup != null && lookup.getFirst() != null) {
-							@NonNull
-							final IModifiableSequence modifiableSequence = tmpRawSequences.getModifiableSequence(lookup.getFirst());
-							@NonNull
-							final List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, element);
-							for (final ISequenceElement e : segment) {
-								modifiableSequence.remove(e);
-								tmpRawSequences.getModifiableUnusedElements().add(e);
-
-								// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots at
-								// once.
-								if (optionalElementsProvider.isElementRequired(e)) {
-									++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
-								}
+						for (ISequenceElement e : tmpRawSequences.getUnusedElements()) {
+							if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
+								state.initiallyUnused.add(e);
 							}
+						}
 
+						// Makes sure target slots are not contained in the solution.
+						for (final IPortSlot portSlot : optionElements) {
+							final ISequenceElement element = portSlotProvider.getElement(portSlot);
+
+							final LookupManager lookupManager = new LookupManager(tmpRawSequences);
+							final @Nullable Pair<IResource, Integer> lookup = lookupManager.lookup(element);
+							if (lookup != null && lookup.getFirst() != null) {
+								@NonNull
+								final IModifiableSequence modifiableSequence = tmpRawSequences.getModifiableSequence(lookup.getFirst());
+								@NonNull
+								final List<ISequenceElement> segment = moveHandlerHelper.extractSegment(modifiableSequence, element);
+								for (final ISequenceElement e : segment) {
+									modifiableSequence.remove(e);
+									tmpRawSequences.getModifiableUnusedElements().add(e);
+
+									// Increment the compulsory slot count to take into account solution change. Otherwise when inserting multiple slots, the first move has to insert all the slots
+									// at
+									// once.
+									if (optionalElementsProvider.isElementRequired(e)) {
+										++state.initialMetrics[MetricType.COMPULSARY_SLOT.ordinal()];
+									}
+								}
+
+							}
 						}
+						state.startingPointRawSequences = tmpRawSequences;
 					}
-					state.startingPointRawSequences = tmpRawSequences;
-				}
-				// check for insertion feasibility
-				{
-					List<ISequenceElement> sequenceElements = optionElements.stream().map(e->portSlotProvider.getElement(e)).collect(Collectors.toList());
-					boolean isFeasible = true;
-					for (IPortSlot portSlot : optionElements) {
-						ISequenceElement element = portSlotProvider.getElement(portSlot);
-						String slotName = "";
-						if (portSlot instanceof ILoadOption) {
-							Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
-							isFeasible = validFollowers.size() > 1;
-							LoadSlot load = modelEntityMap.getModelObject(portSlot, LoadSlot.class);
-							slotName = load.getName();
-						} else if (portSlot instanceof IDischargeOption) {
-							Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
-							DischargeSlot discharge = modelEntityMap.getModelObject(portSlot, DischargeSlot.class);
-							slotName = discharge.getName();
-							isFeasible = validPreceders.size() > 1;
-						}
-						if (!isFeasible) {
-							
-							throw new UserFeedbackException(
-									String.format("Unable to perform insertion on this scenario. This is caused by the slot %s having no possible pairings.", slotName));
+
+					// check for insertion feasibility
+					{
+						List<ISequenceElement> sequenceElements = optionElements.stream().map(e -> portSlotProvider.getElement(e)).collect(Collectors.toList());
+						boolean isFeasible = true;
+						for (IPortSlot portSlot : optionElements) {
+							ISequenceElement element = portSlotProvider.getElement(portSlot);
+							String slotName = "";
+							if (portSlot instanceof ILoadOption) {
+								Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
+								isFeasible = validFollowers.size() > 1;
+								LoadSlot load = modelEntityMap.getModelObject(portSlot, LoadSlot.class);
+								slotName = load.getName();
+							} else if (portSlot instanceof IDischargeOption) {
+								Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
+								DischargeSlot discharge = modelEntityMap.getModelObject(portSlot, DischargeSlot.class);
+								slotName = discharge.getName();
+								isFeasible = validPreceders.size() > 1;
+							}
+							if (!isFeasible) {
+
+								throw new UserFeedbackException(String.format("Unable to perform insertion on this scenario. This is caused by the slot %s having no possible pairings.", slotName));
+							}
 						}
 					}
 				}
