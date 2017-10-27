@@ -22,6 +22,7 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
@@ -71,37 +72,89 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 			public void update(final ViewerCell cell) {
 
 				Object element = cell.getElement();
-				if (element != null) {
-					boolean found = false;
-					for (final EMFPath p : path) {
-						final Object x = p.get((EObject) element);
-						if (x != null) {
-							element = x;
-							found = true;
-							break;
+
+				if (element instanceof CompositeRow) {
+
+					Object pinnedElement = null;
+					Object previousElement = null;
+
+					String deltaValue = "";
+					if (element instanceof CompositeRow) {
+						Row pinnedRow = ((CompositeRow) element).getPinnedRow();
+						Row previousRow = ((CompositeRow) element).getPreviousRow();
+
+						for (final EMFPath p : path) {
+							pinnedElement = p.get((EObject) pinnedRow);
+							if (pinnedElement != null) {
+								break;
+							}
+						}
+
+						for (final EMFPath p : path) {
+							previousElement = p.get((EObject) previousRow);
+							if (previousElement != null) {
+								break;
+							}
+						}
+
+						if (pinnedElement != null && previousElement != null) {
+							Object valuePinned = formatter.getComparable(pinnedElement);
+							Object valuePrevious = formatter.getComparable(previousElement);
+
+							// Check null pointer
+							deltaValue = "";
+							if (valuePrevious != null && valuePinned != null) {
+								if (valuePrevious instanceof Integer) {
+									int delta = ((int) valuePinned) - ((int) valuePrevious);
+									deltaValue = String.valueOf(delta);
+								} else if (valuePrevious instanceof Long) {
+									long delta = ((long) valuePinned) - ((long) valuePrevious);
+									deltaValue = String.valueOf(delta);
+								} else if (valuePrevious instanceof Double) {
+									double delta = ((double) valuePinned) - ((double) valuePrevious);
+									deltaValue = String.valueOf(delta);
+								} else if (valuePrevious instanceof String) {
+									deltaValue = valuePrevious + " -> " + valuePinned;
+								}
+							}
 						}
 					}
-					if (!found) {
-						element = null;
-					}
-				}
 
-				if (element instanceof Row) {
-					for (final EMFPath p : path) {
-						final Object x = p.get((EObject) element);
-						if (x != null) {
-							element = x;
-							break;
+					setRowSpan(formatter, cell, pinnedElement);
+					cell.setText("Δ " + deltaValue);
+				} else {
+					if (element != null) {
+						boolean found = false;
+						for (final EMFPath p : path) {
+							final Object x = p.get((EObject) element);
+							if (x != null) {
+								element = x;
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							element = null;
 						}
 					}
 
-				}
-				if (col.isVisible()) {
-					setRowSpan(formatter, cell, element);
-				}
-				cell.setText(formatter.render(element));
-				if (formatter instanceof IImageProvider) {
-					cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
+					if (element instanceof Row) {
+						for (final EMFPath p : path) {
+							final Object x = p.get((EObject) element);
+							if (x != null) {
+								element = x;
+								break;
+							}
+						}
+					}
+
+					if (col.isVisible()) {
+						setRowSpan(formatter, cell, element);
+					}
+					cell.setText(formatter.render(element));
+					if (formatter instanceof IImageProvider) {
+						cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
+					}
 				}
 			}
 		});

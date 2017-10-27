@@ -25,6 +25,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/pinnedScenario"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/userGroups"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/selectedElements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/compositeRows"/>
+      <genOperations ecoreOperation="schedulereport.ecore#//Table/getCompositeRow"/>
     </genClasses>
     <genClasses ecoreClass="schedulereport.ecore#//Row">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/visible"/>
@@ -38,7 +40,8 @@
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/cargoAllocation"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/loadAllocation"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/dischargeAllocation"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/openSlotAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/openLoadSlotAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/openDischargeSlotAllocation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/reference"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/lhsLink"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/rhsLink"/>
@@ -66,6 +69,10 @@
     <genClasses ecoreClass="schedulereport.ecore#//DiffOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//DiffOptions/filterSelectedElements"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//DiffOptions/filterSelectedSequences"/>
+    </genClasses>
+    <genClasses ecoreClass="schedulereport.ecore#//CompositeRow">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//CompositeRow/previousRow"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//CompositeRow/pinnedRow"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

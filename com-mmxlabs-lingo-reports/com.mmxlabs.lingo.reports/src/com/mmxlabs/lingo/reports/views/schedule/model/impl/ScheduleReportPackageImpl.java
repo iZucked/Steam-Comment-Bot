@@ -9,11 +9,13 @@ package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -22,7 +24,16 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
+import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -78,6 +89,13 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass compositeRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum changeTypeEEnum = null;
 
 	/**
@@ -108,7 +126,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ScheduleReportPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -122,12 +140,22 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		if (isInited) return (ScheduleReportPackage)EPackage.Registry.INSTANCE.getEPackage(ScheduleReportPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ScheduleReportPackageImpl theScheduleReportPackage = (ScheduleReportPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ScheduleReportPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ScheduleReportPackageImpl());
+		Object registeredScheduleReportPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ScheduleReportPackageImpl theScheduleReportPackage = registeredScheduleReportPackage instanceof ScheduleReportPackageImpl ? (ScheduleReportPackageImpl)registeredScheduleReportPackage : new ScheduleReportPackageImpl();
 
 		isInited = true;
 
 		// Initialize simple dependencies
+		CargoPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theScheduleReportPackage.createPackageContents();
@@ -138,7 +166,6 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		// Mark meta-data to indicate it can't be changed
 		theScheduleReportPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ScheduleReportPackage.eNS_URI, theScheduleReportPackage);
 		return theScheduleReportPackage;
@@ -230,6 +257,24 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 */
 	public EReference getTable_SelectedElements() {
 		return (EReference)tableEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getTable_CompositeRows() {
+		return (EReference)tableEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getTable__GetCompositeRow() {
+		return tableEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -601,6 +646,33 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCompositeRow() {
+		return compositeRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCompositeRow_PreviousRow() {
+		return (EReference)compositeRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCompositeRow_PinnedRow() {
+		return (EReference)compositeRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getChangeType() {
 		return changeTypeEEnum;
 	}
@@ -643,6 +715,8 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEReference(tableEClass, TABLE__PINNED_SCENARIO);
 		createEReference(tableEClass, TABLE__USER_GROUPS);
 		createEReference(tableEClass, TABLE__SELECTED_ELEMENTS);
+		createEReference(tableEClass, TABLE__COMPOSITE_ROWS);
+		createEOperation(tableEClass, TABLE___GET_COMPOSITE_ROW);
 
 		rowEClass = createEClass(ROW);
 		createEAttribute(rowEClass, ROW__VISIBLE);
@@ -685,6 +759,10 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		diffOptionsEClass = createEClass(DIFF_OPTIONS);
 		createEAttribute(diffOptionsEClass, DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS);
 		createEAttribute(diffOptionsEClass, DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES);
+
+		compositeRowEClass = createEClass(COMPOSITE_ROW);
+		createEReference(compositeRowEClass, COMPOSITE_ROW__PREVIOUS_ROW);
+		createEReference(compositeRowEClass, COMPOSITE_ROW__PINNED_ROW);
 
 		// Create enums
 		changeTypeEEnum = createEEnum(CHANGE_TYPE);
@@ -732,6 +810,9 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEReference(getTable_PinnedScenario(), ecorePackage.getEObject(), null, "pinnedScenario", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTable_UserGroups(), this.getUserGroup(), null, "userGroups", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTable_SelectedElements(), ecorePackage.getEObject(), null, "selectedElements", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTable_CompositeRows(), this.getCompositeRow(), null, "compositeRows", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getTable__GetCompositeRow(), this.getCompositeRow(), "getCompositeRow", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(rowEClass, Row.class, "Row", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRow_Visible(), ecorePackage.getEBoolean(), "visible", "true", 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -774,6 +855,10 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEClass(diffOptionsEClass, DiffOptions.class, "DiffOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDiffOptions_FilterSelectedElements(), ecorePackage.getEBoolean(), "filterSelectedElements", null, 0, 1, DiffOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiffOptions_FilterSelectedSequences(), ecorePackage.getEBoolean(), "filterSelectedSequences", null, 0, 1, DiffOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(compositeRowEClass, CompositeRow.class, "CompositeRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCompositeRow_PreviousRow(), this.getRow(), null, "previousRow", null, 0, 1, CompositeRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCompositeRow_PinnedRow(), this.getRow(), null, "pinnedRow", null, 0, 1, CompositeRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(changeTypeEEnum, ChangeType.class, "ChangeType");

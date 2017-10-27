@@ -449,10 +449,10 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				}
 				
 				// Process possible final lonely element
-				if (i == (cargoAllocations.size() - 1)) {
-					CargoAllocation last = cargoAllocations.get(i);
-					pairs.add(new CargoAllocationPair(last, null));
-				}
+//				if (i == (cargoAllocations.size() - 1)) {
+//					CargoAllocation last = cargoAllocations.get(i);
+//					pairs.add(new CargoAllocationPair(last, null));
+//				}
 				
 			}
 			return pairs;
@@ -720,7 +720,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			aggregateList.addAll(vesselEventVisitsPairs);
 			
 			// Only create aggregate if more than one element
-			if (aggregateList.size() > 1) {
+			if (validObjects.size() > 1) {
 				validObjects.add(aggregateList);
 			}
 		}

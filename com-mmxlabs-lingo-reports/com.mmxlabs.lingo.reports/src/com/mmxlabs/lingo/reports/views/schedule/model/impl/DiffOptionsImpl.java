@@ -207,7 +207,7 @@ public class DiffOptionsImpl extends MinimalEObjectImpl.Container implements Dif
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (filterSelectedElements: ");
 		result.append(filterSelectedElements);
 		result.append(", filterSelectedSequences: ");

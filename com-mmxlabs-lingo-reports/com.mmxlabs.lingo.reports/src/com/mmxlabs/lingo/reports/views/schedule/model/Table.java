@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario <em>Pinned Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getUserGroups <em>User Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements <em>Selected Elements</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCompositeRows <em>Composite Rows</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getTable()
@@ -182,5 +183,29 @@ public interface Table extends EObject {
 	 * @generated
 	 */
 	EList<EObject> getSelectedElements();
+
+	/**
+	 * Returns the value of the '<em><b>Composite Rows</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Composite Rows</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Composite Rows</em>' containment reference list.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getTable_CompositeRows()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CompositeRow> getCompositeRows();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	CompositeRow getCompositeRow();
 
 } // Table

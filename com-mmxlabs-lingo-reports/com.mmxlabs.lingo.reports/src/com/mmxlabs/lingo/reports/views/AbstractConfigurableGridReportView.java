@@ -71,6 +71,7 @@ import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
@@ -165,7 +166,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			// Wrap around with group sorter
 			viewer.setComparator(new ViewerComparator() {
 				@Override
-				public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				public int compare(final Viewer viewer, Object e1, Object e2) {
 					RowGroup g1 = null;
 					RowGroup g2 = null;
 					if (e1 instanceof Row) {
@@ -174,6 +175,16 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					if (e2 instanceof Row) {
 						g2 = ((Row) e2).getRowGroup();
 					}
+					
+					if (e1 instanceof CompositeRow) {
+						g1 = ((CompositeRow) e1).getPinnedRow().getRowGroup();
+						e1 = ((CompositeRow) e1).getPinnedRow();
+					}
+					if (e2 instanceof CompositeRow) {
+						g2 = ((CompositeRow) e2).getPinnedRow().getRowGroup();
+						e2 = ((CompositeRow) e2).getPinnedRow();
+					}
+					
 					if (g1 == g2) {
 						return vc.compare(viewer, e1, e2);
 					} else {
