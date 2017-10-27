@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
-public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
+public class EObjectTableViewerColumnProvider extends ColumnLabelProvider implements IImageProvider {
 	/**
 	 * 
 	 */
@@ -26,7 +26,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	private final Color warningColour = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
 	private final Color lockedColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
-	public EObjectTableViewerColumnProvider(EObjectTableViewer eObjectTableViewer, ICellRenderer renderer, EMFPath path) {
+	public EObjectTableViewerColumnProvider(final EObjectTableViewer eObjectTableViewer, final ICellRenderer renderer, final EMFPath path) {
 		this.eObjectTableViewer = eObjectTableViewer;
 		this.renderer = renderer;
 		this.path = path;
@@ -105,7 +105,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	}
 
 	@Override
-	public int getToolTipDisplayDelayTime(Object object) {
+	public int getToolTipDisplayDelayTime(final Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			return this.eObjectTableViewer.delegateToolTipProvider.getToolTipDisplayDelayTime(object);
 		}
@@ -113,7 +113,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	}
 
 	@Override
-	public Image getToolTipImage(Object object) {
+	public Image getToolTipImage(final Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			final Image im = this.eObjectTableViewer.delegateToolTipProvider.getToolTipImage(object);
 			if (im != null) {
@@ -124,9 +124,9 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	}
 
 	@Override
-	public Point getToolTipShift(Object object) {
+	public Point getToolTipShift(final Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
-			Point p = this.eObjectTableViewer.delegateToolTipProvider.getToolTipShift(object);
+			final Point p = this.eObjectTableViewer.delegateToolTipProvider.getToolTipShift(object);
 			if (p != null) {
 				return p;
 			}
@@ -135,7 +135,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	}
 
 	@Override
-	public int getToolTipTimeDisplayed(Object object) {
+	public int getToolTipTimeDisplayed(final Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			return this.eObjectTableViewer.delegateToolTipProvider.getToolTipTimeDisplayed(object);
 		}
@@ -161,6 +161,15 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 		}
 	}
 
+	@Override
+	public Image getImage(final Object element) {
+		if (renderer instanceof IImageProvider) {
+			final IImageProvider imageProvider = (IImageProvider) renderer;
+			return imageProvider.getImage(element);
+		}
+		return null;
+	}
+	
 	@Override
 	public void dispose() {
 		super.dispose();
