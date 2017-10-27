@@ -26,4 +26,6 @@ public interface ISelectedDataProvider {
 
 	@NonNull
 	List<ScenarioResult> getScenarioResults();
+
+	ScenarioResult getPinnedScenarioResult();
 }

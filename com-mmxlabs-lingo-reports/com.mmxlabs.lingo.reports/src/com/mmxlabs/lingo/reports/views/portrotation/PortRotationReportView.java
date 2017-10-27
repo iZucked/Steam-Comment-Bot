@@ -26,6 +26,7 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedColumnExtension;
@@ -81,6 +82,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 					elementCollector.collectElements(other, false);
 				}
 				elementCollector.endCollecting();
+				setCurrentSelectedDataProvider(new TransformedSelectedDataProvider(selectedDataProvider));
 				return elements;
 			});
 		}
@@ -264,7 +266,6 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		// Create the actual columns instances.
 		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, getBlockManager());
 	}
-
 
 	@Override
 	public void initPartControl(final Composite parent) {

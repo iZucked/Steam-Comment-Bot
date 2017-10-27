@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -44,6 +45,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -58,19 +60,51 @@ public class CapacityViolationReportView extends EMFReportView {
 	private EPackage tableDataModel;
 
 	private final String NODE_OWNER = "owner";
+	private final String ATTRIBUTE_SCENARIO_NAME = "scenarioName";
+	private final String ATTRIBUTE_PINNED = "pinned";
 	private final String ATTRIBUTE_QUANTITY = "quantity";
 	private final String ATTRIBUTE_TYPE = "type";
 
 	private EAttribute attrib_Row_Type;
 	private EAttribute attrib_Row_Quantity;
+	private EAttribute attrib_Row_ScenarioName;
+	private EAttribute attrib_Row_Pinned;
 	private EReference ref_Row_Owner;
+
+	protected class PinnedScheduleFormatter extends BaseFormatter implements IImageProvider {
+
+		@Override
+		public Image getImage(Object element) {
+			if (element instanceof EObject) {
+				final EObject eObject = (EObject) element;
+				Boolean pinned = (Boolean) eObject.eGet(attrib_Row_Pinned);
+				if (Boolean.TRUE.equals(pinned)) {
+					if (pinImage != null && !pinImage.isDisposed()) {
+						return pinImage;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		@Override
+		public String render(final Object object) {
+			if (object instanceof EObject) {
+				final EObject eObject = (EObject) object;
+				return (String) eObject.eGet(attrib_Row_ScenarioName);
+			}
+			return null;
+		}
+
+	}
 
 	public CapacityViolationReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_CapacityViolations");
 
 		createDataModel();
 
-		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
+		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, new PinnedScheduleFormatter());
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
@@ -189,7 +223,7 @@ public class CapacityViolationReportView extends EMFReportView {
 
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
-
+				String scenarioName = scenarioResult.getScenarioInstance().getName();
 				final List<EObject> rows = new LinkedList<EObject>();
 
 				for (final Sequence sequence : schedule.getSequences()) {
@@ -202,7 +236,7 @@ public class CapacityViolationReportView extends EMFReportView {
 									if (violationMap.containsKey(cvt)) {
 										final Long qty = violationMap.get(cvt);
 										if (qty != null) {
-											final EObject row = createRow(dataModelInstance, event, cvt, qty);
+											final EObject row = createRow(dataModelInstance, event, scenarioName, pinned, cvt, qty);
 											rows.add(row);
 										}
 									}
@@ -256,15 +290,19 @@ public class CapacityViolationReportView extends EMFReportView {
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
 		attrib_Row_Type = GenericEMFTableDataModel.createRowAttribute(rowClass, SchedulePackage.Literals.CAPACITY_VIOLATION_TYPE, ATTRIBUTE_TYPE);
 		attrib_Row_Quantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELong(), ATTRIBUTE_QUANTITY);
+		attrib_Row_ScenarioName = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEString(), ATTRIBUTE_SCENARIO_NAME);
+		attrib_Row_Pinned = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEBoolean(), ATTRIBUTE_PINNED);
 
 		ref_Row_Owner = (EReference) GenericEMFTableDataModel.getRowFeature(tableDataModel, NODE_OWNER);
 	}
 
-	private EObject createRow(final EObject dataModelInstance, final EObject owner, final CapacityViolationType type, final long qty) {
+	private EObject createRow(final EObject dataModelInstance, final EObject owner, String scenarioName, boolean pinned, final CapacityViolationType type, final long qty) {
 		final EObject row = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, null);
 		row.eSet(ref_Row_Owner, owner);
 		row.eSet(attrib_Row_Type, type);
 		row.eSet(attrib_Row_Quantity, qty);
+		row.eSet(attrib_Row_ScenarioName, scenarioName);
+		row.eSet(attrib_Row_Pinned, pinned);
 
 		return row;
 	}

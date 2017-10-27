@@ -4,19 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
@@ -33,6 +29,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -43,11 +40,11 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public abstract class AbstractReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	protected final Map<Object, WeakReference<ScenarioResult>> elementMapping = new WeakHashMap<>();
-
 	private SelectedScenariosService selectedScenariosService;
 
-	protected abstract Object doSelectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others);
+	protected abstract Object doSelectionChanged(final TransformedSelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others);
+
+	protected @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -58,9 +55,9 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 				@Override
 				public void run() {
 					clearInputEquivalents();
-					elementMapping.clear();
+					currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 
-					final Object newInput = doSelectionChanged(selectedDataProvider, pinned, others);
+					final Object newInput = doSelectionChanged(currentSelectedDataProvider, pinned, others);
 
 					ViewerHelper.setInput(getViewer(), true, newInput);
 				}
@@ -73,24 +70,9 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 	protected final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String render(final Object object) {
-			if (object instanceof EObject) {
-				final EObject eObject = (EObject) object;
-				final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
-				if (selectedDataProvider != null) {
-					ScenarioResult instance = selectedDataProvider.getScenarioResult(eObject);
-					if (instance != null) {
-						return instance.getModelRecord().getName();
-					}
-					if (elementMapping.containsKey(eObject)) {
-						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
-						if (ref != null) {
-							instance = ref.get();
-						}
-						if (instance != null) {
-							return instance.getModelRecord().getName();
-						}
-					}
-				}
+			ScenarioResult instance = currentSelectedDataProvider.getScenarioResult(object);
+			if (instance != null) {
+				return instance.getModelRecord().getName();
 			}
 			return null;
 		}
@@ -106,10 +88,6 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 			}
 		}
 		contents.add(input);
-	}
-
-	public void addElementMapping(final Object element, final ScenarioResult scenarioResult) {
-		elementMapping.put(element, new WeakReference<>(scenarioResult));
 	}
 
 	protected void clearInputEquivalents() {
@@ -236,7 +214,6 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 	public void dispose() {
 
 		clearInputEquivalents();
-		elementMapping.clear();
 
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);

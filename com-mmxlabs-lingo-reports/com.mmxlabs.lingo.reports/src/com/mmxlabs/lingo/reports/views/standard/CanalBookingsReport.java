@@ -23,6 +23,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -30,7 +31,9 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractReportView;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.standard.CanalBookingsReportTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -65,11 +68,11 @@ public class CanalBookingsReport extends AbstractReportView {
 	private GridTableViewer viewer;
 
 	private Font boldFont;
-
+	protected Image pinImage;
 	private final CanalBookingsReportTransformer transformer = new CanalBookingsReportTransformer();
 
 	@Override
-	protected Object doSelectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others) {
+	protected Object doSelectionChanged(final TransformedSelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others) {
 		final List<RowData> rows = new LinkedList<>();
 
 		final List<ScenarioResult> scenarios = new LinkedList<>();
@@ -77,17 +80,16 @@ public class CanalBookingsReport extends AbstractReportView {
 			scenarios.add(pinned);
 		}
 		scenarios.addAll(others);
-
 		for (final ScenarioResult other : scenarios) {
 			final ScheduleModel other_scheduleModel = other.getTypedResult(ScheduleModel.class);
 			if (other_scheduleModel != null) {
 				final Schedule schedule = other_scheduleModel.getSchedule();
 				if (schedule != null) {
 					@NonNull
-					final List<RowData> transform = transformer.transform(schedule, other);
+					final List<RowData> transform = transformer.transform(schedule, other, other == pinned);
 					transform.forEach(rowData -> {
 						rows.add(rowData);
-						addElementMapping(rowData, other);
+						selectedDataProvider.addExtraData(rowData, other, schedule);
 
 						final Set<Object> equivalents = new HashSet<>();
 						if (rowData.event != null) {
@@ -147,6 +149,7 @@ public class CanalBookingsReport extends AbstractReportView {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
+		pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
 
 		{
 			final Font systemFont = Display.getDefault().getSystemFont();
@@ -169,7 +172,7 @@ public class CanalBookingsReport extends AbstractReportView {
 		final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
 		viewer.setComparator(sortingSupport.createViewerComparer());
 
-		scheduleColumn = createColumn(sortingSupport, "Schedule", rowData -> rowData.scheduleName, rowData -> rowData.scheduleName);
+		scheduleColumn = createColumn(sortingSupport, true, "Schedule", rowData -> rowData.scheduleName, rowData -> rowData.scheduleName);
 
 		createColumn(sortingSupport, "Pre-booked", rowData -> (rowData.preBooked) ? "Yes" : "No", rowData -> rowData.preBooked);
 
@@ -208,12 +211,16 @@ public class CanalBookingsReport extends AbstractReportView {
 
 	private GridViewerColumn createColumn(final EObjectTableViewerSortingSupport tv, final String title, final Function<RowData, String> labelProvider,
 			final Function<RowData, Comparable> sortFunction) {
+		return createColumn(tv, false, title, labelProvider, sortFunction);
+	}
+
+	private GridViewerColumn createColumn(final EObjectTableViewerSortingSupport tv, boolean pinColumn, final String title, final Function<RowData, String> labelProvider,
+			final Function<RowData, Comparable> sortFunction) {
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		GridViewerHelper.configureLookAndFeel(column);
 
 		column.getColumn().setText(title);
 		column.setLabelProvider(new CellLabelProvider() {
-
 			@Override
 			public void update(final ViewerCell cell) {
 
@@ -226,8 +233,16 @@ public class CanalBookingsReport extends AbstractReportView {
 					if (rowData.warn) {
 						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW));
 					}
+
+					cell.setImage(null);
+					if (pinColumn) {
+						if (rowData.pinned) {
+							cell.setImage(pinImage);
+						}
+					}
 				} else {
 					cell.setText("");
+					cell.setImage(null);
 				}
 			}
 		});

@@ -23,6 +23,8 @@ import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.PinnedScheduleFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
@@ -118,9 +120,22 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.schedule":
 			final PinnedScheduleFormatter containingScheduleFormatter = new PinnedScheduleFormatter(pinImage) {
+
+				@Override
+				public Image getImage(Object element) {
+					TransformedSelectedDataProvider selectedDataProvider = builder.getReport().getCurrentSelectedDataProvider();
+					if (selectedDataProvider != null) {
+						if (selectedDataProvider.isPinnedObject(element)) {
+							return pinImage;
+						}
+					}
+
+					return null;
+				}
+
 				@Override
 				public String render(final Object object) {
-					final ScenarioResult scenarioResult = builder.getReport().getScenarioInstance(object);
+					final ScenarioResult scenarioResult = builder.getReport().getScenarioResult(object);
 					if (scenarioResult != null) {
 						final ScenarioModelRecord modelRecord = scenarioResult.getModelRecord();
 						if (modelRecord != null) {
@@ -459,7 +474,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 					if (object instanceof Journey) {
 						final Journey journey = (Journey) object;
-						final ScenarioResult scenarioResult = builder.getReport().getScenarioInstance(object);
+						final ScenarioResult scenarioResult = builder.getReport().getScenarioResult(journey);
 						if (scenarioResult != null) {
 							final IScenarioDataProvider scenarioDataProvider = scenarioResult.getScenarioDataProvider();
 							if (scenarioDataProvider != null) {
