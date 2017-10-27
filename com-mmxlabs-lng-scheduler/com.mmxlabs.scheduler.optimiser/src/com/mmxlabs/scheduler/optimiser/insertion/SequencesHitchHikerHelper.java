@@ -306,11 +306,13 @@ public class SequencesHitchHikerHelper {
 								// Swap the current for the original.
 								seq.set(i, originalElement);
 								final Pair<@Nullable IResource, Integer> lookup = currentLookup.lookup(originalElement);
-								final IResource newResource = lookup.getFirst();
-								if (newResource == null) {
-									revertedSeq.getModifiableUnusedElements().set(lookup.getSecond(), e);
-								} else {
-									revertedSeq.getModifiableSequence(newResource).set(lookup.getSecond(), e);
+								if (lookup != null) {
+									final IResource newResource = lookup.getFirst();
+									if (newResource == null) {
+										revertedSeq.getModifiableUnusedElements().set(lookup.getSecond(), e);
+									} else {
+										revertedSeq.getModifiableSequence(newResource).set(lookup.getSecond(), e);
+									}
 								}
 								// Re-generate the lookup table
 								currentLookup.createLookup(revertedSeq);
