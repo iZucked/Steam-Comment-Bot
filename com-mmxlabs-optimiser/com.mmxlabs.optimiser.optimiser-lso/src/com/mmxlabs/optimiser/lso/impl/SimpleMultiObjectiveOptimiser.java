@@ -463,18 +463,28 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 			desiredQuartile = worstFitness + 3 * oneQuartile;
 			break;
 		}
+		ListIterator<Pair<ISequences, long[]>> iterator = getIterator(minimise, sortedArchive);
+		Pair<ISequences, long[]> solution = chooseSolution(objectiveIndex, minimise, desiredQuartile, desiredQuartile + oneQuartile, iterator);
+		if (solution == null && sortedArchive.size() > 0) {
+			iterator = getIterator(minimise, sortedArchive);
+			solution = chooseClosestToDesiredQuartile(objectiveIndex, minimise, desiredQuartile, desiredQuartile + oneQuartile, iterator);
+			if (solution == null) {
+				solution = sortedArchive.get(0);
+			}
+			return solution;
+		} else {
+			return solution;
+		}
+	}
+
+	private ListIterator<Pair<ISequences, long[]>> getIterator(boolean minimise, List<Pair<ISequences, long[]>> sortedArchive) {
 		ListIterator<Pair<ISequences, long[]>> iterator;
 		if (minimise) {
 			iterator = sortedArchive.listIterator(sortedArchive.size());
 		} else {
 			iterator = sortedArchive.listIterator(0);
 		}
-		Pair<ISequences, long[]> solution = chooseSolution(objectiveIndex, minimise, desiredQuartile, desiredQuartile + oneQuartile, iterator);
-		if (solution == null && sortedArchive.size() > 0) {
-			return sortedArchive.get(0);
-		} else {
-			return solution;
-		}
+		return iterator;
 	}
 
 	private Pair<ISequences, long[]> chooseSolution(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<Pair<ISequences, long[]>> iterator) {
@@ -521,6 +531,23 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 		} else {
 			return null;
 		}
+	}
+	
+	private Pair<ISequences, long[]> chooseClosestToDesiredQuartile(int objectiveIndex, boolean minimise, long desiredQuartile, long endOfDesiredQuarter, ListIterator<Pair<ISequences, long[]>> iterator) {
+		while (quartileIteratorHasNext(iterator, minimise)) {
+			Pair<ISequences, long[]> entry = iterateQuartileIterator(iterator, minimise);
+			long[] fitnesses = entry.getSecond();
+			if (minimise) {
+				if (fitnesses[objectiveIndex] < desiredQuartile) {
+					return entry;
+				}
+			} else {
+				if (fitnesses[objectiveIndex] > desiredQuartile && fitnesses[objectiveIndex] < endOfDesiredQuarter) {
+					return entry;
+				}
+			}
+		}
+		return null;
 	}
 
 	private Pair<ISequences, long[]> iterateQuartileIterator(ListIterator<Pair<ISequences, long[]>> iterator, boolean minimise) {
