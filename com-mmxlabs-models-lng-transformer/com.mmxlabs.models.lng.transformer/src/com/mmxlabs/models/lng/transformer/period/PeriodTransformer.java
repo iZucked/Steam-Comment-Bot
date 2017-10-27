@@ -363,8 +363,8 @@ public class PeriodTransformer {
 		return new NonNullPair<>(output, internalDomain);
 	}
 
-	private void lockAndRemoveCanalBookings(final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Slot> lockedSlots, final Set<Cargo> lockedCargoes, final Map<Slot, SlotAllocation> slotAllocationMap,
-			final LNGScenarioModel output) {
+	private void lockAndRemoveCanalBookings(final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Slot> lockedSlots, final Set<Cargo> lockedCargoes,
+			final Map<Slot, SlotAllocation> slotAllocationMap, final LNGScenarioModel output) {
 		final CargoModel cargoModel = output.getCargoModel();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
@@ -615,8 +615,7 @@ public class PeriodTransformer {
 
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 				@NonNull
-				final
-				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
+				final NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
 				if (p.getFirst() != InclusionType.In) {
 					charterOutEvent.getAllowedVessels().clear();
 					final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
@@ -765,7 +764,8 @@ public class PeriodTransformer {
 
 	private void updateSlotDependencies(final @NonNull Collection<Slot> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotDependencies, final Set<Cargo> lockedCargoes) {
+			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotDependencies,
+			final Set<Cargo> lockedCargoes) {
 		for (final Slot dep : slotDependencies) {
 			if (slotsToRemove.contains(dep)) {
 				slotsToRemove.remove(dep);
@@ -1337,7 +1337,12 @@ public class PeriodTransformer {
 				vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
 				vesselAvailability.getEndHeel().setPriceExpression("");
-				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+				if (portVisit.getPreviousEvent() instanceof Cooldown) {
+					// We had a cooldown before, so end either way
+					vesselAvailability.getEndHeel().setTankState(EVesselTankState.EITHER);
+				} else {
+					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+				}
 			} else {
 				vesselAvailability.getEndHeel().setMinimumEndHeel(0);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(0);
