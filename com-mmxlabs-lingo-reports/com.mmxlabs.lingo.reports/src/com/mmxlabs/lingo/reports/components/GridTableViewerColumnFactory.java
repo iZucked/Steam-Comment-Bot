@@ -114,14 +114,28 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 									double delta = ((double) valuePinned) - ((double) valuePrevious);
 									deltaValue = String.valueOf(delta);
 								} else if (valuePrevious instanceof String) {
-									deltaValue = valuePrevious + " -> " + valuePinned;
+									if (col.getText().compareTo("Scenario") == 0) {
+										deltaValue = " ";
+									}
+
+									if (col.getText().compareTo("L-ID") == 0) {
+										deltaValue = (String) valuePinned;
+									}
+									
+									if (col.getText().compareTo("D-ID") == 0) {
+										deltaValue = (String) valuePinned;
+									}
 								}
 							}
 						}
 					}
 
 					setRowSpan(formatter, cell, pinnedElement);
-					cell.setText("Δ " + deltaValue);
+					
+					if (deltaValue.compareTo("") != 0) {
+						cell.setText("Δ " + deltaValue);
+					}
+					
 				} else {
 					if (element != null) {
 						boolean found = false;
@@ -147,7 +161,6 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							}
 						}
 					}
-
 					if (col.isVisible()) {
 						setRowSpan(formatter, cell, element);
 					}

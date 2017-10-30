@@ -8,9 +8,6 @@ package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -334,15 +331,22 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			compositeRows = new EObjectContainmentEList<CompositeRow>(CompositeRow.class, this, ScheduleReportPackage.TABLE__COMPOSITE_ROWS);
 		}
 		EList<Row> rows = getRows();
+		compositeRows.clear();
 		
 		for (Row row: rows) {
-			CompositeRow compositeRow = new CompositeRowImpl();
-			
-			compositeRow.setPinnedRow(row);
-			compositeRow.setPreviousRow(row);
-			
-			compositeRows.add(compositeRow);
+			if (row.isReference()) {
+				Row lhs = row.getLhsLink();
+				if (lhs != null) {
+					CompositeRow compositeRow = new CompositeRowImpl();
+					
+					compositeRow.setPinnedRow(row);
+					compositeRow.setPreviousRow(lhs);
+					
+					compositeRows.add(compositeRow);
+				}
+			}
 		}
+
 		return compositeRows;
 	}
 

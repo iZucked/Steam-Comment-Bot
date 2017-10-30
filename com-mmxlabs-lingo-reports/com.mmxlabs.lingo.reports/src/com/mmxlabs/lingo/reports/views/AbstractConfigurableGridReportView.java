@@ -169,6 +169,10 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				public int compare(final Viewer viewer, Object e1, Object e2) {
 					RowGroup g1 = null;
 					RowGroup g2 = null;
+					
+					Boolean firstIsComposite = false;
+					Boolean secondIsComposite = false;
+					
 					if (e1 instanceof Row) {
 						g1 = ((Row) e1).getRowGroup();
 					}
@@ -179,14 +183,24 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					if (e1 instanceof CompositeRow) {
 						g1 = ((CompositeRow) e1).getPinnedRow().getRowGroup();
 						e1 = ((CompositeRow) e1).getPinnedRow();
+						firstIsComposite = true;
 					}
 					if (e2 instanceof CompositeRow) {
 						g2 = ((CompositeRow) e2).getPinnedRow().getRowGroup();
 						e2 = ((CompositeRow) e2).getPinnedRow();
+						secondIsComposite = true;
 					}
 					
 					if (g1 == g2) {
-						return vc.compare(viewer, e1, e2);
+						int res = vc.compare(viewer, e1, e2);
+						
+						if (firstIsComposite && !secondIsComposite) {
+							return 1;
+						} else if (secondIsComposite && !firstIsComposite) {
+							return -1;
+						} 						
+
+						return res;
 					} else {
 						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
 						final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);

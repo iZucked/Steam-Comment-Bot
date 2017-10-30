@@ -191,7 +191,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 						elementCollector.collectElements(other, false);
 					}
 					elementCollector.endCollecting();
-					ViewerHelper.setInput(viewer, true, table.getRows());
+					List<Object> rows = new ArrayList<>(table.getRows().size() + table.getCompositeRows().size());
+					rows.addAll(table.getRows());
+					rows.addAll(table.getCompositeRows());
+					ViewerHelper.setInput(viewer, true, rows);
 				}
 			};
 

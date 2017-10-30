@@ -386,7 +386,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	}
 	
 	public void processCompositeInputs(final List<CompositeRow> result) {
-		clearInputEquivalents();
 		for (final CompositeRow row : result) {
 			setInputEquivalents(row, row.getPinnedRow().getInputEquivalents());
 			setInputEquivalents(row, row.getPreviousRow().getInputEquivalents());
