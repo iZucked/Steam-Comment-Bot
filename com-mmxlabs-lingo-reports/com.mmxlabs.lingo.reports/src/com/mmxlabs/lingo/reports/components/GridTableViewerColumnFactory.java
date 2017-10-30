@@ -100,8 +100,8 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						if (pinnedElement != null && previousElement != null) {
 							Object valuePinned = formatter.getComparable(pinnedElement);
 							Object valuePrevious = formatter.getComparable(previousElement);
-
-							// Check null pointer
+							
+							
 							deltaValue = "";
 							if (valuePrevious != null && valuePinned != null) {
 								if (valuePrevious instanceof Integer) {
