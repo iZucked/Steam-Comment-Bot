@@ -78,6 +78,8 @@ public class ConcurrentModelReferencesTest {
 		for (int i = 0; i < numRunnables; ++i) {
 			runnables.add(() -> {
 
+				// TODO: This can cause concurreny issues if the underlying array needs to grow.
+				// This also needs to be synchronized!
 				instance.eAdapters().add(contentAdapter);
 
 				// Sleep before removing
