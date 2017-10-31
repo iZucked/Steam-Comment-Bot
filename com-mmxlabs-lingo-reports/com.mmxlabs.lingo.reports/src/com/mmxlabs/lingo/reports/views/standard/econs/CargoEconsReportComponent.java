@@ -735,8 +735,9 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			aggregateList.addAll(cargoAllocationPairs);
 			aggregateList.addAll(vesselEventVisitsPairs);
 			
-			// Only create aggregate if more than one element
-			if (validObjects.size() > 1) {
+			// Only create aggregate if more than two element
+			// The cargo/vesselEvent and its partial pair
+			if (validObjects.size() > 2) {
 				validObjects.add(aggregateList);
 			}
 		}
