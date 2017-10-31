@@ -162,6 +162,11 @@ public abstract class AbstractMicroTestCase {
 	public void optimiseWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker) {
 		evaluateWithLSOTest(true, null, null, checker, null);
 	}
+	
+	public void optimiseWithLSOTest(@Nullable final Consumer<OptimisationPlan> tweaker, final @NonNull Consumer<LNGScenarioRunner> checker) {
+		evaluateWithLSOTest(true, tweaker, null, checker, null);
+	}
+
 
 	public void optimiseWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
 		evaluateWithLSOTest(true, null, null, checker, overrides);
