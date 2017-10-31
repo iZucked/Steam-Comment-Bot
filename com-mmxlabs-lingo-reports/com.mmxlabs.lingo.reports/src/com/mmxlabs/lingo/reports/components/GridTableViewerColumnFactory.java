@@ -22,6 +22,8 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -101,6 +103,16 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							Object valuePinned = formatter.getComparable(pinnedElement);
 							Object valuePrevious = formatter.getComparable(previousElement);
 							
+							
+							// Those formatters will also return -MAX_VALUE for the reference row
+							// Bug ? 
+							if (formatter instanceof GeneratedCharterDaysFormatter) {
+								valuePinned = new Double(0);
+							}
+
+							if (formatter instanceof GeneratedCharterRevenueFormatter) {
+								valuePinned = new Integer(0);
+							}
 							
 							deltaValue = "";
 							if (valuePrevious != null && valuePinned != null) {
