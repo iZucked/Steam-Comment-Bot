@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
-import java.beans.beancontext.BeanContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -483,7 +482,8 @@ public class FeasibleTimeWindowTrimmer {
 
 						final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[index - 1];
 
-						if (currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot) != AvailableRouteChoices.OPTIMAL) {
+						if (currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot) != AvailableRouteChoices.OPTIMAL || 
+								currentPortTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(prevPortSlot)) {
 							// Choice already allocation, skip
 							index++;
 							prevElement = element;
@@ -585,11 +585,18 @@ public class FeasibleTimeWindowTrimmer {
 										|| directTravelTime <= panamaTravelTime) {
 
 									if (pass != 0) {
-										// In the first pass, do not set the voyage choice as this may cause problems further down the line
-
-										// journey can be made direct (or it does not go across Panama)
-										travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
-										currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+										// In the first pass, do not set the voyage choice as this may cause problems further down the line (however, northbound Panama may be allowed)
+										if (northBound) {
+											// if northbound, allow Panama
+											int panamaIdleTime =  panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+											travelTimeData.setMinTravelTime(index - 1, Math.min(Math.min(suezTravelTime, directTravelTime), panamaTravelTime + panamaIdleTime));
+											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
+											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
+										} else {
+											// journey can be made direct (or it does not go across Panama)
+											travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
+											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
+										}
 										changed = true;
 									}
 

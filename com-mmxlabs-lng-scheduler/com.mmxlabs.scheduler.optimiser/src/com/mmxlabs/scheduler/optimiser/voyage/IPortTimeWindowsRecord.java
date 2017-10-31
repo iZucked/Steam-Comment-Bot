@@ -68,7 +68,14 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionSlot);
 
+	void setSlotAdditionalPanamaDetails(IPortSlot slot, boolean isConstrainedPanamaJourney, int additionalPanamaIdleTimeInHours);
+
 	IRouteOptionBooking getRouteOptionBooking(IPortSlot slot);
 
 	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot);
+	
+	boolean getSlotIsNextVoyageConstrainedPanama(IPortSlot slot);
+
+	int getSlotAdditionalPanamaIdleHours(IPortSlot slot);
+
 }
