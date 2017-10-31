@@ -165,9 +165,9 @@ public class PortModelImporter implements ISubmodelImporter {
 					location = PortFactory.eINSTANCE.createLocation();
 					port.setLocation(location);
 				}
-				if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
-					location.setMmxId(port.getName());
-				}
+//				if (location.getMmxId() == null || location.getMmxId().isEmpty()) {
+//					location.setMmxId(port.getName());
+//				}
 			}
 		}
 		if (inputs.containsKey(PORT_GROUP_KEY)) {

@@ -159,6 +159,22 @@
                      class="PortCountryGroup">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortIDConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortIDConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PortIDConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PortModel">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

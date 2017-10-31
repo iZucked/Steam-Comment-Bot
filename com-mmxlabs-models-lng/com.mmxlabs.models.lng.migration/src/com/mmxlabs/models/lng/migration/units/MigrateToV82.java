@@ -66,7 +66,7 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 			if (ports != null) {
 
 				// Record the first port by ID.
-				Map<String, EObjectWrapper> firstPort = new HashMap<>();
+//				Map<String, EObjectWrapper> firstPort = new HashMap<>();
 
 				Set<String> seenIDs = new HashSet<>();
 				Set<EObjectWrapper> duplicatePorts = new HashSet<>();
@@ -95,56 +95,58 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 							mmxId = "L_JP_Niiga";
 						}
 					}
+//
+//					if (mmxId == null) {
+//						throw new RuntimeException("No ID for " + name);
+//					}
+//					assert mmxId != null;
+//
+//					if (preferredNameMap.containsKey(mmxId)) {
+//						List<String> newNames = new LinkedList<>();
+//						if (otherNamesList != null) {
+//							newNames.addAll(otherNamesList);
+//						}
+//						if (!newNames.contains(name)) {
+//							newNames.add(0, (String) name);
+//							location.setAttrib("otherNames", newNames);
+//						}
+//						String preferredName = preferredNameMap.get(mmxId);
+//						location.setAttrib("name", preferredName);
+//						port.setAttrib("name", preferredName);
+//					}
 
-					if (mmxId == null) {
-						throw new RuntimeException("No ID for " + name);
-					}
-					assert mmxId != null;
-
-					if (preferredNameMap.containsKey(mmxId)) {
-						List<String> newNames = new LinkedList<>();
-						if (otherNamesList != null) {
-							newNames.addAll(otherNamesList);
-						}
-						if (!newNames.contains(name)) {
-							newNames.add(0, (String) name);
-							location.setAttrib("otherNames", newNames);
-						}
-						String preferredName = preferredNameMap.get(mmxId);
-						location.setAttrib("name", preferredName);
-						port.setAttrib("name", preferredName);
-					}
-
-					if (!seenIDs.add(mmxId)) {
-
-						final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(Collections.singleton(port), model);
-
-						final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(port);
-						if (usages != null) {
-							for (final EStructuralFeature.Setting setting : usages) {
-								if (setting.getEObject() != portModel) {
-									if (setting.getEStructuralFeature().isMany()) {
-										Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
-										if (collection.contains(firstPort.get(mmxId))) {
-											// Replacement is already in the collection, so just remove it
-											collection.remove(port);
-										} else {
-											EcoreUtil.replace(setting, port, firstPort.get(mmxId));
-										}
-									} else {
-										EcoreUtil.replace(setting, port, firstPort.get(mmxId));
-									}
-
-								}
-							}
-						}
-						duplicatePorts.add(port);
-						continue;
-					} else {
-						// Record this port as an original
-						firstPort.put(mmxId, port);
-					}
+//					if (!seenIDs.add(mmxId)) {
+//
+//						final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(Collections.singleton(port), model);
+//
+//						final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(port);
+//						if (usages != null) {
+//							for (final EStructuralFeature.Setting setting : usages) {
+//								if (setting.getEObject() != portModel) {
+//									if (setting.getEStructuralFeature().isMany()) {
+//										Collection<?> collection = (Collection<?>) setting.getEObject().eGet(setting.getEStructuralFeature());
+//										if (collection.contains(firstPort.get(mmxId))) {
+//											// Replacement is already in the collection, so just remove it
+//											collection.remove(port);
+//										} else {
+//											EcoreUtil.replace(setting, port, firstPort.get(mmxId));
+//										}
+//									} else {
+//										EcoreUtil.replace(setting, port, firstPort.get(mmxId));
+//									}
+//
+//								}
+//							}
+//						}
+//						duplicatePorts.add(port);
+//						continue;
+//					} else {
+//						// Record this port as an original
+//						firstPort.put(mmxId, port);
+//					}
+					if (mmxId != null) {
 					location.setAttrib("mmxId", mmxId);
+					}
 
 					location.setAttrib("timeZone", port.getAttrib("timeZone"));
 					port.unsetFeature("timeZone");
