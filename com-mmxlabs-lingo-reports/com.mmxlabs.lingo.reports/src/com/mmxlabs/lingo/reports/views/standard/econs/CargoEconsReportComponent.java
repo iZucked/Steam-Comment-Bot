@@ -447,13 +447,15 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				} else {
 					pairs.add(new CargoAllocationPair(a, null));
 				}
-				
-				// Process possible final lonely element
-//				if (i == (cargoAllocations.size() - 1)) {
-//					CargoAllocation last = cargoAllocations.get(i);
-//					pairs.add(new CargoAllocationPair(last, null));
-//				}
-				
+			}
+
+			// Process possible final lonely element
+			if (cargoAllocations.size() > 1) {
+				CargoAllocation a = cargoAllocations.get(cargoAllocations.size() - 2);
+				CargoAllocation b = cargoAllocations.get(cargoAllocations.size() - 1);
+				if (!a.getName().equals(b.getName())) {
+					pairs.add(new CargoAllocationPair(b, null));
+				}
 			}
 			return pairs;
 		}
@@ -483,6 +485,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		static public List<VesselEventVisitPair> generateVesselEventPair(List<VesselEventVisit> vesselEventVisits) {
 			Collections.sort(vesselEventVisits, (a, b) -> a.name().compareTo(b.name()));
 			List<VesselEventVisitPair> pairs = new ArrayList<>();
+				// Edge case, only one lonely element in the list
+			
+			if (vesselEventVisits.size() == 1) {
+				VesselEventVisit a = vesselEventVisits.get(0);
+				pairs.add(new VesselEventVisitPair(a, null));
+			}
 			
 			for(int i = 0; i < vesselEventVisits.size() - 1; i++) {
 				VesselEventVisit a = vesselEventVisits.get(i);
@@ -495,6 +503,14 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					pairs.add(new VesselEventVisitPair(a, null));
 				}
 			}
+			
+			if (vesselEventVisits.size() > 1) {
+				VesselEventVisit a = vesselEventVisits.get(vesselEventVisits.size() - 2);
+				VesselEventVisit b = vesselEventVisits.get(vesselEventVisits.size() - 1);
+				if (!a.name().equals(b.name())) {
+					pairs.add(new VesselEventVisitPair(b, null));
+				}
+			} 
 			return pairs;
 		}
 		
