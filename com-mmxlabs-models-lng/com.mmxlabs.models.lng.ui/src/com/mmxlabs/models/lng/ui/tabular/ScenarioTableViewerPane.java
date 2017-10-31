@@ -330,15 +330,15 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		return scenarioEditingLocation.getEditingDomain();
 	}
 
-	public AdapterFactory getAdapterFactory() {
+	public @NonNull AdapterFactory getAdapterFactory() {
 		return scenarioEditingLocation.getAdapterFactory();
 	}
 
-	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
+	public @NonNull IReferenceValueProviderProvider getReferenceValueProviderCache() {
 		return scenarioEditingLocation.getReferenceValueProviderCache();
 	}
 
-	public IScenarioEditingLocation getJointModelEditorPart() {
+	public @NonNull IScenarioEditingLocation getJointModelEditorPart() {
 		return scenarioEditingLocation;
 	}
 

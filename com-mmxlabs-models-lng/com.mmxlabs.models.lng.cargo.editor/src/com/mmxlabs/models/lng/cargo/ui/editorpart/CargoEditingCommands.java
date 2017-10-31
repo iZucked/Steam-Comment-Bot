@@ -53,7 +53,6 @@ public class CargoEditingCommands {
 
 	private final @Nullable BaseLegalEntity defaultEntity;
 	private final @NonNull CargoModel cargoModel;
-	private final @NonNull CommercialModel commercialModel;
 
 	private @NonNull MMXRootObject rootObject;
 
@@ -62,7 +61,6 @@ public class CargoEditingCommands {
 		this.editingDomain = editingDomain;
 		this.rootObject = rootObject;
 		this.cargoModel = cargoModel;
-		this.commercialModel = commercialModel;
 		this.modelFactoryRegistry = modelFactoryRegistry;
 
 		// No need for listener to update on change to count as users cannot edit number of entities.
@@ -91,7 +89,7 @@ public class CargoEditingCommands {
 		return (T) null;
 	}
 
-	public Cargo createNewCargo(final List<Command> setCommands, final CargoModel cargoModel) {
+	public @NonNull Cargo createNewCargo(final List<Command> setCommands, final CargoModel cargoModel) {
 		// Create a cargo
 		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
 		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
@@ -105,7 +103,7 @@ public class CargoEditingCommands {
 		return newCargo;
 	}
 
-	public SpotLoadSlot createNewSpotLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
+	public @NonNull SpotLoadSlot createNewSpotLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
 
 		final SpotLoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getSpotLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		newLoad.setDESPurchase(isDESPurchase);
@@ -200,7 +198,7 @@ public class CargoEditingCommands {
 		}
 	}
 
-	public LoadSlot createNewLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase) {
+	public @NonNull LoadSlot createNewLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase) {
 
 		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		newLoad.setDESPurchase(isDESPurchase);
@@ -213,7 +211,7 @@ public class CargoEditingCommands {
 		return newLoad;
 	}
 
-	public DischargeSlot createNewDischarge(final List<Command> setCommands, final CargoModel cargoModel, final boolean isFOBSale) {
+	public @NonNull DischargeSlot createNewDischarge(final List<Command> setCommands, final CargoModel cargoModel, final boolean isFOBSale) {
 
 		final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 		newDischarge.setFOBSale(isFOBSale);
@@ -228,7 +226,7 @@ public class CargoEditingCommands {
 		return newDischarge;
 	}
 
-	public SpotDischargeSlot createNewSpotDischarge(final List<Command> setCommands, final CargoModel cargoModel, final SpotMarket market) {
+	public @NonNull SpotDischargeSlot createNewSpotDischarge(final List<Command> setCommands, final CargoModel cargoModel, final SpotMarket market) {
 
 		final SpotDischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getSpotDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
