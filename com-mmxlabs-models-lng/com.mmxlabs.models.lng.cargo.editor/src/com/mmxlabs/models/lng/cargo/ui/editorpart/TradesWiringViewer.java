@@ -1934,12 +1934,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						setCommands.forEach(c -> cmd.append(c));
 
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newLoad, () -> {
-							// If not ok, revert state;
-							// Revert state
-							assert commandStack.getUndoCommand() == cmd;
-							commandStack.undo();
-						});
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newLoad, commandStack.getMostRecentCommand());
 					}
 				};
 				addActionToMenu(newLoad, menu);
@@ -1956,12 +1951,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
 						setCommands.forEach(c -> cmd.append(c));
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newLoad, () -> {
-							// If not ok, revert state;
-							// Revert state
-							assert commandStack.getUndoCommand() == cmd;
-							commandStack.undo();
-						});
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newLoad, commandStack.getMostRecentCommand());
 					}
 				};
 				addActionToMenu(newDESPurchase, menu);
@@ -1979,12 +1969,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						setCommands.forEach(c -> cmd.append(c));
 
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newDischarge, () -> {
-							// If not ok, revert state;
-							// Revert state
-							assert commandStack.getUndoCommand() == cmd;
-							commandStack.undo();
-						});
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());
 					}
 				};
 
@@ -2003,12 +1988,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						setCommands.forEach(c -> cmd.append(c));
 
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newDischarge, () -> {
-							// If not ok, revert state;
-							// Revert state
-							assert commandStack.getUndoCommand() == cmd;
-							commandStack.undo();
-						});
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());
 					}
 				};
 				addActionToMenu(newFOBSale, menu);

@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EClass;
@@ -125,13 +126,7 @@ class SingleAddAction extends LockableAction {
 			}
 			final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
 			commandStack.execute(add);
-
-			DetailCompositeDialogUtil.editSingleObject(context.getEditorPart(), settings.iterator().next().getInstance(), () -> {
-				// If not ok, revert state;
-				// Revert state
-				assert commandStack.getUndoCommand() == add;
-				commandStack.undo();
-			});
+			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(context.getEditorPart(), settings.iterator().next().getInstance(), commandStack.getMostRecentCommand());
 		}
 	}
 
