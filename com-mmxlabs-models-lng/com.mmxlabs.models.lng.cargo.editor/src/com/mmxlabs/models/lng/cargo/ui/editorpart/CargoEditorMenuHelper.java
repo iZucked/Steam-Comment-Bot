@@ -247,6 +247,7 @@ public class CargoEditorMenuHelper {
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
+					createPanamaAssignmentMenus(manager, dischargeSlot);
 				} else if (dischargeSlot.getCargo() != null) {
 
 					boolean foundDESPurchase = false;
@@ -511,7 +512,15 @@ public class CargoEditorMenuHelper {
 			}
 
 		}
+	}
+	
+	private void createPanamaAssignmentMenus(final IMenuManager menuManager, final Slot slot) {
+		menuManager.add(new Separator());
 
+		if (slot != null) {
+			final MenuManager reassignMenuManager = new MenuManager("Panama Assignment", null);
+			menuManager.add(reassignMenuManager);
+		}
 	}
 
 	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes) {
@@ -564,6 +573,7 @@ public class CargoEditorMenuHelper {
 				createDeleteSlotMenu(manager, loadSlot);
 				if (loadSlot.isDESPurchase()) {
 					createAssignmentMenus(manager, loadSlot);
+					createPanamaAssignmentMenus(manager, loadSlot);
 				} else if (loadSlot.getCargo() != null) {
 					boolean foundFobSale = false;
 					for (final Slot s : loadSlot.getCargo().getSlots()) {
