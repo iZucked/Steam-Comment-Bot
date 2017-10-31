@@ -105,14 +105,21 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							deltaValue = "";
 							if (valuePrevious != null && valuePinned != null) {
 								if (valuePrevious instanceof Integer) {
-									int delta = ((int) valuePinned) - ((int) valuePrevious);
-									deltaValue = String.valueOf(delta);
+									int delta = ((int) valuePrevious) - ((int) valuePinned);
+									if (Math.abs(delta) > 1000)  {
+										deltaValue = String.valueOf(delta);
+									}
 								} else if (valuePrevious instanceof Long) {
-									long delta = ((long) valuePinned) - ((long) valuePrevious);
-									deltaValue = String.valueOf(delta);
+									long delta = ((long) valuePrevious) - ((long) valuePinned);
+									if (Math.abs(delta) > 1000L)  {
+										deltaValue = String.valueOf(delta);
+									}
 								} else if (valuePrevious instanceof Double) {
-									double delta = ((double) valuePinned) - ((double) valuePrevious);
-									deltaValue = String.valueOf(delta);
+									double delta = ((double) valuePrevious) - ((double) valuePinned);
+
+									if (Math.abs(delta) > 1000.0f)  {
+										deltaValue = String.valueOf(delta);
+									}
 								} else if (valuePrevious instanceof String) {
 									if (col.getText().compareTo("Scenario") == 0) {
 										deltaValue = " ";
