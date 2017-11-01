@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.its.tests.microcases.moves;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Random;
 
 import org.eclipse.emf.common.command.Command;
@@ -18,14 +17,10 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl;
-import com.mmxlabs.models.lng.cargo.impl.VesselEventImpl;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
@@ -37,7 +32,6 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -65,7 +59,8 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testSimpleInsertOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
 
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
@@ -134,8 +129,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testSimpleRemoveOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
@@ -205,8 +201,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testInsertOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
@@ -277,8 +274,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testRemoveOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
@@ -349,8 +347,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testExportOptionalCharterOutMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
@@ -398,8 +397,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testExportOptionalCharterOutWithRelocationMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
@@ -448,8 +448,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 	public void testExportOptionalCharterOutWithRelocationRemoveMove() throws Exception {
 
 		// Construct the vessel
-		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
-
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
