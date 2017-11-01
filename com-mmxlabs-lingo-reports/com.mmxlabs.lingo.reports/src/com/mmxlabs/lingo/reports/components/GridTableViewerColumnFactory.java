@@ -140,6 +140,10 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 										deltaValue = " ";
 									}
 
+									if (col.getText().compareTo("Vessel") == 0) {
+										deltaValue = (String) valuePinned;
+									}
+
 									if (col.getText().compareTo("L-ID") == 0) {
 										deltaValue = (String) valuePinned;
 									}

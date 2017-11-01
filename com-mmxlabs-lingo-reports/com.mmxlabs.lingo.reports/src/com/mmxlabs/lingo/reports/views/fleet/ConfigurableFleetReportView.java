@@ -17,10 +17,14 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +74,9 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	public static final String ID = "com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView";
 
 	private final FleetBasedReportBuilder builder;
-
+	
+	private boolean diffMode = false;
+	
 	@Inject(optional = true)
 	private Iterable<IFleetBasedColumnFactoryExtension> columnFactoryExtensions;
 
@@ -96,7 +102,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		this.builder = builder;
 		builder.setBlockManager(getBlockManager());
 	}
-
+	
+	public void toggleDiffMode() {
+		diffMode = !diffMode;
+	}
+	
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		// if (Table.class.isAssignableFrom(adapter)) {
@@ -193,7 +203,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					elementCollector.endCollecting();
 					List<Object> rows = new ArrayList<>(table.getRows().size() + table.getCompositeRows().size());
 					rows.addAll(table.getRows());
-					rows.addAll(table.getCompositeRows());
+					
+					if (diffMode) {
+						rows.addAll(table.getCompositeRows());
+					}
+					
 					ViewerHelper.setInput(viewer, true, rows);
 				}
 			};
@@ -209,7 +223,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
-
+		
+		// Add diff button
+		Action action = new DiffAction(viewer, this);
+		IActionBars actionBars = getViewSite().getActionBars();
+		IToolBarManager toolBar = actionBars.getToolBarManager();
+		toolBar.add(action);
+		
 		viewer.setContentProvider(new ArrayContentProvider());
 
 		// Add a filter to only show certain rows.
@@ -248,6 +268,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
+	}
+	
+	public void triggerSeletedScenariosServiceListener() {
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	@Override

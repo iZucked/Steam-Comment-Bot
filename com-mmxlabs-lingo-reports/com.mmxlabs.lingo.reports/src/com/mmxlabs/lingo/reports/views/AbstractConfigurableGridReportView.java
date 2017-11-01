@@ -193,13 +193,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					
 					if (g1 == g2) {
 						int res = vc.compare(viewer, e1, e2);
-						
-						if (firstIsComposite && !secondIsComposite) {
-							return 1;
-						} else if (secondIsComposite && !firstIsComposite) {
-							return -1;
-						} 						
-
 						return res;
 					} else {
 						final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);

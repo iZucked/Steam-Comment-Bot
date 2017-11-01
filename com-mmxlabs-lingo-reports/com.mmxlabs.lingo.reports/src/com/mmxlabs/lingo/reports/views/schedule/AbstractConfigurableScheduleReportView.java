@@ -132,7 +132,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			
 			List<Object> rows = new ArrayList<>(table.getRows().size() + table.getCompositeRows().size());
 			rows.addAll(table.getRows());
-			rows.addAll(table.getCompositeRows());
+			
+			/* We don't need to diff the schedule summary for now */
+			//rows.addAll(table.getCompositeRows());
 			
 			ViewerHelper.setInput(viewer, true, rows);
 		}
