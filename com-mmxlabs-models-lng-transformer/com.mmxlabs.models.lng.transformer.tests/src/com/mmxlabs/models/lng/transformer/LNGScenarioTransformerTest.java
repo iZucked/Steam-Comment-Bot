@@ -9,10 +9,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -738,11 +738,11 @@ public class LNGScenarioTransformerTest {
 		return 0.0;
 	}
 
-	private static class MyMatcher extends BaseMatcher<ILongCurve> {
+	private static class MyMatcher implements ArgumentMatcher<ILongCurve> {
 		ILongCurve reference;
 
 		public static ILongCurve eq(final ILongCurve reference) {
-			return Matchers.argThat(new MyMatcher(reference));
+			return ArgumentMatchers.argThat(new MyMatcher(reference));
 		}
 
 		public MyMatcher(final ILongCurve reference) {
@@ -751,31 +751,14 @@ public class LNGScenarioTransformerTest {
 		}
 
 		@Override
-		public boolean matches(final Object item) {
-			if (item instanceof ILongCurve) {
-				final ILongCurve other = (ILongCurve) item;
-				long a = reference.getValueAtPoint(0);
-				long b = other.getValueAtPoint(0);
-				if (a != b) {
-					int ii = 0;
-				}
-				return a == b;
+		public boolean matches(final ILongCurve item) {
+			final ILongCurve other = (ILongCurve) item;
+			long a = reference.getValueAtPoint(0);
+			long b = other.getValueAtPoint(0);
+			if (a != b) {
+				int ii = 0;
 			}
-			return false;
-		}
-
-		@Override
-		public void describeTo(final Description description) {
-			description.appendText("MyMatcher: " + reference.getValueAtPoint(0));
-		}
-
-		@Override
-		public void describeMismatch(Object item, Description description) {
-			if (item instanceof ILongCurve) {
-				final ILongCurve other = (ILongCurve) item;
-				description.appendText("MyMatcher: " + other.getValueAtPoint(0));
-			}
-			// description.appendText("was ").appendValue(item);
+			return a == b;
 		}
 	};
 }

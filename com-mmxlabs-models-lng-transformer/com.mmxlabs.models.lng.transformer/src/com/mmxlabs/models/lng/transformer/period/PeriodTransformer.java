@@ -213,8 +213,10 @@ public class PeriodTransformer {
 		final ModelDistanceProvider modelDistanceProvider = ScenarioModelUtil.getModelDistanceProvider(outputDataProvider);
 
 		// Init extensions
-		for (final IPeriodTransformerExtension extension : extensions) {
-			extension.init(cargoModel, ScenarioModelUtil.getScheduleModel(output).getSchedule());
+		if (extensions != null) {
+			for (final IPeriodTransformerExtension extension : extensions) {
+				extension.init(cargoModel, ScenarioModelUtil.getScheduleModel(output).getSchedule());
+			}
 		}
 
 		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
