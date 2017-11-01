@@ -8,4 +8,4 @@ Fragment-Host: com.mmxlabs.common.common-recorder
 Bundle-Name: Common-Recorder: Tests
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- org.mockito.mockito-all;bundle-version="1.9.5"
+ org.mockito.mockito-core;bundle-version="1.9.5"
