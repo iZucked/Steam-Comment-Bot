@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Logger
-Fragment-Host: org.slf4j.api;bundle-version="1.7.0"
+Fragment-Host: org.slf4j.api;bundle-version="1.7.2"
 Bundle-SymbolicName: com.mmxlabs.rcp.logger
 Bundle-Version: 4.3.11.qualifier
 Bundle-Vendor: Minimax Labs
