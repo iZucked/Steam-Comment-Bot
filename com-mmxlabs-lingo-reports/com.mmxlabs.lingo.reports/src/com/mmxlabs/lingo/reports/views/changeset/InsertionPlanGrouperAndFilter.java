@@ -6,16 +6,20 @@ package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -32,7 +36,9 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -59,19 +65,28 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		Complexity, // Group by complexity
 	}
 
-	private final Set<ChangeSet> setsToInclude = new HashSet<>();
-	private boolean filterActive = false;
+	public final Set<Object> expandedGroups = new HashSet<>();
+	// private boolean filterActive = false;
 	private GroupMode groupMode = GroupMode.TargetAndComplexity;
+	private int maxComplexity = 4;
 
 	private final List<UserFilter> userFilters = new LinkedList<>();
 
 	public Map<Pair<String, UserFilter.FilterSlotType>, Set<UserFilter>> exploreSlotOptions = new HashMap<>();
 
+	public boolean insertionModeActive = false;
+
+	public boolean isInsertionModeActive() {
+		return insertionModeActive;
+	}
+
+	public void setInsertionModeActive(boolean insertionModeActive) {
+		this.insertionModeActive = insertionModeActive;
+	}
+
 	@Override
-	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-
+	public boolean select(final Viewer viewer, final Object parentElement, Object element) {
 		if (element instanceof ChangeSetTableGroup) {
-
 			final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
 			for (final UserFilter filter : userFilters) {
 				if (!filter.include(group)) {
@@ -88,22 +103,32 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			}
 		}
 
-		if (!filterActive) {
+		if (!insertionModeActive) {
 			return true;
+		}
+		if (element instanceof ChangeSetTableGroup) {
+
+			ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+			if (changeSetTableGroup.getComplexity() > maxComplexity) {
+				return false;
+			}
+		}
+		if (parentElement instanceof ChangeSetTableGroup) {
+			ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+			if (changeSetTableGroup.getComplexity() > maxComplexity) {
+				return false;
+			}
 		}
 		if (userFilters.isEmpty()) {
 
-			if (element instanceof ChangeSet) {
-				return setsToInclude.contains(element);
-			}
-			if (parentElement instanceof ChangeSet) {
-				return setsToInclude.contains(parentElement);
-			}
 			if (element instanceof ChangeSetTableGroup) {
-				return setsToInclude.contains(((ChangeSetTableGroup) element).getChangeSet());
+
+				ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+				return !changeSetTableGroup.isGroupAlternative() || expandedGroups.contains(changeSetTableGroup.getGroupObject());
 			}
 			if (parentElement instanceof ChangeSetTableGroup) {
-				return setsToInclude.contains(((ChangeSetTableGroup) parentElement).getChangeSet());
+				ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+				return !changeSetTableGroup.isGroupAlternative() || expandedGroups.contains(changeSetTableGroup.getGroupObject());
 			}
 		}
 		return true;
@@ -149,7 +174,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				} else if (mode == GroupMode.Target) {
 					return sendTo == other.sendTo;
 				} else if (mode == GroupMode.TargetAndComplexity) {
-					return this.changeCount == other.changeCount && this.sendTo == other.sendTo;
+					return this.changeCount == other.changeCount && Objects.equal(this.sendTo, other.sendTo);
 				}
 				throw new IllegalStateException();
 			}
@@ -157,18 +182,15 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 	}
 
-	public List<ChangeSet> processChangeSetRoot(final ChangeSetRoot root, final NamedObject target) {
-		setsToInclude.clear();
+	public Consumer<ChangeSetTableRoot> processChangeSetRoot(ChangeSetRoot root, final NamedObject target) {
+		// setsToInclude.clear();
 		userFilters.clear();
 		exploreSlotOptions.clear();
 
 		// Group by change count and target
-		final Map<ChangeSetMetadata, List<ChangeSet>> grouper = new LinkedHashMap<>();
 		for (final ChangeSet changeSet : root.getChangeSets()) {
 			final Collection<ChangeSetRow> changeSetRows = changeSet.getChangeSetRowsToBase();
-			int structuralChanges = 0;
-			ChangeSetRow targetRow = null;
-			ChangeSetRowData targetRowData = null;
+
 			for (final ChangeSetRow row : changeSetRows) {
 				final ChangeSetRowDataGroup afterData = row.getAfterData();
 				if (afterData != null) {
@@ -266,169 +288,60 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						}
 					}
 
-					if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
-						++structuralChanges;
-					}
-					for (final ChangeSetRowData d : afterData.getMembers()) {
-						if (d.getLoadSlot() == target || d.getDischargeSlot() == target) {
-							assert targetRow == null;
-							targetRow = row;
-							targetRowData = d;
-							break;
-						} else if (d.getLhsEvent() instanceof VesselEventVisit) {
-							VesselEventVisit vesselEventVisit = (VesselEventVisit) d.getLhsEvent();
-							if (vesselEventVisit.getVesselEvent() == target) {
-								assert targetRow == null;
-								targetRow = row;
-								targetRowData = d;
-								break;
-							}
-						}
-					}
+					// if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
+					// ++structuralChanges;
+					// }
+					// for (final ChangeSetRowData d : afterData.getMembers()) {
+					// if (d.getLoadSlot() == target || d.getDischargeSlot() == target) {
+					// assert targetRow == null;
+					// targetRow = row;
+					// targetRowData = d;
+					// break;
+					// } else if (d.getLhsEvent() instanceof VesselEventVisit) {
+					// VesselEventVisit vesselEventVisit = (VesselEventVisit) d.getLhsEvent();
+					// if (vesselEventVisit.getVesselEvent() == target) {
+					// assert targetRow == null;
+					// targetRow = row;
+					// targetRowData = d;
+					// break;
+					// }
+					// }
+					// }
 				}
-			}
-			final ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
-			key.changeCount = structuralChanges;
-			Object sendTo = null;
-			if (targetRow != null) {
-				if (targetRowData.getLoadSlot() == target) {
-					final DischargeSlot dischargeSlot = targetRowData.getDischargeSlot();
-					if (dischargeSlot == null) {
-						sendTo = "Open";
-					} else if (dischargeSlot instanceof SpotSlot) {
-						sendTo = ((SpotSlot) dischargeSlot).getMarket().eClass();
-					} else if (dischargeSlot.getContract() != null) {
-						sendTo = dischargeSlot.getContract();
-					} else {
-						sendTo = dischargeSlot.getName();
-					}
-
-				} else if (targetRowData.getDischargeSlot() == target) {
-					final LoadSlot loadSlot = targetRowData.getLoadSlot();
-					if (loadSlot == null) {
-						sendTo = "Open";
-					} else if (loadSlot instanceof SpotSlot) {
-						sendTo = ((SpotSlot) loadSlot).getMarket().eClass();
-					} else if (loadSlot.getContract() != null) {
-						sendTo = loadSlot.getContract();
-					} else {
-						sendTo = loadSlot.getName();
-					}
-				}
-				if (sendTo == null) {
-					final int ii = 0;
-				}
-				key.sendTo = sendTo;
-				grouper.computeIfAbsent(key, k -> new LinkedList<ChangeSet>()).add(changeSet);
 			}
 		}
 
-		for (final Map.Entry<ChangeSetMetadata, List<ChangeSet>> e : grouper.entrySet()) {
-			// NOTE: Double.MIN_VALUE != -Double.MAX_VALUE. Min value is smallest possible positive number....
-			double bestDelta = -Double.MAX_VALUE;
-			ChangeSet bestChangeSet = null;
-			String dest = "";
-			final ChangeSetMetadata m = e.getKey();
-			String prefix;
-			if (target instanceof LoadSlot) {
-				prefix = "Send to";
-			} else {
-				prefix = "Deliver from";
+		return (tableRoot) -> {
+			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
+			for (ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
+				Pair<String, Object> p = getDestination(tableGroup, target);
+				String label = p.getFirst();
+				ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
+				key.sendTo = p.getSecond();
+				key.changeCount = tableGroup.getComplexity();
+				tableGroup.setDescription(label);
+				grouper.computeIfAbsent(key, k -> new LinkedList<ChangeSetTableGroup>()).add(tableGroup);
 			}
-
-			if (m.sendTo instanceof Contract) {
-				dest = ((Contract) m.sendTo).getName();
-			} else if (m.sendTo instanceof Port) {
-				dest = "Spot at " + ((Port) m.sendTo).getName();
-			} else if (m.sendTo instanceof EClass) {
-				final EClass market = (EClass) m.sendTo;
-				if (market == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET) {
-					dest = "Spot FOB market";
-				} else if (market == SpotMarketsPackage.Literals.DES_PURCHASE_MARKET) {
-					dest = "Spot DES market";
-				} else if (market == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
-					dest = "Spot DES market";
-				} else if (market == SpotMarketsPackage.Literals.FOB_SALES_MARKET) {
-					dest = "Spot FOB market";
-				} else {
-					assert false;
-				}
-			} else if (m.sendTo instanceof String) {
-				dest = ((String) m.sendTo);
-			} else {
-				final int ii = 0;
-			}
-			{
-				double lastDelta = Double.MAX_VALUE;
-				final Iterator<ChangeSet> itr = e.getValue().iterator();
-				while (itr.hasNext()) {
-					final ChangeSet cs = itr.next();
-					final double delta = cs.getMetricsToBase().getPnlDelta();
-					if (Math.abs(delta - lastDelta) < 10_000.0) {
-						// itr.remove();
-						// lastDelta = delta;
-					} else {
-						lastDelta = delta;
+			for (Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
+				List<ChangeSetTableGroup> groups = e.getValue();
+				Collections.sort(groups, (a, b) -> Integer.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
+				boolean first = true;
+				double sortValue = 0.0;
+				for (ChangeSetTableGroup g : groups) {
+					if (g.getComplexity() > maxComplexity) {
+						continue;
 					}
+					g.setGroupAlternative(!first);
+					if (first) {
+						sortValue = g.getDeltaMetrics().getPnlDelta();
+						first = false;
+					}
+					g.setGroupSortValue(sortValue);
+					g.setGroupObject(e.getKey());
 				}
 			}
+		};
 
-			int idx = 0;
-			for (final ChangeSet changeSet : e.getValue()) {
-				switch (groupMode) {
-				case TargetAndComplexity: {
-					if (idx == 0) {
-						changeSet.setDescription(String.format("%s, ∆%d (%d/%d)", dest, m.changeCount, 1 + idx, e.getValue().size()));
-					} else {
-						changeSet.setDescription(String.format("%s, ∆%d (%d)", dest, m.changeCount, 1 + idx));
-					}
-					break;
-				}
-				case Target: {
-					if (idx == 0) {
-						changeSet.setDescription(String.format("%s, (%d/%d)", dest, 1 + idx, e.getValue().size()));
-					} else {
-						changeSet.setDescription(String.format("%s, (%d)", dest, 1 + idx));
-					}
-					break;
-				}
-				case Complexity: {
-					if (idx == 0) {
-						changeSet.setDescription(String.format("∆%d (%d/%d)", m.changeCount, 1 + idx, e.getValue().size()));
-					} else {
-						changeSet.setDescription(String.format("∆%d (%d)", m.changeCount, 1 + idx));
-					}
-					break;
-				}
-				default:
-					throw new IllegalStateException();
-				}
-				final double delta = changeSet.getMetricsToBase().getPnlDelta();
-				if (delta > bestDelta) {
-					bestDelta = delta;
-					bestChangeSet = changeSet;
-				}
-				++idx;
-			}
-			if (bestChangeSet != null) {
-				setsToInclude.add(bestChangeSet);
-			}
-		}
-
-		// Assume initial data is correctly ordered.
-		final List<ChangeSet> reorderedElements = new LinkedList<>();
-		for (final Map.Entry<ChangeSetMetadata, List<ChangeSet>> e : grouper.entrySet()) {
-			reorderedElements.addAll(e.getValue());
-		}
-		return reorderedElements;
-	}
-
-	public void toggleFilter() {
-		this.filterActive = !filterActive;
-	}
-
-	public void setFilterActive(final boolean b) {
-		this.filterActive = b;
 	}
 
 	public void setGroupMode(final GroupMode mode) {
@@ -451,7 +364,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	public boolean generateMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets,
 			@Nullable Object targetElement) {
-		if (filterActive) {
+		if (insertionModeActive) {
 
 			if (helper.hasActions()) {
 				helper.addSeparator();
@@ -1118,5 +1031,102 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			// }
 		}
 		// }
+	}
+
+	public @NonNull BiFunction<ChangeSetTableGroup, Integer, String> createLabelProvider() {
+		@NonNull
+		BiFunction<ChangeSetTableGroup, Integer, String> defaultLabelProvider = ChangeSetViewColumnHelper.getDefaultLabelProvider();
+		return (changeSetTableGroup, index) -> {
+			if (!insertionModeActive) {
+				return defaultLabelProvider.apply(changeSetTableGroup, index);
+			}
+
+			String dest = changeSetTableGroup.getDescription();
+			int complexity = changeSetTableGroup.getComplexity();
+			String base = String.format("%s, ∆%d ", dest, complexity);
+			if (userFilters.isEmpty()) {
+				if (expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
+					if (changeSetTableGroup.isGroupAlternative()) {
+
+					} else {
+
+					}
+
+				} else {
+					return base + " (+)";
+				}
+			}
+			return base;
+		};
+
+	}
+
+	private Pair<String, Object> getDestination(ChangeSetTableGroup tableGroup, Object target) {
+		ChangeSet changeSet = tableGroup.getChangeSet();
+		Object sendTo = null;
+		for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+			final ChangeSetRowDataGroup afterData = row.getAfterData();
+			if (afterData == null) {
+				continue;
+			}
+			for (ChangeSetRowData rowData : afterData.getMembers()) {
+				if (rowData.getLoadSlot() == target) {
+					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
+					if (dischargeSlot == null) {
+						sendTo = "Open";
+					} else if (dischargeSlot instanceof SpotSlot) {
+						sendTo = ((SpotSlot) dischargeSlot).getMarket().eClass();
+					} else if (dischargeSlot.getContract() != null) {
+						sendTo = dischargeSlot.getContract();
+					} else {
+						sendTo = dischargeSlot.getName();
+					}
+
+				} else if (rowData.getDischargeSlot() == target) {
+					final LoadSlot loadSlot = rowData.getLoadSlot();
+					if (loadSlot == null) {
+						sendTo = "Open";
+					} else if (loadSlot instanceof SpotSlot) {
+						sendTo = ((SpotSlot) loadSlot).getMarket().eClass();
+					} else if (loadSlot.getContract() != null) {
+						sendTo = loadSlot.getContract();
+					} else {
+						sendTo = loadSlot.getName();
+					}
+				}
+				if (sendTo != null) {
+					break;
+				}
+			}
+		}
+		if (sendTo == null) {
+			return new Pair<>("?", null);
+		}
+		if (sendTo instanceof String) {
+			return new Pair<>((String) sendTo, sendTo);
+		}
+		String dest;
+		if (sendTo instanceof Contract) {
+			dest = ((Contract) sendTo).getName();
+		} else if (sendTo instanceof Port) {
+			dest = "Spot at " + ((Port) sendTo).getName();
+		} else if (sendTo instanceof EClass) {
+			final EClass market = (EClass) sendTo;
+			if (market == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET) {
+				dest = "Spot FOB market";
+			} else if (market == SpotMarketsPackage.Literals.DES_PURCHASE_MARKET) {
+				dest = "Spot DES market";
+			} else if (market == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
+				dest = "Spot DES market";
+			} else if (market == SpotMarketsPackage.Literals.FOB_SALES_MARKET) {
+				dest = "Spot FOB market";
+			} else {
+				assert false;
+				throw new IllegalStateException();
+			}
+		} else {
+			dest = sendTo.toString();
+		}
+		return new Pair<>(dest, sendTo);
 	}
 }

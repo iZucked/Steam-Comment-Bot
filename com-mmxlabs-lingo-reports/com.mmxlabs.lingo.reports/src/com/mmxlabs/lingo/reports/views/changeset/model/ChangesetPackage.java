@@ -685,13 +685,58 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_GROUP__DESCRIPTION = 4;
 
 	/**
+	 * The feature id for the '<em><b>Complexity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__COMPLEXITY = 5;
+
+	/**
+	 * The feature id for the '<em><b>Sort Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__SORT_VALUE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Group Sort Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Group Object</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__GROUP_OBJECT = 8;
+
+	/**
+	 * The feature id for the '<em><b>Group Alternative</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE = 9;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Table Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP_FEATURE_COUNT = 5;
+	int CHANGE_SET_TABLE_GROUP_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Change Set Table Group</em>' class.
@@ -1554,6 +1599,61 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableGroup_Description();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getComplexity <em>Complexity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Complexity</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getComplexity()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_Complexity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getSortValue <em>Sort Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sort Value</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getSortValue()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_SortValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupSortValue <em>Group Sort Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Group Sort Value</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupSortValue()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_GroupSortValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupObject <em>Group Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Group Object</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupObject()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_GroupObject();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#isGroupAlternative <em>Group Alternative</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Group Alternative</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#isGroupAlternative()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableGroup_GroupAlternative();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow <em>Change Set Table Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2376,6 +2476,46 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET_TABLE_GROUP__DESCRIPTION = eINSTANCE.getChangeSetTableGroup_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Complexity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__COMPLEXITY = eINSTANCE.getChangeSetTableGroup_Complexity();
+
+		/**
+		 * The meta object literal for the '<em><b>Sort Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__SORT_VALUE = eINSTANCE.getChangeSetTableGroup_SortValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Group Sort Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE = eINSTANCE.getChangeSetTableGroup_GroupSortValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Group Object</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__GROUP_OBJECT = eINSTANCE.getChangeSetTableGroup_GroupObject();
+
+		/**
+		 * The meta object literal for the '<em><b>Group Alternative</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE = eINSTANCE.getChangeSetTableGroup_GroupAlternative();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl <em>Change Set Table Row</em>}' class.

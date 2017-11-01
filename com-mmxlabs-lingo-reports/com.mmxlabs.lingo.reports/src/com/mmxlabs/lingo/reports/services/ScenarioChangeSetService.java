@@ -15,16 +15,12 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.IPartListener;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;

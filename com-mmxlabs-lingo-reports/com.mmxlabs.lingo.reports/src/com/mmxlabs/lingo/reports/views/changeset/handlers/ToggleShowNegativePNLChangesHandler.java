@@ -12,14 +12,14 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 
-public class ToggleFilterInsertionPlansHandler {
+public class ToggleShowNegativePNLChangesHandler {
 
 	@Inject
 	private IEventBroker eventBroker;
 
 	@Execute
 	public void execute(MPart activePart) {
-		eventBroker.post(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES, activePart);
+		eventBroker.post(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NEGATIVE_PNL_CHANGES, activePart);
 	}
 
 }

@@ -42,6 +42,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getChangeSet <em>Change Set</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getComplexity <em>Complexity</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getSortValue <em>Sort Value</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getGroupSortValue <em>Group Sort Value</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getGroupObject <em>Group Object</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#isGroupAlternative <em>Group Alternative</em>}</li>
  * </ul>
  *
  * @generated
@@ -106,6 +111,106 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getComplexity() <em>Complexity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComplexity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int COMPLEXITY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getComplexity() <em>Complexity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComplexity()
+	 * @generated
+	 * @ordered
+	 */
+	protected int complexity = COMPLEXITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSortValue() <em>Sort Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSortValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double SORT_VALUE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getSortValue() <em>Sort Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSortValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected double sortValue = SORT_VALUE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getGroupSortValue() <em>Group Sort Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroupSortValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double GROUP_SORT_VALUE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getGroupSortValue() <em>Group Sort Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroupSortValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected double groupSortValue = GROUP_SORT_VALUE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getGroupObject() <em>Group Object</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroupObject()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Object GROUP_OBJECT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getGroupObject() <em>Group Object</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroupObject()
+	 * @generated
+	 * @ordered
+	 */
+	protected Object groupObject = GROUP_OBJECT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isGroupAlternative() <em>Group Alternative</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isGroupAlternative()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean GROUP_ALTERNATIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isGroupAlternative() <em>Group Alternative</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isGroupAlternative()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean groupAlternative = GROUP_ALTERNATIVE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -288,6 +393,111 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getComplexity() {
+		return complexity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setComplexity(int newComplexity) {
+		int oldComplexity = complexity;
+		complexity = newComplexity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY, oldComplexity, complexity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getSortValue() {
+		return sortValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSortValue(double newSortValue) {
+		double oldSortValue = sortValue;
+		sortValue = newSortValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE, oldSortValue, sortValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getGroupSortValue() {
+		return groupSortValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupSortValue(double newGroupSortValue) {
+		double oldGroupSortValue = groupSortValue;
+		groupSortValue = newGroupSortValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE, oldGroupSortValue, groupSortValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object getGroupObject() {
+		return groupObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupObject(Object newGroupObject) {
+		Object oldGroupObject = groupObject;
+		groupObject = newGroupObject;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_OBJECT, oldGroupObject, groupObject));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isGroupAlternative() {
+		return groupAlternative;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupAlternative(boolean newGroupAlternative) {
+		boolean oldGroupAlternative = groupAlternative;
+		groupAlternative = newGroupAlternative;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE, oldGroupAlternative, groupAlternative));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -320,6 +530,16 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return basicGetChangeSet();
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				return getDescription();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
+				return getComplexity();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE:
+				return getSortValue();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE:
+				return getGroupSortValue();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_OBJECT:
+				return getGroupObject();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
+				return isGroupAlternative();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -349,6 +569,21 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
+				setComplexity((Integer)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE:
+				setSortValue((Double)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE:
+				setGroupSortValue((Double)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_OBJECT:
+				setGroupObject(newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
+				setGroupAlternative((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -376,6 +611,21 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
+				setComplexity(COMPLEXITY_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE:
+				setSortValue(SORT_VALUE_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE:
+				setGroupSortValue(GROUP_SORT_VALUE_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_OBJECT:
+				setGroupObject(GROUP_OBJECT_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
+				setGroupAlternative(GROUP_ALTERNATIVE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -398,6 +648,16 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return changeSet != null;
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__COMPLEXITY:
+				return complexity != COMPLEXITY_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__SORT_VALUE:
+				return sortValue != SORT_VALUE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE:
+				return groupSortValue != GROUP_SORT_VALUE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_OBJECT:
+				return GROUP_OBJECT_EDEFAULT == null ? groupObject != null : !GROUP_OBJECT_EDEFAULT.equals(groupObject);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
+				return groupAlternative != GROUP_ALTERNATIVE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -414,6 +674,16 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (description: ");
 		result.append(description);
+		result.append(", complexity: ");
+		result.append(complexity);
+		result.append(", sortValue: ");
+		result.append(sortValue);
+		result.append(", groupSortValue: ");
+		result.append(groupSortValue);
+		result.append(", groupObject: ");
+		result.append(groupObject);
+		result.append(", groupAlternative: ");
+		result.append(groupAlternative);
 		result.append(')');
 		return result.toString();
 	}

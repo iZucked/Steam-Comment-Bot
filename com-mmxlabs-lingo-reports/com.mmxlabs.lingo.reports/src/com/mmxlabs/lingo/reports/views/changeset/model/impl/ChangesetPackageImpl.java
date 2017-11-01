@@ -27,8 +27,16 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -170,8 +178,17 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		isInited = true;
 
 		// Initialize simple dependencies
+		CargoPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
 		ScenarioServicePackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theChangesetPackage.createPackageContents();
@@ -679,6 +696,51 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getChangeSetTableGroup_Complexity() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_SortValue() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_GroupSortValue() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_GroupObject() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetTableGroup_GroupAlternative() {
+		return (EAttribute)changeSetTableGroupEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getChangeSetTableRow() {
 		return changeSetTableRowEClass;
 	}
@@ -1042,6 +1104,11 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__CURRENT_METRICS);
 		createEReference(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__CHANGE_SET);
 		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__DESCRIPTION);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__COMPLEXITY);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__SORT_VALUE);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__GROUP_SORT_VALUE);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__GROUP_OBJECT);
+		createEAttribute(changeSetTableGroupEClass, CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE);
 
 		changeSetTableRowEClass = createEClass(CHANGE_SET_TABLE_ROW);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__LHS_NAME);
@@ -1176,6 +1243,11 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetTableGroup_CurrentMetrics(), this.getMetrics(), null, "currentMetrics", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetTableGroup_ChangeSet(), this.getChangeSet(), null, "changeSet", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableGroup_Description(), ecorePackage.getEString(), "description", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_Complexity(), ecorePackage.getEInt(), "complexity", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_SortValue(), ecorePackage.getEDouble(), "sortValue", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_GroupSortValue(), ecorePackage.getEDouble(), "groupSortValue", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_GroupObject(), ecorePackage.getEJavaObject(), "groupObject", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableGroup_GroupAlternative(), ecorePackage.getEBoolean(), "groupAlternative", null, 0, 1, ChangeSetTableGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetTableRowEClass, ChangeSetTableRow.class, "ChangeSetTableRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getChangeSetTableRow_LhsName(), ecorePackage.getEString(), "lhsName", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

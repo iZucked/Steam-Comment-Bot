@@ -24,6 +24,11 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getCurrentMetrics <em>Current Metrics</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getChangeSet <em>Change Set</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getComplexity <em>Complexity</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getSortValue <em>Sort Value</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupSortValue <em>Group Sort Value</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupObject <em>Group Object</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#isGroupAlternative <em>Group Alternative</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup()
@@ -150,5 +155,135 @@ public interface ChangeSetTableGroup extends EObject {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Complexity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Complexity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Complexity</em>' attribute.
+	 * @see #setComplexity(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_Complexity()
+	 * @model
+	 * @generated
+	 */
+	int getComplexity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getComplexity <em>Complexity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Complexity</em>' attribute.
+	 * @see #getComplexity()
+	 * @generated
+	 */
+	void setComplexity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Sort Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sort Value</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sort Value</em>' attribute.
+	 * @see #setSortValue(double)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_SortValue()
+	 * @model
+	 * @generated
+	 */
+	double getSortValue();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getSortValue <em>Sort Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sort Value</em>' attribute.
+	 * @see #getSortValue()
+	 * @generated
+	 */
+	void setSortValue(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Group Sort Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Group Sort Value</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Group Sort Value</em>' attribute.
+	 * @see #setGroupSortValue(double)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_GroupSortValue()
+	 * @model
+	 * @generated
+	 */
+	double getGroupSortValue();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupSortValue <em>Group Sort Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Group Sort Value</em>' attribute.
+	 * @see #getGroupSortValue()
+	 * @generated
+	 */
+	void setGroupSortValue(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Group Object</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Group Object</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Group Object</em>' attribute.
+	 * @see #setGroupObject(Object)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_GroupObject()
+	 * @model
+	 * @generated
+	 */
+	Object getGroupObject();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupObject <em>Group Object</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Group Object</em>' attribute.
+	 * @see #getGroupObject()
+	 * @generated
+	 */
+	void setGroupObject(Object value);
+
+	/**
+	 * Returns the value of the '<em><b>Group Alternative</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Group Alternative</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Group Alternative</em>' attribute.
+	 * @see #setGroupAlternative(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_GroupAlternative()
+	 * @model
+	 * @generated
+	 */
+	boolean isGroupAlternative();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#isGroupAlternative <em>Group Alternative</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Group Alternative</em>' attribute.
+	 * @see #isGroupAlternative()
+	 * @generated
+	 */
+	void setGroupAlternative(boolean value);
 
 } // ChangeSetTableGroup
