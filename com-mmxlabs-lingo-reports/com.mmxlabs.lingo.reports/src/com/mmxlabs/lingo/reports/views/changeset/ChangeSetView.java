@@ -67,6 +67,7 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
@@ -695,6 +696,10 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final @Nullable String targetSlotId) {
+		setNewDataData(target, action, true, targetSlotId);
+	}
+
+	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, boolean runAsync, final @Nullable String targetSlotId) {
 
 		columnHelper.cleanUpVesselColumns();
 
@@ -702,9 +707,9 @@ public class ChangeSetView implements IAdaptable {
 			setEmptyData();
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
-			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
+			Shell activeShell = display.getActiveShell();
 			try {
-				d.run(true, false, new IRunnableWithProgress() {
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -712,11 +717,30 @@ public class ChangeSetView implements IAdaptable {
 						final ViewState newViewState = action.apply(monitor, targetSlotId);
 						newViewState.tableRootToBase = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot);
 						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot);
-						display.asyncExec(new ViewUpdateRunnable(newViewState));
+						if (runAsync) {
+							display.asyncExec(new ViewUpdateRunnable(newViewState));
+						} else {
+							display.syncExec(new ViewUpdateRunnable(newViewState));
+						}
 					}
-				});
+				};
+				if (runAsync) {
+					if (activeShell != null) {
+						final ProgressMonitorDialog d = new ProgressMonitorDialog(activeShell);
+						d.run(true, false, runnable);
+					} else {
+						display.asyncExec(() -> {
+							try {
+								runnable.run(new NullProgressMonitor());
+							} catch (InvocationTargetException | InterruptedException e) {
+								e.printStackTrace();
+							}
+						});
+					}
+				} else {
+					runnable.run(new NullProgressMonitor());
+				}
 			} catch (InvocationTargetException | InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
