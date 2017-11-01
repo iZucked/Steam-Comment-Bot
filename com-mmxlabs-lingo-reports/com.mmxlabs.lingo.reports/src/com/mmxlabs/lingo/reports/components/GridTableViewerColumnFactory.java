@@ -167,6 +167,8 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					double accDouble = 0.0f;
 					
 					if (((ArrayList<CompositeRow>) element).size() > 0) {
+						// Fetch the first element of the list and pass it through the column formatter 
+						// to get its type
 						CompositeRow firstCompositeRow = ((ArrayList<CompositeRow>) element).get(0);
 						
 						Object pinnedElement = null;
@@ -180,6 +182,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						String deltaValue = "";
 						Object valuePinned = formatter.getComparable(pinnedElement);
 						
+						// Sum the value depending on the column type
 						if (valuePinned != null) {
 							List<CompositeRow> compositeRows = (ArrayList<CompositeRow>) element;
 							if (valuePinned instanceof Integer) {
@@ -220,7 +223,9 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					}
 				} else if (element instanceof CompositeRow) {
 					CompositeRow compositeRow = (CompositeRow) element;
+					String deltaValue = computeCompositeRow(compositeRow, path, col, formatter);
 					
+					// Get the underlying pinned element object to set the row span in the grid
 					Object pinnedElement = null;
 					for (final EMFPath p : path) {
 						pinnedElement = p.get((EObject) compositeRow.getPinnedRow());
@@ -228,7 +233,6 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							break;
 						}
 					}
-					String deltaValue = computeCompositeRow((CompositeRow) element, path, col, formatter);
 					
 					setRowSpan(formatter, cell, pinnedElement);
 					if (deltaValue.compareTo("") != 0) {
