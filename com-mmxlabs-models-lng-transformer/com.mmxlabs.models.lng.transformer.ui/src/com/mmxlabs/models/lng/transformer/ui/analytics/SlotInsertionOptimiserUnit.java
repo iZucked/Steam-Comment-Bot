@@ -154,7 +154,7 @@ public class SlotInsertionOptimiserUnit {
 		this.inputState = inputState;
 	}
 
-	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull List<Slot> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @NonNull final IProgressMonitor monitor) {
 		// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 		// scope.enter();
 		try {
@@ -168,7 +168,7 @@ public class SlotInsertionOptimiserUnit {
 					.map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IPortSlot.class)) //
 					.collect(Collectors.toList());
 
-			List<IPortSlot> optionElements = new ArrayList<IPortSlot>(slotElements.size() + eventElements.size());
+			final List<IPortSlot> optionElements = new ArrayList<IPortSlot>(slotElements.size() + eventElements.size());
 			optionElements.addAll(slotElements);
 			optionElements.addAll(eventElements);
 
@@ -186,7 +186,7 @@ public class SlotInsertionOptimiserUnit {
 					final IFollowersAndPreceders followersAndPreceders = injector.getInstance(IFollowersAndPreceders.class);
 
 					{
-						ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+						final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 						final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
 						final ISequences initialRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
 						state.initialMetrics = evaluationHelper.evaluateState(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences), null, true, null, null);
@@ -200,7 +200,7 @@ public class SlotInsertionOptimiserUnit {
 					{
 						final IModifiableSequences tmpRawSequences = new ModifiableSequences(state.originalRawSequences);
 
-						for (ISequenceElement e : tmpRawSequences.getUnusedElements()) {
+						for (final ISequenceElement e : tmpRawSequences.getUnusedElements()) {
 							if (optionalElementsProvider.isElementRequired(e) || optionalElementsProvider.getSoftRequiredElements().contains(e)) {
 								state.initiallyUnused.add(e);
 							}
@@ -236,24 +236,22 @@ public class SlotInsertionOptimiserUnit {
 
 					// check for insertion feasibility
 					{
-						List<ISequenceElement> sequenceElements = optionElements.stream().map(e -> portSlotProvider.getElement(e)).collect(Collectors.toList());
 						boolean isFeasible = true;
-						for (IPortSlot portSlot : optionElements) {
-							ISequenceElement element = portSlotProvider.getElement(portSlot);
+						for (final IPortSlot portSlot : optionElements) {
+							final ISequenceElement element = portSlotProvider.getElement(portSlot);
 							String slotName = "";
 							if (portSlot instanceof ILoadOption) {
-								Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
-								isFeasible = validFollowers.size() > 1;
-								LoadSlot load = modelEntityMap.getModelObject(portSlot, LoadSlot.class);
+								final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(element);
+								isFeasible = validFollowers.size() >= 1;
+								final LoadSlot load = modelEntityMap.getModelObject(portSlot, LoadSlot.class);
 								slotName = load.getName();
 							} else if (portSlot instanceof IDischargeOption) {
-								Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
-								DischargeSlot discharge = modelEntityMap.getModelObject(portSlot, DischargeSlot.class);
+								final Followers<ISequenceElement> validPreceders = followersAndPreceders.getValidPreceders(element);
+								final DischargeSlot discharge = modelEntityMap.getModelObject(portSlot, DischargeSlot.class);
 								slotName = discharge.getName();
-								isFeasible = validPreceders.size() > 1;
+								isFeasible = validPreceders.size() >= 1;
 							}
 							if (!isFeasible) {
-
 								throw new UserFeedbackException(String.format("Unable to perform insertion on this scenario. This is caused by the slot %s having no possible pairings.", slotName));
 							}
 						}
