@@ -31,7 +31,9 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		private IRouteOptionBooking routeOptionBooking = null;
 		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 		public PanamaPeriod panamaPeriod = PanamaPeriod.Beyond;
-
+		public int additionalPanamaIdleTimeInHours = 0;
+		public boolean isConstrainedPanamaJourney = false;
+		
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj == this) {
@@ -229,6 +231,13 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
 		getOrCreateSlotRecord(slot).panamaPeriod = panamaPeriod;
 	}
+	
+	@Override
+	public void setSlotAdditionalPanamaDetails(final IPortSlot slot, final boolean isConstrainedPanamaJourney, int additionalPanamaIdleTimeInHours) {
+		getOrCreateSlotRecord(slot).isConstrainedPanamaJourney = isConstrainedPanamaJourney;
+		getOrCreateSlotRecord(slot).additionalPanamaIdleTimeInHours = additionalPanamaIdleTimeInHours;
+	}
+
 
 	@Override
 	public AvailableRouteChoices getSlotNextVoyageOptions(final IPortSlot slot) {
@@ -244,6 +253,24 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.panamaPeriod;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public boolean getSlotIsNextVoyageConstrainedPanama(IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.isConstrainedPanamaJourney;
+		}
+		throw new IllegalArgumentException("Unknown port slot");
+	}
+
+	@Override
+	public int getSlotAdditionalPanamaIdleHours(IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			return allocation.additionalPanamaIdleTimeInHours;
 		}
 		throw new IllegalArgumentException("Unknown port slot");
 	}
