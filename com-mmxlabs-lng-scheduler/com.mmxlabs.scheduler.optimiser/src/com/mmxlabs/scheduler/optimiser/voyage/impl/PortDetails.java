@@ -8,6 +8,7 @@ import java.util.EnumMap;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -111,7 +112,7 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 	@Override
 	public String toString() {
 		// @formatter:off
-		return Objects.toStringHelper(PortDetails.class)
+		return MoreObjects.toStringHelper(PortDetails.class)
 				.add("options", options)
 				.add("fuelConsumption", fuelConsumption)
 				.add("fuelPrice", fuelPrice)

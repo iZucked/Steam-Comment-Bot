@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -230,7 +231,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	@Override
 	public String toString() {
 		// @formatter:off
-		return Objects.toStringHelper(VoyageOptions.class)
+		return MoreObjects.toStringHelper(VoyageOptions.class)
 				.add("availableTime", availableTime)
 				.add("charterOutIdleTime", charterOutIdleTime)
 				.add("charterOutDailyRate", charterOutDailyRate)

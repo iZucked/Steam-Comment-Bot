@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 
 import org.hamcrest.Description;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -294,7 +295,7 @@ public class ScheduleCalculatorTest {
 	 * Matcher implementation to check that the real and generated MTM slots are as expected in the VoyagePlan.
 	 * 
 	 */
-	class PortTimesRecordMatcher extends org.hamcrest.BaseMatcher<IPortTimesRecord> {
+	class PortTimesRecordMatcher implements org.mockito.ArgumentMatcher<IPortTimesRecord> {
 
 		private final IPortSlot slot;
 		private final int time;
@@ -305,18 +306,10 @@ public class ScheduleCalculatorTest {
 		}
 
 		@Override
-		public boolean matches(final Object item) {
+		public boolean matches(final IPortTimesRecord portTimesRecord) {
 
-			if (item instanceof IPortTimesRecord) {
-				final IPortTimesRecord portTimesRecord = (IPortTimesRecord) item;
-				final int t = portTimesRecord.getSlotTime(slot);
-				return t == time;
-			}
-			return false;
-		}
-
-		@Override
-		public void describeTo(final Description description) {
+			final int t = portTimesRecord.getSlotTime(slot);
+			return t == time;
 		}
 
 	}
@@ -325,7 +318,7 @@ public class ScheduleCalculatorTest {
 	 * Matcher implementation to check that the real and generated MTM slots are as expected in the VoyagePlan.
 	 * 
 	 */
-	class VoyagePlanMatcher extends org.hamcrest.BaseMatcher<VoyagePlan> {
+	class VoyagePlanMatcher implements org.mockito.ArgumentMatcher<VoyagePlan> {
 
 		private final IPortSlot slot;
 
@@ -334,60 +327,52 @@ public class ScheduleCalculatorTest {
 		}
 
 		@Override
-		public boolean matches(final Object item) {
+		public boolean matches(final VoyagePlan voyagePlan) {
 
-			if (item instanceof VoyagePlan) {
-				final VoyagePlan voyagePlan = (VoyagePlan) item;
-				final Object[] sequence = voyagePlan.getSequence();
-				if (sequence != null) {
-					if (sequence.length == 2) {
-						final PortDetails details0 = (PortDetails) sequence[0];
-						final PortDetails details1 = (PortDetails) sequence[1];
+			final Object[] sequence = voyagePlan.getSequence();
+			if (sequence != null) {
+				if (sequence.length == 2) {
+					final PortDetails details0 = (PortDetails) sequence[0];
+					final PortDetails details1 = (PortDetails) sequence[1];
 
-						if (slot instanceof ILoadSlot) {
-							if (details0.getOptions().getPortSlot() != slot) {
-								return false;
-							}
-							if (details1.getOptions().getPortSlot() instanceof MarkToMarketDischargeOption) {
-								return true;
-							}
+					if (slot instanceof ILoadSlot) {
+						if (details0.getOptions().getPortSlot() != slot) {
+							return false;
 						}
-
-						else if (slot instanceof ILoadOption) {
-							if (details0.getOptions().getPortSlot() != slot) {
-								return false;
-							}
-							if (details1.getOptions().getPortSlot() instanceof MarkToMarketDischargeSlot) {
-								return true;
-							}
+						if (details1.getOptions().getPortSlot() instanceof MarkToMarketDischargeOption) {
+							return true;
 						}
+					}
 
-						else if (slot instanceof IDischargeSlot) {
-							if (details1.getOptions().getPortSlot() != slot) {
-								return false;
-							}
-							if (details0.getOptions().getPortSlot() instanceof MarkToMarketLoadOption) {
-								return true;
-							}
+					else if (slot instanceof ILoadOption) {
+						if (details0.getOptions().getPortSlot() != slot) {
+							return false;
 						}
+						if (details1.getOptions().getPortSlot() instanceof MarkToMarketDischargeSlot) {
+							return true;
+						}
+					}
 
-						else if (slot instanceof IDischargeOption) {
-							if (details1.getOptions().getPortSlot() != slot) {
-								return false;
-							}
-							if (details0.getOptions().getPortSlot() instanceof MarkToMarketLoadSlot) {
-								return true;
-							}
+					else if (slot instanceof IDischargeSlot) {
+						if (details1.getOptions().getPortSlot() != slot) {
+							return false;
+						}
+						if (details0.getOptions().getPortSlot() instanceof MarkToMarketLoadOption) {
+							return true;
+						}
+					}
+
+					else if (slot instanceof IDischargeOption) {
+						if (details1.getOptions().getPortSlot() != slot) {
+							return false;
+						}
+						if (details0.getOptions().getPortSlot() instanceof MarkToMarketLoadSlot) {
+							return true;
 						}
 					}
 				}
 			}
 			return false;
 		}
-
-		@Override
-		public void describeTo(final Description description) {
-		}
-
 	}
 }

@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.common.impl.LongFastEnumMap;
@@ -147,7 +148,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	@Override
 	public String toString() {
 		// @formatter:off
-		return Objects.toStringHelper(VoyageDetails.class)
+		return MoreObjects.toStringHelper(VoyageDetails.class)
 				.add("options", options)
 				.add("fuelConsumption", fuelConsumption)
 				.add("routeAdditionalConsumption", routeAdditionalConsumption)
