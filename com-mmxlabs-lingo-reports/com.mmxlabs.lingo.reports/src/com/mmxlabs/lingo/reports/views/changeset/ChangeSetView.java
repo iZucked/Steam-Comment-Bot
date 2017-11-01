@@ -68,6 +68,7 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
@@ -755,7 +756,7 @@ public class ChangeSetView implements IAdaptable {
 			setEmptyData();
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
-			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
+			Shell activeShell = display.getActiveShell();
 			try {
 				IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
@@ -774,12 +775,22 @@ public class ChangeSetView implements IAdaptable {
 					}
 				};
 				if (runAsync) {
-					d.run(true, false, runnable);
+					if (activeShell != null) {
+						final ProgressMonitorDialog d = new ProgressMonitorDialog(activeShell);
+						d.run(true, false, runnable);
+					} else {
+						display.asyncExec(() -> {
+							try {
+								runnable.run(new NullProgressMonitor());
+							} catch (InvocationTargetException | InterruptedException e) {
+								e.printStackTrace();
+							}
+						});
+					}
 				} else {
 					runnable.run(new NullProgressMonitor());
 				}
 			} catch (InvocationTargetException | InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
