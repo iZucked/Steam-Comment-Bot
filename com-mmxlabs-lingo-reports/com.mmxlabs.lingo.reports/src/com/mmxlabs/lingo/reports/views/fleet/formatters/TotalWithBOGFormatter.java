@@ -50,8 +50,12 @@ public class TotalWithBOGFormatter extends CostFormatter {
 		}
 		
 		int revenue = 0;
-		//FIXME: no generated for pinned element in diff mode!
-		//revenue += generatedCharterRevenueFormatter.getIntValue(object);
+		Integer res = generatedCharterRevenueFormatter.getIntValue(object);
+		
+		if (res != null) {
+			revenue += generatedCharterRevenueFormatter.getIntValue(object);
+		}
+		
 		revenue += heelRevenueFormatter.getIntValue(object);
 		
 		final int total = cost - revenue;
