@@ -7,7 +7,7 @@ Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.3.11.qualifier
 Fragment-Host: com.mmxlabs.optimiser.optimiser-core
 Require-Bundle: org.junit;bundle-version="4.8.2",
- org.mockito.mockito-all;bundle-version="1.9.5",
+ org.mockito.mockito-core;bundle-version="1.9.5",
  org.slf4j.api;bundle-version="1.6.4",
  ch.qos.logback.classic;bundle-version="1.0.0",
  ch.qos.logback.core;bundle-version="1.0.0",
