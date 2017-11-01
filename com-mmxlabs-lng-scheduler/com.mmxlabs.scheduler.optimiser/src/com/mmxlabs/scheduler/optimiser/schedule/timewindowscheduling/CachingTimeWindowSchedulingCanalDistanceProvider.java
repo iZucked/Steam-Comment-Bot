@@ -23,13 +23,17 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 		IVessel vessel;
 		int ladenStartTime;
 		AvailableRouteChoices availableRouteChoice;
+		boolean isConstrainedPanamaVoyage;
+		int additionalPanamaIdleHours;
 
-		public CacheKey(final IPort load, final IPort discharge, final IVessel vessel, final int ladenStartTime, AvailableRouteChoices availableRouteChoice) {
+		public CacheKey(final IPort load, final IPort discharge, final IVessel vessel, final int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
 			this.load = load;
 			this.discharge = discharge;
 			this.vessel = vessel;
 			this.ladenStartTime = ladenStartTime;
 			this.availableRouteChoice = availableRouteChoice;
+			this.isConstrainedPanamaVoyage = isConstrainedPanamaVoyage;
+			this.additionalPanamaIdleHours = additionalPanamaIdleHours;
 		}
 
 		@Override
@@ -42,7 +46,10 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 						&& this.discharge == other.discharge//
 						&& this.vessel == other.vessel //
 						&& this.ladenStartTime == other.ladenStartTime //
-						&& this.availableRouteChoice == other.availableRouteChoice;
+						&& this.availableRouteChoice == other.availableRouteChoice //
+						&& this.isConstrainedPanamaVoyage == other.isConstrainedPanamaVoyage //
+						&& this.additionalPanamaIdleHours == other.additionalPanamaIdleHours //
+						;
 			} else {
 				return false;
 			}
@@ -59,6 +66,9 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 			if (availableRouteChoice != null) {
 				result = (prime * result) + availableRouteChoice.ordinal();
 			}
+			if (isConstrainedPanamaVoyage == true) {
+				result = (prime * result) + this.additionalPanamaIdleHours;
+			}
 			return result;
 		}
 	}
@@ -73,12 +83,12 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 
 	@Override
 	public @NonNull LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime,
-			AvailableRouteChoices availableRouteChoice) {
-		final CacheKey key = new CacheKey(load, discharge, vessel, ladenStartTime, availableRouteChoice);
+			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
+		final CacheKey key = new CacheKey(load, discharge, vessel, ladenStartTime, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
 		@NonNull
 		LadenRouteData @Nullable [] values = cache.get(key);
 		if (values == null) {
-			values = delegate.getMinimumLadenTravelTimes(load, discharge, vessel, ladenStartTime, availableRouteChoice);
+			values = delegate.getMinimumLadenTravelTimes(load, discharge, vessel, ladenStartTime, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
 			assert values != null;
 			cache.put(key, values);
 		}
@@ -98,13 +108,13 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 
 	@Override
 	public @NonNull List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden,
-			AvailableRouteChoices availableRouteChoice) {
-		return delegate.getTimeDataForDifferentSpeedsAndRoutes(load, discharge, vessel, cv, startTime, isLaden, availableRouteChoice);
+			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
+		return delegate.getTimeDataForDifferentSpeedsAndRoutes(load, discharge, vessel, cv, startTime, isLaden, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
 	}
 
 	@Override
 	public @NonNull LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime,
-			AvailableRouteChoices availableRouteChoice) {
-		return delegate.getMinimumBallastTravelTimes(load, discharge, vessel, ladenStartTime, availableRouteChoice);
+			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
+		return delegate.getMinimumBallastTravelTimes(load, discharge, vessel, ladenStartTime, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
 	}
 }

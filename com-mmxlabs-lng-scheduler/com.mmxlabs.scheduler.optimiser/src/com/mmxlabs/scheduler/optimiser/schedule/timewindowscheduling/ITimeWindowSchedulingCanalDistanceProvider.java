@@ -29,11 +29,12 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @param load
 	 * @param discharge
 	 * @param vessel
-	 *            TODO
+	 * @param isConstrainedPanamaVoyage
+	 * @param additionalPanamaIdleHours
 	 * @return
 	 */
 	@NonNull
-	LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice);
+	LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
 
 	/**
 	 * Get feasible routes for min and max times
@@ -62,16 +63,15 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @param load
 	 * @param discharge
 	 * @param cv
-	 *            TODO
 	 * @param vessel
 	 * @param startTime
 	 * @return
 	 */
 	@NonNull
 	List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden,
-			AvailableRouteChoices availableRouteChoice);
+			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
 
 	@NonNull
-	LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice);
+	LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
 
 }
