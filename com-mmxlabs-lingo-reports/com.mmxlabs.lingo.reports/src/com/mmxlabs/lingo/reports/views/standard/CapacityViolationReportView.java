@@ -223,7 +223,7 @@ public class CapacityViolationReportView extends EMFReportView {
 
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
-				String scenarioName = scenarioResult.getScenarioInstance().getName();
+				String scenarioName = scenarioResult.getModelRecord().getName();
 				final List<EObject> rows = new LinkedList<EObject>();
 
 				for (final Sequence sequence : schedule.getSequences()) {
