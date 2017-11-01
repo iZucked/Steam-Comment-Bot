@@ -346,7 +346,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				}
 			}
 		}
-
+		
 		return compositeRows;
 	}
 

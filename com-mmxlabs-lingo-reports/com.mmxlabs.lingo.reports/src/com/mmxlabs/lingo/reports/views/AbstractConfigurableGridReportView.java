@@ -191,6 +191,14 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						secondIsComposite = true;
 					}
 					
+					if (e1 instanceof List) {
+						return Integer.MAX_VALUE;
+					}
+					
+					if (e2 instanceof List) {
+						return Integer.MIN_VALUE;
+					}
+					
 					if (g1 == g2) {
 						int res = vc.compare(viewer, e1, e2);
 						return res;

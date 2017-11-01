@@ -50,9 +50,11 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialRowType;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -201,12 +203,22 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 						elementCollector.collectElements(other, false);
 					}
 					elementCollector.endCollecting();
-					List<Object> rows = new ArrayList<>(table.getRows().size() + table.getCompositeRows().size());
+					
+					int numberOfRow = table.getRows().size();
+					if (diffMode) {
+						numberOfRow += table.getCompositeRows().size() + 1;
+					}
+					
+					List<Object> rows = new ArrayList<>(numberOfRow);
+					
 					rows.addAll(table.getRows());
 					
 					if (diffMode) {
 						rows.addAll(table.getCompositeRows());
+						List<CompositeRow> aggregate = new ArrayList(table.getCompositeRows());
+						rows.add(aggregate);
 					}
+					
 					
 					ViewerHelper.setInput(viewer, true, rows);
 				}
@@ -215,7 +227,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			RunnerHelper.exec(r, block);
 		}
 	};
-
+	
 	@Override
 	public void initPartControl(final Composite parent) {
 

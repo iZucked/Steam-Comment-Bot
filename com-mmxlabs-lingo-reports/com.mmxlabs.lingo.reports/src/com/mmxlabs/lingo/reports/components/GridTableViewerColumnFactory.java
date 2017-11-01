@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -45,7 +48,90 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;
 	}
+	
+	private String computeCompositeRow(CompositeRow element, EMFPath[] path, GridColumn col, ICellRenderer formatter) {
 
+		Object pinnedElement = null;
+		Object previousElement = null;
+
+		String deltaValue = "";
+		if (element instanceof CompositeRow) {
+			Row pinnedRow = ((CompositeRow) element).getPinnedRow();
+			Row previousRow = ((CompositeRow) element).getPreviousRow();
+
+			for (final EMFPath p : path) {
+				pinnedElement = p.get((EObject) pinnedRow);
+				if (pinnedElement != null) {
+					break;
+				}
+			}
+
+			for (final EMFPath p : path) {
+				previousElement = p.get((EObject) previousRow);
+				if (previousElement != null) {
+					break;
+				}
+			}
+
+			if (pinnedElement != null && previousElement != null) {
+				Object valuePinned = formatter.getComparable(pinnedElement);
+				Object valuePrevious = formatter.getComparable(previousElement);
+
+				// Those formatters will also return -MAX_VALUE for the reference row
+				// Bug ?
+				if (formatter instanceof GeneratedCharterDaysFormatter) {
+					valuePinned = new Double(0);
+				}
+
+				if (formatter instanceof GeneratedCharterRevenueFormatter) {
+					valuePinned = new Integer(0);
+				}
+
+				deltaValue = "";
+				if (valuePrevious != null && valuePinned != null) {
+					if (valuePrevious instanceof Integer) {
+						int delta = ((int) valuePrevious) - ((int) valuePinned);
+
+						if (delta != 0) {
+							deltaValue = String.valueOf(delta);
+						}
+					} else if (valuePrevious instanceof Long) {
+						long delta = ((long) valuePrevious) - ((long) valuePinned);
+
+						if (delta != 0L) {
+							deltaValue = String.valueOf(delta);
+						}
+					} else if (valuePrevious instanceof Double) {
+						double delta = ((double) valuePrevious) - ((double) valuePinned);
+						double epsilon = 0.0001f;
+
+						if ((delta < -epsilon) && (delta > epsilon)) {
+							deltaValue = String.valueOf(delta);
+						}
+					} else if (valuePrevious instanceof String) {
+						if (col.getText().compareTo("Scenario") == 0) {
+							deltaValue = " ";
+						}
+
+						if (col.getText().compareTo("Vessel") == 0) {
+							deltaValue = (String) valuePinned;
+						}
+
+						if (col.getText().compareTo("L-ID") == 0) {
+							deltaValue = (String) valuePinned;
+						}
+
+						if (col.getText().compareTo("D-ID") == 0) {
+							deltaValue = (String) valuePinned;
+						}
+					}
+					return deltaValue;
+				}
+			}
+		}
+		return "";
+	}
+	
 	@Override
 	public GridViewerColumn createColumn(final ColumnHandler handler) {
 		GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
@@ -74,90 +160,77 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 			public void update(final ViewerCell cell) {
 
 				Object element = cell.getElement();
-
-				if (element instanceof CompositeRow) {
-
-					Object pinnedElement = null;
-					Object previousElement = null;
-
-					String deltaValue = "";
-					if (element instanceof CompositeRow) {
-						Row pinnedRow = ((CompositeRow) element).getPinnedRow();
-						Row previousRow = ((CompositeRow) element).getPreviousRow();
-
+				
+				if (element instanceof List) {
+					int accInt = 0;
+					long accLong = 0L;
+					double accDouble = 0.0f;
+					
+					if (((ArrayList<CompositeRow>) element).size() > 0) {
+						CompositeRow firstCompositeRow = ((ArrayList<CompositeRow>) element).get(0);
+						
+						Object pinnedElement = null;
 						for (final EMFPath p : path) {
-							pinnedElement = p.get((EObject) pinnedRow);
+							pinnedElement = p.get((EObject) firstCompositeRow.getPinnedRow());
 							if (pinnedElement != null) {
 								break;
 							}
 						}
+						
+						String deltaValue = "";
+						Object valuePinned = formatter.getComparable(pinnedElement);
+						
+						if (valuePinned != null) {
+							List<CompositeRow> compositeRows = (ArrayList<CompositeRow>) element;
+							if (valuePinned instanceof Integer) {
+								for (CompositeRow compositeRow : compositeRows) {
+									String res = computeCompositeRow(compositeRow, path, col, formatter);
 
-						for (final EMFPath p : path) {
-							previousElement = p.get((EObject) previousRow);
-							if (previousElement != null) {
-								break;
-							}
-						}
-
-						if (pinnedElement != null && previousElement != null) {
-							Object valuePinned = formatter.getComparable(pinnedElement);
-							Object valuePrevious = formatter.getComparable(previousElement);
-							
-							
-							// Those formatters will also return -MAX_VALUE for the reference row
-							// Bug ? 
-							if (formatter instanceof GeneratedCharterDaysFormatter) {
-								valuePinned = new Double(0);
-							}
-
-							if (formatter instanceof GeneratedCharterRevenueFormatter) {
-								valuePinned = new Integer(0);
-							}
-							
-							deltaValue = "";
-							if (valuePrevious != null && valuePinned != null) {
-								if (valuePrevious instanceof Integer) {
-									int delta = ((int) valuePrevious) - ((int) valuePinned);
-									
-									if (delta != 0)  {
-										deltaValue = String.valueOf(delta);
-									}
-								} else if (valuePrevious instanceof Long) {
-									long delta = ((long) valuePrevious) - ((long) valuePinned);
-									
-									if (delta != 0L)  {
-										deltaValue = String.valueOf(delta);
-									}
-								} else if (valuePrevious instanceof Double) {
-									double delta = ((double) valuePrevious) - ((double) valuePinned);
-									double epsilon = 0.0001f;
-									
-									if ((delta < -epsilon) && (delta > epsilon) )  {
-										deltaValue = String.valueOf(delta);
-									}
-								} else if (valuePrevious instanceof String) {
-									if (col.getText().compareTo("Scenario") == 0) {
-										deltaValue = " ";
-									}
-
-									if (col.getText().compareTo("Vessel") == 0) {
-										deltaValue = (String) valuePinned;
-									}
-
-									if (col.getText().compareTo("L-ID") == 0) {
-										deltaValue = (String) valuePinned;
-									}
-									
-									if (col.getText().compareTo("D-ID") == 0) {
-										deltaValue = (String) valuePinned;
+									if (res.compareTo("") != 0) {
+										accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter));
 									}
 								}
+								deltaValue = String.valueOf(accInt);
+							} else if (valuePinned instanceof Long) {
+								for (CompositeRow compositeRow : compositeRows) {
+									String res = computeCompositeRow(compositeRow, path, col, formatter);
+									
+									if (res.compareTo("") != 0) {
+										accLong += Long.parseLong(res);
+									}
+								}
+								deltaValue = String.valueOf(accInt);
+							} else if (valuePinned instanceof Double) {
+								for (CompositeRow compositeRow : compositeRows) {
+									String res = computeCompositeRow(compositeRow, path, col, formatter);
+
+									if (res.compareTo("") != 0) {
+										accDouble += Double.parseDouble(res);
+									}
+								}
+								deltaValue = String.valueOf(accInt);
 							}
 						}
-					}
+						
+						setRowSpan(formatter, cell, pinnedElement);
+						if (deltaValue.compareTo("") != 0) {
+							cell.setText("Δ " + deltaValue);
+						}
 
-					setRowSpan(formatter, cell, pinnedElement);
+					}
+				} else if (element instanceof CompositeRow) {
+					CompositeRow compositeRow = (CompositeRow) element;
 					
+					Object pinnedElement = null;
+					for (final EMFPath p : path) {
+						pinnedElement = p.get((EObject) compositeRow.getPinnedRow());
+						if (pinnedElement != null) {
+							break;
+						}
+					}
+					String deltaValue = computeCompositeRow((CompositeRow) element, path, col, formatter);
+					
+					setRowSpan(formatter, cell, pinnedElement);
 					if (deltaValue.compareTo("") != 0) {
 						cell.setText("Δ " + deltaValue);
 					}
