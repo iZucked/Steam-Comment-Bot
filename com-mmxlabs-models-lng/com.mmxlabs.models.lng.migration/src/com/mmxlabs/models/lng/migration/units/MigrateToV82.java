@@ -252,17 +252,18 @@ public class MigrateToV82 extends AbstractMigrationUnit {
 				EObjectWrapper analyticsModel = model.getRef("analyticsModel");
 				TreeIterator<EObject> itr = analyticsModel.eAllContents();
 				while (itr.hasNext()) {
-					EObjectWrapper obj = (EObjectWrapper) itr.next();
+					EObject obj = (EObject) itr.next();
 					if (class_Journey.isInstance(obj)) {
-						EObjectWrapper entryPoint = obj.getRef("entryPoint");
+						EObjectWrapper journey = (EObjectWrapper)obj;
+						EObjectWrapper entryPoint = journey.getRef("canalEntry");
 						if (entryPoint != null) {
 							if (entryPoint.eContainingFeature().getName().toLowerCase().contains("northentrance")) {
-								obj.setAttrib("canalEntrance", enum_CanalEntry_NorthSide);
+								journey.setAttrib("canalEntrance", enum_CanalEntry_NorthSide);
 							} else {
-								obj.setAttrib("canalEntrance", enum_CanalEntry_SouthSide);
+								journey.setAttrib("canalEntrance", enum_CanalEntry_SouthSide);
 							}
 						}
-						obj.unsetFeature("entryPoint");
+						journey.unsetFeature("canalEntry");
 					}
 				}
 			}
