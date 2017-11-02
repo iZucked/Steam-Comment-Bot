@@ -75,10 +75,10 @@ public class ExportScheduleHelper {
 		// Null mean original schedule model was not contained by the original scenario model
 		assert source_scheduleModel != null;
 
-		ClonedScenarioDataProvider dataProvider = ClonedScenarioDataProvider.make(scenarioModel, scenarioResult.getScenarioDataProvider());
+		ClonedScenarioDataProvider scenarioDataProvider = ClonedScenarioDataProvider.make(scenarioModel, scenarioResult.getScenarioDataProvider());
 
 		@NonNull
-		final EditingDomain editingDomain = dataProvider.getEditingDomain();
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
 		final CargoModel cargoModel = scenarioModel.getCargoModel();
 
@@ -113,8 +113,7 @@ public class ExportScheduleHelper {
 			// Open but deleted scenario?
 			return null;
 		}
-		ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(newForkName, dataProvider);
-		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, tmpRecord, newForkName);
+		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, scenarioDataProvider, newForkName);
 
 		if (openScenario) {
 			try {

@@ -83,28 +83,7 @@ public class LNGScenarioRunnerUtils {
 	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target,
 			@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final String newName) throws Exception {
 
-		
 		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(target);
-		final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(newName, scenarioDataProvider);
-		return scenarioService.copyInto(target, tmpRecord, newName);
+		return scenarioService.copyInto(target, scenarioDataProvider, newName);
 	}
-
-//	/**
-//	 * Same as {@link #saveScenarioAsChild(ScenarioInstance, Container, LNGScenarioModel, String)} but without a copy
-//	 * 
-//	 * @param originalScenarioInstance
-//	 * @param target
-//	 * @param scenarioModel
-//	 * @param newName
-//	 * @return
-//	 * @throws IOException
-//	 */
-//	@NonNull
-//	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final IScenarioDataProvider scenarioDataProvider,
-//			@NonNull final String newName) throws Exception {
-//		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(target);
-//		final ModelRecord tmpRecord = ScenarioStorageUtil.createFrom(newName, scenarioDataProvider);
-//		return scenarioService.copyInto(target, tmpRecord, newName);
-//
-//	}
 }

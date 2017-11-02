@@ -100,8 +100,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			scenarioRunner.evaluateInitialState();
 			if (parentForFork != null && fork) {
 				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
-				final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(forkName, scenarioDataProvider);
-				scenarioService.copyInto(parentForFork, tmpRecord, forkName);
+				scenarioService.copyInto(parentForFork, scenarioDataProvider, forkName);
 			}
 
 		} catch (final Exception e) {
@@ -141,8 +140,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			if (parentForFork != null) {
 				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
-				final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf("What if", scenarioDataProvider);
-				scenarioService.copyInto(parentForFork, tmpRecord, "What if");
+				scenarioService.copyInto(parentForFork, scenarioDataProvider, "What if");
 			}
 
 		} catch (final Exception e) {
