@@ -496,8 +496,6 @@ public class FeasibleTimeWindowTrimmer {
 						final int suezTravelTime = travelTimeData.getTravelTime(ERouteOption.SUEZ, index - 1);
 						final int panamaTravelTime = travelTimeData.getTravelTime(ERouteOption.PANAMA, index - 1);
 
-						boolean debug = p_prevPortSlot.getId().contains("SPL_Jan_5");
-
 						if (panamaTravelTime == Integer.MAX_VALUE) {
 							travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
 							currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, PanamaPeriod.Beyond);
@@ -539,11 +537,6 @@ public class FeasibleTimeWindowTrimmer {
 									panamaPeriod = PanamaPeriod.Relaxed;
 								} else {
 									panamaPeriod = PanamaPeriod.Strict;
-								}
-
-								if (debug) {
-									System.out.printf("(%d) Period: %s, canal %d - [%d,%d] -> [%d,%d]\n", pass, panamaPeriod, latestPanamaTime, windowStartTime[index - 1], windowEndTime[index - 1],
-											windowStartTime[index], windowEndTime[index]);
 								}
 
 								final IPort panamaEntry = routeOptionEntry;
