@@ -13,7 +13,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  */
-public class CostFormatter implements ICellRenderer {
+public class CostFormatter extends IntegerFormatter {
 
 	private final boolean includeUnits;
 
