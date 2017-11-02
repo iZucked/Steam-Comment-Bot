@@ -978,8 +978,10 @@ public class PanamaSlotBookingsTests extends AbstractMicroTestCase {
 
 		@NonNull
 		final Port loadPort = portFinder.findPort("Quintero");
+		loadPort.getCapabilities().add(PortCapability.LOAD);
 		@NonNull
 		final Port dischargePort = portFinder.findPort("Sabine Pass");
+		dischargePort.getCapabilities().add(PortCapability.DISCHARGE);
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
