@@ -188,9 +188,22 @@ public class ScenarioStorageUtil {
 				@NonNull
 				final ModelRecord extraDataRecord = modelRecord.getExtraDataRecord(ISharedDataModelType.registry().lookup(artifact.getKey()));
 				@NonNull
-				final ModelReference extraRef = extraDataRecord.aquireReference("ScenarioStoragetUtil:storeToFile:1a");
+				final ModelReference extraRef = extraDataRecord.aquireReference("ScenarioStoragetUtil:createCopyOfExtraData:a");
 
 				extraDataObjects.put(artifact.getKey(), EcoreUtil.copy(extraRef.getInstance()));
+			}
+		}
+		return extraDataObjects;
+	}
+
+	public static Map<String, EObject> createCopyOfExtraData(final IScenarioDataProvider scenarioDataProvider) {
+		final Map<String, EObject> extraDataObjects = new HashMap<>();
+		// TODO: This data may change after loading/migration
+		for (final ModelArtifact artifact : scenarioDataProvider.getManifest().getModelDependencies()) {
+			if (artifact.getStorageType() == StorageType.COLOCATED && artifact.getType().equals("EOBJECT")) {
+				ISharedDataModelType key = ISharedDataModelType.REGISTRY.lookup(artifact.getKey());
+				EObject data = (EObject) scenarioDataProvider.getExtraData(key);
+				extraDataObjects.put(artifact.getKey(), EcoreUtil.copy(data));
 			}
 		}
 		return extraDataObjects;

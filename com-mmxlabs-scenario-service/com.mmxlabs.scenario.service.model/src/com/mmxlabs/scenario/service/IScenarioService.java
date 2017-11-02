@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public interface IScenarioService {
@@ -159,5 +160,6 @@ public interface IScenarioService {
 	URI resolveURI(String uriString);
 
 	ScenarioInstance copyInto(Container parent, ScenarioModelRecord tmpRecord, String name) throws Exception;
+	ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name) throws Exception;
 
 }

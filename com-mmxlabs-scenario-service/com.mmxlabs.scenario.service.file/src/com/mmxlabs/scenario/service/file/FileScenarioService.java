@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.Files;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.file.internal.Activator;
 import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
@@ -64,11 +65,13 @@ import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.ResourceHelper;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class FileScenarioService extends AbstractScenarioService {
@@ -410,6 +413,53 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
 		metadata.setContentType(sourceRecord.getManifest().getScenarioType());
+		// Update last modified date
+		metadata.setLastModified(new Date());
+
+		newInstance.setMetadata(metadata);
+
+		ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, false, true, getScenarioCipherProvider());
+
+		modelRecord.setScenarioInstance(newInstance);
+		modelRecord.setName(newInstance.getName());
+		SSDataManager.Instance.register(newInstance, modelRecord);
+		newInstance.setManifest(modelRecord.getManifest());
+
+		// Finally add to node in the service model.
+		parent.getElements().add(newInstance);
+
+		return newInstance;
+	}
+
+	@Override
+	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name) throws Exception {
+
+		// Create a new UUID
+		final String uuid = EcoreUtil.generateUUID();
+		URI archiveURI = resolveURI(String.format("./%s.lingo", uuid));
+		{
+			// try (ModelReference ref = aquireReference("ModelRecord:saveAsCopy")) {
+			final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
+			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+				final Map<String, EObject> extraDataObjects = ScenarioStorageUtil.createCopyOfExtraData(scenarioDataProvider);
+				ScenarioStorageUtil.storeToURI(uuid, rootObject, extraDataObjects, scenarioDataProvider.getManifest(), archiveURI, scenarioCipherProvider);
+			});
+		}
+
+		// Create new model nodes
+		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+
+		newInstance.setName(name);
+		newInstance.setUuid(uuid);
+		newInstance.setScenarioVersion(scenarioDataProvider.getManifest().getScenarioVersion());
+		newInstance.setVersionContext(scenarioDataProvider.getManifest().getVersionContext());
+		newInstance.setClientScenarioVersion(scenarioDataProvider.getManifest().getClientScenarioVersion());
+		newInstance.setClientVersionContext(scenarioDataProvider.getManifest().getClientVersionContext());
+
+		newInstance.setRootObjectURI(archiveURI.toString());
+
+		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+		metadata.setContentType(scenarioDataProvider.getManifest().getScenarioType());
 		// Update last modified date
 		metadata.setLastModified(new Date());
 

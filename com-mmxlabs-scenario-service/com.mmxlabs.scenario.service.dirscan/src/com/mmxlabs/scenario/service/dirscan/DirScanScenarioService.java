@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -54,10 +55,12 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.ResourceHelper;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
@@ -163,6 +166,73 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				}
 			}
 			tmpRecord.saveCopyTo(uuid, archiveURI);
+
+			log.debug("Inserting scenario into " + parent);
+
+			// Create new model nodes
+			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+
+			// Create a new UUID
+			newInstance.setUuid(uuid);
+			newInstance.setMetadata(metadata);
+
+			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+
+			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+			assert destURI != null;
+		} finally {
+			lock.readLock().unlock();
+			pokeWatchThread();
+		}
+		return null;
+
+	}
+
+	@Override
+	public ScenarioInstance copyInto(Container parent, IScenarioDataProvider scenarioDataProvider, String name) throws Exception {
+
+		final String uuid = EcoreUtil.generateUUID();
+		final StringBuilder sb = new StringBuilder();
+		{
+			Container c = parent;
+			while (c != null && !(c instanceof ScenarioService)) {
+				sb.insert(0, File.separator + c.getName());
+				c = c.getParent();
+			}
+
+		}
+		//
+		lock.readLock().lock();
+		try {
+			final File target = new File(dataPath.toString() + sb.toString() + File.separator + name + ".lingo");
+			URI archiveURI = URI.createFileURI(target.getAbsolutePath());
+
+			if (target.exists()) {
+				final boolean[] response = new boolean[1];
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				display.syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
+
+					}
+				});
+				if (!response[0]) {
+					return null;
+				}
+			}
+			{
+				{
+					final EObject rootObject = EcoreUtil.copy(scenarioDataProvider.getScenario());
+					ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+						final Map<String, EObject> extraDataObjects = ScenarioStorageUtil.createCopyOfExtraData(scenarioDataProvider);
+						ScenarioStorageUtil.storeToURI(uuid, rootObject, extraDataObjects, scenarioDataProvider.getManifest(), archiveURI, scenarioCipherProvider);
+					});
+				}
+			}
 
 			log.debug("Inserting scenario into " + parent);
 
