@@ -215,27 +215,32 @@ public class PriceIntervalProviderHelper {
 		return minSalesStart;
 	}
 
-	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
-			final int canalNBOSpeed) {
+	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStartInclusive, final int purchaseEndInclusive, int salesStartInclusive, int salesEndInclusive, final int loadDuration,
+			final int canalMaxSpeed, final int canalNBOSpeed) {
+
 		// set min start dates
-		int purchase = salesStart - canalMaxSpeed - loadDuration;
-		if (purchase < purchaseStart) {
-			salesStart = purchaseStart + canalMaxSpeed + loadDuration;
-			purchase = purchaseStart;
+		int purchase = salesStartInclusive - canalMaxSpeed - loadDuration;
+		if (purchase < purchaseStartInclusive) {
+			salesStartInclusive = purchaseStartInclusive + canalMaxSpeed + loadDuration;
+			purchase = purchaseStartInclusive;
 		}
-		int discharge = salesStart;
-		if (purchase > purchaseEnd) {
-			purchase = purchaseEnd;
-			discharge = Math.min(Math.max(purchaseStart + canalNBOSpeed + loadDuration, salesStart), salesEnd);
-		} else {
+		if (purchase > purchaseEndInclusive) {
+			purchase = purchaseEndInclusive;
+		}
+		salesStartInclusive = Math.max(purchaseStartInclusive + canalMaxSpeed + loadDuration, salesStartInclusive);
+		salesEndInclusive = Math.min(salesStartInclusive, salesEndInclusive);
+		int discharge = salesStartInclusive;
+		{
 			// we are able vary our speeds
 			final int canalDifference = canalNBOSpeed - canalMaxSpeed;
-			final int remainder = purchase - purchaseStart - canalDifference;
-			if (remainder >= 0) {
-				purchase -= canalDifference;
-			} else {
-				purchase = purchaseStart;
-				discharge = Math.min(salesStart - remainder, salesEnd); // note: remainder is -ve
+			if (canalDifference > 0) {
+				final int remainder = purchase - purchaseStartInclusive - canalDifference;
+				if (remainder >= 0) {
+					purchase -= canalDifference;
+				} else {
+					purchase = purchaseStartInclusive;
+					discharge = Math.min(salesStartInclusive - remainder, salesEndInclusive); // note: remainder is -ve
+				}
 			}
 		}
 		return new int[] { purchase, discharge };
@@ -321,8 +326,8 @@ public class PriceIntervalProviderHelper {
 	 *            TODO
 	 * @return
 	 */
-	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor,
-			final int baseFuelPrice, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
+	public static long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance,
+			final int equivalenceFactor, final int baseFuelPrice, final int canalTransitTime, final int durationAtPort, final boolean isLaden) {
 		final VesselState vesselState;
 		if (isLaden) {
 			vesselState = VesselState.Laden;
@@ -583,13 +588,13 @@ public class PriceIntervalProviderHelper {
 					// start is less than the start of the interval
 					if (i > 0) {
 						// create trimmed forward interval
-						list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1]});
+						list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1] });
 						if (intervals.get(i)[0] < exclusiveEnd) {
 							list.add(intervals.get(i));
 						}
 					} else {
 						// no previous interval, so use current
-						list.add(new int[] {inclusiveStart, intervals.get(i)[1]});
+						list.add(new int[] { inclusiveStart, intervals.get(i)[1] });
 					}
 				}
 			} else if (intervals.get(i)[0] < exclusiveEnd) {
