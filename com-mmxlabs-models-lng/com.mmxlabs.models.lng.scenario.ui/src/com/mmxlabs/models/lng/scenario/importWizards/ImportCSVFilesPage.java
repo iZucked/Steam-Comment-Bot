@@ -469,9 +469,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 							try {
-								final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFrom(mainPage.getFileName(), scenarioDataProvider);
-
-								final ScenarioInstance newInstance = scenarioService.copyInto(container, tmpRecord, mainPage.getFileName());
+								final ScenarioInstance newInstance = scenarioService.copyInto(container, scenarioDataProvider, mainPage.getFileName());
 								monitor.worked(1);
 
 								ImportCSVFilesPage.this.setScenarioInstance(newInstance);

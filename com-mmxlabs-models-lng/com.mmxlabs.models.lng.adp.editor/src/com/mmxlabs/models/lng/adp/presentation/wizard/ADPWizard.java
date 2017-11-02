@@ -79,10 +79,9 @@ public class ADPWizard extends Wizard implements IWorkbenchWizard {
 						ADPModelUtil.makeBindings(scenarioModel, adpModel);
 
 						try {
-							final SimpleScenarioDataProvider dataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
-							final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFrom("ADP Plan", dataProvider);
+							final SimpleScenarioDataProvider scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
 							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(instance);
-							fork[0] = scenarioService.copyInto(instance, tmpRecord, "ADP Plan");
+							fork[0] = scenarioService.copyInto(instance, scenarioDataProvider, "ADP Plan");
 						} catch (final Exception e) {
 							e.printStackTrace();
 						}
