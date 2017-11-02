@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -27,6 +28,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
+	
+	public static int SENSIBLE_M3 = 300_000;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -45,9 +48,27 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 				String name = slot.getName();
 				testVolumeValueConstraint(ctx, failures, slot, name);
 				checkThatEverythingIsOverriddenWhenUnitsSet(ctx, failures, slot);
+				checkSensibleValues(ctx, failures, slot, name);
 			}
 		}
 		return Activator.PLUGIN_ID;
+	}
+
+	private void checkSensibleValues(@NonNull IValidationContext ctx, @NonNull List<IStatus> failures, Slot slot, String name) {
+		if (slot.getMinQuantity() > SENSIBLE_M3 && slot.getVolumeLimitsUnit() == VolumeUnits.M3) {
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
+			String.format("Slot|%s min volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getMinQuantity()), IStatus.ERROR));
+			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
+			failures.add(status);
+		}
+		if (slot.getMaxQuantity() > SENSIBLE_M3 && slot.getVolumeLimitsUnit() == VolumeUnits.M3) {
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
+			String.format("Slot|%s max volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getMaxQuantity()), IStatus.ERROR));
+			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
+			failures.add(status);
+		}
 	}
 
 	private void testVolumeValueConstraint(IValidationContext ctx, List<IStatus> failures, final Slot slot, String name) {
