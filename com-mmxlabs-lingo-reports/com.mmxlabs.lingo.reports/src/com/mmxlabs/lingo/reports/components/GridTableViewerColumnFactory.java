@@ -216,7 +216,9 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						}
 						
 						setRowSpan(formatter, cell, pinnedElement);
-						if (deltaValue.compareTo("") != 0) {
+						if (col.getText().equals("Scenario")) {
+							cell.setText("Δ Total");
+						} else if (deltaValue.compareTo("") != 0) {
 							cell.setText("Δ " + deltaValue);
 						}
 
