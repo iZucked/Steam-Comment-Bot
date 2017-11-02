@@ -413,25 +413,25 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void minMaxDurationPriceBasedTrimmingCargoTest() {
 
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 20, 0, 0, 0));
+		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(20);
+		vesselAvailability.setMaxDuration(30);
 		vesselAvailability.setMinDuration(3);
 		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 20, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 10, 0, 0, 0));
 
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPort("Point Fortin");
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPort("Colon");
 
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 27), port1, null, entity, "7") //
+				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 15), port1, null, entity, "7") //
 				.build() //
-				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 29), port2, null, entity, "7") //
+				.makeDESSale("D1", LocalDate.of(2017, Month.JUNE, 30), port2, null, entity, "7") //
 				.build() //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
@@ -459,10 +459,10 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r1_cargo = records.get(r0).get(1);
 
 				// Assert expected result (Truncated start AND end windows)
-				assertEquals(24 * 39 + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
-				assertEquals(24 * 24, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
+				assertEquals(24 * (vesselAvailability.getMaxDuration()) + 1, ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getExclusiveEnd());
+				assertEquals(24 * (vesselAvailability.getMaxDuration()), ptr_r1_cargo.getSlotFeasibleTimeWindow(ptr_r1_cargo.getReturnSlot()).getInclusiveStart());
 
-				assertEquals(24 * 19 + 1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
+				assertEquals(1, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getExclusiveEnd());
 				assertEquals(0, ptr_r0_cargo.getSlotFeasibleTimeWindow(ptr_r0_cargo.getFirstSlot()).getInclusiveStart());
 			}
 		});
@@ -837,7 +837,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		final long minDeltaInSeconds = endTimestamp - startTimestamp;
 		final long minDeltaInHours = (minDeltaInSeconds / 3600) ;
 		
-		if (minDeltaInHours < (27 * 24)) {
+		if (minDeltaInHours < (vesselAvailability.getMinDuration() * 24)) {
 			assertTrue(false);
 		}
 	}
@@ -851,16 +851,16 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailabilityWithTW(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0), LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0));
 
 		// Set the end requirement's time window and max duration
-		vesselAvailability.setMaxDuration(27);
-		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JUNE, 30, 0, 0, 0));
-		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0));
+		vesselAvailability.setMaxDuration(33);
+		vesselAvailability.setEndBy(LocalDateTime.of(2017, Month.JULY, 30, 0, 0, 0));
+		vesselAvailability.setEndAfter(LocalDateTime.of(2017, Month.JULY, 25, 0, 0, 0));
 		
 		// Construct the cargo
 		@NonNull
-		final Port port1 = portFinder.findPort("Sabine Pass");
+		final Port port1 = portFinder.findPort("Point Fortin");
 
 		@NonNull
-		final Port port2 = portFinder.findPort("Manzanillo");
+		final Port port2 = portFinder.findPort("Colon");
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, Month.JUNE, 25), port1, null, entity, "7") //
@@ -877,14 +877,14 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
 		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 2);
+		Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		final long startTimestamp = start.getStart().toEpochSecond();
 		final long endTimestamp = end.getStart().toEpochSecond();
 		
 		final long minDeltaInSeconds = endTimestamp - startTimestamp;
 		final long minDeltaInHours = (minDeltaInSeconds / 3600) ;
 		
-		if (minDeltaInHours > (27 * 24)) {
+		if (minDeltaInHours > (vesselAvailability.getMaxDuration() * 24)) {
 			assertTrue(false);
 		}
 	}
