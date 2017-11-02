@@ -82,19 +82,19 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	/**
 	 * Return the max of the window end and the feasbile end (if late). Add 1 hour if start == end
 	 * 
-	 * @param windowStart
-	 * @param feasibleStart
-	 * @param windowEnd
-	 * @param feasibleEnd
+	 * @param windowStartInclusive
+	 * @param feasibleStartInclusive
+	 * @param windowEndExclusive
+	 * @param feasibleEndExclusive
 	 * @return
 	 */
-	private int findBestEnd(final int windowStart, final int feasibleStart, final int windowEnd, final int feasibleEnd) {
-		int maxEnd = Math.max(windowEnd, feasibleEnd);
-		if (windowStart == maxEnd || feasibleStart == maxEnd) {
-			maxEnd += 1;
+	private int findBestEnd(final int windowStartInclusive, final int feasibleStartInclusive, final int windowEndExclusive, final int feasibleEndExclusive) {
+		int maxEnd = Math.max(windowEndExclusive, feasibleEndExclusive);
+		if (windowStartInclusive == maxEnd || feasibleStartInclusive == maxEnd) {
+			// max should always be at least +1
 			assert false;
 		}
-		return maxEnd + 1;
+		return maxEnd;
 	}
 
 	@Override
