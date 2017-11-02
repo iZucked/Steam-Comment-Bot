@@ -779,8 +779,8 @@ public class CompareViewTests {
 		}
 		evaluate(toDP, to);
 
-		final ScenarioModelRecord pinnedRecord = ScenarioStorageUtil.createFrom("from", fromDP);
-		final ScenarioModelRecord otherRecord = ScenarioStorageUtil.createFrom("to", toDP);
+		final ScenarioModelRecord pinnedRecord = ScenarioStorageUtil.createFromCopyOf("from", fromDP);
+		final ScenarioModelRecord otherRecord = ScenarioStorageUtil.createFromCopyOf("to", toDP);
 		//
 		// final ModelRecord pinnedRecord = SSDataManager.Instance.getModelRecord(pinned);
 		// final ModelRecord otherRecord = SSDataManager.Instance.getModelRecord(other);
