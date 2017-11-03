@@ -1334,8 +1334,12 @@ public class CargoEditorMenuHelper {
 		reassignMenuManager.add(southBoundCanalBookingMenu);
 
 		for (CanalBookingSlot canalbooking : canalbookings) {
-			String canalBookingHandle = String.format("%s (%s)", canalbooking.getEntryPoint().getName(), canalbooking.getBookingDate());
+			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());
 
+			if (canalbooking.getSlot() != null) {
+				canalBookingHandle = String.format("%s [%s]", canalbooking.getBookingDate(), canalbooking.getSlot().getName());
+			} 
+			
 			LocalDate windowStart = slot.getWindowStart();
 			LocalDate windowEnd = windowStart;
 			
