@@ -91,6 +91,14 @@ public class DetailConstraintStatusFactory {
 		return this;
 	}
 
+	public DetailConstraintStatusFactory withObjectAndFeatures(Pair<EObject, EStructuralFeature>... extraFeatures) {
+		for (Pair<EObject, EStructuralFeature> f : extraFeatures) {
+			this.features.add(f);
+		}
+
+		return this;
+	}
+
 	public DetailConstraintStatusDecorator make(final IValidationContext ctx, final Collection<IStatus> statues) {
 		final DetailConstraintStatusDecorator status = make(ctx);
 		statues.add(status);
