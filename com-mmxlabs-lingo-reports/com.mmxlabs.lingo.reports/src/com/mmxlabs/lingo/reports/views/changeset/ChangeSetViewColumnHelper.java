@@ -8,15 +8,14 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToIntBiFunction;
@@ -69,6 +68,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -115,6 +115,16 @@ public class ChangeSetViewColumnHelper {
 	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
+
+	private @NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider = getDefaultLabelProvider();
+
+	public BiFunction<ChangeSetTableGroup, Integer, String> getChangeSetColumnLabelProvider() {
+		return changeSetColumnLabelProvider;
+	}
+
+	public void setChangeSetColumnLabelProvider(@NonNull BiFunction<ChangeSetTableGroup, Integer, String> changeSetColumnLabelProvider) {
+		this.changeSetColumnLabelProvider = changeSetColumnLabelProvider;
+	}
 
 	public boolean isTextualVesselMarkers() {
 		return textualVesselMarkers;
@@ -668,7 +678,8 @@ public class ChangeSetViewColumnHelper {
 
 				if (value instanceof GridItem) {
 					final GridItem gridItem = (GridItem) value;
-					final Object data = gridItem.getData();
+					Object data = gridItem.getData();
+		 
 					if (data instanceof ChangeSetTableGroup) {
 						final int currentLineWidth = gc.getLineWidth();
 						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
@@ -1004,7 +1015,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
 				if (element instanceof ChangeSetTableGroup) {
 
@@ -1106,7 +1117,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
 				if (element instanceof ChangeSetTableGroup) {
@@ -1225,7 +1236,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
 				cell.setForeground(null);
 				if (element instanceof ChangeSetTableGroup) {
@@ -1317,26 +1328,23 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
-
 				if (element instanceof ChangeSetTableGroup) {
-
+//					ChangeSetNode changeSetNode = (ChangeSetNode) element;
+					final ChangeSetTableGroup changeSet =( ChangeSetTableGroup)element;
 					cell.setFont(boldFont);
-
-					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
-
-					if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
-						cell.setText(changeSet.getDescription());
-					} else {
-						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
-						int idx = 0;
-						if (root != null) {
-							idx = root.getGroups().indexOf(changeSet);
-						}
-
-						cell.setText(String.format("Set %d", idx + 1));
+					final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
+					int idx = 0;
+					if (root != null) {
+						idx = root.getGroups().indexOf(changeSet);
 					}
+
+					String text = changeSetColumnLabelProvider.apply(changeSet, idx);
+					cell.setText(text);
+					// }
+					// if (element instanceof ChangeSetTableGroup) {
+
 				}
 			}
 		};
@@ -1495,7 +1503,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
 				double delta = 0;
@@ -1561,7 +1569,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
 				long delta = 0;
@@ -1624,7 +1632,7 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				final Object element = cell.getElement();
+				Object element = cell.getElement();
 				cell.setText("");
 				cell.setFont(null);
 				double delta = 0;
@@ -1772,5 +1780,17 @@ public class ChangeSetViewColumnHelper {
 			return violationColumn.getColumn();
 		}
 		return null;
+	}
+
+	public static @NonNull BiFunction<ChangeSetTableGroup, Integer, String> getDefaultLabelProvider() {
+		return (changeSet, index) -> {
+
+//			final ChangeSetTableGroup changeSet = node.getTableGroup();
+			if (changeSet.getDescription() != null && !changeSet.getDescription().isEmpty()) {
+				return changeSet.getDescription();
+			} else {
+				return String.format("Set %d", index + 1);
+			}
+		};
 	}
 }

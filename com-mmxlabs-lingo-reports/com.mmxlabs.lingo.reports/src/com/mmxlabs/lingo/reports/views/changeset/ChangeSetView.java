@@ -5,10 +5,8 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -18,6 +16,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +36,6 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -54,6 +52,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -72,7 +71,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.common.csv.CSVReader;
+import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.services.ChangeSetViewCreatorService;
@@ -84,6 +83,7 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
 import com.mmxlabs.lingo.reports.views.changeset.actions.CreateSandboxAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
@@ -116,12 +116,13 @@ import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -143,12 +144,12 @@ public class ChangeSetView implements IAdaptable {
 		public @Nullable NamedObject lastTargetSlot;
 		public final Collection<Slot> allTargetSlots = new HashSet<>();
 
-		public ViewState() {
+		public final SortMode displaySortMode;
+		public Consumer<ChangeSetTableRoot> postProcess = (cs) -> {};
 
-		}
-
-		public ViewState(final ChangeSetRoot root) {
+		public ViewState(final ChangeSetRoot root, final SortMode displaySortMode) {
 			this.root = root;
+			this.displaySortMode = displaySortMode;
 		}
 
 		public @Nullable String getTargetSlotID() {
@@ -218,7 +219,7 @@ public class ChangeSetView implements IAdaptable {
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
 					final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, equivalancesMap, table, pin, other, monitor);
 
-					return new ViewState(newRoot);
+					return new ViewState(newRoot, SortMode.BY_GROUP);
 				}, null);
 			}
 		}
@@ -241,6 +242,7 @@ public class ChangeSetView implements IAdaptable {
 
 	private boolean diffToBase = false;
 	private boolean showNonStructuralChanges = false;
+	private boolean showNegativePNLChanges = true;
 
 	private boolean persistAnalyticsSolution = false;
 
@@ -394,11 +396,13 @@ public class ChangeSetView implements IAdaptable {
 					public void displayActionPlan(final List<ScenarioResult> scenarios) {
 						columnHelper.cleanUpVesselColumns();
 
-						final ViewState newViewState = new ViewState();
+						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
-						final ChangeSetTableRoot csdiffToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, null);
-						final ChangeSetTableRoot csdiffToBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, null);
+						final ChangeSetTableRoot csdiffToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
+						final ChangeSetTableRoot csdiffToBase = new ChangeSetToTableTransformer().createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
 
+						newViewState.postProcess.accept(csdiffToBase);
+						newViewState.postProcess.accept(csdiffToPrevious);
 						newViewState.root = newRoot;
 						newViewState.tableRootToBase = csdiffToBase;
 						newViewState.tableRootToPrevious = csdiffToPrevious;
@@ -447,7 +451,7 @@ public class ChangeSetView implements IAdaptable {
 							final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
 							final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, result.equivalancesMap, table, pin, other, monitor);
 
-							return new ViewState(newRoot);
+							return new ViewState(newRoot, SortMode.BY_GROUP);
 						}, false, null);
 						ViewerHelper.refresh(viewer, true);
 
@@ -650,6 +654,25 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
+				if (!showNegativePNLChanges) {
+
+					if (element instanceof ChangeSetTableGroup) {
+						final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
+						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+						if (totalPNLDelta <= 0) {
+							return false;
+						}
+					} else {
+
+						if (parentElement instanceof ChangeSetTableGroup) {
+							final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) parentElement;
+							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+							if (totalPNLDelta <= 0) {
+								return false;
+							}
+						}
+					}
+				}
 				if (!showNonStructuralChanges) {
 					if (element instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow row = (ChangeSetTableRow) element;
@@ -677,6 +700,46 @@ public class ChangeSetView implements IAdaptable {
 		filters[1] = insertionPlanFilter;
 
 		viewer.setFilters(filters);
+
+		viewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(final Viewer viewer, Object e1, Object e2) {
+				final Object original_e1 = e1;
+				final Object original_e2 = e2;
+
+				// If both rows of the same parent group..
+				if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
+					// Retain original ordering in the datamodel
+					final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
+					final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
+					if (r1.eContainer() == r2.eContainer()) {
+						final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
+						return g.getRows().indexOf(r1) - g.getRows().indexOf(r2);
+					}
+				}
+
+				ChangeSetTableGroup g1 = null;
+				ChangeSetTableGroup g2 = null;
+
+				if (e1 instanceof ChangeSetTableGroup) {
+					g1 = (ChangeSetTableGroup) e1;
+				}
+				if (e2 instanceof ChangeSetTableGroup) {
+					g2 = (ChangeSetTableGroup) e2;
+				}
+				if (g1 != null && g2 != null) {
+					if (insertionPlanFilter.getUserFilters().isEmpty()) {
+						if (!Objects.equal(g1.getGroupObject(), g2.getGroupObject())) {
+							return Double.compare(g2.getGroupSortValue(), g1.getGroupSortValue());
+
+						}
+					}
+					return -Double.compare(g2.getSortValue(), g1.getSortValue());
+				}
+
+				return super.compare(viewer, original_e1, original_e2);
+			}
+		});
 
 		scenarioComparisonService.addListener(listener);
 		scenarioComparisonService.triggerListener(listener);
@@ -764,8 +827,11 @@ public class ChangeSetView implements IAdaptable {
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						final ViewState newViewState = action.apply(monitor, targetSlotId);
-						newViewState.tableRootToBase = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot);
-						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot);
+						newViewState.tableRootToBase = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, true, newViewState.lastTargetSlot, newViewState.displaySortMode);
+						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
+						newViewState.postProcess.accept(newViewState.tableRootToBase);
+						newViewState.postProcess.accept(newViewState.tableRootToPrevious);
+						
 						if (runAsync) {
 							display.asyncExec(new ViewUpdateRunnable(newViewState));
 						} else {
@@ -800,7 +866,7 @@ public class ChangeSetView implements IAdaptable {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
-		final ViewState newViewState = new ViewState();
+		final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 		newViewState.root = newRoot;
 		newViewState.tableRootToBase = newTableRoot;
 		newViewState.tableRootToPrevious = newTableRoot;
@@ -921,9 +987,9 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
-	private void handleToggleInsertionPlanDuplicates(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES) final MPart activePart) {
+	private void handleShotNegativePNLToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NEGATIVE_PNL_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
-			insertionPlanFilter.toggleFilter();
+			showNegativePNLChanges = !showNegativePNLChanges;
 			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 		}
 	}
@@ -964,7 +1030,7 @@ public class ChangeSetView implements IAdaptable {
 		this.viewMode = ViewMode.OLD_ACTION_SET;
 		setNewDataData(target, (monitor, targetSlotId) -> {
 			final ActionSetTransformer transformer = new ActionSetTransformer();
-			return new ViewState(transformer.createDataModel(target, monitor));
+			return new ViewState(transformer.createDataModel(target, monitor), SortMode.BY_GROUP);
 		}, null);
 	}
 
@@ -1005,7 +1071,23 @@ public class ChangeSetView implements IAdaptable {
 				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
-					final Object obj = itr.next();
+					Object obj = itr.next();
+					if (obj instanceof ChangeSetTableGroup) {
+						ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
+						if (insertionPlanFilter.getUserFilters().isEmpty()) {
+							if (insertionPlanFilter.expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
+								helper.addAction(new RunnableAction("Hide related changes", () -> {
+									insertionPlanFilter.expandedGroups.remove(changeSetTableGroup.getGroupObject());
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								}));
+							} else {
+								helper.addAction(new RunnableAction("Show related changes", () -> {
+									insertionPlanFilter.expandedGroups.add(changeSetTableGroup.getGroupObject());
+									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+								}));
+							}
+						}
+					}
 					if (obj instanceof ChangeSetTableGroup) {
 						selectedSets.add((ChangeSetTableGroup) obj);
 					} else if (obj instanceof ChangeSetTableRow) {
@@ -1065,11 +1147,7 @@ public class ChangeSetView implements IAdaptable {
 		this.viewMode = ViewMode.OLD_ACTION_SET;
 		this.persistAnalyticsSolution = true;
 
-		final ViewState viewState = new ViewState();
-		viewState.lastSolution = solution;
-
 		final ScenarioInstance target = solution.getScenarioInstance();
-
 		final EObject plan = solution.getSolution();
 		// Do something?
 		if (plan instanceof ActionableSetPlan) {
@@ -1077,12 +1155,15 @@ public class ChangeSetView implements IAdaptable {
 			this.canExportChangeSet = true;
 			setNewDataData(target, (monitor, targetSlotId) -> {
 				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-				return new ViewState(transformer.createDataModel(target, (ActionableSetPlan) plan, monitor));
+				final ViewState viewState = new ViewState(transformer.createDataModel(target, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
+				viewState.lastSolution = solution;
+				return viewState;
 			}, slotId);
 		} else if (plan instanceof SlotInsertionOptions) {
 			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
 			this.viewMode = ViewMode.INSERTIONS;
 			this.canExportChangeSet = true;
+			columnHelper.setChangeSetColumnLabelProvider(insertionPlanFilter.createLabelProvider());
 
 			setNewDataData(target, (monitor, targetSlotId) -> {
 
@@ -1090,7 +1171,7 @@ public class ChangeSetView implements IAdaptable {
 				if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
 					Slot targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
 					if (slotId != null) {
-						for (Slot s : slotInsertionOptions.getSlotsInserted()) {
+						for (final Slot s : slotInsertionOptions.getSlotsInserted()) {
 							if (slotId.equals(s.getName())) {
 								targetSlot = s;
 								break;
@@ -1101,7 +1182,7 @@ public class ChangeSetView implements IAdaptable {
 				} else {
 					VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
 					if (slotId != null) {
-						for (VesselEvent s : slotInsertionOptions.getEventsInserted()) {
+						for (final VesselEvent s : slotInsertionOptions.getEventsInserted()) {
 							if (slotId.equals(s.getName())) {
 								targetSlot = s;
 								break;
@@ -1110,18 +1191,16 @@ public class ChangeSetView implements IAdaptable {
 					}
 					pTargetSlot = targetSlot;
 				}
+				final ViewState viewState = new ViewState(null, SortMode.BY_PNL);
+				viewState.lastSolution = solution;
 				viewState.lastTargetSlot = pTargetSlot;
 				viewState.allTargetSlots.clear();
 				viewState.allTargetSlots.addAll(slotInsertionOptions.getSlotsInserted());
 
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
-
-				// Returns a new sort order -- based on the assumption input data is sorted by best value first
 				final ChangeSetRoot newRoot = transformer.createDataModel(target, slotInsertionOptions, monitor, pTargetSlot);
-				final List<ChangeSet> processChangeSetRoot = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
-				newRoot.getChangeSets().clear();
-				newRoot.getChangeSets().addAll(processChangeSetRoot);
-				insertionPlanFilter.setFilterActive(true);
+				insertionPlanFilter.setInsertionModeActive(true);
+				viewState.postProcess = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 
 				viewState.root = newRoot;
 				return viewState;
@@ -1246,7 +1325,7 @@ public class ChangeSetView implements IAdaptable {
 		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
-		ViewState viewState = currentViewState;
+		final ViewState viewState = currentViewState;
 		if (viewState != null) {
 			final ChangeSetRoot pRoot = viewState.root;
 			boolean linked = false;

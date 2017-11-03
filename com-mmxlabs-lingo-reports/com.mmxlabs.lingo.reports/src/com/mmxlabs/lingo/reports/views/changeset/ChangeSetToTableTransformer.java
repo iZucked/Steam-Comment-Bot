@@ -15,6 +15,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
@@ -24,10 +25,14 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class ChangeSetToTableTransformer {
 
-	public ChangeSetTableRoot createViewDataModel(final ChangeSetRoot changeSetRoot, final boolean isDiffToBase, NamedObject targetToSortFirst) {
+	public enum SortMode {
+		BY_GROUP, BY_PNL
+	}
+
+	public ChangeSetTableRoot createViewDataModel(final ChangeSetRoot changeSetRoot, final boolean isDiffToBase, final NamedObject targetToSortFirst, SortMode sortMode) {
 
 		final ChangeSetTableRoot changeSetTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
-
+		int groupIdx = 0;
 		for (final ChangeSet changeSet : changeSetRoot.getChangeSets()) {
 
 			List<ChangeSetRow> changeSetRows;
@@ -42,6 +47,7 @@ public class ChangeSetToTableTransformer {
 
 			if (!changeSetTableGroupRows.isEmpty()) {
 				final ChangeSetTableGroup changeSetTableGroup = ChangesetFactory.eINSTANCE.createChangeSetTableGroup();
+				++groupIdx;
 				changeSetTableGroup.setDescription(changeSet.getDescription());
 				ChangeSetTransformerUtil.sortRows(changeSetTableGroupRows, targetToSortFirst);
 				changeSetTableGroup.getRows().addAll(changeSetTableGroupRows);
@@ -50,9 +56,24 @@ public class ChangeSetToTableTransformer {
 				changeSetTableGroup.setCurrentMetrics(EcoreUtil.copy(changeSet.getCurrentMetrics()));
 
 				changeSetTableGroup.setChangeSet(changeSet);
-
+				int structuralChanges = 0;
+				for (final ChangeSetRow row : changeSetRows) {
+					final ChangeSetRowDataGroup afterData = row.getAfterData();
+					if (afterData != null && (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange()))) {
+						++structuralChanges;
+					}
+				}
+				changeSetTableGroup.setComplexity(structuralChanges);
+				// TODO: For B.E. grab the B/E. price
+				if (sortMode == SortMode.BY_PNL) {
+					// Lower is better for default sort
+					changeSetTableGroup.setSortValue(-changeSetTableGroup.getDeltaMetrics().getPnlDelta());
+				} else if (sortMode == SortMode.BY_GROUP) {
+					changeSetTableGroup.setSortValue(groupIdx);
+				} else {
+					throw new IllegalArgumentException();
+				}
 			}
-
 		}
 
 		return changeSetTableRoot;
@@ -71,7 +92,7 @@ public class ChangeSetToTableTransformer {
 			// Here we want to filter open before discharges. Note the "open discharge" may not exist in the before hence we check the RHSName.
 			// We filter out these rows as P&L will be included in the linked after row.
 			if (beforeSize == 1 && afterSize == 0) {
-				ChangeSetRowData data = changeSetRow.getBeforeData().getMembers().get(0);
+				final ChangeSetRowData data = changeSetRow.getBeforeData().getMembers().get(0);
 				if (data.getRhsName() != null && !data.getRhsName().isEmpty()) {
 					if (data.getLhsName() == null || data.getLhsName().isEmpty()) {
 						continue;

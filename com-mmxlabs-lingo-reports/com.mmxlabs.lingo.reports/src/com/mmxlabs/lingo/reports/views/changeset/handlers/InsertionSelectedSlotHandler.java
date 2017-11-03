@@ -34,7 +34,7 @@ public class InsertionSelectedSlotHandler {
 
 	@Execute
 	public void execute(final MPart activePart) {
-		eventBroker.post(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES, activePart);
+//		eventBroker.post(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES, activePart);
 	}
 
 	@AboutToShow

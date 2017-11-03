@@ -221,21 +221,21 @@ public class ChangeSetViewCreatorService {
 						toolbar.getChildren().add(item);
 					}
 
-					{
-						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
-						item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
-						item.setType(ItemType.CHECK);
-						item.setTooltip("Toggle related changes filter");
-						item.setLabel("Toggle related changes filter");
-						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
-						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
-						item.setEnabled(true);
-						item.setToBeRendered(true);
-						item.setVisible(true);
-						item.setSelected(true);
-						menu.getChildren().add(item);
-
-					}
+					// {
+					// final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+					// item.setElementId(viewPartId + ".directtoolitem.toggle_insertion");
+					// item.setType(ItemType.CHECK);
+					// item.setTooltip("Toggle related changes filter");
+					// item.setLabel("Toggle related changes filter");
+					// item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+					// item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleFilterInsertionPlansHandler");
+					// item.setEnabled(true);
+					// item.setToBeRendered(true);
+					// item.setVisible(true);
+					// item.setSelected(true);
+					// menu.getChildren().add(item);
+					//
+					// }
 
 					{
 						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
@@ -249,6 +249,20 @@ public class ChangeSetViewCreatorService {
 						item.setToBeRendered(true);
 						item.setVisible(true);
 						item.setSelected(true);
+						menu.getChildren().add(item);
+					}
+					{
+						final MDirectMenuItem item = modelService.createModelElement(MDirectMenuItem.class);
+						item.setElementId(viewPartId + ".directtoolitem.filternegative");
+						item.setType(ItemType.CHECK);
+						item.setLabel("Filter negative PnL Changes");
+						item.setTooltip("Toggling filtering of negative pnl");
+						item.setIconURI("platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif");
+						item.setContributionURI("bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowNegativePNLChangesHandler");
+						item.setEnabled(true);
+						item.setToBeRendered(true);
+						item.setVisible(true);
+						item.setSelected(false);
 						menu.getChildren().add(item);
 					}
 					{

@@ -11,11 +11,11 @@ public final class ChangeSetViewEventConstants {
 	public static final String EVENT_EXPAND_ALL = EVENT_PREFIX + "expand-allDiff";
 	public static final String EVENT_TOGGLE_COMPARE_TO_BASE = EVENT_PREFIX + "toggle-compare-to-base";
 	public static final String EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES = EVENT_PREFIX + "toggle-filter-non-structural-changes";
+	public static final String EVENT_TOGGLE_FILTER_NEGATIVE_PNL_CHANGES = EVENT_PREFIX + "toggle-filter-negative-pnl-changes";
 	public static final String EVENT_ANALYSE_ACTION_SETS = EVENT_PREFIX + "analyse-action-sets";
 	public static final String EVENT_ANALYSE_CHANGE_SETS = EVENT_PREFIX + "analyse-change-sets";
 	public static final String EVENT_ANALYSE_INSERTION_PLANS = "analyse-insertion-plans";
 
-	public static final String EVENT_TOGGLE_FILTER_INSERTION_CHANGES = EVENT_PREFIX + "toggle-filter-insertion-plan-duplicates";
 	public static final String EVENT_SWITCH_GROUP_BY_MODE = EVENT_PREFIX + "switch-group-by-mode";
 	public static final String EVENT_SWITCH_TARGET_SLOT = EVENT_PREFIX + "switch-target-slot";
 
