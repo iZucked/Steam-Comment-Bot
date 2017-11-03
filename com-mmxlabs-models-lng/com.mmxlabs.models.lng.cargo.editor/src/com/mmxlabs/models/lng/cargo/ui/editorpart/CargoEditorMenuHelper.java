@@ -1343,19 +1343,21 @@ public class CargoEditorMenuHelper {
 			LocalDate windowStart = slot.getWindowStart();
 			LocalDate windowEnd = windowStart;
 			
-			/*
 			switch (slot.getSlotOrPortWindowSizeUnits()) {
 			
 			case DAYS:
 				windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
+				break;
 			case HOURS:
 				windowEnd = windowStart.plusDays((slot.getSlotOrPortWindowSize() + 12) / 24);
+				break;
 			case MONTHS:
 				windowEnd = windowStart.plusMonths(slot.getSlotOrPortWindowSize());
+				break;
 			default:
 				break;
 			}
-			*/
+
 			NonNullPair<LocalDate, LocalDate> selectionRange = null;
 			selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
 
