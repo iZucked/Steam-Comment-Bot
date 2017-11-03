@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -19,6 +20,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -31,12 +33,14 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -88,6 +92,51 @@ public class PriceExpressionUtils {
 	private final @NonNull static Pattern shiftDetectPattern = Pattern.compile(".*SHIFT\\p{Space}*\\(.*", Pattern.CASE_INSENSITIVE);
 
 	private final @NonNull static Pattern shiftUsePattern = Pattern.compile("SHIFT\\p{Space}*\\(\\p{Space}*[a-z][a-z0-9_]*\\p{Space}*,\\p{Space}*-?[0-9]+\\p{Space}*\\)", Pattern.CASE_INSENSITIVE);
+
+	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
+			final @NonNull EObject target, EAttribute feature, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
+		PriceIndexType priceIndexType = null;
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
+			if (ExpressionAnnotationConstants.TYPE_COMMODITY.equals(value)) {
+				priceIndexType = PriceIndexType.COMMODITY;
+			} else if (ExpressionAnnotationConstants.TYPE_CHARTER.equals(value)) {
+				priceIndexType = PriceIndexType.CHARTER;
+			} else if (ExpressionAnnotationConstants.TYPE_BASE_FUEL.equals(value)) {
+				priceIndexType = PriceIndexType.BUNKERS;
+			} else if (ExpressionAnnotationConstants.TYPE_CURRENCY.equals(value)) {
+				priceIndexType = PriceIndexType.CURRENCY;
+			}
+		}
+		if (priceIndexType == null) {
+			throw new IllegalArgumentException();
+		}
+		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, otherFeatures);
+	}
+
+	public static void validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull List<IStatus> failures, final @NonNull DetailConstraintStatusFactory factory,
+			final @NonNull EObject target, EAttribute feature, final @NonNull PriceIndexType priceIndexType, boolean missingIsOk, Pair<EObject, EStructuralFeature>... otherFeatures) {
+		String expression = (String) target.eGet(feature);
+		if (expression == null || expression.isEmpty()) {
+			if (!missingIsOk) {
+				factory.copyName() //
+						.withMessage("Missing price expression") //
+						.withObjectAndFeature(target, feature) //
+						.withObjectAndFeatures(otherFeatures) //
+						.make(ctx, failures);
+			}
+		} else {
+			final ValidationResult result = validatePriceExpression(ctx, target, feature, expression, priceIndexType);
+			if (!result.isOk()) {
+				factory.copyName() //
+						.withMessage(result.getErrorDetails()) //
+						.withObjectAndFeature(target, feature) //
+						.withObjectAndFeatures(otherFeatures) //
+						.make(ctx, failures);
+			}
+		}
+	}
 
 	@NonNull
 	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
