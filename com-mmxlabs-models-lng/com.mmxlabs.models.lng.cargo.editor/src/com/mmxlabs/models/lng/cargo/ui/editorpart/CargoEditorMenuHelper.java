@@ -1315,7 +1315,8 @@ public class CargoEditorMenuHelper {
 			}
 
 			public void run() {
-				canalBookingSlot.setSlot(slot);
+				Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, slot);
+				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 			}
 		}
 		
