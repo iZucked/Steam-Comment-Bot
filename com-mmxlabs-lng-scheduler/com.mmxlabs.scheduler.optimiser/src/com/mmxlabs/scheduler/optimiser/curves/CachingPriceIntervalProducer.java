@@ -192,7 +192,11 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	private Entry getCacheEntry(final int start, final int end, final IPortSlot[] determiningSlots, final IPortTimeWindowsRecord portTimeWindowsRecord) {
-		return new Entry(start, end, determiningSlots, portTimeWindowsRecord.getSlots().toArray(new IPortSlot[portTimeWindowsRecord.getSlots().size()]));
+		Entry entry = new Entry(start, end, determiningSlots, portTimeWindowsRecord.getSlots().toArray(new IPortSlot[portTimeWindowsRecord.getSlots().size()]));
+		if (cache.get(entry.cacheKey) != null) {
+			entry.result = cache.get(entry.cacheKey);
+		}
+		return entry;
 	}
 
 	/**
@@ -208,10 +212,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		int maxEnd = Math.max(exclusiveWindowEnd, exclusiveFeasibleEnd);
 		if (inclusiveWindowStart == maxEnd || inclusiveFeasibleStart == maxEnd) {
 			assert false;
-//			maxEnd += 1;
 		}
-		// Why +1 1 again?
-		return maxEnd + 1;
+		return maxEnd;
 	}
 
 }

@@ -481,8 +481,8 @@ public class FeasibleTimeWindowTrimmer {
 					if (!isRoundTripSequence && checkPanamaCanalBookings) {
 						final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[index - 1];
 
-						if (currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot) != AvailableRouteChoices.OPTIMAL || 
-								currentPortTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(prevPortSlot)) {
+						if (currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot) != AvailableRouteChoices.OPTIMAL
+								|| currentPortTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(prevPortSlot)) {
 							// Choice already allocation, skip
 							index++;
 							prevElement = element;
@@ -527,7 +527,11 @@ public class FeasibleTimeWindowTrimmer {
 
 								final PanamaPeriod panamaPeriod;
 								if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
-									panamaPeriod = PanamaPeriod.Beyond;
+									if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
+										panamaPeriod = PanamaPeriod.Relaxed;
+									} else {
+										panamaPeriod = PanamaPeriod.Beyond;
+									}
 								} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
 									panamaPeriod = PanamaPeriod.Relaxed;
 								} else {
@@ -585,7 +589,7 @@ public class FeasibleTimeWindowTrimmer {
 										// In the first pass, do not set the voyage choice as this may cause problems further down the line (however, northbound Panama may be allowed)
 										if (northBound) {
 											// if northbound, allow Panama
-											int panamaIdleTime =  panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+											int panamaIdleTime = panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
 											travelTimeData.setMinTravelTime(index - 1, Math.min(Math.min(suezTravelTime, directTravelTime), panamaTravelTime + panamaIdleTime));
 											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
 											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
@@ -726,7 +730,11 @@ public class FeasibleTimeWindowTrimmer {
 									// Compute panama period
 									final PanamaPeriod panamaPeriod;
 									if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
-										panamaPeriod = PanamaPeriod.Beyond;
+										if (windowStartTime[index] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
+											panamaPeriod = PanamaPeriod.Relaxed;
+										} else {
+											panamaPeriod = PanamaPeriod.Beyond;
+										}
 									} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
 										panamaPeriod = PanamaPeriod.Relaxed;
 									} else {

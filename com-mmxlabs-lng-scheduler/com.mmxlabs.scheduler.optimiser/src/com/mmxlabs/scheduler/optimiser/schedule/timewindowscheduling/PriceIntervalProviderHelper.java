@@ -213,27 +213,32 @@ public class PriceIntervalProviderHelper {
 		return minSalesStart;
 	}
 
-	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
-			final int canalNBOSpeed) {
+	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStartInclusive, final int purchaseEndInclusive, int salesStartInclusive, int salesEndInclusive, final int loadDuration,
+			final int canalMaxSpeed, final int canalNBOSpeed) {
+
 		// set min start dates
-		int purchase = salesStart - canalMaxSpeed - loadDuration;
-		if (purchase < purchaseStart) {
-			salesStart = purchaseStart + canalMaxSpeed + loadDuration;
-			purchase = purchaseStart;
+		int purchase = salesStartInclusive - canalMaxSpeed - loadDuration;
+		if (purchase < purchaseStartInclusive) {
+			salesStartInclusive = purchaseStartInclusive + canalMaxSpeed + loadDuration;
+			purchase = purchaseStartInclusive;
 		}
-		int discharge = salesStart;
-		if (purchase > purchaseEnd) {
-			purchase = purchaseEnd;
-			discharge = Math.min(Math.max(purchaseStart + canalNBOSpeed + loadDuration, salesStart), salesEnd);
-		} else {
+		if (purchase > purchaseEndInclusive) {
+			purchase = purchaseEndInclusive;
+		}
+		salesStartInclusive = Math.max(purchaseStartInclusive + canalMaxSpeed + loadDuration, salesStartInclusive);
+		salesEndInclusive = Math.min(salesStartInclusive, salesEndInclusive);
+		int discharge = salesStartInclusive;
+		{
 			// we are able vary our speeds
 			final int canalDifference = canalNBOSpeed - canalMaxSpeed;
-			final int remainder = purchase - purchaseStart - canalDifference;
-			if (remainder >= 0) {
-				purchase -= canalDifference;
-			} else {
-				purchase = purchaseStart;
-				discharge = Math.min(salesStart - remainder, salesEnd); // note: remainder is -ve
+			if (canalDifference > 0) {
+				final int remainder = purchase - purchaseStartInclusive - canalDifference;
+				if (remainder >= 0) {
+					purchase -= canalDifference;
+				} else {
+					purchase = purchaseStartInclusive;
+					discharge = Math.min(salesStartInclusive - remainder, salesEndInclusive); // note: remainder is -ve
+				}
 			}
 		}
 		return new int[] { purchase, discharge };
