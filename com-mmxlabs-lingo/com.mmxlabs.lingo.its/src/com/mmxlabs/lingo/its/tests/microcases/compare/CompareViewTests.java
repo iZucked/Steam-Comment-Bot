@@ -41,6 +41,7 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer;
 import com.mmxlabs.lingo.reports.views.changeset.ScenarioComparisonTransformer;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -164,7 +165,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(2, changeSet.getRows().size());
@@ -223,7 +224,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(2, changeSet.getRows().size());
@@ -290,7 +291,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(1, changeSet.getRows().size());
@@ -346,7 +347,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(2, changeSet.getRows().size());
@@ -408,7 +409,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(1, changeSet.getRows().size());
@@ -465,7 +466,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(2, changeSet.getRows().size());
@@ -532,7 +533,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(1, changeSet.getRows().size());
@@ -620,7 +621,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(2, changeSet.getRows().size());
@@ -722,7 +723,7 @@ public class CompareViewTests {
 			Assert.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assert.assertEquals(2, changeSet.getRows().size());
