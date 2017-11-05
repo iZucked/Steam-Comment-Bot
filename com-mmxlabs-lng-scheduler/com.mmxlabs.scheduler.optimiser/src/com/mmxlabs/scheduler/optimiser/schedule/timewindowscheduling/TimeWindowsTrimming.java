@@ -29,7 +29,11 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
@@ -55,6 +59,11 @@ public class TimeWindowsTrimming {
 
 	@Inject
 	private SchedulerCalculationUtils schedulerCalculationUtils;
+
+	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private PanamaBookingHelper panamaBookingHelper;
 
 	/**
 	 * Trim time windows for a given set of slots
@@ -255,6 +264,22 @@ public class TimeWindowsTrimming {
 				final ITimeWindow tw = new TimeWindow(endElementTimes[2], endElementTimes[2] + 1);
 				portTimeWindowRecord.setSlotFeasibleTimeWindow(end, tw);
 			}
+			{
+				// Reclassify Panama Northbound as Relaxed, or Beyond based on new timewindow
+				final IVessel vessel = getVesselFromPortTimeWindowsRecord(resource);
+				int voyageStartTime = portTimeWindowRecord.getFirstSlotFeasibleTimeWindow().getInclusiveStart();
+				for (IPortSlot slot : portTimeWindowRecord.getSlots()) {
+					if (portTimeWindowRecord.getSlotIsNextVoyageConstrainedPanama(slot)) {
+						if (distanceProvider.getRouteOptionDirection(load.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND) {
+							final int toCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, load.getPort(), true);
+							if (toCanal != Integer.MAX_VALUE) {
+								int estimatedCanalArrival = voyageStartTime + portTimeWindowRecord.getSlotDuration(load) + toCanal;
+								portTimeWindowRecord.setSlotNextVoyagePanamaPeriod(load, panamaBookingHelper.getPanamaPeriod(estimatedCanalArrival));
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -276,7 +301,8 @@ public class TimeWindowsTrimming {
 		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		assert loadTimeWindow != null;
 		final @NonNull LadenRouteData @NonNull [] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel,
-				loadTimeWindow.getInclusiveStart(), portTimeWindowsRecord.getSlotNextVoyageOptions(load), portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(load), portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(load));
+				loadTimeWindow.getInclusiveStart() + portTimeWindowsRecord.getSlotDuration(load), portTimeWindowsRecord.getSlotNextVoyageOptions(load),
+				portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(load), portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(load));
 		assert sortedCanalTimes.length > 0;
 		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
 		final int minTravelTime = priceIntervalProviderHelper.getMinTravelTimeAtMaxSpeed(sortedCanalTimes);
@@ -319,7 +345,8 @@ public class TimeWindowsTrimming {
 		// get distances for end ballast journey
 		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumBallastTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(),
 				Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE),
-				portTimeWindowsRecord.getSlotNextVoyageOptions(discharge), portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(discharge), portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(discharge));
+				portTimeWindowsRecord.getSlotNextVoyageOptions(discharge), portTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(discharge),
+				portTimeWindowsRecord.getSlotAdditionalPanamaIdleHours(discharge));
 
 		// get time we'll be starting the final ballast journey
 		final int endTimeOfLastNonReturnSlot = getEarliestStartTimeOfBallastForEndSlot(portTimeWindowsRecord);
@@ -571,7 +598,8 @@ public class TimeWindowsTrimming {
 		final ITimeWindow feasibleEndTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(end);
 		final ITimeWindow specifiedEndTimeWindow = end.getTimeWindow();
 		final List<Integer> sortedTimes = schedulingCanalDistanceProvider.getTimeDataForDifferentSpeedsAndRoutes(discharge.getPort(), end.getPort(), vessel, cv, endTimeOfLastNonReturnSlot, false,
-				portTimeWindowRecord.getSlotNextVoyageOptions(discharge), portTimeWindowRecord.getSlotIsNextVoyageConstrainedPanama(discharge), portTimeWindowRecord.getSlotAdditionalPanamaIdleHours(discharge));
+				portTimeWindowRecord.getSlotNextVoyageOptions(discharge), portTimeWindowRecord.getSlotIsNextVoyageConstrainedPanama(discharge),
+				portTimeWindowRecord.getSlotAdditionalPanamaIdleHours(discharge));
 		final int speedBasedEndTime = sortedTimes.get(sortedTimes.size() - 1) + 1;
 		int upperBound;
 		final int lowerBound = feasibleEndTimeWindow.getInclusiveStart();

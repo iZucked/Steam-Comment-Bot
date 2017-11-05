@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
@@ -43,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
@@ -127,6 +129,9 @@ public class FeasibleTimeWindowTrimmer {
 
 	@Inject
 	private IPanamaBookingsProvider panamaBookingsProvider;
+
+	@Inject
+	private PanamaBookingHelper panamaBookingsHelper;
 
 	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
 
@@ -449,12 +454,13 @@ public class FeasibleTimeWindowTrimmer {
 		}
 
 		// Make sure we can schedule stuff on Panama
-		if (!distanceProvider.isRouteAvailable(ERouteOption.PANAMA, vesselAvailability.getVessel())) {
+		IVessel vessel = vesselAvailability.getVessel();
+		if (!distanceProvider.isRouteAvailable(ERouteOption.PANAMA, vessel)) {
 			return;
 		}
 
-		final int vesselMinSpeed = vesselAvailability.getVessel().getVesselClass().getMinSpeed();
-		final int vesselMaxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
+		final int vesselMinSpeed = vessel.getVesselClass().getMinSpeed();
+		final int vesselMaxSpeed = vessel.getVesselClass().getMaxSpeed();
 		boolean changed = false;
 		// Two passes - pass 0 allocate required panama voyages.
 		// - pass 1 force direct/suez where possible
@@ -482,6 +488,7 @@ public class FeasibleTimeWindowTrimmer {
 
 						final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[index - 1];
 
+						// Already processed?
 						if (currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot) != AvailableRouteChoices.OPTIMAL
 								|| currentPortTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(prevPortSlot)) {
 							// Choice already allocation, skip
@@ -497,6 +504,7 @@ public class FeasibleTimeWindowTrimmer {
 						final int panamaTravelTime = travelTimeData.getTravelTime(ERouteOption.PANAMA, index - 1);
 
 						if (panamaTravelTime == Integer.MAX_VALUE) {
+							// No Panama route, so an easy decision
 							travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
 							currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, PanamaPeriod.Beyond);
 							changed = true;
@@ -505,40 +513,50 @@ public class FeasibleTimeWindowTrimmer {
 							final IPort routeOptionEntry = distanceProvider.getRouteOptionEntryPort(prevPortSlot.getPort(), ERouteOption.PANAMA);
 							if (routeOptionEntry != null) {
 
-								final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), routeOptionEntry,
-										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselMaxSpeed)) + panamaBookingsProvider.getMargin() + visitDuration[index - 1];
-
-								final int fromEntryPoint = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), routeOptionEntry, portSlot.getPort(), vesselMaxSpeed);
+								final int toCanal = visitDuration[index - 1] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
+								final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, routeOptionEntry, portSlot.getPort());
 
 								boolean northBound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
 
 								int endTime = windowEndTime[index];
 								if (endTime == Integer.MAX_VALUE) {
 									// No window end, so estimate one. At worst we will travel at min speed.
-									int slowPanamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), prevPortSlot.getPort(), portSlot.getPort(),
-											vesselMinSpeed);
+									int slowPanamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, prevPortSlot.getPort(), portSlot.getPort(), vesselMinSpeed);
 
 									if (northBound) {
 										slowPanamaTime += panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
-									}
-									endTime = windowEndTime[index - 1] + slowPanamaTime;
-								}
-								int latestPanamaTime = endTime - fromEntryPoint - (northBound ? panamaBookingsProvider.getNorthboundMaxIdleDays() * 24 : panamaBookingsProvider.getMargin()); // Include
-																																																// 3am?
-
-								final PanamaPeriod panamaPeriod;
-								if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
-									if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
-										panamaPeriod = PanamaPeriod.Relaxed;
 									} else {
-										panamaPeriod = PanamaPeriod.Beyond;
+										slowPanamaTime += panamaBookingsProvider.getMarginInHours();
+									}
+									endTime = windowEndTime[index - 1] + visitDuration[index - 1] + slowPanamaTime;
+								}
+								int latestPanamaTime = endTime - fromEntryPoint - (northBound ? panamaBookingsProvider.getNorthboundMaxIdleDays() * 24 : panamaBookingsProvider.getMarginInHours()); // Include
+								// 3am?
+
+								PanamaPeriod panamaPeriod;
+								if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
+									panamaPeriod = PanamaPeriod.Beyond;
+									// For windows crossing boundaries we need to ensure the northbound idle days are taken into account but are not enforced yet.
+									// The price based trimmer (which we expect to be used with panama) will refine this further later on
+									if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
+										// Reclassify southbound voyages as relaxed. Northbound we leave for the price based trimmer
+										if (northBound) {
+											int panamaIdleTime = panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
+											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, PanamaPeriod.Beyond);
+											// Notify price based trimmer of variable choice
+											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
+										} else {
+											// Voyage could start in the relaxed period, so assume relaxed.
+											panamaPeriod = PanamaPeriod.Relaxed;
+										}
+
+									} else {
 									}
 								} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
 									panamaPeriod = PanamaPeriod.Relaxed;
 								} else {
 									panamaPeriod = PanamaPeriod.Strict;
 								}
-
 								final IPort panamaEntry = routeOptionEntry;
 								boolean bookingAllocated = false;
 								if (pass == 0) {
@@ -714,10 +732,9 @@ public class FeasibleTimeWindowTrimmer {
 							if (panamaEntry != null) {
 								boolean northBound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
 								//
-								final int toCanal = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselAvailability.getVessel(), prevPortSlot.getPort(), panamaEntry,
-										Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselMaxSpeed)) + panamaBookingsProvider.getMargin() + visitDuration[index];
+								final int toCanal = visitDuration[index] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
 
-								final int fromEntryPoint = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), panamaEntry, thisPortSlot.getPort(), vesselMaxSpeed);
+								final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, prevPortSlot.getPort(), thisPortSlot.getPort());
 								int endTime = windowEndTime[index + 1];
 
 								if (endTime != Integer.MAX_VALUE) {
@@ -726,22 +743,11 @@ public class FeasibleTimeWindowTrimmer {
 									if (northBound) {
 										latestPanamaTime -= panamaBookingsProvider.getNorthboundMaxIdleDays() * 24;
 									} else {
-										latestPanamaTime -= panamaBookingsProvider.getMargin();
+										latestPanamaTime -= panamaBookingsProvider.getMarginInHours();
 									}
 
-									// Compute panama period
-									final PanamaPeriod panamaPeriod;
-									if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
-										if (windowStartTime[index] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
-											panamaPeriod = PanamaPeriod.Relaxed;
-										} else {
-											panamaPeriod = PanamaPeriod.Beyond;
-										}
-									} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
-										panamaPeriod = PanamaPeriod.Relaxed;
-									} else {
-										panamaPeriod = PanamaPeriod.Strict;
-									}
+									// Compute panama period (for reverse pass)
+									final PanamaPeriod panamaPeriod = panamaBookingsHelper.getPanamaPeriod(latestPanamaTime);
 									if (panamaPeriod != PanamaPeriod.Beyond) {
 										final List<IRouteOptionBooking> set = currentBookings.unassignedBookings.get(panamaEntry);
 										if (set != null) {
@@ -754,7 +760,7 @@ public class FeasibleTimeWindowTrimmer {
 
 												// Find the latest possible booking date.
 												if (booking.getBookingDate() + fromEntryPoint < endTime) {
-													int time = booking.getBookingDate() - panamaBookingsProvider.getMargin();
+													int time = booking.getBookingDate() - panamaBookingsProvider.getMarginInHours();
 													if (time > latestPanamaTime) {
 														latestPanamaTime = time;
 													}

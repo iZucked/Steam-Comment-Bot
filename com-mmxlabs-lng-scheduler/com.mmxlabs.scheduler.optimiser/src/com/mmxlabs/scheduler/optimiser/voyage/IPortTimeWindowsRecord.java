@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -73,9 +72,11 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	IRouteOptionBooking getRouteOptionBooking(IPortSlot slot);
 
 	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot);
-	
+
 	boolean getSlotIsNextVoyageConstrainedPanama(IPortSlot slot);
 
 	int getSlotAdditionalPanamaIdleHours(IPortSlot slot);
+
+	void setSlotNextVoyagePanamaPeriod(IPortSlot slot, @NonNull PanamaPeriod panamaPeriod);
 
 }

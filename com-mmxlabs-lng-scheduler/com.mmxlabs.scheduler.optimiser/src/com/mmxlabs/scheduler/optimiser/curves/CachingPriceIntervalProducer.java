@@ -200,7 +200,7 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	/**
-	 * Return the max of the window end and the feasbile end (if late). Add 1 hour if start == end
+	 * Return the max of the window end and the feasible end (if late). Add 1 hour if start == end
 	 * 
 	 * @param windowStart
 	 * @param feasibleStart
