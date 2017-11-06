@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -225,7 +224,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 		});
 
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false, false);
 			return helper.runValidation(validator, extraContext, Collections.singleton(root));
 		});
 

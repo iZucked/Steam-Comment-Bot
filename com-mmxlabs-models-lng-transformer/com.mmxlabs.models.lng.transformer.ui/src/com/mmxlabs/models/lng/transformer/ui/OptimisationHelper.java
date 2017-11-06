@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+import javax.management.relation.Relation;
+
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -986,7 +988,7 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
+	public static boolean validateScenario(final MMXRootObject root, final boolean optimising, boolean relaxedValidation) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -1010,7 +1012,7 @@ public final class OptimisationHelper {
 		});
 
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false, relaxedValidation);
 			return helper.runValidation(validator, extraContext, Collections.singleton(root));
 		});
 
