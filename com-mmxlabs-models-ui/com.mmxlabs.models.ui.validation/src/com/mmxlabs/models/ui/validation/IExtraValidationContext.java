@@ -81,4 +81,11 @@ public interface IExtraValidationContext {
 	 * @return
 	 */
 	boolean isValidatingClone();
+
+	/**
+	 * Returns true if we should relax the validation checking. E.g. for debugging scenarios.
+	 * 
+	 * @return
+	 */
+	boolean isRelaxedChecking();
 }
