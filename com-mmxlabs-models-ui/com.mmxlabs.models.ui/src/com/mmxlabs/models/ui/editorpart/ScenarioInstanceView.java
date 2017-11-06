@@ -168,7 +168,14 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			MMXRootObject rootObject = getRootObject();
 
 			this.valueProviderCache = new ReferenceValueProviderCache(rootObject);
-			extraValidationContext.push(new DefaultExtraValidationContext(rootObject, false));
+			
+			boolean relaxedValidation = false;
+			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
+			if (scenarioInstance != null) {
+				relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
+			}
+			
+			extraValidationContext.push(new DefaultExtraValidationContext(rootObject, false, relaxedValidation));
 			doDisplayScenarioInstance(scenarioInstance, getRootObject());
 		} else {
 			scenarioInstanceStatusProvider = null;
