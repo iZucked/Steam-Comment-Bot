@@ -236,7 +236,7 @@ public class ADPBindingPage extends WizardPage {
 
 			@Override
 			public IExtraValidationContext getExtraValidationContext() {
-				return new DefaultExtraValidationContext(getRootObject(), false);
+				return new DefaultExtraValidationContext(getRootObject(), false, false);
 			}
 
 			@Override
@@ -334,11 +334,11 @@ public class ADPBindingPage extends WizardPage {
 								@Override
 								public void run() {
 									BindingRule bindingRule = ADPFactory.eINSTANCE.createBindingRule();
-									
+
 									// Set some defaults
 									bindingRule.setShippingOption(ADPFactory.eINSTANCE.createShippingOption());
 									bindingRule.setFlowType(ADPFactory.eINSTANCE.createDeliverToFlow());
-									
+
 									CompoundCommand cmd = new CompoundCommand();
 									cmd.append(AddCommand.create(location.getEditingDomain(), adpModel, ADPPackage.Literals.ADP_MODEL__BINDING_RULES, bindingRule));
 									// Disallow re-wiring
