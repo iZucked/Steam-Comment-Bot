@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
