@@ -84,23 +84,23 @@ public class LatenessChecker {
 			// Used only for export
 			final int latenessWithoutFlexInHours = getLatenessWithoutFlex(portSlot, tw, volumeAllocatedSequence.getArrivalTime(portSlot));
 
-			// For fitness component
-			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours);
-
 			// Check for max duration violation
 			int latenessMaxDurationInHours = 0;
 			if (portSlot instanceof IEndPortSlot) {
 				latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
 			}
 			
+			// For fitness component
+			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours + latenessMaxDurationInHours);
+
 			// For own just add the max duration violation to the general lateness
 			// TODO: report max duration lateness as a separate lateness 
 			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0 || latenessMaxDurationInHours != 0) {
-				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours + latenessMaxDurationInHours, latenessWithoutFlexInHours);
+				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours + latenessMaxDurationInHours, latenessWithoutFlexInHours + latenessMaxDurationInHours);
 			}
 
 			if (annotatedSolution != null) {
-				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessWithFlexInHours + latenessMaxDurationInHours, weightedLateness, interval, latenessWithoutFlexInHours, interval);
+				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessWithFlexInHours + latenessMaxDurationInHours, weightedLateness, interval, latenessWithoutFlexInHours + latenessMaxDurationInHours, interval);
 				annotatedSolution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(portSlot), SchedulerConstants.AI_latenessInfo, annotation);
 				setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
 			}
