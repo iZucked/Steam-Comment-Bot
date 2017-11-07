@@ -141,7 +141,7 @@ public class JourneyEventExporter {
 				final int toCanalSpeed;
 				if (journey.getRoute().getRouteOption() == RouteOption.PANAMA) {
 					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getVesselClass().getMaxSpeed());
-					marginHours = panamaSlotsProvider.getMargin();
+					marginHours = panamaSlotsProvider.getMarginInHours();
 				} else {
 					// Suez - use voyage speed
 					toCanalSpeed = voyageDetails.getSpeed();
