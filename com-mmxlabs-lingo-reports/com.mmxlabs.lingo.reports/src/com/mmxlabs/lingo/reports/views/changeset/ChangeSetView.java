@@ -219,7 +219,7 @@ public class ChangeSetView implements IAdaptable {
 					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
 					final ChangeSetRoot newRoot = transformer.createDataModel(selectedDataProvider, equivalancesMap, table, pin, other, monitor);
 
-					return new ViewState(newRoot, SortMode.BY_PNL);
+					return new ViewState(newRoot, SortMode.BY_GROUP);
 				}, null);
 			}
 		}
