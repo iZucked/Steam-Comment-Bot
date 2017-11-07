@@ -88,16 +88,19 @@ public class LatenessChecker {
 			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours);
 
 			// Check for max duration violation
-			final int latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
+			int latenessMaxDurationInHours = 0;
+			if (portSlot instanceof IEndPortSlot) {
+				latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
+			}
 			
-			// For own just add the max duration viloation to the general lateness
-			// TODO: report max duration lateness as a separate 
+			// For own just add the max duration violation to the general lateness
+			// TODO: report max duration lateness as a separate lateness 
 			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0 || latenessMaxDurationInHours != 0) {
-				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours, latenessWithoutFlexInHours + latenessMaxDurationInHours);
+				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours + latenessMaxDurationInHours, latenessWithoutFlexInHours);
 			}
 
 			if (annotatedSolution != null) {
-				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessWithFlexInHours, weightedLateness, interval, latenessWithoutFlexInHours, interval);
+				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessWithFlexInHours + latenessMaxDurationInHours, weightedLateness, interval, latenessWithoutFlexInHours, interval);
 				annotatedSolution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(portSlot), SchedulerConstants.AI_latenessInfo, annotation);
 				setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
 			}
