@@ -242,7 +242,8 @@ public class BaseCaseEvaluator {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class,
+				evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
 
 	}
 
@@ -343,6 +344,8 @@ public class BaseCaseEvaluator {
 			final @NonNull LNGScenarioModel lngScenarioModel, Map<FleetShippingOption, VesselAvailability> shippingMap) {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
+		boolean adjustWindows = false;
+
 		if (shipping == null) {
 			if (loadSlot != null && dischargeSlot != null) {
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
@@ -373,27 +376,7 @@ public class BaseCaseEvaluator {
 			if (dischargeSlot != null && dischargeSlot.isFOBSale()) {
 				dischargeSlot.setNominatedVessel(nominatedShippingOption.getNominatedVessel());
 			}
-
-			if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-				dischargeSlot.setWindowStart(loadSlot.getWindowStart());
-				if (dischargeSlot instanceof SpotSlot) {
-					dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
-					// Ensure other values correctly set
-					dischargeSlot.setWindowSize(1);
-					dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-					dischargeSlot.setWindowStartTime(0);
-				}
-			} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-				loadSlot.setWindowStart(dischargeSlot.getWindowStart());
-				if (loadSlot instanceof SpotSlot) {
-					loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
-					// Ensure other values correctly set
-					loadSlot.setWindowSize(1);
-					loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-					loadSlot.setWindowStartTime(0);
-				}
-			}
-
+			adjustWindows = true;
 		} else if (shipping instanceof FleetShippingOption) {
 			final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
 			if (cargo != null) {
@@ -403,30 +386,7 @@ public class BaseCaseEvaluator {
 
 				cargo.setVesselAssignmentType(vesselAvailability);
 
-				// TODO: Calculate time.
-				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
-					if (dischargeSlot instanceof SpotSlot) {
-						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						dischargeSlot.setWindowSize(1);
-						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						dischargeSlot.setWindowStartTime(0);
-					}
-				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
-					if (loadSlot instanceof SpotSlot) {
-						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						loadSlot.setWindowSize(1);
-						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						loadSlot.setWindowStartTime(0);
-					}
-				}
+				adjustWindows = true;
 			}
 		} else if (shipping instanceof RoundTripShippingOption) {
 			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
@@ -442,41 +402,48 @@ public class BaseCaseEvaluator {
 				cargo.setVesselAssignmentType(market);
 				cargo.setSpotIndex(-1);
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
-				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 
-					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
-					if (dischargeSlot instanceof SpotSlot) {
-						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						dischargeSlot.setWindowSize(1);
-						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						dischargeSlot.setWindowStartTime(0);
-					}
-				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
-
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
-					if (loadSlot instanceof SpotSlot) {
-						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						loadSlot.setWindowSize(1);
-						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						loadSlot.setWindowStartTime(0);
-					}
-				}
-			}	
+				adjustWindows = true;
+			}
 		} else if (shipping instanceof ExistingVesselAvailability) {
 			final ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability) shipping;
 			cargo.setVesselAssignmentType(existingVesselAvailability.getVesselAvailability());
+
+			adjustWindows = true;
 		} else if (shipping instanceof ExistingCharterMarketOption) {
 			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shipping;
 			cargo.setVesselAssignmentType(existingCharterMarketOption.getCharterInMarket());
 			cargo.setSpotIndex(existingCharterMarketOption.getSpotIndex());
-				
-	
+
+			adjustWindows = true;
+		}
+
+		if (adjustWindows) {
+			if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
+				final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+				final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+
+				dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
+				if (dischargeSlot instanceof SpotSlot) {
+					dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					dischargeSlot.setWindowSize(1);
+					dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					dischargeSlot.setWindowStartTime(0);
+				}
+			} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
+				final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+
+				final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+				loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
+				if (loadSlot instanceof SpotSlot) {
+					loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					loadSlot.setWindowSize(1);
+					loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					loadSlot.setWindowStartTime(0);
+				}
+			}
 		}
 	}
 
