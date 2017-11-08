@@ -551,11 +551,11 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					@Nullable
 					final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 					if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject((EObject) a)) {
-						res--;
+						res++;
 					}
 
 					if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject((EObject) b)) {
-						res++;
+						res--;
 					}
 				}
 				return res;
@@ -759,6 +759,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
 					gvc.getColumn().setImage(pinImage);
+					gvc.getColumn().setText("");
 				}
 			// Diff of cargo
 			} else if (selectedObject instanceof CargoAllocationPair) {
@@ -768,7 +769,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					GridViewerHelper.configureLookAndFeel(gvc);
 					// Mark column for disposal on selection change
 					dataColumns.add(gvc);
-					gvc.getColumn().setText("𝚫 " + cargoAllocationPair.getName());
+					gvc.getColumn().setText("𝚫");
 					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 					gvc.getColumn().setWidth(100);
 				}

@@ -92,22 +92,16 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					if (valuePrevious instanceof Integer) {
 						int delta = ((int) valuePrevious) - ((int) valuePinned);
 
-						if (delta != 0) {
 							deltaValue = String.valueOf(delta);
-						}
 					} else if (valuePrevious instanceof Long) {
 						long delta = ((long) valuePrevious) - ((long) valuePinned);
 
-						if (delta != 0L) {
 							deltaValue = String.valueOf(delta);
-						}
 					} else if (valuePrevious instanceof Double) {
 						double delta = ((double) valuePrevious) - ((double) valuePinned);
 						double epsilon = 0.0001f;
 
-						if ((delta < -epsilon) && (delta > epsilon)) {
 							deltaValue = String.valueOf(delta);
-						}
 					} else if (valuePrevious instanceof String) {
 						if (col.getText().compareTo("Scenario") == 0) {
 							deltaValue = " ";
@@ -218,9 +212,9 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						setRowSpan(formatter, cell, pinnedElement);
 						if (col.getText().equals("Scenario")) {
 							cell.setText("Δ Total");
-						} else if (deltaValue.compareTo("") != 0) {
-							cell.setText("Δ " + deltaValue);
-						}
+						} 
+						
+						cell.setText(deltaValue);
 
 					}
 				} else if (element instanceof CompositeRow) {
@@ -237,10 +231,12 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					}
 					
 					setRowSpan(formatter, cell, pinnedElement);
-					if (deltaValue.compareTo("") != 0) {
-						cell.setText("Δ " + deltaValue);
+
+					if (col.getText().equals("Scenario")) {
+						cell.setText("Δ");
+					} else {
+						cell.setText(deltaValue);
 					}
-					
 				} else {
 					if (element != null) {
 						boolean found = false;
