@@ -210,12 +210,10 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 						}
 						
 						setRowSpan(formatter, cell, pinnedElement);
+						cell.setText(deltaValue);
 						if (col.getText().equals("Scenario")) {
 							cell.setText("Δ Total");
 						} 
-						
-						cell.setText(deltaValue);
-
 					}
 				} else if (element instanceof CompositeRow) {
 					CompositeRow compositeRow = (CompositeRow) element;

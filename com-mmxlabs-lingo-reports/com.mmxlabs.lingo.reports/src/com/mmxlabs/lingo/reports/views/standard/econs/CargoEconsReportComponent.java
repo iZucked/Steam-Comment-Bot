@@ -434,7 +434,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			// Edge case, only one lonely element in the list
 			if (cargoAllocations.size() == 1) {
 				CargoAllocation a = cargoAllocations.get(0);
-				pairs.add(new CargoAllocationPair(a, null));
+				//pairs.add(new CargoAllocationPair(a, null));
 			}
 			
 			for(int i = 0; i < cargoAllocations.size() - 1; i++) {
@@ -445,7 +445,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					pairs.add(new CargoAllocationPair(a, b));
 					i++;
 				} else {
-					pairs.add(new CargoAllocationPair(a, null));
+					//pairs.add(new CargoAllocationPair(a, null));
 				}
 			}
 
@@ -735,9 +735,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			aggregateList.addAll(cargoAllocationPairs);
 			aggregateList.addAll(vesselEventVisitsPairs);
 			
+			long numberOfdiffColumn = cargoAllocationPairs.stream().filter(a -> a.second() != null).count();
+			numberOfdiffColumn += vesselEventVisitsPairs.stream().filter(a -> a.second() != null).count();
+			
 			// Only create aggregate if more than two element
 			// The cargo/vesselEvent and its partial pair
-			if (validObjects.size() > 2) {
+			if (numberOfdiffColumn > 1) {
 				validObjects.add(aggregateList);
 			}
 		}
@@ -747,7 +750,6 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			// Currently only CargoAllocations
 			if (selectedObject instanceof CargoAllocation) {
 				final CargoAllocation cargoAllocation = (CargoAllocation) selectedObject;
-
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
@@ -762,27 +764,15 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					gvc.getColumn().setText("");
 				}
 			// Diff of cargo
-			} else if (selectedObject instanceof CargoAllocationPair) {
-				final CargoAllocationPair cargoAllocationPair = (CargoAllocationPair) selectedObject;
-				if (cargoAllocationPair.second() != null || onlyDiffMode == true) {
+			} else if (selectedObject instanceof DeltaPair) {
+				final DeltaPair pair = (DeltaPair) selectedObject;
+				if (pair.second() != null || onlyDiffMode == true) {
 					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 					GridViewerHelper.configureLookAndFeel(gvc);
 					// Mark column for disposal on selection change
 					dataColumns.add(gvc);
+					gvc.getColumn().setAlignment(SWT.CENTER);
 					gvc.getColumn().setText("𝚫");
-					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
-					gvc.getColumn().setWidth(100);
-				}
-			// Diff of VesselEvent
-			} else if (selectedObject instanceof VesselEventVisitPair) {
-				final VesselEventVisitPair vesselEventVisitsPair = (VesselEventVisitPair) selectedObject;
-
-				if (vesselEventVisitsPair.second() != null || onlyDiffMode == true) {
-					final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-					GridViewerHelper.configureLookAndFeel(gvc);
-					// Mark column for disposal on selection change
-					dataColumns.add(gvc);
-					gvc.getColumn().setText("𝚫 " + vesselEventVisitsPair.getName());
 					gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 					gvc.getColumn().setWidth(100);
 				}
@@ -792,7 +782,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
-				gvc.getColumn().setText("𝚫 Aggregate");
+				gvc.getColumn().setAlignment(SWT.CENTER);
+				gvc.getColumn().setText("Σ");
 
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
