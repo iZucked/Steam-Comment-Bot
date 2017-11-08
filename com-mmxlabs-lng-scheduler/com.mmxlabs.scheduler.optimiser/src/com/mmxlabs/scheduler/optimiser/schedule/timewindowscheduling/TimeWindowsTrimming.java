@@ -60,6 +60,7 @@ public class TimeWindowsTrimming {
 	@Inject
 	private SchedulerCalculationUtils schedulerCalculationUtils;
 
+	@Inject
 	private IDistanceProvider distanceProvider;
 
 	@Inject
