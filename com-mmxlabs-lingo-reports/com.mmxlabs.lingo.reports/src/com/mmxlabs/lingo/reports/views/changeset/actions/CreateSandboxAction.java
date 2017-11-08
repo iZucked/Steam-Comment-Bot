@@ -4,14 +4,19 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.actions;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
@@ -364,14 +369,45 @@ public class CreateSandboxAction extends Action {
 		}
 
 		final ScenarioInstance scenarioInstance = baseScenarioResult.getScenarioInstance();
-		@NonNull
-		final
-		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final @NonNull ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (ModelReference ref = modelRecord.aquireReference("ChangeSetView:ContextMenuManager")) {
-			final EditingDomain ed = ref.getEditingDomain();
+			final EditingDomain editingDomain = ref.getEditingDomain();
 			final CompoundCommand cmd = new CompoundCommand("Create sandbox");
-			cmd.append(AddCommand.create(ed, ((LNGScenarioModel) ref.getInstance()).getAnalyticsModel(), AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), newModel));
-			ed.getCommandStack().execute(cmd);
+			if (true) {
+				cmd.append(AddCommand.create(editingDomain, ((LNGScenarioModel) ref.getInstance()).getAnalyticsModel(), AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), newModel));
+				editingDomain.getCommandStack().execute(cmd);
+			} else {
+				// Alternative code path to temporarily disable read-only mode
+				List<Runnable> updates = new LinkedList<>();
+				boolean readOnly = modelRecord.getScenarioInstance().isReadonly();
+				modelRecord.getScenarioInstance().setReadonly(false);
+				{
+					if (editingDomain instanceof AdapterFactoryEditingDomain) {
+						final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) editingDomain;
+						Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+						// Init map if needed.
+						if (resourceToReadOnlyMap != null) {
+							for (final Resource r : editingDomain.getResourceSet().getResources()) {
+								Boolean b = resourceToReadOnlyMap.get(r);
+								if (b != null && b == true) {
+									resourceToReadOnlyMap.put(r, Boolean.FALSE);
+									updates.add(() -> resourceToReadOnlyMap.put(r, Boolean.TRUE));
+								}
+
+							}
+						}
+					}
+				}
+				cmd.append(AddCommand.create(editingDomain, ((LNGScenarioModel) ref.getInstance()).getAnalyticsModel(), AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), newModel));
+				editingDomain.getCommandStack().execute(cmd);
+				try {
+					ref.save();
+				} catch (IOException e) {
+
+				}
+				modelRecord.getScenarioInstance().setReadonly(readOnly);
+				updates.forEach(r -> r.run());
+			}
 		}
 	}
 }
