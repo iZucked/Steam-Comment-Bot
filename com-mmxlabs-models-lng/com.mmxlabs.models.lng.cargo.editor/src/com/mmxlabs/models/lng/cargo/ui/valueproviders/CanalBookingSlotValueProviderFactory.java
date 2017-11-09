@@ -82,10 +82,13 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 					Slot slot = (Slot) value.getSecond();
 					CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
 					
-					LocalDate windowStart = slot.getWindowStart();
-					LocalDate windowEnd = windowStart;
+					if (slot == canalBookingSlot.getSlot()) {
+						filteredList.add(value);
+					} else {
+						LocalDate windowStart = slot.getWindowStart();
+						LocalDate windowEnd = windowStart;
 
-					switch (slot.getSlotOrPortWindowSizeUnits()) {
+						switch (slot.getSlotOrPortWindowSizeUnits()) {
 						case DAYS:
 							windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
 							break;
@@ -97,13 +100,14 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 							break;
 						default:
 							break;
-					}
-					
-					NonNullPair<LocalDate, LocalDate> selectionRange = null;
-					selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+						}
 
-					if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
-						filteredList.add(value);
+						NonNullPair<LocalDate, LocalDate> selectionRange = null;
+						selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+
+						if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
+							filteredList.add(value);
+						}
 					}
 				}
 				return filteredList;
