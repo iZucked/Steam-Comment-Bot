@@ -599,7 +599,7 @@ public class FeasibleTimeWindowTrimmer {
 
 											// Visit duration should implicitly be included in this calculation.
 
-											final int travelTime = (potentialBooking.get().getBookingDate() - windowStartTime[index - 1]) + fromEntryPoint;
+											final int travelTime = toCanal + fromEntryPoint;
 											travelTimeData.setMinTravelTime(index - 1, travelTime);
 
 											// Adjust origin window end

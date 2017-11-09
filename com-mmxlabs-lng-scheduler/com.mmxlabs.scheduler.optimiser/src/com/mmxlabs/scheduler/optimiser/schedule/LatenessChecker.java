@@ -91,7 +91,7 @@ public class LatenessChecker {
 				latenessWithoutFlexInHours = Math.max(latenessMaxDurationInHours, latenessWithoutFlexInHours);
 				
 				// There is no latenessWith flex for the endEvent
-				latenessWithFlexInHours = latenessMaxDurationInHours;
+				latenessWithFlexInHours = Math.max(latenessMaxDurationInHours, latenessWithFlexInHours);
 			}
 			
 			// For fitness component
