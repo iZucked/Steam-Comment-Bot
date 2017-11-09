@@ -407,7 +407,17 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	}
 	
 	public abstract static class DeltaPair {
-	
+		public Object first() {
+			return null;
+		}
+		
+		public Object second() {
+			return null;
+		}
+		
+		public String getName() {
+			return null;
+		}
 	}
 	
 	public static class CargoAllocationPair extends DeltaPair {
@@ -419,10 +429,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			this.second = second;
 		}
 		
+		@Override
 		public CargoAllocation first() {
 			return first;
 		}
 		
+		@Override
 		public CargoAllocation second() {
 			return second;
 		}
@@ -454,13 +466,14 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				CargoAllocation a = cargoAllocations.get(cargoAllocations.size() - 2);
 				CargoAllocation b = cargoAllocations.get(cargoAllocations.size() - 1);
 				if (!a.getName().equals(b.getName())) {
-					pairs.add(new CargoAllocationPair(b, null));
+					//pairs.add(new CargoAllocationPair(b, null));
 				}
 			}
 			return pairs;
 		}
 		
-		String getName() {
+		@Override
+		public String getName() {
 			return first.getName();
 		}
 	}
@@ -474,10 +487,12 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			this.second = second;
 		}
 		
+		@Override
 		public VesselEventVisit first() {
 			return first;
 		}
 		
+		@Override
 		public VesselEventVisit second() {
 			return second;
 		}
@@ -489,7 +504,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			
 			if (vesselEventVisits.size() == 1) {
 				VesselEventVisit a = vesselEventVisits.get(0);
-				pairs.add(new VesselEventVisitPair(a, null));
+				//pairs.add(new VesselEventVisitPair(a, null));
 			}
 			
 			for(int i = 0; i < vesselEventVisits.size() - 1; i++) {
@@ -500,7 +515,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					pairs.add(new VesselEventVisitPair(a, b));
 					i++;
 				} else {
-					pairs.add(new VesselEventVisitPair(a, null));
+					//pairs.add(new VesselEventVisitPair(a, null));
 				}
 			}
 			
@@ -508,13 +523,14 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				VesselEventVisit a = vesselEventVisits.get(vesselEventVisits.size() - 2);
 				VesselEventVisit b = vesselEventVisits.get(vesselEventVisits.size() - 1);
 				if (!a.name().equals(b.name())) {
-					pairs.add(new VesselEventVisitPair(b, null));
+					//pairs.add(new VesselEventVisitPair(b, null));
 				}
 			} 
 			return pairs;
 		}
 		
-		String getName() {
+		@Override
+		public String getName() {
 			return first.name();
 		}
 	}
@@ -524,30 +540,27 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 		String bName = "";
 		
 		if (a != null && b != null) {
+
 			if (a instanceof CargoAllocation) {
 				aName = ((CargoAllocation) a).getName();
 			} else if (a instanceof VesselEventVisit) {
 				aName = ((VesselEventVisit) a).name();
-			} else if (a instanceof CargoAllocationPair) {
-				aName = ((CargoAllocationPair) a).first().getName();
-			} else if (a instanceof VesselEventVisitPair) {
-				aName = ((VesselEventVisitPair) a).first().name();
+			} else if (a instanceof DeltaPair) {
+				aName = ((DeltaPair) a).getName();
 			}
 			
 			if (b instanceof CargoAllocation) {
 				bName = ((CargoAllocation) b).getName();
 			} else if (b instanceof VesselEventVisit) {
 				bName = ((VesselEventVisit) b).name();
-			} else if (b instanceof CargoAllocationPair) {
-				bName = ((CargoAllocationPair) b).first().getName();
-			} else if (b instanceof VesselEventVisitPair) {
-				bName = ((VesselEventVisitPair) b).first().name();
+			} else if (b instanceof DeltaPair) {
+				bName = ((DeltaPair) b).getName();
 			}
 			
 			if (aName != null && bName != null) {
 				int res = aName.compareTo(bName);
 				
-				if (res == 0 && !(a instanceof CargoAllocationPair || b instanceof CargoAllocationPair || a instanceof VesselEventVisitPair || b instanceof VesselEventVisitPair)) {
+				if (res == 0 && !(a instanceof DeltaPair || b instanceof DeltaPair)) {
 					@Nullable
 					final ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 					if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject((EObject) a)) {

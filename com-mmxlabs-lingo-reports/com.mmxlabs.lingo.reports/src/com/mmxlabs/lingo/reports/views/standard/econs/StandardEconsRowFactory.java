@@ -93,15 +93,15 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		final List<CargoEconsReportRow> rows = new LinkedList<>();
 		if (containsCargo) {
 			rows.add(createRow(10, "Purchase", "$", createBuyValuePrice(options)));
-			rows.add(createRow(20, "- Price", "$/mmBTu", createBuyPrice(options)));
-			rows.add(createRow(30, "- Volume", "mmBTu", createBuyVolumeMMBTuPrice(options)));
+			rows.add(createRow(20, "    Price", "$/mmBTu", createBuyPrice(options)));
+			rows.add(createRow(30, "    Volume", "mmBTu", createBuyVolumeMMBTuPrice(options)));
 		}
 		rows.add(createRow(40, "Shipping", "$", createShippingCosts(options)));
-		rows.add(createRow(50, "- Bunkers", "$", createShippingBunkersTotal(options)));
-		rows.add(createRow(60, "- Port", "$", createShippingPortCosts(options)));
-		rows.add(createRow(70, "- Canal", "$", createShippingCanalCosts(options)));
-		rows.add(createRow(80, "- Boil-off", "$", createShippingBOGTotal(options), createBOGColourProvider(options)));
-		rows.add(createRow(90, "- Charter Cost", "$", createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
+		rows.add(createRow(50, "    Bunkers", "$", createShippingBunkersTotal(options)));
+		rows.add(createRow(60, "    Port", "$", createShippingPortCosts(options)));
+		rows.add(createRow(70, "    Canal", "$", createShippingCanalCosts(options)));
+		rows.add(createRow(80, "    Boil-off", "$", createShippingBOGTotal(options), createBOGColourProvider(options)));
+		rows.add(createRow(90, "    Charter Cost", "$", createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
 		if (containsCharterOut) {
 			rows.add(createRow(100, "Charter Revenue", "$", createShippingCharterRevenue(options)));
 			rows.add(createRow(110, "Repositioning", "$", createShippingRepositioning(options)));
@@ -110,8 +110,8 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		if (containsCargo) {
 			rows.add(createRow(140, "Sale", "$", createSellValuePrice(options)));
-			rows.add(createRow(150, "- Price", "$/mmBTu", createSellPrice(options)));
-			rows.add(createRow(160, "- Volume", "mmBtu", createSellVolumeMMBTuPrice(options)));
+			rows.add(createRow(150, "    Price", "$/mmBTu", createSellPrice(options)));
+			rows.add(createRow(160, "    Volume", "mmBtu", createSellVolumeMMBTuPrice(options)));
 			if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 				rows.add(createRow(170, "Equity P&L", "$", createPNLEquity(options)));
 			}
@@ -232,20 +232,11 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		Object first = null;
 		Object second = null;
 		
-		if (object instanceof CargoAllocationPair) {
-			final CargoAllocationPair cargoAllocationPair = (CargoAllocationPair) object;
-			final CargoAllocation cargoAllocationFirst = cargoAllocationPair.first();
-			final CargoAllocation cargoAllocationSecond = cargoAllocationPair.second();
-			first = cargoAllocationFirst;
-			second = cargoAllocationSecond;
-		}
-		
-		if (object instanceof VesselEventVisitPair) {
-			final VesselEventVisitPair cargoAllocationPair = (VesselEventVisitPair) object;
-			final VesselEventVisit cargoAllocationFirst = cargoAllocationPair.first();
-			final VesselEventVisit cargoAllocationSecond = cargoAllocationPair.second();
-			first = cargoAllocationFirst;
-			second = cargoAllocationSecond;
+
+		if (object instanceof DeltaPair) {
+			final DeltaPair deltaPair = (DeltaPair) object;
+			first = deltaPair.first();
+			second = deltaPair.second();
 		}
 
 		T valueFirst = f.apply((U) first, options);
@@ -297,22 +288,12 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		Object first = null;
 		Object second = null;
 		
-		if (object instanceof CargoAllocationPair) {
-			final CargoAllocationPair cargoAllocationPair = (CargoAllocationPair) object;
-			final CargoAllocation cargoAllocationFirst = cargoAllocationPair.first();
-			final CargoAllocation cargoAllocationSecond = cargoAllocationPair.second();
-			first = cargoAllocationFirst;
-			second = cargoAllocationSecond;
+		if (object instanceof DeltaPair) {
+			final DeltaPair deltaPair = (DeltaPair) object;
+			first = deltaPair.first();
+			second = deltaPair.second();
 		}
 		
-		if (object instanceof VesselEventVisitPair) {
-			final VesselEventVisitPair cargoAllocationPair = (VesselEventVisitPair) object;
-			final VesselEventVisit cargoAllocationFirst = cargoAllocationPair.first();
-			final VesselEventVisit cargoAllocationSecond = cargoAllocationPair.second();
-			first = cargoAllocationFirst;
-			second = cargoAllocationSecond;
-		}
-	
 		T valueFirst = f.apply((U) first);
 
 		if (second != null) {
