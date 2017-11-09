@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -775,6 +776,8 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 				if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(cargoAllocation)) {
 					gvc.getColumn().setImage(pinImage);
 					gvc.getColumn().setText("");
+
+					gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				}
 			// Diff of cargo
 			} else if (selectedObject instanceof DeltaPair) {
