@@ -1008,8 +1008,11 @@ public class FeasibleTimeWindowTrimmer {
 		if (requirement != null) {
 			if (requirement.isMaxDurationSet()) {
 				ITimeWindow window = getTrimmedWindowBasedOnMaxDuration(requirement, portSlot, index);
-				windowEndTime[index] = Math.min(windowEndTime[index], window.getExclusiveEnd());
-				windowStartTime[index] = Math.min(windowStartTime[index], window.getInclusiveStart());
+				windowEndTime[index] = Math.max(windowStartTime[index] + 1, Math.min(windowEndTime[index], window.getExclusiveEnd()));
+
+				assert windowStartTime[index] < windowEndTime[index];
+				assert windowStartTime[index - 1] <= windowStartTime[index];
+				assert windowEndTime[index - 1] <= windowEndTime[index];
 			}
 		}
 	}
