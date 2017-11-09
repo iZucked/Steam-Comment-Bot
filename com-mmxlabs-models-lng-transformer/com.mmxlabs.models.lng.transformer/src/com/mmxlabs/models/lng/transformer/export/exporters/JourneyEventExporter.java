@@ -213,8 +213,8 @@ public class JourneyEventExporter {
 
 	private List<FuelQuantity> exportFuelData(final VoyageDetails details) {
 
-		return FuelExportHelper.exportFuelData(details, FuelExportHelper.travelFuelComponentNames, (d, f, u) -> {
+		return FuelExportHelper.exportFuelData(details, details.getOptions().getVessel(), FuelExportHelper.travelFuelComponentNames, (d, f, u) -> {
 			return d.getFuelConsumption(f, u) + d.getRouteAdditionalConsumption(f, u);
-		}, VoyageDetails::getFuelUnitPrice);
+		}, VoyageDetails::getFuelUnitPrice, modelEntityMap);
 	}
 }

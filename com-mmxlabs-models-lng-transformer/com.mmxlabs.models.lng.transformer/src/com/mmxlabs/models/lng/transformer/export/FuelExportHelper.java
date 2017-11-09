@@ -11,12 +11,15 @@ import java.util.Map;
 import java.util.function.ToIntBiFunction;
 
 import com.mmxlabs.common.util.ToLongTriFunction;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -54,8 +57,8 @@ public class FuelExportHelper {
 		modelUnits.put(FuelUnit.MMBTu, com.mmxlabs.models.lng.schedule.FuelUnit.MMBTU);
 	}
 
-	public static <T> List<FuelQuantity> exportFuelData(final T details, final Map<Fuel, FuelComponent[]> fuelMap, final ToLongTriFunction<T, FuelComponent, FuelUnit> consumptionProvider,
-			final ToIntBiFunction<T, FuelComponent> priceProvider) {
+	public static <T> List<FuelQuantity> exportFuelData(final T details, final IVessel vessel, final Map<Fuel, FuelComponent[]> fuelMap,
+			final ToLongTriFunction<T, FuelComponent, FuelUnit> consumptionProvider, final ToIntBiFunction<T, FuelComponent> priceProvider, ModelEntityMap modelEntityMap) {
 
 		final List<FuelQuantity> result = new LinkedList<FuelQuantity>();
 		for (final Map.Entry<Fuel, FuelComponent[]> entry : fuelMap.entrySet()) {
@@ -97,6 +100,10 @@ public class FuelExportHelper {
 					matters = true;
 				}
 				if (matters) {
+
+					if (entry.getKey() == Fuel.BASE_FUEL || entry.getKey() == Fuel.PILOT_LIGHT) {
+						quantity.setBaseFuel(modelEntityMap.getModelObject(vessel.getBaseFuel(), BaseFuel.class));
+					}
 					quantity.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(totalCost));
 					result.add(quantity);
 				}

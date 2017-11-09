@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.export.exporters;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class VisitEventExporter {
 
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<>();
 
-	public PortVisit export(final PortDetails details, VolumeAllocatedSequence sequence, IAnnotatedSolution annotatedSolution, Schedule output) {
+	public PortVisit export(final PortDetails details, final VolumeAllocatedSequence sequence, final IAnnotatedSolution annotatedSolution, final Schedule output) {
 
 		// "element" represents an IPortSlot
 		final IPortSlot slot = details.getOptions().getPortSlot();
@@ -221,14 +222,14 @@ public class VisitEventExporter {
 		}
 
 		if (portVisit instanceof FuelUsage) {
-			FuelUsage fuelUsage = (FuelUsage) portVisit;
+			final FuelUsage fuelUsage = (FuelUsage) portVisit;
 			fuelUsage.getFuels().addAll(exportFuelData(details));
 		}
 
 		portVisit.setPort(ePort);
 
-		int startTime = sequence.getArrivalTime(slot);
-		int endTime = startTime + sequence.getVisitDuration(slot);
+		final int startTime = sequence.getArrivalTime(slot);
+		final int endTime = startTime + sequence.getVisitDuration(slot);
 
 		portVisit.setStart(modelEntityMap.getDateFromHours(startTime, slot.getPort()));
 		// Note, end port may be different for CO event!
@@ -337,8 +338,11 @@ public class VisitEventExporter {
 		return portVisit;
 	}
 
-	private List<FuelQuantity> exportFuelData(PortDetails details) {
-
-		return FuelExportHelper.exportFuelData(details, FuelExportHelper.portFuelComponentNames, PortDetails::getFuelConsumption, PortDetails::getFuelUnitPrice);
+	private List<FuelQuantity> exportFuelData(final PortDetails details) {
+		if (details.getOptions().getVessel() == null) {
+			return Collections.emptyList();
+		}
+		return FuelExportHelper.exportFuelData(details, details.getOptions().getVessel(), FuelExportHelper.portFuelComponentNames, PortDetails::getFuelConsumption, PortDetails::getFuelUnitPrice,
+				modelEntityMap);
 	}
 }

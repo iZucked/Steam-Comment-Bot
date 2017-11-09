@@ -62,6 +62,6 @@ public class IdleEventExporter {
 	}
 
 	private List<FuelQuantity> exportFuelData(VoyageDetails details) {
-		return FuelExportHelper.exportFuelData(details, FuelExportHelper.idleFuelComponentNames, VoyageDetails::getFuelConsumption, VoyageDetails::getFuelUnitPrice);
+		return FuelExportHelper.exportFuelData(details, details.getOptions().getVessel(), FuelExportHelper.idleFuelComponentNames, VoyageDetails::getFuelConsumption, VoyageDetails::getFuelUnitPrice, modelEntityMap);
 	}
 }
