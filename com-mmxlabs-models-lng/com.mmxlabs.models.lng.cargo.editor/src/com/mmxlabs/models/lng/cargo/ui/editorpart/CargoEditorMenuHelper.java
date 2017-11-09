@@ -36,9 +36,13 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -264,6 +268,8 @@ public class CargoEditorMenuHelper {
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, dischargeSlot);
 				}
+
+				panamaAssignmentMenu(manager, dischargeSlot);
 			}
 
 		};
@@ -581,6 +587,7 @@ public class CargoEditorMenuHelper {
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, loadSlot);
 				}
+				panamaAssignmentMenu(manager, loadSlot);
 			}
 
 		};
@@ -1296,7 +1303,74 @@ public class CargoEditorMenuHelper {
 			}
 		}
 	}
+	
+	private void panamaAssignmentMenu(final IMenuManager menuManager, final Slot slot) {
+		
+		class AssignCanalAction extends Action {
+			private final CanalBookingSlot canalBookingSlot;
 
+			public AssignCanalAction(final String label, final CanalBookingSlot canalBookingSlot) {
+				super(label);
+				this.canalBookingSlot = canalBookingSlot;
+			}
+
+			public void run() {
+				Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, slot);
+				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+			}
+		}
+		
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
+		menuManager.add(new Separator());
+
+		final MenuManager reassignMenuManager = new MenuManager("Assign canal booking...", null);
+		menuManager.add(reassignMenuManager);
+		List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
+
+		IMenuManager northBoundCanalBookingMenu = new MenuManager("North Bound");
+		IMenuManager southBoundCanalBookingMenu = new MenuManager("South Bound");
+
+		reassignMenuManager.add(northBoundCanalBookingMenu);
+		reassignMenuManager.add(southBoundCanalBookingMenu);
+
+		for (CanalBookingSlot canalbooking : canalbookings) {
+			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());
+
+			if (canalbooking.getSlot() != null) {
+				canalBookingHandle = String.format("%s [%s]", canalbooking.getBookingDate(), canalbooking.getSlot().getName());
+			} 
+			
+			LocalDate windowStart = slot.getWindowStart();
+			LocalDate windowEnd = windowStart;
+			
+			switch (slot.getSlotOrPortWindowSizeUnits()) {
+			
+			case DAYS:
+				windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
+				break;
+			case HOURS:
+				windowEnd = windowStart.plusDays((slot.getSlotOrPortWindowSize() + 12) / 24);
+				break;
+			case MONTHS:
+				windowEnd = windowStart.plusMonths(slot.getSlotOrPortWindowSize());
+				break;
+			default:
+				break;
+			}
+
+			NonNullPair<LocalDate, LocalDate> selectionRange = null;
+			selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+
+			if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalbooking.getBookingDate(), canalbooking.getBookingDate()), LocalDate::isBefore)) {
+				if (canalbooking.getEntryPoint().getName().equals("Panama North")) {
+					northBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking));
+				} else if (canalbooking.getEntryPoint().getName().equals("Panama South")) {
+					southBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking));
+				}
+			}
+		}
+
+	}
 	/**
 	 */
 	public void editLDDCargo(final Cargo cargo, final boolean isNew) {
