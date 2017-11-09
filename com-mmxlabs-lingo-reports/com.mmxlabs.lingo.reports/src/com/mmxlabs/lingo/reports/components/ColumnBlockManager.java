@@ -346,6 +346,14 @@ public class ColumnBlockManager {
 		}
 	}
 
+	public void removeColumn(final ColumnHandler h) {
+
+		h.destroy();
+		handlers.remove(h);
+		handlersInOrder.remove(h);
+		h.block.getColumnHandlers().remove(h);
+	}
+
 	public void makeAllBlocksVisible() {
 		for (final ColumnHandler handler : handlers) {
 			handler.block.setUserVisible(true);

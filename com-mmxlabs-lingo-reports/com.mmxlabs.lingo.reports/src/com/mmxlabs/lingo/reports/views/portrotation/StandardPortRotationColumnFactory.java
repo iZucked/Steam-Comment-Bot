@@ -87,29 +87,6 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 	public static final String PORT_ROTATION_REPORT_TYPE_ID = "PORT_ROTATION_REPORT_TYPE_ID";
 
-	/**
-	 * Mapping between fuel and the quantity unit displayed.
-	 */
-	private static final Map<Fuel, FuelUnit> fuelQuanityUnits = new HashMap<Fuel, FuelUnit>();
-	/**
-	 * Mapping between fuel and the unit price unit displayed.
-	 */
-	private static final Map<Fuel, FuelUnit> fuelUnitPriceUnits = new HashMap<Fuel, FuelUnit>();
-
-	protected static final String COLUMN_BLOCK_FUELS = "com.mmxlabs.lingo.reports.components.columns.portrotation.fuels";
-
-	static {
-		fuelQuanityUnits.put(Fuel.BASE_FUEL, FuelUnit.MT);
-		fuelQuanityUnits.put(Fuel.FBO, FuelUnit.M3);
-		fuelQuanityUnits.put(Fuel.NBO, FuelUnit.M3);
-		fuelQuanityUnits.put(Fuel.PILOT_LIGHT, FuelUnit.MT);
-
-		fuelUnitPriceUnits.put(Fuel.BASE_FUEL, FuelUnit.MT);
-		fuelUnitPriceUnits.put(Fuel.FBO, FuelUnit.MMBTU);
-		fuelUnitPriceUnits.put(Fuel.NBO, FuelUnit.MMBTU);
-		fuelUnitPriceUnits.put(Fuel.PILOT_LIGHT, FuelUnit.MT);
-	}
-
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager manager, final PortRotationBasedReportBuilder builder) {
 
@@ -352,85 +329,8 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				}
 			});// .setTooltip("In m³");
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuels":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
-
-				@Override
-				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_FUELS);
-					if (block == null) {
-						block = blockManager.createBlock(COLUMN_BLOCK_FUELS, "[Fuels]", ColumnType.NORMAL);
-					}
-					block.setPlaceholder(true);
-					// Create all these columns within the fuels group
-					{
-
-						for (final Fuel fuelName : Fuel.values()) {
-							blockManager.createColumn(block, fuelName.toString(), new IntegerFormatter() {
-								@Override
-								public Integer getIntValue(final Object object) {
-									if (object instanceof FuelUsage) {
-										final FuelUsage mix = (FuelUsage) object;
-										for (final FuelQuantity q : mix.getFuels()) {
-											if (q.getFuel().equals(fuelName)) {
-												final FuelUnit unit = fuelQuanityUnits.get(fuelName);
-												for (final FuelAmount fa : q.getAmounts()) {
-													if (fa.getUnit() == unit) {
-														return fa.getQuantity();
-													}
-												}
-											}
-										}
-
-										return 0;
-									} else {
-										return null;
-									}
-								}
-							}).setTooltip("In " + fuelQuanityUnits.get(fuelName));
-
-							blockManager.createColumn(block, fuelName + " Unit Price", new NumberOfDPFormatter(2) {
-								@Override
-								public Double getDoubleValue(final Object object) {
-									if (object instanceof FuelUsage) {
-										final FuelUsage mix = (FuelUsage) object;
-										for (final FuelQuantity q : mix.getFuels()) {
-											if (q.getFuel() == fuelName) {
-												final FuelUnit unit = fuelUnitPriceUnits.get(fuelName);
-												for (final FuelAmount fa : q.getAmounts()) {
-													if (fa.getUnit() == unit) {
-														return fa.getUnitPrice();
-													}
-												}
-											}
-										}
-									}
-									return null;
-								}
-							}).setTooltip("Price per " + fuelUnitPriceUnits.get(fuelName));
-							blockManager.createColumn(block, fuelName + " Cost", new IntegerFormatter() {
-								@Override
-								public Integer getIntValue(final Object object) {
-									if (object instanceof FuelUsage) {
-										for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
-											if (q.getFuel().equals(fuelName)) {
-												return q.getCost();
-											}
-										}
-										return 0;
-									} else {
-										return null;
-									}
-								}
-							});
-						}
-
-					}
-
-					return null;
-				}
-
-			});
+		case PortRotationBasedReportBuilder.COLUMN_BLOCK_FUELS:
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, builder.getEmptyFuelsColumnBlockFactory());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuelcost":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Fuel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {

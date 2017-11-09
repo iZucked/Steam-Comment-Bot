@@ -28,12 +28,14 @@ public class PortRotationsReportTransformer {
 			private int numberOfSchedules;
 			private boolean isPinned;
 			private final List<Object> elementList = new ArrayList<>();
+			private final List<LNGScenarioModel> rootObjects = new ArrayList<>();
 
 			@Override
 			public void beginCollecting(final boolean pinDiffMode) {
 				super.beginCollecting(pinDiffMode);
 
 				elements.clear();
+				rootObjects.clear();
 				numberOfSchedules = 0;
 				isPinned = false;
 
@@ -43,6 +45,7 @@ public class PortRotationsReportTransformer {
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 				numberOfSchedules++;
+				rootObjects.add(scenarioModel);
 				isPinned |= pinned;
 				final Collection<? extends Object> collectElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
@@ -62,7 +65,7 @@ public class PortRotationsReportTransformer {
 				super.endCollecting();
 
 				viewer.processInputs(elements);
-			
+				builder.refreshDataColumns(rootObjects);
 				elements.addAll(elementList);
 			}
 		};
