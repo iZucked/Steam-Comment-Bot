@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		this.filterSupport = filterSupport;
 	}
 	
-	private String computeCompositeRow(CompositeRow element, EMFPath[] path, GridColumn col, ICellRenderer formatter) {
+	private String computeCompositeRow(CompositeRow element, EMFPath[] path, GridColumn col, ICellRenderer formatter, boolean withFormatting) {
 
 		Object pinnedElement = null;
 		Object previousElement = null;
@@ -92,16 +93,28 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					if (valuePrevious instanceof Integer) {
 						int delta = ((int) valuePrevious) - ((int) valuePinned);
 
+						if (withFormatting) {
+							deltaValue = NumberFormat.getInstance().format(delta) ;
+						} else {
 							deltaValue = String.valueOf(delta);
+						}
 					} else if (valuePrevious instanceof Long) {
 						long delta = ((long) valuePrevious) - ((long) valuePinned);
-
+							
+						if (withFormatting) {
+							deltaValue = NumberFormat.getInstance().format(delta) ;
+						} else {
 							deltaValue = String.valueOf(delta);
+						}
 					} else if (valuePrevious instanceof Double) {
 						double delta = ((double) valuePrevious) - ((double) valuePinned);
 						double epsilon = 0.0001f;
 
+						if (withFormatting) {
+							deltaValue = NumberFormat.getInstance().format(delta) ;
+						} else {
 							deltaValue = String.valueOf(delta);
+						}
 					} else if (valuePrevious instanceof String) {
 						if (col.getText().compareTo("Scenario") == 0) {
 							deltaValue = " ";
@@ -181,16 +194,16 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							List<CompositeRow> compositeRows = (ArrayList<CompositeRow>) element;
 							if (valuePinned instanceof Integer) {
 								for (CompositeRow compositeRow : compositeRows) {
-									String res = computeCompositeRow(compositeRow, path, col, formatter);
+									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 
 									if (res.compareTo("") != 0) {
-										accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter));
+										accInt += Integer.parseInt(computeCompositeRow(compositeRow, path, col, formatter, false));
 									}
 								}
 								deltaValue = String.valueOf(accInt);
 							} else if (valuePinned instanceof Long) {
 								for (CompositeRow compositeRow : compositeRows) {
-									String res = computeCompositeRow(compositeRow, path, col, formatter);
+									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 									
 									if (res.compareTo("") != 0) {
 										accLong += Long.parseLong(res);
@@ -199,7 +212,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 								deltaValue = String.valueOf(accInt);
 							} else if (valuePinned instanceof Double) {
 								for (CompositeRow compositeRow : compositeRows) {
-									String res = computeCompositeRow(compositeRow, path, col, formatter);
+									String res = computeCompositeRow(compositeRow, path, col, formatter, false);
 
 									if (res.compareTo("") != 0) {
 										accDouble += Double.parseDouble(res);
@@ -217,7 +230,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 					}
 				} else if (element instanceof CompositeRow) {
 					CompositeRow compositeRow = (CompositeRow) element;
-					String deltaValue = computeCompositeRow(compositeRow, path, col, formatter);
+					String deltaValue = computeCompositeRow(compositeRow, path, col, formatter, true);
 					
 					// Get the underlying pinned element object to set the row span in the grid
 					Object pinnedElement = null;
