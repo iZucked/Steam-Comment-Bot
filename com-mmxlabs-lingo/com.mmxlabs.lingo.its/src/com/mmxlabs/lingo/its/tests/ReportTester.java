@@ -51,7 +51,7 @@ public class ReportTester {
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
 	// Never commit as true
-	private static final TestMode storeReports = TestMode.Run;
+	public static final TestMode storeReports = TestMode.Run;
 
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final String extension, String elementID, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
@@ -97,53 +97,59 @@ public class ReportTester {
 
 		// A side-effect is the initial evaluation.
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
+		});
+		testReports_NoEvalute(modelRecord, scenarioDataProvider, scenarioURL, reportID, shortName, extension, preAction);
+	}
 
-			if (preAction != null) {
-				preAction.accept(modelRecord);
+	public static void testReports_NoEvalute(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
+			final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
+
+		if (preAction != null) {
+			preAction.accept(modelRecord);
+		}
+
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
+
+		Assert.assertNotNull(reportContents);
+		final String actualContents = reportContents.getStringContents();
+		Assert.assertNotNull(actualContents);
+		if (storeReports == TestMode.Generate) {
+
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
+
+			final File f1 = new File(expectedReportOutput.toURI());
+			final String slash = f1.isDirectory() ? "/" : "";
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
+			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
+				pw.print(actualContents);
 			}
-
-			final ReportTesterHelper reportTester = new ReportTesterHelper();
-			ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-			final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
-
-			Assert.assertNotNull(reportContents);
-			final String actualContents = reportContents.getStringContents();
-			Assert.assertNotNull(actualContents);
-			if (storeReports == TestMode.Generate) {
-
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
-
-				final File f1 = new File(expectedReportOutput.toURI());
-				final String slash = f1.isDirectory() ? "/" : "";
-				final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
-				try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
-					pw.print(actualContents);
-				}
-			} else {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
-				final StringBuilder expectedOutputBuilder = new StringBuilder();
-				{
-					try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-						String line = reader.readLine();
+		} else {
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
+			final StringBuilder expectedOutputBuilder = new StringBuilder();
+			{
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+					String line = reader.readLine();
+					if (line != null) {
+						expectedOutputBuilder.append(line);
+					}
+					while (line != null) {
+						line = reader.readLine();
 						if (line != null) {
+							expectedOutputBuilder.append("\n");
 							expectedOutputBuilder.append(line);
-						}
-						while (line != null) {
-							line = reader.readLine();
-							if (line != null) {
-								expectedOutputBuilder.append("\n");
-								expectedOutputBuilder.append(line);
-							}
 						}
 					}
 				}
-				if (!expectedOutputBuilder.toString().equals(actualContents)) {
-					LOG.warn("Expected " + expectedOutputBuilder.toString());
-					LOG.warn("Actual " + actualContents);
-				}
-				Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
 			}
-		});
+			if (!expectedOutputBuilder.toString().equals(actualContents)) {
+				LOG.warn("Expected " + expectedOutputBuilder.toString());
+				LOG.warn("Actual " + actualContents);
+			}
+			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
+		}
+
 	}
 
 	public static void testPinDiffReports(final URL pinScenarioURL, URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
