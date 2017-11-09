@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -18,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getCost <em>Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getAmounts <em>Amounts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getBaseFuel <em>Base Fuel</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelQuantity()
@@ -95,6 +97,32 @@ public interface FuelQuantity extends EObject {
 	 * @generated
 	 */
 	EList<FuelAmount> getAmounts();
+
+	/**
+	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Base Fuel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Base Fuel</em>' reference.
+	 * @see #setBaseFuel(BaseFuel)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelQuantity_BaseFuel()
+	 * @model
+	 * @generated
+	 */
+	BaseFuel getBaseFuel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getBaseFuel <em>Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Fuel</em>' reference.
+	 * @see #getBaseFuel()
+	 * @generated
+	 */
+	void setBaseFuel(BaseFuel value);
 
 } // end of  FuelQuantity
 

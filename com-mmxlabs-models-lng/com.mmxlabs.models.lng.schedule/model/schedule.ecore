@@ -189,6 +189,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="amounts" upperBound="-1"
         eType="#//FuelAmount" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//BaseFuel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelAmount">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="#//FuelUnit"/>

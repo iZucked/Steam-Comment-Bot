@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getCost <em>Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getAmounts <em>Amounts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl#getBaseFuel <em>Base Fuel</em>}</li>
  * </ul>
  *
  * @generated
@@ -85,6 +87,16 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * @ordered
 	 */
 	protected EList<FuelAmount> amounts;
+
+	/**
+	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuel()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseFuel baseFuel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -164,6 +176,44 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public BaseFuel getBaseFuel() {
+		if (baseFuel != null && baseFuel.eIsProxy()) {
+			InternalEObject oldBaseFuel = (InternalEObject)baseFuel;
+			baseFuel = (BaseFuel)eResolveProxy(oldBaseFuel);
+			if (baseFuel != oldBaseFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.FUEL_QUANTITY__BASE_FUEL, oldBaseFuel, baseFuel));
+			}
+		}
+		return baseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel basicGetBaseFuel() {
+		return baseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBaseFuel(BaseFuel newBaseFuel) {
+		BaseFuel oldBaseFuel = baseFuel;
+		baseFuel = newBaseFuel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_QUANTITY__BASE_FUEL, oldBaseFuel, baseFuel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -187,6 +237,9 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				return getCost();
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
 				return getAmounts();
+			case SchedulePackage.FUEL_QUANTITY__BASE_FUEL:
+				if (resolve) return getBaseFuel();
+				return basicGetBaseFuel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -210,6 +263,9 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				getAmounts().clear();
 				getAmounts().addAll((Collection<? extends FuelAmount>)newValue);
 				return;
+			case SchedulePackage.FUEL_QUANTITY__BASE_FUEL:
+				setBaseFuel((BaseFuel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -231,6 +287,9 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
 				getAmounts().clear();
 				return;
+			case SchedulePackage.FUEL_QUANTITY__BASE_FUEL:
+				setBaseFuel((BaseFuel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -249,6 +308,8 @@ public class FuelQuantityImpl extends EObjectImpl implements FuelQuantity {
 				return cost != COST_EDEFAULT;
 			case SchedulePackage.FUEL_QUANTITY__AMOUNTS:
 				return amounts != null && !amounts.isEmpty();
+			case SchedulePackage.FUEL_QUANTITY__BASE_FUEL:
+				return baseFuel != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -65,6 +65,7 @@ public class FuelQuantityComponentHelper extends BaseComponentHelper {
 		add_fuelEditor(detailComposite, topClass);
 		add_costEditor(detailComposite, topClass);
 		add_amountsEditor(detailComposite, topClass);
+		add_baseFuelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fuel feature on FuelQuantity
@@ -90,5 +91,14 @@ public class FuelQuantityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_amountsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.FUEL_QUANTITY__AMOUNTS));
+	}
+
+	/**
+	 * Create the editor for the baseFuel feature on FuelQuantity
+	 *
+	 * @generated
+	 */
+	protected void add_baseFuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.FUEL_QUANTITY__BASE_FUEL));
 	}
 }

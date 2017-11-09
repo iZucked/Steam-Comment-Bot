@@ -36,7 +36,7 @@ public interface CapacityViolationsHolder extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Violations</em>' map.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCapacityViolationsHolder_Violations()
-	 * @model mapType="com.mmxlabs.models.lng.schedule.CapacityMapEntry<com.mmxlabs.models.lng.schedule.CapacityViolationType, org.eclipse.emf.ecore.ELongObject>"
+	 * @model mapType="com.mmxlabs.models.lng.schedule.CapacityMapEntry&lt;com.mmxlabs.models.lng.schedule.CapacityViolationType, org.eclipse.emf.ecore.ELongObject&gt;"
 	 * @generated
 	 */
 	EMap<CapacityViolationType, Long> getViolations();

@@ -3786,13 +3786,22 @@ public interface SchedulePackage extends EPackage {
 	int FUEL_QUANTITY__AMOUNTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_QUANTITY__BASE_FUEL = 3;
+
+	/**
 	 * The number of structural features of the '<em>Fuel Quantity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUEL_QUANTITY_FEATURE_COUNT = 3;
+	int FUEL_QUANTITY_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Fuel Quantity</em>' class.
@@ -5741,6 +5750,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFuelQuantity_Amounts();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.FuelQuantity#getBaseFuel <em>Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Base Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.FuelQuantity#getBaseFuel()
+	 * @see #getFuelQuantity()
+	 * @generated
+	 */
+	EReference getFuelQuantity_BaseFuel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Cooldown <em>Cooldown</em>}'.
@@ -7716,6 +7736,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference FUEL_QUANTITY__AMOUNTS = eINSTANCE.getFuelQuantity_Amounts();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FUEL_QUANTITY__BASE_FUEL = eINSTANCE.getFuelQuantity_BaseFuel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl <em>Cooldown</em>}' class.

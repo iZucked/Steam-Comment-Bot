@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
@@ -463,6 +464,14 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Initialize simple dependencies
 		CargoPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
+		TypesPackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
+		PricingPackage.eINSTANCE.eClass();
+		SpotMarketsPackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theSchedulePackage.createPackageContents();
@@ -936,6 +945,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EReference getFuelQuantity_Amounts() {
 		return (EReference)fuelQuantityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFuelQuantity_BaseFuel() {
+		return (EReference)fuelQuantityEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -2376,6 +2394,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__FUEL);
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__COST);
 		createEReference(fuelQuantityEClass, FUEL_QUANTITY__AMOUNTS);
+		createEReference(fuelQuantityEClass, FUEL_QUANTITY__BASE_FUEL);
 
 		fuelAmountEClass = createEClass(FUEL_AMOUNT);
 		createEAttribute(fuelAmountEClass, FUEL_AMOUNT__UNIT);
@@ -2512,6 +2531,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 
 		// Create type parameters
@@ -2717,6 +2737,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getFuelQuantity_Fuel(), this.getFuel(), "fuel", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFuelQuantity_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFuelQuantity_Amounts(), this.getFuelAmount(), null, "amounts", null, 0, -1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFuelQuantity_BaseFuel(), theFleetPackage.getBaseFuel(), null, "baseFuel", null, 0, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelAmountEClass, FuelAmount.class, "FuelAmount", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelAmount_Unit(), this.getFuelUnit(), "unit", null, 1, 1, FuelAmount.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
