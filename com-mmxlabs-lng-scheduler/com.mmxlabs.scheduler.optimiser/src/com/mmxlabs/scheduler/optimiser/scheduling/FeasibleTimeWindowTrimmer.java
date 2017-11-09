@@ -1018,17 +1018,8 @@ public class FeasibleTimeWindowTrimmer {
 		if (requirement != null) {
 			if (requirement.isMinDurationSet()) {
 				ITimeWindow window = getTrimmedWindowBasedOnMinDuration(requirement);
-
-				assert windowStartTime[index] < windowEndTime[index];
-				assert windowStartTime[index - 1] <= windowStartTime[index];
-				assert windowEndTime[index - 1] <= windowEndTime[index];
-
 				windowStartTime[index] = Math.max(windowStartTime[index], window.getInclusiveStart());
 				windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
-
-				assert windowStartTime[index] < windowEndTime[index];
-				assert windowStartTime[index - 1] <= windowStartTime[index];
-				assert windowEndTime[index - 1] <= windowEndTime[index];
 			}
 		}
 	}
@@ -1038,17 +1029,8 @@ public class FeasibleTimeWindowTrimmer {
 
 		if (requirement != null) {
 			if (requirement.isMaxDurationSet()) {
-
-				assert windowStartTime[index] < windowEndTime[index];
-				assert windowStartTime[index - 1] <= windowStartTime[index];
-				assert windowEndTime[index - 1] <= windowEndTime[index];
-
 				ITimeWindow window = getTrimmedWindowBasedOnMaxDuration(requirement, index);
 				windowEndTime[index] = Math.max(windowStartTime[index] + 1, Math.min(windowEndTime[index], window.getExclusiveEnd()));
-
-				assert windowStartTime[index] < windowEndTime[index];
-				assert windowStartTime[index - 1] <= windowStartTime[index];
-				assert windowEndTime[index - 1] <= windowEndTime[index];
 			}
 		}
 	}
