@@ -141,7 +141,7 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public int getMargin() {
+	public int getMarginInHours() {
 		return arrivalMargin;
 	}
 

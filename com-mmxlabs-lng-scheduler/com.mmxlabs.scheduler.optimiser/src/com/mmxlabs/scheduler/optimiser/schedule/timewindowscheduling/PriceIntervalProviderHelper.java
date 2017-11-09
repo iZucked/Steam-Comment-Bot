@@ -23,7 +23,6 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -221,14 +220,13 @@ public class PriceIntervalProviderHelper {
 		// set min start dates
 		int purchase = salesStartInclusive - canalMaxSpeed - loadDuration;
 		if (purchase < purchaseStartInclusive) {
-			salesStartInclusive = purchaseStartInclusive + canalMaxSpeed + loadDuration;
 			purchase = purchaseStartInclusive;
 		}
 		if (purchase > purchaseEndInclusive) {
 			purchase = purchaseEndInclusive;
 		}
+
 		salesStartInclusive = Math.max(purchaseStartInclusive + canalMaxSpeed + loadDuration, salesStartInclusive);
-		salesEndInclusive = Math.min(salesStartInclusive, salesEndInclusive);
 		int discharge = salesStartInclusive;
 		{
 			// we are able vary our speeds
@@ -239,7 +237,11 @@ public class PriceIntervalProviderHelper {
 					purchase -= canalDifference;
 				} else {
 					purchase = purchaseStartInclusive;
-					discharge = Math.min(salesStartInclusive - remainder, salesEndInclusive); // note: remainder is -ve
+					// Recalculate diff as salesStartInclusive may not be based on max canal speed
+					int diff = (purchase + canalNBOSpeed + loadDuration) - salesStartInclusive;
+					if (diff > 0) {
+						discharge = Math.min(salesStartInclusive + diff, salesEndInclusive); // note: remainder is -ve
+					}
 				}
 			}
 		}
