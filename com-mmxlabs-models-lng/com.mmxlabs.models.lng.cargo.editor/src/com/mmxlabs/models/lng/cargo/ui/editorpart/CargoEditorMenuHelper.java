@@ -1308,15 +1308,32 @@ public class CargoEditorMenuHelper {
 		
 		class AssignCanalAction extends Action {
 			private final CanalBookingSlot canalBookingSlot;
+			private final CargoModel cargoModel;
 
-			public AssignCanalAction(final String label, final CanalBookingSlot canalBookingSlot) {
+			public AssignCanalAction(final String label, final CanalBookingSlot canalBookingSlot, CargoModel cargoModel) {
 				super(label);
 				this.canalBookingSlot = canalBookingSlot;
+				this.cargoModel = cargoModel;
 			}
 
 			public void run() {
+				
+				List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
+				CompoundCommand cc = new CompoundCommand();
+				
+				for(CanalBookingSlot canalBookingSlot: canalbookings) {
+					if (canalBookingSlot.getSlot() == slot) {
+						Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, SetCommand.UNSET_VALUE);
+						cc.append(cmd);
+					}
+				}
+				
 				Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, slot);
-				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+				cc.append(cmd);
+				
+				if (cc.canExecute()) {
+					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+				}
 			}
 		}
 		
@@ -1363,9 +1380,9 @@ public class CargoEditorMenuHelper {
 
 			if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalbooking.getBookingDate(), canalbooking.getBookingDate()), LocalDate::isBefore)) {
 				if (canalbooking.getEntryPoint().getName().equals("Panama North")) {
-					northBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking));
+					northBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking, cargoModel));
 				} else if (canalbooking.getEntryPoint().getName().equals("Panama South")) {
-					southBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking));
+					southBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking, cargoModel));
 				}
 			}
 		}
