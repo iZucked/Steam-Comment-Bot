@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -59,9 +57,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @RunWith(value = ShiroRunner.class)
 public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
-
-	@Inject
-	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Override
 	public IScenarioDataProvider importReferenceData() throws MalformedURLException {

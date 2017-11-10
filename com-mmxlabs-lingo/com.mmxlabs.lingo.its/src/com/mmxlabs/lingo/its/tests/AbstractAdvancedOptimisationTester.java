@@ -60,9 +60,9 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	// This should only be committed as true.
 	private static final boolean RUN_LIMITED_ITERATION_CASES = true;
 
-	private @NonNull final String scenarioURL;
-	private @Nullable final LocalDate periodStart;
-	private @Nullable final YearMonth periodEnd;
+	protected @NonNull final String scenarioURL;
+	protected @Nullable final LocalDate periodStart;
+	protected @Nullable final YearMonth periodEnd;
 	private final boolean runGCO;
 
 	public AbstractAdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart,

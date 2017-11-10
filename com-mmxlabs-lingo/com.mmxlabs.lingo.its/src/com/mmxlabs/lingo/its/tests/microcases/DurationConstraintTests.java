@@ -15,16 +15,20 @@ import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
+import com.mmxlabs.lingo.its.tests.category.RegressionTest;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -50,12 +54,14 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
@@ -880,4 +886,101 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 			assertTrue(false);
 		}
 	}
+
+	@Test
+	@Category({ RegressionTest.class })
+	public void maxDurationTrimCausedAssertion() {
+
+		// The following case caused an assertion error as the feasible end window was badly trimmed so that the previous element window end was later than vessel end.
+
+		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
+		vessel.setMaxSpeed(16.0);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2017, 9, 11, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2017, 10, 26, 23, 0, 0), LocalDateTime.of(2018, 1, 27, 23, 0, 0)) //
+				.build();
+
+		vesselAvailability.setMinDuration(46);
+		vesselAvailability.setMaxDuration(139);
+		Port port_SP = portFinder.findPort("Sabine Pass");
+		Port port_HJ = portFinder.findPort("Himeji");
+
+		vesselAvailability.getEndAt().add(port_HJ);
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2017, Month.DECEMBER, 12), port_SP, null, entity, "7") //
+				.withWindowSize(3, TimePeriod.DAYS)//
+				.withWindowStartTime(0) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2018, Month.JANUARY, 1), port_HJ, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS)//
+				.withWindowStartTime(0) //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2017, Month.DECEMBER, 18), port_SP, null, entity, "7") //
+				.withWindowSize(8, TimePeriod.DAYS)//
+				.withWindowStartTime(7) //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2017, Month.DECEMBER, 1), port_HJ, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS)//
+				.withWindowStartTime(0) //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 2) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
+			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				scope.enter();
+				final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+				// Set time scheduler settings
+				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
+				scheduler.setUseCanalBasedWindowTrimming(true);
+				scheduler.setUsePriceBasedWindowTrimming(false);
+
+				final ScheduledTimeWindows schedule = scheduler.schedule(initialSequences);
+				final Map<IResource, List<IPortTimeWindowsRecord>> records = schedule.getTrimmedTimeWindowsMap();
+
+				final IResource r0 = initialSequences.getResources().get(0);
+
+				int[] windowStart = new int[6];
+				int[] windowEnd = new int[6];
+
+				final AtomicInteger idx = new AtomicInteger(0);
+				Consumer<IPortTimeWindowsRecord> func = (ptr) -> {
+					for (IPortSlot slot : ptr.getSlots()) {
+						ITimeWindow tw = ptr.getSlotFeasibleTimeWindow(slot);
+						windowStart[idx.get()] = tw.getInclusiveStart();
+						windowEnd[idx.get()] = tw.getExclusiveEnd();
+						idx.getAndIncrement();
+					}
+				};
+
+				func.accept(records.get(r0).get(0));
+				func.accept(records.get(r0).get(1));
+				IPortTimeWindowsRecord ptr = records.get(r0).get(2);
+				func.accept(ptr);
+				{
+					ITimeWindow tw = ptr.getSlotFeasibleTimeWindow(ptr.getReturnSlot());
+					windowStart[idx.get()] = tw.getInclusiveStart();
+					windowEnd[idx.get()] = tw.getExclusiveEnd();
+					idx.getAndIncrement();
+				}
+				// Originally the windowEnd[5] > windowEnd[6] -- but was fixed by the time it was put into a IPortTimeWindowsRecord
+				for (int i = 0; i < idx.get(); ++i) {
+					Assert.assertTrue(windowStart[i] < windowEnd[i]);
+					if (i > 0) {
+						Assert.assertTrue(windowStart[i - 1] <= windowStart[i]);
+						Assert.assertTrue(windowEnd[i - 1] <= windowEnd[i]);
+					}
+				}
+			}
+		});
+	}
+
 }

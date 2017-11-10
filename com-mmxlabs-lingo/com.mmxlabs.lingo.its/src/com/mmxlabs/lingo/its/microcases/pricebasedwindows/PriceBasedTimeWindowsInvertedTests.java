@@ -128,7 +128,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double salesPrice = 8.6;
+		final double salesPrice = 8.6;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -139,11 +139,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -171,7 +171,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double salesPrice = 8.55;
+		final double salesPrice = 8.55;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -182,11 +182,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -214,7 +214,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double salesPrice = 8.6;
+		final double salesPrice = 8.6;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -225,11 +225,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -257,7 +257,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double salesPrice = 8.7;
+		final double salesPrice = 8.8;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -268,11 +268,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).withPricingEvent(PricingEvent.START_LOAD, null).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 		pricingModelBuilder.clearPointsOnCommodityIndex(hh);
 		pricingModelBuilder.addDataToCommodityIndex(hh, YearMonth.of(2016, 6), salesPrice);
@@ -299,8 +299,8 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double loadPrice = 6.999;
-		double salesPrice = 7.5;
+		final double loadPrice = 6.999;
+		final double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -311,11 +311,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
@@ -344,8 +344,8 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 
 		// Construct the cargo scenario
-		double loadPrice = 6.9999;
-		double salesPrice = 7.5;
+		final double loadPrice = 6.9999;
+		final double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -356,11 +356,11 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				.withWindowSize(48, TimePeriod.HOURS).build() //
 				.withVesselAssignment(vesselAvailability1, 1).build();
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
-		EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
-		CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
+		final EList<CommodityIndex> commodityIndices = lngScenarioModel.getReferenceModel().getPricingModel().getCommodityIndices();
+		final CommodityIndex hh = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("Henry_Hub");
 		assert hh != null;
 		@NonNull
-		CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
+		final CommodityIndex jcc = scenarioModelFinder.getPricingModelFinder().findCommodityCurve("JCC");
 		assert jcc != null;
 
 		pricingModelBuilder.clearPointsOnCommodityIndex(jcc);
@@ -375,18 +375,18 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 		checkDischargePrice(7.0, salesPrice);
 	}
 
-	public void checkDischargePrice(double loadPrice, double salesPrice) {
+	public void checkDischargePrice(final double loadPrice, final double salesPrice) {
 		evaluateWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			@NonNull
-			ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+			final ISequences initialSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// get optimiser objects
-			ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-			IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+			final ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+			final IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
 			// make sure no objects are null
 			assert load != null;
@@ -401,7 +401,7 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 				MicroCaseUtils.getInjectorServiceWithPriceBasedScheduler());
 	}
 
-	private VesselAvailability createTestVesselAvailability(LocalDateTime startStart, LocalDateTime startEnd, LocalDateTime endStart) {
+	private VesselAvailability createTestVesselAvailability(final LocalDateTime startStart, final LocalDateTime startEnd, final LocalDateTime endStart) {
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, "50000", 0);
@@ -414,13 +414,13 @@ public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 	}
 
 	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		IDischargeSlot discharge = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName),
+		final IDischargeSlot discharge = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName),
 				IDischargeSlot.class);
 		return discharge;
 	}
 
 	public ILoadSlot getDefaultOptimiserLoadSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		ILoadSlot load = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName), ILoadSlot.class);
+		final ILoadSlot load = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName), ILoadSlot.class);
 		return load;
 	}
 
