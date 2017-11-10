@@ -123,7 +123,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false));
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false, false));
 		validationSupport.setValidationTargets(Collections.singleton(getModel()));
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
 
@@ -582,7 +582,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		this.setModel(model);
 
-		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false));
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getScenarioDataProvider(), false, false));
 		if (model != null) {
 			validationSupport.setValidationTargets(Collections.singleton(model));
 		} else {

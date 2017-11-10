@@ -25,17 +25,19 @@ public class KeepOpenSlotConstraint extends AbstractModelMultiConstraint {
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof Slot) {
-			final Slot slot = (Slot) object;
-			if (slot.isLocked()) {
-				Cargo cargo = slot.getCargo();
-				if (cargo != null) {
-					final String message;
-					message = String.format("[Slot|'%s'] Keep Open can only be set on an open slot. Remove wiring.", slot.getName() == null ? "(no ID)" : slot.getName());
-	
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Locked());
-					statuses.add(dsd);
+		if (!extraContext.isRelaxedChecking()) {
+			if (object instanceof Slot) {
+				final Slot slot = (Slot) object;
+				if (slot.isLocked()) {
+					Cargo cargo = slot.getCargo();
+					if (cargo != null) {
+						final String message;
+						message = String.format("[Slot|'%s'] Keep Open can only be set on an open slot. Remove wiring.", slot.getName() == null ? "(no ID)" : slot.getName());
+
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Locked());
+						statuses.add(dsd);
+					}
 				}
 			}
 		}

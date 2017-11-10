@@ -238,7 +238,7 @@ public class ADPBindingPage extends WizardPage {
 
 			@Override
 			public IExtraValidationContext getExtraValidationContext() {
-				return new DefaultExtraValidationContext(getScenarioDataProvider(), false);
+				return new DefaultExtraValidationContext(getScenarioDataProvider(), false, false);
 			}
 
 			@Override

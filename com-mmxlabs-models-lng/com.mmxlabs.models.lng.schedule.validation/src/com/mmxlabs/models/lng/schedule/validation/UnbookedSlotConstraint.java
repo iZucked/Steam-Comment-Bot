@@ -43,7 +43,7 @@ public class UnbookedSlotConstraint extends AbstractModelMultiConstraint {
 			return Activator.PLUGIN_ID;
 		}
 		if (!LicenseFeatures.isPermitted("features:panama-canal-bookings")) {
-			// return Activator.PLUGIN_ID;
+			return Activator.PLUGIN_ID;
 		}
 		if (target instanceof Schedule) {
 			Schedule schedule = (Schedule) target;

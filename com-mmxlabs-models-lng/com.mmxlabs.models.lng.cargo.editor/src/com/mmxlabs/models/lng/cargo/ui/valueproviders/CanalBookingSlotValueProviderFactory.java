@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,13 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.TimeUtils;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -53,7 +59,17 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 
 			@Override
 			public String getName(EObject referer, EReference feature, EObject referenceValue) {
-				return delegateFactory.getName(referer, feature, referenceValue);
+				String name = delegateFactory.getName(referer, feature, referenceValue);
+				
+				String slotName = "";
+				if (referer instanceof CanalBookingSlot) {
+				CanalBookingSlot canalBookingSlot = (CanalBookingSlot) referer;
+					if (canalBookingSlot.getSlot() != null) {
+						slotName = String.format(" (%s)", canalBookingSlot.getSlot().getWindowStart());
+					}
+				}
+				
+				return delegateFactory.getName(referer, feature, referenceValue) + slotName;
 			}
 
 			@Override
@@ -61,8 +77,39 @@ public class CanalBookingSlotValueProviderFactory implements IReferenceValueProv
 				final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 				final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<>(delegateValue.size() + 1);
 				filteredList.add(new Pair<>("<Unallocated>", null));
-				// TODO: Filter out slots used already?
-				filteredList.addAll(delegateValue);
+				
+				for (Pair<String, EObject> value : delegateValue) {
+					Slot slot = (Slot) value.getSecond();
+					CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
+					
+					if (slot == canalBookingSlot.getSlot()) {
+						filteredList.add(value);
+					} else {
+						LocalDate windowStart = slot.getWindowStart();
+						LocalDate windowEnd = windowStart;
+
+						switch (slot.getSlotOrPortWindowSizeUnits()) {
+						case DAYS:
+							windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
+							break;
+						case HOURS:
+							windowEnd = windowStart.plusDays((slot.getSlotOrPortWindowSize() + 12) / 24);
+							break;
+						case MONTHS:
+							windowEnd = windowStart.plusMonths(slot.getSlotOrPortWindowSize());
+							break;
+						default:
+							break;
+						}
+
+						NonNullPair<LocalDate, LocalDate> selectionRange = null;
+						selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+
+						if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalBookingSlot.getBookingDate(), canalBookingSlot.getBookingDate()), LocalDate::isBefore)) {
+							filteredList.add(value);
+						}
+					}
+				}
 				return filteredList;
 			}
 		};

@@ -37,9 +37,13 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -56,6 +60,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -268,6 +273,8 @@ public class CargoEditorMenuHelper {
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, dischargeSlot);
 				}
+
+				panamaAssignmentMenu(manager, dischargeSlot);
 			}
 
 		};
@@ -585,6 +592,7 @@ public class CargoEditorMenuHelper {
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, loadSlot);
 				}
+				panamaAssignmentMenu(manager, loadSlot);
 			}
 
 		};
@@ -1028,12 +1036,10 @@ public class CargoEditorMenuHelper {
 		}
 		if (slot instanceof SpotSlot) {
 			sb.append(", " + ((SpotSlot) slot).getMarket().getName());
+		} else {
+			sb.append(", " + slot.getName());
 		}
-		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
-		if (c != null) {
-			sb.append(" -- ");
-			sb.append("cargo '" + c.getLoadName() + "'");
-		}
+
 		return sb.toString();
 	}
 
@@ -1300,7 +1306,91 @@ public class CargoEditorMenuHelper {
 			}
 		}
 	}
+	
+	private void panamaAssignmentMenu(final IMenuManager menuManager, final Slot slot) {
+		
+		class AssignCanalAction extends Action {
+			private final CanalBookingSlot canalBookingSlot;
+			private final CargoModel cargoModel;
 
+			public AssignCanalAction(final String label, final CanalBookingSlot canalBookingSlot, CargoModel cargoModel) {
+				super(label);
+				this.canalBookingSlot = canalBookingSlot;
+				this.cargoModel = cargoModel;
+			}
+
+			public void run() {
+				
+				List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
+				CompoundCommand cc = new CompoundCommand();
+				
+				for(CanalBookingSlot canalBookingSlot: canalbookings) {
+					if (canalBookingSlot.getSlot() == slot) {
+						Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, SetCommand.UNSET_VALUE);
+						cc.append(cmd);
+					}
+				}
+				
+				Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(),  canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__SLOT, slot);
+				cc.append(cmd);
+				
+				if (cc.canExecute()) {
+					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+				}
+			}
+		}
+		
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
+		menuManager.add(new Separator());
+
+		final MenuManager reassignMenuManager = new MenuManager("Assign canal booking...", null);
+		menuManager.add(reassignMenuManager);
+		List<CanalBookingSlot> canalbookings = cargoModel.getCanalBookings().getCanalBookingSlots();
+
+		IMenuManager northBoundCanalBookingMenu = new MenuManager("North Bound");
+		IMenuManager southBoundCanalBookingMenu = new MenuManager("South Bound");
+
+		reassignMenuManager.add(northBoundCanalBookingMenu);
+		reassignMenuManager.add(southBoundCanalBookingMenu);
+
+		for (CanalBookingSlot canalbooking : canalbookings) {
+			String canalBookingHandle = String.format("%s", canalbooking.getBookingDate());
+
+			if (canalbooking.getSlot() != null) {
+				canalBookingHandle = String.format("%s [%s]", canalbooking.getBookingDate(), canalbooking.getSlot().getName());
+			} 
+			
+			LocalDate windowStart = slot.getWindowStart();
+			LocalDate windowEnd = windowStart;
+			
+			switch (slot.getSlotOrPortWindowSizeUnits()) {
+			
+			case DAYS:
+				windowEnd = windowStart.plusDays(slot.getSlotOrPortWindowSize());
+				break;
+			case HOURS:
+				windowEnd = windowStart.plusDays((slot.getSlotOrPortWindowSize() + 12) / 24);
+				break;
+			case MONTHS:
+				windowEnd = windowStart.plusMonths(slot.getSlotOrPortWindowSize());
+				break;
+			default:
+				break;
+			}
+
+			NonNullPair<LocalDate, LocalDate> selectionRange = null;
+			selectionRange = new NonNullPair<>(windowStart.minusDays(2), windowEnd.plusDays(60));
+
+			if (TimeUtils.overlaps(selectionRange, new NonNullPair<>(canalbooking.getBookingDate(), canalbooking.getBookingDate()), LocalDate::isBefore)) {
+				if (canalbooking.getCanalEntrance() == CanalEntry.SOUTHSIDE) {
+					northBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking, cargoModel));
+				} else if (canalbooking.getCanalEntrance() == CanalEntry.NORTHSIDE) {
+					southBoundCanalBookingMenu.add(new AssignCanalAction(canalBookingHandle, canalbooking, cargoModel));
+				}
+			}
+		}
+
+	}
 	/**
 	 */
 	public void editLDDCargo(final Cargo cargo, final boolean isNew) {
