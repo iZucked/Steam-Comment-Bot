@@ -83,7 +83,6 @@ import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
@@ -987,7 +986,7 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors, boolean relaxedValidation) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -1010,9 +1009,9 @@ public final class OptimisationHelper {
 			}
 		});
 
-		MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
+		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false);
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
 			return helper.runValidation(validator, extraContext, Collections.singleton(root));
 		});
 

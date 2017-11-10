@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.Port;
@@ -137,7 +138,7 @@ public class JourneyEventExporter {
 				final int toCanalSpeed;
 				if (journey.getRouteOption() == RouteOption.PANAMA) {
 					toCanalSpeed = Math.min(panamaSlotsProvider.getSpeedToCanal(), voyageDetails.getOptions().getVessel().getMaxSpeed());
-					marginHours = panamaSlotsProvider.getMargin();
+					marginHours = panamaSlotsProvider.getMarginInHours();
 				} else {
 					// Suez - use voyage speed
 					toCanalSpeed = voyageDetails.getSpeed();

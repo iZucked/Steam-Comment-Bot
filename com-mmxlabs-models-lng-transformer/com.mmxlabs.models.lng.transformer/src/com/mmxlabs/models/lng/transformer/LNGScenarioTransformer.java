@@ -1576,7 +1576,6 @@ public class LNGScenarioTransformer {
 				minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
 				if (dischargeSlot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
 					maxVolume = Long.MAX_VALUE;
-					// maxVolume = OptimiserUnitConvertor.convertToInternalVolume(140_000);
 				} else {
 					maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
 				}
@@ -1757,7 +1756,6 @@ public class LNGScenarioTransformer {
 			minVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity());
 			if (loadSlot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
 				maxVolume = Long.MAX_VALUE;
-				// maxVolume = OptimiserUnitConvertor.convertToInternalVolume(140_000);
 			} else {
 				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity());
 			}
@@ -3081,12 +3079,12 @@ public class LNGScenarioTransformer {
 
 			final int minDuration = eVesselAvailability.getAvailabilityOrContractMinDuration();
 			if (minDuration != 0) {
-				endRequirement.setMinDurationInDays(minDuration);
+				endRequirement.setMinDurationInHours(minDuration * 24);
 			}
 
 			final int maxDuration = eVesselAvailability.getAvailabilityOrContractMaxDuration();
 			if (maxDuration != 0) {
-				endRequirement.setMaxDurationInDays(maxDuration);
+				endRequirement.setMaxDurationInHours(maxDuration * 24);
 			}
 
 			final ILongCurve dailyCharterInCurve;
@@ -3187,16 +3185,17 @@ public class LNGScenarioTransformer {
 						final IVesselAvailability spotAvailability = spots.get(i);
 						spotCharterInToAvailability.put(key, spotAvailability);
 
+						// TODO: Setters should not be on the interface, move to builder API
 						final IEndRequirement endReq = spotAvailability.getEndRequirement();
 
 						final int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
 						if (maxDurationInDays != 0) {
-							endReq.setMaxDurationInDays(maxDurationInDays);
+							endReq.setMaxDurationInHours(maxDurationInDays * 24);
 						}
 
 						final int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
 						if (minDurationInDays != 0) {
-							endReq.setMinDurationInDays(minDurationInDays);
+							endReq.setMinDurationInHours(minDurationInDays * 24);
 						}
 
 						/*
