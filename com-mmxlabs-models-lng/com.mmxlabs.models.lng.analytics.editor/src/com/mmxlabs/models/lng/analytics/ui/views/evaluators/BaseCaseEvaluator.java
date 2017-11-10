@@ -4,19 +4,16 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -36,13 +33,14 @@ import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
-import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.SlotMode;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -51,7 +49,6 @@ import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -73,89 +70,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class BaseCaseEvaluator {
 
-	public interface IMapperClass {
-
-		LoadSlot get(BuyOption buy);
-
-		DischargeSlot get(SellOption sell);
-
-		void addMapping(BuyOption buy, LoadSlot load);
-
-		void addMapping(SellOption sell, DischargeSlot discharge);
-
-		<T extends EObject> T getCopy(@NonNull T original);
-
-		<T extends EObject> T getOriginal(@NonNull T copy);
-
-	}
-
 	private static final ShippingOptionDescriptionFormatter SHIPPING_OPTION_DESCRIPTION_FORMATTER = new ShippingOptionDescriptionFormatter();
-
-	static class Mapper implements IMapperClass {
-		private final EcoreUtil.Copier copier;
-
-		Map<BuyOption, LoadSlot> buyMap = new HashMap<>();
-		Map<SellOption, DischargeSlot> sellMap = new HashMap<>();
-
-		Mapper(final Copier copier) {
-			this.copier = copier;
-		}
-
-		@Override
-		public LoadSlot get(final BuyOption buy) {
-			return buyMap.get(buy);
-		}
-
-		@Override
-		public DischargeSlot get(final SellOption sell) {
-			return sellMap.get(sell);
-		}
-
-		@Override
-		public void addMapping(final BuyOption buy, final LoadSlot load) {
-			buyMap.put(buy, load);
-			if (copier.containsKey(buy)) {
-				buyMap.put((BuyOption) copier.get(buy), load);
-			} else {
-				for (final Map.Entry<EObject, EObject> e : copier.entrySet()) {
-					if (e.getValue() == buy) {
-						buyMap.put((BuyOption) e.getKey(), load);
-					}
-				}
-			}
-		}
-
-		@Override
-		public void addMapping(final SellOption sell, final DischargeSlot discharge) {
-			sellMap.put(sell, discharge);
-			if (copier.containsKey(discharge)) {
-				sellMap.put((SellOption) copier.get(sell), discharge);
-			} else {
-				for (final Map.Entry<EObject, EObject> e : copier.entrySet()) {
-					if (e.getValue() == sell) {
-						sellMap.put((SellOption) e.getKey(), discharge);
-
-					}
-				}
-			}
-
-		}
-
-		public <T extends EObject> T getOriginal(@NonNull T copy) {
-
-			for (Map.Entry<EObject, EObject> e : copier.entrySet()) {
-				if (e.getValue() == copy) {
-					return (T) e.getKey();
-				}
-			}
-
-			return (T) null;
-		}
-
-		public <T extends EObject> T getCopy(@NonNull T original) {
-			return (T) copier.get(original);
-		}
-	}
 
 	public static LNGScenarioModel generateScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase,
 			final BiConsumer<LNGScenarioModel, IMapperClass> callback) {
@@ -242,7 +157,8 @@ public class BaseCaseEvaluator {
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class,
+				evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
 
 	}
 
@@ -252,21 +168,41 @@ public class BaseCaseEvaluator {
 
 		for (final BaseCaseRow row : clonedBaseCase.getBaseCase()) {
 			final BuyOption buy = row.getBuyOption();
-			final LoadSlot loadSlot = AnalyticsBuilder.makeLoadSlot(buy, clone);
 
-			mapper.addMapping(buy, loadSlot);
+			// Standard sandbox only uses the original
+
+			final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.ORIGINAL_SLOT);
+			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.BREAK_EVEN_VARIANT);
+			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.CHANGE_PRICE_VARIANT);
+			mapper.addMapping(buy, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
 
 			final SellOption sell = row.getSellOption();
-			final DischargeSlot dischargeSlot = AnalyticsBuilder.makeDischargeSlot(sell, clone);
-			mapper.addMapping(sell, dischargeSlot);
+			final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.ORIGINAL_SLOT);
+			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.BREAK_EVEN_VARIANT);
+			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.CHANGE_PRICE_VARIANT);
 
-			Cargo cargo = makeCargo(clone, shippingMap, row, loadSlot, dischargeSlot);
+			mapper.addMapping(sell, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
 
-			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
-				clone.getCargoModel().getLoadSlots().add(loadSlot);
+			Cargo cargo = makeCargo(clone, shippingMap, row, loadSlot_original, dischargeSlot_original);
+
+			if (loadSlot_original != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot_original)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot_original);
 			}
-			if (dischargeSlot != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot)) {
-				clone.getCargoModel().getDischargeSlots().add(dischargeSlot);
+			if (loadSlot_breakEven != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot_breakEven)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot_breakEven);
+			}
+			if (loadSlot_changeable != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot_changeable)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot_changeable);
+			}
+
+			if (dischargeSlot_original != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot_original)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot_original);
+			}
+			if (dischargeSlot_breakEven != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot_breakEven)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot_breakEven);
+			}
+			if (dischargeSlot_changeable != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot_changeable)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot_changeable);
 			}
 			if (cargo != null && !clone.getCargoModel().getCargoes().contains(cargo)) {
 				clone.getCargoModel().getCargoes().add(cargo);
@@ -291,17 +227,33 @@ public class BaseCaseEvaluator {
 		Map<ShippingOption, VesselAssignmentType> shippingMap = createShipping(clone, clonedModel);
 
 		for (final BuyOption buy : clonedModel.getBuys()) {
-			final LoadSlot loadSlot = AnalyticsBuilder.makeLoadSlot(buy, clone);
-			mapper.addMapping(buy, loadSlot);
-			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
-				clone.getCargoModel().getLoadSlots().add(loadSlot);
+			final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.ORIGINAL_SLOT);
+			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.BREAK_EVEN_VARIANT);
+			final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.CHANGE_PRICE_VARIANT);
+			mapper.addMapping(buy, loadSlot_original, loadSlot_breakEven, loadSlot_changeable);
+			if (loadSlot_original != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot_original)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot_original);
+			}
+			if (loadSlot_breakEven != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot_breakEven)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot_breakEven);
+			}
+			if (loadSlot_changeable != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot_changeable)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot_changeable);
 			}
 		}
 		for (final SellOption sell : clonedModel.getSells()) {
-			final DischargeSlot dischargeSlot = AnalyticsBuilder.makeDischargeSlot(sell, clone);
-			mapper.addMapping(sell, dischargeSlot);
-			if (dischargeSlot != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot)) {
-				clone.getCargoModel().getDischargeSlots().add(dischargeSlot);
+			final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.ORIGINAL_SLOT);
+			final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.BREAK_EVEN_VARIANT);
+			final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.CHANGE_PRICE_VARIANT);
+			mapper.addMapping(sell, dischargeSlot_original, dischargeSlot_breakEven, dischargeSlot_changeable);
+			if (dischargeSlot_original != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot_original)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot_original);
+			}
+			if (dischargeSlot_breakEven != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot_breakEven)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot_breakEven);
+			}
+			if (dischargeSlot_changeable != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot_changeable)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot_changeable);
 			}
 		}
 		return shippingMap;
@@ -343,6 +295,8 @@ public class BaseCaseEvaluator {
 			final @NonNull LNGScenarioModel lngScenarioModel, Map<FleetShippingOption, VesselAvailability> shippingMap) {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
+		boolean adjustWindows = false;
+
 		if (shipping == null) {
 			if (loadSlot != null && dischargeSlot != null) {
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
@@ -373,27 +327,7 @@ public class BaseCaseEvaluator {
 			if (dischargeSlot != null && dischargeSlot.isFOBSale()) {
 				dischargeSlot.setNominatedVessel(nominatedShippingOption.getNominatedVessel());
 			}
-
-			if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-				dischargeSlot.setWindowStart(loadSlot.getWindowStart());
-				if (dischargeSlot instanceof SpotSlot) {
-					dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
-					// Ensure other values correctly set
-					dischargeSlot.setWindowSize(1);
-					dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-					dischargeSlot.setWindowStartTime(0);
-				}
-			} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-				loadSlot.setWindowStart(dischargeSlot.getWindowStart());
-				if (loadSlot instanceof SpotSlot) {
-					loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
-					// Ensure other values correctly set
-					loadSlot.setWindowSize(1);
-					loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-					loadSlot.setWindowStartTime(0);
-				}
-			}
-
+			adjustWindows = true;
 		} else if (shipping instanceof FleetShippingOption) {
 			final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
 			if (cargo != null) {
@@ -403,30 +337,7 @@ public class BaseCaseEvaluator {
 
 				cargo.setVesselAssignmentType(vesselAvailability);
 
-				// TODO: Calculate time.
-				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
-					if (dischargeSlot instanceof SpotSlot) {
-						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						dischargeSlot.setWindowSize(1);
-						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						dischargeSlot.setWindowStartTime(0);
-					}
-				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
-					if (loadSlot instanceof SpotSlot) {
-						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						loadSlot.setWindowSize(1);
-						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						loadSlot.setWindowStartTime(0);
-					}
-				}
+				adjustWindows = true;
 			}
 		} else if (shipping instanceof RoundTripShippingOption) {
 			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
@@ -442,41 +353,48 @@ public class BaseCaseEvaluator {
 				cargo.setVesselAssignmentType(market);
 				cargo.setSpotIndex(-1);
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
-				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 
-					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
-					if (dischargeSlot instanceof SpotSlot) {
-						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						dischargeSlot.setWindowSize(1);
-						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						dischargeSlot.setWindowStartTime(0);
-					}
-				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
-
-					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
-					if (loadSlot instanceof SpotSlot) {
-						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
-						// Ensure other values correctly set
-						loadSlot.setWindowSize(1);
-						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-						loadSlot.setWindowStartTime(0);
-					}
-				}
-			}	
+				adjustWindows = true;
+			}
 		} else if (shipping instanceof ExistingVesselAvailability) {
 			final ExistingVesselAvailability existingVesselAvailability = (ExistingVesselAvailability) shipping;
 			cargo.setVesselAssignmentType(existingVesselAvailability.getVesselAvailability());
+
+			adjustWindows = true;
 		} else if (shipping instanceof ExistingCharterMarketOption) {
 			final ExistingCharterMarketOption existingCharterMarketOption = (ExistingCharterMarketOption) shipping;
 			cargo.setVesselAssignmentType(existingCharterMarketOption.getCharterInMarket());
 			cargo.setSpotIndex(existingCharterMarketOption.getSpotIndex());
-				
-	
+
+			adjustWindows = true;
+		}
+
+		if (adjustWindows) {
+			if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
+				final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+				final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+
+				dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
+				if (dischargeSlot instanceof SpotSlot) {
+					dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					dischargeSlot.setWindowSize(1);
+					dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					dischargeSlot.setWindowStartTime(0);
+				}
+			} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
+				final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+
+				final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+				loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
+				if (loadSlot instanceof SpotSlot) {
+					loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					loadSlot.setWindowSize(1);
+					loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					loadSlot.setWindowStartTime(0);
+				}
+			}
 		}
 	}
 

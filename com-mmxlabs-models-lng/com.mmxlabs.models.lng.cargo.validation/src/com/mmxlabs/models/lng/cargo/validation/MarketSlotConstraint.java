@@ -127,44 +127,46 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowFlex());
 					failures.add(dsd);
 				}
-				if (slot.getWindowStart() != null && slot.getWindowStart().getDayOfMonth() != 1) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should start on the 1st of the month."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-					failures.add(dsd);
-				}
-				if (!slot.isSetWindowStartTime() || slot.getWindowStartTime() != 0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have start time set to zero"));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-					failures.add(dsd);
-				}
+				if (!extraContext.isRelaxedChecking()) {
+					if (slot.getWindowStart() != null && slot.getWindowStart().getDayOfMonth() != 1) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should start on the 1st of the month."));
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+						failures.add(dsd);
+					}
+					if (!slot.isSetWindowStartTime() || slot.getWindowStartTime() != 0) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have start time set to zero"));
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime());
+						failures.add(dsd);
+					}
 
-				boolean foundAltWindowSize = false;
-				final int actual = slot.getWindowSize();
-				final Port port = slot.getPort();
-				if (slot.isSetWindowSizeUnits() && slot.getWindowSizeUnits() == TimePeriod.HOURS || (port != null && port.getDefaultWindowSizeUnits() == TimePeriod.HOURS)) {
-					if (slot.isSetWindowSize()) {
-						final LocalDate windowStart = slot.getWindowStart();
-						final int expected = Hours.between(windowStart, windowStart.plusMonths(1)) - 1;
-						if (expected == actual) {
-							foundAltWindowSize = true;
+					boolean foundAltWindowSize = false;
+					final int actual = slot.getWindowSize();
+					final Port port = slot.getPort();
+					if (slot.isSetWindowSizeUnits() && slot.getWindowSizeUnits() == TimePeriod.HOURS || (port != null && port.getDefaultWindowSizeUnits() == TimePeriod.HOURS)) {
+						if (slot.isSetWindowSize()) {
+							final LocalDate windowStart = slot.getWindowStart();
+							final int expected = Hours.between(windowStart, windowStart.plusMonths(1)) - 1;
+							if (expected == actual) {
+								foundAltWindowSize = true;
+							}
 						}
 					}
-				}
 
-				if (!slot.isSetWindowSizeUnits() || slot.getWindowSizeUnits() != TimePeriod.MONTHS) {
-					final int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have a one month window"), eType);
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSizeUnits());
-					failures.add(dsd);
-				} else if (!slot.isSetWindowSize() || actual != 1) {
-					final int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have a one month window"), eType);
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSize());
-					failures.add(dsd);
+					if (!slot.isSetWindowSizeUnits() || slot.getWindowSizeUnits() != TimePeriod.MONTHS) {
+						final int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have a one month window"), eType);
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSizeUnits());
+						failures.add(dsd);
+					} else if (!slot.isSetWindowSize() || actual != 1) {
+						final int eType = foundAltWindowSize ? IStatus.WARNING : IStatus.ERROR;
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should have a one month window"), eType);
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSize());
+						failures.add(dsd);
+					}
 				}
 			}
 

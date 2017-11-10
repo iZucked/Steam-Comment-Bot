@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
+package com.mmxlabs.models.lng.analytics.ui.views.sandbox;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -91,6 +91,10 @@ public class AnalyticsBuilder {
 	private static final double DEFAULT_MAX_VOLUME = 140_000;
 
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
+		return makeLoadSlot(buy, lngScenarioModel, SlotMode.ORIGINAL_SLOT);
+	}
+
+	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel, final SlotMode slotMode) {
 
 		final String baseName = buyOptionDescriptionFormatter.render(buy);
 
@@ -103,8 +107,48 @@ public class AnalyticsBuilder {
 		final String id = getUniqueID(baseName, usedIDStrings);
 
 		if (buy instanceof BuyReference) {
-			return ((BuyReference) buy).getSlot();
-		} else if (buy instanceof BuyOpportunity) {
+			final LoadSlot originalLoadSlot = ((BuyReference) buy).getSlot();
+			if (slotMode != SlotMode.ORIGINAL_SLOT) {
+				// TODO: Copy other params!
+				final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+				slot.setOptional(true);
+				slot.setName(id);
+				slot.setPort(originalLoadSlot.getPort());
+
+				slot.setArriveCold(originalLoadSlot.isArriveCold());
+				slot.setDESPurchase(originalLoadSlot.isDESPurchase());
+				slot.setDivertible(originalLoadSlot.isDivertible());
+				slot.setCounterparty(originalLoadSlot.getCounterparty());
+				slot.setDuration(originalLoadSlot.getSlotOrPortDuration());
+
+				if (originalLoadSlot.getSlotOrDelegatedCV() != 0.0) {
+					slot.setCargoCV(originalLoadSlot.getSlotOrDelegatedCV());
+				}
+				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
+					slot.setPriceExpression("??");
+				} else if (slotMode == SlotMode.BREAK_EVEN_VARIANT) {
+					slot.setPriceExpression("?");
+				}
+				slot.setWindowStart(originalLoadSlot.getWindowStart());
+
+				slot.setEntity(originalLoadSlot.getSlotOrDelegatedEntity());
+
+				if (originalLoadSlot.getCancellationExpression() != null && !originalLoadSlot.getCancellationExpression().isEmpty()) {
+					slot.setCancellationExpression(originalLoadSlot.getCancellationExpression());
+				}
+				slot.setMiscCosts(originalLoadSlot.getMiscCosts());
+
+				slot.setVolumeLimitsUnit(originalLoadSlot.getSlotOrContractVolumeLimitsUnit());
+				slot.setMinQuantity(originalLoadSlot.getSlotOrContractMinQuantity());
+				slot.setMaxQuantity(originalLoadSlot.getSlotOrContractMaxQuantity());
+
+				return slot;
+			}
+
+			return originalLoadSlot;
+		} else if (buy instanceof BuyOpportunity)
+
+		{
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
 			final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 			slot.setOptional(true);
@@ -119,7 +163,11 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getContract() != null) {
 				slot.setContract(buyOpportunity.getContract());
 			}
-			if (buyOpportunity.getPriceExpression() != null && !buyOpportunity.getPriceExpression().equals("")) {
+			if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
+				slot.setPriceExpression("??");
+			} else if (slotMode == SlotMode.BREAK_EVEN_VARIANT) {
+				slot.setPriceExpression("?");
+			} else if (buyOpportunity.getPriceExpression() != null && !buyOpportunity.getPriceExpression().equals("")) {
 				slot.setPriceExpression(buyOpportunity.getPriceExpression().contains("?") ? "?" : buyOpportunity.getPriceExpression());
 			}
 			if (buyOpportunity.getDate() != null) {
@@ -158,6 +206,12 @@ public class AnalyticsBuilder {
 			slot.setMarket(market);
 
 			slot.setName(id);
+
+			if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
+				slot.setPriceExpression("??");
+			} else if (slotMode == SlotMode.BREAK_EVEN_VARIANT) {
+				slot.setPriceExpression("?");
+			}
 
 			return slot;
 		}
@@ -203,6 +257,10 @@ public class AnalyticsBuilder {
 	}
 
 	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel) {
+		return makeDischargeSlot(sell, lngScenarioModel, SlotMode.ORIGINAL_SLOT);
+	}
+
+	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel, final SlotMode slotMode) {
 		final String baseName = sellOptionDescriptionFormatter.render(sell);
 
 		// Get existing names
@@ -214,7 +272,42 @@ public class AnalyticsBuilder {
 		final String id = getUniqueID(baseName, usedIDStrings);
 
 		if (sell instanceof SellReference) {
-			return ((SellReference) sell).getSlot();
+
+			final DischargeSlot originalDischargeSlot = ((SellReference) sell).getSlot();
+			if (slotMode != SlotMode.ORIGINAL_SLOT) {
+
+				final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
+				slot.setOptional(true);
+				slot.setName(id);
+				slot.setPort(originalDischargeSlot.getPort());
+
+				slot.setFOBSale(originalDischargeSlot.isFOBSale());
+				slot.setDivertible(originalDischargeSlot.isDivertible());
+				slot.setCounterparty(originalDischargeSlot.getCounterparty());
+				slot.setDuration(originalDischargeSlot.getSlotOrPortDuration());
+				// TODO: Copy other params!
+				if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
+					slot.setPriceExpression("??");
+				} else if (slotMode == SlotMode.BREAK_EVEN_VARIANT) {
+					slot.setPriceExpression("?");
+				}
+				slot.setWindowStart(originalDischargeSlot.getWindowStart());
+
+				slot.setEntity(originalDischargeSlot.getSlotOrDelegatedEntity());
+
+				if (originalDischargeSlot.getCancellationExpression() != null && !originalDischargeSlot.getCancellationExpression().isEmpty()) {
+					slot.setCancellationExpression(originalDischargeSlot.getCancellationExpression());
+				}
+				slot.setMiscCosts(originalDischargeSlot.getMiscCosts());
+
+				slot.setVolumeLimitsUnit(originalDischargeSlot.getSlotOrContractVolumeLimitsUnit());
+				slot.setMinQuantity(originalDischargeSlot.getSlotOrContractMinQuantity());
+				slot.setMaxQuantity(originalDischargeSlot.getSlotOrContractMaxQuantity());
+
+				return slot;
+			}
+
+			return originalDischargeSlot;
 		} else if (sell instanceof SellOpportunity) {
 			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
 			final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
@@ -236,7 +329,12 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getEntity() != null) {
 				slot.setEntity(sellOpportunity.getEntity());
 			}
-			if (sellOpportunity.getCancellationExpression() != null && !sellOpportunity.getCancellationExpression().isEmpty()) {
+
+			if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
+				slot.setPriceExpression("??");
+			} else if (slotMode == SlotMode.BREAK_EVEN_VARIANT) {
+				slot.setPriceExpression("?");
+			} else if (sellOpportunity.getCancellationExpression() != null && !sellOpportunity.getCancellationExpression().isEmpty()) {
 				slot.setCancellationExpression(sellOpportunity.getCancellationExpression());
 			}
 			slot.setMiscCosts(sellOpportunity.getMiscCosts());
@@ -265,6 +363,11 @@ public class AnalyticsBuilder {
 			slot.setMarket(market);
 			slot.setName(id);
 
+			if (slotMode == SlotMode.CHANGE_PRICE_VARIANT) {
+				slot.setPriceExpression("??");
+			} else if (slotMode == SlotMode.BREAK_EVEN_VARIANT) {
+				slot.setPriceExpression("?");
+			}
 			return slot;
 		}
 
@@ -326,10 +429,6 @@ public class AnalyticsBuilder {
 			}
 		}
 		return 0;
-	}
-
-	public enum ShippingType {
-		None, Shipped, NonShipped, Mixed
 	}
 
 	public static ShippingType isNonShipped(@NonNull final PartialCaseRow row) {
