@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.analytics;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -28,9 +27,9 @@ import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -74,7 +73,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -218,8 +216,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				final Map<IResource, IModifiableSequence> m_preCreated = new LinkedHashMap<>();
 
 				for (final BaseCaseRow row : baseCase.getBaseCase()) {
-					final LoadSlot load = mapper.get(row.getBuyOption());
-					final DischargeSlot discharge = mapper.get(row.getSellOption());
+					final LoadSlot load = mapper.getOriginal(row.getBuyOption());
+					final DischargeSlot discharge = mapper.getOriginal(row.getSellOption());
 					final ShippingOption shipping = row.getShipping();
 
 					if (row.getBuyOption() == null || row.getSellOption() == null) {
@@ -234,7 +232,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					}
 
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge, load, discharge);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge.getDataTransformer(), load, discharge);
 						m_preCreated.put(p.getFirst(), p.getSecond());
 
 						continue;
@@ -271,13 +269,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					final VesselAssignmentType t = e.getKey();
 					if (t instanceof VesselAvailability) {
 						final VesselAvailability vesselAvailability = (VesselAvailability) t;
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, vesselAvailability, orderedSlots);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge.getDataTransformer(), vesselAvailability, orderedSlots);
 						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
 						assert old == null;
 
 					} else if (t instanceof CharterInMarket) {
 						final CharterInMarket charterInMarket = (CharterInMarket) t;
-						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, charterInMarket, -1, orderedSlots);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge.getDataTransformer(), charterInMarket, -1, orderedSlots);
 						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
 						assert old == null;
 					}
