@@ -369,8 +369,8 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Create the sequence to export
-			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge);
-			SequenceHelper.addSequence(result, scenarioToOptimiserBridge, vesselAvailability, charterOutEvent);
+			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
+			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, charterOutEvent);
 
 			Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
@@ -420,8 +420,8 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Create the sequence to export
-			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge);
-			SequenceHelper.addSequence(result, scenarioToOptimiserBridge, vesselAvailability, charterOutEvent);
+			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
+			SequenceHelper.addSequence(result, scenarioToOptimiserBridge.getDataTransformer(), vesselAvailability, charterOutEvent);
 
 			Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 
@@ -471,9 +471,9 @@ public class InsertOptionalCharterOutTests extends AbstractMoveHandlerTest {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Create the sequence to export
-			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge);
+			final IModifiableSequences result = SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer());
 
-			SequenceHelper.addToUnused(result, scenarioToOptimiserBridge, charterOutEvent);
+			SequenceHelper.addToUnused(result, scenarioToOptimiserBridge.getDataTransformer(), charterOutEvent);
 
 			Schedule updatedSchedule = scenarioToOptimiserBridge.createOptimiserSchedule(result, null);
 

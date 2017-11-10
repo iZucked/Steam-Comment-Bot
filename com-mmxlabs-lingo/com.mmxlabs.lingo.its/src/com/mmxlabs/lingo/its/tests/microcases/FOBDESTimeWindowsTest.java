@@ -186,7 +186,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 			LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			ISequences rawSequences = SequenceHelper.createFOBDESSequences(scenarioToOptimiserBridge, loadSlot, dischargeSlot);
+			ISequences rawSequences = SequenceHelper.createFOBDESSequences(scenarioToOptimiserBridge.getDataTransformer(), loadSlot, dischargeSlot);
 
 			// Validate the initial sequences are invalid
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
@@ -222,7 +222,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		evaluateWithLSOTest(scenarioRunner -> {
 			LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			ISequences rawSequences = SequenceHelper.createFOBDESSequences(scenarioToOptimiserBridge, loadSlot, dischargeSlot);
+			ISequences rawSequences = SequenceHelper.createFOBDESSequences(scenarioToOptimiserBridge.getDataTransformer(), loadSlot, dischargeSlot);
 
 			// Validate the initial sequences are invalid
 			final List<IEvaluatedStateConstraintChecker> failedConstraintCheckers = MicroTestUtils.validateEvaluatedStateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(),
