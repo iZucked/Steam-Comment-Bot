@@ -4,19 +4,28 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 
 /**
  * Generic tests linked to emailed cases
@@ -33,6 +42,30 @@ public abstract class AdvancedOptimisationTester extends AbstractAdvancedOptimis
 	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final LocalDate periodStart, @Nullable final YearMonth periodEnd,
 			boolean runGCO) {
 		super(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, runGCO);
+	}
+
+	/**
+	 * Test the transformed scenario is pretty close to the original - specifically scheduling should be consistent.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category(MicroTest.class)
+	public void validatePeriodTransform() throws Exception {
+		Assume.assumeTrue(periodStart != null || periodEnd != null);
+		final URL url = getClass().getResource(scenarioURL);
+		Assert.assertNotNull(url);
+		ScenarioStorageUtil.withExternalScenarioFromResourceURL(url, (scenarioInstance, modelReference) -> {
+			LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
+			final OptimisationPlan optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
+			if (periodStart != null) {
+				optimiserSettings.getUserSettings().setPeriodStartDate(periodStart);
+			}
+			if (periodEnd != null) {
+				optimiserSettings.getUserSettings().setPeriodEnd(periodEnd);
+			}
+			LNGScenarioRunnerCreator.withEvaluationRunner(scenarioModel, optimiserSettings, runner -> PeriodVerifierUtil.runTest(runner, true));
+		});
 	}
 
 	@Test

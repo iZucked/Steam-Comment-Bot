@@ -284,9 +284,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// Tests
-				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
-				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assert.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
 	}
@@ -361,9 +361,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// tests
-				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
-				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assert.assertEquals(1216, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
 	}
@@ -438,9 +438,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				// tests
-				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
-				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1464);
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assert.assertEquals(1464, dischargeFeasibleTimeWindow.getInclusiveStart());
 			});
 		});
 	}
@@ -454,10 +454,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	@Category({ MicroTest.class })
 	public void testTimeWindows_24hours_higher_price() throws Exception {
 
+		Assert.fail("FIXME: This test fails as the price trimmer does not take timezone into account");
+
 		// Create the required basic elements
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 23, 0, 0), LocalDateTime.of(2016, 6, 30, 23, 0, 0),
 				LocalDateTime.of(2018, 1, 1, 0, 0, 0));
-
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 7, 1), portFinder.findPort("Bonny Nigeria"), null, entity, "Henry_Hub", 23.4) //
@@ -512,13 +513,13 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
-				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
-				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1488);
-
 				Assert.assertEquals(13.5, ScheduleTools.getPrice(optimiserScenario, cargo1.getSortedSlots().get(1)), 0.0001);
-				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
-						MicroCaseDateUtils.getZonedDateTime(2016, 9, 01, 0, getDefaultEMFDischargeSlot().getPort()));
+				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
+				Assert.assertEquals(1488, dischargeFeasibleTimeWindow.getInclusiveStart());	
+
+				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 01, 0, getDefaultEMFDischargeSlot().getPort()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()));
+
 			});
 		},
 				/*
@@ -596,9 +597,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
-				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
-						MicroCaseDateUtils.getZonedDateTime(2016, 9, 1, 0, getDefaultEMFDischargeSlot().getPort()));
+				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 1, 0, getDefaultEMFDischargeSlot().getPort()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, 1488, getDefaultEMFDischargeSlot().getPort().getTimeZone()));
 
 			});
 		},
@@ -674,9 +674,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
-				Assert.assertEquals(
-						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()),
-						MicroCaseDateUtils.getZonedDateTime(2016, 8, 1, 0, getDefaultEMFDischargeSlot().getPort()));
+				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 8, 1, 0, getDefaultEMFDischargeSlot().getPort()),
+						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getTimeZone()));
 			});
 		},
 				/*
