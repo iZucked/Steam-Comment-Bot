@@ -58,8 +58,10 @@ public class LatenessChecker {
 	public static final @NonNull String GA_TOTAL_BEYOND_LATENESS_HIGH_IN_HOURS = "total-beyond-high-lateness-hours";
 
 	/**
-	 * TODO: Break out into separate class Calculate the various capacity violation check - min/max load & discharge volumes, max heel, vessel capacity and cooldown. Note the {@link IVolumeAllocator}
-	 * and {@link LNGVoyageCalculator} generally feed into these checks.
+	 * TODO: Break out into separate class Calculate the various capacity violation
+	 * check - min/max load & discharge volumes, max heel, vessel capacity and
+	 * cooldown. Note the {@link IVolumeAllocator} and {@link LNGVoyageCalculator}
+	 * generally feed into these checks.
 	 * 
 	 * @param sequences
 	 * @param profitAndLossSequences
@@ -77,7 +79,7 @@ public class LatenessChecker {
 
 			// Where in the scenario does the lateness occur?
 			final Interval interval = getInterval(tw);
-			
+
 			// Used by fitness constraint
 			int latenessWithFlexInHours = getLatenessWithFlex(portSlot, tw, volumeAllocatedSequence.getArrivalTime(portSlot));
 
@@ -89,16 +91,16 @@ public class LatenessChecker {
 			if (portSlot instanceof IEndPortSlot) {
 				latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
 				latenessWithoutFlexInHours = Math.max(latenessMaxDurationInHours, latenessWithoutFlexInHours);
-				
+
 				// There is no latenessWith flex for the endEvent
 				latenessWithFlexInHours = Math.max(latenessMaxDurationInHours, latenessWithFlexInHours);
 			}
-			
+
 			// For fitness component
 			final long weightedLateness = getWeightedLateness(interval, latenessWithFlexInHours);
 
 			// For own just add the max duration violation to the general lateness
-			// TODO: report max duration lateness as a separate lateness 
+			// TODO: report max duration lateness as a separate lateness
 			if (latenessWithFlexInHours != 0 || weightedLateness != 0 || latenessWithoutFlexInHours != 0 || latenessMaxDurationInHours != 0) {
 				volumeAllocatedSequence.addLateness(portSlot, weightedLateness, interval, latenessWithFlexInHours, latenessWithoutFlexInHours);
 			}
@@ -110,28 +112,28 @@ public class LatenessChecker {
 			}
 		}
 	}
-	
-	private int getLatenessMaxDurationInHours(VolumeAllocatedSequence volumeAllocatedSequence, @NonNull final IResource resource) {	
+
+	private int getLatenessMaxDurationInHours(final VolumeAllocatedSequence volumeAllocatedSequence, @NonNull final IResource resource) {
 		final IPortSlot startSlot = volumeAllocatedSequence.getSequenceSlots().get(0);
 		final IPortSlot endSlot = volumeAllocatedSequence.getSequenceSlots().get(volumeAllocatedSequence.getSequenceSlots().size() - 1);
 
-		int maxDeltaInHours = volumeAllocatedSequence.getArrivalTime(endSlot) - volumeAllocatedSequence.getArrivalTime(startSlot);
+		final int maxDeltaInHours = volumeAllocatedSequence.getArrivalTime(endSlot) - volumeAllocatedSequence.getArrivalTime(startSlot);
 		int maxDurationInHours = 0;
-		
+
 		final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
 		if (req != null) {
 			if (req.isMaxDurationSet()) {
-				maxDurationInHours = req.getMaxDurationInDays() * 24;
+				maxDurationInHours = req.getMaxDurationInHours();
 
 				if (maxDeltaInHours > maxDurationInHours) {
 					return maxDeltaInHours - maxDurationInHours;
 				}
 			}
 		}
-		
+
 		return 0;
 	}
-	
+
 	private @Nullable ITimeWindow getTW(@NonNull final IPortSlot portSlot, @NonNull final IResource resource) {
 		ITimeWindow tw = null;
 
