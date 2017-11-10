@@ -74,8 +74,14 @@ public class OptimisationJobRunner {
 						// create a new job
 						job = createJobDescriptorCallback.get();
 
+						boolean relaxedValidation = false;
+						final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
+						if (scenarioInstance != null) {
+							relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
+						}
+
 						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root, false)) {
+						if (!validateScenario(root, false, relaxedValidation)) {
 							scenarioLock.unlock();
 							return;
 						}
@@ -141,7 +147,7 @@ public class OptimisationJobRunner {
 		}
 	}
 
-	protected boolean validateScenario(LNGScenarioModel root, boolean optimising) {
-		return OptimisationHelper.validateScenario(root, optimising);
+	protected boolean validateScenario(LNGScenarioModel root, boolean optimising, boolean relaxedValidation) {
+		return OptimisationHelper.validateScenario(root, optimising, relaxedValidation);
 	}
 }
