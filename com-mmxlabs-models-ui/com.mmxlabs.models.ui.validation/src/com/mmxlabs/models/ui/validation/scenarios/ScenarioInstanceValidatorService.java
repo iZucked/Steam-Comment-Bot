@@ -56,16 +56,16 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 
 		modelRecord.execute(modelReference -> {
 
-			EObject rootObject = modelReference.getInstance();
+			final EObject rootObject = modelReference.getInstance();
 			if (rootObject instanceof MMXRootObject) {
-				MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
-				//
-				// try (ModelReference modelReference = modelRecord.aquireReference()) {
-				// final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
-				// if (rootObject == null) {
-				// return;
-				// }
-				final IExtraValidationContext extraContext = new DefaultExtraValidationContext(mmxRootObject, false);
+				final MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
+				boolean relaxedValidation = false;
+				final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
+				if (scenarioInstance != null) {
+					relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
+				}
+
+				final IExtraValidationContext extraContext = new DefaultExtraValidationContext(mmxRootObject, false, relaxedValidation);
 
 				final IValidationService pValidationService = validationService;
 				if (pValidationService != null) {
