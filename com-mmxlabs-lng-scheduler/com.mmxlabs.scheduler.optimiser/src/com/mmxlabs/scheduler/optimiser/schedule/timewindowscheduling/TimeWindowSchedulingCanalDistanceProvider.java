@@ -21,10 +21,13 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSchedulingCanalDistanceProvider {
 
@@ -37,6 +40,9 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 	@Inject
 	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private PanamaBookingHelper panamaBookingHelper;
 
 	@Override
 	public @NonNull LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int ladenStartTime,
@@ -57,6 +63,17 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			return new LadenRouteData[] { new LadenRouteData(0, 0, 0, 0, 0) };
 		}
 
+		if (isConstrainedPanamaVoyage && distanceProvider.getRouteOptionDirection(load, ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND) {
+			final int toCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, load, true);
+			if (toCanal != Integer.MAX_VALUE) {
+				int estimatedCanalArrival = voyageStartTime + toCanal;
+				if (panamaBookingHelper.getPanamaPeriod(estimatedCanalArrival) == PanamaPeriod.Beyond) {
+					additionalPanamaIdleHours = 0;
+				}
+			}
+		}
+
+		final int finalAdditionalPanamaIdleHours = additionalPanamaIdleHours;
 		// get distances for this pairing (assumes that getAllDistanceValues() returns a copy of the data)
 		VesselState vesselState;
 		IRouteCostProvider.CostType costType;
@@ -74,8 +91,11 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			@Override
 			public int compare(final DistanceMatrixEntry o1, final DistanceMatrixEntry o2) {
 				if (routeCostProvider.getRouteCost(o1.getRoute(), vessel, voyageStartTime, costType) == routeCostProvider.getRouteCost(o2.getRoute(), vessel, voyageStartTime, costType)) {
-					return Integer.compare(Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o1.getDistance()) + getProcessedRouteTransitTime(o1.getRoute(), vessel, isConstrainedPanamaVoyage, additionalPanamaIdleHours),
-							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o2.getDistance()) + getProcessedRouteTransitTime(o2.getRoute(), vessel, isConstrainedPanamaVoyage, additionalPanamaIdleHours));
+						return Integer.compare(
+							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o1.getDistance())
+									+ getProcessedRouteTransitTime(o1.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours),
+							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o2.getDistance())
+									+ getProcessedRouteTransitTime(o2.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours));
 				} else {
 					return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), vessel, voyageStartTime, costType),
 							routeCostProvider.getRouteCost(o2.getRoute(), vessel, voyageStartTime, costType));
@@ -100,7 +120,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			final int mintravelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance());
 			final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState), vessel.getMinSpeed()), vessel.getMaxSpeed());
 			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getDistance());
-			final int transitTime = getProcessedRouteTransitTime(d.getRoute(), vessel, isConstrainedPanamaVoyage, additionalPanamaIdleHours);
+			final int transitTime = getProcessedRouteTransitTime(d.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours);
 			times[i] = new LadenRouteData(mintravelTime + transitTime, nbotravelTime + transitTime,
 					OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getRoute(), vessel, voyageStartTime, costType)), d.getDistance(), transitTime);
 			i++;

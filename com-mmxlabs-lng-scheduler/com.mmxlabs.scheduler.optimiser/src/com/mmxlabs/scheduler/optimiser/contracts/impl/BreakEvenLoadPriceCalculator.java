@@ -35,11 +35,11 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
-	private int price;
+	private ThreadLocal<Integer> price = new ThreadLocal<Integer>();
 
 	@Override
 	public void preparePurchaseForEvaluation(final @NonNull ISequences sequences) {
-		price = 0;
+		price.set(0);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerM3, final IAllocationAnnotation allocationAnnotation,
 			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			final IDetailTree annotations) {
-		return price;
+		return price.get();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
-		return price;
+		return price.get();
 	}
 
 	/**
@@ -64,12 +64,12 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			final @Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
-		return price;
+		return price.get();
 	}
 
 	@Override
 	public void setPrice(final int newPrice) {
-		this.price = newPrice;
+		this.price.set(newPrice);
 	}
 
 	@Override
@@ -90,7 +90,13 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Override
 	public List<int @NonNull []> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		final List<int @NonNull []> intervals = new LinkedList<>();
-		intervals.add(new int[] { startOfRange, price });
+		Integer priceObj = price.get();
+		if (priceObj == null) {
+			intervals.add(new int[] { startOfRange, 0 });
+		} else {
+
+			intervals.add(new int[] { startOfRange, priceObj });
+		}
 		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
 		return intervals;
 	}
@@ -107,4 +113,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 		}
 	}
 
+	public int getPrice() {
+		return price.get();
+	}
 }

@@ -144,12 +144,15 @@ public class ProfitAndLossCalculator {
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
+							profitAndLossSequences.setCargoValueAnnotation(plan, cargoValueAnnotation);
+
 						} else {
 							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
 									vesselAvailability, sequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
+							profitAndLossSequences.setCargoValueAnnotation(plan, cargoValueAnnotation);
 						}
 
 						// Store annotations if required

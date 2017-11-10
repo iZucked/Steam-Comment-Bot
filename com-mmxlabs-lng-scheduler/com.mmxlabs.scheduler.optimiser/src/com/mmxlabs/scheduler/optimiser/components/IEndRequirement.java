@@ -17,17 +17,13 @@ public interface IEndRequirement extends IStartEndRequirement {
 	@NonNull
 	IHeelOptionConsumer getHeelOptions();
 	
-	int getMinDurationInDays();
-	
-	int getMaxDurationInDays();
-	
 	int getMinDurationInHours();
 	
 	int getMaxDurationInHours();
 	
-	void setMinDurationInDays(int value);
+	void setMinDurationInHours(int hours);
 	
-	void setMaxDurationInDays(int value);
+	void setMaxDurationInHours(int hours);
 
 	boolean isMinDurationSet();
 	
