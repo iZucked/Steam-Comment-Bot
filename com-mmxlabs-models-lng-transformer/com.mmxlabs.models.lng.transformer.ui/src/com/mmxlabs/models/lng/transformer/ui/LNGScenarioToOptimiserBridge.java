@@ -451,4 +451,12 @@ public class LNGScenarioToOptimiserBridge {
 			return exporter.exportAnnotatedSolution(optimiserDataTransformer.getModelEntityMap(), solution);
 		}
 	}
+
+	/**
+	 * Returns the optimiser {@link Schedule} for the initial sequences.
+	 * @return
+	 */
+	public Schedule createOptimiserInitialSchedule() {
+		return createOptimiserSchedule(optimiserDataTransformer.getInitialSequences(), null);
+	}
 }
