@@ -39,13 +39,16 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	private HashMap<EObject, EObject> originals = new HashMap<EObject, EObject>();
 
 	private final boolean validatingClone;
+	private boolean relaxedValidation;
 
 	/**
+	 * @param relaxedValidation 
 	 */
-	public DefaultExtraValidationContext(IScenarioDataProvider scenarioDataProvider, boolean validatingClone) {
+	public DefaultExtraValidationContext(IScenarioDataProvider scenarioDataProvider, boolean validatingClone, boolean relaxedValidation) {
 		this.rootObject = scenarioDataProvider != null ? scenarioDataProvider.getTypedScenario(MMXRootObject.class) : null;
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.validatingClone = validatingClone;
+		this.relaxedValidation = relaxedValidation;
 	}
 
 	/**
@@ -55,6 +58,7 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 		this.rootObject = outerContext.getRootObject();
 		this.scenarioDataProvider = outerContext.getScenarioDataProvider();
 		this.validatingClone = validatingClone;
+		this.relaxedValidation = outerContext.isRelaxedChecking();
 	}
 
 	@Override
@@ -186,7 +190,12 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	public boolean isValidatingClone() {
 		return validatingClone;
 	}
-
+	
+	@Override
+	public boolean isRelaxedChecking() {
+		return relaxedValidation;
+	}
+	
 	@Override
 	public IScenarioDataProvider getScenarioDataProvider() {
 		return scenarioDataProvider;

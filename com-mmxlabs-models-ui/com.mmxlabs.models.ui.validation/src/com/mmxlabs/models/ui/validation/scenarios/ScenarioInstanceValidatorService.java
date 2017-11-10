@@ -23,8 +23,11 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
- * The {@link ScenarioInstanceValidatorService} is an {@link IScenarioServiceListener} implementation intended to be registered as a OSGi service. It adds itself a a listener to
- * {@link IScenarioService}s and hooks in to the post load event. It will then attach a {@link ScenarioInstanceValidator} to loaded {@link ScenarioInstance}s.
+ * The {@link ScenarioInstanceValidatorService} is an
+ * {@link IScenarioServiceListener} implementation intended to be registered as
+ * a OSGi service. It adds itself a a listener to {@link IScenarioService}s and
+ * hooks in to the post load event. It will then attach a
+ * {@link ScenarioInstanceValidator} to loaded {@link ScenarioInstance}s.
  * 
  * @author Simon Goodall
  * 
@@ -54,7 +57,9 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 
 		modelRecord.executeWithProvider(scenarioDataProvider -> {
 
-			final IExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false);
+			boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
+
+			final IExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
 
 			final IValidationService pValidationService = validationService;
 			if (pValidationService != null) {

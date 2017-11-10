@@ -425,7 +425,13 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			site.setSelectionProvider(this);
 
 			validationContextStack.clear();
-			validationContextStack.push(new DefaultExtraValidationContext(getScenarioDataProvider(), false));
+			
+			boolean relaxedValidation = false;
+			final ScenarioInstance scenarioInstance = modelRecord.getScenarioInstance();
+			if (scenarioInstance != null) {
+				relaxedValidation = "Period Scenario".equals(scenarioInstance.getName());
+			}
+			validationContextStack.push(new DefaultExtraValidationContext(getScenarioDataProvider(), false, relaxedValidation));
 
 			updateLocked();
 

@@ -48,7 +48,7 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 		final IExtraValidationContext extraValidationContext;
 		if (activator == null) {
 			// For unit tests outside of OSGi
-			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider)null, false);
+			extraValidationContext = new DefaultExtraValidationContext((IScenarioDataProvider)null, false, false);
 		} else {
 			extraValidationContext = activator.getExtraValidationContext();
 		}
