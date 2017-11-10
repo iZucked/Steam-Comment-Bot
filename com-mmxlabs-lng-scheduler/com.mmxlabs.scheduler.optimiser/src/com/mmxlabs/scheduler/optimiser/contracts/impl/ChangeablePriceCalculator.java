@@ -8,25 +8,32 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  */
-public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBreakEvenPriceCalculator, IPriceIntervalProvider {
+public class ChangeablePriceCalculator implements ISalesPriceCalculator, ILoadPriceCalculator, IPriceIntervalProvider {
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
@@ -36,19 +43,13 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	 */
 	@Override
 	public void prepareSalesForEvaluation(final @NonNull ISequences sequences) {
-		price.set(0);
 	}
 
 	@Override
 	public int estimateSalesUnitPrice(final IDischargeOption option, IPortTimesRecord voyageRecord, final IDetailTree annotations) {
-		Integer value = price.get();
-		if (value == null) {
-			return 0;
-		}
-		return value;
+		return price.get();
 	}
 
-	@Override
 	public void setPrice(final int newPrice) {
 		this.price.set(newPrice);
 	}
@@ -76,13 +77,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	@Override
 	public List<int @NonNull []> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		final List<int[]> intervals = new LinkedList<>();
-		Integer integer = price.get();
-		if (integer == null) {
-			intervals.add(new int[] { startOfRange, 0 });
-
-		} else {
-			intervals.add(new int[] { startOfRange, integer });
-		}
+		intervals.add(new int[] { startOfRange, price.get() });
 		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
 		return intervals;
 	}
@@ -99,7 +94,22 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 		}
 	}
 
-	public int getPrice() {
+	@Override
+	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			@Nullable IDetailTree annotations) {
+		return price.get();
+	}
+
+	@Override
+	public int calculateDESPurchasePricePerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu,
+			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IDetailTree annotations) {
+		return price.get();
+	}
+
+	@Override
+	public int calculatePriceForFOBSalePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeOption dischargeOption, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IDetailTree annotations) {
 		return price.get();
 	}
 }

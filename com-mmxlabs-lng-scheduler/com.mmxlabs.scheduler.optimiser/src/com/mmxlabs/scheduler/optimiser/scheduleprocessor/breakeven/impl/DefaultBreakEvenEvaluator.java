@@ -151,7 +151,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 			final long minPrice_Value = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startingHeelInM3, portTimesRecord, sequenceElements, originalLoad,
 					originalDischarge, minPricePerMMBTu, priceSetter);
-
+			assert minPrice_Value != Long.MAX_VALUE;
+			
 			// TODO: We originally had a chunk of code to extend price range so that we could (almost) ensure PNL of zero was in range - unless values were really crazy. Disable now we search for
 			// purchase price too.
 
@@ -168,6 +169,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// int maxPricePerMMBTu = 10 * minPricePerMMBTu;
 			final long maxPrice_Value = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startingHeelInM3, portTimesRecord, sequenceElements, originalLoad,
 					originalDischarge, maxPricePerMMBTu, priceSetter);
+			
+			assert maxPrice_Value != Long.MAX_VALUE;
 			// while (maxPrice_Value < 0) {
 			// // Add $1
 			// maxPricePerMMBTu += OptimiserUnitConvertor.convertToInternalPrice(1.0);

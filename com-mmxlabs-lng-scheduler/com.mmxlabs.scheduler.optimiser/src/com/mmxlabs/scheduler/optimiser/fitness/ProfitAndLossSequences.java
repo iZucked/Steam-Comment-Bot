@@ -10,6 +10,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -26,6 +27,7 @@ public class ProfitAndLossSequences {
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 
 	private final @NonNull VolumeAllocatedSequences volumeAllocatedSequences;
+	private Map<VoyagePlan, CargoValueAnnotation> planToValueAnnotation = new HashMap<>();
 
 	public ProfitAndLossSequences(final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
 		this.volumeAllocatedSequences = volumeAllocatedSequences;
@@ -57,5 +59,13 @@ public class ProfitAndLossSequences {
 
 	public @NonNull VolumeAllocatedSequences getVolumeAllocatedSequences() {
 		return volumeAllocatedSequences;
+	}
+
+	public void setCargoValueAnnotation(VoyagePlan plan, CargoValueAnnotation cargoValueAnnotation) {
+		planToValueAnnotation.put(plan, cargoValueAnnotation);
+	}
+
+	public CargoValueAnnotation getCargoValueAnnotation(VoyagePlan plan) {
+		return planToValueAnnotation.get(plan);
 	}
 }
