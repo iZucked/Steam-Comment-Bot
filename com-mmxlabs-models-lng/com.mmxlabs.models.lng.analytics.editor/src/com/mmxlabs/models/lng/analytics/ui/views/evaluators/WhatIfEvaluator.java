@@ -49,7 +49,7 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -671,8 +671,8 @@ public class WhatIfEvaluator {
 
 		final EList<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
 
-		final LoadSlot loadSlot = mapper.get(baseCaseRow.getBuyOption());
-		final DischargeSlot dischargeSlot = mapper.get(baseCaseRow.getSellOption());
+		final LoadSlot loadSlot = mapper.getOriginal(baseCaseRow.getBuyOption());
+		final DischargeSlot dischargeSlot = mapper.getOriginal(baseCaseRow.getSellOption());
 
 		for (final SlotAllocation a : slotAllocations) {
 			if (a.getSlot() == loadSlot) {
@@ -696,8 +696,8 @@ public class WhatIfEvaluator {
 		OpenSlotAllocation loadAllocation = null;
 		OpenSlotAllocation dischargeAllocation = null;
 
-		final LoadSlot loadSlot = mapper.get(baseCaseRow.getBuyOption());
-		final DischargeSlot dischargeSlot = mapper.get(baseCaseRow.getSellOption());
+		final LoadSlot loadSlot = mapper.getOriginal(baseCaseRow.getBuyOption());
+		final DischargeSlot dischargeSlot = mapper.getOriginal(baseCaseRow.getSellOption());
 
 		for (final OpenSlotAllocation a : schedule.getOpenSlotAllocations()) {
 			if (a.getSlot() == loadSlot) {

@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;

@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;

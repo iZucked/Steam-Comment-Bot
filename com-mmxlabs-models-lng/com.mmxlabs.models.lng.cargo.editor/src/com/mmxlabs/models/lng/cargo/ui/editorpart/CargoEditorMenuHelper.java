@@ -1031,12 +1031,10 @@ public class CargoEditorMenuHelper {
 		}
 		if (slot instanceof SpotSlot) {
 			sb.append(", " + ((SpotSlot) slot).getMarket().getName());
+		} else {
+			sb.append(", " + slot.getName());
 		}
-		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
-		if (c != null) {
-			sb.append(" -- ");
-			sb.append("cargo '" + c.getLoadName() + "'");
-		}
+
 		return sb.toString();
 	}
 
