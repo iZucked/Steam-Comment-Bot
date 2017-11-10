@@ -194,7 +194,6 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 			return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
 				final String[] files = (String[]) fileData;
-				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
 				// Scan tree creating folder structure and gathering scenarios.
 				final List<File> scenarioFiles = new LinkedList<>();
@@ -223,6 +222,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 				}
 
 				try {
+					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 					dialog.run(true, true, new IRunnableWithProgress() {
 
 						@Override
