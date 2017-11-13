@@ -57,7 +57,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	VesselStateAttributes attrLaden;
 	VesselStateAttributes attrBal;
 
-	private final boolean writeScenario = true;
+	private final boolean writeScenario = false;
 
 	public class boilOffOverride implements IOptimiserInjectorService {
 
