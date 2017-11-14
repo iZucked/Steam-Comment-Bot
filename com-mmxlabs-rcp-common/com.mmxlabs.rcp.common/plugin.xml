@@ -46,5 +46,13 @@
          </commandParameter>
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.rcp.common.os.MachineInformation"
+            id="com.mmxlabs.rcp.common.os.MachineInformation"
+            name="Machine Information">
+      </page>
+   </extension>
 
 </plugin>
