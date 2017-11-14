@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="15">
+<?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="18">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
@@ -69,8 +69,8 @@
 <unit id="javax.jms.source" version="0.0.0"/>
 <unit id="org.apache.commons.math" version="0.0.0"/>
 <unit id="org.apache.commons.math.source" version="0.0.0"/>
-<unit id="org.slf4j.api" version="0.0.0"/>
-<unit id="org.slf4j.ext" version="0.0.0"/>
+<unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
+<unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
 <unit id="ch.qos.logback.classic.source" version="0.0.0"/>
 <unit id="ch.qos.logback.core" version="0.0.0"/>
