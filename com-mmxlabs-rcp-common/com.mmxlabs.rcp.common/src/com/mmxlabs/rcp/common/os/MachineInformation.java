@@ -105,13 +105,15 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 		final String osname = System.getProperty("os.name");
 		// FIXME: Support multiple physical cpus - we aim for a space separated list of
 		// physical core attributes. However line order may not have physical id first.
-		final Integer physicalId = 0;
+		Integer physicalId = 0;
 		if (osname != null) {
 			if (osname.startsWith("Windows")) {
-				final List<String> lines = executeCommand("wmic", "CPU", "Get", "NumberOfCores,NumberOfLogicalProcessors", " /Format:List");
+				final List<String> lines = executeCommand("wmic", "CPU", "Get", "DeviceID,Name,MaxClockSpeed,NumberOfCores,NumberOfLogicalProcessors", "/Format:List");
 				if (lines != null) {
 					for (final String line : lines) {
-						if (line.startsWith("NumberOfCores=")) {
+						if (line.startsWith("DeviceID=")) {
+							physicalId = Integer.parseInt(line.substring("DeviceID=CPU".length()));
+						} else if (line.startsWith("NumberOfCores=")) {
 							features.computeIfAbsent(MachineFeatures.NumberOfCores, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("NumberOfCores=".length())));
 						} else if (line.startsWith("NumberOfLogicalProcessors=")) {
 							features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, (v) -> new HashSet<>())
@@ -159,15 +161,26 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 		try {
 			final Process proc = pb.start();
 
+			final List<String> lines = new LinkedList<>();
 			try (BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()))) {
 
-				final List<String> lines = new LinkedList<>();
 				String s = null;
 				while ((s = stdInput.readLine()) != null) {
 					lines.add(s);
 				}
-				return lines;
 			}
+
+			if (lines.isEmpty()) {
+				try (BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getErrorStream()))) {
+
+					String s = null;
+					while ((s = stdInput.readLine()) != null) {
+						lines.add(s);
+					}
+
+				}
+			}
+			return lines;
 		} catch (final IOException e) {
 			// Ignore
 		}
