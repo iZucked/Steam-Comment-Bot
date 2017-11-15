@@ -151,6 +151,10 @@ public class PeriodExporter {
 							final VesselAvailability period_VA = optimiserDataTransformer.getModelEntityMap().getModelObjectNullChecked(period_vesselAvailability, VesselAvailability.class);
 							@Nullable
 							final VesselAvailability complete_VA = periodMapping.getOriginalFromCopy(period_VA);
+							if (complete_VA == null) {
+								// Probably a re-introduced cargo with duplicate availability.
+								continue;
+							}
 							final IVesselAvailability complete_vesselAvailability = originalDataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(complete_VA, IVesselAvailability.class);
 
 							complete_resource = complete_vesselProvider.getResource(complete_vesselAvailability);
@@ -286,8 +290,8 @@ public class PeriodExporter {
 
 				final Triple<IResource, Integer, Integer> completeMapping = periodToCompleteResourceLength.get(r);
 				if (completeMapping == null) {
-					// hmm resource was not used in initial period solution....
-					throw new UnsupportedOperationException();
+					// Assume linked to re-introduced cargo
+					continue;
 				}
 
 				// Extract the solution segment that represents the equivalent bit of the period
