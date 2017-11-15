@@ -88,7 +88,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 	@SuppressWarnings("unused")
 	protected void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts,
 			final IOptimiserInjectorService optimiserInjectorService, String... extraHints) throws Exception {
-		Assume.assumeTrue(AbstractOptimisationResultTester.storeFitnessMap != TestMode.Skip);
+		Assume.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 
 		if (withGeneratedCharterOuts) {
 			Assume.assumeTrue(runGCO);

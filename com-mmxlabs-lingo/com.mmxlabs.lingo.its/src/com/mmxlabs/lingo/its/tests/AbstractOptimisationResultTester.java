@@ -50,8 +50,8 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipher
 /**
  * 
  * Abstract class to test the optimisation reproducibility of a scenario. Super classes pass in a URL to a scenario resource. There are two modes of operation, determined by the boolean
- * {@link #storeFitnessMap}. When set to false (default) a properties file (located at the input URL with ".properties" appended) contains the expected initial and final fitness values of the
- * scenario. The second mode ({@link #storeFitnessMap} set to true) will generate the properties file. Note this mode will only work for file:// URLs. It is expected that a JUnit test run will provide
+ * {@link #OptimisationTestMode}. When set to false (default) a properties file (located at the input URL with ".properties" appended) contains the expected initial and final fitness values of the
+ * scenario. The second mode ({@link #OptimisationTestMode} set to true) will generate the properties file. Note this mode will only work for file:// URLs. It is expected that a JUnit test run will provide
  * file based URLs. It is expected JUnit plugin tests will not.
  * 
  * <a href="https://mmxlabs.fogbugz.com/default.asp?220">Case 220: Optimisation Result Test</a>
@@ -60,11 +60,6 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipher
  * 
  */
 public class AbstractOptimisationResultTester {
-
-	/**
-	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
-	 */
-	public static final TestMode storeFitnessMap = TestMode.Run;
 
 	/**
 	 * Subclasses can set to false to disable properties file generation for test cases which check other things.
@@ -160,7 +155,7 @@ public class AbstractOptimisationResultTester {
 	}
 
 	public IMultiStateResult optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
-		Assume.assumeTrue(storeFitnessMap != TestMode.Skip);
+		Assume.assumeTrue(TestingModes.OptimisationTestMode != TestMode.Skip);
 
 		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
@@ -168,8 +163,8 @@ public class AbstractOptimisationResultTester {
 		Properties props = null;
 		if (doPropertiesChecks) {
 			final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
-			props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap == TestMode.Generate);
-			if (storeFitnessMap == TestMode.Generate) {
+			props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), TestingModes.OptimisationTestMode == TestMode.Generate);
+			if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 				TesterUtil.storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 			} else {
 				// Assert old and new are equal
@@ -183,7 +178,7 @@ public class AbstractOptimisationResultTester {
 			boolean checkSolutions = true;
 
 			// Store the number of extra solutions so we can verify we get the same amount back out
-			if (storeFitnessMap == TestMode.Generate) {
+			if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 				// FIXME: Constant
 				props.put("solution-count", Integer.toString(result.getSolutions().size()));
 			} else {
@@ -201,7 +196,7 @@ public class AbstractOptimisationResultTester {
 				for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
 					final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(p.getSecond());
 					final String mapName = String.format("solution-%d", i++);
-					if (storeFitnessMap == TestMode.Generate) {
+					if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 						TesterUtil.storeFitnesses(props, mapName, currentEndFitnesses);
 					} else {
 						// Check for old test cases where we do not have this data stored, we do not want to abort here.
@@ -216,7 +211,7 @@ public class AbstractOptimisationResultTester {
 			// Check final optimised result
 			{
 				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
-				if (storeFitnessMap == TestMode.Generate) {
+				if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 					TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 				} else {
 					// Assert old and new are equal
@@ -224,7 +219,7 @@ public class AbstractOptimisationResultTester {
 				}
 			}
 
-			if (storeFitnessMap == TestMode.Generate) {
+			if (TestingModes.OptimisationTestMode == TestMode.Generate) {
 				try {
 					TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
 				} catch (final URISyntaxException e) {

@@ -50,9 +50,6 @@ public class ReportTester {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
-	// Never commit as true
-	public static final TestMode storeReports = TestMode.Run;
-
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final String extension, String elementID, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
 		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, extension, (t) -> {
@@ -93,7 +90,7 @@ public class ReportTester {
 	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final String extension, @Nullable Consumer<ScenarioModelRecord> preAction) throws Exception {
 
-		Assume.assumeTrue(storeReports != TestMode.Skip);
+		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
@@ -115,7 +112,7 @@ public class ReportTester {
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();
 		Assert.assertNotNull(actualContents);
-		if (storeReports == TestMode.Generate) {
+		if (TestingModes.ReportTestMode == TestMode.Generate) {
 
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
@@ -165,7 +162,7 @@ public class ReportTester {
 
 	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, IScenarioDataProvider pinModelDataProvider, ScenarioModelRecord refInstance,
 			IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-		Assume.assumeTrue(storeReports != TestMode.Skip);
+		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		// A side-effect is the initial evaluation.
 
@@ -184,7 +181,7 @@ public class ReportTester {
 				Assert.assertNotNull(result[0]);
 				final String actualContents = result[0];
 				Assert.assertNotNull(actualContents);
-				if (storeReports == TestMode.Generate) {
+				if (TestingModes.ReportTestMode == TestMode.Generate) {
 
 					final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
@@ -247,7 +244,7 @@ public class ReportTester {
 
 	public static void testActionPlanReport(final List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances, final URL scenarioURL, final String reportID, final String shortName,
 			final String extension) throws Exception {
-		Assume.assumeTrue(storeReports != TestMode.Skip);
+		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		CheckedConsumer<List<ScenarioResult>, Exception> c = orderedResults -> {
 
@@ -258,7 +255,7 @@ public class ReportTester {
 			Assert.assertNotNull(reportContents);
 			final String actualContents = reportContents.getStringContents();
 			Assert.assertNotNull(actualContents);
-			if (storeReports == TestMode.Generate) {
+			if (TestingModes.ReportTestMode == TestMode.Generate) {
 
 				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 

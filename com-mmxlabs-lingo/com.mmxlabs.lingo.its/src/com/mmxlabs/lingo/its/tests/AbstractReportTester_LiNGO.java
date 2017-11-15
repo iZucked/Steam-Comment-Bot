@@ -47,11 +47,11 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 
 	public AbstractReportTester_LiNGO(final String name, final String scenarioPath) throws Exception {
 
-		// Note: Junit 4.1.3 or Junit 5 should be able to do this without need for cache. 
+		// Note: Junit 4.1.3 or Junit 5 should be able to do this without need for cache.
 		// JUnit 4.1.3 will have @Before/AfterParam annotations
 		// Currently we only unload scenarios once ALL report/scenario test combinations in class have run - potential memory leak
 		key = new Pair<>(name, scenarioPath);
-		if (ReportTester.storeReports != TestMode.Skip) {
+		if (TestingModes.ReportTestMode != TestMode.Skip) {
 
 			if (!cache.containsKey(key)) {
 				final URL url = getClass().getResource(scenarioPath);
@@ -88,7 +88,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 
 	@Override
 	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
-		Assume.assumeTrue(ReportTester.storeReports != TestMode.Skip);
+		Assume.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		final Triple<URL, ScenarioModelRecord, IScenarioDataProvider> triple = cache.get(key);
 
