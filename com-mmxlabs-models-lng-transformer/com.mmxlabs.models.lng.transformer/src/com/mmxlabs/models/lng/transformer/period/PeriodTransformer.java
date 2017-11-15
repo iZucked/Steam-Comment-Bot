@@ -315,7 +315,6 @@ public class PeriodTransformer {
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap, lockedCargoes);
 
 		if (extensions != null) {
-			final List<Slot> extraDependencies = new LinkedList<Slot>();
 			for (final IPeriodTransformerExtension ext : extensions) {
 				ext.processSlotInclusionsAndExclusions(cargoModel, output.getScheduleModel().getSchedule(), slotsToRemove, cargoesToRemove);
 			}
@@ -795,6 +794,9 @@ public class PeriodTransformer {
 							// Do not set optional, as this is no longer optional!
 
 							newVesselAvailabilities.add(newVesselAvailability);
+							
+							depCargo.setVesselAssignmentType(newVesselAvailability);
+							
 							updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
 						}
 
