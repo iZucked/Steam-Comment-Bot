@@ -114,7 +114,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			if (defaultContext == null) {
 				defaultContext = ext.getContext();
 			} else {
-				LOG.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
+				LOG.error("There is already a default migration context set - " + defaultContext + ". Context " + ext.getContext() + " will not be set as the default.");
 			}
 		}
 
@@ -144,7 +144,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			if (defaultClientContext == null) {
 				defaultClientContext = ext.getClientContext();
 			} else {
-				LOG.error("There is already a default client migration context set. " + ext.getClientContext() + " will not be set as the default.");
+				LOG.error("There is already a default client migration context set - " + defaultClientContext + ". Context " + ext.getClientContext() + " will not be set as the default.");
 			}
 		}
 	}
