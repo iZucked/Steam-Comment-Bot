@@ -35,7 +35,8 @@ import com.mmxlabs.common.Pair;
 public class MachineInformation extends PreferencePage implements IWorkbenchPreferencePage {
 
 	private enum MachineFeatures {
-		CPUName, CPUSpeed, NumberOfCores, NumberOfLogicalCores, NumberOfCPUS,
+		CPUName, CPUSpeed, NumberOfCores, NumberOfLogicalCores, NumberOfCPUS, // CPU
+		PhysicalMemory // Memory
 	}
 
 	private static final Logger log = LoggerFactory.getLogger(MachineInformation.class);
@@ -62,7 +63,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			final Label lbl = new Label(c, SWT.NONE);
 			lbl.setText("CPU Name");
 
-			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT);
+			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT | SWT.WRAP);
 			txt.setText(features.getOrDefault(MachineFeatures.CPUName, "Unknown"));
 			txt.setLayoutData(dataFactory.create());
 			txt.pack();
@@ -94,6 +95,15 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 			txt.pack();
 			txt.setLayoutData(dataFactory.create());
 		}
+		{
+			final Label lbl = new Label(c, SWT.NONE);
+			lbl.setText("Physical memory:");
+
+			final Text txt = new Text(c, SWT.READ_ONLY | SWT.RIGHT);
+			txt.setText(features.getOrDefault(MachineFeatures.PhysicalMemory, "Unknown"));
+			txt.pack();
+			txt.setLayoutData(dataFactory.create());
+		}
 
 		return c;
 	}
@@ -108,25 +118,38 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 		Integer physicalId = 0;
 		if (osname != null) {
 			if (osname.startsWith("Windows")) {
-				final List<String> lines = executeCommand("wmic", "CPU", "Get", "DeviceID,Name,MaxClockSpeed,NumberOfCores,NumberOfLogicalProcessors", "/Format:List");
-				if (lines != null) {
-					for (final String line : lines) {
-						if (line.startsWith("DeviceID=")) {
-							physicalId = Integer.parseInt(line.substring("DeviceID=CPU".length()));
-						} else if (line.startsWith("NumberOfCores=")) {
-							features.computeIfAbsent(MachineFeatures.NumberOfCores, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("NumberOfCores=".length())));
-						} else if (line.startsWith("NumberOfLogicalProcessors=")) {
-							features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, (v) -> new HashSet<>())
-									.add(new Pair<Integer, String>(physicalId, line.substring("NumberOfLogicalProcessors=".length())));
-						} else if (line.startsWith("Name=")) {
-							features.computeIfAbsent(MachineFeatures.CPUName, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("Name=".length())));
-						} else if (line.startsWith("MaxClockSpeed=")) {
-							features.computeIfAbsent(MachineFeatures.CPUSpeed, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("MaxClockSpeed=".length())));
+				{
+					final List<String> lines = executeCommand("wmic", "CPU", "Get", "DeviceID,Name,MaxClockSpeed,NumberOfCores,NumberOfLogicalProcessors", "/Format:List");
+					if (lines != null) {
+						for (final String line : lines) {
+							if (line.startsWith("DeviceID=")) {
+								physicalId = Integer.parseInt(line.substring("DeviceID=CPU".length()));
+							} else if (line.startsWith("NumberOfCores=")) {
+								features.computeIfAbsent(MachineFeatures.NumberOfCores, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("NumberOfCores=".length())));
+							} else if (line.startsWith("NumberOfLogicalProcessors=")) {
+								features.computeIfAbsent(MachineFeatures.NumberOfLogicalCores, (v) -> new HashSet<>())
+										.add(new Pair<Integer, String>(physicalId, line.substring("NumberOfLogicalProcessors=".length())));
+							} else if (line.startsWith("Name=")) {
+								features.computeIfAbsent(MachineFeatures.CPUName, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("Name=".length())));
+								features.computeIfAbsent(MachineFeatures.CPUName, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("Name=".length())));
+							} else if (line.startsWith("MaxClockSpeed=")) {
+								features.computeIfAbsent(MachineFeatures.CPUSpeed, (v) -> new HashSet<>()).add(new Pair<Integer, String>(physicalId, line.substring("MaxClockSpeed=".length())));
+							}
+						}
+					}
+				}
+				{
+					final List<String> lines = executeCommand("wmic", "memphysical", "Get", "MaxCapacity", "/Format:List");
+					if (lines != null) {
+						for (final String line : lines) {
+							if (line.startsWith("MaxCapacity=")) {
+								features.computeIfAbsent(MachineFeatures.PhysicalMemory, (v) -> new HashSet<>()).add(new Pair<Integer, String>(0, line.substring("MaxCapacity=".length())));
+							}
 						}
 					}
 				}
 			} else if (osname.startsWith("Linux")) {
-				// Info for each logical(?) core, separated by emtpty lines.
+				// Info for each logical(?) core, separated by empty lines.
 				final List<String> lines = executeCommand("cat", "/proc/cpuinfo");
 				if (lines != null) {
 					for (final String line : lines) {
@@ -151,7 +174,7 @@ public class MachineInformation extends PreferencePage implements IWorkbenchPref
 		final Function<Set<Pair<Integer, String>>, String> f = (v) -> v.stream() //
 				.sorted((a, b) -> Integer.compare(a.getFirst(), b.getFirst())) //
 				.map(p -> p.getSecond()) //
-				.collect(Collectors.joining(" "));
+				.collect(Collectors.joining(", "));
 
 		return features.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), v -> f.apply(v.getValue())));
 	}
