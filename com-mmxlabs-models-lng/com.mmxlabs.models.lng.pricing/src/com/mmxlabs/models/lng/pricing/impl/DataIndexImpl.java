@@ -141,18 +141,15 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 		return super.eIsSet(featureID);
 	}
 
-	private List<IndexPoint<Value>> sortedPoints = null;
 
 	private List<IndexPoint<Value>> getSortedPoints() {
-		if (sortedPoints == null || sortedPoints.size() != points.size()) {
-			sortedPoints = new ArrayList<IndexPoint<Value>>(getPoints());
-			Collections.sort(sortedPoints, new Comparator<IndexPoint<Value>>() {
-				@Override
-				public int compare(IndexPoint<Value> arg0, IndexPoint<Value> arg1) {
-					return arg0.getDate().compareTo(arg1.getDate());
-				}
-			});
-		}
+		List<IndexPoint<Value>> sortedPoints = new ArrayList<IndexPoint<Value>>(getPoints());
+		Collections.sort(sortedPoints, new Comparator<IndexPoint<Value>>() {
+			@Override
+			public int compare(IndexPoint<Value> arg0, IndexPoint<Value> arg1) {
+				return arg0.getDate().compareTo(arg1.getDate());
+			}
+		});
 		return sortedPoints;
 	}
 
