@@ -547,7 +547,10 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				@Override
 				public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 					proxy.display(dialogContext, scenario, object, range);
-					key.setFirst(proxy.getEditorTarget());
+					// FIXME: Fixed the NPE by key == null, but need to investigate why key is sometimes null (new vessel override UI)
+					if (key != null) {
+						key.setFirst(proxy.getEditorTarget());
+					}
 				}
 
 				@Override

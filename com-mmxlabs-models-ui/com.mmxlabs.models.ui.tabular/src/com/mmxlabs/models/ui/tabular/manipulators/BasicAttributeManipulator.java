@@ -78,7 +78,9 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 					if (o instanceof EStructuralFeature) {
 						EStructuralFeature eStructuralFeature = (EStructuralFeature) o;
 						EObject parent = (EObject) ((EObject) object).eGet(eStructuralFeature);
-						return renderUnsetValue(object, parent.eGet(field));
+						if (parent != null) {
+							return renderUnsetValue(object, parent.eGet(field));
+						}
 					}
 				}
 			}
