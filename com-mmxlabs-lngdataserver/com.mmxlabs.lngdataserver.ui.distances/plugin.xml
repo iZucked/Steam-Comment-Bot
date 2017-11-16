@@ -20,7 +20,7 @@
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lngdataserver.ui.distances.DistancesEditorView"
             id="com.mmxlabs.lngdataserver.ui.distances.DistancesEditorView"
-            name="Distnces View"
+            name="Distances View"
             restorable="true">
       	</view>
     </extension>
