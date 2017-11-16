@@ -62,6 +62,8 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
 						maxLoadValid = false;
+					} else if (slot.getSlotOrContractMaxQuantity() == 0) {
+						maxLoadValid = false;
 					}
 				} else if (slot instanceof DischargeSlot) {
 					dischargeMinVolume += slot.getSlotOrContractMinQuantity();
@@ -75,6 +77,8 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 						checkComplexDischargeLimitUnitsIdentical(ctx, failures, cargo, dischargeUnits, slot);
 					}
 					if (slot.getSlotOrContractMaxQuantity() == Integer.MAX_VALUE) {
+						maxDischargeValid = false;
+					} else if (slot.getSlotOrContractMaxQuantity() == 0) {
 						maxDischargeValid = false;
 					}
 				}

@@ -191,7 +191,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  [Slot|{1}, {0}] Port {2} lacks the required {0} capability.
+                  {0}
                </message>
                <description>
                   Load and Discharge slots need ports with Load and Discharge capabilities respectively.

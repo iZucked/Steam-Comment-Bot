@@ -38,7 +38,9 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 				// Null ports outside of CargoModel are ok (specifically we expect them to be SpotSlots for non-shipped markets which will be filled in when the Schedule is applied to the scenario.)
 				if (port == null) {
 					if (slot.eContainer() instanceof CargoModel) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + slot.getName() + "'", "has no port"));
+						String message = String.format("[Slot|%s has not port", slot.getName());
+
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 						return dsd;
 					}
@@ -73,8 +75,8 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 					final EList<PortCapability> capabilities = port.getCapabilities();
 					if (requiredCapability != null) {
 						if (!capabilities.contains(requiredCapability)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus(requiredCapability.getName(), "'" + slot.getName() + "'", "'" + port.getName() + "'"));
+							String message = String.format("[Slot|%s] Port %s lacks the required %s capability", slot.getName(), port.getName(), requiredCapability);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							if (cargo != null) {
 								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
