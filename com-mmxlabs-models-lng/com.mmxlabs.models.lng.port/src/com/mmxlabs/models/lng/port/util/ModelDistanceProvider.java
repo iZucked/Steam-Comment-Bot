@@ -97,14 +97,37 @@ public class ModelDistanceProvider extends EContentAdapter {
 	}
 
 	public int getDistance(final Port from, final Port to, final RouteOption routeOption) {
+		if (from == null || from.getLocation() == null) {
+			return Integer.MAX_VALUE;
+		}
+		if (to == null || to.getLocation() == null) {
+			return Integer.MAX_VALUE;
+		}
 		return getDistance(from.getLocation(), to.getLocation(), routeOption);
 	}
 
 	public int getDistance(final Location from, final Location to, final RouteOption routeOption) {
+		if (from == null) {
+			return Integer.MAX_VALUE;
+		}
+		if (to == null) {
+			return Integer.MAX_VALUE;
+		}
 		return getDistance(from.getTempMMXID(), to.getTempMMXID(), routeOption);
 	}
 
 	public int getDistance(final String from, final String to, final RouteOption routeOption) {
+
+		if (from == null) {
+			return Integer.MAX_VALUE;
+		}
+		if (to == null) {
+			return Integer.MAX_VALUE;
+		}
+		if (routeOption == null) {
+			return Integer.MAX_VALUE;
+		}
+
 		if (from.equals(to)) {
 			return 0;
 		}
