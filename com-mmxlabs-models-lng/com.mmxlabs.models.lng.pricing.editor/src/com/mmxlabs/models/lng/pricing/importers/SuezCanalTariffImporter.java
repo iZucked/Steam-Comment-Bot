@@ -42,16 +42,16 @@ public class SuezCanalTariffImporter extends DefaultClassImporter {
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 
-		if (row.containsKey(TUG_COST_KEY)) {
+		if (row.containsKey(TUG_COST_KEY) && !row.get(TUG_COST_KEY).isEmpty()) {
 			return parseField(row, context, TUG_COST_KEY, "tug cost", PricingPackage.Literals.SUEZ_CANAL_TARIFF__TUG_COST, valueString -> Double.parseDouble(valueString));
 		}
-		if (row.containsKey(FIXED_COST_KEY)) {
+		if (row.containsKey(FIXED_COST_KEY) && !row.get(FIXED_COST_KEY).isEmpty()) {
 			return parseField(row, context, FIXED_COST_KEY, "fixed cost", PricingPackage.Literals.SUEZ_CANAL_TARIFF__FIXED_COSTS, valueString -> Double.parseDouble(valueString));
 		}
-		if (row.containsKey(DISCOUNT_FACTOR_KEY)) {
-			return parseField(row, context, FIXED_COST_KEY, "discount factor", PricingPackage.Literals.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR, valueString -> Double.parseDouble(valueString));
+		if (row.containsKey(DISCOUNT_FACTOR_KEY) && !row.get(DISCOUNT_FACTOR_KEY).isEmpty()) {
+			return parseField(row, context, DISCOUNT_FACTOR_KEY, "discount factor", PricingPackage.Literals.SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR, valueString -> Double.parseDouble(valueString));
 		}
-		if (row.containsKey(SDR_TO_USD_KEY)) {
+		if (row.containsKey(SDR_TO_USD_KEY) && !row.get(SDR_TO_USD_KEY).isEmpty()) {
 			return parseField(row, context, SDR_TO_USD_KEY, "sdr to usd", PricingPackage.Literals.SUEZ_CANAL_TARIFF__SDR_TO_USD, valueString -> valueString);
 		}
 
