@@ -561,11 +561,12 @@ public class LNGScenarioTransformer {
 			final Index<Double> index = currencyIndex.getData();
 			assert index != null;
 			final String name = currencyIndex.getName();
-			assert name != null;
-			registerIndex(name, index, commodityIndices);
-			registerIndex(name, index, baseFuelIndices);
-			registerIndex(name, index, charterIndices);
-			registerIndex(name, index, currencyIndices);
+			if (name != null) {
+				registerIndex(name, index, commodityIndices);
+				registerIndex(name, index, baseFuelIndices);
+				registerIndex(name, index, charterIndices);
+				registerIndex(name, index, currencyIndices);
+			}
 		}
 
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
