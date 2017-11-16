@@ -378,7 +378,10 @@ public class CargoImporter extends DefaultClassImporter {
 
 					// the row data has a "name" field even though cargo objects do not have names
 					// this is used to allow multi-line specifications of e.g. LDD cargoes
-					final String realCargoName = row.get(KEY_CARGONAME);
+					String realCargoName = row.get(KEY_CARGONAME);
+					if (realCargoName == null || realCargoName.isEmpty()) {
+						realCargoName = row.get("buy.name");
+					}
 
 					boolean keepCargo = true;
 					if (load == null || load.getWindowStart() == null) {
