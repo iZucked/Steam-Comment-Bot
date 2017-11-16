@@ -94,7 +94,7 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 			for (final APortSet<Port> portSet : portCost.getPorts()) {
 				for (final PortCostEntry e : portCost.getEntries()) {
 					final Set<APortSet<Port>> explicit = explicitMap.get(e.getActivity());
-					if (explicit.contains(portSet) && !warnedExplcit) {
+					if (explicit != null && explicit.contains(portSet) && !warnedExplcit) {
 						final DetailConstraintStatusFactory factory = factoryBase.copyName()//
 								.withSeverity(IStatus.ERROR) //
 								.withMessage(String.format("Port %s already contained explicitly in another port cost entry for %s capability", portSet.getName(), e.getActivity().getName()));
@@ -109,7 +109,7 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 					for (final Port port : SetUtils.getObjects(portSet)) {
 						for (final PortCostEntry e : portCost.getEntries()) {
 							final Set<Port> implicit = implicitMap.get(e.getActivity());
-							if (implicit.contains(port) && !warnedImplcit) {
+							if (implicit != null && implicit.contains(port) && !warnedImplcit) {
 								final DetailConstraintStatusFactory factory = factoryBase.copyName()//
 										.withSeverity(IStatus.ERROR) //
 										.withMessage(String.format("Port %s in group %s already contained in another port cost entry for %s capability", port.getName(), portSet.getName(),
