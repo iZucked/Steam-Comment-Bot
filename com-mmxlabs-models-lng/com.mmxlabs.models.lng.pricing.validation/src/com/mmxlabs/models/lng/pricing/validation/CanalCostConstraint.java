@@ -68,7 +68,7 @@ public class CanalCostConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 
-				if (!seenSuezCost) {
+				if (!seenSuezCost && (costModel.getSuezCanalTariff() == null || vessel.getVesselOrDelegateSCNT() == 0)) {
 					final String message = String.format("The vessel %s has no Suez canal costs", vessel.getName());
 					DetailConstraintStatusFactory.makeStatus()//
 							.withMessage(message)//
