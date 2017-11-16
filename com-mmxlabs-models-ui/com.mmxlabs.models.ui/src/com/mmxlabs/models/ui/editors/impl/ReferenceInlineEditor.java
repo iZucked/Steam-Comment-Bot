@@ -147,9 +147,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		if (combo == null || combo.isDisposed()) {
 			return;
 		}
-		if (combo.getItemCount() > 0) {
-			return;
-		}
+
 		final List<Pair<String, EObject>> values = getValues();
 		// update combo contents
 		combo.removeAll();
