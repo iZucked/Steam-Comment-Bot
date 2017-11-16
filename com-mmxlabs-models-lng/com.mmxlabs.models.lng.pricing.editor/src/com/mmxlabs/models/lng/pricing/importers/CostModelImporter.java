@@ -191,13 +191,19 @@ public class CostModelImporter implements ISubmodelImporter {
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(costModel.getCooldownCosts(), context));
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(costModel.getPortCosts(), context));
 		output.put(ROUTE_COSTS_KEY, routeCostImporter.exportObjects(costModel.getRouteCosts(), context));
-		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
-		if (panamaCanalTariff != null) {
-			output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportTariff(panamaCanalTariff, context));
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+
+			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+			if (panamaCanalTariff != null) {
+				output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportTariff(panamaCanalTariff, context));
+			}
 		}
-		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
-		if (suezCanalTariff != null) {
-			output.put(SUEZ_CANAL_TARIFF_KEY, suezCanalTariffBandImporter.exportTariff(suezCanalTariff, context));
+		if (LicenseFeatures.isPermitted("features:suez-canal")) {
+
+			final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
+			if (suezCanalTariff != null) {
+				output.put(SUEZ_CANAL_TARIFF_KEY, suezCanalTariffBandImporter.exportTariff(suezCanalTariff, context));
+			}
 		}
 	}
 
