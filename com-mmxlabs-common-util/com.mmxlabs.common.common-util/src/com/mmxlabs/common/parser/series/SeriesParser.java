@@ -115,6 +115,9 @@ public class SeriesParser {
 	}
 
 	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
+		if (name == null) {
+			return;
+		}
 		evaluatedSeries.put(name.toLowerCase(), new ISeries() {
 			@Override
 			public int[] getChangePoints() {
