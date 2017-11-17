@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
@@ -38,14 +37,12 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -55,37 +52,38 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 
 /**
- * Class to organise insertion plans and optionally filter out related but "poorer" choices
+ * Class to organise insertion plans and optionally filter out related but
+ * "poorer" choices
  *
  */
 public class InsertionPlanGrouperAndFilter extends ViewerFilter {
-	public static enum GroupMode {
+	public enum GroupMode {
 		TargetAndComplexity, // Group by target and then by complexity count
 		Target, // Group by Target
 		Complexity, // Group by complexity
 	}
 
-	public final Set<Object> expandedGroups = new HashSet<>();
+	private final Set<Object> expandedGroups = new HashSet<>();
 	// private boolean filterActive = false;
 	private GroupMode groupMode = GroupMode.TargetAndComplexity;
-	private int maxComplexity = 4;
+	private final int maxComplexity = 4;
 
 	private final List<UserFilter> userFilters = new LinkedList<>();
 
-	public Map<Pair<String, UserFilter.FilterSlotType>, Set<UserFilter>> exploreSlotOptions = new HashMap<>();
+	private final Map<Pair<String, UserFilter.FilterSlotType>, Set<UserFilter>> exploreSlotOptions = new HashMap<>();
 
-	public boolean insertionModeActive = false;
+	private boolean insertionModeActive = false;
 
 	public boolean isInsertionModeActive() {
 		return insertionModeActive;
 	}
 
-	public void setInsertionModeActive(boolean insertionModeActive) {
+	public void setInsertionModeActive(final boolean insertionModeActive) {
 		this.insertionModeActive = insertionModeActive;
 	}
 
 	@Override
-	public boolean select(final Viewer viewer, final Object parentElement, Object element) {
+	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 		if (element instanceof ChangeSetTableGroup) {
 			final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
 			for (final UserFilter filter : userFilters) {
@@ -108,13 +106,13 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 		if (element instanceof ChangeSetTableGroup) {
 
-			ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
 			if (changeSetTableGroup.getComplexity() > maxComplexity) {
 				return false;
 			}
 		}
 		if (parentElement instanceof ChangeSetTableGroup) {
-			ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
 			if (changeSetTableGroup.getComplexity() > maxComplexity) {
 				return false;
 			}
@@ -123,11 +121,11 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 			if (element instanceof ChangeSetTableGroup) {
 
-				ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+				final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
 				return !changeSetTableGroup.isGroupAlternative() || expandedGroups.contains(changeSetTableGroup.getGroupObject());
 			}
 			if (parentElement instanceof ChangeSetTableGroup) {
-				ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+				final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
 				return !changeSetTableGroup.isGroupAlternative() || expandedGroups.contains(changeSetTableGroup.getGroupObject());
 			}
 		}
@@ -141,7 +139,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		Collection<ChangeSet> allChangeSets = new LinkedList<>();
 	}
 
-	public class ChangeSetMetadata {
+	private static class ChangeSetMetadata {
 		public int changeCount;
 		public Object sendTo;
 		private final GroupMode mode;
@@ -182,8 +180,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 	}
 
-	public Consumer<ChangeSetTableRoot> processChangeSetRoot(ChangeSetRoot root, final NamedObject target) {
-		// setsToInclude.clear();
+	public Consumer<ChangeSetTableRoot> processChangeSetRoot(final ChangeSetRoot root, final NamedObject target) {
 		userFilters.clear();
 		exploreSlotOptions.clear();
 
@@ -287,47 +284,27 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 							}
 						}
 					}
-
-					// if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
-					// ++structuralChanges;
-					// }
-					// for (final ChangeSetRowData d : afterData.getMembers()) {
-					// if (d.getLoadSlot() == target || d.getDischargeSlot() == target) {
-					// assert targetRow == null;
-					// targetRow = row;
-					// targetRowData = d;
-					// break;
-					// } else if (d.getLhsEvent() instanceof VesselEventVisit) {
-					// VesselEventVisit vesselEventVisit = (VesselEventVisit) d.getLhsEvent();
-					// if (vesselEventVisit.getVesselEvent() == target) {
-					// assert targetRow == null;
-					// targetRow = row;
-					// targetRowData = d;
-					// break;
-					// }
-					// }
-					// }
 				}
 			}
 		}
 
 		return (tableRoot) -> {
 			final Map<ChangeSetMetadata, List<ChangeSetTableGroup>> grouper = new LinkedHashMap<>();
-			for (ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
-				Pair<String, Object> p = getDestination(tableGroup, target);
-				String label = p.getFirst();
-				ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
+			for (final ChangeSetTableGroup tableGroup : tableRoot.getGroups()) {
+				final Pair<String, Object> p = getDestination(tableGroup, target);
+				final String label = p.getFirst();
+				final ChangeSetMetadata key = new ChangeSetMetadata(groupMode);
 				key.sendTo = p.getSecond();
 				key.changeCount = tableGroup.getComplexity();
 				tableGroup.setDescription(label);
 				grouper.computeIfAbsent(key, k -> new LinkedList<ChangeSetTableGroup>()).add(tableGroup);
 			}
-			for (Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
-				List<ChangeSetTableGroup> groups = e.getValue();
+			for (final Map.Entry<ChangeSetMetadata, List<ChangeSetTableGroup>> e : grouper.entrySet()) {
+				final List<ChangeSetTableGroup> groups = e.getValue();
 				Collections.sort(groups, (a, b) -> Integer.compare(b.getDeltaMetrics().getPnlDelta(), a.getDeltaMetrics().getPnlDelta()));
 				boolean first = true;
 				double sortValue = 0.0;
-				for (ChangeSetTableGroup g : groups) {
+				for (final ChangeSetTableGroup g : groups) {
 					if (g.getComplexity() > maxComplexity) {
 						continue;
 					}
@@ -363,18 +340,18 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 	}
 
 	public boolean generateMenus(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets,
-			@Nullable Object targetElement) {
+			@Nullable final Object targetElement) {
 		if (insertionModeActive) {
 
 			if (helper.hasActions()) {
 				helper.addSeparator();
 			}
 
-			if (directSelectedRows.size() == 0) {
+			if (directSelectedRows.isEmpty()) {
 				generateInsertionSubMenus_ExploreAll(helper, viewer);
 
 			}
-			if (selectedSets.size() > 0 && directSelectedRows.size() == 0) {
+			if (!selectedSets.isEmpty() && directSelectedRows.isEmpty()) {
 				generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets, targetElement);
 			}
 			if (directSelectedRows.size() == 1) {
@@ -382,7 +359,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				generateInsertionSubMenus_FilterOn(helper, viewer, false, directSelectedRows);
 				generateInsertionSubMenus_FilterOn(helper, viewer, true, directSelectedRows);
 			}
-			if (getUserFilters().size() > 0) {
+			if (!getUserFilters().isEmpty()) {
 				final SubLocalMenuHelper remove = new SubLocalMenuHelper("Remove filter...");
 				if (getUserFilters().size() > 1) {
 					remove.addAction(new RunnableAction("All filters", () -> {
@@ -403,7 +380,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		return false;
 	}
 
-	private void generateInsertionSubMenus_FilterOn(final LocalMenuHelper helper, final GridTreeViewer viewer, boolean exclude, final Set<ChangeSetTableRow> directSelectedRows) {
+	private void generateInsertionSubMenus_FilterOn(final LocalMenuHelper helper, final GridTreeViewer viewer, final boolean exclude, final Set<ChangeSetTableRow> directSelectedRows) {
 
 		final boolean showLHSActions = true;
 		final boolean showRHSActions = true;
@@ -437,7 +414,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 							}));
 						}
-						final Contract contract = discharge.getContract();
+						final Contract contract = discharge == null ? null : discharge.getContract();
 						if (contract != null) {
 							final String label = row.getLhsName() + " to " + contract.getName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
@@ -533,7 +510,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 							}));
 						}
-						final Contract contract = load.getContract();
+						final Contract contract = load == null ? null : load.getContract();
 						if (contract != null) {
 							final String label = contract.getName() + " to " + row.getRhsName();
 							showFromMenu.addAction(new RunnableAction(label, () -> {
@@ -616,14 +593,14 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 	}
 
-	private void generateInsertionSubMenus_FilterSets(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableGroup> selectedSets, @Nullable Object targetElement) {
+	private void generateInsertionSubMenus_FilterSets(final LocalMenuHelper helper, final GridTreeViewer viewer, final Set<ChangeSetTableGroup> selectedSets, @Nullable final Object targetElement) {
 
 		final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper("Show all...");
 		helper.addSubMenu(showFromMenu);
 		{
 
 			final ChangeSetTableGroup group = selectedSets.iterator().next();
-			for (ChangeSetTableRow row : group.getRows()) {
+			for (final ChangeSetTableRow row : group.getRows()) {
 				if (row.getLhsAfter() != null && row.getLhsAfter().getLoadSlot() == targetElement) {
 					if (row.isRhsSlot()) {
 						final Slot discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
@@ -694,13 +671,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						}));
 					}
 				} else if (row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot() == targetElement) {
-					int ii = 0;
-					// final Slot slot = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
-					// if (slot != null) {
-
 					if (row.isLhsSlot()) {
 						final Slot load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
-						final Contract contract = load.getContract();
+						final Contract contract = load == null ? null : load.getContract();
 
 						if (load instanceof SpotSlot) {
 							final SpotSlot spotSlot = (SpotSlot) load;
@@ -884,13 +857,13 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			final SubLocalMenuHelper showFromMenuParent = new SubLocalMenuHelper("Explore all...");
 			helper.addSubMenu(showFromMenuParent);
 			// {
-			List<Pair<String, SubLocalMenuHelper>> items = new ArrayList<>(exploreSlotOptions.size());
+			final List<Pair<String, SubLocalMenuHelper>> items = new ArrayList<>(exploreSlotOptions.size());
 
-			for (Pair<String, UserFilter.FilterSlotType> key : exploreSlotOptions.keySet()) {
+			for (final Pair<String, UserFilter.FilterSlotType> key : exploreSlotOptions.keySet()) {
 				if (key.getSecond() != UserFilter.FilterSlotType.BY_ID) {
 					continue;
 				}
-				String lhsName = key.getFirst();
+				final String lhsName = key.getFirst();
 				final SubLocalMenuHelper showFromMenu = new SubLocalMenuHelper(lhsName + "...");
 
 				final SubLocalMenuHelper loadMenuContract = new SubLocalMenuHelper("by contract");
@@ -898,7 +871,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				final SubLocalMenuHelper loadMenuMarket = new SubLocalMenuHelper("by spot market");
 				final SubLocalMenuHelper loadMenuVessel = new SubLocalMenuHelper("by vessel");
 
-				// final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(row.getLhsName(), UserFilter.FilterSlotType.BY_ID);
+				// final Pair<String, UserFilter.FilterSlotType> key = new
+				// Pair<>(row.getLhsName(), UserFilter.FilterSlotType.BY_ID);
 
 				final Collection<UserFilter> filters = exploreSlotOptions.get(key);
 				if (filters != null) {
@@ -980,79 +954,22 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			} else {
 				items.forEach(p -> showFromMenuParent.addSubMenu(p.getSecond()));
 			}
-			// {
-
-			//
-			// if (showFromMenu.hasActions()) {
-			// showFromMenu.addSeparator();
-			// }
-			// rhsName
-			// final SubLocalMenuHelper dischargeMenuContract = new SubLocalMenuHelper(rhsName+ " by contract");
-			// final SubLocalMenuHelper dischargeMenuSlot = new SubLocalMenuHelper(rhsName + " by slot");
-			// final SubLocalMenuHelper dischargeMenuMarket = new SubLocalMenuHelper(rhsName + " by spot market");
-			// final SubLocalMenuHelper dischargeMenuVessel = new SubLocalMenuHelper(rhsName + " by vessel");
-			// final Pair<String, UserFilter.FilterSlotType> key = new Pair<>(rhsName, UserFilter.FilterSlotType.BY_ID);
-			// final Collection<UserFilter> filters = exploreSlotOptions.get(key);
-			// if (filters != null) {
-			// for (final UserFilter f : filters) {
-			//
-			// SubLocalMenuHelper menu = null;
-			// if (f.vesselType == FilterVesselType.BY_NAME) {
-			// menu = dischargeMenuVessel;
-			// } else if (f.lhsType == FilterSlotType.BY_ID) {
-			// menu = dischargeMenuSlot;
-			// } else if (f.lhsType == FilterSlotType.BY_CONTRACT) {
-			// menu = dischargeMenuContract;
-			// } else if (f.lhsType == FilterSlotType.BY_SPOT_MARKET) {
-			// menu = dischargeMenuMarket;
-			// }
-			// if (menu != null) {
-			// menu.addAction(new RunnableAction(f.label, () -> {
-			// clearFilter();
-			// mergeFilter(f);
-			// ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-			// }));
-			// }
-			// }
-			// }
-
-			// if (dischargeMenuContract.hasActions()) {
-			// showFromMenu.addSubMenu(dischargeMenuContract);
-			// }
-			// if (dischargeMenuSlot.hasActions()) {
-			// showFromMenu.addSubMenu(dischargeMenuSlot);
-			// }
-			// if (dischargeMenuMarket.hasActions()) {
-			// showFromMenu.addSubMenu(dischargeMenuMarket);
-			// }
-			// if (dischargeMenuVessel.hasActions()) {
-			// showFromMenu.addSubMenu(dischargeMenuVessel);
-			// }
-			// }
 		}
-		// }
 	}
 
 	public @NonNull BiFunction<ChangeSetTableGroup, Integer, String> createLabelProvider() {
 		@NonNull
-		BiFunction<ChangeSetTableGroup, Integer, String> defaultLabelProvider = ChangeSetViewColumnHelper.getDefaultLabelProvider();
+		final BiFunction<ChangeSetTableGroup, Integer, String> defaultLabelProvider = ChangeSetViewColumnHelper.getDefaultLabelProvider();
 		return (changeSetTableGroup, index) -> {
 			if (!insertionModeActive) {
 				return defaultLabelProvider.apply(changeSetTableGroup, index);
 			}
 
-			String dest = changeSetTableGroup.getDescription();
-			int complexity = changeSetTableGroup.getComplexity();
-			String base = String.format("%s, ∆%d ", dest, complexity);
+			final String dest = changeSetTableGroup.getDescription();
+			final int complexity = changeSetTableGroup.getComplexity();
+			final String base = String.format("%s, ∆%d ", dest, complexity);
 			if (userFilters.isEmpty()) {
-				if (expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
-					if (changeSetTableGroup.isGroupAlternative()) {
-
-					} else {
-
-					}
-
-				} else {
+				if (!expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
 					return base + " (+)";
 				}
 			}
@@ -1061,15 +978,15 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	}
 
-	private Pair<String, Object> getDestination(ChangeSetTableGroup tableGroup, Object target) {
-		ChangeSet changeSet = tableGroup.getChangeSet();
+	private Pair<String, Object> getDestination(final ChangeSetTableGroup tableGroup, final Object target) {
+		final ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
-		for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+		for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
 			final ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData == null) {
 				continue;
 			}
-			for (ChangeSetRowData rowData : afterData.getMembers()) {
+			for (final ChangeSetRowData rowData : afterData.getMembers()) {
 				if (rowData.getLoadSlot() == target) {
 					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
 					if (dischargeSlot == null) {
@@ -1128,5 +1045,9 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			dest = sendTo.toString();
 		}
 		return new Pair<>(dest, sendTo);
+	}
+
+	public Collection<Object> getExpandedGroups() {
+		return expandedGroups;
 	}
 }

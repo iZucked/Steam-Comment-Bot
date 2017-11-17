@@ -145,7 +145,8 @@ public class ChangeSetView implements IAdaptable {
 		public final Collection<Slot> allTargetSlots = new HashSet<>();
 
 		public final SortMode displaySortMode;
-		public Consumer<ChangeSetTableRoot> postProcess = (cs) -> {};
+		public Consumer<ChangeSetTableRoot> postProcess = (cs) -> {
+		};
 
 		public ViewState(final ChangeSetRoot root, final SortMode displaySortMode) {
 			this.root = root;
@@ -293,7 +294,8 @@ public class ChangeSetView implements IAdaptable {
 			final ViewState oldRoot = currentViewState;
 
 			final ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
-			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
+			// Release after creating the new one so we increment reference counts before
+			// decrementing, which could cause a scenario unload/load cycle
 
 			currentViewState = newViewState;
 
@@ -831,7 +833,7 @@ public class ChangeSetView implements IAdaptable {
 						newViewState.tableRootToPrevious = new ChangeSetToTableTransformer().createViewDataModel(newViewState.root, false, newViewState.lastTargetSlot, newViewState.displaySortMode);
 						newViewState.postProcess.accept(newViewState.tableRootToBase);
 						newViewState.postProcess.accept(newViewState.tableRootToPrevious);
-						
+
 						if (runAsync) {
 							display.asyncExec(new ViewUpdateRunnable(newViewState));
 						} else {
@@ -1036,7 +1038,8 @@ public class ChangeSetView implements IAdaptable {
 
 	private void openView(final @NonNull String viewId) {
 		// Open, but do not focus the view.
-		// FIXME: If this causes the view to be created the selection will not be correct. However attempting to re-set the selection does not appear to work.
+		// FIXME: If this causes the view to be created the selection will not be
+		// correct. However attempting to re-set the selection does not appear to work.
 		partService.showPart(viewId, PartState.VISIBLE);
 	}
 
@@ -1075,14 +1078,14 @@ public class ChangeSetView implements IAdaptable {
 					if (obj instanceof ChangeSetTableGroup) {
 						ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
 						if (insertionPlanFilter.getUserFilters().isEmpty()) {
-							if (insertionPlanFilter.expandedGroups.contains(changeSetTableGroup.getGroupObject())) {
+							if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
 								helper.addAction(new RunnableAction("Hide related changes", () -> {
-									insertionPlanFilter.expandedGroups.remove(changeSetTableGroup.getGroupObject());
+									insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
 							} else {
 								helper.addAction(new RunnableAction("Show related changes", () -> {
-									insertionPlanFilter.expandedGroups.add(changeSetTableGroup.getGroupObject());
+									insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
 									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 								}));
 							}
@@ -1105,7 +1108,8 @@ public class ChangeSetView implements IAdaptable {
 						}
 						// Experimental code to generate a sandbox scenario.
 						if (false && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
-							// This does not work as insertion scenario is read-only. Data model is also unstable (not sure if containment works right.
+							// This does not work as insertion scenario is read-only. Data model is also
+							// unstable (not sure if containment works right.
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 							helper.addAction(new CreateSandboxAction(changeSetTableGroup));
 							showMenu = true;
