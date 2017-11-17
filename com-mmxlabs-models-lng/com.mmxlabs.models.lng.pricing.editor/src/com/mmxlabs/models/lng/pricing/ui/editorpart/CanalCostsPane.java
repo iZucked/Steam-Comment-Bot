@@ -49,8 +49,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
@@ -78,8 +76,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  * 
  */
 public class CanalCostsPane extends ScenarioTableViewerPane {
-
-	private static final Logger log = LoggerFactory.getLogger(CanalCostsPane.class);
 
 	private FormattedText panama_MarkupEditor;
 	private FormattedText suez_TugCostEditor;
@@ -125,8 +121,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_CanalCosts");
 	}
 
-	private AdapterImpl changeListener = new EContentAdapter() {
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification msg) {
+	private final AdapterImpl changeListener = new EContentAdapter() {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification msg) {
 			//
 			super.notifyChanged(msg);
 			if (msg.getEventType() == Notification.REMOVING_ADAPTER) {
@@ -188,7 +184,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 	private TableViewer suezTugsTableViewer;
 
 	@Override
-	public ScenarioTableViewer createViewer(Composite parent) {
+	public ScenarioTableViewer createViewer(final Composite parent) {
 
 		createSuezTariffControls(parent);
 		createPanamaTariffControls(parent);
@@ -196,9 +192,9 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		return super.createViewer(parent);
 	}
 
-	private void createPanamaTariffControls(Composite parent) {
+	private void createPanamaTariffControls(final Composite parent) {
 
-		ExpandableComposite parametersExpandable = new ExpandableComposite(parent, ExpandableComposite.TWISTIE);
+		final ExpandableComposite parametersExpandable = new ExpandableComposite(parent, ExpandableComposite.TWISTIE);
 		parametersExpandable.setExpanded(false);
 		parametersExpandable.setText("Panama tariff");
 
@@ -232,10 +228,10 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			panama_MarkupEditor.getControl().addModifyListener(new ModifyListener() {
 
 				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = panama_MarkupEditor.getValue();
+				public void modifyText(final ModifyEvent e) {
+					final Object newValue = panama_MarkupEditor.getValue();
 					if (panamaCanalTariff != null && newValue instanceof Double) {
-						double v = ((Double) newValue) / 100.0;
+						final double v = ((Double) newValue) / 100.0;
 						if (v != panamaCanalTariff.getMarkupRate()) {
 							final Command cmd = SetCommand.create(getEditingDomain(), panamaCanalTariff, PricingPackage.eINSTANCE.getPanamaCanalTariff_MarkupRate(), v);
 							getEditingDomain().getCommandStack().execute(cmd);
@@ -263,7 +259,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 			tableViewer.setContentProvider(new IStructuredContentProvider() {
 				@Override
-				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 				}
 
@@ -273,8 +269,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public Object[] getElements(Object inputElement) {
-					Object[] things = ((PanamaCanalTariff) inputElement).getBands().toArray();
+				public Object[] getElements(final Object inputElement) {
+					final Object[] things = ((PanamaCanalTariff) inputElement).getBands().toArray();
 
 					return things;
 				}
@@ -289,7 +285,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 				boolean resizing = false;
 
 				@Override
-				public void handleEvent(Event event) {
+				public void handleEvent(final Event event) {
 					if (resizing)
 						return;
 					resizing = true;
@@ -319,9 +315,9 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 	}
 
-	private void createSuezTariffControls(Composite parent) {
+	private void createSuezTariffControls(final Composite parent) {
 
-		ExpandableComposite parametersExpandable = new ExpandableComposite(parent, ExpandableComposite.TWISTIE);
+		final ExpandableComposite parametersExpandable = new ExpandableComposite(parent, ExpandableComposite.TWISTIE);
 		parametersExpandable.setExpanded(false);
 		parametersExpandable.setText("Suez tariff");
 
@@ -355,8 +351,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			suez_TugCostEditor.getControl().addModifyListener(new ModifyListener() {
 
 				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = suez_TugCostEditor.getValue();
+				public void modifyText(final ModifyEvent e) {
+					final Object newValue = suez_TugCostEditor.getValue();
 					if (suezCanalTariff != null && newValue instanceof Double && !Objects.equals(newValue, suezCanalTariff.getTugCost())) {
 						final Command cmd = SetCommand.create(getEditingDomain(), suezCanalTariff, PricingPackage.eINSTANCE.getSuezCanalTariff_TugCost(), newValue);
 						getEditingDomain().getCommandStack().execute(cmd);
@@ -381,8 +377,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			suez_FixedCostsEditor.getControl().addModifyListener(new ModifyListener() {
 
 				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = suez_FixedCostsEditor.getValue();
+				public void modifyText(final ModifyEvent e) {
+					final Object newValue = suez_FixedCostsEditor.getValue();
 					if (suezCanalTariff != null && newValue instanceof Double && !Objects.equals(newValue, suezCanalTariff.getFixedCosts())) {
 						final Command cmd = SetCommand.create(getEditingDomain(), suezCanalTariff, PricingPackage.eINSTANCE.getSuezCanalTariff_FixedCosts(), newValue);
 						getEditingDomain().getCommandStack().execute(cmd);
@@ -406,11 +402,11 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			suez_DiscountFactorEditor.getControl().addModifyListener(new ModifyListener() {
 
 				@Override
-				public void modifyText(ModifyEvent e) {
+				public void modifyText(final ModifyEvent e) {
 
-					Object newValue = suez_DiscountFactorEditor.getValue();
+					final Object newValue = suez_DiscountFactorEditor.getValue();
 					if (suezCanalTariff != null && newValue instanceof Double) {
-						double v = ((Double) newValue) / 100.0;
+						final double v = ((Double) newValue) / 100.0;
 						if (v != suezCanalTariff.getDiscountFactor()) {
 							final Command cmd = SetCommand.create(getEditingDomain(), suezCanalTariff, PricingPackage.eINSTANCE.getSuezCanalTariff_DiscountFactor(), v);
 							getEditingDomain().getCommandStack().execute(cmd);
@@ -436,8 +432,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			suez_sdrToUSDEditor.getControl().addModifyListener(new ModifyListener() {
 
 				@Override
-				public void modifyText(ModifyEvent e) {
-					Object newValue = suez_DiscountFactorEditor.getValue();
+				public void modifyText(final ModifyEvent e) {
+					final Object newValue = suez_DiscountFactorEditor.getValue();
 					if (suezCanalTariff != null && newValue instanceof String && !Objects.equals(newValue, suezCanalTariff.getSdrToUSD())) {
 						final Command cmd = SetCommand.create(getEditingDomain(), suezCanalTariff, PricingPackage.eINSTANCE.getSuezCanalTariff_SdrToUSD(), newValue);
 						getEditingDomain().getCommandStack().execute(cmd);
@@ -449,7 +445,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		}
 		{
 
-			Composite tableParent = new Composite(parametersParent, SWT.NONE);
+			final Composite tableParent = new Composite(parametersParent, SWT.NONE);
 			tableParent.setLayout(GridLayoutFactory.fillDefaults().create());
 
 			final Label lbl = new Label(tableParent, SWT.NONE);
@@ -468,7 +464,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 			tableViewer.setContentProvider(new IStructuredContentProvider() {
 				@Override
-				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 				}
 
@@ -478,8 +474,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public Object[] getElements(Object inputElement) {
-					Object[] things = ((SuezCanalTariff) inputElement).getBands().toArray();
+				public Object[] getElements(final Object inputElement) {
+					final Object[] things = ((SuezCanalTariff) inputElement).getBands().toArray();
 
 					return things;
 				}
@@ -493,7 +489,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 				boolean resizing = false;
 
 				@Override
-				public void handleEvent(Event event) {
+				public void handleEvent(final Event event) {
 					if (resizing)
 						return;
 					resizing = true;
@@ -520,7 +516,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			});
 		}
 		{
-			Composite tableParent = new Composite(parametersParent, SWT.NONE);
+			final Composite tableParent = new Composite(parametersParent, SWT.NONE);
 			tableParent.setLayout(GridLayoutFactory.fillDefaults().create());
 			tableParent.setLayoutData(GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.TOP).create());
 
@@ -538,7 +534,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 			tableViewer.setContentProvider(new IStructuredContentProvider() {
 				@Override
-				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 				}
 
@@ -548,8 +544,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public Object[] getElements(Object inputElement) {
-					Object[] things = ((SuezCanalTariff) inputElement).getTugBands().toArray();
+				public Object[] getElements(final Object inputElement) {
+					final Object[] things = ((SuezCanalTariff) inputElement).getTugBands().toArray();
 
 					return things;
 				}
@@ -562,7 +558,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 				boolean resizing = false;
 
 				@Override
-				public void handleEvent(Event event) {
+				public void handleEvent(final Event event) {
 					if (resizing)
 						return;
 					resizing = true;
@@ -590,7 +586,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 	}
 
-	public void setInput(CostModel costModel, SuezCanalTariff suezCanalTariff, PanamaCanalTariff panamaCanalTariff) {
+	public void setInput(final CostModel costModel, final SuezCanalTariff suezCanalTariff, final PanamaCanalTariff panamaCanalTariff) {
 
 		if (this.suezCanalTariff != null) {
 			this.suezCanalTariff.eAdapters().remove(changeListener);
@@ -650,7 +646,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		super.dispose();
 	}
 
-	private TableViewerColumn createPriceColumn(String name, final EAttribute attr, TableViewer tableViewer) {
+	private TableViewerColumn createPriceColumn(final String name, final EAttribute attr, final TableViewer tableViewer) {
 
 		final TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
 
@@ -659,24 +655,24 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		column.setEditingSupport(new EditingSupport(tableViewer) {
 
 			@Override
-			protected void setValue(Object element, Object value) {
+			protected void setValue(final Object element, final Object value) {
 				getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), element, attr, value));
 			}
 
 			@Override
-			protected Object getValue(Object element) {
+			protected Object getValue(final Object element) {
 				return ((EObject) element).eGet(attr);
 			}
 
 			@Override
-			protected CellEditor getCellEditor(Object element) {
+			protected CellEditor getCellEditor(final Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(tableViewer.getTable());
 				ed.setFormatter(new DoubleFormatter("#0.##"));
 				return ed;
 			}
 
 			@Override
-			protected boolean canEdit(Object element) {
+			protected boolean canEdit(final Object element) {
 				return true;
 			}
 		});
@@ -691,7 +687,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		return column;
 	}
 
-	private TableViewerColumn createTugColumn(String name, final EAttribute attr, TableViewer tableViewer) {
+	private TableViewerColumn createTugColumn(final String name, final EAttribute attr, final TableViewer tableViewer) {
 
 		final TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
 
@@ -700,25 +696,25 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		column.setEditingSupport(new EditingSupport(tableViewer) {
 
 			@Override
-			protected void setValue(Object element, Object value) {
+			protected void setValue(final Object element, final Object value) {
 				final EditingDomain ed = getEditingDomain();
 				ed.getCommandStack().execute(SetCommand.create(ed, element, attr, value));
 			}
 
 			@Override
-			protected Object getValue(Object element) {
+			protected Object getValue(final Object element) {
 				return ((EObject) element).eGet(attr);
 			}
 
 			@Override
-			protected CellEditor getCellEditor(Object element) {
+			protected CellEditor getCellEditor(final Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(tableViewer.getTable());
 				ed.setFormatter(new IntegerFormatter("0"));
 				return ed;
 			}
 
 			@Override
-			protected boolean canEdit(Object element) {
+			protected boolean canEdit(final Object element) {
 				return true;
 			}
 		});
@@ -726,7 +722,15 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		column.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : String.format("%d", ((EObject) element).eGet(attr));
+				if (element instanceof EObject) {
+					final EObject eObject = (EObject) element;
+					final Object value = eObject.eGet(attr);
+					if (value instanceof Number) {
+						final Number number = (Number) value;
+						return element == null ? "" : String.format("%d", number.intValue());
+					}
+				}
+				return "";
 			}
 		});
 
@@ -734,7 +738,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 	}
 
-	private TableViewerColumn createLabelColumn(TableViewer tableViewer) {
+	private TableViewerColumn createLabelColumn(final TableViewer tableViewer) {
 
 		final TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
 
