@@ -42,8 +42,7 @@ public class XmlStreamReader<T> {
 		this.stream = stream;
 	}
 
-	public void parse()
-			throws IOException, XMLStreamException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
+	public void parse() throws IOException, XMLStreamException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
 		final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
 
