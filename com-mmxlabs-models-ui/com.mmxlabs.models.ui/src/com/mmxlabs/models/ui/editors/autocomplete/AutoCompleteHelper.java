@@ -9,9 +9,14 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IControlContentAdapter;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -21,15 +26,26 @@ import org.osgi.framework.ServiceReference;
 
 public class AutoCompleteHelper {
 
-	public static IMMXContentProposalProvider createTextControlProposalAdapter(final Text text, final EStructuralFeature attribute) {
-		return createTextControlProposalAdapter(text, factory -> factory.create(attribute));
+	public static IMMXContentProposalProvider createControlProposalAdapter(final Control text, final EStructuralFeature attribute) {
+		return createControlProposalAdapter(text, factory -> factory.create(attribute));
 	}
 
-	public static IMMXContentProposalProvider createTextControlProposalAdapter(final Text text, final String attribute) {
-		return createTextControlProposalAdapter(text, factory -> factory.create(attribute));
+	public static IMMXContentProposalProvider createControlProposalAdapter(final Control text, final String attribute) {
+		return createControlProposalAdapter(text, factory -> factory.create(attribute));
 	}
 
-	public static IMMXContentProposalProvider createTextControlProposalAdapter(final Text text, final Function<IContentProposalFactory, IMMXContentProposalProvider> supplier) {
+	public static IMMXContentProposalProvider createControlProposalAdapter(final Control control, final Function<IContentProposalFactory, IMMXContentProposalProvider> supplier) {
+
+		IControlContentAdapter controlContentAdapter = null;
+		if (control instanceof Text) {
+			controlContentAdapter = new TextContentAdapter();
+		} else if (control instanceof Combo) {
+			controlContentAdapter = new ComboContentAdapter();
+		} else if (control instanceof CCombo) {
+			controlContentAdapter = new CComboContentAdapter();
+		} else {
+			return null;
+		}
 
 		try {
 			final Bundle bundle = FrameworkUtil.getBundle(AutoCompleteHelper.class);
@@ -41,7 +57,7 @@ public class AutoCompleteHelper {
 				if (factory != null) {
 					final IMMXContentProposalProvider proposalProvider = supplier.apply(factory);
 					if (proposalProvider != null) {
-						final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(text, new TextContentAdapter(), proposalProvider, getActivationKeystroke(), getAutoactivationChars());
+						final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(control, controlContentAdapter, proposalProvider, getActivationKeystroke(), getAutoactivationChars());
 						proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
 						proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
 						proposalAdapter.setPropagateKeys(true);

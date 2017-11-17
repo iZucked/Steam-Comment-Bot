@@ -97,7 +97,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 		// final Text text = new Text(parent, style);
 		final Text text = toolkit.createText(parent, "", style);
-		this.proposalHelper = AutoCompleteHelper.createTextControlProposalAdapter(text, feature);
+		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(text, feature);
 		return text;
 	}
 }
