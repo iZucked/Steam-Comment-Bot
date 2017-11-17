@@ -44,7 +44,7 @@ public class DamerauLevenshteinDistance implements StringDistance {
 	      return source.length() * DELETE_COST;
 	    }
 	    int[][] table = new int[source.length()][target.length()];
-	    Map<Character, Integer> sourceIndexByCharacter = new HashMap<Character, Integer>();
+	    Map<Character, Integer> sourceIndexByCharacter = new HashMap<>();
 	    if (source.charAt(0) != target.charAt(0)) {
 	      table[0][0] = Math.min(REPLACE_COST, DELETE_COST + INSERT_COST);
 	    }

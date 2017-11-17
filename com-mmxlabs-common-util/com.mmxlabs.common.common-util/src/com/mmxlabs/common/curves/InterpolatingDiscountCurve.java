@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * 
  */
 public class InterpolatingDiscountCurve implements ICurve {
-	final TreeMap<Integer, Integer> values = new TreeMap<Integer, Integer>();
+	final TreeMap<Integer, Integer> values = new TreeMap<>();
 
 	public void setValueAtPoint(final int time, final int discountValue) {
 		values.put(time, discountValue);

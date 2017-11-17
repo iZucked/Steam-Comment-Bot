@@ -32,7 +32,7 @@ public class StringParserTest {
 	public void testParse() throws InvalidArgumentException {
 		final StringParser parser = new StringParser();
 
-		final List<String> strings = new ArrayList<String>(2);
+		final List<String> strings = new ArrayList<>(2);
 		final String str1 = new String();
 		final String str2 = new String();
 		strings.add(str1);

@@ -58,7 +58,7 @@ public class RouletteWheel<T> {
 	}
 
 	public List<Double> getDistributions() {
-		return new ArrayList<Double>(wheel.values());
+		return new ArrayList<>(wheel.values());
 	}
 
 	public double getCorrespondingDistribution(final String entry, final Map<String, Double> distribution) {

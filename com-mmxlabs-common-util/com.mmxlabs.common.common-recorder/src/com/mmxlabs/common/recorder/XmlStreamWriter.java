@@ -25,7 +25,7 @@ import com.mmxlabs.common.recorder.conversion.impl.TypeConvertorService;
 
 public class XmlStreamWriter {
 
-	private final Map<Object, String> objectMap = new HashMap<Object, String>();
+	private final Map<Object, String> objectMap = new HashMap<>();
 
 	private final OutputStream stream;
 
@@ -67,7 +67,8 @@ public class XmlStreamWriter {
 		eventWriter.add(eventFactory.createNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
 		eventWriter.add(eventFactory.createAttribute("xsi:schemaLocation", namespace + " schemas/InterfaceRecorder-1.0.0.xsd"));
 		// xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		// xsi:schemaLocation="http://www.eclipse.org/webtools/Catalogue Catalogue.xsd ">
+		// xsi:schemaLocation="http://www.eclipse.org/webtools/Catalogue Catalogue.xsd
+		// ">
 		eventWriter.add(eventFactory.createNamespace(prefix, namespace));
 
 		eventWriter.add(eventFactory.createAttribute(XmlRecordingConstants.ATTR_OPERATIONS_INTERFACE, interfaceClass.getCanonicalName()));

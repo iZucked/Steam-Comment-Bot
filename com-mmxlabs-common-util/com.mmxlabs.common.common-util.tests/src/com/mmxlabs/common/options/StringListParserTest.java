@@ -42,7 +42,7 @@ public class StringListParserTest {
 		final String separator = "z";
 		final StringListParser parser = new StringListParser(separator);
 
-		final List<String> strings = new ArrayList<String>(2);
+		final List<String> strings = new ArrayList<>(2);
 		final String str1 = "abczdef ghi";
 		strings.add(str1);
 

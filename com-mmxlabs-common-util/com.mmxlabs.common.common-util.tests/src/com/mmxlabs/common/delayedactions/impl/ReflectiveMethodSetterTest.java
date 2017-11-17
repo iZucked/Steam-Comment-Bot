@@ -19,7 +19,7 @@ public class ReflectiveMethodSetterTest {
 		final ITransformer<String, String> transformer = (ITransformer<String, String>) Mockito.mock(ITransformer.class);
 
 		final String source = "String";
-		final ReflectiveMethodSetter<String> setter = new ReflectiveMethodSetter<String>(mock, MockClass.class.getDeclaredMethod("setField", String.class), transformer, source);
+		final ReflectiveMethodSetter<String> setter = new ReflectiveMethodSetter<>(mock, MockClass.class.getDeclaredMethod("setField", String.class), transformer, source);
 
 		Mockito.when(transformer.transform(source)).thenReturn(source);
 		setter.run();

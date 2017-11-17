@@ -31,12 +31,13 @@ import com.mmxlabs.common.options.OptionsException;
 /**
  * Command-line interface for {@link AccurateNauticalDistanceCalculator}.
  * 
- * Sample inputs are in the data/nauticaldistances directory; the program requires two input files:
+ * Sample inputs are in the data/nauticaldistances directory; the program
+ * requires two input files:
  * <ol>
- * <li>
- * a picture of the earth, as a mercator projection, in which pure blue is terrain passable by vessels, and non-blue is impassable.</li>
- * <li>
- * a list of ports, as a CSV file, whose first three columns are port name, port latitude and port longitude in that order</li>
+ * <li>a picture of the earth, as a mercator projection, in which pure blue is
+ * terrain passable by vessels, and non-blue is impassable.</li>
+ * <li>a list of ports, as a CSV file, whose first three columns are port name,
+ * port latitude and port longitude in that order</li>
  * </ol>
  * Run with --help argument for more help.
  * 
@@ -121,7 +122,7 @@ public class DistanceMatrixCreator {
 			String line;
 			while ((line = portReader.readLine()) != null) {
 				final String[] parts = line.split(",");
-				ports.add(new Pair<String, Pair<Double, Double>>(parts[0], new Pair<Double, Double>(Double.parseDouble(parts[1].trim()), Double.parseDouble(parts[2].trim()))));
+				ports.add(new Pair<String, Pair<Double, Double>>(parts[0], new Pair<>(Double.parseDouble(parts[1].trim()), Double.parseDouble(parts[2].trim()))));
 			}
 		} finally {
 			if (portReader != null) {
@@ -160,7 +161,7 @@ public class DistanceMatrixCreator {
 			try {
 				snap = new BufferedWriter(new FileWriter(
 
-				"./snapports.txt"));
+						"./snapports.txt"));
 				real = new BufferedWriter(new FileWriter("./realports.txt"));
 
 				calculator.writeSnappedPoints(snap, real, otherPorts);

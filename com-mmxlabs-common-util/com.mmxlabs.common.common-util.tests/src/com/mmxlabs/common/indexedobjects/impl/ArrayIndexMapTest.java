@@ -18,7 +18,7 @@ public class ArrayIndexMapTest {
 	@Test
 	public void testMaybeGet() {
 
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
 		Assert.assertNull(map.maybeGet(key));
@@ -27,7 +27,7 @@ public class ArrayIndexMapTest {
 
 	@Test(expected = NoSuchElementException.class)
 	public void testGet2() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
 		map.get(key);
@@ -37,7 +37,7 @@ public class ArrayIndexMapTest {
 
 	@Test(expected = NoSuchElementException.class)
 	public void testGet3() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
 		Mockito.when(key.getIndex()).thenReturn(Integer.MAX_VALUE);
@@ -46,7 +46,7 @@ public class ArrayIndexMapTest {
 
 	@Test
 	public void testGetSet() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final Object o1 = new Object();
 		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 
@@ -59,7 +59,7 @@ public class ArrayIndexMapTest {
 
 	@Test
 	public void testGetValues1() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final Object value1 = new Object();
 		final Object value2 = new Object();
 		final IIndexedObject key1 = new MockIndexedObject(0);
@@ -85,7 +85,7 @@ public class ArrayIndexMapTest {
 
 	@Test(expected = NoSuchElementException.class)
 	public void testGetValues2() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final Object value1 = new Object();
 		final Object value2 = new Object();
 		final IIndexedObject key1 = new MockIndexedObject(0);
@@ -115,7 +115,7 @@ public class ArrayIndexMapTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetValues3() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 
 		final Iterable<Object> values = map.getValues();
 		Assert.assertNotNull(values);
@@ -128,7 +128,7 @@ public class ArrayIndexMapTest {
 
 	@Test
 	public void testClear() {
-		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<IIndexedObject, Object>();
+		final ArrayIndexMap<IIndexedObject, Object> map = new ArrayIndexMap<>();
 		final Object o1 = new Object();
 		final IIndexedObject key = Mockito.mock(IIndexedObject.class);
 

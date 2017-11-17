@@ -13,7 +13,9 @@ import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
 /**
- * An indexed map directly backed with an array, which doubles in size whenever its capacity is exhausted. Optimised for fast access rather than any other considerations.
+ * An indexed map directly backed with an array, which doubles in size whenever
+ * its capacity is exhausted. Optimised for fast access rather than any other
+ * considerations.
  * 
  * @author hinton
  * 

@@ -31,9 +31,9 @@ public class CSVReader implements Closeable {
 	}
 
 	private final String[] headerLine;
-	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
+	private final Map<String, String> originalHeaderLine = new HashMap<>();
 
-	private final Set<String> unusedHeaders = new HashSet<String>();
+	private final Set<String> unusedHeaders = new HashSet<>();
 
 	private final char separator;
 
@@ -71,7 +71,7 @@ public class CSVReader implements Closeable {
 		if (line == null) {
 			return null;
 		}
-		final LinkedList<String> fields = new LinkedList<String>();
+		final LinkedList<String> fields = new LinkedList<>();
 		StringBuffer temp = new StringBuffer();
 		State state = State.NORMAL;
 		boolean firstTry = true;
@@ -126,7 +126,7 @@ public class CSVReader implements Closeable {
 	}
 
 	public Set<String> getUnusedHeaders() {
-		final HashSet<String> result = new LinkedHashSet<String>();
+		final HashSet<String> result = new LinkedHashSet<>();
 		for (final String s : unusedHeaders) {
 			result.add(getCasedColumnName(s));
 		}

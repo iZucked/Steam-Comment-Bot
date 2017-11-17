@@ -22,9 +22,14 @@ import com.mmxlabs.common.Pair;
 /**
  * Nautical distance matrix calculator which models the earth as a sphere.
  * 
- * Given a bitmap of passable/impassable terrain (passable = false, impassable = true), finds all the "coastal" pixels (passable with impassable in one of the cardinal directions), and then computes
- * line-of-sight distances by sweeping out a great circle between pairs of coastal pixels and testing for impassable terrain in between them. Finally, given the line-of-sight great-circle distances
- * uses Dijkstra's algorithm to find the shortest navigable path between pairs of coastal points. Not very fast, because of lots of matrix maths.
+ * Given a bitmap of passable/impassable terrain (passable = false, impassable =
+ * true), finds all the "coastal" pixels (passable with impassable in one of the
+ * cardinal directions), and then computes line-of-sight distances by sweeping
+ * out a great circle between pairs of coastal pixels and testing for impassable
+ * terrain in between them. Finally, given the line-of-sight great-circle
+ * distances uses Dijkstra's algorithm to find the shortest navigable path
+ * between pairs of coastal points. Not very fast, because of lots of matrix
+ * maths.
  * 
  * Copyright (C) Minimax Labs Ltd., 2010 All rights reserved.
  * 
@@ -91,16 +96,19 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Get the shortest distances from origin to each point in the list, after snapping all points to their nearest (by great-circle distance) coastal points.
+	 * Get the shortest distances from origin to each point in the list, after
+	 * snapping all points to their nearest (by great-circle distance) coastal
+	 * points.
 	 * 
-	 * In principle runs the risk of snapping a point to something on the other side of a landmass, but so far I haven't seen that happen.
+	 * In principle runs the risk of snapping a point to something on the other side
+	 * of a landmass, but so far I haven't seen that happen.
 	 * 
 	 * @param origin
 	 * @param latLonPairs
 	 * @return
 	 */
 	public List<Integer> getShortestPaths(final Pair<Double, Double> origin, final List<Pair<Double, Double>> latLonPairs) {
-		final List<Integer> results = new ArrayList<Integer>();
+		final List<Integer> results = new ArrayList<>();
 
 		final int startPoint = snap(origin);
 		final int[] endPoints = new int[latLonPairs.size()];
@@ -122,8 +130,8 @@ public class AccurateNauticalDistanceCalculator {
 			}
 		};
 
-		final PriorityQueue<Integer> queue = new PriorityQueue<Integer>(coast.size(), comparator);
-		final Set<Integer> remaining = new HashSet<Integer>();
+		final PriorityQueue<Integer> queue = new PriorityQueue<>(coast.size(), comparator);
+		final Set<Integer> remaining = new HashSet<>();
 		for (int i = 0; i < coast.size(); i++) {
 			remaining.add(i);
 			queue.add(i);
@@ -191,8 +199,8 @@ public class AccurateNauticalDistanceCalculator {
 			}
 		};
 
-		final PriorityQueue<Integer> queue = new PriorityQueue<Integer>(coast.size(), comparator);
-		final Set<Integer> remaining = new HashSet<Integer>();
+		final PriorityQueue<Integer> queue = new PriorityQueue<>(coast.size(), comparator);
+		final Set<Integer> remaining = new HashSet<>();
 		for (int i = 0; i < coast.size(); i++) {
 			remaining.add(i);
 			queue.add(i);
@@ -236,7 +244,8 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Snap a lat/lon pair to a coast point. Input are in degrees, coast in radians. find nearest coast point
+	 * Snap a lat/lon pair to a coast point. Input are in degrees, coast in radians.
+	 * find nearest coast point
 	 * 
 	 * @param pair
 	 * @return
@@ -265,7 +274,9 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Compute the great-circle distance in nautical miles between the two points represented as vectors to points on the unit sphere (scaled up to earth radius)
+	 * Compute the great-circle distance in nautical miles between the two points
+	 * represented as vectors to points on the unit sphere (scaled up to earth
+	 * radius)
 	 * 
 	 * @param pair
 	 * @param pair2
@@ -290,7 +301,9 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	/**
-	 * Test all the pixels between cartesian normal sphere points v1 and v2 in the given mercator matrix, and return true if and only if they are all sea pixels.
+	 * Test all the pixels between cartesian normal sphere points v1 and v2 in the
+	 * given mercator matrix, and return true if and only if they are all sea
+	 * pixels.
 	 * 
 	 * @param v1
 	 * @param v2
@@ -525,12 +538,12 @@ public class AccurateNauticalDistanceCalculator {
 	}
 
 	private List<Pair<Integer, Integer>> findCoastalPixels(final boolean[][] landMatrix) {
-		final List<Pair<Integer, Integer>> result = new ArrayList<Pair<Integer, Integer>>();
+		final List<Pair<Integer, Integer>> result = new ArrayList<>();
 
 		for (int x = 0; x < landMatrix.length; x++) {
 			for (int y = 0; y < landMatrix[0].length; y++) {
 				if ((landMatrix[x][y] == false) && hasLandNeighbour(landMatrix, x, y)) {
-					result.add(new Pair<Integer, Integer>(x, y));
+					result.add(new Pair<>(x, y));
 				}
 			}
 		}

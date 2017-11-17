@@ -20,7 +20,7 @@ public class ReflectiveFieldSetterTest {
 		final ITransformer<String, String> transformer = (ITransformer<String, String>) Mockito.mock(ITransformer.class);
 
 		final String source = "String";
-		final ReflectiveFieldSetter<String> setter = new ReflectiveFieldSetter<String>(mock, MockClass.class.getDeclaredField("field1"), transformer, source);
+		final ReflectiveFieldSetter<String> setter = new ReflectiveFieldSetter<>(mock, MockClass.class.getDeclaredField("field1"), transformer, source);
 
 		Mockito.when(transformer.transform(source)).thenReturn(source);
 
@@ -38,7 +38,7 @@ public class ReflectiveFieldSetterTest {
 		final ITransformer<String, String> transformer = (ITransformer<String, String>) Mockito.mock(ITransformer.class);
 
 		final String source = "String";
-		final ReflectiveFieldSetter<String> setter = new ReflectiveFieldSetter<String>(mock, MockClass.class.getDeclaredField("field2"), transformer, source);
+		final ReflectiveFieldSetter<String> setter = new ReflectiveFieldSetter<>(mock, MockClass.class.getDeclaredField("field2"), transformer, source);
 		
 		Mockito.when(transformer.transform(source)).thenReturn(source);
 		setter.run();

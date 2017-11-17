@@ -51,7 +51,7 @@ public class InterfaceRecorderTest {
 
 			@Override
 			public void setList(final Integer... ints) {
-				this.ints = new LinkedList<Integer>();
+				this.ints = new LinkedList<>();
 				for (final int i : ints) {
 					this.ints.add(i);
 				}

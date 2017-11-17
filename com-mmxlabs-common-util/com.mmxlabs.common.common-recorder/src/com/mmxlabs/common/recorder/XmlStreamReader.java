@@ -33,7 +33,7 @@ public class XmlStreamReader<T> {
 
 	private final @NonNull T object;
 
-	private final Map<String, Object> objectMap = new HashMap<String, Object>();
+	private final Map<String, Object> objectMap = new HashMap<>();
 
 	private final ITypeConvertorService conversionService = new TypeConvertorService();
 
@@ -42,8 +42,8 @@ public class XmlStreamReader<T> {
 		this.stream = stream;
 	}
 
-	public void parse() throws IOException, XMLStreamException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException,
-			NoSuchMethodException {
+	public void parse()
+			throws IOException, XMLStreamException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
 
 		final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
 
@@ -56,8 +56,8 @@ public class XmlStreamReader<T> {
 		final QName qname_argumentRef = new QName(XmlRecordingConstants.ATTR_ARGUMENT_REF);
 		final QName qname_argumentValue = new QName(XmlRecordingConstants.ATTR_ARGUMENT_VALUE);
 
-		final List<Class<?>> parameterTypes = new LinkedList<Class<?>>();
-		final List<Object> arguments = new LinkedList<Object>();
+		final List<Class<?>> parameterTypes = new LinkedList<>();
+		final List<Object> arguments = new LinkedList<>();
 		String methodName = null;
 		String returnedRef = null;
 

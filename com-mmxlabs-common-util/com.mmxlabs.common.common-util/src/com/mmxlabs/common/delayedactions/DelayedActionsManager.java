@@ -18,7 +18,7 @@ public final class DelayedActionsManager {
 	/**
 	 * Queue of actions to perform.
 	 */
-	private final Queue<Runnable> actions = new ConcurrentLinkedQueue<Runnable>();
+	private final Queue<Runnable> actions = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * Apply all the delayed mappings. This assumes all the required objects have been added using {@link #register(Class, String, Object)}. The delayed mappings will be cleared once completed.

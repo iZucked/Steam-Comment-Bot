@@ -128,7 +128,7 @@ public class FieldMap implements IFieldMap {
 
 	@Override
 	public IFieldMap getSubMap(String keyPrefix) {
-		final HashMap<String, String> subDelegate = new HashMap<String, String>();
+		final HashMap<String, String> subDelegate = new HashMap<>();
 		for (final String key : delegate.keySet()) {
 			if (key.startsWith(keyPrefix)) {
 				subDelegate.put(key.substring(keyPrefix.length()), delegate.get(key));
@@ -147,7 +147,7 @@ public class FieldMap implements IFieldMap {
 		return lastAccessedKey;
 	}
 
-	private Set<String> missedKeys = new HashSet<String>();
+	private Set<String> missedKeys = new HashSet<>();
 
 	private String lastAccessedKey = "";
 

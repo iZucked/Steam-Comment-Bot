@@ -28,7 +28,7 @@ public final class InterfaceRecorder {
 
 	public <T> void replay(final @NonNull T object, final InputStream is, final String lastMethod) throws Exception {
 
-		final XmlStreamReader<T> reader = new XmlStreamReader<T>(object, is);
+		final XmlStreamReader<T> reader = new XmlStreamReader<>(object, is);
 		reader.parse();
 	}
 }

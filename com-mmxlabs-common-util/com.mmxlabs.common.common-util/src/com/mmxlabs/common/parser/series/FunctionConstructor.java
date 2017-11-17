@@ -35,7 +35,7 @@ public class FunctionConstructor implements IExpression<ISeries> {
 	}
 
 	private List<ISeries> evaluate(final List<IExpression<ISeries>> exprs) {
-		final List<ISeries> result = new ArrayList<ISeries>(exprs.size());
+		final List<ISeries> result = new ArrayList<>(exprs.size());
 		for (final IExpression<ISeries> exp : exprs) {
 			result.add(exp.evaluate());
 		}

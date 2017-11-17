@@ -38,7 +38,7 @@ public final class LHMCache<K, V> extends AbstractCache<K, V> {
 		V value = (V) null;
 		if ((ref == null) || ((value = ref.get()) == null)) {
 			final Pair<K, V> pair = evaluate(key);
-			map.put(pair.getFirst(), new SoftReference<V>(pair.getSecond()));
+			map.put(pair.getFirst(), new SoftReference<>(pair.getSecond()));
 			value = pair.getSecond();
 		} else {
 			hit();

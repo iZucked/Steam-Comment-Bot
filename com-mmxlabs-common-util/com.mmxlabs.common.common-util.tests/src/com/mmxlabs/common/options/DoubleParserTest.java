@@ -41,7 +41,7 @@ public class DoubleParserTest {
 
 		final DoubleParser parser = new DoubleParser();
 
-		final List<String> strings = new ArrayList<String>(2);
+		final List<String> strings = new ArrayList<>(2);
 		final String str1 = "0.0";
 		final String str2 = "string";
 		strings.add(str1);

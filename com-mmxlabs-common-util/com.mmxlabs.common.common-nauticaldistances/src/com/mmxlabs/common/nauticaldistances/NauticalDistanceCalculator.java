@@ -15,12 +15,18 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 
 /**
- * Calculator for port-port distances which uses a simple model of the sea as passable/impassable terrain and computes the shortest path through passable squares.
+ * Calculator for port-port distances which uses a simple model of the sea as
+ * passable/impassable terrain and computes the shortest path through passable
+ * squares.
  * 
- * Assumes the matrix is a rough mercator projection, and the earth is normal-sized for an earth.
+ * Assumes the matrix is a rough mercator projection, and the earth is
+ * normal-sized for an earth.
  * 
- * Estimates will be over by maybe 5% because of a lack of genuine diagonal lines and the low resolution of the terrain bitmap. A better solution would probably have to find all coastal points,
- * determine which coastal points are great-circle reachable from one another, build a graph on that and then run dijkstra like this.
+ * Estimates will be over by maybe 5% because of a lack of genuine diagonal
+ * lines and the low resolution of the terrain bitmap. A better solution would
+ * probably have to find all coastal points, determine which coastal points are
+ * great-circle reachable from one another, build a graph on that and then run
+ * dijkstra like this.
  * 
  * Copyright (C) Minimax Labs Ltd., 2010 All rights reserved.
  * 
@@ -37,7 +43,8 @@ public class NauticalDistanceCalculator {
 	private static final double RAD_KNOTS = 3443.89849;
 	private final boolean[][] landMatrix;
 	/**
-	 * This matrix will be filled with the shortest path to each square from the current start square
+	 * This matrix will be filled with the shortest path to each square from the
+	 * current start square
 	 */
 	private final int[][] distances;
 	private Pair<Integer, Integer> startSquare = null;
@@ -121,8 +128,8 @@ public class NauticalDistanceCalculator {
 	}
 
 	public List<Integer> getMultipleDistances(final Pair<Double, Double> latlon, final List<Pair<Double, Double>> others) {
-		final ArrayList<Integer> result = new ArrayList<Integer>();
-		final ArrayList<Pair<Integer, Integer>> ends = new ArrayList<Pair<Integer, Integer>>();
+		final ArrayList<Integer> result = new ArrayList<>();
+		final ArrayList<Pair<Integer, Integer>> ends = new ArrayList<>();
 
 		for (final Pair<Double, Double> p : others) {
 			final Pair<Integer, Integer> grid = gridLatLon(p);
@@ -158,7 +165,7 @@ public class NauticalDistanceCalculator {
 		final int markCount = latitudeResolution * longitudeResolution;
 		int percent = -1;
 		int markProgress = 0;
-		final Pair<Integer, Integer> here = new Pair<Integer, Integer>(startSquare);
+		final Pair<Integer, Integer> here = new Pair<>(startSquare);
 		int distanceToHere = distances[here.getFirst()][here.getSecond()];
 		while (distanceToHere != Integer.MAX_VALUE) {
 			boolean markedEveryEnd = true;
@@ -222,7 +229,8 @@ public class NauticalDistanceCalculator {
 	}
 
 	/**
-	 * Compute great-circle distance in nautical miles. parameters are a lat/lon index, and n, which has delta-values in elements 2 and 3.
+	 * Compute great-circle distance in nautical miles. parameters are a lat/lon
+	 * index, and n, which has delta-values in elements 2 and 3.
 	 * 
 	 * @param here
 	 * @param n
@@ -237,7 +245,9 @@ public class NauticalDistanceCalculator {
 	}
 
 	/**
-	 * Return an iterable of the neighbours of the given square. Doesn't have to be well behaved (i.e. may just return the same object again and again). Doesn't work at the poles, but doesn't need to.
+	 * Return an iterable of the neighbours of the given square. Doesn't have to be
+	 * well behaved (i.e. may just return the same object again and again). Doesn't
+	 * work at the poles, but doesn't need to.
 	 * 
 	 * @param marks
 	 * @param here

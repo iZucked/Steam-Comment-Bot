@@ -15,7 +15,7 @@ import java.util.List;
  * 
  */
 public class DetailTree implements IDetailTree {
-	private final LinkedList<IDetailTree> children = new LinkedList<IDetailTree>();
+	private final LinkedList<IDetailTree> children = new LinkedList<>();
 	private final String key;
 	private final Object value;
 

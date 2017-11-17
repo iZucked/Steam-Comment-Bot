@@ -44,9 +44,9 @@ public class SeriesUtil {
 	}
 
 	public static void main(final String[] args) {
-		final SortedSet<Integer> s1 = new TreeSet<Integer>();
-		final SortedSet<Integer> s2 = new TreeSet<Integer>();
-		final SortedSet<Integer> s3 = new TreeSet<Integer>();
+		final SortedSet<Integer> s1 = new TreeSet<>();
+		final SortedSet<Integer> s2 = new TreeSet<>();
+		final SortedSet<Integer> s3 = new TreeSet<>();
 
 		final Random r = new Random();
 

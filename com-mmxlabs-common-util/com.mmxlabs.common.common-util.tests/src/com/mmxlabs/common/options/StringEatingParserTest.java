@@ -33,7 +33,7 @@ public class StringEatingParserTest {
 	public void testParse() throws InvalidArgumentException {
 		final StringEatingParser parser = new StringEatingParser();
 
-		final List<String> strings = new ArrayList<String>(2);
+		final List<String> strings = new ArrayList<>(2);
 		final String str1 = "abc";
 		final String str2 = "def";
 		strings.add(str1);

@@ -25,7 +25,7 @@ public class Max extends SimpleSeriesFunction {
 
 	@Override
 	public Number evaluate(int point) {
-		final List<Number> values = new ArrayList<Number>(arguments.size());
+		final List<Number> values = new ArrayList<>(arguments.size());
 
 		for (final ISeries s : arguments) {
 			values.add(s.evaluate(point));

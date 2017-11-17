@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
 public class JSONConverter {
 	
 	public static Map<String, Object> jsonToMap(JSONObject json) {
-	    Map<String, Object> retMap = new HashMap<String, Object>();
+	    Map<String, Object> retMap = new HashMap<>();
 
 	    if(json.isEmpty()) {
 	        retMap = toMap(json);
@@ -25,7 +25,7 @@ public class JSONConverter {
 	}
 
 	public static Map<String, Object> toMap(JSONObject object) {
-	    Map<String, Object> map = new HashMap<String, Object>();
+	    Map<String, Object> map = new HashMap<>();
 
 	    Iterator<Object> keysItr = object.keySet().iterator();
 	    while(keysItr.hasNext()) {
@@ -46,7 +46,7 @@ public class JSONConverter {
 	}
 
 	public static List<Object> toList(JSONArray array) {
-	    List<Object> list = new ArrayList<Object>();
+	    List<Object> list = new ArrayList<>();
 	    for(int i = 0; i < array.size(); i++) {
 	        Object value = array.get(i);
 	        if(value instanceof JSONArray) {

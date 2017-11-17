@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public final class ObjectRegistry {
 
-	private final Map<Class<?>, Map<Object, Object>> registry = new HashMap<Class<?>, Map<Object, Object>>();
+	private final Map<Class<?>, Map<Object, Object>> registry = new HashMap<>();
 
 	/**
 	 * Returns the object registered under the given key for the specified {@link Class}. Returns null if no object is found.
@@ -51,7 +51,7 @@ public final class ObjectRegistry {
 		if (registry.containsKey(cls)) {
 			m = registry.get(cls);
 		} else {
-			m = new HashMap<Object, Object>();
+			m = new HashMap<>();
 			registry.put(cls, m);
 		}
 		m.put(key, value);

@@ -41,7 +41,7 @@ public class IntegerParserTest {
 
 		final IntegerParser parser = new IntegerParser();
 
-		final List<String> strings = new ArrayList<String>(2);
+		final List<String> strings = new ArrayList<>(2);
 		final String str1 = "0";
 		final String str2 = "string";
 		strings.add(str1);

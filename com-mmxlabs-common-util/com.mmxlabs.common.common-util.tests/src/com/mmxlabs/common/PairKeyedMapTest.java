@@ -12,7 +12,7 @@ public class PairKeyedMapTest {
 	@Test
 	public void testPairKeyMap() {
 
-		final PairKeyedMap<String, String, Object> map = new PairKeyedMap<String, String, Object>();
+		final PairKeyedMap<String, String, Object> map = new PairKeyedMap<>();
 
 		final String key1 = "key1";
 		final String key2 = "key2";
@@ -22,8 +22,8 @@ public class PairKeyedMapTest {
 		final Object obj1 = new Object();
 		final Object obj2 = new Object();
 
-		final Pair<String, String> p1 = new Pair<String, String>(key1, key2);
-		final Pair<String, String> p2 = new Pair<String, String>(key1, key3);
+		final Pair<String, String> p1 = new Pair<>(key1, key2);
+		final Pair<String, String> p2 = new Pair<>(key1, key3);
 
 		Assert.assertFalse(map.containsKey(p1));
 		Assert.assertFalse(map.containsKey(p2));

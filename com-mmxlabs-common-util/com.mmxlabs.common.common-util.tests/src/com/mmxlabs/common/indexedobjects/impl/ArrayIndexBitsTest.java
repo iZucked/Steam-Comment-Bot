@@ -14,7 +14,7 @@ public class ArrayIndexBitsTest {
 	@Test
 	public void testIsSet() {
 
-		final ArrayIndexBits<MockIndexedObject> bits = new ArrayIndexBits<MockIndexedObject>();
+		final ArrayIndexBits<MockIndexedObject> bits = new ArrayIndexBits<>();
 
 		final MockIndexedObject obj1 = new MockIndexedObject(1);
 		final MockIndexedObject obj2 = new MockIndexedObject(2);
