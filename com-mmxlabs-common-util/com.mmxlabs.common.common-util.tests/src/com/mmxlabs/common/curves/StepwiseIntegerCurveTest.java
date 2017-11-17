@@ -38,7 +38,7 @@ public class StepwiseIntegerCurveTest {
 		}
 
 		for (int i = 0; i < 100; i++) {
-			Assert.assertEquals(c.getValueAtPoint(i), i * 2);
+			Assert.assertEquals(c.getValueAtPoint(i), i * 2L);
 		}
 	}
 }
