@@ -181,8 +181,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				final LadenRouteData[] lrd = new LadenRouteData[2];
 				lrd[0] = new LadenRouteData(52, 71, 0, 1000, 0);
 				lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
-				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselName, optimiserScenario.getCargoModel().getVesselAvailabilities(),
-						scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
+				final IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselAvailability1.getVessel().getName(),
+						optimiserScenario.getCargoModel().getVesselAvailabilities(), scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
 
 				final @NonNull IVessel o_vessel = o_vesselAvailability.getVessel();
 				/*
@@ -521,11 +521,11 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 				Assert.assertEquals(13.5, ScheduleTools.getPrice(optimiserScenario, cargo1.getSortedSlots().get(1)), 0.0001);
 				Assert.assertEquals(0, loadFeasibleTimeWindow.getInclusiveStart());
-				Assert.assertEquals(1488, dischargeFeasibleTimeWindow.getInclusiveStart());	
+				Assert.assertEquals(1488, dischargeFeasibleTimeWindow.getInclusiveStart());
 
 				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 01, 0, getDefaultEMFDischargeSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, dischargeFeasibleTimeWindow.getInclusiveStart(), getDefaultEMFDischargeSlot().getPort().getZoneId()));
-			
+
 			});
 		},
 				/*
@@ -606,7 +606,6 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 				Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 				Assert.assertEquals(MicroCaseDateUtils.getZonedDateTime(2016, 9, 1, 0, getDefaultEMFDischargeSlot().getPort()),
 						MicroCaseDateUtils.getDateTimeFromHour(scenarioToOptimiserBridge, 1488, getDefaultEMFDischargeSlot().getPort().getZoneId()));
-
 
 			});
 		},
