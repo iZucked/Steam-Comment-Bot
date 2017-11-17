@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -75,7 +76,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 		final GridViewerColumn gvc0 = createColumn("Slot", SchedulePackage.Literals.SLOT_ALLOCATION__SLOT);
 		// gvc0.getColumn().setTree(true);
 
-		final GridViewerColumn gvc1 = createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX);
+		final GridViewerColumn gvc1 = createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
 		final GridViewerColumn gvc2 = createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
 		final GridColumnGroup volumeGroup = createGroup("Volume");
 
@@ -232,27 +233,34 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 				final Object element = cell.getElement();
 				if (element instanceof EObject) {
 					final EObject eObject = (EObject) element;
-					if (eObject.eClass().getEAllReferences().contains(reference)) {
-						try {
+					if (reference instanceof EAttribute) {
+						if (eObject.eClass().getEAllAttributes().contains(reference)) {
 							final Object o = ((EObject) element).eGet(reference);
-							if (o instanceof Slot) {
-								final Slot slot = (Slot) o;
-								cell.setText(slot.getName());
-							} else if (o instanceof NamedIndexContainer<?>) {
-								final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) o;
-								cell.setText(idx.getName());
-							} else if (element instanceof ExposureDetail) {
-								final ExposureDetail detail = (ExposureDetail) element;
-								if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
-									cell.setText(String.format("%,.3f", (Double) o));
-								} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-									cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
-								} else {
-									cell.setText(o.toString());
+							cell.setText(o.toString());
+						}
+					} else {
+						if (eObject.eClass().getEAllReferences().contains(reference)) {
+							try {
+								final Object o = ((EObject) element).eGet(reference);
+								if (o instanceof Slot) {
+									final Slot slot = (Slot) o;
+									cell.setText(slot.getName());
+								} else if (o instanceof NamedIndexContainer<?>) {
+									final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) o;
+									cell.setText(idx.getName());
+								} else if (element instanceof ExposureDetail) {
+									final ExposureDetail detail = (ExposureDetail) element;
+									if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+										cell.setText(String.format("%,.3f", (Double) o));
+									} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+										cell.setText(String.format("%,.1f", ((Double) o).doubleValue()));
+									} else {
+										cell.setText(o.toString());
+									}
 								}
+							} catch (final Throwable e) {
+								cell.setText("");
 							}
-						} catch (final Throwable e) {
-							cell.setText("");
 						}
 					}
 				}
