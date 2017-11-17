@@ -34,7 +34,7 @@ public class DateTreeSetComparatorTest {
 		datemap.put(obj1, d1);
 		datemap.put(obj2, d2);
 
-		final ITransformer<Object, Date> transformer = t -> datemap.get(t);
+		final ITransformer<Object, Date> transformer = datemap::get;
 
 		final DateTreeSetComparator<Object> cmp = new DateTreeSetComparator<>(transformer);
 
