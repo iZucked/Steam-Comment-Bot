@@ -95,7 +95,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			final Supplier<String> overrideStringSupplier = () -> {
 				if (input instanceof MMXObject) {
 					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
-					inner.setValue(v);
+					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
 				return null;
@@ -108,7 +108,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			final Supplier<String> overrideStringSupplier = () -> {
 				if (input instanceof MMXObject) {
 					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
-					inner.setValue(v);
+					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
 				return null;
@@ -121,7 +121,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			final Supplier<String> overrideStringSupplier = () -> {
 				if (input instanceof MMXObject) {
 					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
-					inner.setValue(v);
+					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
 				return null;
@@ -133,7 +133,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			final Supplier<String> overrideStringSupplier = () -> {
 				if (input instanceof MMXObject) {
 					final Object v = ((MMXObject) input).getUnsetValue(getFeature());
-					inner.setValue(v);
+					inner.setValue(scale(v));
 					return inner.getDisplayString();
 				}
 				return null;
