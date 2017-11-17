@@ -195,7 +195,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		{
 			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
 			msc.scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(msc.loadPort, msc.dischargePort, panamaCanal.getRouteOption(), 20, true);
-			// FIXME: Should this really be suez data or copy/paste error?			
+			// FIXME: Should this really be suez data or copy/paste error?
 			msc.fleetCreator.assignDefaultSuezCanalData(msc.vessel, RouteOption.PANAMA);
 			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vessel, RouteOption.PANAMA);
 
@@ -335,8 +335,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		// but the vessel's capacity is only 50m3 greater than its minimum heel
 		// and the journeys (after loading) use a total of 40m3 NBO
@@ -414,7 +413,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		final SequenceTester checker = getDefaultTester();
 		checker.baseFuelPricePerMT = 100;
@@ -572,7 +571,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		// but minimum discharge volume means that it causes a capacity violation
 		DischargeSlot dischargeSlot = (DischargeSlot) msc.cargo.getSlots().get(1);
@@ -610,7 +609,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		// but minimum discharge volume means that it causes a capacity violation
 		msc.cargo.getSlots().get(1).setMinQuantity(9965);

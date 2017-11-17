@@ -63,10 +63,9 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// Push up base fuel price for force NBO+FBO
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
-
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 		checker.baseFuelPricePerMT = 100;
+		fuelPrice.setExpression(Float.toString(checker.baseFuelPricePerMT));
 
 		msc.vessel.setWarmingTime(0);
 
@@ -191,8 +190,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 		checker.baseFuelPricePerMT = 100;
+		fuelPrice.setExpression(Float.toString(checker.baseFuelPricePerMT));
 
 		// change from default scenario
 		// first journey should use NBO and base fuel (not just base fuel)
@@ -410,9 +409,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
-
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -508,7 +506,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		// Set up cooldown infrastructure
 		msc.setupCooldown(0);
@@ -602,9 +600,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
-
 		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		fuelPrice.setExpression("100");
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);

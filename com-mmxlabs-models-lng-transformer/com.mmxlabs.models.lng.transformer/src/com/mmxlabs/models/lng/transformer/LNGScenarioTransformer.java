@@ -724,16 +724,13 @@ public class LNGScenarioTransformer {
 		// Generate base fuels
 		{
 			for (final BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
-				final BaseFuelIndex index = baseFuelCost.getIndex();
-				assert index != null;
-
 				final BaseFuel eBF = baseFuelCost.getFuel();
 				assert eBF != null;
 
 				final IBaseFuel bf = TransformerHelper.buildBaseFuel(builder, eBF);
 				modelEntityMap.addModelObject(eBF, bf);
 
-				final ICurve curve = baseFuelIndexAssociation.lookupNullChecked(index);
+				final ICurve curve = dateHelper.generateExpressionCurve(baseFuelCost.getExpression(), baseFuelIndices);
 				baseFuelCurveProvider.setBaseFuelCurve(bf, curve);
 			}
 		}

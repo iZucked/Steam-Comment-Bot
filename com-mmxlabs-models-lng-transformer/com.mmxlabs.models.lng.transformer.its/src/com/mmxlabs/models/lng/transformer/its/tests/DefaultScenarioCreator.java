@@ -250,42 +250,12 @@ public class DefaultScenarioCreator {
 		final int defaultSuezCanalCost = 1;
 		final int defaultPanamaCanalCost = 1;
 
-		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price, final YearMonth date) {
-			BaseFuelIndex bfi = bfc.getIndex();
-			if (bfi == null) {
-				bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
-				bfc.setIndex(bfi);
-				bfi.setName(bfc.getFuel().getName());
-			}
-			Index<Double> indexData = bfi.getData();
-			if (indexData == null || (indexData instanceof DataIndex) == false) {
-				indexData = PricingFactory.eINSTANCE.createDataIndex();
-				bfi.setData(indexData);
-			}
-
-			final List<IndexPoint<Double>> points = ((DataIndex<Double>) indexData).getPoints();
-
-			if (points.isEmpty()) {
-				final IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
-
-				points.add(point);
-			}
-
-			points.get(0).setValue(price);
-			points.get(0).setDate(date);
-		}
-
-		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
-			setBaseFuelPrice(bfc, price, YearMonth.of(2000, 1));
-		}
-
 		/**
 		 * Creates a base fuel with default settings.
 		 * 
 		 * @return
 		 */
 		public BaseFuel createDefaultBaseFuel() {
-			final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
 			final CostModel costModel = scenario.getReferenceModel().getCostModel();
 			final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 
@@ -296,9 +266,8 @@ public class DefaultScenarioCreator {
 
 			final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
 			bfc.setFuel(baseFuel);
-			setBaseFuelPrice(bfc, baseFuelUnitPrice);
+			bfc.setExpression(Integer.toString(baseFuelUnitPrice));
 			costModel.getBaseFuelCosts().add(bfc);
-			pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 			return baseFuel;
 		}
@@ -333,7 +302,7 @@ public class DefaultScenarioCreator {
 			vessel.setInPortBaseFuel(baseFuel);
 			vessel.setIdleBaseFuel(baseFuel);
 			vessel.setPilotLightBaseFuel(baseFuel);
-			
+
 			vessel.setMinSpeed(defaultMinSpeed);
 			vessel.setMaxSpeed(defaultMaxSpeed);
 			vessel.setCapacity(defaultCapacity);

@@ -121,8 +121,7 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 		final double fillCapacity = 1.0;
 
 		BaseFuel baseFuel = scenarioModelBuilder.getFleetModelBuilder().createBaseFuel("BASE FUEL", equivalenceFactor);
-		BaseFuelIndex baseFuelIndex = scenarioModelBuilder.getPricingModelBuilder().createBaseFuelExpressionIndex("BASEFUEL", baseFuelUnitPrice);
-		final BaseFuelCost bfc = scenarioModelBuilder.getCostModelBuilder().createBaseFuelCost(baseFuel, baseFuelIndex);
+		final BaseFuelCost bfc = scenarioModelBuilder.getCostModelBuilder().createOrUpdateBaseFuelCost(baseFuel, Float.toString(baseFuelUnitPrice));
 
 		final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(vesselClassName, capacity, fillCapacity, minSpeed, maxSpeed, baseFuel, pilotLightRate, minHeelVolume,
 				cooldownVolume, warmupTime);
@@ -270,7 +269,6 @@ public class CustomScenarioCreator extends DefaultScenarioCreator {
 			final LocalDateTime loadWindowStart, final int travelTime) {
 		return addCargo(cargoID, loadPort, dischargePort, Float.toString(loadPrice), Float.toString(dischargePrice), cvValue, loadWindowStart, travelTime);
 	}
-
 
 	public CharterOutEvent addCharterOut(final String id, final @NonNull Port startPort, final @Nullable Port endPort, final @NonNull LocalDateTime startCharterOut, final int heelLimit,
 			final int charterOutDurationDays, final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
