@@ -454,8 +454,7 @@ public class CapacityViolationTests extends AbstractMicroTestCase {
 		// Build new pricing model with known prices
 		scenarioModelFinder.getCostModelFinder().getCostModel().getBaseFuelCosts().clear();
 		for (BaseFuel bf : scenarioModelFinder.getFleetModelFinder().getFleetModel().getBaseFuels()) {
-			BaseFuelIndex idx = scenarioModelBuilder.getPricingModelBuilder().createBaseFuelExpressionIndex("cost-" + bf.getName(), 100.0);
-			scenarioModelBuilder.getCostModelBuilder().createBaseFuelCost(bf, idx);
+			scenarioModelBuilder.getCostModelBuilder().createOrUpdateBaseFuelCost(bf, "100");
 		}
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //

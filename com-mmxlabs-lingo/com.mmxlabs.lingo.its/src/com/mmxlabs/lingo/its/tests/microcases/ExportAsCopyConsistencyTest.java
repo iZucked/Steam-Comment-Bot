@@ -95,7 +95,6 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 			final CostModel costModel = ScenarioModelUtil.getCostModel(copy);
 			for (final BaseFuelCost bfc : costModel.getBaseFuelCosts()) {
 				Assert.assertNotNull(bfc.getFuel());
-				Assert.assertNotNull(bfc.getIndex());
 			}
 		}, null);
 	}
@@ -118,7 +117,6 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 			final CostModel costModel = ScenarioModelUtil.getCostModel(copy);
 			for (final BaseFuelCost bfc : costModel.getBaseFuelCosts()) {
 				Assert.assertNotNull(bfc.getFuel());
-				Assert.assertNotNull(bfc.getIndex());
 			}
 		});
 	}

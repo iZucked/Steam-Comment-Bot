@@ -119,10 +119,10 @@ public class MultipleBaseFuelTestCase extends AbstractMicroTestCase {
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		costModelBuilder = scenarioModelBuilder.getCostModelBuilder();
 
-		costModelBuilder.createBaseFuelCost(baseFuel, pricingModelBuilder.createBaseFuelExpressionIndex("BASE", 100));
-		costModelBuilder.createBaseFuelCost(idleBaseFuel, pricingModelBuilder.createBaseFuelExpressionIndex("IDLE", 3));
-		costModelBuilder.createBaseFuelCost(pilotLightBaseFuel, pricingModelBuilder.createBaseFuelExpressionIndex("PILOT", 70));
-		costModelBuilder.createBaseFuelCost(inPortBaseFuel, pricingModelBuilder.createBaseFuelExpressionIndex("PORT", 20));
+		costModelBuilder.createOrUpdateBaseFuelCost(baseFuel, "100");
+		costModelBuilder.createOrUpdateBaseFuelCost(idleBaseFuel, "3");
+		costModelBuilder.createOrUpdateBaseFuelCost(pilotLightBaseFuel, "70");
+		costModelBuilder.createOrUpdateBaseFuelCost(inPortBaseFuel, "20");
 
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
