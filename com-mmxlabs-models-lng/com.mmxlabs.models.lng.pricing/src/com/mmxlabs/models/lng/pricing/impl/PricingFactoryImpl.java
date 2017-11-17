@@ -23,9 +23,7 @@ import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
-import com.mmxlabs.models.lng.pricing.PortsPriceMap;
 import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
-import com.mmxlabs.models.lng.pricing.PortsSplitPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -90,9 +88,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
-			case PricingPackage.PORTS_PRICE_MAP: return createPortsPriceMap();
 			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
-			case PricingPackage.PORTS_SPLIT_PRICE_MAP: return createPortsSplitPriceMap();
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
 			case PricingPackage.PANAMA_CANAL_TARIFF: return createPanamaCanalTariff();
 			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: return createPanamaCanalTariffBand();
@@ -260,29 +256,9 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortsPriceMap createPortsPriceMap() {
-		PortsPriceMapImpl portsPriceMap = new PortsPriceMapImpl();
-		return portsPriceMap;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public PortsExpressionMap createPortsExpressionMap() {
 		PortsExpressionMapImpl portsExpressionMap = new PortsExpressionMapImpl();
 		return portsExpressionMap;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortsSplitPriceMap createPortsSplitPriceMap() {
-		PortsSplitPriceMapImpl portsSplitPriceMap = new PortsSplitPriceMapImpl();
-		return portsSplitPriceMap;
 	}
 
 	/**

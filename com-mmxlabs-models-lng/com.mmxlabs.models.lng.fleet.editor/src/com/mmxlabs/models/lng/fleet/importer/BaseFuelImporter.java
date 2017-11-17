@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.fleet.importer;
 
 import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
@@ -15,10 +14,8 @@ import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -33,7 +30,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  * 
  */
 public class BaseFuelImporter extends DefaultClassImporter {
-	private static String indexKey = "index";
+	private static String indexKey = "expression";
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
@@ -44,7 +41,6 @@ public class BaseFuelImporter extends DefaultClassImporter {
 
 			final String indexName = row.get(indexKey);
 			assert indexName != null;
-
 			context.doLater(new IDeferment() {
 
 				@Override
@@ -54,20 +50,11 @@ public class BaseFuelImporter extends DefaultClassImporter {
 					if (rootObject instanceof LNGScenarioModel) {
 						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 						final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
-						final BaseFuelIndex index = (BaseFuelIndex) context.getNamedObject(indexName, PricingPackage.Literals.BASE_FUEL_INDEX);
 
-						final EList<BaseFuelCost> baseFuelPrices = costModel.getBaseFuelCosts();
-						for (final BaseFuelCost baseFuelCost : baseFuelPrices) {
-							if (baseFuelCost.getFuel() == fuel) {
-								baseFuelCost.setIndex(index);
-								return;
-							}
-						}
 						final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
 						baseFuelCost.setFuel(fuel);
-						baseFuelCost.setIndex(index);
-
-						baseFuelPrices.add(baseFuelCost);
+						baseFuelCost.setExpression(indexName);
+						costModel.getBaseFuelCosts().add(baseFuelCost);
 					}
 				}
 
@@ -93,10 +80,7 @@ public class BaseFuelImporter extends DefaultClassImporter {
 			final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
 			for (final BaseFuelCost cost : costModel.getBaseFuelCosts()) {
 				if (cost.getFuel() == bf) {
-					final BaseFuelIndex index = cost.getIndex();
-					if (index != null) {
-						result.put("index", index.getName());
-					}
+					result.put(indexKey, cost.getExpression());
 					break;
 				}
 			}

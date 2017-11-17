@@ -303,16 +303,6 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST_ENTRY = 14;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl <em>Ports Price Map</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsPriceMap()
-	 * @generated
-	 */
-	int PORTS_PRICE_MAP = 16;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl <em>Cooldown Price</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -370,7 +360,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsExpressionMap()
 	 * @generated
 	 */
-	int PORTS_EXPRESSION_MAP = 17;
+	int PORTS_EXPRESSION_MAP = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -861,13 +851,13 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST__FUEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_COST__INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int BASE_FUEL_COST__EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel Cost</em>' class.
@@ -1032,97 +1022,6 @@ public interface PricingPackage extends EPackage {
 	int COOLDOWN_PRICE_FEATURE_COUNT = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_PRICE_MAP__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_PRICE_MAP__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_PRICE_MAP__INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Ports Price Map</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_PRICE_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl <em>Ports Split Price Map</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitPriceMap()
-	 * @generated
-	 */
-	int PORTS_SPLIT_PRICE_MAP = 18;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_SPLIT_PRICE_MAP__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_SPLIT_PRICE_MAP__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Index H1</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_SPLIT_PRICE_MAP__INDEX_H1 = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Index H2</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_SPLIT_PRICE_MAP__INDEX_H2 = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Ports Split Price Map</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORTS_SPLIT_PRICE_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl <em>Ports Split Expression Map</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1130,7 +1029,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
 	 * @generated
 	 */
-	int PORTS_SPLIT_EXPRESSION_MAP = 19;
+	int PORTS_SPLIT_EXPRESSION_MAP = 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1185,7 +1084,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariff()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF = 20;
+	int PANAMA_CANAL_TARIFF = 18;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -1222,7 +1121,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariffBand()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF_BAND = 21;
+	int PANAMA_CANAL_TARIFF_BAND = 19;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -1286,7 +1185,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTugBand()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TUG_BAND = 22;
+	int SUEZ_CANAL_TUG_BAND = 20;
 
 	/**
 	 * The feature id for the '<em><b>Tugs</b></em>' attribute.
@@ -1332,7 +1231,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariff()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TARIFF = 23;
+	int SUEZ_CANAL_TARIFF = 21;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -1405,7 +1304,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariffBand()
 	 * @generated
 	 */
-	int SUEZ_CANAL_TARIFF_BAND = 24;
+	int SUEZ_CANAL_TARIFF_BAND = 22;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -1460,7 +1359,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
 	 * @generated
 	 */
-	int UNIT_CONVERSION = 25;
+	int UNIT_CONVERSION = 23;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' attribute.
@@ -1744,15 +1643,15 @@ public interface PricingPackage extends EPackage {
 	EReference getBaseFuelCost_Fuel();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getExpression <em>Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex()
+	 * @return the meta object for the attribute '<em>Expression</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.BaseFuelCost#getExpression()
 	 * @see #getBaseFuelCost()
 	 * @generated
 	 */
-	EReference getBaseFuelCost_Index();
+	EAttribute getBaseFuelCost_Expression();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCost <em>Port Cost</em>}'.
@@ -2000,38 +1899,6 @@ public interface PricingPackage extends EPackage {
 	EReference getCostModel_SuezCanalTariff();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsPriceMap <em>Ports Price Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Ports Price Map</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsPriceMap
-	 * @generated
-	 */
-	EClass getPortsPriceMap();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortsPriceMap#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsPriceMap#getPorts()
-	 * @see #getPortsPriceMap()
-	 * @generated
-	 */
-	EReference getPortsPriceMap_Ports();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortsPriceMap#getIndex <em>Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsPriceMap#getIndex()
-	 * @see #getPortsPriceMap()
-	 * @generated
-	 */
-	EReference getPortsPriceMap_Index();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsExpressionMap <em>Ports Expression Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2062,49 +1929,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPortsExpressionMap_Expression();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap <em>Ports Split Price Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Ports Split Price Map</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap
-	 * @generated
-	 */
-	EClass getPortsSplitPriceMap();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getPorts()
-	 * @see #getPortsSplitPriceMap()
-	 * @generated
-	 */
-	EReference getPortsSplitPriceMap_Ports();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH1 <em>Index H1</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index H1</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH1()
-	 * @see #getPortsSplitPriceMap()
-	 * @generated
-	 */
-	EReference getPortsSplitPriceMap_IndexH1();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH2 <em>Index H2</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index H2</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH2()
-	 * @see #getPortsSplitPriceMap()
-	 * @generated
-	 */
-	EReference getPortsSplitPriceMap_IndexH2();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap <em>Ports Split Expression Map</em>}'.
@@ -2685,12 +2509,12 @@ public interface PricingPackage extends EPackage {
 		EReference BASE_FUEL_COST__FUEL = eINSTANCE.getBaseFuelCost_Fuel();
 
 		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BASE_FUEL_COST__INDEX = eINSTANCE.getBaseFuelCost_Index();
+		EAttribute BASE_FUEL_COST__EXPRESSION = eINSTANCE.getBaseFuelCost_Expression();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -2893,32 +2717,6 @@ public interface PricingPackage extends EPackage {
 		EReference COST_MODEL__SUEZ_CANAL_TARIFF = eINSTANCE.getCostModel_SuezCanalTariff();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl <em>Ports Price Map</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsPriceMap()
-		 * @generated
-		 */
-		EClass PORTS_PRICE_MAP = eINSTANCE.getPortsPriceMap();
-
-		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORTS_PRICE_MAP__PORTS = eINSTANCE.getPortsPriceMap_Ports();
-
-		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORTS_PRICE_MAP__INDEX = eINSTANCE.getPortsPriceMap_Index();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsExpressionMapImpl <em>Ports Expression Map</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2943,40 +2741,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORTS_EXPRESSION_MAP__EXPRESSION = eINSTANCE.getPortsExpressionMap_Expression();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl <em>Ports Split Price Map</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitPriceMap()
-		 * @generated
-		 */
-		EClass PORTS_SPLIT_PRICE_MAP = eINSTANCE.getPortsSplitPriceMap();
-
-		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORTS_SPLIT_PRICE_MAP__PORTS = eINSTANCE.getPortsSplitPriceMap_Ports();
-
-		/**
-		 * The meta object literal for the '<em><b>Index H1</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORTS_SPLIT_PRICE_MAP__INDEX_H1 = eINSTANCE.getPortsSplitPriceMap_IndexH1();
-
-		/**
-		 * The meta object literal for the '<em><b>Index H2</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORTS_SPLIT_PRICE_MAP__INDEX_H2 = eINSTANCE.getPortsSplitPriceMap_IndexH2();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl <em>Ports Split Expression Map</em>}' class.

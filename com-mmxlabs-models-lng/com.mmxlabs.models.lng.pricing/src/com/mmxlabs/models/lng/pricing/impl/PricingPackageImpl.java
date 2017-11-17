@@ -33,9 +33,7 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
-import com.mmxlabs.models.lng.pricing.PortsPriceMap;
 import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
-import com.mmxlabs.models.lng.pricing.PortsSplitPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -171,21 +169,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass portsPriceMapEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass portsExpressionMapEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass portsSplitPriceMapEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -516,8 +500,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBaseFuelCost_Index() {
-		return (EReference)baseFuelCostEClass.getEStructuralFeatures().get(1);
+	public EAttribute getBaseFuelCost_Expression() {
+		return (EAttribute)baseFuelCostEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -732,33 +716,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getPortsPriceMap() {
-		return portsPriceMapEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortsPriceMap_Ports() {
-		return (EReference)portsPriceMapEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortsPriceMap_Index() {
-		return (EReference)portsPriceMapEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getPortsExpressionMap() {
 		return portsExpressionMapEClass;
 	}
@@ -779,42 +736,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EAttribute getPortsExpressionMap_Expression() {
 		return (EAttribute)portsExpressionMapEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getPortsSplitPriceMap() {
-		return portsSplitPriceMapEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortsSplitPriceMap_Ports() {
-		return (EReference)portsSplitPriceMapEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortsSplitPriceMap_IndexH1() {
-		return (EReference)portsSplitPriceMapEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPortsSplitPriceMap_IndexH2() {
-		return (EReference)portsSplitPriceMapEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1191,7 +1112,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		baseFuelCostEClass = createEClass(BASE_FUEL_COST);
 		createEReference(baseFuelCostEClass, BASE_FUEL_COST__FUEL);
-		createEReference(baseFuelCostEClass, BASE_FUEL_COST__INDEX);
+		createEAttribute(baseFuelCostEClass, BASE_FUEL_COST__EXPRESSION);
 
 		portCostEClass = createEClass(PORT_COST);
 		createEReference(portCostEClass, PORT_COST__PORTS);
@@ -1205,18 +1126,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		cooldownPriceEClass = createEClass(COOLDOWN_PRICE);
 		createEAttribute(cooldownPriceEClass, COOLDOWN_PRICE__LUMPSUM);
 
-		portsPriceMapEClass = createEClass(PORTS_PRICE_MAP);
-		createEReference(portsPriceMapEClass, PORTS_PRICE_MAP__PORTS);
-		createEReference(portsPriceMapEClass, PORTS_PRICE_MAP__INDEX);
-
 		portsExpressionMapEClass = createEClass(PORTS_EXPRESSION_MAP);
 		createEReference(portsExpressionMapEClass, PORTS_EXPRESSION_MAP__PORTS);
 		createEAttribute(portsExpressionMapEClass, PORTS_EXPRESSION_MAP__EXPRESSION);
-
-		portsSplitPriceMapEClass = createEClass(PORTS_SPLIT_PRICE_MAP);
-		createEReference(portsSplitPriceMapEClass, PORTS_SPLIT_PRICE_MAP__PORTS);
-		createEReference(portsSplitPriceMapEClass, PORTS_SPLIT_PRICE_MAP__INDEX_H1);
-		createEReference(portsSplitPriceMapEClass, PORTS_SPLIT_PRICE_MAP__INDEX_H2);
 
 		portsSplitExpressionMapEClass = createEClass(PORTS_SPLIT_EXPRESSION_MAP);
 		createEReference(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__PORTS);
@@ -1331,9 +1243,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownPriceEClass.getESuperTypes().add(this.getPortsExpressionMap());
-		portsPriceMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portsExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		portsSplitPriceMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portsSplitExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
@@ -1413,7 +1323,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		initEClass(baseFuelCostEClass, BaseFuelCost.class, "BaseFuelCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseFuelCost_Fuel(), theFleetPackage.getBaseFuel(), null, "fuel", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBaseFuelCost_Index(), this.getBaseFuelIndex(), null, "index", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseFuelCost_Expression(), ecorePackage.getEString(), "expression", null, 0, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portCostEClass, PortCost.class, "PortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -1434,27 +1344,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(cooldownPriceEClass, CooldownPrice.class, "CooldownPrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCooldownPrice_Lumpsum(), ecorePackage.getEBoolean(), "lumpsum", null, 0, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(portsPriceMapEClass, PortsPriceMap.class, "PortsPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(theTypesPackage.getAPortSet());
-		g2 = createEGenericType(thePortPackage.getPort());
-		g1.getETypeArguments().add(g2);
-		initEReference(getPortsPriceMap_Ports(), g1, null, "ports", null, 1, -1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortsPriceMap_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(portsExpressionMapEClass, PortsExpressionMap.class, "PortsExpressionMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getPortsExpressionMap_Ports(), g1, null, "ports", null, 1, -1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortsExpressionMap_Expression(), ecorePackage.getEString(), "expression", null, 1, 1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(portsSplitPriceMapEClass, PortsSplitPriceMap.class, "PortsSplitPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(theTypesPackage.getAPortSet());
-		g2 = createEGenericType(thePortPackage.getPort());
-		g1.getETypeArguments().add(g2);
-		initEReference(getPortsSplitPriceMap_Ports(), g1, null, "ports", null, 1, -1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortsSplitPriceMap_IndexH1(), this.getCommodityIndex(), null, "indexH1", null, 1, 1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortsSplitPriceMap_IndexH2(), this.getCommodityIndex(), null, "indexH2", null, 1, 1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portsSplitExpressionMapEClass, PortsSplitExpressionMap.class, "PortsSplitExpressionMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -1684,6 +1579,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	protected void createExpressionTypeAnnotations() {
 		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		addAnnotation
+		  (getBaseFuelCost_Expression(), 
+		   source, 
+		   new String[] {
+			 "type", "basefuel"
+		   });	
 		addAnnotation
 		  (getSuezCanalTariff_SdrToUSD(), 
 		   source, 

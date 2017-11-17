@@ -24,9 +24,7 @@ import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
-import com.mmxlabs.models.lng.pricing.PortsPriceMap;
 import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
-import com.mmxlabs.models.lng.pricing.PortsSplitPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -155,16 +153,8 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createCooldownPriceAdapter();
 			}
 			@Override
-			public Adapter casePortsPriceMap(PortsPriceMap object) {
-				return createPortsPriceMapAdapter();
-			}
-			@Override
 			public Adapter casePortsExpressionMap(PortsExpressionMap object) {
 				return createPortsExpressionMapAdapter();
-			}
-			@Override
-			public Adapter casePortsSplitPriceMap(PortsSplitPriceMap object) {
-				return createPortsSplitPriceMapAdapter();
 			}
 			@Override
 			public Adapter casePortsSplitExpressionMap(PortsSplitExpressionMap object) {
@@ -451,20 +441,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortsPriceMap <em>Ports Price Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.PortsPriceMap
-	 * @generated
-	 */
-	public Adapter createPortsPriceMapAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortsExpressionMap <em>Ports Expression Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -475,20 +451,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortsExpressionMapAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap <em>Ports Split Price Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap
-	 * @generated
-	 */
-	public Adapter createPortsSplitPriceMapAdapter() {
 		return null;
 	}
 

@@ -67,7 +67,6 @@ public class ProvisionalCargoComponentHelper extends BaseComponentHelper {
 		add_buyEditor(detailComposite, topClass);
 		add_sellEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
-		add_portfolioModelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the buy feature on ProvisionalCargo
@@ -92,14 +91,5 @@ public class ProvisionalCargoComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.PROVISIONAL_CARGO__VESSEL));
-	}
-
-	/**
-	 * Create the editor for the portfolioModel feature on ProvisionalCargo
-	 *
-	 * @generated
-	 */
-	protected void add_portfolioModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL));
 	}
 }

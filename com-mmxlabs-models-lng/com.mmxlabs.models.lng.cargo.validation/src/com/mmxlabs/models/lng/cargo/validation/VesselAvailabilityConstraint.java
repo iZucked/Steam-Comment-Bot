@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +38,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -139,28 +139,46 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 			if (earliestDate != null && vessel != null) {
-				{
-					final BaseFuel baseFuel = vessel.getVesselOrDelegateBaseFuel();
-					if (baseFuel != null) {
-						final MMXRootObject rootObject = extraContext.getRootObject();
-						if (rootObject instanceof LNGScenarioModel) {
-							final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 
-							final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
-							for (final BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
-								if (baseFuelCost.getFuel() == baseFuel) {
-									final BaseFuelIndex index = baseFuelCost.getIndex();
-									@Nullable
-									final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-									if (date == null || date.isAfter(earliestDate)) {
+				final Set<BaseFuel> fuels = new LinkedHashSet<>();
 
-										statuses.add(baseFactory.copyName() //
-												.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
-												.withMessage(String.format("There is no base fuel pricing data before %s %04d for curve %s",
-														date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())) //
-												.make(ctx));
+				fuels.add(vessel.getVesselOrDelegateBaseFuel());
+				fuels.add(vessel.getVesselOrDelegateIdleBaseFuel());
+				fuels.add(vessel.getVesselOrDelegateInPortBaseFuel());
+				fuels.add(vessel.getVesselOrDelegatePilotLightBaseFuel());
+				fuels.remove(null);
+
+				final MMXRootObject rootObject = extraContext.getRootObject();
+				if (rootObject instanceof LNGScenarioModel) {
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+
+					final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
+
+					for (final BaseFuel baseFuel : fuels) {
+						for (final BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
+							if (baseFuelCost.getFuel() == baseFuel) {
+
+								final YearMonth key = earliestDate;
+								final String priceExpression = baseFuelCost.getExpression();
+
+								if (priceExpression != null && !priceExpression.trim().isEmpty()) {
+									for (final NamedIndexContainer<?> index : PriceExpressionUtils.getLinkedCurves(priceExpression)) {
+										final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+										if (date == null) {
+											statuses.add(baseFactory.copyName() //
+													.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+													.withMessage(String.format("There is no base fuel cost pricing data for curve %s", date.getYear(), index.getName())) //
+													.make(ctx));
+										} else if (date.isAfter(key)) {
+											statuses.add(baseFactory.copyName() //
+													.withObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
+													.withMessage(String.format("There is no base fuel cost pricing data before %s %04d for curve %s",
+															date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())) //
+													.make(ctx));
+										}
 									}
 								}
+
 							}
 						}
 					}
@@ -175,13 +193,13 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
-			BallastBonusContract vaBallastBonusContract = va.getBallastBonusContract();
-			CharterContract charterContract = va.getCharterContract();
+			final BallastBonusContract vaBallastBonusContract = va.getBallastBonusContract();
+			final CharterContract charterContract = va.getCharterContract();
 			BallastBonusContract charterBallastBonusContract = null;
 			if (charterContract != null && charterContract instanceof BallastBonusCharterContract) {
 				charterBallastBonusContract = ((BallastBonusCharterContract) charterContract).getBallastBonusContract();
 			}
-			BallastBonusContract ballastBonusContract = vaBallastBonusContract != null ? vaBallastBonusContract : charterBallastBonusContract;
+			final BallastBonusContract ballastBonusContract = vaBallastBonusContract != null ? vaBallastBonusContract : charterBallastBonusContract;
 			if (ballastBonusContract != null) {
 				if (ballastBonusContract instanceof RuleBasedBallastBonusContract) {
 					ruleBasedballastBonusValidation(ctx, extraContext, baseFactory, failures, va, (RuleBasedBallastBonusContract) ballastBonusContract);

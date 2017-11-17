@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -130,7 +131,7 @@ public class Exposures {
 							d.setVolumeInNativeUnits(0.0);
 						}
 					}
-					
+
 					cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
 				}
 			}
@@ -409,7 +410,7 @@ public class Exposures {
 				}
 
 				for (final ExposureDetail detail : slotAllocation.getExposures()) {
-					if (detail.getIndex() == index) {
+					if (Objects.equals(detail.getIndexName(), index.getName())) {
 						switch (mode) {
 						case VOLUME_MMBTU:
 							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
@@ -444,7 +445,7 @@ public class Exposures {
 			for (final ExposureRecord record : exposureRecords.records) {
 				final ExposureDetail exposureDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
 
-				exposureDetail.setIndex(record.index);
+				exposureDetail.setIndexName(record.index.getName());
 				exposureDetail.setCurrencyUnit(record.index.getCurrencyUnit());
 				exposureDetail.setVolumeUnit(record.index.getVolumeUnit());
 

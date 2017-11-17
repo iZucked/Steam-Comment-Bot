@@ -433,29 +433,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortsPriceMap} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PortsPriceMapItemProvider portsPriceMapItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortsPriceMap}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPortsPriceMapAdapter() {
-		if (portsPriceMapItemProvider == null) {
-			portsPriceMapItemProvider = new PortsPriceMapItemProvider(this);
-		}
-
-		return portsPriceMapItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortsExpressionMap} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -476,29 +453,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return portsExpressionMapItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PortsSplitPriceMapItemProvider portsSplitPriceMapItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPortsSplitPriceMapAdapter() {
-		if (portsSplitPriceMapItemProvider == null) {
-			portsSplitPriceMapItemProvider = new PortsSplitPriceMapItemProvider(this);
-		}
-
-		return portsSplitPriceMapItemProvider;
 	}
 
 	/**
@@ -803,9 +757,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
-		if (portsPriceMapItemProvider != null) portsPriceMapItemProvider.dispose();
 		if (portsExpressionMapItemProvider != null) portsExpressionMapItemProvider.dispose();
-		if (portsSplitPriceMapItemProvider != null) portsSplitPriceMapItemProvider.dispose();
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();
 		if (panamaCanalTariffItemProvider != null) panamaCanalTariffItemProvider.dispose();
 		if (panamaCanalTariffBandItemProvider != null) panamaCanalTariffBandItemProvider.dispose();

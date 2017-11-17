@@ -1889,8 +1889,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getExposureDetail_Index() {
-		return (EReference)exposureDetailEClass.getEStructuralFeatures().get(0);
+	public EAttribute getExposureDetail_IndexName() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -2450,7 +2450,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(portVisitLatenessEClass, PORT_VISIT_LATENESS__LATENESS_IN_HOURS);
 
 		exposureDetailEClass = createEClass(EXPOSURE_DETAIL);
-		createEReference(exposureDetailEClass, EXPOSURE_DETAIL__INDEX);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__INDEX_NAME);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__DATE);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);
@@ -2532,7 +2532,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
-		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 
 		// Create type parameters
 		addETypeParameter(iterableEDataType, "T");
@@ -2793,7 +2792,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getPortVisitLateness_LatenessInHours(), ecorePackage.getEInt(), "latenessInHours", null, 0, 1, PortVisitLateness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(exposureDetailEClass, ExposureDetail.class, "ExposureDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getExposureDetail_Index(), thePricingPackage.getCommodityIndex(), null, "index", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_IndexName(), ecorePackage.getEString(), "indexName", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_Date(), theDateTimePackage.getYearMonth(), "date", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_VolumeInMMBTU(), ecorePackage.getEDouble(), "volumeInMMBTU", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_VolumeInNativeUnits(), ecorePackage.getEDouble(), "volumeInNativeUnits", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

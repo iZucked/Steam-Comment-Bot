@@ -67,7 +67,7 @@ public class ExposureDetailComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_indexEditor(detailComposite, topClass);
+		add_indexNameEditor(detailComposite, topClass);
 		add_dateEditor(detailComposite, topClass);
 		add_volumeInMMBTUEditor(detailComposite, topClass);
 		add_volumeInNativeUnitsEditor(detailComposite, topClass);
@@ -77,13 +77,14 @@ public class ExposureDetailComponentHelper extends BaseComponentHelper {
 		add_currencyUnitEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the index feature on ExposureDetail
+	 * Create the editor for the indexName feature on ExposureDetail
 	 *
 	 * @generated
 	 */
-	protected void add_indexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX));
+	protected void add_indexNameEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME));
 	}
+
 	/**
 	 * Create the editor for the date feature on ExposureDetail
 	 *

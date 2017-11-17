@@ -294,6 +294,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latenessInHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExposureDetail">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CommodityIndex"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="indexName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeInMMBTU" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

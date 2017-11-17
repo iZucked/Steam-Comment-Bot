@@ -159,15 +159,6 @@ public interface PricingFactory extends EFactory {
 	CooldownPrice createCooldownPrice();
 
 	/**
-	 * Returns a new object of class '<em>Ports Price Map</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Ports Price Map</em>'.
-	 * @generated
-	 */
-	PortsPriceMap createPortsPriceMap();
-
-	/**
 	 * Returns a new object of class '<em>Ports Expression Map</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -175,15 +166,6 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	PortsExpressionMap createPortsExpressionMap();
-
-	/**
-	 * Returns a new object of class '<em>Ports Split Price Map</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Ports Split Price Map</em>'.
-	 * @generated
-	 */
-	PortsSplitPriceMap createPortsSplitPriceMap();
 
 	/**
 	 * Returns a new object of class '<em>Ports Split Expression Map</em>'.

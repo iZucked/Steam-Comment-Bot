@@ -20,7 +20,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getBuy <em>Buy</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getSell <em>Sell</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel <em>Vessel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getProvisionalCargo()
@@ -105,32 +104,6 @@ public interface ProvisionalCargo extends MMXObject {
 	 * @generated
 	 */
 	void setVessel(Vessel value);
-
-	/**
-	 * Returns the value of the '<em><b>Portfolio Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Portfolio Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Portfolio Model</em>' containment reference.
-	 * @see #setPortfolioModel(EObject)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getProvisionalCargo_PortfolioModel()
-	 * @model containment="true" transient="true"
-	 * @generated
-	 */
-	EObject getPortfolioModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Portfolio Model</em>' containment reference.
-	 * @see #getPortfolioModel()
-	 * @generated
-	 */
-	void setPortfolioModel(EObject value);
 
 } // end of  ProvisionalCargo
 

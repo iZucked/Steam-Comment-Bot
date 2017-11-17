@@ -4380,13 +4380,13 @@ public interface SchedulePackage extends EPackage {
 	int EXPOSURE_DETAIL = 32;
 
 	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * The feature id for the '<em><b>Index Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPOSURE_DETAIL__INDEX = 0;
+	int EXPOSURE_DETAIL__INDEX_NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6871,15 +6871,15 @@ public interface SchedulePackage extends EPackage {
 	EClass getExposureDetail();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndex <em>Index</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndexName <em>Index Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getIndex()
+	 * @return the meta object for the attribute '<em>Index Name</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getIndexName()
 	 * @see #getExposureDetail()
 	 * @generated
 	 */
-	EReference getExposureDetail_Index();
+	EAttribute getExposureDetail_IndexName();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDate <em>Date</em>}'.
@@ -8616,12 +8616,12 @@ public interface SchedulePackage extends EPackage {
 		EClass EXPOSURE_DETAIL = eINSTANCE.getExposureDetail();
 
 		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Index Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXPOSURE_DETAIL__INDEX = eINSTANCE.getExposureDetail_Index();
+		EAttribute EXPOSURE_DETAIL__INDEX_NAME = eINSTANCE.getExposureDetail_IndexName();
 
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.

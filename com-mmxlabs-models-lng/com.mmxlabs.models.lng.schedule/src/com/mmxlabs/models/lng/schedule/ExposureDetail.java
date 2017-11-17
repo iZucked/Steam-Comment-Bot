@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndexName <em>Index Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeInMMBTU <em>Volume In MMBTU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeInNativeUnits <em>Volume In Native Units</em>}</li>
@@ -37,30 +37,30 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ExposureDetail extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Index</b></em>' reference.
+	 * Returns the value of the '<em><b>Index Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Index</em>' reference isn't clear,
+	 * If the meaning of the '<em>Index Name</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Index</em>' reference.
-	 * @see #setIndex(CommodityIndex)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getExposureDetail_Index()
+	 * @return the value of the '<em>Index Name</em>' attribute.
+	 * @see #setIndexName(String)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getExposureDetail_IndexName()
 	 * @model
 	 * @generated
 	 */
-	CommodityIndex getIndex();
+	String getIndexName();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndex <em>Index</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndexName <em>Index Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Index</em>' reference.
-	 * @see #getIndex()
+	 * @param value the new value of the '<em>Index Name</em>' attribute.
+	 * @see #getIndexName()
 	 * @generated
 	 */
-	void setIndex(CommodityIndex value);
+	void setIndexName(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Date</b></em>' attribute.

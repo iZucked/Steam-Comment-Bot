@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
@@ -63,10 +62,17 @@ public class CostModelBuilder {
 		};
 	}
 
-	public @NonNull BaseFuelCost createBaseFuelCost(@NonNull final BaseFuel baseFuel, @NonNull final BaseFuelIndex baseFuelIndex) {
+	public @NonNull BaseFuelCost createOrUpdateBaseFuelCost(@NonNull final BaseFuel baseFuel, @NonNull final String baseFuelExpression) {
+
+		for (BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
+			if (baseFuelCost.getFuel() == baseFuel) {
+				baseFuelCost.setExpression(baseFuelExpression);
+				return baseFuelCost;
+			}
+		}
 
 		final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
-		baseFuelCost.setIndex(baseFuelIndex);
+		baseFuelCost.setExpression(baseFuelExpression);
 		baseFuelCost.setFuel(baseFuel);
 
 		costModel.getBaseFuelCosts().add(baseFuelCost);

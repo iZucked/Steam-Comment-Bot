@@ -88,7 +88,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="costLines" upperBound="-1"
         eType="#//UnitCostLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowedRouteOptions" upperBound="-1"
-        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+        eType="ecore:EDataType ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="revenueShare" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -235,6 +235,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sell" eType="#//SellOpportunity"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portfolioModel" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        transient="true" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyOption" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellOption" abstract="true" interface="true"/>

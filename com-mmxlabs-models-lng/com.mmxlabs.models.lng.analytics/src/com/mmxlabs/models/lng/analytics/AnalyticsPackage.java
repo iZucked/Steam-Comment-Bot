@@ -1077,22 +1077,13 @@ public interface AnalyticsPackage extends EPackage {
 	int PROVISIONAL_CARGO__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Portfolio Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__PORTFOLIO_MODEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Provisional Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROVISIONAL_CARGO_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int PROVISIONAL_CARGO_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.
@@ -3470,17 +3461,6 @@ s	 * <!-- end-user-doc -->
 	EReference getProvisionalCargo_Vessel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Portfolio Model</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel()
-	 * @see #getProvisionalCargo()
-	 * @generated
-	 */
-	EReference getProvisionalCargo_PortfolioModel();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5460,14 +5440,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PROVISIONAL_CARGO__VESSEL = eINSTANCE.getProvisionalCargo_Vessel();
-
-		/**
-		 * The meta object literal for the '<em><b>Portfolio Model</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROVISIONAL_CARGO__PORTFOLIO_MODEL = eINSTANCE.getProvisionalCargo_PortfolioModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}' class.

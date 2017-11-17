@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.provider;
 
 
+import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
@@ -46,7 +49,7 @@ public class BaseFuelCostItemProvider
 			super.getPropertyDescriptors(object);
 
 			addFuelPropertyDescriptor(object);
-			addIndexPropertyDescriptor(object);
+			addExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -74,23 +77,23 @@ public class BaseFuelCostItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Index feature.
+	 * This adds a property descriptor for the Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIndexPropertyDescriptor(Object object) {
+	protected void addExpressionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_BaseFuelCost_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuelCost_index_feature", "_UI_BaseFuelCost_type"),
-				 PricingPackage.Literals.BASE_FUEL_COST__INDEX,
+				 getString("_UI_BaseFuelCost_expression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuelCost_expression_feature", "_UI_BaseFuelCost_type"),
+				 PricingPackage.Literals.BASE_FUEL_COST__EXPRESSION,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -114,7 +117,10 @@ public class BaseFuelCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_BaseFuelCost_type");
+		String label = ((BaseFuelCost)object).getExpression();
+		return label == null || label.length() == 0 ?
+			getString("_UI_BaseFuelCost_type") :
+			getString("_UI_BaseFuelCost_type") + " " + label;
 	}
 
 	/**
@@ -127,6 +133,12 @@ public class BaseFuelCostItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(BaseFuelCost.class)) {
+			case PricingPackage.BASE_FUEL_COST__EXPRESSION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

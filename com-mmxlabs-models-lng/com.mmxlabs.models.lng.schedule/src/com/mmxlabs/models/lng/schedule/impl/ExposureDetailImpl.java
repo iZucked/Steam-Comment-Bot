@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getIndexName <em>Index Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getVolumeInMMBTU <em>Volume In MMBTU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getVolumeInNativeUnits <em>Volume In Native Units</em>}</li>
@@ -43,14 +43,24 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * The default value of the '{@link #getIndexName() <em>Index Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIndex()
+	 * @see #getIndexName()
 	 * @generated
 	 * @ordered
 	 */
-	protected CommodityIndex index;
+	protected static final String INDEX_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getIndexName() <em>Index Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndexName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String indexName = INDEX_NAME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
@@ -216,16 +226,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommodityIndex getIndex() {
-		if (index != null && index.eIsProxy()) {
-			InternalEObject oldIndex = (InternalEObject)index;
-			index = (CommodityIndex)eResolveProxy(oldIndex);
-			if (index != oldIndex) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.EXPOSURE_DETAIL__INDEX, oldIndex, index));
-			}
-		}
-		return index;
+	public String getIndexName() {
+		return indexName;
 	}
 
 	/**
@@ -233,20 +235,11 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommodityIndex basicGetIndex() {
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setIndex(CommodityIndex newIndex) {
-		CommodityIndex oldIndex = index;
-		index = newIndex;
+	public void setIndexName(String newIndexName) {
+		String oldIndexName = indexName;
+		indexName = newIndexName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EXPOSURE_DETAIL__INDEX, oldIndex, index));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME, oldIndexName, indexName));
 	}
 
 	/**
@@ -404,9 +397,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.EXPOSURE_DETAIL__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
+			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
+				return getIndexName();
 			case SchedulePackage.EXPOSURE_DETAIL__DATE:
 				return getDate();
 			case SchedulePackage.EXPOSURE_DETAIL__VOLUME_IN_MMBTU:
@@ -433,8 +425,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.EXPOSURE_DETAIL__INDEX:
-				setIndex((CommodityIndex)newValue);
+			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
+				setIndexName((String)newValue);
 				return;
 			case SchedulePackage.EXPOSURE_DETAIL__DATE:
 				setDate((YearMonth)newValue);
@@ -469,8 +461,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.EXPOSURE_DETAIL__INDEX:
-				setIndex((CommodityIndex)null);
+			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
+				setIndexName(INDEX_NAME_EDEFAULT);
 				return;
 			case SchedulePackage.EXPOSURE_DETAIL__DATE:
 				setDate(DATE_EDEFAULT);
@@ -505,8 +497,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.EXPOSURE_DETAIL__INDEX:
-				return index != null;
+			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
+				return INDEX_NAME_EDEFAULT == null ? indexName != null : !INDEX_NAME_EDEFAULT.equals(indexName);
 			case SchedulePackage.EXPOSURE_DETAIL__DATE:
 				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
 			case SchedulePackage.EXPOSURE_DETAIL__VOLUME_IN_MMBTU:
@@ -535,7 +527,9 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (date: ");
+		result.append(" (indexName: ");
+		result.append(indexName);
+		result.append(", date: ");
 		result.append(date);
 		result.append(", volumeInMMBTU: ");
 		result.append(volumeInMMBTU);

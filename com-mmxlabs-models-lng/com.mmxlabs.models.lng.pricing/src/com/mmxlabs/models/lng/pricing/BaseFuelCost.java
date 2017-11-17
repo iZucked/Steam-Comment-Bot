@@ -16,7 +16,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getFuel <em>Fuel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getExpression <em>Expression</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost()
@@ -51,30 +51,30 @@ public interface BaseFuelCost extends MMXObject {
 	void setFuel(BaseFuel value);
 
 	/**
-	 * Returns the value of the '<em><b>Index</b></em>' reference.
+	 * Returns the value of the '<em><b>Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Index</em>' reference isn't clear,
+	 * If the meaning of the '<em>Expression</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Index</em>' reference.
-	 * @see #setIndex(BaseFuelIndex)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost_Index()
-	 * @model required="true"
+	 * @return the value of the '<em>Expression</em>' attribute.
+	 * @see #setExpression(String)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost_Expression()
+	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='basefuel'"
 	 * @generated
 	 */
-	BaseFuelIndex getIndex();
+	String getExpression();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getExpression <em>Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Index</em>' reference.
-	 * @see #getIndex()
+	 * @param value the new value of the '<em>Expression</em>' attribute.
+	 * @see #getExpression()
 	 * @generated
 	 */
-	void setIndex(BaseFuelIndex value);
+	void setExpression(String value);
 
 } // end of  BaseFuelCost
 

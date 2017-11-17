@@ -67,7 +67,7 @@ public class ExposureDetailItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIndexPropertyDescriptor(object);
+			addIndexNamePropertyDescriptor(object);
 			addDatePropertyDescriptor(object);
 			addVolumeInMMBTUPropertyDescriptor(object);
 			addVolumeInNativeUnitsPropertyDescriptor(object);
@@ -80,23 +80,23 @@ public class ExposureDetailItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Index feature.
+	 * This adds a property descriptor for the Index Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIndexPropertyDescriptor(Object object) {
+	protected void addIndexNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ExposureDetail_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ExposureDetail_index_feature", "_UI_ExposureDetail_type"),
-				 SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX,
+				 getString("_UI_ExposureDetail_indexName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExposureDetail_indexName_feature", "_UI_ExposureDetail_type"),
+				 SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -274,8 +274,7 @@ public class ExposureDetailItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		YearMonth labelValue = ((ExposureDetail)object).getDate();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((ExposureDetail)object).getIndexName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ExposureDetail_type") :
 			getString("_UI_ExposureDetail_type") + " " + label;
@@ -294,6 +293,7 @@ public class ExposureDetailItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ExposureDetail.class)) {
+			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
 			case SchedulePackage.EXPOSURE_DETAIL__DATE:
 			case SchedulePackage.EXPOSURE_DETAIL__VOLUME_IN_MMBTU:
 			case SchedulePackage.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS:
