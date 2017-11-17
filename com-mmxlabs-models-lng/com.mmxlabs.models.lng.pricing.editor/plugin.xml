@@ -39,6 +39,12 @@
           id="com.mmxlabs.models.lng.cargo.editor.CharterIndexCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.CurrencyIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CurrencyIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>    
 </extension>
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
