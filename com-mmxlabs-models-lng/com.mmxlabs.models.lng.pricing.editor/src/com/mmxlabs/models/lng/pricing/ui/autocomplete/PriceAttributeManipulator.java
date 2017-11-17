@@ -21,7 +21,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -152,7 +151,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 
 	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		TextCellEditor text = new TextCellEditor(c);
-		this.proposalHelper = AutoCompleteHelper.createTextControlProposalAdapter((Text) text.getControl(), expressionType);
+		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(text.getControl(), expressionType);
 		for (Resource r : editingDomain.getResourceSet().getResources()) {
 			for (EObject o : r.getContents()) {
 				if (o instanceof MMXRootObject) {

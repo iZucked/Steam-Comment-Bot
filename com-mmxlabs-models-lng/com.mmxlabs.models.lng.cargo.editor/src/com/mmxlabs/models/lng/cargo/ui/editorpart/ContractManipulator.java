@@ -12,6 +12,7 @@ import java.util.Objects;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -23,13 +24,19 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
+import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -101,7 +108,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (Objects.equals(getValue(object), value)) {
 			return;
 		}
-		
+
 		if (value instanceof SpotMarket) {
 			runSetCommand(object, (SpotMarket) value);
 			runSetCommand(object, (Contract) null);
@@ -123,6 +130,23 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 	public CellEditor createCellEditor(final Composite c, final Object object) {
 		final ComboBoxViewerCellEditor editor = new ComboBoxViewerCellEditor(c, SWT.FLAT | SWT.BORDER) {
+
+			private IMMXContentProposalProvider proposalHelper;
+
+			@Override
+			protected Control createControl(Composite parent) {
+				Control control = super.createControl(parent);
+				this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, ExpressionAnnotationConstants.TYPE_COMMODITY);
+				for (Resource r : editingDomain.getResourceSet().getResources()) {
+					for (EObject o : r.getContents()) {
+						if (o instanceof MMXRootObject) {
+							this.proposalHelper.setRootObject((MMXRootObject) o);
+						}
+					}
+				}
+				return control;
+			}
+
 			/**
 			 * Override doGetValue to also return the custom string if a valid selection has not been made.
 			 */
