@@ -255,7 +255,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_defaultWindowSizeUnits_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_defaultWindowSizeUnits_feature", "_UI_Port_type"),
+				 getString("_UI_Port_defaultWindowSizeUnits_description"),
 				 PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS,
 				 true,
 				 false,

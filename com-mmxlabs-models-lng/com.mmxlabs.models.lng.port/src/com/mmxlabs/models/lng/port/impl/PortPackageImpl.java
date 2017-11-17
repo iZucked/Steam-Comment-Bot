@@ -874,7 +874,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		  (getPort_DefaultWindowSize(), 
 		   source, 
 		   new String[] {
-			 "unit", "hours",
 			 "formatString", "##,##0"
 		   });	
 		addAnnotation

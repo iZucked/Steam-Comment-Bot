@@ -232,7 +232,7 @@ public interface Port extends APortSet<Port> {
 	 * @see #setDefaultWindowSize(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DefaultWindowSize()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
 	 * @generated
 	 */
 	int getDefaultWindowSize();

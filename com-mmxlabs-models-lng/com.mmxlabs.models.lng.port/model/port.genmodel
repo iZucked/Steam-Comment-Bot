@@ -33,16 +33,19 @@
           ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultStartTime"/>
       <genFeatures createChild="false" propertyDescription="If true, cooldown will be considered at this port; if not, cooldowns will only happen if they cannot be avoided"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/allowCooldown"/>
-      <genFeatures createChild="false" propertyDescription="The typical size (in hours) of a load / discharge time window at this port (can be overridden by the cargo)"
+      <genFeatures createChild="false" propertyDescription="The typical size of a load / discharge time window at this port (can be overridden by the cargo)"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultWindowSize"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultWindowSizeUnits"/>
+      <genFeatures createChild="false" propertyDescription="The units of the time window size"
+          ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultWindowSizeUnits"/>
       <genFeatures createChild="false" propertyDescription="The minimum CV value of a discharge that can be received at this port"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/minCvValue"/>
       <genFeatures createChild="false" propertyDescription="The maximum CV value of a discharge that can be received at this port"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/maxCvValue"/>
       <genOperations ecoreOperation="port.ecore#//Port/getZoneId"/>
+      <genOperations ecoreOperation="port.ecore#//Port/getTempMMXID"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/routeOption"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/northEntrance"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/southEntrance"/>
@@ -51,6 +54,11 @@
       <genFeatures notify="false" createChild="false" propertyDescription="This port group will contain all ports set here, and the contents of all port groups set here."
           propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//PortGroup/contents"/>
     </genClasses>
+    <genClasses ecoreClass="port.ecore#//RouteLine">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/from"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/to"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//RouteLine/distance"/>
+    </genClasses>
     <genClasses ecoreClass="port.ecore#//PortModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/ports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portGroups"/>
@@ -58,34 +66,23 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/specialPortGroups"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portCountryGroups"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/portDataVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/distanceDataVersion"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//CapabilityGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//CapabilityGroup/capability"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Location">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/mmxID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/mmxId"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/timeZone"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/country"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lat"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lon"/>
       <genOperations ecoreOperation="port.ecore#//Location/getZoneId"/>
+      <genOperations ecoreOperation="port.ecore#//Location/getTempMMXID"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortCountryGroup"/>
     <genClasses ecoreClass="port.ecore#//EntryPoint">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//EntryPoint/port"/>
-    </genClasses>
-    <genClasses ecoreClass="port.ecore#//DistanceModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//DistanceModel/matrices"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//DistanceModel/version"/>
-    </genClasses>
-    <genClasses ecoreClass="port.ecore#//DistanceLine">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//DistanceLine/distance"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//DistanceLine/from"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//DistanceLine/to"/>
-    </genClasses>
-    <genClasses ecoreClass="port.ecore#//DistanceMatrix">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//DistanceMatrix/routeOption"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//DistanceMatrix/lines"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

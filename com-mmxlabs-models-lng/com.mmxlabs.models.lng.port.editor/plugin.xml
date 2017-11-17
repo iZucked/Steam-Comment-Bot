@@ -266,5 +266,14 @@
             class="com.mmxlabs.models.lng.port.ui.commands.DistanceVersionCommandWrapper">
       </WrappedCommandExtension>
    </extension>
+   <extension
+         point="com.mmxlabs.models.ui.displaycompositefactories">
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.port.Port"
+            factory="com.mmxlabs.models.lng.port.presentation.composites.PortDetailCompositeFactory"
+            id="com.mmxlabs.models.lng.port.presentation.composites.PortDetailCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+   </extension>
 
 </plugin>
