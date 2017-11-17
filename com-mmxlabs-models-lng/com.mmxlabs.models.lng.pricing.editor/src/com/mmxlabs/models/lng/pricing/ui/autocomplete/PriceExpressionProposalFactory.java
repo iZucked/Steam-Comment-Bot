@@ -21,16 +21,22 @@ public class PriceExpressionProposalFactory implements IContentProposalFactory {
 			final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
 			if (eAnnotation != null) {
 				String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
-				if (ExpressionAnnotationConstants.TYPE_COMMODITY.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.COMMODITY, PriceIndexType.CURRENCY);
-				} else if (ExpressionAnnotationConstants.TYPE_CHARTER.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.CHARTER, PriceIndexType.CURRENCY);
-				} else if (ExpressionAnnotationConstants.TYPE_BASE_FUEL.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.BUNKERS, PriceIndexType.CURRENCY);
-				} else if (ExpressionAnnotationConstants.TYPE_CURRENCY.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.CURRENCY);
-				}
+				return create(value);
 			}
+		}
+		return null;
+	}
+
+	@Override
+	public @Nullable IMMXContentProposalProvider create(@Nullable final String value) {
+		if (ExpressionAnnotationConstants.TYPE_COMMODITY.equals(value)) {
+			return new PriceExpressionProposalProvider(PriceIndexType.COMMODITY, PriceIndexType.CURRENCY);
+		} else if (ExpressionAnnotationConstants.TYPE_CHARTER.equals(value)) {
+			return new PriceExpressionProposalProvider(PriceIndexType.CHARTER, PriceIndexType.CURRENCY);
+		} else if (ExpressionAnnotationConstants.TYPE_BASE_FUEL.equals(value)) {
+			return new PriceExpressionProposalProvider(PriceIndexType.BUNKERS, PriceIndexType.CURRENCY);
+		} else if (ExpressionAnnotationConstants.TYPE_CURRENCY.equals(value)) {
+			return new PriceExpressionProposalProvider(PriceIndexType.CURRENCY);
 		}
 		return null;
 	}
