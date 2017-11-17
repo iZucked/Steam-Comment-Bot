@@ -959,7 +959,7 @@ public class ChangeSetView implements IAdaptable {
 	@Inject
 	@Optional
 	private void handleExpandAll(@UIEventTopic(ChangeSetViewEventConstants.EVENT_EXPAND_ALL) final Object o) {
-		ViewerHelper.runIfViewerValid(viewer, true, v -> v.expandAll());
+		ViewerHelper.runIfViewerValid(viewer, true, AbstractTreeViewer::expandAll);
 	}
 
 	@Inject
@@ -983,7 +983,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
 			showNonStructuralChanges = !showNonStructuralChanges;
-			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+			ViewerHelper.runIfViewerValid(viewer, true, AbstractTreeViewer::expandAll);
 		}
 	}
 
@@ -992,7 +992,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleShotNegativePNLToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NEGATIVE_PNL_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
 			showNegativePNLChanges = !showNegativePNLChanges;
-			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+			ViewerHelper.runIfViewerValid(viewer, true, AbstractTreeViewer::expandAll);
 		}
 	}
 
@@ -1081,12 +1081,12 @@ public class ChangeSetView implements IAdaptable {
 							if (insertionPlanFilter.getExpandedGroups().contains(changeSetTableGroup.getGroupObject())) {
 								helper.addAction(new RunnableAction("Hide related changes", () -> {
 									insertionPlanFilter.getExpandedGroups().remove(changeSetTableGroup.getGroupObject());
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.runIfViewerValid(viewer, true, AbstractTreeViewer::expandAll);
 								}));
 							} else {
 								helper.addAction(new RunnableAction("Show related changes", () -> {
 									insertionPlanFilter.getExpandedGroups().add(changeSetTableGroup.getGroupObject());
-									ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+									ViewerHelper.runIfViewerValid(viewer, true, AbstractTreeViewer::expandAll);
 								}));
 							}
 						}
