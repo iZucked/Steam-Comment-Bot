@@ -129,8 +129,10 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	/**
-	 * Creates a complete backup of the file scenario service data. First we create a local archive as the rest of the application will block to avoid data modification issues. Then we copy to the
-	 * remote location after releasing the lock.
+	 * Creates a complete backup of the file scenario service data. First we create
+	 * a local archive as the rest of the application will block to avoid data
+	 * modification issues. Then we copy to the remote location after releasing the
+	 * lock.
 	 */
 	private void backupWorkspace() throws InterruptedException {
 
@@ -156,7 +158,8 @@ public class FileScenarioService extends AbstractScenarioService {
 			// Get the zip file name
 			final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
 
-			// Use the URI to resolve to the scenario-service directory (or what ever is currently defined in the service properties).
+			// Use the URI to resolve to the scenario-service directory (or what ever is
+			// currently defined in the service properties).
 			final URI resolveURI = resolveURI(targetName);
 			final File localArchive = new File(resolveURI.toFileString());
 
@@ -185,7 +188,8 @@ public class FileScenarioService extends AbstractScenarioService {
 			createArchiveJob.setRule(rule);
 			createArchiveJob.schedule(0);
 
-			// Second job to copy archive to remote mapped location then "secure" delete the archive
+			// Second job to copy archive to remote mapped location then "secure" delete the
+			// archive
 			final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
 			final File destinationLocation = new File(dest);
 			if (destinationLocation.exists() && destinationLocation.isDirectory()) {
@@ -273,14 +277,16 @@ public class FileScenarioService extends AbstractScenarioService {
 						// Get the zip file name
 						final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
 
-						// Use the URI to resolve to the scenario-service directory (or what ever is currently defined in the service properties).
+						// Use the URI to resolve to the scenario-service directory (or what ever is
+						// currently defined in the service properties).
 						final URI resolveURI = resolveURI(targetName);
 						final File localArchive = new File(resolveURI.toFileString());
 
 						new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
 						monitor.worked(10);
 						monitor.subTask("Move archive to destination");
-						// Second job to copy archive to remote mapped location then "secure" delete the archive
+						// Second job to copy archive to remote mapped location then "secure" delete the
+						// archive
 						final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
 						final File destinationLocation = new File(dest);
 						if (destinationLocation.exists() && destinationLocation.isDirectory()) {
@@ -505,14 +511,14 @@ public class FileScenarioService extends AbstractScenarioService {
 		backupLock.acquireUninterruptibly();
 		// Unlock as we do not really need it
 		backupLock.release();
-
-		// HACk
-		while (!PlatformUI.isWorkbenchRunning()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		synchronized (this) {
+			// HACk
+			while (!PlatformUI.isWorkbenchRunning()) {
+				try {
+					this.wait(500);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 
@@ -650,7 +656,8 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	/**
-	 * Simple method to recover any lost scenarios (those which are in the instances/ dir, but not in the scenario service)
+	 * Simple method to recover any lost scenarios (those which are in the
+	 * instances/ dir, but not in the scenario service)
 	 * 
 	 * @param result
 	 */
