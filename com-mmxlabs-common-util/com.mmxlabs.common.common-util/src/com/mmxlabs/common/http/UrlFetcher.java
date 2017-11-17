@@ -16,22 +16,23 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.HttpClients;
 
 public class UrlFetcher {
-	
 
 	/**
 	 * Fetch the content of a URL.
+	 * 
 	 * @param url
 	 * @return
 	 * @throws AuthenticationException
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String fetchUrlContent(String url) throws AuthenticationException, ClientProtocolException, IOException {
+	public static String fetchUrlContent(final String url) throws AuthenticationException, ClientProtocolException, IOException {
 		return fetchURLContent(url, null, null);
 	}
-	
+
 	/**
 	 * Fetch the content of a URL with basic authentication.
+	 * 
 	 * @param url
 	 * @param username
 	 * @param password
@@ -40,24 +41,25 @@ public class UrlFetcher {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public static String fetchURLContent(String url, String username, String password) throws ClientProtocolException, IOException, AuthenticationException {
-		HttpClient client = HttpClients.createDefault();
-		HttpGet request = new HttpGet(url);
-		
+	public static String fetchURLContent(final String url, final String username, final String password) throws ClientProtocolException, IOException, AuthenticationException {
+		final HttpClient client = HttpClients.createDefault();
+		final HttpGet request = new HttpGet(url);
+
 		if (url != null) {
-			Header auth = new BasicScheme(StandardCharsets.UTF_8).authenticate(new UsernamePasswordCredentials(username, password), request, null);
+			final Header auth = new BasicScheme(StandardCharsets.UTF_8).authenticate(new UsernamePasswordCredentials(username, password), request, null);
 			request.addHeader(auth);
 		}
 
-		HttpResponse response = client.execute(request);
+		final HttpResponse response = client.execute(request);
 
-		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		try (BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
 
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
+			final StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			return result.toString();
 		}
-		return result.toString();
 	}
 }
