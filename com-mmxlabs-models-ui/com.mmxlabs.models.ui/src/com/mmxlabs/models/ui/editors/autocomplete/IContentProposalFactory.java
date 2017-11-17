@@ -11,4 +11,7 @@ public interface IContentProposalFactory {
 
 	@Nullable
 	IMMXContentProposalProvider create(@Nullable EStructuralFeature feature);
+
+	@Nullable
+	IMMXContentProposalProvider create(@Nullable String type);
 }

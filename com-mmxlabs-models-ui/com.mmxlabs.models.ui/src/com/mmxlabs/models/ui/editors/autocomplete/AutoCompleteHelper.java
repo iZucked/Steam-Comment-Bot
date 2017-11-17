@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editors.autocomplete;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.bindings.keys.KeyStroke;
@@ -21,6 +22,14 @@ import org.osgi.framework.ServiceReference;
 public class AutoCompleteHelper {
 
 	public static IMMXContentProposalProvider createTextControlProposalAdapter(final Text text, final EStructuralFeature attribute) {
+		return createTextControlProposalAdapter(text, factory -> factory.create(attribute));
+	}
+
+	public static IMMXContentProposalProvider createTextControlProposalAdapter(final Text text, final String attribute) {
+		return createTextControlProposalAdapter(text, factory -> factory.create(attribute));
+	}
+
+	public static IMMXContentProposalProvider createTextControlProposalAdapter(final Text text, final Function<IContentProposalFactory, IMMXContentProposalProvider> supplier) {
 
 		try {
 			final Bundle bundle = FrameworkUtil.getBundle(AutoCompleteHelper.class);
@@ -30,7 +39,7 @@ public class AutoCompleteHelper {
 			for (final ServiceReference<IContentProposalFactory> ref : serviceReferences) {
 				final IContentProposalFactory factory = bundleContext.getService(ref);
 				if (factory != null) {
-					final IMMXContentProposalProvider proposalProvider = factory.create(attribute);
+					final IMMXContentProposalProvider proposalProvider = supplier.apply(factory);
 					if (proposalProvider != null) {
 						final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(text, new TextContentAdapter(), proposalProvider, getActivationKeystroke(), getAutoactivationChars());
 						proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
