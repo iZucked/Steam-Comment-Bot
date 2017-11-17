@@ -28,7 +28,8 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * A workaround for the horrible effect of autoboxing on collections. Convert a collection of Integers to an array of ints.
+	 * A workaround for the horrible effect of autoboxing on collections. Convert a
+	 * collection of Integers to an array of ints.
 	 * 
 	 * @param integers
 	 * @return
@@ -58,7 +59,8 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * A workaround for the horrible effect of autoboxing on collections. Convert an array of ints to an {@link ArrayList} of {@link Integer}s.
+	 * A workaround for the horrible effect of autoboxing on collections. Convert an
+	 * array of ints to an {@link ArrayList} of {@link Integer}s.
 	 * 
 	 * @param a
 	 * @return
@@ -72,7 +74,8 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * A workaround for the horrible effect of autoboxing on collections. Convert an array of longs to an {@link ArrayList} of {@link Long}s.
+	 * A workaround for the horrible effect of autoboxing on collections. Convert an
+	 * array of longs to an {@link ArrayList} of {@link Long}s.
 	 * 
 	 * @param a
 	 * @return
@@ -87,7 +90,8 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * A workaround for the horrible effect of autoboxing on collections. Convert an array of shorts to an {@link ArrayList} of {@link Short}s.
+	 * A workaround for the horrible effect of autoboxing on collections. Convert an
+	 * array of shorts to an {@link ArrayList} of {@link Short}s.
 	 * 
 	 * @param a
 	 * @return
@@ -139,7 +143,8 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * Create a new {@link HashMap} from the list of elements. This method assumes an even number of elements in the form of { key1, value1, key2, value2,...}
+	 * Create a new {@link HashMap} from the list of elements. This method assumes
+	 * an even number of elements in the form of { key1, value1, key2, value2,...}
 	 * 
 	 * @param <K>
 	 * @param <V>
@@ -176,7 +181,8 @@ public final class CollectionsUtil {
 	}
 
 	/**
-	 * Returns a value from a {@link Map} if the key exists, otherwise return the specified default value.
+	 * Returns a value from a {@link Map} if the key exists, otherwise return the
+	 * specified default value.
 	 * 
 	 * @param <K>
 	 * @param <T>
@@ -218,13 +224,13 @@ public final class CollectionsUtil {
 			return set;
 		}
 	}
-	
-	public static <T> @Nullable T getFirstElement(List<T> list) {
-		return list.size() > 0 ? list.get(0) : null;
+
+	public static <T> @Nullable T getFirstElement(@NonNull List<T> list) {
+		return list.isEmpty() ? null : list.get(0);
 	}
 
-	public static <T> @Nullable T getLastElement(List<T> list) {
-		return list.size() > 0 ? list.get(list.size() - 1) : null;
+	public static <T> @Nullable T getLastElement(@NonNull List<T> list) {
+		return list.isEmpty() ? null : list.get(list.size() - 1);
 	}
 
 }
