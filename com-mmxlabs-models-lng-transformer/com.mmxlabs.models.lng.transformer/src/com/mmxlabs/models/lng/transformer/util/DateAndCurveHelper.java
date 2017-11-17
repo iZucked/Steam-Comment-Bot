@@ -9,6 +9,11 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -25,16 +30,26 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
- * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
- * for creating {@link ICurve}s
+ * Small helper class which is intended to be injected into external
+ * {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with
+ * date and time conversion. This also has some routines for creating
+ * {@link ICurve}s
  * 
  */
 public class DateAndCurveHelper {
@@ -60,7 +75,8 @@ public class DateAndCurveHelper {
 	}
 
 	/**
-	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
+	 * Convert a date into relative hours; returns the number of hours between
+	 * windowStart and earliest.
 	 * 
 	 * @param earliest
 	 * @param windowStart
@@ -114,7 +130,8 @@ public class DateAndCurveHelper {
 
 			if (hours < 0) {
 				if (gotOneEarlyDate) {
-					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
+					// TODO: While we should skip all the early stuff, we need to keep the latest,
+					// this currently however takes the earliest value!
 					// continue;
 				}
 				gotOneEarlyDate = true;
@@ -130,6 +147,34 @@ public class DateAndCurveHelper {
 		}
 
 		return curve;
+	}
+
+	public ICurve generateExpressionCurveWithShift(final String priceExpression, final @NonNull SeriesParser indices, int days) {
+		ICurve nonShiftedCurve = generateExpressionCurve(priceExpression, indices);
+		final ICurve shiftedCurve = new ICurve() {
+			@Override
+			public int getValueAtPoint(final int point) {
+				return nonShiftedCurve.getValueAtPoint(point + days * 24);
+			}
+		};
+		return shiftedCurve;
+	}
+
+	public Map<IPort, ICurve> generateSplitExpressionCurve(final Collection<PortsSplitExpressionMap> entries, int dayOfMonth, @NonNull SeriesParser parser,
+			final @NonNull ModelEntityMap modelEntityMap) {
+
+		Map<IPort, ICurve> splitExpressionMap = new HashMap<>();
+
+		if (entries != null) {
+			for (final PortsSplitExpressionMap entry : entries) {
+				final ICurve curve = createSplitMonthCurve(modelEntityMap, parser, entry.getExpression1(), entry.getExpression2(), dayOfMonth);
+				for (final Port p : SetUtils.getObjects(entry.getPorts())) {
+					assert p != null;
+					splitExpressionMap.put(modelEntityMap.getOptimiserObjectNullChecked(p, IPort.class), curve);
+				}
+			}
+		}
+		return splitExpressionMap;
 	}
 
 	public StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, final SeriesParser indices) {
@@ -177,31 +222,6 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-//	@Nullable
-//	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
-//
-//		if (priceExpression == null || priceExpression.isEmpty()) {
-//			return null;
-//		}
-//
-//		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
-//		final ISeries parsed = expression.evaluate();
-//
-//		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-//		if (parsed.getChangePoints().length == 0) {
-//			curve.setDefaultValue((int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(0).intValue()));
-//		} else {
-//
-//			curve.setDefaultValue(0);
-//			for (final int i : parsed.getChangePoints()) {
-//				Number value = parsed.evaluate(i);
-//				assert value.longValue() == value.intValue();
-//				curve.setValueAfter(i, (int) OptimiserUnitConvertor.convertToInternalFixedCost(value.intValue()));
-//			}
-//		}
-//		return curve;
-//	}
-
 	public int convertTime(@NonNull final YearMonth time) {
 		return convertTime(yearMonthToDateTime(time));
 	}
@@ -227,7 +247,8 @@ public class DateAndCurveHelper {
 	}
 
 	/**
-	 * Returns the minutes that need to be added to a date that has been rounded down elsewhere in the application (e.g. in convertTime())
+	 * Returns the minutes that need to be added to a date that has been rounded
+	 * down elsewhere in the application (e.g. in convertTime())
 	 * 
 	 * @param timeZone
 	 * @return
@@ -267,14 +288,15 @@ public class DateAndCurveHelper {
 	public static ZonedDateTime createDate(final int year, final int month, final int dayOfMonth, final int hourOfDay, final String newTimeZone) {
 		return ZonedDateTime.of(year, month, dayOfMonth, hourOfDay, 0, 0, 0, ZoneId.of(newTimeZone));
 	}
- 
+
 	public static YearMonth createYearMonth(final int year, final int month) {
 		return YearMonth.of(year, month);
 	}
 
 	@NonNull
 	public StepwiseIntegerCurve createDateShiftCurve(int dayOfMonth) {
-		// Create a curve, shifting the current date forwards or backwards depending on whether or not it is on or after the dayOfMonth.
+		// Create a curve, shifting the current date forwards or backwards depending on
+		// whether or not it is on or after the dayOfMonth.
 		final StepwiseIntegerCurve dateShiftCurve = new StepwiseIntegerCurve();
 		{
 			ZonedDateTime currentDate = getEarliestTime();
@@ -287,7 +309,8 @@ public class DateAndCurveHelper {
 			// Ensure midnight
 			currentDate = currentDate.withHour(0);
 
-			// Hmm, not sure how to get to the true latest date - perhaps better as a lazy treemap?
+			// Hmm, not sure how to get to the true latest date - perhaps better as a lazy
+			// treemap?
 			final ZonedDateTime end = getLatestTime();
 			while (currentDate.isBefore(end)) {
 
@@ -304,4 +327,32 @@ public class DateAndCurveHelper {
 		}
 		return dateShiftCurve;
 	}
+
+	public ICurve createSplitMonthCurve(final @NonNull ModelEntityMap modelEntityMap, @NonNull SeriesParser parser, final String expression1, final String expression2, final int dayOfMonth) {
+
+		final ICurve o_curve1 = generateExpressionCurve(expression1, parser);
+		final ICurve o_curve2 = generateExpressionCurve(expression2, parser);
+
+		final ZonedDateTime earliestTime = getEarliestTime();
+		final ZonedDateTime earliestTimeUTC = earliestTime.withZoneSameInstant(ZoneId.of("UTC"));
+
+		final ZonedDateTime latestTime = getLatestTime();
+		final ZonedDateTime latestTimeUTC = latestTime.withZoneSameInstant(ZoneId.of("UTC"));
+
+		LocalDate start = earliestTimeUTC.toLocalDate().withDayOfMonth(1);
+		final LocalDate end = latestTimeUTC.toLocalDate();
+
+		final List<Pair<LocalDate, Integer>> vals = new LinkedList<>();
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		curve.setDefaultValue(0);
+		while (start.isBefore(end)) {
+			int month_1st = convertTime(YearMonth.from(start));
+			curve.setValueAfter(month_1st, o_curve1.getValueAtPoint(month_1st));
+			curve.setValueAfter(convertTime(start.withDayOfMonth(dayOfMonth)), o_curve2.getValueAtPoint(month_1st));
+
+			start = start.plusMonths(1);
+		}
+		return curve;
+	}
+
 }
