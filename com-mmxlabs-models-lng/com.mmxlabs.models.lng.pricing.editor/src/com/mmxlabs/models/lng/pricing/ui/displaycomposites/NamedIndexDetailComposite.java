@@ -24,8 +24,6 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
 public class NamedIndexDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
 
-	private Composite contentComposite;
-
 	public NamedIndexDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
 	}
@@ -74,35 +72,4 @@ public class NamedIndexDetailComposite extends DefaultDetailComposite implements
 			}
 		};
 	}
-
-	// @Override
-	// public void createControls(IDialogEditingContext dialogContext, MMXRootObject root, EObject object, EMFDataBindingContext dbc) {
-	// // TODO Auto-generated method stub
-	// this.object = object;
-	// toolkit.adapt(this);
-	// setDefaultHelpContext(object);
-	// // contentComposite = toolkit.createComposite(this);
-	//
-	// final GridLayout layout = new GridLayout(4, false);
-	// layout.verticalSpacing = 8;
-	// this.setLayout(layout);
-	// for (final IInlineEditor editor : editors) {
-	//
-	// final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
-	// editor.setLabel(label);
-	// final Control control = editor.createControl(this, dbc, toolkit);
-	// dialogContext.registerEditorControl(object, editor.getFeature(), control);
-	//
-	// control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
-	// control.setData(LABEL_CONTROL_KEY, label);
-	// control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-	// if (label != null) {
-	// toolkit.adapt(label, true, false);
-	// label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-	// label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
-	// dialogContext.registerEditorControl(object, editor.getFeature(), label);
-	// }
-	// }
-	// }
-
 }
