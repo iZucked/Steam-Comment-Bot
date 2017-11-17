@@ -149,10 +149,10 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 	private static @NonNull LookupData createLookupData(final PricingModel pricingModel) {
 		final LookupData lookupData = new LookupData();
 
-		pricingModel.getCommodityIndices().forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getCharterIndices().forEach(idx -> lookupData.charterMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getBaseFuelPrices().forEach(idx -> lookupData.baseFuelMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getCurrencyIndices().forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getCommodityIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getCharterIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.charterMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getBaseFuelPrices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.baseFuelMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getCurrencyIndices().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
 
 		return lookupData;
 
