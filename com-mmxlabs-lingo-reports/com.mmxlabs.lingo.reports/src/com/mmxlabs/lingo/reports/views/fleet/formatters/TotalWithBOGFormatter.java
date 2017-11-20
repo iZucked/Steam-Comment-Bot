@@ -25,6 +25,7 @@ public class TotalWithBOGFormatter extends CostFormatter {
 		
 		costFormatters.add(new BaseFuelCostFormatter());
 		costFormatters.add(new HeelCostFormatter(false));
+		costFormatters.add(new CanalCostFormatter());
 		costFormatters.add(new BallastBonusFormatter(false));
 		costFormatters.add(new CharterCostFormatter(false));
 		costFormatters.add(new PortCostFormatter());
