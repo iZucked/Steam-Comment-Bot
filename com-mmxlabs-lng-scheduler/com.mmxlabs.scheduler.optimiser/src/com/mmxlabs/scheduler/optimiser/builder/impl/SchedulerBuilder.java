@@ -835,7 +835,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// put end slot into list of slots to patch up later.
 			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
 			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && !vesselInstanceType.equals(VesselInstanceType.ROUND_TRIP)) {
-				fullyOpenEndDateWindows.add((MutableTimeWindow) end.getTimeWindow());
+				if (end.isMinDurationSet()) {
+					partiallyOpenEndDateWindows.add((MutableTimeWindow) end.getTimeWindow());
+				} else {
+					fullyOpenEndDateWindows.add((MutableTimeWindow) end.getTimeWindow());
+				}
 			}
 		}
 
@@ -1035,7 +1039,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
 						.map(element -> portSlotsProvider.getPortSlot(element)) //
 						.filter(portSlot -> portSlot.getTimeWindow() != null) //
-						.filter(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()  != Integer.MAX_VALUE) //
+						.filter(portSlot -> portSlot.getTimeWindow().getExclusiveEnd() != Integer.MAX_VALUE) //
 						.mapToInt(portSlot -> portSlot.getTimeWindow().getExclusiveEnd()) //
 						.max();
 				final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
