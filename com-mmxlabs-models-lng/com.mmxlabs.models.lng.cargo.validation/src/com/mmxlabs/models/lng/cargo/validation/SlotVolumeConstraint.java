@@ -55,14 +55,14 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private void checkSensibleValues(@NonNull IValidationContext ctx, @NonNull List<IStatus> failures, Slot slot, String name) {
-		if (slot.getMinQuantity() > SENSIBLE_M3 && slot.getVolumeLimitsUnit() == VolumeUnits.M3) {
+		if (slot.getSlotOrContractMinQuantity() > SENSIBLE_M3 && slot.getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3) {
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
 			String.format("Slot|%s min volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getMinQuantity()), IStatus.ERROR));
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
 			failures.add(status);
 		}
-		if (slot.getMaxQuantity() > SENSIBLE_M3 && slot.getVolumeLimitsUnit() == VolumeUnits.M3) {
+		if (slot.getSlotOrContractMaxQuantity() > SENSIBLE_M3 && slot.getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3) {
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
 			String.format("Slot|%s max volume limit (%s) is not sensible, note units are in M3", slot.getName(), slot.getMaxQuantity()), IStatus.ERROR));
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
