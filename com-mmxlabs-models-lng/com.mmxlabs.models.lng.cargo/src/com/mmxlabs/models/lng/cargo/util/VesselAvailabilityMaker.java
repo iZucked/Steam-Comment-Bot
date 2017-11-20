@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
 
 public class VesselAvailabilityMaker {
 	@NonNull
@@ -23,7 +25,7 @@ public class VesselAvailabilityMaker {
 	@NonNull
 	private final VesselAvailability vesselAvailability;
 
-	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull Vessel vessel, @NonNull BaseLegalEntity entity) {
+	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull final Vessel vessel, @NonNull final BaseLegalEntity entity) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		this.vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
@@ -44,6 +46,18 @@ public class VesselAvailabilityMaker {
 			vesselAvailability.getEndAt().add(port);
 		}
 
+		return this;
+	}
+
+	public VesselAvailabilityMaker withEndPorts(APortSet<Port> endPorts) {
+		vesselAvailability.getEndAt().clear();
+		vesselAvailability.getEndAt().add(endPorts);
+		return this;
+	}
+
+	public VesselAvailabilityMaker withEndPorts(Collection<APortSet<Port>> endPorts) {
+		vesselAvailability.getEndAt().clear();
+		vesselAvailability.getEndAt().addAll(endPorts);
 		return this;
 	}
 
@@ -97,7 +111,7 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
-	public VesselAvailabilityMaker withStartHeel(double minVolumeInM3, double maxVolumeInM3, double cvValue, String pricePerMMBTu) {
+	public VesselAvailabilityMaker withStartHeel(final double minVolumeInM3, final double maxVolumeInM3, final double cvValue, final String pricePerMMBTu) {
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -118,7 +132,7 @@ public class VesselAvailabilityMaker {
 
 	}
 
-	public VesselAvailabilityMaker withEndHeel(int minVolumeInM3, int maxVolumeInM3, @NonNull EVesselTankState state, @Nullable String priceExpression) {
+	public VesselAvailabilityMaker withEndHeel(final int minVolumeInM3, final int maxVolumeInM3, @NonNull final EVesselTankState state, @Nullable final String priceExpression) {
 
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();
@@ -150,8 +164,20 @@ public class VesselAvailabilityMaker {
 	}
 
 	@NonNull
-	public VesselAvailabilityMaker withCharterRate(@NonNull String priceExpression) {
+	public VesselAvailabilityMaker withCharterRate(final @NonNull String priceExpression) {
 		vesselAvailability.setTimeCharterRate(priceExpression);
+		return this;
+	}
+
+	@NonNull
+	public VesselAvailabilityMaker withMinDuration(final int durationInDays) {
+		vesselAvailability.setMinDuration(durationInDays);
+		return this;
+	}
+
+	@NonNull
+	public VesselAvailabilityMaker withMaxDuration(final int durationInDays) {
+		vesselAvailability.setMaxDuration(durationInDays);
 		return this;
 	}
 
@@ -162,4 +188,5 @@ public class VesselAvailabilityMaker {
 
 		return vesselAvailability;
 	}
+
 }
