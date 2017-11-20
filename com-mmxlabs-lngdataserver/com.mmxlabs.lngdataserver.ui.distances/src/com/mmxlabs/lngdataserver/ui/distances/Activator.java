@@ -41,10 +41,10 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		while (!ServerUrlProvider.INSTANCE.isAvailable()) {
-			Thread.sleep(5000);
-			System.out.println("waiting for server...");
-		}
+//		while (!ServerUrlProvider.INSTANCE.isAvailable()) {
+//			Thread.sleep(5000);
+//			System.out.println("waiting for server...");
+//		}
 		
 		// TODO: should we move this logic to the front-end?
 		while (!BackEndUrlProvider.INSTANCE.isAvailable()) {

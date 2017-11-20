@@ -21,7 +21,7 @@ public class DistancesUiEndpointExtension implements EndpointExtension {
 	public Handler getHandler() {
 		ResourceHandler resourceHandler= new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
-		resourceHandler.setWelcomeFiles(new String[]{ "index.html" });
+//		resourceHandler.setWelcomeFiles(new String[]{ "index.html" });
 //		resourceHandler.setResourceBase(this.getClass().getResource("/web_files").toString());
 		try {
 			resourceHandler.setResourceBase(Activator.getWebFilesPath());

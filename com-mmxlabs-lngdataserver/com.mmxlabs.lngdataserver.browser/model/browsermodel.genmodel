@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/com.mmxlabs.lngdataserver.browser/src" editDirectory="/com.mmxlabs.lngdataserver.browser.edit/src"
+    editorDirectory="" modelPluginID="com.mmxlabs.lngdataserver.browser" modelName="Browser"
+    modelPluginClass="" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    codeFormatting="true" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" editPluginID="com.mmxlabs.lngdataserver.browser.edit"
+    editorPluginID="com.mmxlabs.lngdataserver.browser.editor" language="" operationReflection="true"
+    importOrganizing="true">
+  <foreignModel>browsermodel.ecore</foreignModel>
+  <genPackages prefix="Browser" basePackage="com.mmxlabs.lngdataserver" disposableProviderFactory="true"
+      ecorePackage="browsermodel.ecore#/">
+    <genClasses ecoreClass="browsermodel.ecore#//RootNode"/>
+  </genPackages>
+</genmodel:GenModel>

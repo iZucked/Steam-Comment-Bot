@@ -39,6 +39,9 @@
          </contentTypeBinding>
       </editor>
    </extension> -->
+   
+   
+   <!-- DISTANCES -->
      <extension
            point="org.eclipse.ui.menus">
          
@@ -51,15 +54,36 @@
                   style="push">
             </command>
          </menuContribution>
-
-
      </extension>
       <extension
             point="org.eclipse.ui.commands">
          <command
                defaultHandler="com.mmxlabs.lngdataserver.lng.importers.distances.ui.ImportDistancesWizardHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.distances"
-               name="Bulk import charter curves from CSV">
+               name="Copy distances to scenario">
+         </command>
+      </extension>
+      
+      <!-- PRICES -->
+	<extension
+           point="org.eclipse.ui.menus">
+         
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=dataStart">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.prices"
+                  label="Import prices"
+                  style="push">
+            </command>
+         </menuContribution>
+     </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.lngdataserver.lng.importers.pricing.ui.ImportPricingWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.prices"
+               name="Copy prices to scenario">
          </command>
       </extension>
 </plugin>

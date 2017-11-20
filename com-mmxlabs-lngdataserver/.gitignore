@@ -1,7 +1,6 @@
 #MongoDB
-com.mmxlabs.lngdataserver.distances.backend/mongo_data/diagnostic.data/
-com.mmxlabs.lngdataserver.distances.backend/mongo_data/mongod.lock
-
+com.mmxlabs.lngdataserver.server/mongo_data/diagnostic.data/
+com.mmxlabs.lngdataserver.server/mongod.lock
 
 *.orig
 *.rej

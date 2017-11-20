@@ -29,7 +29,7 @@ public class DistancesToScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DistancesToScenarioCopier.class);
 
-	public Pair<Command, Map<RouteOption, List<RouteLine>>> getUpdateDistancesCommand(@NonNull final EditingDomain editingDomain, @NonNull final IDistanceProvider distanceProvider,
+	public static Pair<Command, Map<RouteOption, List<RouteLine>>> getUpdateDistancesCommand(@NonNull final EditingDomain editingDomain, @NonNull final IDistanceProvider distanceProvider,
 			@NonNull final PortModel portModel) {
 
 		final CompoundCommand cc = new CompoundCommand();

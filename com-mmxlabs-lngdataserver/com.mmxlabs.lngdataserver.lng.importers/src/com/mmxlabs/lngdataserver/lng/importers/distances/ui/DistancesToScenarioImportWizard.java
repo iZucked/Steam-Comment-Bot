@@ -69,7 +69,6 @@ public class DistancesToScenarioImportWizard extends Wizard implements IImportWi
 
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						DistancesToScenarioCopier copier = new DistancesToScenarioCopier();
 						monitor.beginTask("copy into scenario", updateScenarioCommands.size());
 
 						updateScenarioCommands.forEach(command -> {

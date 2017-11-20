@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension-point id="DataBrowserExtension" name="DataBrowserExtension" schema="schema/DataBrowserExtension.exsd"/>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
+            id="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
+            name="DataBrowser"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>

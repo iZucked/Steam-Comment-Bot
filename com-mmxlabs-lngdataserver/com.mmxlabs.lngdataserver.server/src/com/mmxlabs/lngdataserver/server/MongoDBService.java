@@ -47,12 +47,12 @@ public class MongoDBService {
 
 	// // only needed for embedded mode
 	// @Value("${db.embeddedDataLocation:mongo_data}")
-	 private String embeddedDataLocation;
+	private String embeddedDataLocation;
 	//
 	private static MongodStarter MONGOD_STARTER;
 	private MongodExecutable mongodExecutable;
 	private MongodProcess mongodProcess;
-//	private int randomPort;
+	// private int randomPort;
 
 	public int start() throws IOException, ClassNotFoundException {
 		if (MONGOD_STARTER == null) {
@@ -63,8 +63,16 @@ public class MongoDBService {
 
 				Command command = Command.MongoD;
 
-				IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder().defaults(command).artifactStore(new ExtractedArtifactStoreBuilder().defaults(command)
-						.download(new DownloadConfigBuilder().defaultsForCommand(command).artifactStorePath(artifactStorePath).build()).executableNaming(executableNaming)).build();
+				IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
+						.defaults(command)
+						.artifactStore(new ExtractedArtifactStoreBuilder()
+								.defaults(command)
+						.download(new DownloadConfigBuilder()
+								.defaultsForCommand(command)
+								.artifactStorePath(artifactStorePath)
+								.build())
+						.executableNaming(executableNaming))
+						.build();
 
 				MONGOD_STARTER = MongodStarter.getInstance(runtimeConfig);
 			} else {
@@ -72,22 +80,20 @@ public class MongoDBService {
 			}
 
 		}
-		
+
 		File file = new File(embeddedDataLocation);
 		file.mkdirs();
-//		Net n =  new Net(bindIp, port, ipv6)
+		// Net n = new Net(bindIp, port, ipv6)
 		mongodExecutable = MONGOD_STARTER.prepare(new MongodConfigBuilder().version(Version.Main.PRODUCTION).replication(new Storage(embeddedDataLocation, null, 0))
-				//.net(new Net(host, getPort(), false))
-				//.net(new Net(host, getPort(), false))
+				// .net(new Net(host, getPort(), false))
+				// .net(new Net(host, getPort(), false))
 				.net(new Net("127.0.0.1", Network.getFreeServerPort(), false))
-//				.setParameter("bind_ip","127.0.0.1")
-				
+				// .setParameter("bind_ip","127.0.0.1")
+
 				.cmdOptions(new MongoCmdOptionsBuilder().syncDelay(10).build()).build());
-		
-		
 
 		mongodProcess = mongodExecutable.start();
-		
+
 		int port = mongodProcess.getConfig().net().getPort();
 		System.out.println(port);
 		int ii = 0;
@@ -95,48 +101,48 @@ public class MongoDBService {
 
 		return port;
 	}
-//
-//	public int getPort() throws IOException {
-//		if (randomPort == 0 && portAvailable(providedPort)) {
-//			// try to set the random port to the one provided by the user
-//			// this is slightly dangerous since it could be taken in the meantime
-//			randomPort = providedPort;
-//			return randomPort;
-//		}
-//		if (randomPort == 0) {
-//			try {
-//				randomPort = Network.getFreeServerPort();
-//			} catch (IOException e) {
-//				LOGGER.warn("Error getting free port for embedded mongodb", e);
-//				throw e;
-//			}
-//		}
-//		return randomPort;
-//	}
+	//
+	// public int getPort() throws IOException {
+	// if (randomPort == 0 && portAvailable(providedPort)) {
+	// // try to set the random port to the one provided by the user
+	// // this is slightly dangerous since it could be taken in the meantime
+	// randomPort = providedPort;
+	// return randomPort;
+	// }
+	// if (randomPort == 0) {
+	// try {
+	// randomPort = Network.getFreeServerPort();
+	// } catch (IOException e) {
+	// LOGGER.warn("Error getting free port for embedded mongodb", e);
+	// throw e;
+	// }
+	// }
+	// return randomPort;
+	// }
 
-//	private static boolean portAvailable(int port) {
-//		LOGGER.info("--------------Testing port " + port);
-//		Socket s = null;
-//		try {
-//			s = new Socket("localhost", port);
-//
-//			// If the code makes it this far without an exception it means
-//			// something is using the port and has responded.
-//			LOGGER.info("--------------Port " + port + " is not available");
-//			return false;
-//		} catch (IOException e) {
-//			LOGGER.info("--------------Port " + port + " is available");
-//			return true;
-//		} finally {
-//			if (s != null) {
-//				try {
-//					s.close();
-//				} catch (IOException e) {
-//					throw new RuntimeException("Error closing probing socket", e);
-//				}
-//			}
-//		}
-//	}
+	// private static boolean portAvailable(int port) {
+	// LOGGER.info("--------------Testing port " + port);
+	// Socket s = null;
+	// try {
+	// s = new Socket("localhost", port);
+	//
+	// // If the code makes it this far without an exception it means
+	// // something is using the port and has responded.
+	// LOGGER.info("--------------Port " + port + " is not available");
+	// return false;
+	// } catch (IOException e) {
+	// LOGGER.info("--------------Port " + port + " is available");
+	// return true;
+	// } finally {
+	// if (s != null) {
+	// try {
+	// s.close();
+	// } catch (IOException e) {
+	// throw new RuntimeException("Error closing probing socket", e);
+	// }
+	// }
+	// }
+	// }
 
 	public void stop() {
 		LOGGER.info("shutting down embedded database...");

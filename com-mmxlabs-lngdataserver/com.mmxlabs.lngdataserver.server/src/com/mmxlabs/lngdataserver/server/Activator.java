@@ -50,10 +50,9 @@ public class Activator implements BundleActivator {
 		
 		mongoService = new MongoDBService();
 		mongoService.setEmbeddedBinariesLocation(binariesPath);
-		mongoService.setEmbeddedDataLocation("/Users/roberterdin/tmp/mongo_data");
+//		mongoService.setEmbeddedDataLocation("/Users/roberterdin/tmp/mongo_data");
+		mongoService.setEmbeddedDataLocation(getMongoDataPath());
 		int port = 	mongoService.start();
-		
-		
 		
 		// this is a bit dangerous, should probably let the server choose it's own port with server.port=0
 		int randomPort = randomPort();
@@ -63,7 +62,9 @@ public class Activator implements BundleActivator {
 				"--db.embedded=false",
 				"--db.port=" + port,
 				"--db.diagnosticDataCollectionEnabled=false",
-				"--server.cors=true"
+				"--server.cors=true",
+				"--spring.mvc.async.request-timeout=-1",
+				"--debug"
 				};
 		Thread background = new Thread(new Runnable() {
 			

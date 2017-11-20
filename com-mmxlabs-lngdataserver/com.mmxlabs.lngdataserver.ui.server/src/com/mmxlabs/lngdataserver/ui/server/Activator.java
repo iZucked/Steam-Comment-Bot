@@ -13,11 +13,12 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterables;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -26,6 +27,9 @@ import com.google.inject.TypeLiteral;
 
 
 public class Activator extends Plugin {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(Activator.class);
+	
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.server"; //$NON-NLS-1$
 	// The shared instance
@@ -59,6 +63,7 @@ public class Activator extends Plugin {
 		Injector injector = Guice.createInjector(new ServerExtensionsModule());
 		Iterable<EndpointExtensionPoint> extensions = injector.getInstance(Key.get(new TypeLiteral<Iterable<EndpointExtensionPoint>>() {
 		}));
+		LOG.debug("Found " + Iterables.size(extensions) + " extensions");
 		for (EndpointExtensionPoint ext : extensions) {
 			EndpointExtension pluginInstance = ext.getInstance();
 			if (pluginInstance != null) {

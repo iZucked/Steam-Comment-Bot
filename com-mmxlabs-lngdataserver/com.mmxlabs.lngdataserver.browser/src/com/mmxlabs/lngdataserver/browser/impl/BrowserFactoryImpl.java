@@ -1,0 +1,131 @@
+/**
+ */
+package com.mmxlabs.lngdataserver.browser.impl;
+
+import com.mmxlabs.lngdataserver.browser.*;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+
+import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model <b>Factory</b>.
+ * <!-- end-user-doc -->
+ * @generated
+ */
+public class BrowserFactoryImpl extends EFactoryImpl implements BrowserFactory {
+	/**
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static BrowserFactory init() {
+		try {
+			BrowserFactory theBrowserFactory = (BrowserFactory) EPackage.Registry.INSTANCE.getEFactory(BrowserPackage.eNS_URI);
+			if (theBrowserFactory != null) {
+				return theBrowserFactory;
+			}
+		} catch (Exception exception) {
+			EcorePlugin.INSTANCE.log(exception);
+		}
+		return new BrowserFactoryImpl();
+	}
+
+	/**
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BrowserFactoryImpl() {
+		super();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EObject create(EClass eClass) {
+		switch (eClass.getClassifierID()) {
+		case BrowserPackage.ROOT_NODE:
+			return createRootNode();
+		case BrowserPackage.COMPOSITE_NODE:
+			return createCompositeNode();
+		case BrowserPackage.LEAF:
+			return createLeaf();
+		case BrowserPackage.NODE:
+			return createNode();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RootNode createRootNode() {
+		RootNodeImpl rootNode = new RootNodeImpl();
+		return rootNode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CompositeNode createCompositeNode() {
+		CompositeNodeImpl compositeNode = new CompositeNodeImpl();
+		return compositeNode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Leaf createLeaf() {
+		LeafImpl leaf = new LeafImpl();
+		return leaf;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Node createNode() {
+		NodeImpl node = new NodeImpl();
+		return node;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BrowserPackage getBrowserPackage() {
+		return (BrowserPackage) getEPackage();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @deprecated
+	 * @generated
+	 */
+	@Deprecated
+	public static BrowserPackage getPackage() {
+		return BrowserPackage.eINSTANCE;
+	}
+
+} //BrowserFactoryImpl

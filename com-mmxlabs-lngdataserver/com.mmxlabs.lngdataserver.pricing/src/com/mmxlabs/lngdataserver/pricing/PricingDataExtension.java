@@ -1,0 +1,23 @@
+package com.mmxlabs.lngdataserver.pricing;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.ui.DataExtension;
+import com.mmxlabs.lngdataserver.pricing.internal.Activator;
+
+
+public class PricingDataExtension implements DataExtension {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(PricingDataExtension.class);
+	
+	
+
+	@Override
+	public CompositeNode getDataRoot() {
+		LOGGER.debug("Pricing versions for Data Browser requested");
+		
+		return Activator.getDefault().getPricingDataRoot();
+	}
+}
