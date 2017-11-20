@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
@@ -57,6 +59,10 @@ public class OptimiserInjectorServiceMaker {
 		return this;
 	}
 
+	public ModuleBuilder makeModule() {
+		return new ModuleBuilder(this);
+	}
+
 	public IOptimiserInjectorService make() {
 		return new IOptimiserInjectorService() {
 
@@ -86,7 +92,7 @@ public class OptimiserInjectorServiceMaker {
 				if (moduleOverrideMap.containsKey(moduleType)) {
 
 					final List<Function<Collection<@NonNull String>, Module>> moduleProviders = moduleOverrideMap.get(moduleType);
-					List<@NonNull Module> modules = new LinkedList<>();
+					final List<@NonNull Module> modules = new LinkedList<>();
 					for (final Function<Collection<@NonNull String>, Module> m : moduleProviders) {
 						modules.add(m.apply(hints));
 					}
@@ -95,5 +101,45 @@ public class OptimiserInjectorServiceMaker {
 				return null;
 			}
 		};
+	}
+
+	public static class ModuleBuilder {
+		private final List<Consumer<Binder>> configures = new LinkedList<>();
+		private final OptimiserInjectorServiceMaker maker;
+
+		private ModuleBuilder(final OptimiserInjectorServiceMaker maker) {
+			this.maker = maker;
+		}
+
+		public ModuleBuilder with(final Consumer<Binder> statement) {
+			configures.add(statement);
+
+			return this;
+		}
+
+		public OptimiserInjectorServiceMaker buildOverride(final ModuleType moduleType) {
+			final Module m = new AbstractModule() {
+
+				@Override
+				protected void configure() {
+					configures.forEach(stmt -> stmt.accept(this.binder()));
+				}
+			};
+
+			return maker.withModuleOverride(moduleType, m);
+		}
+
+		public OptimiserInjectorServiceMaker build(final ModuleType moduleType) {
+			final Module m = new AbstractModule() {
+
+				@Override
+				protected void configure() {
+					configures.forEach(stmt -> stmt.accept(this.binder()));
+				}
+			};
+
+			return maker.withModule(moduleType, m);
+		}
+
 	}
 }
