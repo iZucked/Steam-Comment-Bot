@@ -6,9 +6,12 @@ package com.mmxlabs.models.lng.port.util;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 
 public class PortModelFinder {
 	private final @NonNull PortModel portModel;
@@ -40,5 +43,15 @@ public class PortModelFinder {
 			}
 		}
 		throw new IllegalArgumentException("Unknown route");
+	}
+
+	public APortSet<Port> getCapabilityPortsGroup(PortCapability capabilityGroup) {
+		String groupName = "All " + capabilityGroup.getName() + " Ports";
+		for (CapabilityGroup g : portModel.getSpecialPortGroups()) {
+			if (groupName.contentEquals(g.getName())) {
+				return g;
+			}
+		}
+		throw new IllegalStateException("Special " + capabilityGroup.getName() + " port group does not exist");
 	}
 }
