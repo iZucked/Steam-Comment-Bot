@@ -25,6 +25,8 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Injector;
+import com.google.inject.name.Names;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.RegressionTest;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
@@ -45,12 +47,15 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -58,7 +63,15 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
+import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
+import com.mmxlabs.scheduler.optimiser.scheduling.EarliestSlotTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.ISlotTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
@@ -132,36 +145,36 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 	private VesselAvailability getDefaultVesselAvailability() {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
-		Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 		return vesselAvailability;
 	}
 
-	private VesselAvailability getDefaultVesselAvailabilityWithTW(LocalDateTime windowStart, LocalDateTime windowEnd) {
+	private VesselAvailability getDefaultVesselAvailabilityWithTW(final LocalDateTime windowStart, final LocalDateTime windowEnd) {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
-		Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartWindow(windowStart, windowEnd) //
-				.build();
-		return vesselAvailability;
-	}
-
-	private VesselAvailability getVesselAvailabilityWithTW(String vesselName, LocalDateTime windowStart, LocalDateTime windowEnd) {
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		vesselClass.setMaxSpeed(16.0);
-		Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(windowStart, windowEnd) //
 				.build();
 		return vesselAvailability;
 	}
 
-	private VesselAvailability getVesselAvailabilityWithoutTW(String vesselName) {
+	private VesselAvailability getVesselAvailabilityWithTW(final String vesselName, final LocalDateTime windowStart, final LocalDateTime windowEnd) {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
-		Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(windowStart, windowEnd) //
+				.build();
+		return vesselAvailability;
+	}
+
+	private VesselAvailability getVesselAvailabilityWithoutTW(final String vesselName) {
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vesselClass.setMaxSpeed(16.0);
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
 		return vesselAvailability;
@@ -699,8 +712,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(2);
+		final Event start = schedule.getSequences().get(0).getEvents().get(0);
+		final Event end = schedule.getSequences().get(0).getEvents().get(2);
 
 		assertTrue(start.getStart().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0)));
 		assertTrue(end.getEnd().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 25, 0, 0, 0)));
@@ -725,8 +738,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(2);
+		final Event start = schedule.getSequences().get(0).getEvents().get(0);
+		final Event end = schedule.getSequences().get(0).getEvents().get(2);
 
 		assertTrue(start.getStart().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0)));
 		assertTrue(end.getEnd().toLocalDateTime().isEqual(LocalDateTime.of(2017, Month.JUNE, 28, 0, 0, 0)));
@@ -751,8 +764,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(2);
+		final Event start = schedule.getSequences().get(0).getEvents().get(0);
+		final Event end = schedule.getSequences().get(0).getEvents().get(2);
 		final long startTimestamp = start.getStart().toEpochSecond();
 		final long endTimestamp = end.getStart().toEpochSecond();
 
@@ -783,8 +796,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(2);
+		final Event start = schedule.getSequences().get(0).getEvents().get(0);
+		final Event end = schedule.getSequences().get(0).getEvents().get(2);
 		final long startTimestamp = start.getStart().toEpochSecond();
 		final long endTimestamp = end.getStart().toEpochSecond();
 
@@ -830,8 +843,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
+		final Event start = schedule.getSequences().get(0).getEvents().get(0);
+		final Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		final long startTimestamp = start.getStart().toEpochSecond();
 		final long endTimestamp = end.getStart().toEpochSecond();
 
@@ -877,8 +890,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		Event start = schedule.getSequences().get(0).getEvents().get(0);
-		Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
+		final Event start = schedule.getSequences().get(0).getEvents().get(0);
+		final Event end = schedule.getSequences().get(0).getEvents().get(schedule.getSequences().get(0).getEvents().size() - 1);
 		final long startTimestamp = start.getStart().toEpochSecond();
 		final long endTimestamp = end.getStart().toEpochSecond();
 
@@ -898,7 +911,7 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		vesselClass.setMaxSpeed(16.0);
-		Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel", vesselClass);
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2017, 9, 11, 0, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2017, 10, 26, 23, 0, 0), LocalDateTime.of(2018, 1, 27, 23, 0, 0)) //
@@ -906,8 +919,8 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 		vesselAvailability.setMinDuration(46);
 		vesselAvailability.setMaxDuration(139);
-		Port port_SP = portFinder.findPort("Sabine Pass");
-		Port port_HJ = portFinder.findPort("Himeji");
+		final Port port_SP = portFinder.findPort("Sabine Pass");
+		final Port port_HJ = portFinder.findPort("Himeji");
 
 		vesselAvailability.getEndAt().add(port_HJ);
 
@@ -952,13 +965,13 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				final IResource r0 = initialSequences.getResources().get(0);
 
-				int[] windowStart = new int[6];
-				int[] windowEnd = new int[6];
+				final int[] windowStart = new int[6];
+				final int[] windowEnd = new int[6];
 
 				final AtomicInteger idx = new AtomicInteger(0);
-				Consumer<IPortTimeWindowsRecord> func = (ptr) -> {
-					for (IPortSlot slot : ptr.getSlots()) {
-						ITimeWindow tw = ptr.getSlotFeasibleTimeWindow(slot);
+				final Consumer<IPortTimeWindowsRecord> func = (ptr) -> {
+					for (final IPortSlot slot : ptr.getSlots()) {
+						final ITimeWindow tw = ptr.getSlotFeasibleTimeWindow(slot);
 						windowStart[idx.get()] = tw.getInclusiveStart();
 						windowEnd[idx.get()] = tw.getExclusiveEnd();
 						idx.getAndIncrement();
@@ -967,10 +980,10 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 
 				func.accept(records.get(r0).get(0));
 				func.accept(records.get(r0).get(1));
-				IPortTimeWindowsRecord ptr = records.get(r0).get(2);
+				final IPortTimeWindowsRecord ptr = records.get(r0).get(2);
 				func.accept(ptr);
 				{
-					ITimeWindow tw = ptr.getSlotFeasibleTimeWindow(ptr.getReturnSlot());
+					final ITimeWindow tw = ptr.getSlotFeasibleTimeWindow(ptr.getReturnSlot());
 					windowStart[idx.get()] = tw.getInclusiveStart();
 					windowEnd[idx.get()] = tw.getExclusiveEnd();
 					idx.getAndIncrement();
@@ -984,6 +997,105 @@ public class DurationConstraintTests extends AbstractMicroTestCase {
 					}
 				}
 			}
+		});
+	}
+
+	/***
+	 * We did see a case where the hire cost only end rule kicked in and ignored the max duration and canal booking requirements.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		@NonNull
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModel.getCanalBookings().getCanalBookingSlots().clear();
+
+		cargoModel.getCanalBookings().setStrictBoundaryOffsetDays(10);
+		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
+
+		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
+		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
+		cargoModel.getCanalBookings().setArrivalMarginHours(12);
+
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final Vessel vessel1 = fleetModelBuilder.createVessel("Vessel1 ", vesselClass);
+
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel1, entity) //
+				.withStartWindow(LocalDateTime.of(2017, 12, 15, 0, 0)) //
+				.withMinDuration(60) //
+				.withMaxDuration(100) //
+				.withCharterRate("68000") //
+				.withEndPorts(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE)) //
+				.build();
+
+		// Construct the cargo
+		@NonNull
+		final Port port1 = portFinder.findPort("Sabine Pass");
+
+		@NonNull
+		final Port port2 = portFinder.findPort("Himeji");
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2018, Month.JANUARY, 13), port1, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.DAYS) //
+
+				.withVisitDuration(36) //
+
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2018, Month.FEBRUARY, 1), port2, null, entity, "7") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.withVisitDuration(36) //
+
+				.build() //
+				.withVesselAssignment(vesselAvailability1, 1) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 11, 10), LocalDate.of(2018, 2, 8));
+
+		IOptimiserInjectorService localOverrides = OptimiserInjectorServiceMaker.begin() //
+				.makeModule() //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(ISlotTimeScheduler.class).to(EarliestSlotTimeScheduler.class)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE))//
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)).toInstance(Boolean.FALSE)) //
+				.buildOverride(ModuleType.Module_LNGTransformerModule)//
+				.make();
+
+		evaluateWithOverrides(localOverrides, null, scenarioRunner -> {
+
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+			final Schedule schedule = scheduleModel.getSchedule();
+
+			boolean foundVessel1 = false;
+			for (Sequence sequence : schedule.getSequences()) {
+				if (sequence.getVesselAvailability() == vesselAvailability1) {
+					foundVessel1 = true;
+				} else {
+					continue;
+				}
+
+				final Event start = sequence.getEvents().get(0);
+				final Event end = sequence.getEvents().get(sequence.getEvents().size() - 1);
+
+				Assert.assertTrue(Days.between(start.getStart(), end.getEnd()) >= 60);
+				Assert.assertTrue(Days.between(start.getStart(), end.getEnd()) <= 100);
+
+				// Check Panama is not used
+				for (Event evt : sequence.getEvents()) {
+					if (evt instanceof Journey) {
+						Journey journey = (Journey) evt;
+						Assert.assertTrue(journey.getRoute().getRouteOption() != RouteOption.PANAMA);
+					}
+				}
+			}
+			Assert.assertTrue(foundVessel1);
 		});
 	}
 
