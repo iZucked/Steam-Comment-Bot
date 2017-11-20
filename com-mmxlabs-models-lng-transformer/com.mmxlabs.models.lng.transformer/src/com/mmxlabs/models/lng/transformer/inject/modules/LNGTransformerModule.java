@@ -193,6 +193,7 @@ public class LNGTransformerModule extends AbstractModule {
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
+		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
 		bind(IVolumeAllocator.class).annotatedWith(NotCaching.class).to(UnconstrainedVolumeAllocator.class);
