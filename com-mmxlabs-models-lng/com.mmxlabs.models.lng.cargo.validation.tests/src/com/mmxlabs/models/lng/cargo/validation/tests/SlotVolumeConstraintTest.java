@@ -56,7 +56,6 @@ public class SlotVolumeConstraintTest {
 	public void testSlotVolumeConstraintEqualMinMax() {
 		final int max = 2;
 		final int min = 2;
-
 		testSlotVolumeConstraint(true, max, min);
 	}
 
@@ -130,6 +129,7 @@ public class SlotVolumeConstraintTest {
 		verify(slot, atLeast(0)).getSlotOrContractMinQuantity();
 		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity();
 		verify(slot, atLeast(0)).isSetVolumeLimitsUnit();
+		verify(slot, atLeast(0)).getSlotOrContractVolumeLimitsUnit();
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
